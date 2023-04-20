@@ -1,0 +1,3 @@
+catchWidgetError(error){
+
+}

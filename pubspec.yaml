@@ -11,13 +11,25 @@ dependencies:
   flutter:
     sdk: flutter
 
+#main ui kit
+  shuffle_uikit:
+    git: "https://github.com/shuffle-app/shuffle_ui_kit.git"
+
+#tools for config workers
+  json_annotation: ^4.7.0
+  json_serializable: ^6.6.1
+
+#configuration libs
+  http:
+  path_provider:
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+  build_runner:
 
 # The following section is specific to Flutter packages.
 flutter:
