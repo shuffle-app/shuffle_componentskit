@@ -9,14 +9,29 @@ class PositionModel {
   final String version;
 
   @JsonKey(
-      name: 'alignment',
+      name: 'title_alignment',
       fromJson: _stringToAlignment,
       toJson: _alignmentToString)
-  final Alignment? alignment;
+  final Alignment? titleAlignment;
+
+  @JsonKey(
+      name: 'body_alignment',
+      fromJson: _stringToAlignment,
+      toJson: _alignmentToString)
+  final Alignment? bodyAlignment;
+
+  @JsonKey(name: 'vertical_margin')
+  final double? verticalMargin;
+
+  @JsonKey(name: 'horizontal_margin')
+  final double? horizontalMargin;
 
   PositionModel({
+    this.verticalMargin,
+    this.horizontalMargin,
     required this.version,
-    this.alignment,
+    this.titleAlignment,
+    this.bodyAlignment,
   });
 
   factory PositionModel.fromJson(Map<String, dynamic> json) =>
@@ -31,6 +46,20 @@ Alignment? _stringToAlignment(String? string) {
       return Alignment.center;
     case "centerLeft":
       return Alignment.centerLeft;
+    case "topLeft":
+      return Alignment.topLeft;
+    case "topCenter":
+      return Alignment.topCenter;
+    case "topRight":
+      return Alignment.topRight;
+    case "centerRight":
+      return Alignment.centerRight;
+    case "bottomLeft":
+      return Alignment.bottomLeft;
+    case "bottomCenter":
+      return Alignment.bottomCenter;
+    case "bottomRight":
+      return Alignment.bottomRight;
     default:
       return null;
   }

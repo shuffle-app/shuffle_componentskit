@@ -1,2 +1,2 @@
-export 'config_models/event_model.dart';
-export 'config_models/profile_model.dart';
+export 'config_models/event/event_model.dart';
+export 'config_models/common/booking_element_model.dart';
