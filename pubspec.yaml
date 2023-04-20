@@ -13,15 +13,17 @@ dependencies:
 
 #main ui kit
   shuffle_uikit:
-    git: "https://github.com/shuffle-app/shuffle_ui_kit.git"
+    git:
+      url: https://github.com/shuffle-app/shuffle_ui_kit.git
+      ref: master
 
 #tools for config workers
   json_annotation: ^4.7.0
   json_serializable: ^6.6.1
 
 #configuration libs
-  http:
-  path_provider:
+  http: ^0.13.5
+  path_provider: ^2.0.14
 
 
 dev_dependencies:

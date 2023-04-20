@@ -4,15 +4,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 part 'place_model.g.dart';
 
 @JsonSerializable()
-class EventModel {
-  @JsonKey(name: 'version')
-  final String version;
-
-  @JsonKey(name: 'builder_type')
-  final PageBuilderType pageBuilderType;
-
-  @JsonKey(name: 'position_model')
-  final PositionModel? positionModel;
+class PlaceModel extends BaseModel {
 
   @JsonKey(name: 'booking_element_model')
   final BookingElementModel? bookingElementModel;
@@ -26,17 +18,17 @@ class EventModel {
   @JsonKey(name: 'show_reactions')
   final bool? showReactions;
 
-  EventModel(
+  PlaceModel(
       {this.showRating,
         this.showReviews,
         this.bookingElementModel,
         this.showReactions,
-        required this.version,
-        required this.pageBuilderType,
-        this.positionModel});
+        required super.pageBuilderType,
+        super.positionModel,
+        required super.version,}):super();
 
-  factory EventModel.fromJson(Map<String, dynamic> json) =>
-      _$EventModelFromJson(json);
+  factory PlaceModel.fromJson(Map<String, dynamic> json) =>
+      _$PlaceModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$EventModelToJson(this);
+  Map<String, dynamic> toJson() => _$PlaceModelToJson(this);
 }

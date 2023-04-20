@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:shuffle_components_kit/services/configuration/data/config_constants.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 import 'data/configuration_model.dart';
 
@@ -15,30 +16,52 @@ class GlobalConfiguration {
     return _singleton;
   }
 
+  final Completer _compliter = Completer();
+
+  bool get isLoaded => _compliter.isCompleted;
+
   GlobalConfiguration._internal();
 
   ConfigurationModel appConfig = ConfigurationModel(
       updated: DateTime.now(), content: {}, theme: 'default');
 
   Future<GlobalConfiguration> load() async {
+    try {
     File cache = await _loadFromDocument();
-    final String cacheAsString = await cache.readAsString();
-    late final ConfigurationModel model;
-    if (cacheAsString.isNotEmpty) {
-      model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
+    late final String cacheAsString;
+    late  ConfigurationModel model;
+    if (cache.existsSync()) {
+      cacheAsString = await cache.readAsString();
+      if (cacheAsString.isNotEmpty) {
+        model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
+        if (model.updated.difference(DateTime.now()).inDays > 1) {
+          model = await _loadAndSaveConfig();
+        }
+      } else {
+        model = await _loadAndSaveConfig();
+      }
+    } else {
+      model = await _loadAndSaveConfig();
     }
-    if (cacheAsString.isEmpty ||
-        model.updated.difference(DateTime.now()).inDays > 1) {
-      Map<String, dynamic> configAsMap = await _getFromUrl(
-          ConfigConstants.configUrl,
-          headers: ConfigConstants.configHeaders);
-      appConfig = ConfigurationModel(
-          updated: DateTime.now(),
-          content: configAsMap,
-          theme: configAsMap['theme_name']);
-      _saveToDocument();
+    appConfig = model;
+    _compliter.complete();
+    } catch (e,t) {
+      generalErrorCatch(e, t);
     }
+
     return _singleton;
+  }
+
+  Future<ConfigurationModel> _loadAndSaveConfig() async {
+    Map<String, dynamic> configAsMap = await _getFromUrl(
+        ConfigConstants.configUrl,
+        headers: ConfigConstants.configHeaders);
+    final model = ConfigurationModel(
+        updated: DateTime.now(),
+        content: configAsMap,
+        theme: configAsMap['theme_name']);
+    _saveToDocument();
+    return model;
   }
 
   Future<void> _saveToDocument() async {
@@ -63,9 +86,11 @@ class GlobalConfiguration {
       });
     }
     headers ??= <String, String>{};
-    headers.putIfAbsent("Accept", () => "application/json");
+    Map<String, String>? usableHeader = Map.from(headers);
+    usableHeader.putIfAbsent("Accept", () => "application/json");
+
     var encodedUri = Uri.encodeFull(finalUrl);
-    var response = await http.get(Uri.parse(encodedUri), headers: headers);
+    var response = await http.get(Uri.parse(encodedUri), headers: usableHeader);
     if (response.statusCode != 200) {
       throw Exception(
           'HTTP request failed, statusCode: ${response.statusCode}, $finalUrl');

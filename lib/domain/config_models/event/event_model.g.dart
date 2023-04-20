@@ -7,19 +7,19 @@ part of 'event_model.dart';
 // **************************************************************************
 
 EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
-      showReviews: json['show_reviews'] as bool?,
-      bookingElementModel: json['booking_element_model'] == null
-          ? null
-          : BookingElementModel.fromJson(
-              json['booking_element_model'] as Map<String, dynamic>),
-      showReactions: json['show_reactions'] as bool?,
-      version: json['version'] as String,
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
           ? null
           : PositionModel.fromJson(
               json['position_model'] as Map<String, dynamic>),
+      version: json['version'] as String,
+      showReviews: json['show_reviews'] as bool?,
+      bookingElementModel: json['booking_element_model'] == null
+          ? null
+          : BookingElementModel.fromJson(
+              json['booking_element_model'] as Map<String, dynamic>),
+      showReactions: json['show_reactions'] as bool?,
     );
 
 Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
@@ -33,6 +33,6 @@ Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
     };
 
 const _$PageBuilderTypeEnumMap = {
-  PageBuilderType.modalBottomSheet: 'modalBottomSheet',
+  PageBuilderType.modalBottomSheet: 'modal_bottom_sheet',
   PageBuilderType.page: 'page',
 };
