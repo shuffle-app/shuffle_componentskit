@@ -45,7 +45,9 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? ComponentsTestPage()
+                  ? GlobalComponent(
+                      globalConfiguration: configuration,
+                      child: ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load()
@@ -53,7 +55,9 @@ class _MyAppState extends State<MyApp> {
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(
                               themeMatcher(configuration.appConfig.theme)));
                       return Center(
-                          child: CircularProgressIndicator(color: Colors.white,));
+                          child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ));
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -86,7 +90,100 @@ class ComponentsTestPage extends StatelessWidget {
                     context,
                     PlaceModel.fromJson(
                         configuration.appConfig.content['place']),
-                    Placeholder())),
+                    PlaceComponent(
+                      placeData: Place(
+                        media: [
+                          PlaceMedia(
+                              link: 'assets/images/png/place.png',
+                              type: PlaceMediaType.video),
+                          PlaceMedia(
+                              link: 'assets/images/png/place.png',
+                              type: PlaceMediaType.image),
+                          PlaceMedia(
+                              link: 'assets/images/png/place.png',
+                              type: PlaceMediaType.image),
+                          PlaceMedia(
+                              link: 'assets/images/png/place.png',
+                              type: PlaceMediaType.image),
+                          PlaceMedia(
+                              link: 'assets/images/png/place.png',
+                              type: PlaceMediaType.image),
+                        ],
+                        description:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                            'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+                            'Nulla facilisi. '
+                            'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+                            'Nulla facilisi',
+                        rating: 4.8,
+                        tags: [
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: false),
+                          PlaceTag(
+                              title: 'Cheap',
+                              iconPath: 'assets/images/svg/cocktail.svg',
+                              matching: true),
+                        ],
+                      ),
+                    ))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show event',
