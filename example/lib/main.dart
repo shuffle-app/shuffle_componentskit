@@ -182,7 +182,24 @@ class ComponentsTestPage extends StatelessWidget {
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
                         ],
+                      ), placeDescriptionItems: [
+                      PlaceDescriptionItem(
+                        title: 'Address',
+                        description: 'Burj Khalifa 122nd Floor',
                       ),
+                      PlaceDescriptionItem(
+                        title: 'Open now',
+                        description: '9:30 am - 10:30 pm',
+                      ),
+                      PlaceDescriptionItem(
+                        title: 'Website',
+                        description: 'atmosphere.com',
+                      ),
+                      PlaceDescriptionItem(
+                        title: 'Phone',
+                        description: '+971123596943',
+                      ),
+                    ],
                     ))),
             SpacingFoundation.verticalSpace16,
             context.button(

@@ -3,9 +3,10 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PlaceComponent extends StatelessWidget {
-  final Place placeData;
+  final UiKitPlace placeData;
+  final List<PlaceDescriptionItem> placeDescriptionItems;
 
-  const PlaceComponent({Key? key, required this.placeData}) : super(key: key);
+  const PlaceComponent({Key? key, required this.placeData, required this.placeDescriptionItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class PlaceComponent extends StatelessWidget {
                   (model.positionModel?.titleAlignment).mainAxisAlignment,
               crossAxisAlignment:
                   (model.positionModel?.titleAlignment).crossAxisAlignment,
-              children: [
+              children: const [
                 Placeholder(
                   child: SizedBox(
                     width: 280,
@@ -73,28 +74,11 @@ class PlaceComponent extends StatelessWidget {
               ),
               SpacingFoundation.verticalSpace16,
               PlaceDescriptionGrid(
-                descriptionItems: [
-                  PlaceDescriptionItem(
-                    title: 'Address',
-                    description: 'Burj Khalifa 122nd Floor',
-                  ),
-                  PlaceDescriptionItem(
-                    title: 'Open now',
-                    description: '9:30 am - 10:30 pm',
-                  ),
-                  PlaceDescriptionItem(
-                    title: 'Website',
-                    description: 'atmosphere.com',
-                  ),
-                  PlaceDescriptionItem(
-                    title: 'Phone',
-                    description: '+971123596943',
-                  ),
-                ],
+                descriptionItems:placeDescriptionItems,
                 spacing: 16,
               ),
               SpacingFoundation.verticalSpace16,
-              Placeholder(
+              const Placeholder(
                 child: SizedBox(
                   width: 280,
                   height: 45,
