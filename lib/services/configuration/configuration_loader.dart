@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -27,25 +28,25 @@ class GlobalConfiguration {
 
   Future<GlobalConfiguration> load() async {
     try {
-    File cache = await _loadFromDocument();
-    late final String cacheAsString;
-    late  ConfigurationModel model;
-    if (cache.existsSync()) {
-      cacheAsString = await cache.readAsString();
-      if (cacheAsString.isNotEmpty) {
-        model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
-        if (model.updated.difference(DateTime.now()).inDays > 1) {
+      File? cache = kIsWeb ? null : await _loadFromDocument();
+      late final String cacheAsString;
+      late ConfigurationModel model;
+      if (cache != null && cache.existsSync()) {
+        cacheAsString = await cache.readAsString();
+        if (cacheAsString.isNotEmpty) {
+          model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
+          if (model.updated.difference(DateTime.now()).inDays > 1) {
+            model = await _loadAndSaveConfig();
+          }
+        } else {
           model = await _loadAndSaveConfig();
         }
       } else {
         model = await _loadAndSaveConfig();
       }
-    } else {
-      model = await _loadAndSaveConfig();
-    }
-    appConfig = model;
-    _compliter.complete();
-    } catch (e,t) {
+      appConfig = model;
+      _compliter.complete();
+    } catch (e, t) {
       generalErrorCatch(e, t);
     }
 
@@ -65,6 +66,9 @@ class GlobalConfiguration {
   }
 
   Future<void> _saveToDocument() async {
+    if (kIsWeb) {
+      return;
+    }
     var provider = await getApplicationDocumentsDirectory();
     final File file =
         File(p.join(provider.path, 'appConfig/generalConfigCache'));

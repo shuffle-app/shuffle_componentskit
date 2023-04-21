@@ -226,18 +226,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_gen_core
-      sha256: e74db9fc706ce43ef0dfd4b296fcfa10f84c4d862b9b68a087e7c703f97c7a0a
+      sha256: "41ed478d2c1b77cb899b859c3705be02a76a3f03171c17b1d82af98068788763"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   flutter_gen_runner:
     dependency: transitive
     description:
       name: flutter_gen_runner
-      sha256: "434511d7c3f7bb5c67d89a16451056093953bebf7afa8336baeceddfc6fe2a21"
+      sha256: a32f596f5c4f0d03ef950db2ec03b5d05f944d215accfd3e0494cf47113139fa
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -565,10 +565,18 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "35b35ad1f83d87eb631d4b6a1464590eeb009de1"
+      resolved-ref: "617f987926ba7b3328f5916b0c5721957d0b167f"
       url: "https://github.com/shuffle-app/shuffle_ui_kit.git"
     source: git
     version: "0.0.1"
+  simple_gradient_text:
+    dependency: transitive
+    description:
+      name: simple_gradient_text
+      sha256: "075a2cbabac021d3713d0d199b2d1b0d40f6293e1e9d37b25e84936ae43c90fa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.4"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -751,5 +759,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.19.6 <3.0.0"
+  dart: ">=2.19.1 <3.0.0"
   flutter: ">=3.7.0-0"
