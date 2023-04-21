@@ -22,7 +22,7 @@ jobs:
         run: |
           cd example
           flutter build web --release --base-href "/${{vars.BASE_URL}}/"
-      - name: Push to ${{vars.BRANCH}} branch
+      - name: Push to ${{vars.TEST_STAGE_BRANCH}} branch
         run: |
           cd example/build/web
           git init
@@ -30,7 +30,7 @@ jobs:
           git config --global user.name ${{secrets.NAME}}
           git status
           git remote add origin https://${{secrets.PAT}}@github.com/${{github.repository}}.git
-          git checkout -b ${{vars.BRANCH}}
+          git checkout -b ${{vars.TEST_STAGE_BRANCH}}
           git add --all
           git commit -m "update by commit ${{github.workflow_sha}}"
-          git push -f origin ${{vars.BRANCH}}
+          git push -f origin ${{vars.TEST_STAGE_BRANCH}}
