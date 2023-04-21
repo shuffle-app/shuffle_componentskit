@@ -565,7 +565,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "617f987926ba7b3328f5916b0c5721957d0b167f"
+      resolved-ref: c8d66b343c31d17935176b8a2c68ba2def4a9f7a
       url: "https://github.com/shuffle-app/shuffle_ui_kit.git"
     source: git
     version: "0.0.1"
