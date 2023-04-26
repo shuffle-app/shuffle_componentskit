@@ -3,10 +3,16 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PlaceComponent extends StatelessWidget {
+  final PlaceModel model;
   final UiKitPlace placeData;
   final List<PlaceDescriptionItem> placeDescriptionItems;
 
-  const PlaceComponent({Key? key, required this.placeData, required this.placeDescriptionItems}) : super(key: key);
+  const PlaceComponent(
+      {Key? key,
+      required this.placeData,
+      required this.placeDescriptionItems,
+      required this.model})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,79 +21,121 @@ class PlaceComponent extends StatelessWidget {
             GlobalConfiguration().appConfig.content;
     final PlaceModel model = PlaceModel.fromJson(config['place']);
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(
-          vertical: model.positionModel?.verticalMargin ?? 0,
-          horizontal: model.positionModel?.horizontalMargin ?? 0),
-      child: Column(
-        children: [
-          Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment:
-                  (model.positionModel?.titleAlignment).mainAxisAlignment,
-              crossAxisAlignment:
-                  (model.positionModel?.titleAlignment).crossAxisAlignment,
-              children: const [
-                Placeholder(
-                  child: SizedBox(
-                    width: 280,
-                    height: 45,
-                  ),
-                )
-              ]),
-          Column(
+    return Column(
+      children: [
+        Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment:
-                (model.positionModel?.bodyAlignment).mainAxisAlignment,
+                (model.positionModel?.titleAlignment).mainAxisAlignment,
             crossAxisAlignment:
-                (model.positionModel?.bodyAlignment).crossAxisAlignment,
+                (model.positionModel?.titleAlignment).crossAxisAlignment,
             children: [
-              PlaceInfo(
-                place: placeData,
+              SpacingFoundation.verticalSpace4,
+              TitleWithAvatar(
+                title: placeData.title,
+                avatarUrl: placeData.logo,
               ),
-              SpacingFoundation.verticalSpace16,
-              IntrinsicHeight(
+            ]),
+        SpacingFoundation.verticalSpace4,
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              (model.positionModel?.bodyAlignment).mainAxisAlignment,
+          crossAxisAlignment:
+              (model.positionModel?.bodyAlignment).crossAxisAlignment,
+          children: [
+            PlaceInfo(
+              place: placeData,
+            ),
+            SpacingFoundation.verticalSpace16,
+            IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: UpcomingEventPlaceActionCard(
+                      value: 'in 2 days',
+                      icon: GraphicsFoundation.instance.svgPicture(
+                        asset: Assets.images.svg.star,
+                      ),
+                      action: () {},
+                    ),
+                  ),
+                  SpacingFoundation.horizontalSpace8,
+                  Expanded(
+                    child: PointBalancePlaceActionCard(
+                      value: '2 650',
+                      icon: GraphicsFoundation.instance.svgPicture(
+                        asset: Assets.images.svg.star,
+                      ),
+                      action: () {},
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            PlaceDescriptionGrid(
+              descriptionItems: placeDescriptionItems,
+              spacing: 16,
+            ),
+            SpacingFoundation.verticalSpace16,
+            SafeArea(
+                top: false,
                 child: Row(
+                  crossAxisAlignment:
+                      (model.bookingElementModel?.positionModel?.bodyAlignment)
+                          .crossAxisAlignment,
+                  mainAxisAlignment:
+                      (model.bookingElementModel?.positionModel?.bodyAlignment)
+                          .mainAxisAlignment,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Expanded(
-                      child: UpcomingEventPlaceActionCard(
-                        value: 'in 2 days',
+                    if (model.bookingElementModel?.showRoute ?? true)
+                      context.button(
+                        text: 'Button',
+                        onPressed: () {},
+                        onlyIcon: true,
+                        outlined: true,
                         icon: GraphicsFoundation.instance.svgPicture(
-                          asset: Assets.images.svg.star,
+                          asset: Assets.images.svg.route,
+                          color: Colors.white,
                         ),
-                        action: () {},
+                      ),
+                    SpacingFoundation.horizontalSpace12,
+                    Expanded(
+                      child: context.button(
+                        text: 'Book it',
+                        onPressed: () {},
+                        gradient: true,
                       ),
                     ),
-                    SpacingFoundation.horizontalSpace8,
-                    Expanded(
-                      child: PointBalancePlaceActionCard(
-                        value: '2 650',
+                    SpacingFoundation.horizontalSpace12,
+                    if (model.bookingElementModel?.showMagnify ?? true)
+                      context.button(
+                        text: 'Button',
+                        onPressed: () {},
+                        onlyIcon: true,
+                        outlined: true,
                         icon: GraphicsFoundation.instance.svgPicture(
-                          asset: Assets.images.svg.star,
+                          asset: Assets.images.svg.searchPeople,
+                          color: Colors.white,
                         ),
-                        action: () {},
                       ),
-                    ),
                   ],
-                ),
-              ),
-              SpacingFoundation.verticalSpace16,
-              PlaceDescriptionGrid(
-                descriptionItems:placeDescriptionItems,
-                spacing: 16,
-              ),
-              SpacingFoundation.verticalSpace16,
-              const Placeholder(
-                child: SizedBox(
-                  width: 280,
-                  height: 45,
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+                ).paddingSymmetric(
+                    vertical: model.bookingElementModel?.positionModel
+                            ?.verticalMargin ??
+                        0.0,
+                    horizontal: model.bookingElementModel?.positionModel
+                            ?.horizontalMargin ??
+                        0.0)),
+          ],
+        ),
+      ],
+      // ),
+    ).paddingSymmetric(
+        vertical: model.positionModel?.verticalMargin ?? 0,
+        horizontal: model.positionModel?.horizontalMargin ?? 0);
   }
 }

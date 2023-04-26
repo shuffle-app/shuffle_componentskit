@@ -72,6 +72,7 @@ class GlobalConfiguration {
     var provider = await getApplicationDocumentsDirectory();
     final File file =
         File(p.join(provider.path, 'appConfig/generalConfigCache'));
+    file.create(recursive: true);
     file.writeAsString(jsonEncode(appConfig.toJson()));
   }
 

@@ -91,23 +91,25 @@ class ComponentsTestPage extends StatelessWidget {
                     PlaceModel.fromJson(
                         configuration.appConfig.content['place']),
                     PlaceComponent(
-                      placeData: Place(
+                    model: PlaceModel.fromJson(
+                          configuration.appConfig.content['place']),
+                      placeData: UiKitPlace(
                         media: [
-                          PlaceMedia(
+                          UiKitPlaceMedia(
                               link: 'assets/images/png/place.png',
-                              type: PlaceMediaType.video),
-                          PlaceMedia(
+                              type: UiKitPlaceMediaType.video),
+                          UiKitPlaceMedia(
                               link: 'assets/images/png/place.png',
-                              type: PlaceMediaType.image),
-                          PlaceMedia(
+                              type: UiKitPlaceMediaType.image),
+                          UiKitPlaceMedia(
                               link: 'assets/images/png/place.png',
-                              type: PlaceMediaType.image),
-                          PlaceMedia(
+                              type: UiKitPlaceMediaType.image),
+                          UiKitPlaceMedia(
                               link: 'assets/images/png/place.png',
-                              type: PlaceMediaType.image),
-                          PlaceMedia(
+                              type: UiKitPlaceMediaType.image),
+                          UiKitPlaceMedia(
                               link: 'assets/images/png/place.png',
-                              type: PlaceMediaType.image),
+                              type: UiKitPlaceMediaType.image),
                         ],
                         description:
                             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
@@ -117,72 +119,72 @@ class ComponentsTestPage extends StatelessWidget {
                             'Nulla facilisi',
                         rating: 4.8,
                         tags: [
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: false),
-                          PlaceTag(
+                          UiKitPlaceTag(
                               title: 'Cheap',
                               iconPath: 'assets/images/svg/cocktail.svg',
                               matching: true),
                         ],
-                      ), placeDescriptionItems: [
+                      ), placeDescriptionItems: const [
                       PlaceDescriptionItem(
                         title: 'Address',
                         description: 'Burj Khalifa 122nd Floor',
