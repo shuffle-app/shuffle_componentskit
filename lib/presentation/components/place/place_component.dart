@@ -3,15 +3,13 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PlaceComponent extends StatelessWidget {
-  final PlaceModel model;
   final UiKitPlace placeData;
   final List<PlaceDescriptionItem> placeDescriptionItems;
 
   const PlaceComponent(
       {Key? key,
       required this.placeData,
-      required this.placeDescriptionItems,
-      required this.model})
+      required this.placeDescriptionItems})
       : super(key: key);
 
   @override
@@ -47,14 +45,6 @@ class PlaceComponent extends StatelessWidget {
           crossAxisAlignment:
               (model.positionModel?.bodyAlignment).crossAxisAlignment,
           children: [
-            // SlidablePlaceCard(
-            //     slidablePlaceCardData: SlidablePlaceCardData(
-            //         media: placeData.media,
-            //         title: placeData.title!,
-            //         placeTags: placeData.tags)),
-            // PlaceInfo(
-            //   place: placeData,
-            // ),
             UiKitPhotoSlider(
               media: placeData.media,
               width: size.width,
@@ -62,7 +52,7 @@ class PlaceComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace12,
             PlaceStats(
-              rating: placeData.rating,
+              rating: (model.showRating ?? false) ? placeData.rating : null,
               tags: placeData.tags,
             ),
             SpacingFoundation.verticalSpace12,

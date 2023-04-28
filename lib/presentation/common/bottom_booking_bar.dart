@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 class BottomBookingBar extends StatelessWidget {
-  final PlaceModel model;
+  final BookingElementModel model;
   const BottomBookingBar({Key? key, required this.model}) : super(key: key);
 
   @override
@@ -11,16 +11,16 @@ class BottomBookingBar extends StatelessWidget {
         top: false,
         child: Row(
           crossAxisAlignment:
-          (model.bookingElementModel?.positionModel?.bodyAlignment)
+          (model.positionModel?.bodyAlignment)
               .crossAxisAlignment,
           mainAxisAlignment:
-          (model.bookingElementModel?.positionModel?.bodyAlignment)
+          (model.positionModel?.bodyAlignment)
               .mainAxisAlignment,
           mainAxisSize: MainAxisSize.max,
           children: [
-            if (model.bookingElementModel?.showRoute ?? true)
+            if (model.showRoute ?? true)
               context.button(
-                text: 'Button',
+                text: '',
                 onPressed: () {},
                 onlyIcon: true,
                 outlined: true,
@@ -38,9 +38,9 @@ class BottomBookingBar extends StatelessWidget {
               ),
             ),
             SpacingFoundation.horizontalSpace12,
-            if (model.bookingElementModel?.showMagnify ?? true)
+            if (model.showMagnify ?? true)
               context.button(
-                text: 'Button',
+                text: '',
                 onPressed: () {},
                 onlyIcon: true,
                 outlined: true,
@@ -51,10 +51,10 @@ class BottomBookingBar extends StatelessWidget {
               ),
           ],
         ).paddingSymmetric(
-            vertical: model.bookingElementModel?.positionModel
+            vertical: model.positionModel
                 ?.verticalMargin ??
                 0.0,
-            horizontal: model.bookingElementModel?.positionModel
+            horizontal: model.positionModel
                 ?.horizontalMargin ??
                 0.0));
   }

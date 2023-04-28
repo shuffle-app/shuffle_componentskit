@@ -10,7 +10,7 @@ BookingElementModel _$BookingElementModelFromJson(Map<String, dynamic> json) =>
     BookingElementModel(
       showRoute: json['show_route'] as bool?,
       showMagnify: json['show_magnify'] as bool?,
-      version: json['version'] as String,
+      version: json['version'] as String? ?? '0',
       positionModel: json['position_model'] == null
           ? null
           : PositionModel.fromJson(

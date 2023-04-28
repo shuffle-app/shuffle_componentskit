@@ -1,12 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'event_model.dart';
+part of 'feed_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
+FeedModel _$FeedModelFromJson(Map<String, dynamic> json) => FeedModel(
+      showPlaces: json['show_places'] as bool?,
+      showFeelings: json['show_feelings'] as bool?,
+      showDailyRecomendation: json['show_daily_recomendation'] as bool?,
+      showStories: json['show_stories'] as bool?,
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -14,22 +18,16 @@ EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
           : PositionModel.fromJson(
               json['position_model'] as Map<String, dynamic>),
       version: json['version'] as String? ?? '0',
-      showReviews: json['show_reviews'] as bool?,
-      bookingElementModel: json['booking_element_model'] == null
-          ? null
-          : BookingElementModel.fromJson(
-              json['booking_element_model'] as Map<String, dynamic>),
-      showReactions: json['show_reactions'] as bool?,
     );
 
-Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$FeedModelToJson(FeedModel instance) => <String, dynamic>{
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
-      'booking_element_model': instance.bookingElementModel,
-      'show_reviews': instance.showReviews,
-      'show_reactions': instance.showReactions,
+      'show_daily_recomendation': instance.showDailyRecomendation,
+      'show_stories': instance.showStories,
+      'show_feelings': instance.showFeelings,
+      'show_places': instance.showPlaces,
     };
 
 const _$PageBuilderTypeEnumMap = {

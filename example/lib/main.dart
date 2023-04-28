@@ -91,8 +91,6 @@ class ComponentsTestPage extends StatelessWidget {
                     PlaceModel.fromJson(
                         configuration.appConfig.content['place']),
                     PlaceComponent(
-                      model: PlaceModel.fromJson(
-                          configuration.appConfig.content['place']),
                       placeData: UiKitPlace(
                         media: [
                           UiKitMedia(
@@ -206,7 +204,9 @@ class ComponentsTestPage extends StatelessWidget {
                     ),
                     BottomBookingBar(
                         model: PlaceModel.fromJson(
-                            configuration.appConfig.content['place'])))),
+                                    configuration.appConfig.content['place'])
+                                .bookingElementModel ??
+                            BookingElementModel(version: '0')))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show event',
@@ -214,7 +214,114 @@ class ComponentsTestPage extends StatelessWidget {
                     context,
                     EventModel.fromJson(
                         configuration.appConfig.content['event']),
-                    Placeholder())),
+                    EventComponent(
+                        event: UiKitEvent(
+                      media: [
+                        UiKitMedia(
+                            link: 'assets/images/png/place.png',
+                            type: UiKitMediaType.video),
+                        UiKitMedia(
+                            link: 'assets/images/png/place.png',
+                            type: UiKitMediaType.image),
+                        UiKitMedia(
+                            link: 'assets/images/png/place.png',
+                            type: UiKitMediaType.image),
+                        UiKitMedia(
+                            link: 'assets/images/png/place.png',
+                            type: UiKitMediaType.image),
+                        UiKitMedia(
+                            link: 'assets/images/png/place.png',
+                            type: UiKitMediaType.image),
+                      ],
+                      description:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                          'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+                          'Nulla facilisi. '
+                          'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+                          'Nulla facilisi',
+                      rating: 4.8,
+                      tags: [
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: false),
+                        UiKitTag(
+                            title: 'Cheap',
+                            iconPath: 'assets/images/svg/cocktail.svg',
+                            matching: true),
+                      ],
+                      descriptionItems: const [
+                        DescriptionItem(
+                          title: 'Don\'t miss out',
+                          description: 'Burj Khalifa 122nd Floor',
+                        ),
+                        DescriptionItem(
+                          title: 'Open now',
+                          description: '9:30 am - 10:30 pm',
+                        ),
+                      ],
+                    )),
+                    BottomBookingBar(
+                        model: PlaceModel.fromJson(
+                                    configuration.appConfig.content['event'])
+                                .bookingElementModel ??
+                            BookingElementModel(version: '0')))),
             SpacingFoundation.verticalSpace16,
           ],
         ),

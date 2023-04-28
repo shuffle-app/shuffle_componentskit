@@ -20,7 +20,7 @@ PlaceModel _$PlaceModelFromJson(Map<String, dynamic> json) => PlaceModel(
           ? null
           : PositionModel.fromJson(
               json['position_model'] as Map<String, dynamic>),
-      version: json['version'] as String,
+      version: json['version'] as String? ?? '0',
     );
 
 Map<String, dynamic> _$PlaceModelToJson(PlaceModel instance) =>
