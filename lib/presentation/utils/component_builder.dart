@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart' as kit;
 
-Future<dynamic> buildComponent(BuildContext context, BaseModel configuration, Widget child) {
+Future<dynamic> buildComponent(BuildContext context, BaseModel configuration, Widget child, [Widget? bottomBar]) {
   //TODO romancores: add later flavors
   if (kDebugMode) {
     SnackBarUtils.show(
@@ -11,7 +11,7 @@ Future<dynamic> buildComponent(BuildContext context, BaseModel configuration, Wi
   }
   switch (configuration.pageBuilderType) {
     case PageBuilderType.modalBottomSheet:
-      return kit.showUiKitGeneralFullScreenDialog(context, child: child);
+      return kit.showUiKitGeneralFullScreenDialog(context, child: child,bottomBar: bottomBar);
 
     case PageBuilderType.page:
       return context.push(child);
