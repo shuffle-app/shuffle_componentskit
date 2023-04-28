@@ -10,7 +10,7 @@ PositionModel _$PositionModelFromJson(Map<String, dynamic> json) =>
     PositionModel(
       verticalMargin: (json['vertical_margin'] as num?)?.toDouble(),
       horizontalMargin: (json['horizontal_margin'] as num?)?.toDouble(),
-      version: json['version'] as String,
+      version: json['version'] as String? ?? '0',
       titleAlignment: _stringToAlignment(json['title_alignment'] as String?),
       bodyAlignment: _stringToAlignment(json['body_alignment'] as String?),
     );

@@ -5,7 +5,7 @@ part 'booking_element_model.g.dart';
 
 @JsonSerializable()
 class BookingElementModel {
-  @JsonKey(name: 'version')
+  @JsonKey(name: 'version',defaultValue:'0')
   final String version;
 
   @JsonKey(name: 'position_model')

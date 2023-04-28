@@ -35,7 +35,8 @@ class GlobalConfiguration {
         cacheAsString = await cache.readAsString();
         if (cacheAsString.isNotEmpty) {
           model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
-          if (model.updated.difference(DateTime.now()).inDays > 1) {
+          //TODO change to days
+          if (model.updated.difference(DateTime.now()).inMinutes > 1) {
             model = await _loadAndSaveConfig();
           }
         } else {
