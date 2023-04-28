@@ -21,8 +21,12 @@ class PlaceComponent extends StatelessWidget {
             GlobalConfiguration().appConfig.content;
     final PlaceModel model = PlaceModel.fromJson(config['place']);
 
+    final theme = context.uiKitTheme;
+    final size = MediaQuery.of(context).size;
+
     return Column(
       children: [
+        SpacingFoundation.verticalSpace4,
         Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment:
@@ -30,7 +34,6 @@ class PlaceComponent extends StatelessWidget {
             crossAxisAlignment:
                 (model.positionModel?.titleAlignment).crossAxisAlignment,
             children: [
-              SpacingFoundation.verticalSpace4,
               TitleWithAvatar(
                 title: placeData.title,
                 avatarUrl: placeData.logo,
@@ -44,8 +47,28 @@ class PlaceComponent extends StatelessWidget {
           crossAxisAlignment:
               (model.positionModel?.bodyAlignment).crossAxisAlignment,
           children: [
-            PlaceInfo(
-              place: placeData,
+            // SlidablePlaceCard(
+            //     slidablePlaceCardData: SlidablePlaceCardData(
+            //         media: placeData.media,
+            //         title: placeData.title!,
+            //         placeTags: placeData.tags)),
+            // PlaceInfo(
+            //   place: placeData,
+            // ),
+            UiKitPhotoSlider(
+              media: placeData.media,
+              width: size.width,
+              height: 156,
+            ),
+            SpacingFoundation.verticalSpace12,
+            PlaceStats(
+              rating: placeData.rating,
+              tags: placeData.tags,
+            ),
+            SpacingFoundation.verticalSpace12,
+            Text(
+              placeData.description,
+              style: theme?.boldTextTheme.caption1.copyWith(color: Colors.white),
             ),
             SpacingFoundation.verticalSpace16,
             IntrinsicHeight(
@@ -55,8 +78,8 @@ class PlaceComponent extends StatelessWidget {
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
                       value: 'in 2 days',
-                      icon: GraphicsFoundation.instance.svgPicture(
-                        asset: Assets.images.svg.star,
+                      icon: ImageWidget(
+                        rasterAsset: Assets.images.png.calendar,
                       ),
                       action: () {},
                     ),
@@ -65,8 +88,8 @@ class PlaceComponent extends StatelessWidget {
                   Expanded(
                     child: PointBalancePlaceActionCard(
                       value: '2 650',
-                      icon: GraphicsFoundation.instance.svgPicture(
-                        asset: Assets.images.svg.star,
+                      icon: ImageWidget(
+                        rasterAsset: Assets.images.png.place,
                       ),
                       action: () {},
                     ),
@@ -80,56 +103,6 @@ class PlaceComponent extends StatelessWidget {
               spacing: 16,
             ),
             SpacingFoundation.verticalSpace16,
-            SafeArea(
-                top: false,
-                child: Row(
-                  crossAxisAlignment:
-                      (model.bookingElementModel?.positionModel?.bodyAlignment)
-                          .crossAxisAlignment,
-                  mainAxisAlignment:
-                      (model.bookingElementModel?.positionModel?.bodyAlignment)
-                          .mainAxisAlignment,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    if (model.bookingElementModel?.showRoute ?? true)
-                      context.button(
-                        text: 'Button',
-                        onPressed: () {},
-                        onlyIcon: true,
-                        outlined: true,
-                        icon: GraphicsFoundation.instance.svgPicture(
-                          asset: Assets.images.svg.route,
-                          color: Colors.white,
-                        ),
-                      ),
-                    SpacingFoundation.horizontalSpace12,
-                    Expanded(
-                      child: context.button(
-                        text: 'Book it',
-                        onPressed: () {},
-                        gradient: true,
-                      ),
-                    ),
-                    SpacingFoundation.horizontalSpace12,
-                    if (model.bookingElementModel?.showMagnify ?? true)
-                      context.button(
-                        text: 'Button',
-                        onPressed: () {},
-                        onlyIcon: true,
-                        outlined: true,
-                        icon: GraphicsFoundation.instance.svgPicture(
-                          asset: Assets.images.svg.searchPeople,
-                          color: Colors.white,
-                        ),
-                      ),
-                  ],
-                ).paddingSymmetric(
-                    vertical: model.bookingElementModel?.positionModel
-                            ?.verticalMargin ??
-                        0.0,
-                    horizontal: model.bookingElementModel?.positionModel
-                            ?.horizontalMargin ??
-                        0.0)),
           ],
         ),
       ],
