@@ -52,7 +52,7 @@ class EventComponent extends StatelessWidget {
               UiKitPhotoSlider(
                 media: event.media!,
                 width: size.width,
-                height: 156,
+                height: 256,
               ),
               SpacingFoundation.verticalSpace12
             ],

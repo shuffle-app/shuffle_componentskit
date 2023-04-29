@@ -74,6 +74,38 @@ class ComponentsTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UiKitEvent event = UiKitEvent(
+      media: [
+        UiKitMedia(
+            link: 'assets/images/png/place.png', type: UiKitMediaType.video),
+        UiKitMedia(
+            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+        UiKitMedia(
+            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+        UiKitMedia(
+            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+        UiKitMedia(
+            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+      ],
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+          'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+          'Nulla facilisi. '
+          'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+          'Nulla facilisi',
+      rating: 4.8,
+      tags: tags,
+      descriptionItems: const [
+        DescriptionItem(
+          title: 'Don\'t miss out',
+          description: 'Burj Khalifa 122nd Floor',
+        ),
+        DescriptionItem(
+          title: 'Open now',
+          description: '9:30 am - 10:30 pm',
+        ),
+      ],
+    );
+
     return Scaffold(
       appBar: CustomAppBar(
         title:
@@ -85,104 +117,29 @@ class ComponentsTestPage extends StatelessWidget {
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+                text: 'show feed',
+                onPressed: () => buildComponent(
+                    context,
+                    FeedModel.fromJson(configuration.appConfig.content['feed']),
+                    FeedComponent(
+                        feed: UiKitFeed(
+                      places: List.generate(4, (index) => place),
+                      recommendedEvent: event,
+                      moods: List.generate(
+                          4,
+                          (index) => UiKitMood(
+                              title: 'Want to have some fun',
+                              logo: 'assets/images/png/crazy_emoji.png')),
+                    )))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 text: 'show place',
                 onPressed: () => buildComponent(
                     context,
                     PlaceModel.fromJson(
                         configuration.appConfig.content['place']),
                     PlaceComponent(
-                      placeData: UiKitPlace(
-                        media: [
-                          UiKitMedia(
-                              link: 'assets/images/png/place.png',
-                              type: UiKitMediaType.video),
-                          UiKitMedia(
-                              link: 'assets/images/png/place.png',
-                              type: UiKitMediaType.image),
-                          UiKitMedia(
-                              link: 'assets/images/png/place.png',
-                              type: UiKitMediaType.image),
-                          UiKitMedia(
-                              link: 'assets/images/png/place.png',
-                              type: UiKitMediaType.image),
-                          UiKitMedia(
-                              link: 'assets/images/png/place.png',
-                              type: UiKitMediaType.image),
-                        ],
-                        description:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                            'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-                            'Nulla facilisi. '
-                            'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-                            'Nulla facilisi',
-                        rating: 4.8,
-                        tags: [
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: false),
-                          UiKitTag(
-                              title: 'Cheap',
-                              iconPath: 'assets/images/svg/cocktail.svg',
-                              matching: true),
-                        ],
-                      ),
+                      placeData: place,
                       placeDescriptionItems: const [
                         PlaceDescriptionItem(
                           title: 'Address',
@@ -214,109 +171,7 @@ class ComponentsTestPage extends StatelessWidget {
                     context,
                     EventModel.fromJson(
                         configuration.appConfig.content['event']),
-                    EventComponent(
-                        event: UiKitEvent(
-                      media: [
-                        UiKitMedia(
-                            link: 'assets/images/png/place.png',
-                            type: UiKitMediaType.video),
-                        UiKitMedia(
-                            link: 'assets/images/png/place.png',
-                            type: UiKitMediaType.image),
-                        UiKitMedia(
-                            link: 'assets/images/png/place.png',
-                            type: UiKitMediaType.image),
-                        UiKitMedia(
-                            link: 'assets/images/png/place.png',
-                            type: UiKitMediaType.image),
-                        UiKitMedia(
-                            link: 'assets/images/png/place.png',
-                            type: UiKitMediaType.image),
-                      ],
-                      description:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                          'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-                          'Nulla facilisi. '
-                          'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-                          'Nulla facilisi',
-                      rating: 4.8,
-                      tags: [
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: false),
-                        UiKitTag(
-                            title: 'Cheap',
-                            iconPath: 'assets/images/svg/cocktail.svg',
-                            matching: true),
-                      ],
-                      descriptionItems: const [
-                        DescriptionItem(
-                          title: 'Don\'t miss out',
-                          description: 'Burj Khalifa 122nd Floor',
-                        ),
-                        DescriptionItem(
-                          title: 'Open now',
-                          description: '9:30 am - 10:30 pm',
-                        ),
-                      ],
-                    )),
+                    EventComponent(event: event),
                     BottomBookingBar(
                         model: PlaceModel.fromJson(
                                     configuration.appConfig.content['event'])
@@ -328,4 +183,158 @@ class ComponentsTestPage extends StatelessWidget {
       ),
     );
   }
+
+  final List<UiKitTag> tags = [
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: false),
+    UiKitTag(
+        title: 'Cheap',
+        iconPath: 'assets/images/svg/cocktail.svg',
+        matching: true),
+  ];
+
+  final UiKitPlace place = UiKitPlace(
+    media: [
+      UiKitMedia(
+          link: 'assets/images/png/place.png', type: UiKitMediaType.video),
+      UiKitMedia(
+          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+      UiKitMedia(
+          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+      UiKitMedia(
+          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+      UiKitMedia(
+          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+    ],
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+        'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+        'Nulla facilisi. '
+        'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+        'Nulla facilisi',
+    rating: 4.8,
+    tags: [
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: false),
+      UiKitTag(
+          title: 'Cheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          matching: true),
+    ],
+  );
 }

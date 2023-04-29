@@ -48,7 +48,7 @@ class PlaceComponent extends StatelessWidget {
             UiKitPhotoSlider(
               media: placeData.media,
               width: size.width,
-              height: 156,
+              height: 256,
             ),
             SpacingFoundation.verticalSpace12,
             PlaceStats(
