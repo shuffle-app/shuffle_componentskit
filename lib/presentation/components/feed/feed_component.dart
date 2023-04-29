@@ -24,7 +24,7 @@ class FeedComponent extends StatelessWidget {
             (model.positionModel?.bodyAlignment).crossAxisAlignment,
         children: [
           if (feed.recommendedEvent != null) ...[
-             AccentCard(
+            AccentCard(
               title: feed.recommendedEvent!.title ?? '',
               additionalInfo:
                   feed.recommendedEvent!.descriptionItems?.first.description ??
@@ -41,19 +41,19 @@ class FeedComponent extends StatelessWidget {
             Text('How’re you feeling tonight?',
                 style: theme?.regularTextTheme.title1),
             SpacingFoundation.verticalSpace8,
-
-            // SingleChildScrollView(
-            //     scrollDirection: Axis.horizontal,
-            //     child: Row(
-            //         children: feed.moods!
-            //             .map((e) => MessageCardWithIcon(
-            //                     message: e.title,
-            //                     icon: ImageWidget(link: e.logo),
-            //                     layoutDirection: Axis.horizontal)
-            //                 .paddingSymmetric(
-            //                     horizontal:
-            //                         SpacingFoundation.horizontalSpacing4))
-            //             .toList())),
+            SingleChildScrollView(
+                    primary: false,
+                    scrollDirection: Axis.horizontal,
+                    child:  Row(
+                        children: feed.moods!
+                            .map((e) => Flexible(child: MessageCardWithIcon(
+                                    message: e.title,
+                                    icon: ImageWidget(link: e.logo),
+                                    layoutDirection: Axis.vertical)
+    ).paddingSymmetric(
+                                    horizontal:
+                                        SpacingFoundation.horizontalSpacing4))
+                            .toList())),
             SpacingFoundation.verticalSpace8,
           ],
           if (feed.places != null) ...[
@@ -67,7 +67,7 @@ class FeedComponent extends StatelessWidget {
                     UiKitPhotoSlider(
                       media: e.media,
                       width: size.width,
-                      height: 156,
+                      height: 256,
                     ),
                     SpacingFoundation.verticalSpace4,
                     Text(e.title ?? '',
