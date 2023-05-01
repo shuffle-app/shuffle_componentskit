@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+
 class BottomBookingBar extends StatelessWidget {
   final BookingElementModel model;
-  const BottomBookingBar({Key? key, required this.model}) : super(key: key);
+  final VoidCallback? onShowRoute;
+  final VoidCallback? onBook;
+  final VoidCallback? onMagnify;
+
+  const BottomBookingBar(
+      {Key? key,
+      required this.model,
+      this.onShowRoute,
+      this.onBook,
+      this.onMagnify})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,17 +22,15 @@ class BottomBookingBar extends StatelessWidget {
         top: false,
         child: Row(
           crossAxisAlignment:
-          (model.positionModel?.bodyAlignment)
-              .crossAxisAlignment,
+              (model.positionModel?.bodyAlignment).crossAxisAlignment,
           mainAxisAlignment:
-          (model.positionModel?.bodyAlignment)
-              .mainAxisAlignment,
+              (model.positionModel?.bodyAlignment).mainAxisAlignment,
           mainAxisSize: MainAxisSize.max,
           children: [
             if (model.showRoute ?? true)
               context.button(
                 text: '',
-                onPressed: () {},
+                onPressed: onShowRoute,
                 onlyIcon: true,
                 outlined: true,
                 icon: ImageWidget(
@@ -33,7 +42,7 @@ class BottomBookingBar extends StatelessWidget {
             Expanded(
               child: context.button(
                 text: 'Book it',
-                onPressed: () {},
+                onPressed: onBook,
                 gradient: true,
               ),
             ),
@@ -41,7 +50,7 @@ class BottomBookingBar extends StatelessWidget {
             if (model.showMagnify ?? true)
               context.button(
                 text: '',
-                onPressed: () {},
+                onPressed: onMagnify,
                 onlyIcon: true,
                 outlined: true,
                 icon: ImageWidget(
@@ -51,11 +60,7 @@ class BottomBookingBar extends StatelessWidget {
               ),
           ],
         ).paddingSymmetric(
-            vertical: model.positionModel
-                ?.verticalMargin ??
-                0.0,
-            horizontal: model.positionModel
-                ?.horizontalMargin ??
-                0.0));
+            vertical: model.positionModel?.verticalMargin ?? 0.0,
+            horizontal: model.positionModel?.horizontalMargin ?? 0.0));
   }
 }

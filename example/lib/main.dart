@@ -55,9 +55,7 @@ class _MyAppState extends State<MyApp> {
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(
                               themeMatcher(configuration.appConfig.theme)));
                       return Center(
-                          child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ));
+                          child: LoadingWidget());
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -75,6 +73,7 @@ class ComponentsTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UiKitEvent event = UiKitEvent(
+      id: '1',
       media: [
         UiKitMedia(
             link: 'assets/images/png/place.png', type: UiKitMediaType.video),
@@ -121,16 +120,25 @@ class ComponentsTestPage extends StatelessWidget {
                 onPressed: () => buildComponent(
                     context,
                     FeedModel.fromJson(configuration.appConfig.content['feed']),
-                    FeedComponent(
-                        feed: UiKitFeed(
-                      places: List.generate(4, (index) => place),
-                      recommendedEvent: event,
-                      moods: List.generate(
-                          4,
-                          (index) => UiKitMood(
-                              title: 'Want to have some fun',
-                              logo: 'assets/images/png/crazy_emoji.png')),
-                    )))),
+                    Scaffold(
+                        // appBar: AppBar(
+                        //   backgroundColor: Colors.transparent,
+                        //   toolbarHeight: 0,
+                        //   bottomOpacity: 0,
+                        //   toolbarOpacity: 0,
+                        // ),
+                        body: SingleChildScrollView(
+                            child: FeedComponent(
+                                feed: UiKitFeed(
+                          places: List.generate(4, (index) => place),
+                          recommendedEvent: event,
+                          moods: List.generate(
+                              4,
+                              (index) => UiKitMood(
+                                  id: '1',
+                                  title: 'Want to have some fun',
+                                  logo: 'assets/images/png/crazy_emoji.png')),
+                        )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show place',
@@ -252,6 +260,8 @@ class ComponentsTestPage extends StatelessWidget {
   ];
 
   final UiKitPlace place = UiKitPlace(
+    title: 'title',
+    id: '1',
     media: [
       UiKitMedia(
           link: 'assets/images/png/place.png', type: UiKitMediaType.video),

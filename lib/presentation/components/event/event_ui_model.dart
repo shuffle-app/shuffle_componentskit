@@ -3,6 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../../../shuffle_components_kit.dart';
 
 class UiKitEvent {
+  final String id;
   final String? title;
   final OwnerModel? owner;
   final List<UiKitMedia>? media;
@@ -11,8 +12,8 @@ class UiKitEvent {
   final double? rating;
   final List<DescriptionItem>? descriptionItems;
 
-  UiKitEvent(
-      {this.title,
+  UiKitEvent({required this.id,
+      this.title,
       this.owner,
       this.media,
       this.description,

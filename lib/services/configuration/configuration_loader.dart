@@ -47,7 +47,7 @@ class GlobalConfiguration {
         model = await _loadAndSaveConfig();
       }
       appConfig = model;
-      _compliter.complete();
+      if (!_compliter.isCompleted) _compliter.complete();
     } catch (e, t) {
       generalErrorCatch(e, t);
     }
