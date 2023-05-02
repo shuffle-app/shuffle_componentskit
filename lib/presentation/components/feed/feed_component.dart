@@ -103,7 +103,7 @@ class FeedComponent extends StatelessWidget {
                         : () => onPlacePressed!(e.id),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         UiKitPhotoSlider(
                           media: e.media,
