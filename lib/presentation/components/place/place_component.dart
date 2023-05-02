@@ -7,9 +7,7 @@ class PlaceComponent extends StatelessWidget {
   final List<PlaceDescriptionItem> placeDescriptionItems;
 
   const PlaceComponent(
-      {Key? key,
-      required this.placeData,
-      required this.placeDescriptionItems})
+      {Key? key, required this.placeData, required this.placeDescriptionItems})
       : super(key: key);
 
   @override
@@ -58,7 +56,8 @@ class PlaceComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace12,
             Text(
               placeData.description,
-              style: theme?.boldTextTheme.caption1.copyWith(color: Colors.white),
+              style:
+                  theme?.boldTextTheme.caption1.copyWith(color: Colors.white),
             ),
             SpacingFoundation.verticalSpace16,
             IntrinsicHeight(
@@ -68,9 +67,7 @@ class PlaceComponent extends StatelessWidget {
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
                       value: 'in 2 days',
-                      icon: ImageWidget(
-                        rasterAsset: Assets.images.png.calendar,
-                      ),
+                      rasterIconAsset: Assets.images.png.calendar,
                       action: () {},
                     ),
                   ),
@@ -78,9 +75,7 @@ class PlaceComponent extends StatelessWidget {
                   Expanded(
                     child: PointBalancePlaceActionCard(
                       value: '2 650',
-                      icon: ImageWidget(
-                        rasterAsset: Assets.images.png.place,
-                      ),
+                      rasterIconAsset: Assets.images.png.calendar,
                       action: () {},
                     ),
                   ),

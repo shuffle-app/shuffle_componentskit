@@ -11,3 +11,4 @@ export 'components/feed/feed_component.dart';
 export 'components/feed/feed_ui_model.dart';
 export 'components/mood/mood_component.dart';
 export 'components/mood/mood_ui_model.dart';
+export 'components/place/place_ui_model.dart';
