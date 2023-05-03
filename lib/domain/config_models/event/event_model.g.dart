@@ -6,7 +6,8 @@ part of 'event_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ComponentEventModel _$EventModelFromJson(Map<String, dynamic> json) => ComponentEventModel(
+ComponentEventModel _$ComponentEventModelFromJson(Map<String, dynamic> json) =>
+    ComponentEventModel(
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -22,7 +23,8 @@ ComponentEventModel _$EventModelFromJson(Map<String, dynamic> json) => Component
       showReactions: json['show_reactions'] as bool?,
     );
 
-Map<String, dynamic> _$EventModelToJson(ComponentEventModel instance) =>
+Map<String, dynamic> _$ComponentEventModelToJson(
+        ComponentEventModel instance) =>
     <String, dynamic>{
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,

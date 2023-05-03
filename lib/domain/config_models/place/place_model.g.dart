@@ -6,7 +6,8 @@ part of 'place_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ComponentPlaceModel _$PlaceModelFromJson(Map<String, dynamic> json) => ComponentPlaceModel(
+ComponentPlaceModel _$ComponentPlaceModelFromJson(Map<String, dynamic> json) =>
+    ComponentPlaceModel(
       showRating: json['show_rating'] as bool?,
       showReviews: json['show_reviews'] as bool?,
       bookingElementModel: json['booking_element_model'] == null
@@ -23,7 +24,8 @@ ComponentPlaceModel _$PlaceModelFromJson(Map<String, dynamic> json) => Component
       version: json['version'] as String? ?? '0',
     );
 
-Map<String, dynamic> _$PlaceModelToJson(ComponentPlaceModel instance) =>
+Map<String, dynamic> _$ComponentPlaceModelToJson(
+        ComponentPlaceModel instance) =>
     <String, dynamic>{
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
