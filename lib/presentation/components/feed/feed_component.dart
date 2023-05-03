@@ -3,7 +3,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FeedComponent extends StatelessWidget {
-  final UiKitFeed feed;
+  final UiFeedModel feed;
   final Function? onMoodPressed;
   final Function? onEventPressed;
   final Function? onPlacePressed;
@@ -21,7 +21,7 @@ class FeedComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final FeedModel model = FeedModel.fromJson(config['feed']);
+    final ComponentFeedModel model = ComponentFeedModel.fromJson(config['feed']);
 
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
@@ -60,8 +60,8 @@ class FeedComponent extends StatelessWidget {
               Text('How’re you feeling tonight?',
                   style: theme?.regularTextTheme.title1),
               Transform.translate(
-                  offset: Offset(-20, 25),
-                  child: InkWell(
+                  offset: const Offset(-20, 25),
+                  child: const InkWell(
                     child: BlurredQuestionChip(
                       label: 'How it works',
                     ),

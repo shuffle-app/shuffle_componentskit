@@ -3,7 +3,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PlaceComponent extends StatelessWidget {
-  final UiKitPlace placeData;
+  final UiPlaceModel placeData;
   final List<PlaceDescriptionItem> placeDescriptionItems;
 
   const PlaceComponent(
@@ -15,7 +15,7 @@ class PlaceComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final PlaceModel model = PlaceModel.fromJson(config['place']);
+    final ComponentPlaceModel model = ComponentPlaceModel.fromJson(config['place']);
 
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
@@ -57,7 +57,7 @@ class PlaceComponent extends StatelessWidget {
             Text(
               placeData.description,
               style:
-                  theme?.boldTextTheme.caption1.copyWith(color: Colors.white),
+                  theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
             ),
             SpacingFoundation.verticalSpace16,
             IntrinsicHeight(

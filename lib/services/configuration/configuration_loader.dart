@@ -8,10 +8,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
-import 'data/configuration_model.dart';
 
 class GlobalConfiguration {
-  static GlobalConfiguration _singleton = GlobalConfiguration._internal();
+  static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
 
   factory GlobalConfiguration() {
     return _singleton;

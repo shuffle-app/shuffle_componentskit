@@ -4,7 +4,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 part 'feed_model.g.dart';
 
 @JsonSerializable()
-class FeedModel extends BaseModel {
+class ComponentFeedModel extends BaseModel {
 
   @JsonKey(name: 'show_daily_recomendation')
   final bool? showDailyRecomendation;
@@ -18,7 +18,7 @@ class FeedModel extends BaseModel {
   @JsonKey(name: 'show_places')
   final bool? showPlaces;
 
-  FeedModel(
+  ComponentFeedModel(
       {this.showPlaces,
         this.showFeelings,
         this.showDailyRecomendation,
@@ -27,7 +27,7 @@ class FeedModel extends BaseModel {
         super.positionModel,
         required super.version,}):super();
 
-  factory FeedModel.fromJson(Map<String, dynamic> json) =>
+  factory ComponentFeedModel.fromJson(Map<String, dynamic> json) =>
       _$FeedModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$FeedModelToJson(this);

@@ -3,7 +3,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class EventComponent extends StatelessWidget {
-  final UiKitEvent event;
+  final UiEventModel event;
 
   const EventComponent({Key? key, required this.event}) : super(key: key);
 
@@ -12,7 +12,7 @@ class EventComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final EventModel model = EventModel.fromJson(config['event']);
+    final ComponentEventModel model = ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
@@ -65,7 +65,7 @@ class EventComponent extends StatelessWidget {
               Text(
                 event.description!,
                 style:
-                    theme?.boldTextTheme.caption1.copyWith(color: Colors.white),
+                    theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
               ),
               SpacingFoundation.verticalSpace16
             ],

@@ -6,7 +6,8 @@ part of 'feed_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FeedModel _$FeedModelFromJson(Map<String, dynamic> json) => FeedModel(
+ComponentFeedModel _$ComponentFeedModelFromJson(Map<String, dynamic> json) =>
+    ComponentFeedModel(
       showPlaces: json['show_places'] as bool?,
       showFeelings: json['show_feelings'] as bool?,
       showDailyRecomendation: json['show_daily_recomendation'] as bool?,
@@ -20,7 +21,8 @@ FeedModel _$FeedModelFromJson(Map<String, dynamic> json) => FeedModel(
       version: json['version'] as String? ?? '0',
     );
 
-Map<String, dynamic> _$FeedModelToJson(FeedModel instance) => <String, dynamic>{
+Map<String, dynamic> _$ComponentFeedModelToJson(ComponentFeedModel instance) =>
+    <String, dynamic>{
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
