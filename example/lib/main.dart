@@ -54,8 +54,7 @@ class _MyAppState extends State<MyApp> {
                           .then((_) => Future.delayed(Duration(seconds: 1)))
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(
                               themeMatcher(configuration.appConfig.theme)));
-                      return Center(
-                          child: LoadingWidget());
+                      return Center(child: LoadingWidget());
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -72,7 +71,7 @@ class ComponentsTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UiKitEvent event = UiKitEvent(
+    final UiEventModel event = UiEventModel(
       id: '1',
       media: [
         UiKitMedia(
@@ -94,11 +93,11 @@ class ComponentsTestPage extends StatelessWidget {
       rating: 4.8,
       tags: tags,
       descriptionItems: const [
-        DescriptionItem(
+        UiDescriptionItemModel(
           title: 'Don\'t miss out',
           description: 'Burj Khalifa 122nd Floor',
         ),
-        DescriptionItem(
+        UiDescriptionItemModel(
           title: 'Open now',
           description: '9:30 am - 10:30 pm',
         ),
@@ -119,7 +118,8 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show feed',
                 onPressed: () => buildComponent(
                     context,
-                    FeedModel.fromJson(configuration.appConfig.content['feed']),
+                    ComponentFeedModel.fromJson(
+                        configuration.appConfig.content['feed']),
                     Scaffold(
                         // appBar: AppBar(
                         //   backgroundColor: Colors.transparent,
@@ -129,22 +129,22 @@ class ComponentsTestPage extends StatelessWidget {
                         // ),
                         body: SingleChildScrollView(
                             child: FeedComponent(
-                                feed: UiKitFeed(
-                          places: List.generate(4, (index) => place),
-                          recommendedEvent: event,
-                          moods: List.generate(
-                              4,
-                              (index) => UiKitMood(
-                                  id: '1',
-                                  title: 'Want to have some fun',
-                                  logo: 'assets/images/png/crazy_emoji.png')),
-                        )))))),
+                                feed: UiFeedModel(
+                      places: List.generate(4, (index) => place),
+                      recommendedEvent: event,
+                      moods: List.generate(
+                          4,
+                          (index) => UiMoodModel(
+                              id: '1',
+                              title: 'Want to have some fun',
+                              logo: 'assets/images/png/crazy_emoji.png')),
+                    )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show place',
                 onPressed: () => buildComponent(
                     context,
-                    PlaceModel.fromJson(
+                    ComponentPlaceModel.fromJson(
                         configuration.appConfig.content['place']),
                     PlaceComponent(
                       placeData: place,
@@ -168,7 +168,7 @@ class ComponentsTestPage extends StatelessWidget {
                       ],
                     ),
                     BottomBookingBar(
-                        model: PlaceModel.fromJson(
+                        model: ComponentPlaceModel.fromJson(
                                     configuration.appConfig.content['place'])
                                 .bookingElementModel ??
                             BookingElementModel(version: '0')))),
@@ -177,11 +177,11 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show event',
                 onPressed: () => buildComponent(
                     context,
-                    EventModel.fromJson(
+                    ComponentEventModel.fromJson(
                         configuration.appConfig.content['event']),
                     EventComponent(event: event),
                     BottomBookingBar(
-                        model: PlaceModel.fromJson(
+                        model: ComponentPlaceModel.fromJson(
                                     configuration.appConfig.content['event'])
                                 .bookingElementModel ??
                             BookingElementModel(version: '0')))),
@@ -259,7 +259,7 @@ class ComponentsTestPage extends StatelessWidget {
         matching: true),
   ];
 
-  final UiKitPlace place = UiKitPlace(
+  final UiPlaceModel place = UiPlaceModel(
     title: 'title',
     id: '1',
     media: [

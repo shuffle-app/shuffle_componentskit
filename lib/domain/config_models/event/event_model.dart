@@ -4,7 +4,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 part 'event_model.g.dart';
 
 @JsonSerializable()
-class EventModel extends BaseModel {
+class ComponentEventModel extends BaseModel {
 
   @JsonKey(name: 'booking_element_model')
   final BookingElementModel? bookingElementModel;
@@ -15,7 +15,7 @@ class EventModel extends BaseModel {
   @JsonKey(name: 'show_reactions')
   final bool? showReactions;
 
-  EventModel({
+  ComponentEventModel({
     required super.pageBuilderType,
     super.positionModel,
     required super.version,
@@ -24,7 +24,7 @@ class EventModel extends BaseModel {
     this.showReactions,
   }) : super();
 
-  factory EventModel.fromJson(Map<String, dynamic> json) =>
+  factory ComponentEventModel.fromJson(Map<String, dynamic> json) =>
       _$EventModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$EventModelToJson(this);

@@ -1,6 +1,6 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class UiKitPlace {
+class UiPlaceModel {
   final String id;
   final List<UiKitMedia> media;
   final String description;
@@ -9,7 +9,7 @@ class UiKitPlace {
   final String? title;
   final String? logo;
 
-  UiKitPlace({
+  UiPlaceModel({
     required this.id,
     this.title,
     required this.media,

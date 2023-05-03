@@ -4,7 +4,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 part 'place_model.g.dart';
 
 @JsonSerializable()
-class PlaceModel extends BaseModel {
+class ComponentPlaceModel extends BaseModel {
 
   @JsonKey(name: 'booking_element_model')
   final BookingElementModel? bookingElementModel;
@@ -18,7 +18,7 @@ class PlaceModel extends BaseModel {
   @JsonKey(name: 'show_reactions')
   final bool? showReactions;
 
-  PlaceModel(
+  ComponentPlaceModel(
       {this.showRating,
         this.showReviews,
         this.bookingElementModel,
@@ -27,7 +27,7 @@ class PlaceModel extends BaseModel {
         super.positionModel,
         required super.version,}):super();
 
-  factory PlaceModel.fromJson(Map<String, dynamic> json) =>
+  factory ComponentPlaceModel.fromJson(Map<String, dynamic> json) =>
       _$PlaceModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlaceModelToJson(this);

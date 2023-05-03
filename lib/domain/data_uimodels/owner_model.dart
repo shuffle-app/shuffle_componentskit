@@ -1,10 +1,10 @@
-class OwnerModel {
+class UiOwnerModel {
   final String name;
   final String? logo;
   final String id;
   final OwnerType type;
 
-  OwnerModel({
+  UiOwnerModel({
     required this.name,
     this.logo,
     required this.id,

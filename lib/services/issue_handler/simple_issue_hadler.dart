@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/presentation.dart';
-
-import 'navigation_service/navigation_key.dart';
+import '../../shuffle_components_kit.dart';
 
 generalErrorCatch(error,stackTrace) {
   try {
