@@ -28,7 +28,7 @@ class ComponentPlaceModel extends BaseModel {
         required super.version,}):super();
 
   factory ComponentPlaceModel.fromJson(Map<String, dynamic> json) =>
-      _$PlaceModelFromJson(json);
+      _$ComponentPlaceModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PlaceModelToJson(this);
+  Map<String, dynamic> toJson() => _$ComponentPlaceModelToJson(this);
 }

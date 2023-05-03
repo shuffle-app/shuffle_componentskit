@@ -28,7 +28,7 @@ class ComponentFeedModel extends BaseModel {
         required super.version,}):super();
 
   factory ComponentFeedModel.fromJson(Map<String, dynamic> json) =>
-      _$FeedModelFromJson(json);
+      _$ComponentFeedModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FeedModelToJson(this);
+  Map<String, dynamic> toJson() => _$ComponentFeedModelToJson(this);
 }

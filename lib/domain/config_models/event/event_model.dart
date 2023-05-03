@@ -25,7 +25,7 @@ class ComponentEventModel extends BaseModel {
   }) : super();
 
   factory ComponentEventModel.fromJson(Map<String, dynamic> json) =>
-      _$EventModelFromJson(json);
+      _$ComponentEventModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$EventModelToJson(this);
+  Map<String, dynamic> toJson() => _$ComponentEventModelToJson(this);
 }
