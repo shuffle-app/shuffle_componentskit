@@ -26,11 +26,12 @@ class MoodComponent extends StatelessWidget {
           (model.positionModel?.bodyAlignment).crossAxisAlignment,
       children: [
         MessageCardWithIcon(
-            message: mood.title,
-            icon: ImageWidget(link: mood.logo),
-            layoutDirection: Axis.horizontal).paddingSymmetric(
-            horizontal: model.positionModel?.horizontalMargin ?? 0),
-        SpacingFoundation.verticalSpace12,
+                message: mood.title,
+                icon: ImageWidget(link: mood.logo),
+                layoutDirection: Axis.horizontal)
+            .paddingSymmetric(
+                horizontal: model.positionModel?.horizontalMargin ?? 0),
+        SpacingFoundation.verticalSpace8,
         Row(
           children: [
             const Flexible(
@@ -45,33 +46,35 @@ class MoodComponent extends StatelessWidget {
               children: [
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.isNotEmpty)
-                  WeatherInfoCard(
+                  Flexible(
+                      child: WeatherInfoCard(
                     temperature: mood.descriptionItems!.first.description,
                     weatherType: mood.descriptionItems!.first.title,
-                  ),
-                SpacingFoundation.verticalSpace12,
+                  )),
+                SpacingFoundation.verticalSpace8,
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.length >= 2)
-                  MetricsCard(
+                  Flexible(
+                      child: MetricsCard(
                     title: mood.descriptionItems!.last.title,
                     value: mood.descriptionItems!.last.description,
                     unit: 'kCal',
                     icon: ImageWidget(
                       svgAsset: Assets.images.svg.fireWhite,
                     ),
-                  ),
+                  )),
               ],
-            ))
+            ).paddingOnly(left: SpacingFoundation.horizontalSpacing8))
           ],
         ).paddingSymmetric(
             horizontal: model.positionModel?.horizontalMargin ?? 0),
         if (model.showPlaces ?? true) ...[
-          SpacingFoundation.verticalSpace12,
+          SpacingFoundation.verticalSpace8,
           Text(
             'We have places just for you',
             style: theme?.boldTextTheme.title1,
           ).paddingSymmetric(
-    horizontal: model.positionModel?.horizontalMargin ?? 0),
+              horizontal: model.positionModel?.horizontalMargin ?? 0),
           SpacingFoundation.verticalSpace8,
           ...?mood.places
               ?.map((e) => PlacePreview(
@@ -82,7 +85,6 @@ class MoodComponent extends StatelessWidget {
                       vertical: SpacingFoundation.verticalSpacing4))
               .toList(),
         ],
-        SpacingFoundation.verticalSpace24,
       ],
     ).paddingSymmetric(
       vertical: model.positionModel?.verticalMargin ?? 0,
