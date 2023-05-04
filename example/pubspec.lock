@@ -482,11 +482,9 @@ packages:
   shuffle_uikit:
     dependency: transitive
     description:
-      path: "."
-      ref: master
-      resolved-ref: "5b068c7a627b9822e2db3cbff35f1e69ff76fdf0"
-      url: "https://github.com/shuffle-app/shuffle_ui_kit.git"
-    source: git
+      path: "../../shuffle-uikit"
+      relative: true
+    source: path
     version: "0.0.1"
   simple_gradient_text:
     dependency: transitive

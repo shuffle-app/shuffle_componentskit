@@ -141,6 +141,31 @@ class ComponentsTestPage extends StatelessWidget {
                     )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
+                text: 'show mood',
+                onPressed: () => buildComponent(
+                    context,
+                    ComponentMoodModel.fromJson(
+                        configuration.appConfig.content['mood']),
+                    Scaffold(
+                        appBar: const CustomAppBar(
+                          title: 'Feeling',
+                          centerTitle: true,
+                        ),
+                        body: SingleChildScrollView(
+                            child: MoodComponent(
+                          mood: UiMoodModel(
+                            descriptionItems: [
+                              UiDescriptionItemModel(title: 'Sunny', description: '+32'),
+                              UiDescriptionItemModel(title: 'Burned today', description: '432'),
+                            ],
+                            title: 'need to cool down a bit?',
+                            logo: 'assets/images/png/crazy_emoji.png',
+                            id: '1',
+                            places: List.generate(4, (index) => place),
+                          ),
+                        ))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 text: 'show place',
                 onPressed: () => buildComponent(
                     context,

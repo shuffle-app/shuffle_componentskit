@@ -5,6 +5,7 @@ export 'widgets/components_provider.dart';
 export 'components/place/place_component.dart';
 export 'utils/extentions/aligment_extention.dart';
 export 'common/bottom_booking_bar.dart';
+export 'common/place_preview.dart';
 export 'components/event/event_component.dart';
 export 'components/event/event_uimodel.dart';
 export 'components/feed/feed_component.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/common/place_preview.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -7,13 +8,14 @@ class FeedComponent extends StatelessWidget {
   final Function? onMoodPressed;
   final Function? onEventPressed;
   final Function? onPlacePressed;
+  final Function? onTagSortPressed;
 
   const FeedComponent(
       {Key? key,
       required this.feed,
       this.onMoodPressed,
       this.onEventPressed,
-      this.onPlacePressed})
+      this.onPlacePressed, this.onTagSortPressed})
       : super(key: key);
 
   @override
@@ -56,11 +58,12 @@ class FeedComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace8
           ],
           if (feed.moods != null && (model.showFeelings ?? true)) ...[
-            Row(children: [
-              Text('How’re you feeling tonight?',
-                  style: theme?.regularTextTheme.title1),
+            Stack(children: [
+             Text('How’re you feeling tonight?',
+                  style: theme?.boldTextTheme.title1),
+
               Transform.translate(
-                  offset: const Offset(-20, 25),
+                  offset: Offset(size.width/2, 30),
                   child: const InkWell(
                     child: BlurredQuestionChip(
                       label: 'How it works',
@@ -93,50 +96,11 @@ class FeedComponent extends StatelessWidget {
           ],
           if (feed.places != null && (model.showPlaces ?? true)) ...[
             Text('You better check this out',
-                    style: theme?.regularTextTheme.title1)
+                    style: theme?.boldTextTheme.title1)
                 .paddingSymmetric(
                     horizontal: model.positionModel?.horizontalMargin ?? 0),
             SpacingFoundation.verticalSpace8,
-            ...feed.places!.map((e) => InkWell(
-                    onTap: onPlacePressed == null
-                        ? null
-                        : () => onPlacePressed!(e.id),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        UiKitPhotoSlider(
-                          media: e.media,
-                          width: size.width -
-                              (model.positionModel?.horizontalMargin ?? 0) * 2,
-                          height: 200,
-                        ),
-                        SpacingFoundation.verticalSpace4,
-                        Text(e.title ?? '',
-                                style: theme?.regularTextTheme.caption1)
-                            .paddingSymmetric(
-                                horizontal:
-                                    model.positionModel?.horizontalMargin ?? 0),
-                        SpacingFoundation.verticalSpace4,
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Wrap(
-                            spacing: SpacingFoundation.horizontalSpacing8,
-                            children: [
-                              (model.positionModel?.horizontalMargin ?? 0)
-                                  .widthBox,
-                              ...e.tags
-                                  .map((el) => UiKitTagWidget(
-                                        title: el.title,
-                                        icon: el.iconPath,
-                                        showGradient: el.matching,
-                                      ))
-                                  .toList()
-                            ],
-                          ),
-                        ),
-                      ],
-                    ))
+            ...feed.places!.map((e) => PlacePreview(onTap: onPlacePressed,place: e,model: model,)
                 .paddingSymmetric(
                     vertical: SpacingFoundation.verticalSpacing4)),
             SpacingFoundation.verticalSpace16,
