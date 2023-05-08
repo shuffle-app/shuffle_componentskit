@@ -6,9 +6,10 @@ class UiEventModel {
   final String id;
   final String? title;
   final UiOwnerModel? owner;
-  final List<UiKitMedia>? media;
+  final List<BaseUiKitMedia>? media;
   final String? description;
   final List<UiKitTag>? tags;
+  final List<UiKitTag>? baseTags;
   final double? rating;
   final List<UiDescriptionItemModel>? descriptionItems;
 
@@ -18,6 +19,7 @@ class UiEventModel {
       this.media,
       this.description,
       this.tags,
+      this.baseTags,
       this.rating,
       this.descriptionItems});
 }
