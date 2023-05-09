@@ -25,6 +25,8 @@ dependencies:
 #configuration libs
   http: ^0.13.5
   path_provider: ^2.0.14
+ #ui_helpers
+ palette_generator:
 
 
 dev_dependencies:
