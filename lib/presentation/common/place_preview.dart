@@ -27,6 +27,7 @@ class PlacePreview extends StatelessWidget {
                 alignment: Alignment.center,
                 child: UiKitPhotoSlider(
                   media: place.media,
+                  onTap: onTap != null ? () => onTap!(place.id) : null,
                   width: size.width -
                       (model.positionModel?.horizontalMargin ?? 0) * 2,
                   height: 106.h,
