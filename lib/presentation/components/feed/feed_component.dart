@@ -15,7 +15,8 @@ class FeedComponent extends StatelessWidget {
       required this.feed,
       this.onMoodPressed,
       this.onEventPressed,
-      this.onPlacePressed, this.onTagSortPressed})
+      this.onPlacePressed,
+      this.onTagSortPressed})
       : super(key: key);
 
   @override
@@ -23,7 +24,8 @@ class FeedComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentFeedModel model = ComponentFeedModel.fromJson(config['feed']);
+    final ComponentFeedModel model =
+        ComponentFeedModel.fromJson(config['feed']);
 
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
@@ -41,7 +43,7 @@ class FeedComponent extends StatelessWidget {
                         ? null
                         : () => onEventPressed!(feed.recommendedEvent?.id),
                     child: SafeArea(
-                        child: AccentCard(
+                        child: UiKitAccentCard(
                       title: feed.recommendedEvent!.title ?? '',
                       additionalInfo: feed.recommendedEvent!.descriptionItems
                               ?.first.description ??
@@ -59,13 +61,12 @@ class FeedComponent extends StatelessWidget {
           ],
           if (feed.moods != null && (model.showFeelings ?? true)) ...[
             Stack(children: [
-             Text('How’re you feeling tonight?',
+              Text('How’re you feeling tonight?',
                   style: theme?.boldTextTheme.title1),
-
               Transform.translate(
-                  offset: Offset(size.width/2, 30),
+                  offset: Offset(size.width / 2, 30),
                   child: const InkWell(
-                    child: BlurredQuestionChip(
+                    child: UiKitBlurredQuestionChip(
                       label: 'How it works',
                     ),
                   ))
@@ -84,7 +85,7 @@ class FeedComponent extends StatelessWidget {
                               onTap: onMoodPressed == null
                                   ? null
                                   : () => onMoodPressed!(e.id),
-                              child: MessageCardWithIcon(
+                              child: UiKitMessageCardWithIcon(
                                   message: e.title,
                                   icon: ImageWidget(link: e.logo),
                                   layoutDirection: Axis.vertical))
@@ -99,9 +100,45 @@ class FeedComponent extends StatelessWidget {
                     style: theme?.boldTextTheme.title1)
                 .paddingSymmetric(
                     horizontal: model.positionModel?.horizontalMargin ?? 0),
+            if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
+              SpacingFoundation.verticalSpace8,
+              SingleChildScrollView(
+                  primary: false,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(children: [
+                    ((model.positionModel?.horizontalMargin ?? 0) -
+                            SpacingFoundation.horizontalSpacing4)
+                        .widthBox,
+                    context.button(
+                        icon: ImageWidget(
+                            svgAsset: GraphicsFoundation.instance.svg.dice),
+                        onPressed: onTagSortPressed == null
+                            ? null
+                            : ()=>onTagSortPressed!(''),
+                        onlyIcon: true,
+                        gradient: true),
+                    ...feed.filterChips!
+                        .map((e) => context
+                            .button(
+                              // small: true,
+                              text: e.title,
+                              onPressed: onTagSortPressed == null
+                                  ? null
+                                  : () => onTagSortPressed!(e.title),
+                              icon: ImageWidget(link: e.iconPath,color: ColorsFoundation.darkNeutral900,),
+                            )
+                            .paddingSymmetric(
+                                horizontal:
+                                    SpacingFoundation.horizontalSpacing4))
+                        .toList()
+                  ])),
+            ],
             SpacingFoundation.verticalSpace8,
-            ...feed.places!.map((e) => PlacePreview(onTap: onPlacePressed,place: e,model: model,)
-                .paddingSymmetric(
+            ...feed.places!.map((e) => PlacePreview(
+                  onTap: onPlacePressed,
+                  place: e,
+                  model: model,
+                ).paddingSymmetric(
                     vertical: SpacingFoundation.verticalSpacing4)),
             SpacingFoundation.verticalSpace16,
           ],

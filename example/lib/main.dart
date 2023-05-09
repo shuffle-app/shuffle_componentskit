@@ -74,16 +74,16 @@ class ComponentsTestPage extends StatelessWidget {
     final UiEventModel event = UiEventModel(
       id: '1',
       media: [
-        UiKitMedia(
-            link: 'assets/images/png/place.png', type: UiKitMediaType.video),
-        UiKitMedia(
-            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
-        UiKitMedia(
-            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
-        UiKitMedia(
-            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
-        UiKitMedia(
-            link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+        UiKitMediaVideo(
+            link: 'assets/images/png/place.png'),
+        UiKitMediaPhoto(
+            link: 'assets/images/png/place.png', ),
+        UiKitMediaPhoto(
+            link: 'assets/images/png/place.png', ),
+        UiKitMediaPhoto(
+            link: 'assets/images/png/place.png', ),
+        UiKitMediaPhoto(
+            link: 'assets/images/png/place.png', ),
       ],
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
           'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
@@ -171,22 +171,22 @@ class ComponentsTestPage extends StatelessWidget {
                     context,
                     ComponentPlaceModel.fromJson(
                         configuration.appConfig.content['place']),
-                    PlaceComponent(
-                      placeData: place,
-                      placeDescriptionItems: const [
-                        PlaceDescriptionItem(
+                    const PlaceDescriptionGrid(
+                      spacing: 16,
+                      children: [
+                        UiKitTitledDescriptionWidget(
                           title: 'Address',
                           description: 'Burj Khalifa 122nd Floor',
                         ),
-                        PlaceDescriptionItem(
+                        UiKitTitledDescriptionWidget(
                           title: 'Open now',
                           description: '9:30 am - 10:30 pm',
                         ),
-                        PlaceDescriptionItem(
+                        UiKitTitledDescriptionWidget(
                           title: 'Website',
                           description: 'atmosphere.com',
                         ),
-                        PlaceDescriptionItem(
+                        UiKitTitledDescriptionWidget(
                           title: 'Phone',
                           description: '+971123596943',
                         ),
@@ -221,83 +221,83 @@ class ComponentsTestPage extends StatelessWidget {
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: false),
+        unique: false),
     UiKitTag(
         title: 'Cheap',
         iconPath: 'assets/images/svg/cocktail.svg',
-        matching: true),
+        unique: true),
   ];
 
   final UiPlaceModel place = UiPlaceModel(
     title: 'title',
     id: '1',
     media: [
-      UiKitMedia(
-          link: 'assets/images/png/place.png', type: UiKitMediaType.video),
-      UiKitMedia(
-          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
-      UiKitMedia(
-          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
-      UiKitMedia(
-          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
-      UiKitMedia(
-          link: 'assets/images/png/place.png', type: UiKitMediaType.image),
+      UiKitMediaVideo(
+          link: 'assets/images/png/place.png',),
+      UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',),
+      UiKitMediaPhoto(
+          link: 'assets/images/png/place.png', ),
+      UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',),
+      UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',),
     ],
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
         'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
@@ -309,67 +309,67 @@ class ComponentsTestPage extends StatelessWidget {
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: true),
+      UiKitTag(
+          title: 'uniqueCheap',
+          iconPath: 'assets/images/svg/cocktail.svg',
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
+          unique: true),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
+          unique: true),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
+          unique: true),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
+          unique: true),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
+          unique: true),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
+          unique: true),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: false),
       UiKitTag(
           title: 'Cheap',
           iconPath: 'assets/images/svg/cocktail.svg',
-          matching: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          matching: true),
+          unique: true),
     ],
   );
 }

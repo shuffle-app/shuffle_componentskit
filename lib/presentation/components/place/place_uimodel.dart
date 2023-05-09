@@ -2,9 +2,10 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiPlaceModel {
   final String id;
-  final List<UiKitMedia> media;
+  final List<BaseUiKitMedia> media;
   final String description;
   final List<UiKitTag> tags;
+  final List<UiKitTag>? baseTags;
   final double? rating;
   final String? title;
   final String? logo;
@@ -17,5 +18,6 @@ class UiPlaceModel {
     required this.description,
     this.rating,
     required this.tags,
+     this.baseTags,
   });
 }

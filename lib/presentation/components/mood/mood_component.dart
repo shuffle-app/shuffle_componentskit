@@ -11,6 +11,7 @@ class MoodComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
@@ -25,7 +26,7 @@ class MoodComponent extends StatelessWidget {
       crossAxisAlignment:
           (model.positionModel?.bodyAlignment).crossAxisAlignment,
       children: [
-        MessageCardWithIcon(
+        UiKitMessageCardWithIcon(
                 message: mood.title,
                 icon: ImageWidget(link: mood.logo),
                 layoutDirection: Axis.horizontal)
@@ -35,7 +36,7 @@ class MoodComponent extends StatelessWidget {
         Row(
           children: [
             const Flexible(
-              child: GradientAttentionCard(
+              child: UiKitGradientAttentionCard(
                 message: 'Then check this out',
                 textColor: Colors.black,
               ),
@@ -47,15 +48,19 @@ class MoodComponent extends StatelessWidget {
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.isNotEmpty)
                   Flexible(
-                      child: WeatherInfoCard(
-                    temperature: mood.descriptionItems!.first.description,
-                    weatherType: mood.descriptionItems!.first.title,
+                      child: UiKitMetricsCard(
+                    value: mood.descriptionItems!.first.description,
+                    title: mood.descriptionItems!.first.title,
+                    unit: 'º',
+                    icon: ImageWidget(
+                      rasterAsset: Assets.images.png.weatherIcon,
+                    ),
                   )),
                 SpacingFoundation.verticalSpace8,
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.length >= 2)
                   Flexible(
-                      child: MetricsCard(
+                      child: UiKitMetricsCard(
                     title: mood.descriptionItems!.last.title,
                     value: mood.descriptionItems!.last.description,
                     unit: 'kCal',

@@ -4,7 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PlaceComponent extends StatelessWidget {
   final UiPlaceModel placeData;
-  final List<PlaceDescriptionItem> placeDescriptionItems;
+  final List<UiDescriptionItemModel> placeDescriptionItems;
 
   const PlaceComponent(
       {Key? key, required this.placeData, required this.placeDescriptionItems})
@@ -49,9 +49,10 @@ class PlaceComponent extends StatelessWidget {
               height: 256,
             ),
             SpacingFoundation.verticalSpace12,
-            PlaceStats(
+            UiKitTagsWidget(
               rating: (model.showRating ?? false) ? placeData.rating : null,
-              tags: placeData.tags,
+              uniqueTags: placeData.tags,
+              baseTags: placeData.baseTags ?? [],
             ),
             SpacingFoundation.verticalSpace12,
             Text(
@@ -84,8 +85,8 @@ class PlaceComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace16,
             PlaceDescriptionGrid(
-              descriptionItems: placeDescriptionItems,
               spacing: 16,
+              children: placeDescriptionItems.map((e) => UiKitTitledDescriptionWidget(title: e.title,description: e.description,)).toList(),
             ),
             SpacingFoundation.verticalSpace16,
           ],
