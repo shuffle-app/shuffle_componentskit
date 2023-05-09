@@ -13,3 +13,5 @@ export 'components/feed/feed_uimodel.dart';
 export 'components/mood/mood_component.dart';
 export 'components/mood/mood_uimodel.dart';
 export 'components/place/place_uimodel.dart';
+export 'components/shuffle/shuffle_component.dart';
+export 'components/shuffle/shuffle_uimodel.dart';

@@ -51,10 +51,10 @@ class _MyAppState extends State<MyApp> {
                   : Builder(builder: (c) {
                       configuration
                           .load()
-                          .then((_) => Future.delayed(Duration(seconds: 1)))
+                          .then((_) => Future.delayed(const Duration(seconds: 1)))
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(
                               themeMatcher(configuration.appConfig.theme)));
-                      return Center(child: LoadingWidget());
+                      return const Center(child: LoadingWidget());
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -74,16 +74,19 @@ class ComponentsTestPage extends StatelessWidget {
     final UiEventModel event = UiEventModel(
       id: '1',
       media: [
-        UiKitMediaVideo(
-            link: 'assets/images/png/place.png'),
+        UiKitMediaVideo(link: 'assets/images/png/place.png'),
         UiKitMediaPhoto(
-            link: 'assets/images/png/place.png', ),
+          link: 'assets/images/png/place.png',
+        ),
         UiKitMediaPhoto(
-            link: 'assets/images/png/place.png', ),
+          link: 'assets/images/png/place.png',
+        ),
         UiKitMediaPhoto(
-            link: 'assets/images/png/place.png', ),
+          link: 'assets/images/png/place.png',
+        ),
         UiKitMediaPhoto(
-            link: 'assets/images/png/place.png', ),
+          link: 'assets/images/png/place.png',
+        ),
       ],
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
           'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
@@ -113,6 +116,58 @@ class ComponentsTestPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                text: 'show shuffle',
+                onPressed: () => buildComponent(
+                    context,
+                    ComponentShuffleModel.fromJson(
+                        configuration.appConfig.content['shuffle']),
+                    Scaffold(
+                        body: ShuffleComponent(
+                      shuffle: UiShuffleModel(
+                          items: List.generate(
+                        4,
+                        (index) => UiKitSwiperCard(
+                            title: 'Dance Again',
+                            subtitle: 'Unique place for unique people',
+                            imageLink: index == 0
+                                ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
+                                : index == 1
+                                    ? 'https://www.trutravels.com/blog/finns-beach-club.png'
+                                    : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
+                            tags: [
+                              UiKitTagWidget(
+                                title: 'Club',
+                                icon: Assets.images.svg.cocktail.path,
+                              ),
+                              UiKitTagWidget(
+                                title: 'Club',
+                                icon: Assets.images.svg.cocktail.path,
+                                customSpace: SpacingFoundation.horizontalSpace8,
+                                showSpacing: true,
+                              ),
+                              UiKitTagWidget(
+                                title: 'Club',
+                                icon: Assets.images.svg.cocktail.path,
+                                customSpace: SpacingFoundation.horizontalSpace8,
+                                showSpacing: true,
+                              ),
+                              UiKitTagWidget(
+                                title: 'Club',
+                                icon: Assets.images.svg.cocktail.path,
+                                customSpace: SpacingFoundation.horizontalSpace8,
+                                showSpacing: true,
+                              ),
+                              UiKitTagWidget(
+                                title: 'Club',
+                                icon: Assets.images.svg.cocktail.path,
+                                customSpace: SpacingFoundation.horizontalSpace8,
+                                showSpacing: true,
+                              ),
+                            ]),
+                      )),
+                    )))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show feed',
@@ -155,8 +210,10 @@ class ComponentsTestPage extends StatelessWidget {
                             child: MoodComponent(
                           mood: UiMoodModel(
                             descriptionItems: [
-                              UiDescriptionItemModel(title: 'Sunny', description: '+32'),
-                              UiDescriptionItemModel(title: 'Burned today', description: '432'),
+                              UiDescriptionItemModel(
+                                  title: 'Sunny', description: '+32'),
+                              UiDescriptionItemModel(
+                                  title: 'Burned today', description: '432'),
                             ],
                             title: 'need to cool down a bit?',
                             logo: 'assets/images/png/crazy_emoji.png',
@@ -289,15 +346,20 @@ class ComponentsTestPage extends StatelessWidget {
     id: '1',
     media: [
       UiKitMediaVideo(
-          link: 'assets/images/png/place.png',),
+        link: 'assets/images/png/place.png',
+      ),
       UiKitMediaPhoto(
-          link: 'assets/images/png/place.png',),
+        link: 'assets/images/png/place.png',
+      ),
       UiKitMediaPhoto(
-          link: 'assets/images/png/place.png', ),
+        link: 'assets/images/png/place.png',
+      ),
       UiKitMediaPhoto(
-          link: 'assets/images/png/place.png',),
+        link: 'assets/images/png/place.png',
+      ),
       UiKitMediaPhoto(
-          link: 'assets/images/png/place.png',),
+        link: 'assets/images/png/place.png',
+      ),
     ],
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
         'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
