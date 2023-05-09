@@ -112,21 +112,20 @@ class FeedComponent extends StatelessWidget {
                     context.button(
                         icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.dice),
-                        small: true,
                         onPressed: onTagSortPressed == null
                             ? null
-                            : onTagSortPressed!(''),
+                            : ()=>onTagSortPressed!(''),
                         onlyIcon: true,
                         gradient: true),
                     ...feed.filterChips!
                         .map((e) => context
                             .button(
-                              small: true,
+                              // small: true,
                               text: e.title,
                               onPressed: onTagSortPressed == null
                                   ? null
                                   : () => onTagSortPressed!(e.title),
-                              icon: ImageWidget(link: e.iconPath),
+                              icon: ImageWidget(link: e.iconPath,color: ColorsFoundation.darkNeutral900,),
                             )
                             .paddingSymmetric(
                                 horizontal:

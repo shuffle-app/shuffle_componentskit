@@ -17,18 +17,20 @@ class PlacePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
-    return InkWell(
-        onTap: onTap == null ? null : () => onTap!(place.id),
+    return SizedBox(
+        width: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            UiKitPhotoSlider(
-              media: place.media,
-              width:
-                  size.width - (model.positionModel?.horizontalMargin ?? 0) * 2,
-              height: 156.h,
-            ),
+            Align(
+                alignment: Alignment.center,
+                child: UiKitPhotoSlider(
+                  media: place.media,
+                  width: size.width -
+                      (model.positionModel?.horizontalMargin ?? 0) * 2,
+                  height: 106.h,
+                )),
             SpacingFoundation.verticalSpace4,
             Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
                 .paddingSymmetric(
@@ -36,6 +38,7 @@ class PlacePreview extends StatelessWidget {
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
               baseTags: place.baseTags ?? [],
+              uniqueTags: place.tags,
             )
           ],
         ));
