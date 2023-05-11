@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
-part 'event_model.g.dart';
+part 'component_event_model.g.dart';
 
 @JsonSerializable()
-class ComponentEventModel extends BaseModel {
+class ComponentEventModel extends UiBaseModel {
 
   @JsonKey(name: 'booking_element_model')
   final BookingElementModel? bookingElementModel;

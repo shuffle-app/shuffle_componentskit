@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
-part 'mood_model.g.dart';
+part 'component_mood_model.g.dart';
 
 @JsonSerializable()
-class ComponentMoodModel extends BaseModel {
+class ComponentMoodModel extends UiBaseModel {
 
   @JsonKey(name: 'show_stats')
   final bool? showStats;

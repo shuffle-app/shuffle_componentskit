@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
@@ -64,6 +63,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
+    final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Stack(children: [
       Transform.scale(
@@ -81,9 +81,9 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
       SafeArea(
           child: Column(
         mainAxisAlignment:
-            (model.positionModel?.bodyAlignment).mainAxisAlignment,
+            bodyAlignment.mainAxisAlignment,
         crossAxisAlignment:
-            (model.positionModel?.bodyAlignment).crossAxisAlignment,
+            bodyAlignment.crossAxisAlignment,
         children: [
           Text('Try this yourself', style: theme?.boldTextTheme.title1),
           SizedBox(
@@ -137,9 +137,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              context.button(
+              context.smallButton(
                 blurred: true,
-                small: true,
                 onPressed: () => controller.swipeLeft(),
                 icon: ImageWidget(
                   svgAsset: GraphicsFoundation.instance.svg.heartBrokenFill,
@@ -154,11 +153,9 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                     svgAsset: GraphicsFoundation.instance.svg.star,
                     color: Colors.white,
                   ),
-                  small: false,
                 ),
-              context.button(
+              context.smallButton(
                 blurred: true,
-                small: true,
                 onPressed: () => controller.swipeRight(),
                 icon: ImageWidget(
                   svgAsset: GraphicsFoundation.instance.svg.heartFill,

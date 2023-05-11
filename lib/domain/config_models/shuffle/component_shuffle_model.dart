@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
-part 'shuffle_model.g.dart';
+part 'component_shuffle_model.g.dart';
 
 @JsonSerializable()
-class ComponentShuffleModel extends BaseModel {
+class ComponentShuffleModel extends UiBaseModel {
   @JsonKey(name: 'show_favorite')
   final bool? showFavorite;
 

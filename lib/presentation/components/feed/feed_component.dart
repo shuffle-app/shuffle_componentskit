@@ -28,12 +28,14 @@ class FeedComponent extends StatelessWidget {
 
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
+    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
         mainAxisAlignment:
-            (model.positionModel?.bodyAlignment).mainAxisAlignment,
+            bodyAlignment.mainAxisAlignment,
         crossAxisAlignment:
-            (model.positionModel?.bodyAlignment).crossAxisAlignment,
+            bodyAlignment.crossAxisAlignment,
         children: [
           if (feed.recommendedEvent != null &&
               (model.showDailyRecomendation ?? true)) ...[
@@ -55,7 +57,7 @@ class FeedComponent extends StatelessWidget {
                       ),
                     )))
                 .paddingSymmetric(
-                    horizontal: model.positionModel?.horizontalMargin ?? 0),
+                    horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8
           ],
           if (feed.moods != null && (model.showFeelings ?? true)) ...[
@@ -64,19 +66,22 @@ class FeedComponent extends StatelessWidget {
                   style: theme?.boldTextTheme.title1),
               Transform.translate(
                   offset: Offset(size.width / 2, 30),
-                  child: const InkWell(
+                  child: RotatableWidget(
+                    startDelay: const Duration(seconds: 10),
                     child: UiKitBlurredQuestionChip(
                       label: 'How it works',
+                      onTap: () => showUiKitFullScreenAlertDialog(context,
+                          child: _howItWorksDialog),
                     ),
                   ))
             ]).paddingSymmetric(
-                horizontal: model.positionModel?.horizontalMargin ?? 0),
+                horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             SingleChildScrollView(
                 primary: false,
                 scrollDirection: Axis.horizontal,
                 child: Row(children: [
-                  ((model.positionModel?.horizontalMargin ?? 0) -
+                  (horizontalMargin -
                           SpacingFoundation.horizontalSpacing4)
                       .widthBox,
                   ...feed.moods!
@@ -98,14 +103,14 @@ class FeedComponent extends StatelessWidget {
             Text('You better check this out',
                     style: theme?.boldTextTheme.title1)
                 .paddingSymmetric(
-                    horizontal: model.positionModel?.horizontalMargin ?? 0),
+                    horizontal: horizontalMargin),
             if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
               SpacingFoundation.verticalSpace8,
               SingleChildScrollView(
                   primary: false,
                   scrollDirection: Axis.horizontal,
                   child: Row(children: [
-                    ((model.positionModel?.horizontalMargin ?? 0) -
+                    (horizontalMargin -
                             SpacingFoundation.horizontalSpacing4)
                         .widthBox,
                     context.button(
@@ -113,8 +118,7 @@ class FeedComponent extends StatelessWidget {
                             svgAsset: GraphicsFoundation.instance.svg.dice),
                         onPressed: onTagSortPressed == null
                             ? null
-                            : ()=>onTagSortPressed!(''),
-                        onlyIcon: true,
+                            : () => onTagSortPressed!(''),
                         gradient: true),
                     ...feed.filterChips!
                         .map((e) => context
@@ -124,7 +128,10 @@ class FeedComponent extends StatelessWidget {
                               onPressed: onTagSortPressed == null
                                   ? null
                                   : () => onTagSortPressed!(e.title),
-                              icon: ImageWidget(link: e.iconPath,color: ColorsFoundation.darkNeutral900,),
+                              icon: ImageWidget(
+                                link: e.iconPath,
+                                color: ColorsFoundation.darkNeutral900,
+                              ),
                             )
                             .paddingSymmetric(
                                 horizontal:
@@ -145,4 +152,70 @@ class FeedComponent extends StatelessWidget {
       vertical: model.positionModel?.verticalMargin ?? 0,
     );
   }
+
+  _howItWorksDialog(context, textStyle) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Depending on...',
+            style: textStyle,
+          ),
+          SpacingFoundation.verticalSpace8,
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.location,
+                  ),
+                  hint: 'your location',
+                ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.target,
+                  ),
+                  hint: 'your interests',
+                ),
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace8,
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.cloudy,
+                  ),
+                  hint: 'weather around',
+                ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.mood,
+                  ),
+                  hint: 'and other 14 scales',
+                ),
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace8,
+          Text(
+            'you get exactly what you need',
+            style: textStyle,
+          ),
+          SpacingFoundation.verticalSpace8,
+          GeneralPurposeButton(
+            text: 'OKAY, COOL!',
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      );
 }

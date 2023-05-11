@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/data/base_ui_model/base_ui_model.dart';
-import 'package:shuffle_components_kit/presentation/components/place/place_uimodel.dart';
+import 'package:shuffle_components_kit/data/base_ui_model/uibase_model.dart';
+import 'package:shuffle_components_kit/presentation/components/place/uiplace_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PlacePreview extends StatelessWidget {
   final Function? onTap;
   final UiPlaceModel place;
-  final BaseModel model;
+  final UiBaseModel model;
 
   const PlacePreview(
       {Key? key, required this.onTap, required this.place, required this.model})
@@ -17,6 +17,8 @@ class PlacePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
+    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+
     return SizedBox(
         width: double.infinity,
         child: Column(
@@ -29,13 +31,13 @@ class PlacePreview extends StatelessWidget {
                   media: place.media,
                   onTap: onTap != null ? () => onTap!(place.id) : null,
                   width: size.width -
-                      (model.positionModel?.horizontalMargin ?? 0) * 2,
+                      horizontalMargin * 2,
                   height: 106.h,
                 )),
             SpacingFoundation.verticalSpace4,
             Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
                 .paddingSymmetric(
-                    horizontal: model.positionModel?.horizontalMargin ?? 0),
+                    horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
               baseTags: place.baseTags ?? [],

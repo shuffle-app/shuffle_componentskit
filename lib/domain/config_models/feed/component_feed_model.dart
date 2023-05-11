@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
-part 'feed_model.g.dart';
+part 'component_feed_model.g.dart';
 
 @JsonSerializable()
-class ComponentFeedModel extends BaseModel {
+class ComponentFeedModel extends UiBaseModel {
 
   @JsonKey(name: 'show_daily_recomendation')
   final bool? showDailyRecomendation;

@@ -18,20 +18,18 @@ class BottomBookingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bodyAlignment = model.positionModel?.bodyAlignment;
+
     return SafeArea(
         top: false,
         child: Row(
-          crossAxisAlignment:
-              (model.positionModel?.bodyAlignment).crossAxisAlignment,
-          mainAxisAlignment:
-              (model.positionModel?.bodyAlignment).mainAxisAlignment,
+          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
           mainAxisSize: MainAxisSize.max,
           children: [
             if (model.showRoute ?? true)
               context.button(
-                text: '',
                 onPressed: onShowRoute,
-                onlyIcon: true,
                 outlined: true,
                 icon: ImageWidget(
                   svgAsset: Assets.images.svg.route,
@@ -49,9 +47,7 @@ class BottomBookingBar extends StatelessWidget {
             SpacingFoundation.horizontalSpace12,
             if (model.showMagnify ?? true)
               context.button(
-                text: '',
                 onPressed: onMagnify,
-                onlyIcon: true,
                 outlined: true,
                 icon: ImageWidget(
                   svgAsset: Assets.images.svg.searchPeople,
