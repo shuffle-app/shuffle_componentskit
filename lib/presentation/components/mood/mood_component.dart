@@ -11,7 +11,6 @@ class MoodComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
@@ -19,19 +18,18 @@ class MoodComponent extends StatelessWidget {
         ComponentMoodModel.fromJson(config['mood']);
 
     final theme = context.uiKitTheme;
-    final size = MediaQuery.of(context).size;
+    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
-      mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
-      crossAxisAlignment:
-          (model.positionModel?.bodyAlignment).crossAxisAlignment,
+      mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+      crossAxisAlignment: bodyAlignment.crossAxisAlignment,
       children: [
         UiKitMessageCardWithIcon(
                 message: mood.title,
                 icon: ImageWidget(link: mood.logo),
                 layoutDirection: Axis.horizontal)
-            .paddingSymmetric(
-                horizontal: model.positionModel?.horizontalMargin ?? 0),
+            .paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace8,
         Row(
           children: [
@@ -47,39 +45,39 @@ class MoodComponent extends StatelessWidget {
               children: [
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.isNotEmpty)
-                  Flexible(
-                      child: UiKitMetricsCard(
-                    value: mood.descriptionItems!.first.description,
-                    title: mood.descriptionItems!.first.title,
-                    unit: 'º',
-                    icon: ImageWidget(
-                      rasterAsset: Assets.images.png.weatherIcon,
-                    ),
-                  )),
-                SpacingFoundation.verticalSpace8,
+                  Flexible(child: () {
+                    final item = mood.descriptionItems!.first;
+
+                    return UiKitWeatherInfoCard(
+                      weatherType: item.description,
+                      temperature: item.title,
+                    );
+                  }()),
+                SpacingFoundation.verticalSpace4,
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.length >= 2)
-                  Flexible(
-                      child: UiKitMetricsCard(
-                    title: mood.descriptionItems!.last.title,
-                    value: mood.descriptionItems!.last.description,
-                    unit: 'kCal',
-                    icon: ImageWidget(
-                      svgAsset: Assets.images.svg.fireWhite,
-                    ),
-                  )),
+                  Flexible(child: () {
+                    final item = mood.descriptionItems!.last;
+
+                    return UiKitMetricsCard(
+                      title: item.title,
+                      value: item.description,
+                      unit: 'kCal',
+                      icon: ImageWidget(
+                        svgAsset: Assets.images.svg.fireWhite,
+                      ),
+                    );
+                  }()),
               ],
             ).paddingOnly(left: SpacingFoundation.horizontalSpacing8))
           ],
-        ).paddingSymmetric(
-            horizontal: model.positionModel?.horizontalMargin ?? 0),
+        ).paddingSymmetric(horizontal: horizontalMargin),
         if (model.showPlaces ?? true) ...[
           SpacingFoundation.verticalSpace8,
           Text(
             'We have places just for you',
             style: theme?.boldTextTheme.title1,
-          ).paddingSymmetric(
-              horizontal: model.positionModel?.horizontalMargin ?? 0),
+          ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace8,
           ...?mood.places
               ?.map((e) => PlacePreview(

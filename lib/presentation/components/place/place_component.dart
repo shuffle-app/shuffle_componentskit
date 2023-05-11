@@ -1,92 +1,108 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PlaceComponent extends StatelessWidget {
-  final UiPlaceModel placeData;
-  final List<UiDescriptionItemModel> placeDescriptionItems;
+  final UiPlaceModel place;
 
-  const PlaceComponent(
-      {Key? key, required this.placeData, required this.placeDescriptionItems})
-      : super(key: key);
+  const PlaceComponent({Key? key, required this.place}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentPlaceModel model = ComponentPlaceModel.fromJson(config['place']);
-
-    final theme = context.uiKitTheme;
-    final size = MediaQuery.of(context).size;
+    final ComponentPlaceModel model =
+        ComponentPlaceModel.fromJson(config['place']);
+    final titleAlignment = model.positionModel?.titleAlignment;
+    final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
       children: [
         SpacingFoundation.verticalSpace4,
         Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment:
-                (model.positionModel?.titleAlignment).mainAxisAlignment,
-            crossAxisAlignment:
-                (model.positionModel?.titleAlignment).crossAxisAlignment,
-            children: [
-              TitleWithAvatar(
-                title: placeData.title,
-                avatarUrl: placeData.logo,
-              ),
-            ]),
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: titleAlignment.mainAxisAlignment,
+          crossAxisAlignment: titleAlignment.crossAxisAlignment,
+          children: [
+            TitleWithAvatar(
+              title: place.title,
+              avatarUrl: place.logo,
+            ),
+          ],
+        ),
         SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              (model.positionModel?.bodyAlignment).mainAxisAlignment,
-          crossAxisAlignment:
-              (model.positionModel?.bodyAlignment).crossAxisAlignment,
+          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
-            UiKitPhotoSlider(
-              media: placeData.media,
-              width: size.width,
-              height: 256,
+            UiKitMediaSliderWithTags(
+              rating: place.rating,
+              media: place.media,
+              description: place.description,
+              baseTags: place.baseTags ?? [],
+              uniqueTags: place.tags,
             ),
-            SpacingFoundation.verticalSpace12,
-            UiKitTagsWidget(
-              rating: (model.showRating ?? false) ? placeData.rating : null,
-              uniqueTags: placeData.tags,
-              baseTags: placeData.baseTags ?? [],
-            ),
-            SpacingFoundation.verticalSpace12,
-            Text(
-              placeData.description,
-              style:
-                  theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
-            ),
+            // UiKitPhotoSlider(
+            //   media: placeData.media,
+            //   width: size.width,
+            //   height: 256,
+            // ),
+            // SpacingFoundation.verticalSpace12,
+            // UiKitTagsWidget(
+            //   rating: (model.showRating ?? false) ? placeData.rating : null,
+            //   uniqueTags: placeData.tags,
+            //   baseTags: placeData.baseTags ?? [],
+            // ),
+            // SpacingFoundation.verticalSpace12,
+            // Text(
+            //   placeData.description,
+            //   style: theme?.boldTextTheme.caption1Bold
+            //       .copyWith(color: Colors.white),
+            // ),
             SpacingFoundation.verticalSpace16,
             IntrinsicHeight(
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: UpcomingEventPlaceActionCard(
-                      value: 'in 2 days',
-                      rasterIconAsset: Assets.images.png.calendar,
-                      action: () {},
+                children: () {
+                  final icon = Assets.images.png.calendar;
+
+                  return [
+                    Expanded(
+                      child: UpcomingEventPlaceActionCard(
+                        value: 'in 2 days',
+                        rasterIconAsset: icon,
+                        action: () {
+                          log('calendar was pressed');
+                        },
+                      ),
                     ),
-                  ),
-                  SpacingFoundation.horizontalSpace8,
-                  Expanded(
-                    child: PointBalancePlaceActionCard(
-                      value: '2 650',
-                      rasterIconAsset: Assets.images.png.calendar,
-                      action: () {},
+                    SpacingFoundation.horizontalSpace8,
+                    Expanded(
+                      child: PointBalancePlaceActionCard(
+                        value: '2 650',
+                        rasterIconAsset: icon,
+                        action: () {
+                          log('balance was pressed');
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ];
+                }(),
               ),
             ),
             SpacingFoundation.verticalSpace16,
             PlaceDescriptionGrid(
               spacing: 16,
-              children: placeDescriptionItems.map((e) => UiKitTitledDescriptionWidget(title: e.title,description: e.description,)).toList(),
+              children: place.descriptionItems!
+                  .map((e) => UiKitTitledDescriptionWidget(
+                        title: e.title,
+                        description: e.description,
+                      ))
+                  .toList(),
             ),
             SpacingFoundation.verticalSpace16,
           ],
@@ -94,7 +110,8 @@ class PlaceComponent extends StatelessWidget {
       ],
       // ),
     ).paddingSymmetric(
-        vertical: model.positionModel?.verticalMargin ?? 0,
-        horizontal: model.positionModel?.horizontalMargin ?? 0);
+      vertical: model.positionModel?.verticalMargin ?? 0,
+      horizontal: model.positionModel?.horizontalMargin ?? 0,
+    );
   }
 }

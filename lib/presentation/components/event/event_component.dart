@@ -12,20 +12,20 @@ class EventComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = ComponentEventModel.fromJson(config['event']);
+    final ComponentEventModel model =
+        ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
-    final size = MediaQuery.of(context).size;
+    final bodyAlignment = model.positionModel?.bodyAlignment;
+    final titleAlignment = model.positionModel?.titleAlignment;
 
     return Column(
       children: [
         SpacingFoundation.verticalSpace4,
         Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment:
-                (model.positionModel?.titleAlignment).mainAxisAlignment,
-            crossAxisAlignment:
-                (model.positionModel?.titleAlignment).crossAxisAlignment,
+            mainAxisAlignment: titleAlignment.mainAxisAlignment,
+            crossAxisAlignment: titleAlignment.crossAxisAlignment,
             children: [
               if (event.title != null) ...[
                 Text(
@@ -34,42 +34,44 @@ class EventComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.verticalSpace4,
               ],
-              if (event.owner != null)
-                TitleWithAvatar(
-                  title: event.owner!.name,
-                  avatarUrl: event.owner!.logo,
-                ),
+              if (event.owner != null) event.owner!.buildUserTile(context)
             ]),
         SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              (model.positionModel?.bodyAlignment).mainAxisAlignment,
-          crossAxisAlignment:
-              (model.positionModel?.bodyAlignment).crossAxisAlignment,
+          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
-            if (event.media != null) ...[
-              UiKitPhotoSlider(
-                media: event.media!,
-                width: size.width,
-                height: 256,
-              ),
-              SpacingFoundation.verticalSpace12
-            ],
-            UiKitTagsWidget(
-              rating: null,
+            UiKitMediaSliderWithTags(
+              rating: event.rating,
+              media: event.media ?? [],
+              description: event.description ?? '',
               baseTags: event.baseTags ?? [],
               uniqueTags: event.tags ?? [],
             ),
-            SpacingFoundation.verticalSpace12,
-            if (event.description != null) ...[
-              Text(
-                event.description!,
-                style:
-                    theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
-              ),
-              SpacingFoundation.verticalSpace16
-            ],
+
+            // if (event.media != null) ...[
+            //   UiKitPhotoSlider(
+            //     media: event.media!,
+            //     width: size.width,
+            //     height: 256,
+            //   ),
+            //   SpacingFoundation.verticalSpace12
+            // ],
+            // UiKitTagsWidget(
+            //   rating: null,
+            //   baseTags: event.baseTags ?? [],
+            //   uniqueTags: event.tags ?? [],
+            // ),
+            // SpacingFoundation.verticalSpace12,
+            // if (event.description != null) ...[
+            //   Text(
+            //     event.description!,
+            //     style: theme?.boldTextTheme.caption1Bold
+            //         .copyWith(color: Colors.white),
+            //   ),
+            //   SpacingFoundation.verticalSpace16
+            // ],
             if (event.descriptionItems != null)
               ...event.descriptionItems!
                   .map((e) => TitledAccentInfo(

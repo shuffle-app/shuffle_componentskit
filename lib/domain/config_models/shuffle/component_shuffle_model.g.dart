@@ -1,13 +1,15 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'event_model.dart';
+part of 'component_shuffle_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ComponentEventModel _$ComponentEventModelFromJson(Map<String, dynamic> json) =>
-    ComponentEventModel(
+ComponentShuffleModel _$ComponentShuffleModelFromJson(
+        Map<String, dynamic> json) =>
+    ComponentShuffleModel(
+      showFavorite: json['show_favorite'] as bool?,
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -15,23 +17,15 @@ ComponentEventModel _$ComponentEventModelFromJson(Map<String, dynamic> json) =>
           : PositionModel.fromJson(
               json['position_model'] as Map<String, dynamic>),
       version: json['version'] as String? ?? '0',
-      showReviews: json['show_reviews'] as bool?,
-      bookingElementModel: json['booking_element_model'] == null
-          ? null
-          : BookingElementModel.fromJson(
-              json['booking_element_model'] as Map<String, dynamic>),
-      showReactions: json['show_reactions'] as bool?,
     );
 
-Map<String, dynamic> _$ComponentEventModelToJson(
-        ComponentEventModel instance) =>
+Map<String, dynamic> _$ComponentShuffleModelToJson(
+        ComponentShuffleModel instance) =>
     <String, dynamic>{
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
-      'booking_element_model': instance.bookingElementModel,
-      'show_reviews': instance.showReviews,
-      'show_reactions': instance.showReactions,
+      'show_favorite': instance.showFavorite,
     };
 
 const _$PageBuilderTypeEnumMap = {

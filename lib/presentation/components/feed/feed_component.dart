@@ -26,59 +26,58 @@ class FeedComponent extends StatelessWidget {
     final ComponentFeedModel model =
         ComponentFeedModel.fromJson(config['feed']);
 
-    final theme = context.uiKitTheme;
+    final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
     final size = MediaQuery.of(context).size;
+    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final horizontalWidthBox =
+        (horizontalMargin - SpacingFoundation.horizontalSpacing4).widthBox;
+    final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
-        mainAxisAlignment:
-            (model.positionModel?.bodyAlignment).mainAxisAlignment,
-        crossAxisAlignment:
-            (model.positionModel?.bodyAlignment).crossAxisAlignment,
+        mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
         children: [
           if (feed.recommendedEvent != null &&
               (model.showDailyRecomendation ?? true)) ...[
             InkWell(
-                    onTap: onEventPressed == null
-                        ? null
-                        : () => onEventPressed!(feed.recommendedEvent?.id),
-                    child: SafeArea(
-                        child: UiKitAccentCard(
-                      title: feed.recommendedEvent!.title ?? '',
-                      additionalInfo: feed.recommendedEvent!.descriptionItems
-                              ?.first.description ??
-                          '',
-                      accentMessage: 'Don\'t miss it',
-                      image: ImageWidget(
-                        link: feed.recommendedEvent?.media?.first.link,
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                      ),
-                    )))
-                .paddingSymmetric(
-                    horizontal: model.positionModel?.horizontalMargin ?? 0),
+                onTap: onEventPressed == null
+                    ? null
+                    : () => onEventPressed!(feed.recommendedEvent?.id),
+                child: SafeArea(
+                    child: UiKitAccentCard(
+                  title: feed.recommendedEvent!.title ?? '',
+                  additionalInfo: feed.recommendedEvent!.descriptionItems?.first
+                          .description ??
+                      '',
+                  accentMessage: 'Don\'t miss it',
+                  image: ImageWidget(
+                    link: feed.recommendedEvent?.media?.first.link,
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                  ),
+                ))).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8
           ],
           if (feed.moods != null && (model.showFeelings ?? true)) ...[
             Stack(children: [
-              Text('How’re you feeling tonight?',
-                  style: theme?.boldTextTheme.title1),
+              Text('How’re you feeling tonight?', style: themeTitleStyle),
               Transform.translate(
                   offset: Offset(size.width / 2, 30),
-                  child: const InkWell(
+                  child: RotatableWidget(
+                    startDelay: const Duration(seconds: 10),
                     child: UiKitBlurredQuestionChip(
                       label: 'How it works',
+                      onTap: () => showUiKitFullScreenAlertDialog(context,
+                          child: _howItWorksDialog),
                     ),
                   ))
-            ]).paddingSymmetric(
-                horizontal: model.positionModel?.horizontalMargin ?? 0),
+            ]).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             SingleChildScrollView(
                 primary: false,
                 scrollDirection: Axis.horizontal,
                 child: Row(children: [
-                  ((model.positionModel?.horizontalMargin ?? 0) -
-                          SpacingFoundation.horizontalSpacing4)
-                      .widthBox,
+                  horizontalWidthBox,
                   ...feed.moods!
                       .map((e) => InkWell(
                               onTap: onMoodPressed == null
@@ -95,26 +94,21 @@ class FeedComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace8,
           ],
           if (feed.places != null && (model.showPlaces ?? true)) ...[
-            Text('You better check this out',
-                    style: theme?.boldTextTheme.title1)
-                .paddingSymmetric(
-                    horizontal: model.positionModel?.horizontalMargin ?? 0),
+            Text('You better check this out', style: themeTitleStyle)
+                .paddingSymmetric(horizontal: horizontalMargin),
             if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
               SpacingFoundation.verticalSpace8,
               SingleChildScrollView(
                   primary: false,
                   scrollDirection: Axis.horizontal,
                   child: Row(children: [
-                    ((model.positionModel?.horizontalMargin ?? 0) -
-                            SpacingFoundation.horizontalSpacing4)
-                        .widthBox,
+                    horizontalWidthBox,
                     context.button(
                         icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.dice),
                         onPressed: onTagSortPressed == null
                             ? null
-                            : ()=>onTagSortPressed!(''),
-                        onlyIcon: true,
+                            : () => onTagSortPressed!(''),
                         gradient: true),
                     ...feed.filterChips!
                         .map((e) => context
@@ -124,7 +118,10 @@ class FeedComponent extends StatelessWidget {
                               onPressed: onTagSortPressed == null
                                   ? null
                                   : () => onTagSortPressed!(e.title),
-                              icon: ImageWidget(link: e.iconPath,color: ColorsFoundation.darkNeutral900,),
+                              icon: ImageWidget(
+                                link: e.iconPath,
+                                color: ColorsFoundation.darkNeutral900,
+                              ),
                             )
                             .paddingSymmetric(
                                 horizontal:
@@ -145,4 +142,70 @@ class FeedComponent extends StatelessWidget {
       vertical: model.positionModel?.verticalMargin ?? 0,
     );
   }
+
+  _howItWorksDialog(context, textStyle) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Depending on...',
+            style: textStyle,
+          ),
+          SpacingFoundation.verticalSpace8,
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.location,
+                  ),
+                  hint: 'your location',
+                ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.target,
+                  ),
+                  hint: 'your interests',
+                ),
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace8,
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.cloudy,
+                  ),
+                  hint: 'weather around',
+                ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              Expanded(
+                child: UiKitIconHintCard(
+                  icon: ImageWidget(
+                    rasterAsset: GraphicsFoundation.instance.png.mood,
+                  ),
+                  hint: 'and other 14 scales',
+                ),
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace8,
+          Text(
+            'you get exactly what you need',
+            style: textStyle,
+          ),
+          SpacingFoundation.verticalSpace8,
+          GeneralPurposeButton(
+            text: 'OKAY, COOL!',
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      );
 }

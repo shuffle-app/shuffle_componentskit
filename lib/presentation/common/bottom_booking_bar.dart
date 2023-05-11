@@ -18,47 +18,47 @@ class BottomBookingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bodyAlignment = model.positionModel?.bodyAlignment;
+
     return SafeArea(
         top: false,
         child: Row(
-          crossAxisAlignment:
-              (model.positionModel?.bodyAlignment).crossAxisAlignment,
-          mainAxisAlignment:
-              (model.positionModel?.bodyAlignment).mainAxisAlignment,
+          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
           mainAxisSize: MainAxisSize.max,
-          children: [
-            if (model.showRoute ?? true)
-              context.button(
-                text: '',
-                onPressed: onShowRoute,
-                onlyIcon: true,
-                outlined: true,
-                icon: ImageWidget(
-                  svgAsset: Assets.images.svg.route,
-                  color: Colors.white,
+          children: (){
+            final svg = Assets.images.svg;
+
+            return [
+              if (model.showRoute ?? true)
+                context.button(
+                  onPressed: onShowRoute,
+                  outlined: true,
+                  icon: ImageWidget(
+                    svgAsset: svg.route,
+                    color: Colors.white,
+                  ),
+                ),
+              SpacingFoundation.horizontalSpace12,
+              Expanded(
+                child: context.button(
+                  text: 'Book it',
+                  onPressed: onBook,
+                  gradient: true,
                 ),
               ),
-            SpacingFoundation.horizontalSpace12,
-            Expanded(
-              child: context.button(
-                text: 'Book it',
-                onPressed: onBook,
-                gradient: true,
-              ),
-            ),
-            SpacingFoundation.horizontalSpace12,
-            if (model.showMagnify ?? true)
-              context.button(
-                text: '',
-                onPressed: onMagnify,
-                onlyIcon: true,
-                outlined: true,
-                icon: ImageWidget(
-                  svgAsset: Assets.images.svg.searchPeople,
-                  color: Colors.white,
+              SpacingFoundation.horizontalSpace12,
+              if (model.showMagnify ?? true)
+                context.button(
+                  onPressed: onMagnify,
+                  outlined: true,
+                  icon: ImageWidget(
+                    svgAsset: svg.searchPeople,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-          ],
+            ];}()
+
         ).paddingSymmetric(
             vertical: model.positionModel?.verticalMargin ?? 0.0,
             horizontal: model.positionModel?.horizontalMargin ?? 0.0));

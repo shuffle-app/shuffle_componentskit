@@ -63,6 +63,7 @@ class GlobalConfiguration {
         content: configAsMap,
         theme: configAsMap['theme_name']);
     _saveToDocument();
+
     return model;
   }
 
@@ -79,6 +80,7 @@ class GlobalConfiguration {
 
   Future<File> _loadFromDocument() async {
     var provider = await getApplicationDocumentsDirectory();
+
     return File(p.join(provider.path, 'appConfig/generalConfigCache'));
   }
 
@@ -101,6 +103,7 @@ class GlobalConfiguration {
       throw Exception(
           'HTTP request failed, statusCode: ${response.statusCode}, $finalUrl');
     }
+
     return json.decode(response.body);
   }
 }
