@@ -1,16 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-
-
 
 class SnackBarUtils {
   SnackBarUtils._();
 
-  static void show({
-    required String message,
-    Duration? duration,
-    required BuildContext context,
-    VoidCallback? onTap
-  }) {
+  static void show(
+      {required String message,
+      Duration? duration,
+      required BuildContext context,
+      VoidCallback? onTap}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: duration ?? const Duration(seconds: 3),
@@ -18,7 +17,10 @@ class SnackBarUtils {
         action: SnackBarAction(
           textColor: const Color(0xFFFAF2FB),
           label: 'OK',
-          onPressed: onTap ?? (){},
+          onPressed: onTap ??
+              () {
+                log('SnackBar action was pressed');
+              },
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -73,7 +75,9 @@ class PlaceComponent extends StatelessWidget {
                       child: UpcomingEventPlaceActionCard(
                         value: 'in 2 days',
                         rasterIconAsset: icon,
-                        action: () {},
+                        action: () {
+                          log('calendar was pressed');
+                        },
                       ),
                     ),
                     SpacingFoundation.horizontalSpace8,
@@ -81,7 +85,9 @@ class PlaceComponent extends StatelessWidget {
                       child: PointBalancePlaceActionCard(
                         value: '2 650',
                         rasterIconAsset: icon,
-                        action: () {},
+                        action: () {
+                          log('balance was pressed');
+                        },
                       ),
                     ),
                   ];
