@@ -26,44 +26,41 @@ class FeedComponent extends StatelessWidget {
     final ComponentFeedModel model =
         ComponentFeedModel.fromJson(config['feed']);
 
-    final theme = context.uiKitTheme;
+    final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
     final size = MediaQuery.of(context).size;
     final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final horizontalWidthBox =
+        (horizontalMargin - SpacingFoundation.horizontalSpacing4).widthBox;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
-        mainAxisAlignment:
-            bodyAlignment.mainAxisAlignment,
-        crossAxisAlignment:
-            bodyAlignment.crossAxisAlignment,
+        mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
         children: [
           if (feed.recommendedEvent != null &&
               (model.showDailyRecomendation ?? true)) ...[
             InkWell(
-                    onTap: onEventPressed == null
-                        ? null
-                        : () => onEventPressed!(feed.recommendedEvent?.id),
-                    child: SafeArea(
-                        child: UiKitAccentCard(
-                      title: feed.recommendedEvent!.title ?? '',
-                      additionalInfo: feed.recommendedEvent!.descriptionItems
-                              ?.first.description ??
-                          '',
-                      accentMessage: 'Don\'t miss it',
-                      image: ImageWidget(
-                        link: feed.recommendedEvent?.media?.first.link,
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                      ),
-                    )))
-                .paddingSymmetric(
-                    horizontal: horizontalMargin),
+                onTap: onEventPressed == null
+                    ? null
+                    : () => onEventPressed!(feed.recommendedEvent?.id),
+                child: SafeArea(
+                    child: UiKitAccentCard(
+                  title: feed.recommendedEvent!.title ?? '',
+                  additionalInfo: feed.recommendedEvent!.descriptionItems?.first
+                          .description ??
+                      '',
+                  accentMessage: 'Don\'t miss it',
+                  image: ImageWidget(
+                    link: feed.recommendedEvent?.media?.first.link,
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                  ),
+                ))).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8
           ],
           if (feed.moods != null && (model.showFeelings ?? true)) ...[
             Stack(children: [
-              Text('How’re you feeling tonight?',
-                  style: theme?.boldTextTheme.title1),
+              Text('How’re you feeling tonight?', style: themeTitleStyle),
               Transform.translate(
                   offset: Offset(size.width / 2, 30),
                   child: RotatableWidget(
@@ -74,16 +71,13 @@ class FeedComponent extends StatelessWidget {
                           child: _howItWorksDialog),
                     ),
                   ))
-            ]).paddingSymmetric(
-                horizontal: horizontalMargin),
+            ]).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             SingleChildScrollView(
                 primary: false,
                 scrollDirection: Axis.horizontal,
                 child: Row(children: [
-                  (horizontalMargin -
-                          SpacingFoundation.horizontalSpacing4)
-                      .widthBox,
+                  horizontalWidthBox,
                   ...feed.moods!
                       .map((e) => InkWell(
                               onTap: onMoodPressed == null
@@ -100,19 +94,15 @@ class FeedComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace8,
           ],
           if (feed.places != null && (model.showPlaces ?? true)) ...[
-            Text('You better check this out',
-                    style: theme?.boldTextTheme.title1)
-                .paddingSymmetric(
-                    horizontal: horizontalMargin),
+            Text('You better check this out', style: themeTitleStyle)
+                .paddingSymmetric(horizontal: horizontalMargin),
             if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
               SpacingFoundation.verticalSpace8,
               SingleChildScrollView(
                   primary: false,
                   scrollDirection: Axis.horizontal,
                   child: Row(children: [
-                    (horizontalMargin -
-                            SpacingFoundation.horizontalSpacing4)
-                        .widthBox,
+                    horizontalWidthBox,
                     context.button(
                         icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.dice),

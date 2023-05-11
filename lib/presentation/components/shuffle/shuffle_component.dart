@@ -41,17 +41,17 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
   _getColor(String imageLink) async {
     if (imageLink.isEmpty) return;
     late final PaletteGenerator paletteGenerator;
-    if(imageLink.substring(0, 4) == 'http') {
+    if (imageLink.substring(0, 4) == 'http') {
       final file = await CustomCacheManager.instance
           .getFileStream(imageLink)
           .firstWhere((element) => element is FileInfo);
-      paletteGenerator =
-          await PaletteGenerator.fromImageProvider(
-              Image.file((file as FileInfo).file).image);
+      paletteGenerator = await PaletteGenerator.fromImageProvider(
+          Image.file((file as FileInfo).file).image);
     } else {
-      paletteGenerator =
-      await PaletteGenerator.fromImageProvider(
-          Image.asset(imageLink,package: 'shuffle_uikit',).image);
+      paletteGenerator = await PaletteGenerator.fromImageProvider(Image.asset(
+        imageLink,
+        package: 'shuffle_uikit',
+      ).image);
     }
     setState(() {
       _backgroundColor =
@@ -80,10 +80,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
           )),
       SafeArea(
           child: Column(
-        mainAxisAlignment:
-            bodyAlignment.mainAxisAlignment,
-        crossAxisAlignment:
-            bodyAlignment.crossAxisAlignment,
+        mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
         children: [
           Text('Try this yourself', style: theme?.boldTextTheme.title1),
           SizedBox(
@@ -107,7 +105,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                     case CardSwiperDirection.top:
                       if (widget.onFavorite != null &&
                           (model.showFavorite ?? true)) {
-                        widget.onFavorite!(widget.shuffle.items[currentIndex!].title);
+                        widget.onFavorite!(
+                            widget.shuffle.items[currentIndex!].title);
                       } else {
                         return false;
                       }
@@ -116,14 +115,16 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                       return false;
                     case CardSwiperDirection.left:
                       if (widget.onDislike != null) {
-                        widget.onDislike!(widget.shuffle.items[currentIndex!].title);
+                        widget.onDislike!(
+                            widget.shuffle.items[currentIndex!].title);
                       } else {
                         return false;
                       }
                       return true;
                     case CardSwiperDirection.right:
                       if (widget.onLike != null) {
-                        widget.onLike!(widget.shuffle.items[currentIndex!].title);
+                        widget
+                            .onLike!(widget.shuffle.items[currentIndex!].title);
                       } else {
                         return false;
                       }
@@ -136,33 +137,37 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              context.smallButton(
-                blurred: true,
-                onPressed: () => controller.swipeLeft(),
-                icon: ImageWidget(
-                  svgAsset: GraphicsFoundation.instance.svg.heartBrokenFill,
-                  color: Colors.white,
-                ),
-              ),
-              if (model.showFavorite ?? true)
-                context.button(
+            children: () {
+              final svg = GraphicsFoundation.instance.svg;
+
+              return [
+                context.smallButton(
                   blurred: true,
-                  onPressed: () => controller.swipeTop(),
+                  onPressed: () => controller.swipeLeft(),
                   icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.star,
+                    svgAsset: svg.heartBrokenFill,
                     color: Colors.white,
                   ),
                 ),
-              context.smallButton(
-                blurred: true,
-                onPressed: () => controller.swipeRight(),
-                icon: ImageWidget(
-                  svgAsset: GraphicsFoundation.instance.svg.heartFill,
-                  color: Colors.white,
+                if (model.showFavorite ?? true)
+                  context.button(
+                    blurred: true,
+                    onPressed: () => controller.swipeTop(),
+                    icon: ImageWidget(
+                      svgAsset: svg.star,
+                      color: Colors.white,
+                    ),
+                  ),
+                context.smallButton(
+                  blurred: true,
+                  onPressed: () => controller.swipeRight(),
+                  icon: ImageWidget(
+                    svgAsset: svg.heartFill,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
+              ];
+            }(),
           ),
         ],
       ))

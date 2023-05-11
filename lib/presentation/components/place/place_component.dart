@@ -14,36 +14,35 @@ class PlaceComponent extends StatelessWidget {
             GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model =
         ComponentPlaceModel.fromJson(config['place']);
+    final titleAlignment = model.positionModel?.titleAlignment;
+    final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
       children: [
         SpacingFoundation.verticalSpace4,
         Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment:
-                (model.positionModel?.titleAlignment).mainAxisAlignment,
-            crossAxisAlignment:
-                (model.positionModel?.titleAlignment).crossAxisAlignment,
-            children: [
-              TitleWithAvatar(
-                title: place.title,
-                avatarUrl: place.logo,
-              ),
-            ],),
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: titleAlignment.mainAxisAlignment,
+          crossAxisAlignment: titleAlignment.crossAxisAlignment,
+          children: [
+            TitleWithAvatar(
+              title: place.title,
+              avatarUrl: place.logo,
+            ),
+          ],
+        ),
         SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              (model.positionModel?.bodyAlignment).mainAxisAlignment,
-          crossAxisAlignment:
-              (model.positionModel?.bodyAlignment).crossAxisAlignment,
+          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
             UiKitMediaSliderWithTags(
               rating: place.rating,
-              media: place.media ?? [],
-              description: place.description ?? '',
+              media: place.media,
+              description: place.description,
               baseTags: place.baseTags ?? [],
-              uniqueTags: place.tags ?? [],
+              uniqueTags: place.tags,
             ),
             // UiKitPhotoSlider(
             //   media: placeData.media,
@@ -66,23 +65,27 @@ class PlaceComponent extends StatelessWidget {
             IntrinsicHeight(
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: UpcomingEventPlaceActionCard(
-                      value: 'in 2 days',
-                      rasterIconAsset: Assets.images.png.calendar,
-                      action: () {},
+                children: () {
+                  final icon = Assets.images.png.calendar;
+
+                  return [
+                    Expanded(
+                      child: UpcomingEventPlaceActionCard(
+                        value: 'in 2 days',
+                        rasterIconAsset: icon,
+                        action: () {},
+                      ),
                     ),
-                  ),
-                  SpacingFoundation.horizontalSpace8,
-                  Expanded(
-                    child: PointBalancePlaceActionCard(
-                      value: '2 650',
-                      rasterIconAsset: Assets.images.png.calendar,
-                      action: () {},
+                    SpacingFoundation.horizontalSpace8,
+                    Expanded(
+                      child: PointBalancePlaceActionCard(
+                        value: '2 650',
+                        rasterIconAsset: icon,
+                        action: () {},
+                      ),
                     ),
-                  ),
-                ],
+                  ];
+                }(),
               ),
             ),
             SpacingFoundation.verticalSpace16,
@@ -101,7 +104,8 @@ class PlaceComponent extends StatelessWidget {
       ],
       // ),
     ).paddingSymmetric(
-        vertical: model.positionModel?.verticalMargin ?? 0,
-        horizontal: model.positionModel?.horizontalMargin ?? 0,);
+      vertical: model.positionModel?.verticalMargin ?? 0,
+      horizontal: model.positionModel?.horizontalMargin ?? 0,
+    );
   }
 }

@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppSnackBarAction {
-  AppSnackBarAction(this.text, {this.withDismiss = true, this.onTap});
 
-  final VoidCallback? onTap;
-  final String text;
-  final bool withDismiss;
-}
 
 class SnackBarUtils {
   SnackBarUtils._();
@@ -40,3 +34,11 @@ class SnackBarUtils {
     show(message: message, context: context);
   }
 }
+//
+// class AppSnackBarAction {
+//   AppSnackBarAction(this.text, {this.withDismiss = true, this.onTap});
+//
+//   final VoidCallback? onTap;
+//   final String text;
+//   final bool withDismiss;
+// }

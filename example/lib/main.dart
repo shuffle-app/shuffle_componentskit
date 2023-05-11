@@ -210,9 +210,9 @@ class ComponentsTestPage extends StatelessWidget {
                             child: MoodComponent(
                           mood: UiMoodModel(
                             descriptionItems: [
-                              UiDescriptionItemModel(
+                              const UiDescriptionItemModel(
                                   title: 'Sunny', description: '+32'),
-                              UiDescriptionItemModel(
+                              const UiDescriptionItemModel(
                                   title: 'Burned today', description: '432'),
                             ],
                             title: 'need to cool down a bit?',

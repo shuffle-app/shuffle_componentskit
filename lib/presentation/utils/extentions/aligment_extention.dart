@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension ColumnAligment on Alignment? {
+extension AligmentExtention on Alignment? {
   MainAxisAlignment get mainAxisAlignment {
     if (this == null) return MainAxisAlignment.start;
     final y = this!.y;
