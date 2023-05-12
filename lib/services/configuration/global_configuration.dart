@@ -8,22 +8,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
-
 class GlobalConfiguration {
   static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
+  final Completer _compliter = Completer();
+  ConfigurationModel appConfig = ConfigurationModel(
+      updated: DateTime.now(), content: {}, theme: 'default');
+
+  bool get isLoaded => _compliter.isCompleted;
 
   factory GlobalConfiguration() {
     return _singleton;
   }
 
-  final Completer _compliter = Completer();
-
-  bool get isLoaded => _compliter.isCompleted;
-
   GlobalConfiguration._internal();
-
-  ConfigurationModel appConfig = ConfigurationModel(
-      updated: DateTime.now(), content: {}, theme: 'default');
 
   Future<GlobalConfiguration> load() async {
     try {
@@ -62,7 +59,7 @@ class GlobalConfiguration {
         updated: DateTime.now(),
         content: configAsMap,
         theme: configAsMap['theme_name']);
-    _saveToDocument();
+    unawaited(_saveToDocument());
 
     return model;
   }
@@ -74,8 +71,8 @@ class GlobalConfiguration {
     var provider = await getApplicationDocumentsDirectory();
     final File file =
         File(p.join(provider.path, 'appConfig/generalConfigCache'));
-    file.create(recursive: true);
-    file.writeAsString(jsonEncode(appConfig.toJson()));
+    await file.create(recursive: true);
+    await file.writeAsString(jsonEncode(appConfig.toJson()));
   }
 
   Future<File> _loadFromDocument() async {
@@ -90,12 +87,12 @@ class GlobalConfiguration {
     String finalUrl = url;
     if (queryParameters != null) {
       queryParameters.forEach((k, v) {
-        finalUrl += !finalUrl.endsWith("?") ? "?$k=$v" : "&$k=$v";
+        finalUrl += !finalUrl.endsWith('?') ? '?$k=$v' : '&$k=$v';
       });
     }
     headers ??= <String, String>{};
     Map<String, String>? usableHeader = Map.from(headers);
-    usableHeader.putIfAbsent("Accept", () => "application/json");
+    usableHeader.putIfAbsent('Accept', () => 'application/json');
 
     var encodedUri = Uri.encodeFull(finalUrl);
     var response = await http.get(Uri.parse(encodedUri), headers: usableHeader);

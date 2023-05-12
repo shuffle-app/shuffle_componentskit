@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -34,11 +36,11 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
-    _getColor(widget.shuffle.items.first.imageLink ?? '');
+    unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
     super.initState();
   }
 
-  _getColor(String imageLink) async {
+  Future<void> _getColor(String imageLink) async {
     if (imageLink.isEmpty) return;
     late final PaletteGenerator paletteGenerator;
     if (imageLink.substring(0, 4) == 'http') {
@@ -83,7 +85,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
         mainAxisAlignment: bodyAlignment.mainAxisAlignment,
         crossAxisAlignment: bodyAlignment.crossAxisAlignment,
         children: [
-          Text('Try this yourself', style: theme?.boldTextTheme.title1),
+          Text('Try this yourself', style: theme?.boldTextTheme.title1)
+              .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4),
           SizedBox(
               height: size.height / 1.5,
               width: double.infinity,
