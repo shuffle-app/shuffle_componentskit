@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class GlobalComponent extends InheritedWidget {
+  static GlobalComponent? of(BuildContext context) =>
+      context.findAncestorWidgetOfExactType<GlobalComponent>();
   final GlobalConfiguration globalConfiguration;
 
   const GlobalComponent({
@@ -9,8 +11,6 @@ class GlobalComponent extends InheritedWidget {
     required super.child,
     super.key,
   });
-
-  static GlobalComponent? of(BuildContext context) => context.findAncestorWidgetOfExactType<GlobalComponent>();
 
   // void updateGlobalConfiguration(GlobalConfiguration data) {
   //   onGlobalConfigurationUpdated(data);

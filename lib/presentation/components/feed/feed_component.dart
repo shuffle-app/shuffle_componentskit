@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -17,6 +19,40 @@ class FeedComponent extends StatelessWidget {
       this.onPlacePressed,
       this.onTagSortPressed})
       : super(key: key);
+
+  Widget _howItWorksDialog(context, textStyle) => UiKitHintDialog(
+        title: 'Fullscreen Dialog',
+        subtitle: 'you get exactly what you need',
+        textStyle: textStyle,
+        dismissText: 'OKAY, COOL!',
+        onDismiss: () => Navigator.pop(context),
+        hintTiles: [
+          UiKitIconHintCard(
+            icon: ImageWidget(
+              rasterAsset: GraphicsFoundation.instance.png.location,
+            ),
+            hint: 'your location',
+          ),
+          UiKitIconHintCard(
+            icon: ImageWidget(
+              rasterAsset: GraphicsFoundation.instance.png.target,
+            ),
+            hint: 'your interests',
+          ),
+          UiKitIconHintCard(
+            icon: ImageWidget(
+              rasterAsset: GraphicsFoundation.instance.png.cloudy,
+            ),
+            hint: 'weather around',
+          ),
+          UiKitIconHintCard(
+            icon: ImageWidget(
+              rasterAsset: GraphicsFoundation.instance.png.mood,
+            ),
+            hint: 'and other 14 scales',
+          ),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +98,19 @@ class FeedComponent extends StatelessWidget {
             Stack(children: [
               Text('How’re you feeling tonight?', style: themeTitleStyle),
               Transform.translate(
-                  offset: Offset(size.width / 2, 30),
-                  child: RotatableWidget(
-                    startDelay: const Duration(seconds: 10),
-                    child: UiKitBlurredQuestionChip(
-                      label: 'How it works',
-                      onTap: () => showUiKitFullScreenAlertDialog(context,
-                          child: _howItWorksDialog),
-                    ),
+                  offset: Offset(size.width / 1.7, 15),
+                  child: Transform.rotate(
+                    angle: pi * -20 / 180,
+                    child: RotatableWidget(
+                        endAngle: pi * 20 / 180,
+                        alignment: Alignment.center,
+                        applyReverseOnEnd: true,
+                        startDelay: const Duration(seconds: 10),
+                        child: UiKitBlurredQuestionChip(
+                          label: 'How it works',
+                          onTap: () => showUiKitFullScreenAlertDialog(context,
+                              child: _howItWorksDialog),
+                        )),
                   ))
             ]).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
@@ -103,13 +144,13 @@ class FeedComponent extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(children: [
                     horizontalWidthBox,
-                    context.button(
-                        icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.dice),
-                        onPressed: onTagSortPressed == null
-                            ? null
-                            : () => onTagSortPressed!(''),
-                        gradient: true),
+                    context.gradientButton(
+                      icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.dice),
+                      onPressed: onTagSortPressed == null
+                          ? null
+                          : () => onTagSortPressed!(''),
+                    ),
                     ...feed.filterChips!
                         .map((e) => context
                             .button(
@@ -135,77 +176,11 @@ class FeedComponent extends StatelessWidget {
                   place: e,
                   model: model,
                 ).paddingSymmetric(
-                    vertical: SpacingFoundation.verticalSpacing4)),
+                    vertical: SpacingFoundation.verticalSpacing8)),
             SpacingFoundation.verticalSpace16,
           ],
         ]).paddingSymmetric(
       vertical: model.positionModel?.verticalMargin ?? 0,
     );
   }
-
-  _howItWorksDialog(context, textStyle) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Depending on...',
-            style: textStyle,
-          ),
-          SpacingFoundation.verticalSpace8,
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: UiKitIconHintCard(
-                  icon: ImageWidget(
-                    rasterAsset: GraphicsFoundation.instance.png.location,
-                  ),
-                  hint: 'your location',
-                ),
-              ),
-              SpacingFoundation.horizontalSpace16,
-              Expanded(
-                child: UiKitIconHintCard(
-                  icon: ImageWidget(
-                    rasterAsset: GraphicsFoundation.instance.png.target,
-                  ),
-                  hint: 'your interests',
-                ),
-              ),
-            ],
-          ),
-          SpacingFoundation.verticalSpace8,
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: UiKitIconHintCard(
-                  icon: ImageWidget(
-                    rasterAsset: GraphicsFoundation.instance.png.cloudy,
-                  ),
-                  hint: 'weather around',
-                ),
-              ),
-              SpacingFoundation.horizontalSpace16,
-              Expanded(
-                child: UiKitIconHintCard(
-                  icon: ImageWidget(
-                    rasterAsset: GraphicsFoundation.instance.png.mood,
-                  ),
-                  hint: 'and other 14 scales',
-                ),
-              ),
-            ],
-          ),
-          SpacingFoundation.verticalSpace8,
-          Text(
-            'you get exactly what you need',
-            style: textStyle,
-          ),
-          SpacingFoundation.verticalSpace8,
-          GeneralPurposeButton(
-            text: 'OKAY, COOL!',
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      );
 }

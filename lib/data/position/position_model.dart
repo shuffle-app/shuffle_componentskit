@@ -42,23 +42,23 @@ class PositionModel {
 
 Alignment? _stringToAlignment(String? string) {
   switch (string) {
-    case "center":
+    case 'center':
       return Alignment.center;
-    case "centerLeft":
+    case 'centerLeft':
       return Alignment.centerLeft;
-    case "topLeft":
+    case 'topLeft':
       return Alignment.topLeft;
-    case "topCenter":
+    case 'topCenter':
       return Alignment.topCenter;
-    case "topRight":
+    case 'topRight':
       return Alignment.topRight;
-    case "centerRight":
+    case 'centerRight':
       return Alignment.centerRight;
-    case "bottomLeft":
+    case 'bottomLeft':
       return Alignment.bottomLeft;
-    case "bottomCenter":
+    case 'bottomCenter':
       return Alignment.bottomCenter;
-    case "bottomRight":
+    case 'bottomRight':
       return Alignment.bottomRight;
     default:
       return null;
