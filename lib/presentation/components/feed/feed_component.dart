@@ -98,7 +98,7 @@ class FeedComponent extends StatelessWidget {
             Stack(children: [
               Text('How’re you feeling tonight?', style: themeTitleStyle),
               Transform.translate(
-                  offset: Offset(size.width / 1.5, 10),
+                  offset: Offset(size.width / 1.7, 15),
                   child: Transform.rotate(
                     angle: pi * -20 / 180,
                     child: RotatableWidget(
@@ -144,13 +144,13 @@ class FeedComponent extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(children: [
                     horizontalWidthBox,
-                    context.button(
-                        icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.dice),
-                        onPressed: onTagSortPressed == null
-                            ? null
-                            : () => onTagSortPressed!(''),
-                        gradient: true),
+                    context.gradientButton(
+                      icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.dice),
+                      onPressed: onTagSortPressed == null
+                          ? null
+                          : () => onTagSortPressed!(''),
+                    ),
                     ...feed.filterChips!
                         .map((e) => context
                             .button(

@@ -31,9 +31,8 @@ class BottomBookingBar extends StatelessWidget {
 
             return [
               if (model.showRoute ?? true)
-                context.button(
+                context.outlinedButton(
                   onPressed: onShowRoute,
-                  outlined: true,
                   icon: ImageWidget(
                     svgAsset: svg.route,
                     color: Colors.white,
@@ -41,17 +40,15 @@ class BottomBookingBar extends StatelessWidget {
                 ),
               SpacingFoundation.horizontalSpace12,
               Expanded(
-                child: context.button(
+                child: context.gradientButton(
                   text: 'Book it',
                   onPressed: onBook,
-                  gradient: true,
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
               if (model.showMagnify ?? true)
-                context.button(
+                context.outlinedButton(
                   onPressed: onMagnify,
-                  outlined: true,
                   icon: ImageWidget(
                     svgAsset: svg.searchPeople,
                     color: Colors.white,
