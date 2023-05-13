@@ -21,7 +21,7 @@ class FeedComponent extends StatelessWidget {
       : super(key: key);
 
   Widget _howItWorksDialog(context, textStyle) => UiKitHintDialog(
-        title: 'Fullscreen Dialog',
+        title: 'Depending on...',
         subtitle: 'you get exactly what you need',
         textStyle: textStyle,
         dismissText: 'OKAY, COOL!',
