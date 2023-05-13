@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 extension AligmentExtention on Alignment? {
   MainAxisAlignment get mainAxisAlignment {
     if (this == null) return MainAxisAlignment.start;
-    final y = this!.y;
+    final pos = this!.y;
 
-    if (y == 0) {
+    if (pos == 0) {
       return MainAxisAlignment.center;
-    } else if (y < 0) {
+    } else if (pos < 0) {
       return MainAxisAlignment.start;
     } else {
       return MainAxisAlignment.end;
@@ -16,11 +16,11 @@ extension AligmentExtention on Alignment? {
 
   CrossAxisAlignment get crossAxisAlignment {
     if (this == null) return CrossAxisAlignment.center;
-    final x = this!.x;
+    final pos = this!.x;
 
-    if (x == 0) {
+    if (pos == 0) {
       return CrossAxisAlignment.center;
-    } else if (x < 0) {
+    } else if (pos < 0) {
       return CrossAxisAlignment.start;
     } else {
       return CrossAxisAlignment.end;
