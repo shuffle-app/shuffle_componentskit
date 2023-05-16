@@ -29,25 +29,25 @@ class FeedComponent extends StatelessWidget {
         hintTiles: [
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.location,
+              svgAsset: GraphicsFoundation.instance.svg.location,
             ),
             hint: 'your location',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.target,
+              svgAsset: GraphicsFoundation.instance.svg.dart,
             ),
             hint: 'your interests',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.cloudy,
+              svgAsset: GraphicsFoundation.instance.svg.sunClouds,
             ),
             hint: 'weather around',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.mood,
+              svgAsset: GraphicsFoundation.instance.svg.smileMood,
             ),
             hint: 'and other 14 scales',
           ),
@@ -152,19 +152,17 @@ class FeedComponent extends StatelessWidget {
                           : () => onTagSortPressed!(''),
                     ),
                     ...feed.filterChips!
-                        .map((e) => context
-                            .button(
-                              // small: true,
-                              text: e.title,
+                        .map((e) => UiKitTitledFilterChip(
+                              selected: feed.activeFilterChips
+                                      ?.map((e) => e.title)
+                                      .contains(e.title) ??
+                                  false,
+                              title: e.title,
                               onPressed: onTagSortPressed == null
-                                  ? null
+                                  ? () {}
                                   : () => onTagSortPressed!(e.title),
-                              icon: ImageWidget(
-                                link: e.iconPath,
-                                color: ColorsFoundation.darkNeutral900,
-                              ),
-                            )
-                            .paddingSymmetric(
+                              icon: e.iconPath,
+                            ).paddingSymmetric(
                                 horizontal:
                                     SpacingFoundation.horizontalSpacing4))
                         .toList()

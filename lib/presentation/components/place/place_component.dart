@@ -68,13 +68,13 @@ class PlaceComponent extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: () {
-                  final icon = Assets.images.png.calendar;
+                  final icon = Assets.images.svg.calendar;
 
                   return [
                     Expanded(
                       child: UpcomingEventPlaceActionCard(
                         value: 'in 2 days',
-                        rasterIconAsset: icon,
+                        vectorIconAsset: icon,
                         action: () {
                           log('calendar was pressed');
                         },
@@ -84,7 +84,7 @@ class PlaceComponent extends StatelessWidget {
                     Expanded(
                       child: PointBalancePlaceActionCard(
                         value: '2 650',
-                        rasterIconAsset: icon,
+                        vectorIconAsset: icon,
                         action: () {
                           log('balance was pressed');
                         },
@@ -95,12 +95,16 @@ class PlaceComponent extends StatelessWidget {
               ),
             ),
             SpacingFoundation.verticalSpace16,
-            PlaceDescriptionGrid(
-              spacing: 16,
+            GridView.count(
+              primary: false,
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
+              childAspectRatio: 2,
               children: place.descriptionItems!
-                  .map((e) => UiKitTitledDescriptionWidget(
+                  .map((e) => TitledAccentInfo(
                         title: e.title,
-                        description: e.description,
+                        info: e.description,
                       ))
                   .toList(),
             ),
