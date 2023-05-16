@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -85,10 +85,10 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
         mainAxisAlignment: bodyAlignment.mainAxisAlignment,
         crossAxisAlignment: bodyAlignment.crossAxisAlignment,
         children: [
-          Text('Try this yourself', style: theme?.boldTextTheme.title1)
-              .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4),
+          Text('Try\nyourself', style: theme?.boldTextTheme.title1,textAlign: TextAlign.center)
+              .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
           SizedBox(
-              height: size.height / 1.5,
+              height: size.height / 1.6,
               width: double.infinity,
               child: UiKitCardSwiper(
                 onSwipe: (
@@ -137,6 +137,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                 cards: widget.shuffle.items,
                 controller: controller,
               )),
+          SpacingFoundation.verticalSpace4,
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -157,8 +158,11 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                     blurred: true,
                     onPressed: () => controller.swipeTop(),
                     icon: ImageWidget(
+                      height: 20.h,
+                      fit: BoxFit.fitHeight,
                       svgAsset: svg.star,
                       color: Colors.white,
+
                     ),
                   ),
                 context.smallButton(

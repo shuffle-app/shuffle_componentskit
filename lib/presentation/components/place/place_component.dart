@@ -68,7 +68,7 @@ class PlaceComponent extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: () {
-                  final icon = Assets.images.svg.calendar;
+                  final icon = Assets.images.svg.events;
 
                   return [
                     Expanded(
@@ -94,8 +94,9 @@ class PlaceComponent extends StatelessWidget {
                 }(),
               ),
             ),
-            SpacingFoundation.verticalSpace16,
+            SpacingFoundation.verticalSpace8,
             GridView.count(
+              padding: EdgeInsets.zero,
               primary: false,
               shrinkWrap: true,
               crossAxisCount: 2,
@@ -108,7 +109,7 @@ class PlaceComponent extends StatelessWidget {
                       ))
                   .toList(),
             ),
-            SpacingFoundation.verticalSpace16,
+            SpacingFoundation.verticalSpace8,
           ],
         ),
       ],

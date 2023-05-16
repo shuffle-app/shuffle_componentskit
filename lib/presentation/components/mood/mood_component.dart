@@ -25,13 +25,13 @@ class MoodComponent extends StatelessWidget {
       mainAxisAlignment: bodyAlignment.mainAxisAlignment,
       crossAxisAlignment: bodyAlignment.crossAxisAlignment,
       children: [
-        SpacingFoundation.verticalSpace8,
+        SpacingFoundation.verticalSpace16,
         UiKitMessageCardWithIcon(
                 message: mood.title,
                 icon: ImageWidget(link: mood.logo),
                 layoutDirection: Axis.horizontal)
             .paddingSymmetric(horizontal: horizontalMargin),
-        SpacingFoundation.verticalSpace8,
+        SpacingFoundation.verticalSpace14,
         Row(
           children: [
             const Flexible(
@@ -46,18 +46,18 @@ class MoodComponent extends StatelessWidget {
               children: [
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.isNotEmpty)
-                  Flexible(child: () {
+                  () {
                     final item = mood.descriptionItems!.first;
 
                     return UiKitWeatherInfoCard(
-                      weatherType: item.description,
-                      temperature: item.title,
+                      weatherType: item.title,
+                      temperature: item.description,
                     );
-                  }()),
-                SpacingFoundation.verticalSpace4,
+                  }(),
+                SpacingFoundation.verticalSpace8,
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.length >= 2)
-                  Flexible(child: () {
+                  () {
                     final item = mood.descriptionItems!.last;
 
                     return UiKitMetricsCard(
@@ -68,25 +68,25 @@ class MoodComponent extends StatelessWidget {
                         svgAsset: Assets.images.svg.fireWhite,
                       ),
                     );
-                  }()),
+                  }(),
               ],
             ).paddingOnly(left: SpacingFoundation.horizontalSpacing8))
           ],
         ).paddingSymmetric(horizontal: horizontalMargin),
         if (model.showPlaces ?? true) ...[
-          SpacingFoundation.verticalSpace8,
+          SpacingFoundation.verticalSpace24,
           Text(
             'We have places just for you',
             style: theme?.boldTextTheme.title1,
           ).paddingSymmetric(horizontal: horizontalMargin),
-          SpacingFoundation.verticalSpace8,
+          SpacingFoundation.verticalSpace4,
           ...?mood.places
               ?.map((e) => PlacePreview(
                     onTap: onPlacePressed,
                     place: e,
                     model: model,
                   ).paddingSymmetric(
-                      vertical: SpacingFoundation.verticalSpacing4))
+                      vertical: SpacingFoundation.verticalSpacing12))
               .toList(),
         ],
       ],

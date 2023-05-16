@@ -21,7 +21,7 @@ class EventComponent extends StatelessWidget {
 
     return Column(
       children: [
-        SpacingFoundation.verticalSpace4,
+        SpacingFoundation.verticalSpace8,
         Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: titleAlignment.mainAxisAlignment,
@@ -32,11 +32,11 @@ class EventComponent extends StatelessWidget {
                   event.title!,
                   style: theme?.boldTextTheme.title2,
                 ),
-                SpacingFoundation.verticalSpace4,
+                SpacingFoundation.verticalSpace8,
               ],
               if (event.owner != null) event.owner!.buildUserTile(context)
             ]),
-        SpacingFoundation.verticalSpace4,
+        SpacingFoundation.verticalSpace16,
         Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -49,29 +49,7 @@ class EventComponent extends StatelessWidget {
               baseTags: event.baseTags ?? [],
               uniqueTags: event.tags ?? [],
             ),
-
-            // if (event.media != null) ...[
-            //   UiKitPhotoSlider(
-            //     media: event.media!,
-            //     width: size.width,
-            //     height: 256,
-            //   ),
-            //   SpacingFoundation.verticalSpace12
-            // ],
-            // UiKitTagsWidget(
-            //   rating: null,
-            //   baseTags: event.baseTags ?? [],
-            //   uniqueTags: event.tags ?? [],
-            // ),
-            // SpacingFoundation.verticalSpace12,
-            // if (event.description != null) ...[
-            //   Text(
-            //     event.description!,
-            //     style: theme?.boldTextTheme.caption1Bold
-            //         .copyWith(color: Colors.white),
-            //   ),
-            //   SpacingFoundation.verticalSpace16
-            // ],
+            SpacingFoundation.verticalSpace16,
             if (event.descriptionItems != null)
               ...event.descriptionItems!
                   .map((e) => TitledAccentInfo(
