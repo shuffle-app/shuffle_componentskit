@@ -30,14 +30,12 @@ class PlacePreview extends StatelessWidget {
                 child: UiKitPhotoSlider(
                   media: place.media,
                   onTap: onTap != null ? () => onTap!(place.id) : null,
-                  width: size.width -
-                      horizontalMargin * 2,
-                  height: 106.h,
+                  width: size.width - horizontalMargin * 2,
+                  height: 156.h,
                 )),
-            SpacingFoundation.verticalSpace4,
+            SpacingFoundation.verticalSpace8,
             Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
-                .paddingSymmetric(
-                    horizontal: horizontalMargin),
+                .paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
               baseTags: place.baseTags ?? [],

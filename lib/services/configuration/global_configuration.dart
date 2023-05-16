@@ -46,6 +46,9 @@ class GlobalConfiguration {
       if (!_compliter.isCompleted) _compliter.complete();
     } catch (e, t) {
       generalErrorCatch(e, t);
+      if(kDebugMode) {
+        rethrow;
+      }
     }
 
     return _singleton;

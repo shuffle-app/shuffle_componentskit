@@ -51,7 +51,8 @@ class _MyAppState extends State<MyApp> {
                   : Builder(builder: (c) {
                       configuration
                           .load()
-                          .then((_) => Future.delayed(const Duration(seconds: 1)))
+                          .then(
+                              (_) => Future.delayed(const Duration(seconds: 1)))
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(
                               themeMatcher(configuration.appConfig.theme)));
                       return const Center(child: LoadingWidget());
@@ -228,27 +229,7 @@ class ComponentsTestPage extends StatelessWidget {
                     context,
                     ComponentPlaceModel.fromJson(
                         configuration.appConfig.content['place']),
-                    const PlaceDescriptionGrid(
-                      spacing: 16,
-                      children: [
-                        UiKitTitledDescriptionWidget(
-                          title: 'Address',
-                          description: 'Burj Khalifa 122nd Floor',
-                        ),
-                        UiKitTitledDescriptionWidget(
-                          title: 'Open now',
-                          description: '9:30 am - 10:30 pm',
-                        ),
-                        UiKitTitledDescriptionWidget(
-                          title: 'Website',
-                          description: 'atmosphere.com',
-                        ),
-                        UiKitTitledDescriptionWidget(
-                          title: 'Phone',
-                          description: '+971123596943',
-                        ),
-                      ],
-                    ),
+                    PlaceComponent(place: place),
                     BottomBookingBar(
                         model: ComponentPlaceModel.fromJson(
                                     configuration.appConfig.content['place'])
@@ -433,5 +414,23 @@ class ComponentsTestPage extends StatelessWidget {
           iconPath: 'assets/images/svg/cocktail.svg',
           unique: true),
     ],
+    descriptionItems: [
+      const UiDescriptionItemModel(
+        title: 'test 1',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+      ),
+      const UiDescriptionItemModel(
+        title: 'test 2',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+      ),
+      const UiDescriptionItemModel(
+        title: 'test 3',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+      ),
+      const UiDescriptionItemModel(
+        title: 'test 4',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+      ),
+    ]
   );
 }

@@ -7,6 +7,7 @@ generalErrorCatch(error,stackTrace) {
   } catch (e) {
     SnackBarUtils.show(
         message: 'got stackTrace ${stackTrace.toString()}', context: navigatorKey.currentState!.context);
+
   }
   switch (error) {
     case NoSuchMethodError:
@@ -16,4 +17,5 @@ generalErrorCatch(error,stackTrace) {
     default:
       throw error;
   }
+
 }

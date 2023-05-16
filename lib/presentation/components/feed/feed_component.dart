@@ -29,25 +29,25 @@ class FeedComponent extends StatelessWidget {
         hintTiles: [
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.location,
+              svgAsset: GraphicsFoundation.instance.svg.map,
             ),
             hint: 'your location',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.target,
+              svgAsset: GraphicsFoundation.instance.svg.dart,
             ),
             hint: 'your interests',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.cloudy,
+              svgAsset: GraphicsFoundation.instance.svg.sunClouds,
             ),
             hint: 'weather around',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              rasterAsset: GraphicsFoundation.instance.png.mood,
+              svgAsset: GraphicsFoundation.instance.svg.smileMood,
             ),
             hint: 'and other 14 scales',
           ),
@@ -75,12 +75,12 @@ class FeedComponent extends StatelessWidget {
         children: [
           if (feed.recommendedEvent != null &&
               (model.showDailyRecomendation ?? true)) ...[
-            InkWell(
-                onTap: onEventPressed == null
-                    ? null
-                    : () => onEventPressed!(feed.recommendedEvent?.id),
-                child: SafeArea(
-                    child: UiKitAccentCard(
+            SafeArea(
+                bottom: false,
+                child: UiKitAccentCard(
+                  onPressed: onEventPressed == null
+                      ? null
+                      : () => onEventPressed!(feed.recommendedEvent?.id),
                   title: feed.recommendedEvent!.title ?? '',
                   additionalInfo: feed.recommendedEvent!.descriptionItems?.first
                           .description ??
@@ -91,8 +91,8 @@ class FeedComponent extends StatelessWidget {
                     fit: BoxFit.fill,
                     width: double.infinity,
                   ),
-                ))).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace8
+                )).paddingSymmetric(horizontal: horizontalMargin),
+            SpacingFoundation.verticalSpace24
           ],
           if (feed.moods != null && (model.showFeelings ?? true)) ...[
             Stack(children: [
@@ -107,32 +107,31 @@ class FeedComponent extends StatelessWidget {
                         applyReverseOnEnd: true,
                         startDelay: const Duration(seconds: 10),
                         child: UiKitBlurredQuestionChip(
-                          label: 'How it works',
+                          label: 'How it\nworks',
                           onTap: () => showUiKitFullScreenAlertDialog(context,
                               child: _howItWorksDialog),
                         )),
                   ))
             ]).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace8,
+            SpacingFoundation.verticalSpace16,
             SingleChildScrollView(
                 primary: false,
                 scrollDirection: Axis.horizontal,
                 child: Row(children: [
                   horizontalWidthBox,
                   ...feed.moods!
-                      .map((e) => InkWell(
-                              onTap: onMoodPressed == null
+                      .map((e) => UiKitMessageCardWithIcon(
+                              onPressed: onMoodPressed == null
                                   ? null
                                   : () => onMoodPressed!(e.id),
-                              child: UiKitMessageCardWithIcon(
                                   message: e.title,
                                   icon: ImageWidget(link: e.logo),
-                                  layoutDirection: Axis.vertical))
+                                  layoutDirection: Axis.vertical)
                           .paddingSymmetric(
                               horizontal: SpacingFoundation.horizontalSpacing4))
                       .toList()
                 ])),
-            SpacingFoundation.verticalSpace8,
+            SpacingFoundation.verticalSpace24,
           ],
           if (feed.places != null && (model.showPlaces ?? true)) ...[
             Text('You better check this out', style: themeTitleStyle)
@@ -152,31 +151,29 @@ class FeedComponent extends StatelessWidget {
                           : () => onTagSortPressed!(''),
                     ),
                     ...feed.filterChips!
-                        .map((e) => context
-                            .button(
-                              // small: true,
-                              text: e.title,
+                        .map((e) => UiKitTitledFilterChip(
+                              selected: feed.activeFilterChips
+                                      ?.map((e) => e.title)
+                                      .contains(e.title) ??
+                                  false,
+                              title: e.title,
                               onPressed: onTagSortPressed == null
                                   ? null
                                   : () => onTagSortPressed!(e.title),
-                              icon: ImageWidget(
-                                link: e.iconPath,
-                                color: ColorsFoundation.darkNeutral900,
-                              ),
-                            )
-                            .paddingSymmetric(
+                              icon: e.iconPath,
+                            ).paddingSymmetric(
                                 horizontal:
-                                    SpacingFoundation.horizontalSpacing4))
+                                    SpacingFoundation.horizontalSpacing6))
                         .toList()
                   ])),
             ],
-            SpacingFoundation.verticalSpace8,
+            SpacingFoundation.verticalSpace4,
             ...feed.places!.map((e) => PlacePreview(
                   onTap: onPlacePressed,
                   place: e,
                   model: model,
                 ).paddingSymmetric(
-                    vertical: SpacingFoundation.verticalSpacing8)),
+                    vertical: SpacingFoundation.verticalSpacing12)),
             SpacingFoundation.verticalSpace16,
           ],
         ]).paddingSymmetric(
