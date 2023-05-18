@@ -69,6 +69,12 @@ class ComponentsTestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final UiEventModel event = UiEventModel(
       id: '1',
+      owner: UiOwnerModel(
+        name: 'name',
+        id: '1',
+        type: UserTileType.ordinary,
+        onTap: () {},
+      ),
       media: [
         UiKitMediaVideo(link: 'assets/images/png/place.png'),
         UiKitMediaPhoto(
