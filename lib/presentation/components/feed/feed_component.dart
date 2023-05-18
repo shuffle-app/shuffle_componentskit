@@ -24,7 +24,7 @@ class FeedComponent extends StatelessWidget {
         hintTiles: [
           UiKitIconHintCard(
             icon: ImageWidget(
-              svgAsset: GraphicsFoundation.instance.svg.location,
+              svgAsset: GraphicsFoundation.instance.svg.map,
             ),
             hint: 'your location',
           ),
@@ -94,7 +94,7 @@ class FeedComponent extends StatelessWidget {
                     applyReverseOnEnd: true,
                     startDelay: const Duration(seconds: 10),
                     child: UiKitBlurredQuestionChip(
-                      label: 'How it works',
+                      label: 'How it\nworks',
                       onTap: () => showUiKitFullScreenAlertDialog(context, child: _howItWorksDialog),
                     ),
                   ),
@@ -106,18 +106,16 @@ class FeedComponent extends StatelessWidget {
           SingleChildScrollView(
             primary: false,
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                horizontalWidthBox,
-                ...feed.moods!
-                    .map((e) => UiKitMessageCardWithIcon(
-                          message: e.title,
-                          icon: ImageWidget(link: e.logo),
-                          layoutDirection: Axis.vertical,
-                          onPressed: onMoodPressed == null ? null : () => onMoodPressed!(e.id),
-                        ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing4))
-                    .toList()
-              ],
+            child: Wrap(
+              spacing: SpacingFoundation.horizontalSpacing12,
+              children: feed.moods!
+                  .map((e) => UiKitMessageCardWithIcon(
+                        message: e.title,
+                        icon: ImageWidget(link: e.logo),
+                        layoutDirection: Axis.vertical,
+                        onPressed: onMoodPressed == null ? null : () => onMoodPressed!(e.id),
+                      ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing4))
+                  .toList(),
             ),
           ),
           SpacingFoundation.verticalSpace8,
