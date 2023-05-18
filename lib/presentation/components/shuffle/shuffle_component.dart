@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/src/result/file_info.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
@@ -12,13 +13,7 @@ class ShuffleComponent extends StatefulWidget {
   final Function? onDislike;
   final Function? onFavorite;
 
-  const ShuffleComponent(
-      {Key? key,
-      required this.shuffle,
-      this.onLike,
-      this.onDislike,
-      this.onFavorite})
-      : super(key: key);
+  const ShuffleComponent({Key? key, required this.shuffle, this.onLike, this.onDislike, this.onFavorite}) : super(key: key);
 
   @override
   State<ShuffleComponent> createState() => _ShuffleComponentState();
@@ -31,9 +26,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
 
   @override
   void initState() {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
     unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
     super.initState();
@@ -43,11 +36,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
     if (imageLink.isEmpty) return;
     late final PaletteGenerator paletteGenerator;
     if (imageLink.substring(0, 4) == 'http') {
-      final file = await CustomCacheManager.instance
-          .getFileStream(imageLink)
-          .firstWhere((element) => element is FileInfo);
-      paletteGenerator = await PaletteGenerator.fromImageProvider(
-          Image.file((file as FileInfo).file).image);
+      final file = await CustomCacheManager.instance.getFileStream(imageLink).firstWhere((element) => element is FileInfo);
+      paletteGenerator = await PaletteGenerator.fromImageProvider(Image.file((file as FileInfo).file).image);
     } else {
       paletteGenerator = await PaletteGenerator.fromImageProvider(Image.asset(
         imageLink,
@@ -55,8 +45,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
       ).image);
     }
     setState(() {
-      _backgroundColor =
-          paletteGenerator.dominantColor?.color ?? Colors.black12;
+      _backgroundColor = paletteGenerator.dominantColor?.color ?? Colors.black12;
     });
   }
 
@@ -73,18 +62,16 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
             width: double.infinity,
             height: double.infinity,
             decoration: BoxDecoration(
-                gradient: RadialGradient(radius: 1, colors: [
-              _backgroundColor,
-              theme?.customAppBapTheme.backgroundColor ??
-                  ColorsFoundation.darkNeutral100
-            ])),
+                gradient: RadialGradient(
+                    radius: 1,
+                    colors: [_backgroundColor, theme?.customAppBapTheme.backgroundColor ?? ColorsFoundation.darkNeutral100])),
           )),
       SafeArea(
           child: Column(
         mainAxisAlignment: bodyAlignment.mainAxisAlignment,
         crossAxisAlignment: bodyAlignment.crossAxisAlignment,
         children: [
-          Text('Try\nyourself', style: theme?.boldTextTheme.title1,textAlign: TextAlign.center)
+          Text('Try\nyourself', style: theme?.boldTextTheme.title1, textAlign: TextAlign.center)
               .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
           SizedBox(
               height: size.height / 1.6,
