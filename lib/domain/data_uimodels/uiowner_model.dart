@@ -23,6 +23,6 @@ class UiOwnerModel {
         username: username,
         avatarUrl: logo,
         type: type,
-        onTap: onTap ?? () {},
+        onTap: onTap,
       );
 }
