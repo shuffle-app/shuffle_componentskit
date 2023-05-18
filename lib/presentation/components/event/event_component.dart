@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventComponent extends StatelessWidget {
   final UiEventModel event;
@@ -18,6 +19,7 @@ class EventComponent extends StatelessWidget {
     final theme = context.uiKitTheme;
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final titleAlignment = model.positionModel?.titleAlignment;
+    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
 
     return Column(
       children: [
@@ -42,13 +44,31 @@ class EventComponent extends StatelessWidget {
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
           crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
-            UiKitMediaSliderWithTags(
+            if (event.media != null) ...[
+              Align(
+                  alignment: Alignment.center,
+                  child: UiKitPhotoSlider(
+                    media: event.media ?? [],
+                    onTap: null,
+                    width: 1.sw - horizontalMargin * 2,
+                    height: 156.h,
+                  )),
+              SpacingFoundation.verticalSpace12
+            ],
+            UiKitTagsWidget(
               rating: event.rating,
-              media: event.media ?? [],
-              description: event.description ?? '',
               baseTags: event.baseTags ?? [],
               uniqueTags: event.tags ?? [],
             ),
+            SpacingFoundation.verticalSpace12,
+            if (event.description != null) ...[
+              Text(
+                event.description!,
+                style: theme?.boldTextTheme.caption1Bold
+                    .copyWith(color: Colors.white),
+              ),
+              SpacingFoundation.verticalSpace16
+            ],
             SpacingFoundation.verticalSpace16,
             if (event.descriptionItems != null)
               ...event.descriptionItems!
@@ -65,6 +85,6 @@ class EventComponent extends StatelessWidget {
       // ),
     ).paddingSymmetric(
         vertical: model.positionModel?.verticalMargin ?? 0,
-        horizontal: model.positionModel?.horizontalMargin ?? 0);
+        horizontal: horizontalMargin);
   }
 }
