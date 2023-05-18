@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,16 +44,12 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(
-                      globalConfiguration: configuration,
-                      child: ComponentsTestPage())
+                  ? GlobalComponent(globalConfiguration: configuration, child: ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load()
-                          .then(
-                              (_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(
-                              themeMatcher(configuration.appConfig.theme)));
+                          .then((_) => Future.delayed(const Duration(seconds: 1)))
+                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
                       return const Center(child: LoadingWidget());
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
@@ -74,6 +69,12 @@ class ComponentsTestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final UiEventModel event = UiEventModel(
       id: '1',
+      owner: UiOwnerModel(
+        name: 'name',
+        id: '1',
+        type: UserTileType.ordinary,
+        onTap: () {},
+      ),
       media: [
         UiKitMediaVideo(link: 'assets/images/png/place.png'),
         UiKitMediaPhoto(
@@ -122,8 +123,7 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show shuffle',
                 onPressed: () => buildComponent(
                     context,
-                    ComponentShuffleModel.fromJson(
-                        configuration.appConfig.content['shuffle']),
+                    ComponentShuffleModel.fromJson(configuration.appConfig.content['shuffle']),
                     Scaffold(
                         body: ShuffleComponent(
                       shuffle: UiShuffleModel(
@@ -174,8 +174,7 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show feed',
                 onPressed: () => buildComponent(
                     context,
-                    ComponentFeedModel.fromJson(
-                        configuration.appConfig.content['feed']),
+                    ComponentFeedModel.fromJson(configuration.appConfig.content['feed']),
                     Scaffold(
                         // appBar: AppBar(
                         //   backgroundColor: Colors.transparent,
@@ -188,20 +187,15 @@ class ComponentsTestPage extends StatelessWidget {
                                 feed: UiFeedModel(
                       places: List.generate(4, (index) => place),
                       recommendedEvent: event,
-                      moods: List.generate(
-                          4,
-                          (index) => UiMoodModel(
-                              id: '1',
-                              title: 'Want to have some fun',
-                              logo: 'assets/images/png/crazy_emoji.png')),
+                      moods: List.generate(4,
+                          (index) => UiMoodModel(id: '1', title: 'Want to have some fun', logo: 'assets/images/png/crazy_emoji.png')),
                     )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show mood',
                 onPressed: () => buildComponent(
                     context,
-                    ComponentMoodModel.fromJson(
-                        configuration.appConfig.content['mood']),
+                    ComponentMoodModel.fromJson(configuration.appConfig.content['mood']),
                     Scaffold(
                         appBar: const CustomAppBar(
                           title: 'Feeling',
@@ -211,10 +205,8 @@ class ComponentsTestPage extends StatelessWidget {
                             child: MoodComponent(
                           mood: UiMoodModel(
                             descriptionItems: [
-                              const UiDescriptionItemModel(
-                                  title: 'Sunny', description: '+32'),
-                              const UiDescriptionItemModel(
-                                  title: 'Burned today', description: '432'),
+                              const UiDescriptionItemModel(title: 'Sunny', description: '+32'),
+                              const UiDescriptionItemModel(title: 'Burned today', description: '432'),
                             ],
                             title: 'need to cool down a bit?',
                             logo: 'assets/images/png/crazy_emoji.png',
@@ -227,26 +219,20 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show place',
                 onPressed: () => buildComponent(
                     context,
-                    ComponentPlaceModel.fromJson(
-                        configuration.appConfig.content['place']),
+                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']),
                     PlaceComponent(place: place),
                     BottomBookingBar(
-                        model: ComponentPlaceModel.fromJson(
-                                    configuration.appConfig.content['place'])
-                                .bookingElementModel ??
+                        model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
                             BookingElementModel(version: '0')))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show event',
                 onPressed: () => buildComponent(
                     context,
-                    ComponentEventModel.fromJson(
-                        configuration.appConfig.content['event']),
+                    ComponentEventModel.fromJson(configuration.appConfig.content['event']),
                     EventComponent(event: event),
                     BottomBookingBar(
-                        model: ComponentPlaceModel.fromJson(
-                                    configuration.appConfig.content['event'])
-                                .bookingElementModel ??
+                        model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
                             BookingElementModel(version: '0')))),
             SpacingFoundation.verticalSpace16,
           ],
@@ -256,181 +242,72 @@ class ComponentsTestPage extends StatelessWidget {
   }
 
   final List<UiKitTag> tags = [
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
   ];
 
   final UiPlaceModel place = UiPlaceModel(
-    title: 'title',
-    id: '1',
-    media: [
-      UiKitMediaVideo(
-        link: 'assets/images/png/place.png',
-      ),
-      UiKitMediaPhoto(
-        link: 'assets/images/png/place.png',
-      ),
-      UiKitMediaPhoto(
-        link: 'assets/images/png/place.png',
-      ),
-      UiKitMediaPhoto(
-        link: 'assets/images/png/place.png',
-      ),
-      UiKitMediaPhoto(
-        link: 'assets/images/png/place.png',
-      ),
-    ],
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-        'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-        'Nulla facilisi. '
-        'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-        'Nulla facilisi',
-    rating: 4.8,
-    tags: [
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-      UiKitTag(
-          title: 'uniqueCheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: false),
-      UiKitTag(
-          title: 'Cheap',
-          iconPath: 'assets/images/svg/cocktail.svg',
-          unique: true),
-    ],
-    descriptionItems: [
-      const UiDescriptionItemModel(
-        title: 'test 1',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-      ),
-      const UiDescriptionItemModel(
-        title: 'test 2',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-      ),
-      const UiDescriptionItemModel(
-        title: 'test 3',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-      ),
-      const UiDescriptionItemModel(
-        title: 'test 4',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-      ),
-    ]
-  );
+      title: 'title',
+      id: '1',
+      media: [
+        UiKitMediaVideo(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+      ],
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+          'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+          'Nulla facilisi. '
+          'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+          'Nulla facilisi',
+      rating: 4.8,
+      tags: [
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'uniqueCheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      ],
+      descriptionItems: [
+        const UiDescriptionItemModel(title: 'test 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+        const UiDescriptionItemModel(title: 'test 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+        const UiDescriptionItemModel(title: 'test 3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+        const UiDescriptionItemModel(title: 'test 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+      ]);
 }
