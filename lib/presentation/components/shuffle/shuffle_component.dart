@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/src/result/file_info.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:flutter_cache_manager/src/result/file_info.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class ShuffleComponent extends StatefulWidget {
   final UiShuffleModel shuffle;
@@ -97,19 +96,15 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                   direction,
                 ) {
                   if (direction != CardSwiperDirection.bottom) {
-                    _getColor(
-                        widget.shuffle.items[currentIndex ?? 0].imageLink ??
-                            '');
+                    _getColor(widget.shuffle.items[currentIndex ?? 0].imageLink ?? '');
                   }
 
                   switch (direction) {
                     case CardSwiperDirection.bottom:
                       return false;
                     case CardSwiperDirection.top:
-                      if (widget.onFavorite != null &&
-                          (model.showFavorite ?? true)) {
-                        widget.onFavorite!(
-                            widget.shuffle.items[currentIndex!].title);
+                      if (widget.onFavorite != null && (model.showFavorite ?? true)) {
+                        widget.onFavorite!(widget.shuffle.items[currentIndex!].title);
                       } else {
                         return false;
                       }
@@ -118,16 +113,14 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                       return false;
                     case CardSwiperDirection.left:
                       if (widget.onDislike != null) {
-                        widget.onDislike!(
-                            widget.shuffle.items[currentIndex!].title);
+                        widget.onDislike!(widget.shuffle.items[currentIndex!].title);
                       } else {
                         return false;
                       }
                       return true;
                     case CardSwiperDirection.right:
                       if (widget.onLike != null) {
-                        widget
-                            .onLike!(widget.shuffle.items[currentIndex!].title);
+                        widget.onLike!(widget.shuffle.items[currentIndex!].title);
                       } else {
                         return false;
                       }
@@ -158,11 +151,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                     blurred: true,
                     onPressed: () => controller.swipeTop(),
                     icon: ImageWidget(
-                      height: 20.h,
-                      fit: BoxFit.fitHeight,
-                      svgAsset: svg.star,
+                      svgAsset: svg.starOutline,
                       color: Colors.white,
-
                     ),
                   ),
                 context.smallButton(

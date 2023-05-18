@@ -64,35 +64,31 @@ class PlaceComponent extends StatelessWidget {
             //       .copyWith(color: Colors.white),
             // ),
             SpacingFoundation.verticalSpace16,
-            IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: () {
-                  final icon = Assets.images.svg.events;
-
-                  return [
-                    Expanded(
-                      child: UpcomingEventPlaceActionCard(
-                        value: 'in 2 days',
-                        vectorIconAsset: icon,
-                        action: () {
-                          log('calendar was pressed');
-                        },
-                      ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: () {
+                return [
+                  Expanded(
+                    child: UpcomingEventPlaceActionCard(
+                      value: 'in 2 days',
+                      vectorIconAsset: GraphicsFoundation.instance.svg.events,
+                      action: () {
+                        log('calendar was pressed');
+                      },
                     ),
-                    SpacingFoundation.horizontalSpace8,
-                    Expanded(
-                      child: PointBalancePlaceActionCard(
-                        value: '2 650',
-                        vectorIconAsset: icon,
-                        action: () {
-                          log('balance was pressed');
-                        },
-                      ),
+                  ),
+                  SpacingFoundation.horizontalSpace8,
+                  Expanded(
+                    child: PointBalancePlaceActionCard(
+                      value: '2 650',
+                      vectorIconAsset: GraphicsFoundation.instance.svg.coin,
+                      action: () {
+                        log('balance was pressed');
+                      },
                     ),
-                  ];
-                }(),
-              ),
+                  ),
+                ];
+              }(),
             ),
             SpacingFoundation.verticalSpace8,
             GridView.count(
