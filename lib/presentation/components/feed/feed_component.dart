@@ -131,7 +131,12 @@ class FeedComponent extends StatelessWidget {
                   icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice),
                   onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(''),
                 ),
-                SpacingFoundation.horizontalSpace8,
+                UiKitTitledFilterChip(
+                  selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
+                  title: 'Favorites',
+                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                  icon: GraphicsFoundation.instance.svg.star.path,
+                ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
                 Wrap(
                     spacing: SpacingFoundation.verticalSpacing8,
                     children: feed.filterChips!
@@ -140,7 +145,7 @@ class FeedComponent extends StatelessWidget {
                               title: e.title,
                               onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                               icon: e.iconPath,
-                            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing6))
+                            ))
                         .toList()),
               ],
             ),
