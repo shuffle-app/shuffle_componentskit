@@ -10,19 +10,25 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class GlobalConfiguration {
   static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
-  final Completer _compliter = Completer();
+  static String _configUrl = ConfigConstants.configUrl;
+  final Completer _completer = Completer();
   ConfigurationModel appConfig = ConfigurationModel(
       updated: DateTime.now(), content: {}, theme: 'default');
 
-  bool get isLoaded => _compliter.isCompleted;
+  bool get isLoaded => _completer.isCompleted;
 
-  factory GlobalConfiguration() {
+  factory GlobalConfiguration([String? configUrl]) {
+    if (configUrl != null) {
+      _configUrl = configUrl;
+    }
+
     return _singleton;
   }
 
   GlobalConfiguration._internal();
 
-  Future<GlobalConfiguration> load([String version = '1']) async {
+  Future<GlobalConfiguration> load(
+      {String version = '1', String? userId}) async {
     try {
       File? cache = kIsWeb ? null : await _loadFromDocument();
       late final String cacheAsString;
@@ -34,16 +40,16 @@ class GlobalConfiguration {
           //TODO change to days
           // print('here is load from GlobalConfiguration model.updated.difference(DateTime.now()) ${model.updated.difference(DateTime.now())} ${model.updated.difference(DateTime.now()).inMinutes}');
           if (model.updated.difference(DateTime.now()).inMinutes.abs() > 1) {
-            model = await _loadAndSaveConfig(version);
+            model = await _loadAndSaveConfig(version, userId);
           }
         } else {
-          model = await _loadAndSaveConfig(version);
+          model = await _loadAndSaveConfig(version, userId);
         }
       } else {
-        model = await _loadAndSaveConfig(version);
+        model = await _loadAndSaveConfig(version, userId);
       }
       appConfig = model;
-      if (!_compliter.isCompleted) _compliter.complete();
+      if (!_completer.isCompleted) _completer.complete();
     } catch (e, t) {
       generalErrorCatch(e, t);
       if (kDebugMode) {
@@ -54,9 +60,13 @@ class GlobalConfiguration {
     return _singleton;
   }
 
-  Future<ConfigurationModel> _loadAndSaveConfig(String version) async {
+  Future<ConfigurationModel> _loadAndSaveConfig(String version,
+      [String? userId]) async {
+    if (userId != null) {
+      ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
+    }
     Map<String, dynamic> configAsMap = await _getFromUrl(
-        '${ConfigConstants.configUrl}v$version/config',
+        '${_configUrl}settings/v$version/config',
         headers: ConfigConstants.configHeaders);
     final model = ConfigurationModel(
         updated: DateTime.now(),
@@ -72,8 +82,7 @@ class GlobalConfiguration {
       return;
     }
     var provider = await getApplicationDocumentsDirectory();
-    final File file =
-        File(p.join(provider.path, 'appConfig/generalConfigCache'));
+    final File file = File(p.join(provider.path, ConfigConstants.configPath));
     await file.create(recursive: true);
     await file.writeAsString(jsonEncode(appConfig.toJson()));
   }
@@ -81,7 +90,7 @@ class GlobalConfiguration {
   Future<File> _loadFromDocument() async {
     var provider = await getApplicationDocumentsDirectory();
 
-    return File(p.join(provider.path, 'appConfig/generalConfigCache'));
+    return File(p.join(provider.path, ConfigConstants.configPath));
   }
 
   Future<Map<String, dynamic>> _getFromUrl(String url,
