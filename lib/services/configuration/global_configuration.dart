@@ -22,7 +22,7 @@ class GlobalConfiguration {
 
   GlobalConfiguration._internal();
 
-  Future<GlobalConfiguration> load() async {
+  Future<GlobalConfiguration> load([String version = '1']) async {
     try {
       File? cache = kIsWeb ? null : await _loadFromDocument();
       late final String cacheAsString;
@@ -34,19 +34,19 @@ class GlobalConfiguration {
           //TODO change to days
           // print('here is load from GlobalConfiguration model.updated.difference(DateTime.now()) ${model.updated.difference(DateTime.now())} ${model.updated.difference(DateTime.now()).inMinutes}');
           if (model.updated.difference(DateTime.now()).inMinutes.abs() > 1) {
-            model = await _loadAndSaveConfig();
+            model = await _loadAndSaveConfig(version);
           }
         } else {
-          model = await _loadAndSaveConfig();
+          model = await _loadAndSaveConfig(version);
         }
       } else {
-        model = await _loadAndSaveConfig();
+        model = await _loadAndSaveConfig(version);
       }
       appConfig = model;
       if (!_compliter.isCompleted) _compliter.complete();
     } catch (e, t) {
       generalErrorCatch(e, t);
-      if(kDebugMode) {
+      if (kDebugMode) {
         rethrow;
       }
     }
@@ -54,9 +54,9 @@ class GlobalConfiguration {
     return _singleton;
   }
 
-  Future<ConfigurationModel> _loadAndSaveConfig() async {
+  Future<ConfigurationModel> _loadAndSaveConfig(String version) async {
     Map<String, dynamic> configAsMap = await _getFromUrl(
-        ConfigConstants.configUrl,
+        '${ConfigConstants.configUrl}v$version/config',
         headers: ConfigConstants.configHeaders);
     final model = ConfigurationModel(
         updated: DateTime.now(),

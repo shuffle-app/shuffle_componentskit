@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shuffle_uikit/foundation/border_radius_foundation.dart';
+import 'package:shuffle_uikit/foundation/colors_foundation.dart';
 
 class SnackBarUtils {
   SnackBarUtils._();
@@ -12,6 +14,10 @@ class SnackBarUtils {
       VoidCallback? onTap}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusFoundation.all12
+        ),
+        backgroundColor: ColorsFoundation.darkNeutral900,
         duration: duration ?? const Duration(seconds: 3),
         content: Text(message),
         action: SnackBarAction(

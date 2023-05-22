@@ -31,7 +31,7 @@ class BottomBookingBar extends StatelessWidget {
 
             return [
               if (model.showRoute ?? true)
-                context.outlinedButton(
+                context.smallOutlinedButton(
                   onPressed: onShowRoute,
                   icon: ImageWidget(
                     svgAsset: svg.route,
@@ -47,7 +47,7 @@ class BottomBookingBar extends StatelessWidget {
               ),
               SpacingFoundation.horizontalSpace12,
               if (model.showMagnify ?? true)
-                context.outlinedButton(
+                context.smallOutlinedButton(
                   onPressed: onMagnify,
                   icon: ImageWidget(
                     svgAsset: svg.searchPeople,
