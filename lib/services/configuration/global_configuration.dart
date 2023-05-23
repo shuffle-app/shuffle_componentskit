@@ -28,7 +28,7 @@ class GlobalConfiguration {
   GlobalConfiguration._internal();
 
   Future<GlobalConfiguration> load(
-      {String version = '1', String? userId}) async {
+      {String version = '1.0.0', String? userId}) async {
     try {
       File? cache = kIsWeb ? null : await _loadFromDocument();
       late final String cacheAsString;
@@ -66,7 +66,7 @@ class GlobalConfiguration {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
     Map<String, dynamic> configAsMap = await _getFromUrl(
-        '${_configUrl}settings/v$version/config',
+        '${_configUrl}settings/config/v$version',
         headers: ConfigConstants.configHeaders);
     final model = ConfigurationModel(
         updated: DateTime.now(),
