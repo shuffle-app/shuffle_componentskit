@@ -66,7 +66,7 @@ class GlobalConfiguration {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
     Map<String, dynamic> configAsMap = await _getFromUrl(
-        '${_configUrl}settings/config/v$version',
+        'http://${_configUrl}/settings/config/v$version',
         headers: ConfigConstants.configHeaders);
     final model = ConfigurationModel(
         updated: DateTime.now(),
