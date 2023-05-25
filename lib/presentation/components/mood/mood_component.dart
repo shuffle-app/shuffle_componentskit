@@ -18,7 +18,7 @@ class MoodComponent extends StatelessWidget {
         ComponentMoodModel.fromJson(config['mood']);
 
     final theme = context.uiKitTheme;
-    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
@@ -91,7 +91,7 @@ class MoodComponent extends StatelessWidget {
         ],
       ],
     ).paddingSymmetric(
-      vertical: model.positionModel?.verticalMargin ?? 0,
+      vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
   }
 }

@@ -57,7 +57,7 @@ class BottomBookingBar extends StatelessWidget {
             ];}()
 
         ).paddingSymmetric(
-            vertical: model.positionModel?.verticalMargin ?? 0.0,
-            horizontal: model.positionModel?.horizontalMargin ?? 0.0));
+            vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
+            horizontal: (model.positionModel?.horizontalMargin ?? 0).toDouble()));
   }
 }
