@@ -19,7 +19,7 @@ class EventComponent extends StatelessWidget {
     final theme = context.uiKitTheme;
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final titleAlignment = model.positionModel?.titleAlignment;
-    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return Column(
       children: [
@@ -84,7 +84,7 @@ class EventComponent extends StatelessWidget {
       ],
       // ),
     ).paddingSymmetric(
-        vertical: model.positionModel?.verticalMargin ?? 0,
+        vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
         horizontal: horizontalMargin);
   }
 }

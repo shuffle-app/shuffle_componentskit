@@ -15,6 +15,7 @@ class PlaceComponent extends StatelessWidget {
     final ComponentPlaceModel model = ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return Column(
       children: [
@@ -29,7 +30,7 @@ class PlaceComponent extends StatelessWidget {
               avatarUrl: place.logo,
             ),
           ],
-        ),
+        ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -86,7 +87,7 @@ class PlaceComponent extends StatelessWidget {
                   ),
                 ];
               }(),
-            ),
+            ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             GridView.count(
               padding: EdgeInsets.zero,
@@ -101,15 +102,14 @@ class PlaceComponent extends StatelessWidget {
                         info: e.description,
                       ))
                   .toList(),
-            ),
+            ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
           ],
         ),
       ],
       // ),
     ).paddingSymmetric(
-      vertical: model.positionModel?.verticalMargin ?? 0,
-      horizontal: model.positionModel?.horizontalMargin ?? 0,
+      vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
   }
 }

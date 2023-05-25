@@ -56,7 +56,7 @@ class FeedComponent extends StatelessWidget {
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
     final size = MediaQuery.of(context).size;
-    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final horizontalWidthBox = (horizontalMargin - SpacingFoundation.horizontalSpacing4).widthBox;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
@@ -160,7 +160,7 @@ class FeedComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
       ],
     ]).paddingSymmetric(
-      vertical: model.positionModel?.verticalMargin ?? 0,
+      vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
   }
 }

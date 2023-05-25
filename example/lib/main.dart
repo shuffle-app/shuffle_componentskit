@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,9 +7,19 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  HttpOverrides.global = MyHttpOverrides();
   usePathUrlStrategy();
   runApp(const MyApp());
 }
@@ -54,7 +66,8 @@ class _MyAppState extends State<MyApp> {
                               (_) => Future.delayed(const Duration(seconds: 1)))
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(
                               themeMatcher(configuration.appConfig.theme)));
-                      return const Center(child: LoadingWidget());
+                      return const Scaffold(
+                          body: Center(child: LoadingWidget()));
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -122,6 +135,34 @@ class ComponentsTestPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                text: 'show profile',
+                onPressed: () => buildComponent(
+                    context,
+                    ComponentShuffleModel.fromJson(
+                        configuration.appConfig.content['profile']),
+                    Scaffold(
+                      body: BlurredAppBarPage(
+                        title: 'My card',
+                        centerTitle: true,
+                        body: ProfileComponent(
+                            profile: UiProfileModel(
+                          name: 'Marry Williams',
+                          nickname: '@marywill',
+                          description:
+                              'Just walking here and there trying to find something unique and interesting to show you!',
+                          avatarUrl: 'assets/images/png/profile_avatar.png',
+                          interests: [
+                            'Restaurants',
+                            'Hookah',
+                            'Roller Coaster',
+                            'Swimmings'
+                          ],
+                          // followers: 2650,
+                        )),
+                      ),
+                    ))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show shuffle',
