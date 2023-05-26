@@ -129,7 +129,7 @@ class FeedComponent extends StatelessWidget {
                 horizontalWidthBox,
                 context.gradientButton(
                   icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice),
-                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(''),
+                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
                 ),
                 UiKitTitledFilterChip(
                   selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
