@@ -10,9 +10,10 @@ class FeedComponent extends StatelessWidget {
   final Function? onEventPressed;
   final Function? onPlacePressed;
   final Function? onTagSortPressed;
+  final VoidCallback? onHowItWorksPoped;
 
   const FeedComponent(
-      {Key? key, required this.feed, this.onMoodPressed, this.onEventPressed, this.onPlacePressed, this.onTagSortPressed})
+      {Key? key, required this.feed, this.onMoodPressed, this.onEventPressed, this.onPlacePressed, this.onTagSortPressed, this.onHowItWorksPoped})
       : super(key: key);
 
   Widget _howItWorksDialog(context, textStyle) => UiKitHintDialog(
@@ -20,7 +21,11 @@ class FeedComponent extends StatelessWidget {
         subtitle: 'you get exactly what you need',
         textStyle: textStyle,
         dismissText: 'OKAY, COOL!',
-        onDismiss: () => Navigator.pop(context),
+        onDismiss: () {
+          onHowItWorksPoped?.call();
+
+          return Navigator.pop(context);
+        },
         hintTiles: [
           UiKitIconHintCard(
             icon: ImageWidget(
@@ -81,6 +86,7 @@ class FeedComponent extends StatelessWidget {
         Stack(
           children: [
             Text('How’re you feeling tonight?', style: themeTitleStyle),
+            if(feed.showHowItWorks)
             Transform.translate(
               offset: Offset(size.width / 1.7, 15),
               child: Transform.rotate(
@@ -129,7 +135,7 @@ class FeedComponent extends StatelessWidget {
                 horizontalWidthBox,
                 context.gradientButton(
                   icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice),
-                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(''),
+                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
                 ),
                 UiKitTitledFilterChip(
                   selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,

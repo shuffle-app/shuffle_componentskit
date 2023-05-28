@@ -19,7 +19,7 @@ class PlaceComponent extends StatelessWidget {
 
     return Column(
       children: [
-        SpacingFoundation.verticalSpace4,
+        // SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: titleAlignment.mainAxisAlignment,
@@ -30,8 +30,8 @@ class PlaceComponent extends StatelessWidget {
               avatarUrl: place.logo,
             ),
           ],
-        ).paddingSymmetric(horizontal: horizontalMargin),
-        SpacingFoundation.verticalSpace4,
+        ).paddingSymmetric(horizontal: horizontalMargin,vertical: SpacingFoundation.verticalSpacing8),
+        // SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
