@@ -15,3 +15,10 @@ export 'components/mood/uimood_model.dart';
 export 'components/place/uiplace_model.dart';
 export 'components/shuffle/shuffle_component.dart';
 export 'components/shuffle/uishuffle_model.dart';
+export 'components/spinner/uispinner_model.dart';
+export 'components/spinner/spinner_component.dart';
+export 'components/profile/profile_component.dart';
+export 'components/profile/edit_profile_component/edit_profile_component.dart';
+export 'components/profile/uiprofile_model.dart';
+
+

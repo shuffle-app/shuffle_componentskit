@@ -3,6 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiFeedModel {
   final UiEventModel? recommendedEvent;
+  final bool showHowItWorks;
   final List<UiMoodModel>? moods;
   final List<UiPlaceModel>? places;
   final List<UiKitTag>? filterChips;
@@ -12,6 +13,7 @@ class UiFeedModel {
       {this.filterChips,
       this.activeFilterChips,
       this.recommendedEvent,
+      this.showHowItWorks = false,
       this.moods,
       this.places});
 }

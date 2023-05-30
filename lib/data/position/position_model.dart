@@ -21,10 +21,10 @@ class PositionModel {
   final Alignment? bodyAlignment;
 
   @JsonKey(name: 'vertical_margin')
-  final double? verticalMargin;
+  final num? verticalMargin;
 
   @JsonKey(name: 'horizontal_margin')
-  final double? horizontalMargin;
+  final num? horizontalMargin;
 
   PositionModel({
     this.verticalMargin,

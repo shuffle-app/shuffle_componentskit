@@ -17,7 +17,7 @@ class PlacePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final size = MediaQuery.of(context).size;
-    final horizontalMargin = model.positionModel?.horizontalMargin ?? 0;
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return SizedBox(
         width: double.infinity,
