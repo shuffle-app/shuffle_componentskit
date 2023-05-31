@@ -20,5 +20,7 @@ export 'components/spinner/spinner_component.dart';
 export 'components/profile/profile_component.dart';
 export 'components/profile/edit_profile_component/edit_profile_component.dart';
 export 'components/profile/uiprofile_model.dart';
+export 'components/preferences/uipreferences_model.dart';
+export 'components/preferences/preferences_component.dart';
 
 

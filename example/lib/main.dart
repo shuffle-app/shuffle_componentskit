@@ -137,6 +137,52 @@ class ComponentsTestPage extends StatelessWidget {
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+                text: 'show preferences selector',
+                onPressed: () => buildComponent(
+                    context,
+                    ComponentShuffleModel.fromJson(
+                        configuration.appConfig.content['profile']),
+                    Scaffold(
+                        body: PreferencesComponent(
+                      preferences: UiPreferencesModel([
+                        UiKitImportanceChip(
+                            title: 'Electronic\nMusic',
+                            importance: ImportanceChip.high),
+                        UiKitImportanceChip(
+                            title: 'Swimming',
+                            importance: ImportanceChip.medium),
+                        UiKitImportanceChip(
+                            title: 'Theme\nParks',
+                            importance: ImportanceChip.none),
+                        UiKitImportanceChip(
+                            title: 'Hookah', importance: ImportanceChip.high),
+                        UiKitImportanceChip(
+                            title: 'Electronic\nMusic',
+                            importance: ImportanceChip.high),
+                        UiKitImportanceChip(
+                            title: 'Swimming',
+                            importance: ImportanceChip.medium),
+                        UiKitImportanceChip(
+                            title: 'Theme\nParks',
+                            importance: ImportanceChip.none),
+                        UiKitImportanceChip(
+                            title: 'Hookah', importance: ImportanceChip.high),
+                        UiKitImportanceChip(
+                            title: 'Electronic\nMusic',
+                            importance: ImportanceChip.high),
+                        UiKitImportanceChip(
+                            title: 'Swimming',
+                            importance: ImportanceChip.medium),
+                        UiKitImportanceChip(
+                            title: 'Theme\nParks',
+                            importance: ImportanceChip.none),
+                        UiKitImportanceChip(
+                            title: 'Hookah', importance: ImportanceChip.high),
+                      ]),
+                      onSubmit: () {},
+                    )))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 text: 'show profile',
                 onPressed: () => buildComponent(
                     context,
