@@ -13,10 +13,10 @@ dependencies:
 
 #main ui kit
   shuffle_uikit:
-    path: ../shuffle_uikit
-#    git:
-#      url: https://github.com/shuffle-app/shuffle_ui_kit.git
-#      ref: master
+#    path: ../shuffle-uikit
+    git:
+      url: https://github.com/shuffle-app/shuffle_ui_kit.git
+      ref: master
 
 #tools for config workers
   json_annotation: ^4.7.0
@@ -28,6 +28,7 @@ dependencies:
 
   #ui_helpers
   palette_generator: ^0.3.3+2
+  flutter_staggered_grid_view: ^0.6.2
 
 
 dev_dependencies:

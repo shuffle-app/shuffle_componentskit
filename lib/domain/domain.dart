@@ -7,3 +7,4 @@ export 'config_models/spinner/component_spinner_model.dart';
 export 'config_models/common/booking_element_model.dart';
 export 'data_uimodels/uiowner_model.dart';
 export 'data_uimodels/uidescriptionitem_model.dart';
+export 'config_models/about_user/component_about_user_model.dart';
