@@ -7,9 +7,14 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class AboutUserComponent extends StatelessWidget {
   final UiAboutUserModel aboutUserModel;
-  final VoidCallback? onSubmitUserData;
-  final ValueChanged<String>? onReligionChanged;
+  final ValueChanged<UiAboutUserModel>? onSubmitUserData;
+  final ValueChanged<String>? onReligionSelected;
+  final ValueChanged<String>? onNameChanged;
+  final ValueChanged<String>? onNickNameChanged;
   final ValueChanged<String?>? onPersonTypeChanged;
+  final ValueChanged<int?>? onAgeChanged;
+  final String? Function(String?)? inputFieldValidator;
+  final ValueChanged<String>? onGenderChanged;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController nickNameController = TextEditingController();
@@ -17,8 +22,13 @@ class AboutUserComponent extends StatelessWidget {
   AboutUserComponent({
     Key? key,
     required this.aboutUserModel,
-    this.onReligionChanged,
+    this.onReligionSelected,
+    this.inputFieldValidator,
+    this.onNameChanged,
+    this.onNickNameChanged,
     this.onPersonTypeChanged,
+    this.onAgeChanged,
+    this.onGenderChanged,
     this.onSubmitUserData,
   }) : super(key: key);
 
@@ -26,6 +36,8 @@ class AboutUserComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentAboutUserModel model = ComponentAboutUserModel.fromJson(config['about_user']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -39,11 +51,15 @@ class AboutUserComponent extends StatelessWidget {
               UiKitInputFieldNoIcon(
                 controller: nameController,
                 hintText: 'NAME',
+                validator: inputFieldValidator,
+                onChanged: (value) => onNameChanged?.call(value),
               ),
               SpacingFoundation.verticalSpace16,
               UiKitInputFieldNoIcon(
                 controller: nickNameController,
                 hintText: 'NICKNAME',
+                validator: inputFieldValidator,
+                onChanged: (value) => onNickNameChanged?.call(value),
               ),
             ],
           ).paddingAll(EdgeInsetsFoundation.all4),
@@ -52,11 +68,13 @@ class AboutUserComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           UiKitMenu<String>(
             title: 'Describe yourself',
+            selectedItem: aboutUserModel.selectedPersonType,
             items: aboutUserModel.personTypes!
                 .map<UiKitMenuItem<String>>(
                   (e) => UiKitMenuItem<String>(
-                    title: e,
-                    value: e,
+                    title: e.title,
+                    value: e.value,
+                    icon: e.icon,
                   ),
                 )
                 .toList(),
@@ -75,7 +93,7 @@ class AboutUserComponent extends StatelessWidget {
                   icon: data.icon,
                   title: data.title,
                   isSelected: data.isSelected,
-                  onPressed: () => onReligionChanged?.call(data.title),
+                  onPressed: () => onReligionSelected?.call(data.title),
                 );
               },
               separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
@@ -87,6 +105,7 @@ class AboutUserComponent extends StatelessWidget {
         UiKitHorizontalWheelNumberSelector(
           values: List<int>.generate(70, (index) => index + 10),
           title: 'Your age',
+          onValueChanged: (age) => onAgeChanged?.call(age),
         ),
         if (aboutUserModel.genders != null) ...[
           SpacingFoundation.verticalSpace16,
@@ -96,9 +115,11 @@ class AboutUserComponent extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: aboutUserModel.genders!
                   .map(
-                    (e) => UiKitSignWithCaption(
+                    (e) => UiKitVerticalChip(
+                      selected: aboutUserModel.selectedGender == e.caption,
                       caption: e.caption,
                       sign: e.sign,
+                      onTap: () => onGenderChanged?.call(e.caption),
                     ),
                   )
                   .toList(),
@@ -108,9 +129,12 @@ class AboutUserComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         context.button(
           text: 'CONFIRM',
-          onPressed: () => onSubmitUserData?.call(),
+          onPressed: () => onSubmitUserData?.call(aboutUserModel),
         ),
       ],
+    ).paddingSymmetric(
+      vertical: verticalMargin,
+      horizontal: horizontalMargin,
     );
   }
 }
