@@ -1,4 +1,4 @@
-class UiEditProfileModel {
+class UiEditDefaultProfileModel {
   final String? photo;
   final String? name;
   final String? email;
@@ -9,7 +9,7 @@ class UiEditProfileModel {
 
   String get preferencesString => preferences?.join(', ') ?? '';
 
-  UiEditProfileModel({
+  UiEditDefaultProfileModel({
     this.photo,
     this.name,
     this.email,

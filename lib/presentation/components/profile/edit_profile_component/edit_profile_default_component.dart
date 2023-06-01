@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/components/profile/edit_profile_component/ui_edit_profile_model.dart';
-import 'package:shuffle_components_kit/presentation/utils/input_formatters.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class EditProfileComponent extends StatelessWidget {
-  final UiEditProfileModel editProfileModel;
-  final ValueChanged<UiEditProfileModel>? onProfileEditSubmitted;
+class EditProfileDefaultComponent extends StatelessWidget {
+  final UiEditDefaultProfileModel editProfileModel;
+  final ValueChanged<UiEditDefaultProfileModel>? onProfileEditSubmitted;
   final ValueChanged<String>? onPhotoChanged;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
@@ -20,7 +19,7 @@ class EditProfileComponent extends StatelessWidget {
   late final TextEditingController dateOfBirthController = TextEditingController(text: editProfileModel.dateOfBirth);
   late final TextEditingController phoneController = TextEditingController(text: editProfileModel.phone);
 
-  EditProfileComponent({
+  EditProfileDefaultComponent({
     Key? key,
     required this.editProfileModel,
     this.onProfileEditSubmitted,
@@ -34,10 +33,10 @@ class EditProfileComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    // final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
-    // final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    // final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
 
     return Scaffold(
@@ -106,8 +105,8 @@ class EditProfileComponent extends StatelessWidget {
             ),
           ],
         ).paddingSymmetric(
-          horizontal: EdgeInsetsFoundation.horizontal16,
-          vertical: EdgeInsetsFoundation.vertical16,
+          horizontal: horizontalMargin,
+          vertical: verticalMargin,
         ),
       ),
       bottomSheet: Visibility(
@@ -118,8 +117,8 @@ class EditProfileComponent extends StatelessWidget {
               onPressed: () => onProfileEditSubmitted?.call(editProfileModel),
             )
             .paddingOnly(
-              left: EdgeInsetsFoundation.horizontal16,
-              right: EdgeInsetsFoundation.horizontal16,
+              left: horizontalMargin,
+              right: horizontalMargin,
               bottom: EdgeInsetsFoundation.vertical24,
             ),
       ),
