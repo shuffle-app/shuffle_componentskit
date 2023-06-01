@@ -14,8 +14,8 @@ generalErrorCatch(error,stackTrace) {
       break;
     case TypeError:
       break;
-    default:
-      throw error;
+    // default:
+    //   throw error;
   }
 
 }
