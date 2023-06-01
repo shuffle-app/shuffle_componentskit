@@ -85,7 +85,7 @@ class ComponentsTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UiEventModel event = UiEventModel(
-      id: '1',
+      id: 1,
       owner: UiOwnerModel(
         name: 'name',
         id: '1',
@@ -431,7 +431,7 @@ class ComponentsTestPage extends StatelessWidget {
                       moods: List.generate(
                           4,
                           (index) => UiMoodModel(
-                              id: '1',
+                              id: 1,
                               title: 'Want to have some fun',
                               logo: 'assets/images/png/crazy_emoji.png')),
                     )))))),
@@ -458,7 +458,7 @@ class ComponentsTestPage extends StatelessWidget {
                             ],
                             title: 'need to cool down a bit?',
                             logo: 'assets/images/png/crazy_emoji.png',
-                            id: '1',
+                            id: 1,
                             places: List.generate(4, (index) => place),
                           ),
                         ))))),
@@ -564,7 +564,7 @@ class ComponentsTestPage extends StatelessWidget {
 
   final UiPlaceModel place = UiPlaceModel(
       title: 'title',
-      id: '1',
+      id: 1,
       media: [
         UiKitMediaVideo(
           link: 'assets/images/png/place.png',

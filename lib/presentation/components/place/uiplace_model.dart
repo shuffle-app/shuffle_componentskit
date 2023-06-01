@@ -3,7 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../../../shuffle_components_kit.dart';
 
 class UiPlaceModel {
-  final String id;
+  final int id;
   final List<BaseUiKitMedia> media;
   final String description;
   final List<UiKitTag> tags;
