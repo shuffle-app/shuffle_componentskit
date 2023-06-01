@@ -3,7 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../../../shuffle_components_kit.dart';
 
 class UiEventModel {
-  final String id;
+  final int id;
   final String? title;
   final UiOwnerModel? owner;
   final List<BaseUiKitMedia>? media;

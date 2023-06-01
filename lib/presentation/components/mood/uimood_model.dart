@@ -1,7 +1,7 @@
 import '../../../shuffle_components_kit.dart';
 
 class UiMoodModel {
-  final String id;
+  final int id;
   final String title;
   final String logo;
   final List<UiDescriptionItemModel>? descriptionItems;
@@ -15,7 +15,7 @@ class UiMoodModel {
       this.places});
 
   UiMoodModel copyWith({
-    String? id,
+    int? id,
     String? title,
     String? logo,
     List<UiDescriptionItemModel>? descriptionItems,
