@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:shuffle_components_kit/data/base_ui_model/uibase_model.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 part 'component_edit_profile_model.g.dart';
 
