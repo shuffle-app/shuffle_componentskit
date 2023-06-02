@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class AboutUserComponent extends StatelessWidget {
   final UiAboutUserModel aboutUserModel;
-  final ValueChanged<UiAboutUserModel>? onSubmitUserData;
+  final VoidCallback? onSubmitUserData;
   final ValueChanged<String>? onReligionSelected;
   // final ValueChanged<String>? onNameChanged;
   // final ValueChanged<String>? onNickNameChanged;
@@ -35,6 +35,9 @@ class AboutUserComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(aboutUserModel.selectedAge==null){
+      onAgeChanged?.call(24);
+    }
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentAboutUserModel model = ComponentAboutUserModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
@@ -181,7 +184,7 @@ class AboutUserComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           context.button(
             text: 'CONFIRM',
-            onPressed: () => onSubmitUserData?.call(aboutUserModel),
+            onPressed: onSubmitUserData,
           ),
           SpacingFoundation.verticalSpace24,
         ],
