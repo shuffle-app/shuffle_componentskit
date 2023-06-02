@@ -35,6 +35,9 @@ class AboutUserComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (aboutUserModel.selectedAge == null) {
+      onAgeChanged?.call(24);
+    }
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentAboutUserModel model = ComponentAboutUserModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
@@ -140,10 +143,7 @@ class AboutUserComponent extends StatelessWidget {
                     },
                     separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
                     itemCount: aboutUserModel.religions!.length,
-                  )).paddingOnly(
-                left: EdgeInsetsFoundation.horizontal4,
-                bottom: EdgeInsetsFoundation.vertical4,
-              ),
+                  )),
             ),
           ],
           SpacingFoundation.verticalSpace16,
@@ -159,23 +159,48 @@ class AboutUserComponent extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SpacingFoundation.horizontalSpace16,
-                  ...aboutUserModel.genders!
-                      .map(
-                        (e) => Expanded(
-                          child: UiKitVerticalChip(
-                            selected: aboutUserModel.selectedGender == e.caption,
-                            caption: e.caption,
-                            sign: e.sign,
-                            onTap: () => onGenderChanged?.call(e.caption),
-                          ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                        ),
-                      )
-                      .toList(),
-                  SpacingFoundation.horizontalSpace16,
-                ],
+                children: aboutUserModel.genders!
+                    .map(
+                      (e) => UiKitVerticalChip(
+                        selected: aboutUserModel.selectedGender == e.caption,
+                        caption: e.caption,
+                        sign: e.sign,
+                        onTap: () => onGenderChanged?.call(e.caption),
+                      ),
+                    )
+                    .toList(),
               ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
+            ),
+            if (aboutUserModel.genders != null) ...[
+              SpacingFoundation.verticalSpace16,
+              UiKitTitledSection(
+                title: 'Gender',
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SpacingFoundation.horizontalSpace16,
+                    ...aboutUserModel.genders!
+                        .map(
+                          (e) => Expanded(
+                            child: UiKitVerticalChip(
+                              selected: aboutUserModel.selectedGender == e.caption,
+                              caption: e.caption,
+                              sign: e.sign,
+                              onTap: () => onGenderChanged?.call(e.caption),
+                            ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                          ),
+                        )
+                        .toList(),
+                    SpacingFoundation.horizontalSpace16,
+                  ],
+                ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
+              ),
+            ],
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              text: 'CONFIRM',
+              onPressed: () => onSubmitUserData?.call(aboutUserModel),
             ),
           ],
           SpacingFoundation.verticalSpace16,
@@ -183,7 +208,6 @@ class AboutUserComponent extends StatelessWidget {
             text: 'CONFIRM',
             onPressed: () => onSubmitUserData?.call(aboutUserModel),
           ),
-          SpacingFoundation.verticalSpace24,
         ],
       ).paddingSymmetric(
         vertical: verticalMargin,
