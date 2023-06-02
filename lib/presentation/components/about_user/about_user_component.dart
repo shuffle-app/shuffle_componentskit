@@ -110,6 +110,7 @@ class AboutUserComponent extends StatelessWidget {
         ),
         if (aboutUserModel.personTypes != null) ...[
           SpacingFoundation.verticalSpace16,
+<<<<<<< HEAD
           UiKitMenu<String>(
             title: 'Describe yourself',
             selectedItem: aboutUserModel.selectedPersonType,
@@ -120,6 +121,26 @@ class AboutUserComponent extends StatelessWidget {
                     value: e.value,
                     icon: e.icon,
                   ),
+=======
+          RichText(
+            key: _myKey,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'The more info we get about you, the better ',
+                  style: subHeadline,
+                ),
+                TextSpan(
+                  text: 'your leisure selection',
+                  style: subHeadline?.copyWith(
+                      foreground: Paint()
+                        ..shader = GradientFoundation.buttonGradient
+                            .createShader(_myKey.currentContext?.findRenderObject()?.paintBounds ?? Rect.zero)),
+                ),
+                TextSpan(
+                  text: ' will be.',
+                  style: subHeadline,
+>>>>>>> parent of 6c666ab (ui bugfixes)
                 )
                 .toList(),
             onSelected: (personType) => onPersonTypeChanged?.call(personType),
@@ -175,6 +196,40 @@ class AboutUserComponent extends StatelessWidget {
                   .toList(),
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
           ),
+<<<<<<< HEAD
+=======
+          if (aboutUserModel.genders != null) ...[
+            SpacingFoundation.verticalSpace16,
+            UiKitTitledSection(
+              title: 'Gender',
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SpacingFoundation.horizontalSpace16,
+                  ...aboutUserModel.genders!
+                      .map(
+                        (e) => Expanded(
+                          child: UiKitVerticalChip(
+                            selected: aboutUserModel.selectedGender == e.caption,
+                            caption: e.caption,
+                            sign: e.sign,
+                            onTap: () => onGenderChanged?.call(e.caption),
+                          ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                        ),
+                      )
+                      .toList(),
+                  SpacingFoundation.horizontalSpace16,
+                ],
+              ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
+            ),
+          ],
+          SpacingFoundation.verticalSpace16,
+          context.button(
+            text: 'CONFIRM',
+            onPressed: () => onSubmitUserData?.call(aboutUserModel),
+          ),
+>>>>>>> parent of 6c666ab (ui bugfixes)
         ],
         SpacingFoundation.verticalSpace16,
         context.button(
