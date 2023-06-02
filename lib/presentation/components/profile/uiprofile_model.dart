@@ -12,14 +12,15 @@ class UiProfileModel {
   final List<String>? matchingInterests;
 
   ProfileCard get cardWidget => ProfileCard(
-      nickname: nickname,
-      name: name,
-      description: description,
-      avatarUrl: avatarUrl,
-      followers: followers,
-      interests: interests,
-      onFollow: onFollow,
-      matchingInterests: matchingInterests);
+        nickname: nickname,
+        name: name,
+        description: description,
+        avatarUrl: avatarUrl,
+        followers: followers,
+        interests: interests,
+        onFollow: onFollow,
+        matchingInterests: matchingInterests,
+      );
 
   UiProfileModel({
     this.onFollow,
