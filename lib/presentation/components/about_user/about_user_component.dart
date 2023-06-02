@@ -35,7 +35,7 @@ class AboutUserComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(aboutUserModel.selectedAge==null){
+    if (aboutUserModel.selectedAge == null) {
       onAgeChanged?.call(24);
     }
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
@@ -134,42 +134,23 @@ class AboutUserComponent extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final data = aboutUserModel.religions![index];
 
-                    return UiKitBorderedChipWithIcon(
-                      icon: data.icon,
-                      title: data.title,
-                      isSelected: aboutUserModel.selectedReligions?.contains(data.title) ?? false,
-                      onPressed: () => onReligionSelected?.call(data.title),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
-                  itemCount: aboutUserModel.religions!.length,
-                )),
-          ),
-        ],
-        SpacingFoundation.verticalSpace16,
-        UiKitHorizontalWheelNumberSelector(
-          values: List<int>.generate(70, (index) => index + 16),
-          title: 'Your age',
-          onValueChanged: (age) => onAgeChanged?.call(age),
-        ),
-        if (aboutUserModel.genders != null) ...[
+                      return UiKitBorderedChipWithIcon(
+                        icon: data.icon,
+                        title: data.title,
+                        isSelected: aboutUserModel.selectedReligions?.contains(data.title) ?? false,
+                        onPressed: () => onReligionSelected?.call(data.title),
+                      );
+                    },
+                    separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                    itemCount: aboutUserModel.religions!.length,
+                  )),
+            ),
+          ],
           SpacingFoundation.verticalSpace16,
-          UiKitTitledSection(
-            title: 'Gender',
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: aboutUserModel.genders!
-                  .map(
-                    (e) => UiKitVerticalChip(
-                      selected: aboutUserModel.selectedGender == e.caption,
-                      caption: e.caption,
-                      sign: e.sign,
-                      onTap: () => onGenderChanged?.call(e.caption),
-                    ),
-                  )
-                  .toList(),
-            ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
+          UiKitHorizontalWheelNumberSelector(
+            values: List<int>.generate(70, (index) => index + 16),
+            title: 'Your age',
+            onValueChanged: (age) => onAgeChanged?.call(age),
           ),
           if (aboutUserModel.genders != null) ...[
             SpacingFoundation.verticalSpace16,
@@ -178,23 +159,48 @@ class AboutUserComponent extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SpacingFoundation.horizontalSpace16,
-                  ...aboutUserModel.genders!
-                      .map(
-                        (e) => Expanded(
-                          child: UiKitVerticalChip(
-                            selected: aboutUserModel.selectedGender == e.caption,
-                            caption: e.caption,
-                            sign: e.sign,
-                            onTap: () => onGenderChanged?.call(e.caption),
-                          ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                        ),
-                      )
-                      .toList(),
-                  SpacingFoundation.horizontalSpace16,
-                ],
+                children: aboutUserModel.genders!
+                    .map(
+                      (e) => UiKitVerticalChip(
+                        selected: aboutUserModel.selectedGender == e.caption,
+                        caption: e.caption,
+                        sign: e.sign,
+                        onTap: () => onGenderChanged?.call(e.caption),
+                      ),
+                    )
+                    .toList(),
               ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
+            ),
+            if (aboutUserModel.genders != null) ...[
+              SpacingFoundation.verticalSpace16,
+              UiKitTitledSection(
+                title: 'Gender',
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SpacingFoundation.horizontalSpace16,
+                    ...aboutUserModel.genders!
+                        .map(
+                          (e) => Expanded(
+                            child: UiKitVerticalChip(
+                              selected: aboutUserModel.selectedGender == e.caption,
+                              caption: e.caption,
+                              sign: e.sign,
+                              onTap: () => onGenderChanged?.call(e.caption),
+                            ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                          ),
+                        )
+                        .toList(),
+                    SpacingFoundation.horizontalSpace16,
+                  ],
+                ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
+              ),
+            ],
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              text: 'CONFIRM',
+              onPressed: () => onSubmitUserData?.call(aboutUserModel),
             ),
           ],
           SpacingFoundation.verticalSpace16,
@@ -203,15 +209,10 @@ class AboutUserComponent extends StatelessWidget {
             onPressed: () => onSubmitUserData?.call(aboutUserModel),
           ),
         ],
-        SpacingFoundation.verticalSpace16,
-        context.button(
-          text: 'CONFIRM',
-          onPressed: () => onSubmitUserData?.call(aboutUserModel),
-        ),
-      ],
-    ).paddingSymmetric(
-      vertical: verticalMargin,
-      horizontal: horizontalMargin,
+      ).paddingSymmetric(
+        vertical: verticalMargin,
+        horizontal: horizontalMargin,
+      ),
     );
   }
 }
