@@ -174,7 +174,7 @@ class FeedComponent extends StatelessWidget {
               place: e,
               model: model,
             ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12)),
-        SpacingFoundation.verticalSpace16,
+        kBottomNavigationBarHeight.heightBox,
       ],
     ]).paddingSymmetric(
       vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
