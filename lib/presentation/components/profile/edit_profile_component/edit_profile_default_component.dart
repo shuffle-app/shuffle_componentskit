@@ -23,6 +23,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   final TextEditingController dateOfBirthController;
   final TextEditingController phoneController;
+  final bool isLoading;
 
   const EditProfileDefaultComponent({
     Key? key,
@@ -41,6 +42,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     required this.dateOfBirthController,
     required this.phoneController,
      this.onPreferencesChangeRequested,
+    this.isLoading = false
   }) : super(key: key);
 
   @override
@@ -135,7 +137,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
             .gradientButton(
               text: 'SAVE',
               onPressed: onProfileEditSubmitted?.call,
-            )
+            ).loadingWrap(isLoading)
             .paddingOnly(
               left: horizontalMargin,
               right: horizontalMargin,

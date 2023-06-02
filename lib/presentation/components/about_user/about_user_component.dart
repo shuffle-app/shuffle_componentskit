@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -34,84 +35,25 @@ class AboutUserComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(aboutUserModel.selectedAge==null){
+      onAgeChanged?.call(24);
+    }
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentAboutUserModel model = ComponentAboutUserModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final subHeadline = context.uiKitTheme?.boldTextTheme.subHeadline;
 
-    return Column(
-      // mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Now let\'s get to know each other',
-          style: context.uiKitTheme?.boldTextTheme.title1,
-        ),
-        SpacingFoundation.verticalSpace16,
-        RichText(
-          key: _myKey,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'The more info we get about you, the better ',
-                style: subHeadline,
-              ),
-              TextSpan(
-                text: 'your leisure selection',
-                style: subHeadline?.copyWith(
-                    foreground: Paint()
-                      ..shader = GradientFoundation.buttonGradient
-                          .createShader(_myKey.currentContext?.findRenderObject()?.paintBounds ?? Rect.zero)),
-              ),
-              TextSpan(
-                text: ' will be.',
-                style: subHeadline,
-              )
-            ],
+    return KeyboardDismisser(
+      child: Column(
+        // mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Now let\'s get to know each other',
+            style: context.uiKitTheme?.boldTextTheme.title1,
           ),
-        ),
-        SpacingFoundation.verticalSpace16,
-        UiKitCardWrapper(
-          child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
-                children: [
-                  UiKitInputFieldNoIcon(
-                    controller: nameController,
-                    hintText: 'NAME',
-                    validator: inputFieldValidator,
-                    // onChanged: (value) => onNameChanged?.call(value),
-                  ),
-                  SpacingFoundation.verticalSpace16,
-                  UiKitInputFieldNoIcon(
-                    controller: nickNameController,
-                    hintText: 'NICKNAME',
-                    validator: inputFieldValidator,
-                    // onChanged: (value) => onNickNameChanged?.call(value),
-                  ),
-                ],
-              )).paddingAll(EdgeInsetsFoundation.all4),
-        ),
-        if (aboutUserModel.personTypes != null) ...[
           SpacingFoundation.verticalSpace16,
-          UiKitMenu<String>(
-            title: 'Describe yourself',
-            selectedItem: aboutUserModel.selectedPersonType,
-            items: aboutUserModel.personTypes!
-                .map<UiKitMenuItem<String>>(
-                  (e) => UiKitMenuItem<String>(
-                    title: e.title,
-                    value: e.value,
-                    icon: e.icon,
-                  ),
-                )
-                .toList(),
-            onSelected: (personType) => onPersonTypeChanged?.call(personType),
-          ),
           RichText(
             key: _myKey,
             text: TextSpan(
@@ -124,28 +66,73 @@ class AboutUserComponent extends StatelessWidget {
                   text: 'your leisure selection',
                   style: subHeadline?.copyWith(
                       foreground: Paint()
+                        ..style = PaintingStyle.fill
                         ..shader = GradientFoundation.buttonGradient
                             .createShader(_myKey.currentContext?.findRenderObject()?.paintBounds ?? Rect.zero)),
                 ),
                 TextSpan(
                   text: ' will be.',
                   style: subHeadline,
-                ),
+                )
               ],
             ),
           ),
-        ],
-        if (aboutUserModel.religions != null) ...[
           SpacingFoundation.verticalSpace16,
-          UiKitTitledSection(
-            title: 'Select your religions',
-            child: SizedBox(
-                height: 40,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final data = aboutUserModel.religions![index];
+          UiKitCardWrapper(
+            color: ColorsFoundation.surface1,
+            child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
+                  children: [
+                    UiKitInputFieldNoIcon(
+                      controller: nameController,
+                      hintText: 'NAME',
+                      validator: inputFieldValidator,
+                      fillColor: ColorsFoundation.surface3,
+                      // onChanged: (value) => onNameChanged?.call(value),
+                    ),
+                    SpacingFoundation.verticalSpace16,
+                    UiKitInputFieldNoIcon(
+                      controller: nickNameController,
+                      hintText: 'NICKNAME',
+                      validator: inputFieldValidator,
+                      fillColor: ColorsFoundation.surface3,
+                      // onChanged: (value) => onNickNameChanged?.call(value),
+                    ),
+                  ],
+                )).paddingAll(EdgeInsetsFoundation.all4),
+          ),
+          if (aboutUserModel.personTypes != null) ...[
+            SpacingFoundation.verticalSpace16,
+            UiKitMenu<String>(
+              title: 'Describe yourself',
+              selectedItem: aboutUserModel.selectedPersonType,
+              items: aboutUserModel.personTypes!
+                  .map<UiKitMenuItem<String>>(
+                    (e) => UiKitMenuItem<String>(
+                      title: e.title,
+                      value: e.value,
+                      icon: e.icon,
+                    ),
+                  )
+                  .toList(),
+              onSelected: (personType) => onPersonTypeChanged?.call(personType),
+            ),
+          ],
+          if (aboutUserModel.religions != null) ...[
+            SpacingFoundation.verticalSpace16,
+            UiKitTitledSection(
+              title: 'Select your religions',
+              child: SizedBox(
+                  height: 40,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final data = aboutUserModel.religions![index];
 
                     return UiKitBorderedChipWithIcon(
                       icon: data.icon,

@@ -43,6 +43,7 @@ class PlaceComponent extends StatelessWidget {
               description: place.description,
               baseTags: place.baseTags ?? [],
               uniqueTags: place.tags,
+              horizontalMargin: horizontalMargin,
             ),
             // UiKitPhotoSlider(
             //   media: placeData.media,
