@@ -66,6 +66,7 @@ class AboutUserComponent extends StatelessWidget {
                   text: 'your leisure selection',
                   style: subHeadline?.copyWith(
                       foreground: Paint()
+                        ..style = PaintingStyle.fill
                         ..shader = GradientFoundation.buttonGradient
                             .createShader(_myKey.currentContext?.findRenderObject()?.paintBounds ?? Rect.zero)),
                 ),
@@ -185,6 +186,7 @@ class AboutUserComponent extends StatelessWidget {
             text: 'CONFIRM',
             onPressed: onSubmitUserData,
           ),
+          SpacingFoundation.verticalSpace24,
         ],
       ).paddingSymmetric(
         vertical: verticalMargin,
