@@ -11,7 +11,7 @@ class UiAboutUserModel {
 
   bool get checkFields {
     if (selectedPersonType != null && selectedGender != null &&
-        selectedAge != null && selectedReligions != null ) {
+        selectedAge != null && selectedReligions != null && selectedReligions!.isNotEmpty) {
 
       return true;
     }

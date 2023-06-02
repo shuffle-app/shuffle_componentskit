@@ -20,6 +20,7 @@ class AboutUserComponent extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController nickNameController;
   final GlobalKey _myKey = GlobalKey();
+  final GlobalKey? formKey ;
 
    AboutUserComponent({
     Key? key,
@@ -30,6 +31,7 @@ class AboutUserComponent extends StatelessWidget {
     required this.nickNameController,
     this.onPersonTypeChanged,
     this.onAgeChanged,
+    this.formKey,
     this.onGenderChanged,
     this.onSubmitUserData,
   }) : super(key: key);
@@ -83,7 +85,9 @@ class AboutUserComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         UiKitCardWrapper(
-          child: Column(
+          child: Form(
+            key: formKey,
+            child: Column(
             mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
@@ -102,7 +106,7 @@ class AboutUserComponent extends StatelessWidget {
                 // onChanged: (value) => onNickNameChanged?.call(value),
               ),
             ],
-          ).paddingAll(EdgeInsetsFoundation.all4),
+            )).paddingAll(EdgeInsetsFoundation.all4),
         ),
         if (aboutUserModel.personTypes != null) ...[
           SpacingFoundation.verticalSpace16,

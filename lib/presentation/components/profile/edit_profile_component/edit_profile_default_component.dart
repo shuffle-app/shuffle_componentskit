@@ -134,7 +134,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
         child: context
             .gradientButton(
               text: 'SAVE',
-              onPressed: () => onProfileEditSubmitted?.call(),
+              onPressed: onProfileEditSubmitted?.call,
             )
             .paddingOnly(
               left: horizontalMargin,
