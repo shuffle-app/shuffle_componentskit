@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/domain/config_models/about_user/component_about_user_model.dart';
-import 'package:shuffle_components_kit/presentation/components/about_user/ui_about_user_model.dart';
-import 'package:shuffle_components_kit/presentation/widgets/global_component.dart';
-import 'package:shuffle_components_kit/services/configuration/global_configuration.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -20,9 +16,9 @@ class AboutUserComponent extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController nickNameController;
   final GlobalKey _myKey = GlobalKey();
-  final GlobalKey? formKey ;
+  final GlobalKey? formKey;
 
-   AboutUserComponent({
+  AboutUserComponent({
     Key? key,
     required this.aboutUserModel,
     this.onReligionSelected,
@@ -38,15 +34,10 @@ class AboutUserComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentAboutUserModel model =
-        ComponentAboutUserModel.fromJson(config['about_user']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentAboutUserModel model = ComponentAboutUserModel.fromJson(config['about_user']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final subHeadline = context.uiKitTheme?.boldTextTheme.subHeadline;
 
     return Column(
@@ -70,11 +61,8 @@ class AboutUserComponent extends StatelessWidget {
                 text: 'your leisure selection',
                 style: subHeadline?.copyWith(
                     foreground: Paint()
-                      ..shader = GradientFoundation.buttonGradient.createShader(
-                          _myKey.currentContext
-                              ?.findRenderObject()
-                              ?.paintBounds ??
-                              Rect.zero)),
+                      ..shader = GradientFoundation.buttonGradient
+                          .createShader(_myKey.currentContext?.findRenderObject()?.paintBounds ?? Rect.zero)),
               ),
               TextSpan(
                 text: ' will be.',
@@ -86,31 +74,30 @@ class AboutUserComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         UiKitCardWrapper(
           child: Form(
-            key: formKey,
-            child: Column(
-            mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
-            children: [
-              UiKitInputFieldNoIcon(
-                controller: nameController,
-                hintText: 'NAME',
-                validator: inputFieldValidator,
-                // onChanged: (value) => onNameChanged?.call(value),
-              ),
-              SpacingFoundation.verticalSpace16,
-              UiKitInputFieldNoIcon(
-                controller: nickNameController,
-                hintText: 'NICKNAME',
-                validator: inputFieldValidator,
-                // onChanged: (value) => onNickNameChanged?.call(value),
-              ),
-            ],
-            )).paddingAll(EdgeInsetsFoundation.all4),
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
+                children: [
+                  UiKitInputFieldNoIcon(
+                    controller: nameController,
+                    hintText: 'NAME',
+                    validator: inputFieldValidator,
+                    // onChanged: (value) => onNameChanged?.call(value),
+                  ),
+                  SpacingFoundation.verticalSpace16,
+                  UiKitInputFieldNoIcon(
+                    controller: nickNameController,
+                    hintText: 'NICKNAME',
+                    validator: inputFieldValidator,
+                    // onChanged: (value) => onNickNameChanged?.call(value),
+                  ),
+                ],
+              )).paddingAll(EdgeInsetsFoundation.all4),
         ),
         if (aboutUserModel.personTypes != null) ...[
           SpacingFoundation.verticalSpace16,
-<<<<<<< HEAD
           UiKitMenu<String>(
             title: 'Describe yourself',
             selectedItem: aboutUserModel.selectedPersonType,
@@ -121,7 +108,10 @@ class AboutUserComponent extends StatelessWidget {
                     value: e.value,
                     icon: e.icon,
                   ),
-=======
+                )
+                .toList(),
+            onSelected: (personType) => onPersonTypeChanged?.call(personType),
+          ),
           RichText(
             key: _myKey,
             text: TextSpan(
@@ -140,10 +130,9 @@ class AboutUserComponent extends StatelessWidget {
                 TextSpan(
                   text: ' will be.',
                   style: subHeadline,
->>>>>>> parent of 6c666ab (ui bugfixes)
-                )
-                .toList(),
-            onSelected: (personType) => onPersonTypeChanged?.call(personType),
+                ),
+              ],
+            ),
           ),
         ],
         if (aboutUserModel.religions != null) ...[
@@ -151,24 +140,23 @@ class AboutUserComponent extends StatelessWidget {
           UiKitTitledSection(
             title: 'Select your religions',
             child: SizedBox(
-            height: 40,
-            child: ListView.separated(
-              shrinkWrap:true,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final data = aboutUserModel.religions![index];
+                height: 40,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final data = aboutUserModel.religions![index];
 
-                return UiKitBorderedChipWithIcon(
-                  icon: data.icon,
-                  title: data.title,
-                  isSelected: aboutUserModel.selectedReligions?.contains(data.title) ?? false,
-                  onPressed: () => onReligionSelected?.call(data.title),
-                );
-              },
-              separatorBuilder: (context, index) =>
-                  SpacingFoundation.horizontalSpace8,
-              itemCount: aboutUserModel.religions!.length,
-            )),
+                    return UiKitBorderedChipWithIcon(
+                      icon: data.icon,
+                      title: data.title,
+                      isSelected: aboutUserModel.selectedReligions?.contains(data.title) ?? false,
+                      onPressed: () => onReligionSelected?.call(data.title),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                  itemCount: aboutUserModel.religions!.length,
+                )),
           ),
         ],
         SpacingFoundation.verticalSpace16,
@@ -196,8 +184,6 @@ class AboutUserComponent extends StatelessWidget {
                   .toList(),
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
           ),
-<<<<<<< HEAD
-=======
           if (aboutUserModel.genders != null) ...[
             SpacingFoundation.verticalSpace16,
             UiKitTitledSection(
@@ -229,7 +215,6 @@ class AboutUserComponent extends StatelessWidget {
             text: 'CONFIRM',
             onPressed: () => onSubmitUserData?.call(aboutUserModel),
           ),
->>>>>>> parent of 6c666ab (ui bugfixes)
         ],
         SpacingFoundation.verticalSpace16,
         context.button(
