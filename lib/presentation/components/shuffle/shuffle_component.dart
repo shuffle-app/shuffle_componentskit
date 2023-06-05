@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/src/result/file_info.dart';
@@ -55,106 +56,121 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
     final size = MediaQuery.of(context).size;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
-    return Stack(children: [
-      Transform.scale(
-          scale: 2,
+    return Stack(
+      children: [
+        Center(
           child: Container(
-            width: double.infinity,
-            height: double.infinity,
+            height: size.height * 0.75,
+            width: size.width * 0.9,
             decoration: BoxDecoration(
-                gradient: RadialGradient(
-                    radius: 1,
-                    colors: [_backgroundColor, theme?.customAppBapTheme.backgroundColor ?? ColorsFoundation.darkNeutral100])),
-          )),
-      SafeArea(
-          child: Column(
-        mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-        children: [
-          Text('Try\nyourself', style: theme?.boldTextTheme.title1, textAlign: TextAlign.center)
-              .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
-          SizedBox(
-              height: size.height / 1.6,
-              width: double.infinity,
-              child: UiKitCardSwiper(
-                onSwipe: (
-                  previousIndex,
-                  currentIndex,
-                  direction,
-                ) {
-                  if (direction != CardSwiperDirection.bottom) {
-                    _getColor(widget.shuffle.items[currentIndex ?? 0].imageLink ?? '');
-                  }
-
-                  switch (direction) {
-                    case CardSwiperDirection.bottom:
-                      return false;
-                    case CardSwiperDirection.top:
-                      if (widget.onFavorite != null && (model.showFavorite ?? true)) {
-                        widget.onFavorite!(widget.shuffle.items[currentIndex!].title);
-                      } else {
-                        return false;
-                      }
-                      return true;
-                    case CardSwiperDirection.none:
-                      return false;
-                    case CardSwiperDirection.left:
-                      if (widget.onDislike != null) {
-                        widget.onDislike!(widget.shuffle.items[currentIndex!].title);
-                      } else {
-                        return false;
-                      }
-                      return true;
-                    case CardSwiperDirection.right:
-                      if (widget.onLike != null) {
-                        widget.onLike!(widget.shuffle.items[currentIndex!].title);
-                      } else {
-                        return false;
-                      }
-                      return true;
-                  }
-                },
-                cards: widget.shuffle.items,
-                controller: controller,
-              )),
-          SpacingFoundation.verticalSpace4,
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: () {
-              final svg = GraphicsFoundation.instance.svg;
-
-              return [
-                context.smallButton(
-                  blurred: true,
-                  onPressed: () => controller.swipeLeft(),
-                  icon: ImageWidget(
-                    svgAsset: svg.heartBrokenFill,
-                    color: Colors.white,
-                  ),
-                ),
-                if (model.showFavorite ?? true)
-                  context.button(
-                    blurred: true,
-                    onPressed: () => controller.swipeTop(),
-                    icon: ImageWidget(
-                      svgAsset: svg.starOutline,
-                      color: Colors.white,
-                    ),
-                  ),
-                context.smallButton(
-                  blurred: true,
-                  onPressed: () => controller.swipeRight(),
-                  icon: ImageWidget(
-                    svgAsset: svg.heartFill,
-                    color: Colors.white,
-                  ),
-                ),
-              ];
-            }(),
+              color: _backgroundColor,
+              borderRadius: BorderRadiusFoundation.max,
+            ),
           ),
-        ],
-      ))
-    ]);
+        ),
+        BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+          child: Container(
+            height: size.height,
+            width: size.width,
+            color: Colors.white.withOpacity(0.05),
+          ),
+        ),
+        SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+              crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+              children: [
+                Text('Try\nyourself', style: theme?.boldTextTheme.title1, textAlign: TextAlign.center)
+                    .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
+                SizedBox(
+                  height: size.height / 1.6,
+                  width: size.width - 24,
+                  child: UiKitCardSwiper(
+                    onSwipe: (
+                      previousIndex,
+                      currentIndex,
+                      direction,
+                    ) {
+                      if (direction != CardSwiperDirection.bottom) {
+                        _getColor(widget.shuffle.items[currentIndex ?? 0].imageLink ?? '');
+                      }
+
+                      switch (direction) {
+                        case CardSwiperDirection.bottom:
+                          return false;
+                        case CardSwiperDirection.top:
+                          if (widget.onFavorite != null && (model.showFavorite ?? true)) {
+                            widget.onFavorite!(widget.shuffle.items[currentIndex!].title);
+                          } else {
+                            return false;
+                          }
+                          return true;
+                        case CardSwiperDirection.none:
+                          return false;
+                        case CardSwiperDirection.left:
+                          if (widget.onDislike != null) {
+                            widget.onDislike!(widget.shuffle.items[currentIndex!].title);
+                          } else {
+                            return false;
+                          }
+                          return true;
+                        case CardSwiperDirection.right:
+                          if (widget.onLike != null) {
+                            widget.onLike!(widget.shuffle.items[currentIndex!].title);
+                          } else {
+                            return false;
+                          }
+                          return true;
+                      }
+                    },
+                    cards: widget.shuffle.items,
+                    controller: controller,
+                  ),
+                ),
+                SpacingFoundation.verticalSpace4,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: () {
+                    final svg = GraphicsFoundation.instance.svg;
+
+                    return [
+                      context.smallButton(
+                        blurred: true,
+                        onPressed: () => controller.swipeLeft(),
+                        icon: ImageWidget(
+                          svgAsset: svg.heartBrokenFill,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SpacingFoundation.horizontalSpace24,
+                      if (model.showFavorite ?? true)
+                        context.button(
+                          blurred: true,
+                          onPressed: () => controller.swipeTop(),
+                          icon: ImageWidget(
+                            svgAsset: svg.starOutline,
+                            color: Colors.white,
+                          ),
+                        ),
+                      SpacingFoundation.horizontalSpace24,
+                      context.smallButton(
+                        blurred: true,
+                        onPressed: () => controller.swipeRight(),
+                        icon: ImageWidget(
+                          svgAsset: svg.heartFill,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ];
+                  }(),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
