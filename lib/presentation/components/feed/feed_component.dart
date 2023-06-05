@@ -145,7 +145,7 @@ class FeedComponent extends StatelessWidget {
               children: [
                 horizontalWidthBox,
                 context.gradientButton(
-                  icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice),
+                  icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice,height: 16,fit: BoxFit.fitHeight,),
                   onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
                 ),
                 UiKitTitledFilterChip(
