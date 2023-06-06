@@ -60,16 +60,16 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
       children: [
         Center(
           child: Container(
-            height: size.height * 0.65,
+            height: size.height * 0.9,
             width: size.width * 0.9,
             decoration: BoxDecoration(
               color: _backgroundColor,
-              borderRadius: BorderRadiusFoundation.all40,
+              borderRadius: BorderRadiusFoundation.max,
             ),
           ),
         ),
         BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+          filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
           child: Container(
             height: size.height,
             width: size.width,
