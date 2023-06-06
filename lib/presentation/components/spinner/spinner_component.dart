@@ -5,7 +5,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 class SpinnerComponent extends StatelessWidget {
   final UiSpinnerModel spinner;
 
-  SpinnerComponent({Key? key, required this.spinner}) : super(key: key);
+  const SpinnerComponent({Key? key, required this.spinner}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
