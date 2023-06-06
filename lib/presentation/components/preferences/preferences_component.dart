@@ -105,7 +105,9 @@ class PreferencesComponent extends StatelessWidget {
                   svgAsset: GraphicsFoundation.instance.svg.search,
                   color: Colors.white.withOpacity(0.5),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  print('search');
+                },
               )).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace16,
           Expanded(
