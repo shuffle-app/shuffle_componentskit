@@ -88,7 +88,7 @@ class ComponentsTestPage extends StatelessWidget {
       id: 1,
       owner: UiOwnerModel(
         name: 'name',
-        id: '1',
+        // id: '1',
         type: UserTileType.ordinary,
         onTap: () {},
       ),

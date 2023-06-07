@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/src/result/file_info.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
@@ -53,15 +53,14 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final size = MediaQuery.of(context).size;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Stack(
       children: [
         Center(
           child: Container(
-            height: size.height * 0.9,
-            width: size.width * 0.9,
+            height: 0.9.sh,
+            width: 0.9.sw,
             decoration: BoxDecoration(
               color: _backgroundColor,
               borderRadius: BorderRadiusFoundation.max,
@@ -69,10 +68,10 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
           ),
         ),
         BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+          filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
           child: Container(
-            height: size.height,
-            width: size.width,
+            height: double.infinity,
+            width: double.infinity,
             color: Colors.white.withOpacity(0.05),
           ),
         ),
@@ -85,8 +84,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                 Text('Try\nyourself', style: theme?.boldTextTheme.title1, textAlign: TextAlign.center)
                     .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
                 SizedBox(
-                  height: size.height / 1.6,
-                  width: size.width - 24,
+                  height: 1.sh / 1.6,
+                  width: 1.sw - 24,
                   child: UiKitCardSwiper(
                     onSwipe: (
                       previousIndex,
