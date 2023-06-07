@@ -28,9 +28,10 @@ class PlaceComponent extends StatelessWidget {
             TitleWithAvatar(
               title: place.title,
               avatarUrl: place.logo,
+              horizontalMargin: horizontalMargin,
             ),
           ],
-        ).paddingSymmetric(horizontal: horizontalMargin,vertical: SpacingFoundation.verticalSpacing8),
+        ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing8),
         // SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -88,7 +89,7 @@ class PlaceComponent extends StatelessWidget {
                   ),
                 ];
               }(),
-            ).paddingSymmetric(horizontal: horizontalMargin),
+            ),
             SpacingFoundation.verticalSpace8,
             GridView.count(
               padding: EdgeInsets.zero,
