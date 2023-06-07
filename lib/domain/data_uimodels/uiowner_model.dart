@@ -5,7 +5,6 @@ class UiOwnerModel {
   final String name;
   final String? username;
   final String? logo;
-  final String id;
   final UserTileType type;
   final VoidCallback? onTap;
 
@@ -14,7 +13,6 @@ class UiOwnerModel {
     required this.name,
     this.logo,
     this.onTap,
-    required this.id,
     required this.type,
   });
 

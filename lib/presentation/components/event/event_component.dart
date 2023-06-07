@@ -64,9 +64,11 @@ class EventComponent extends StatelessWidget {
             if (event.description != null) ...[
               Text(
                 event.description!,
+                maxLines: 7,
+                overflow: TextOverflow.ellipsis,
                 style: theme?.boldTextTheme.caption1Bold
                     .copyWith(color: Colors.white),
-              ),
+              ).paddingSymmetric(horizontal: horizontalMargin),
               SpacingFoundation.verticalSpace16
             ],
             SpacingFoundation.verticalSpace16,
