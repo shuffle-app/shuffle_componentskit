@@ -7,6 +7,8 @@ class UiEventModel {
   final String? title;
   final UiOwnerModel? owner;
   final List<BaseUiKitMedia>? media;
+  final bool? favorite;
+  final DateTime? date;
   final String? description;
   final List<UiKitTag>? tags;
   final List<UiKitTag>? baseTags;
@@ -15,7 +17,9 @@ class UiEventModel {
 
   UiEventModel({required this.id,
       this.title,
+      this.favorite,
       this.owner,
+      this.date,
       this.media,
       this.description,
       this.tags,

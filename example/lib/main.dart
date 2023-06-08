@@ -384,31 +384,17 @@ class ComponentsTestPage extends StatelessWidget {
                         configuration.appConfig.content['spinner']),
                     Scaffold(
                         body: SpinnerComponent(
+                            onEventTap: () {},
+                            onFavoriteTap: () {},
                             spinner: UiSpinnerModel(
                                 categories: List<String>.generate(
                                   10,
                                   (index) => 'Category ${index + 1}',
                                 ),
-                                events: (size) => List.generate(
+
+                                events:  List.generate(
                                       5,
-                                      (index) => UiKitSpinnerCard(
-                                        availableHeight: size.maxHeight,
-                                        photoLink: GraphicsFoundation
-                                            .instance.png.spinnerEvent.path,
-                                        title:
-                                            'Yoga today at Palm Jumeirah. You go? Yes, you go!',
-                                        date: DateTime.now(),
-                                        favourite: index % 2 > 0,
-                                        onTap: () {},
-                                        onFavoriteTap: () {},
-                                        ownerPhotoLink: GraphicsFoundation
-                                            .instance.png.mockUserAvatar.path,
-                                        ownerTileTitle: 'John Doe',
-                                        ownerTileTitleTrailing:
-                                            ProAccountMark(),
-                                        ownerTileSubtitle: '@johndoe',
-                                      ),
-                                    )))))),
+                                      (index) => event)))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 text: 'show feed',
