@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/src/result/file_info.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -46,7 +47,9 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
       ).image);
     }
     setState(() {
-      _backgroundColor = paletteGenerator.dominantColor?.color ?? Colors.black12;
+      final dominantColor = paletteGenerator.dominantColor?.color ?? Colors.black12;
+
+      _backgroundColor = HSLColor.fromColor(dominantColor).withLightness(0.45).toColor();
     });
   }
 
@@ -59,20 +62,28 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
       children: [
         Center(
           child: Container(
-            height: 0.9.sh,
-            width: 0.9.sw,
+            height: 0.6.sh,
+            width: 0.7.sw,
             decoration: BoxDecoration(
               color: _backgroundColor,
               borderRadius: BorderRadiusFoundation.max,
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset.zero,
+                  blurRadius: 50,
+                  color: _backgroundColor,
+                  spreadRadius: 50,
+                ),
+              ],
             ),
           ),
         ),
         BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+          filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
           child: Container(
             height: double.infinity,
             width: double.infinity,
-            color: Colors.white.withOpacity(0.05),
+            color: Colors.transparent,
           ),
         ),
         SafeArea(
