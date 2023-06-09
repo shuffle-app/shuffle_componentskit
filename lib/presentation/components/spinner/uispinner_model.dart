@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/rendering.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
-import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiSpinnerModel {
   final String title;
   final ValueChanged<String>? onSpinChangedCategory;
   final ScrollController scrollController;
   final List<UiEventModel> events;
-  // final List<UiKitSpinnerCard> Function(BoxConstraints size) events;
   final List<String> categories;
 
   UiSpinnerModel(
