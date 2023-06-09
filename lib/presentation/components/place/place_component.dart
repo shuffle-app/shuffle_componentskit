@@ -31,7 +31,7 @@ class PlaceComponent extends StatelessWidget {
               horizontalMargin: horizontalMargin,
             ),
           ],
-        ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing8),
+        ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
         // SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,

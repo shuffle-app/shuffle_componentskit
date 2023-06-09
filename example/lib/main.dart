@@ -137,6 +137,7 @@ class ComponentsTestPage extends StatelessWidget {
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show about user step 1',
                 onPressed: () => buildComponent(
                     context,
@@ -248,9 +249,10 @@ class ComponentsTestPage extends StatelessWidget {
                           ),
                         )),
                       ),
-                    ))),
+                    )))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show preferences selector',
                 onPressed: () => buildComponent(
                     context,
@@ -294,9 +296,10 @@ class ComponentsTestPage extends StatelessWidget {
                             title: 'Hookah', importance: ImportanceChip.high),
                       ]),
                       onSubmit: () {}, onSelect: (){},
-                    )))),
+                    ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show profile',
                 onPressed: () => buildComponent(
                     context,
@@ -322,9 +325,10 @@ class ComponentsTestPage extends StatelessWidget {
                           // followers: 2650,
                         )),
                       ),
-                    ))),
+                    )))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show shuffle',
                 onPressed: () => buildComponent(
                     context,
@@ -374,9 +378,10 @@ class ComponentsTestPage extends StatelessWidget {
                               ),
                             ]),
                       )),
-                    )))),
+                    ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show spinner',
                 onPressed: () => buildComponent(
                     context,
@@ -394,9 +399,10 @@ class ComponentsTestPage extends StatelessWidget {
 
                                 events:  List.generate(
                                       5,
-                                      (index) => event)))))),
+                                      (index) => event))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show feed',
                 onPressed: () => buildComponent(
                     context,
@@ -420,9 +426,10 @@ class ComponentsTestPage extends StatelessWidget {
                               id: 1,
                               title: 'Want to have some fun',
                               logo: 'assets/images/png/crazy_emoji.png')),
-                    )))))),
+                    ))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show mood',
                 onPressed: () => buildComponent(
                     context,
@@ -447,9 +454,10 @@ class ComponentsTestPage extends StatelessWidget {
                             id: 1,
                             places: List.generate(4, (index) => place),
                           ),
-                        ))))),
+                        )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show place',
                 onPressed: () => buildComponent(
                     context,
@@ -460,9 +468,10 @@ class ComponentsTestPage extends StatelessWidget {
                         model: ComponentPlaceModel.fromJson(
                                     configuration.appConfig.content['place'])
                                 .bookingElementModel ??
-                            BookingElementModel(version: '0')))),
+                            BookingElementModel(version: '0'))))),
             SpacingFoundation.verticalSpace16,
             context.button(
+    data: BaseUiKitButtonData(
                 text: 'show event',
                 onPressed: () => buildComponent(
                     context,
@@ -473,7 +482,7 @@ class ComponentsTestPage extends StatelessWidget {
                         model: ComponentPlaceModel.fromJson(
                                     configuration.appConfig.content['event'])
                                 .bookingElementModel ??
-                            BookingElementModel(version: '0')))),
+                            BookingElementModel(version: '0'))))),
             SpacingFoundation.verticalSpace16,
           ],
         ),

@@ -147,31 +147,35 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
 
                     return [
                       context.smallButton(
+
                         blurred: true,
+                          data: BaseUiKitButtonData(
                         onPressed: () => controller.swipeLeft(),
                         icon: ImageWidget(
                           svgAsset: svg.heartBrokenFill,
                           color: Colors.white,
-                        ),
+                        )),
                       ),
                       SpacingFoundation.horizontalSpace24,
                       if (model.showFavorite ?? true)
                         context.button(
                           blurred: true,
+                    data: BaseUiKitButtonData(
                           onPressed: () => controller.swipeTop(),
                           icon: ImageWidget(
                             svgAsset: svg.starOutline,
                             color: Colors.white,
-                          ),
+                          )),
                         ),
                       SpacingFoundation.horizontalSpace24,
                       context.smallButton(
                         blurred: true,
+                      data: BaseUiKitButtonData(
                         onPressed: () => controller.swipeRight(),
                         icon: ImageWidget(
                           svgAsset: svg.heartFill,
                           color: Colors.white,
-                        ),
+                        )),
                       ),
                     ];
                   }(),

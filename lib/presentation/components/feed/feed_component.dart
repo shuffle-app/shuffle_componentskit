@@ -81,9 +81,10 @@ class FeedComponent extends StatelessWidget {
               title: feed.recommendedEvent!.title ?? '',
               additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
               accentMessage: 'Don\'t miss it',
-              image: ImageWidget(
+              image:  ImageWidget(
                 link: feed.recommendedEvent?.media?.first.link,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
+                height: 200,
                 width: double.infinity,
               ),
             )).paddingSymmetric(horizontal: horizontalMargin),
@@ -144,9 +145,9 @@ class FeedComponent extends StatelessWidget {
             child: Row(
               children: [
                 horizontalWidthBox,
-                context.gradientButton(
+                context.gradientButton(data: BaseUiKitButtonData(
                   icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice,height: 16,fit: BoxFit.fitHeight,),
-                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
+                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random')),
                 ),
                 UiKitTitledFilterChip(
                   selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
