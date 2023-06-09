@@ -144,13 +144,9 @@ class FeedComponent extends StatelessWidget {
             child: Row(
               children: [
                 horizontalWidthBox,
-                context.gradientButton(
-                  icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.dice,
-                    height: 16,
-                    fit: BoxFit.fitHeight,
-                  ),
-                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
+                context.gradientButton(data: BaseUiKitButtonData(
+                  icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice,height: 16,fit: BoxFit.fitHeight,),
+                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random')),
                 ),
                 UiKitTitledFilterChip(
                   selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,

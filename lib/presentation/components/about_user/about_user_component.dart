@@ -183,8 +183,9 @@ class AboutUserComponent extends StatelessWidget {
           ],
           SpacingFoundation.verticalSpace16,
           context.button(
+    data: BaseUiKitButtonData(
             text: 'CONFIRM',
-            onPressed: onSubmitUserData,
+            onPressed: onSubmitUserData,)
           ),
           SpacingFoundation.verticalSpace24,
         ],

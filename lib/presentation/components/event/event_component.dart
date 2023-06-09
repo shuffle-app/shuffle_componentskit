@@ -19,7 +19,8 @@ class EventComponent extends StatelessWidget {
     final theme = context.uiKitTheme;
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final titleAlignment = model.positionModel?.titleAlignment;
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return Column(
       children: [
@@ -62,13 +63,7 @@ class EventComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace12,
             if (event.description != null) ...[
-              Text(
-                event.description!,
-                maxLines: 7,
-                overflow: TextOverflow.ellipsis,
-                style: theme?.boldTextTheme.caption1Bold
-                    .copyWith(color: Colors.white),
-              ).paddingSymmetric(horizontal: horizontalMargin),
+              DescriptionWidget(description: event.description!),
               SpacingFoundation.verticalSpace16
             ],
             SpacingFoundation.verticalSpace16,
@@ -79,8 +74,8 @@ class EventComponent extends StatelessWidget {
                         info: e.description,
                       ).paddingSymmetric(
                           vertical: SpacingFoundation.verticalSpacing4))
-                  .toList()
-            // SpacingFoundation.verticalSpace16,
+                  .toList(),
+            SpacingFoundation.verticalSpace16,
           ],
         ),
       ],

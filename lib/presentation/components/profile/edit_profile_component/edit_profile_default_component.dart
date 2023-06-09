@@ -135,8 +135,9 @@ class EditProfileDefaultComponent extends StatelessWidget {
         visible: MediaQuery.of(context).viewInsets.bottom == 0,
         child: context
             .gradientButton(
+    data: BaseUiKitButtonData(
               text: 'SAVE',
-              onPressed: onProfileEditSubmitted?.call,
+              onPressed: onProfileEditSubmitted?.call,)
             ).loadingWrap(isLoading)
             .paddingOnly(
               left: horizontalMargin,

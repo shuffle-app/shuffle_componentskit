@@ -7,12 +7,14 @@ class BottomBookingBar extends StatelessWidget {
   final VoidCallback? onShowRoute;
   final VoidCallback? onBook;
   final VoidCallback? onMagnify;
+  final bool isLoading;
 
   const BottomBookingBar(
       {Key? key,
       required this.model,
       this.onShowRoute,
       this.onBook,
+      this.isLoading = false,
       this.onMagnify})
       : super(key: key);
 
@@ -20,44 +22,61 @@ class BottomBookingBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
-    return SafeArea(
-        top: false,
-        child: Row(
-          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-          mainAxisSize: MainAxisSize.max,
-          children: (){
-            final svg = Assets.images.svg;
+    return DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.center,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Colors.black,
+            ],
+          ),
+        ),
+        child: SafeArea(
+            top: false,
+            child: Row(
+                    crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+                    mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+                    mainAxisSize: MainAxisSize.max,
+                    children: () {
+                      final svg = Assets.images.svg;
 
-            return [
-              if (model.showRoute ?? true)
-                context.smallOutlinedButton(
-                  onPressed: onShowRoute,
-                  icon: ImageWidget(
-                    svgAsset: svg.route,
-                    color: Colors.white,
-                  ),
-                ),
-              SpacingFoundation.horizontalSpace12,
-              Expanded(
-                child: context.gradientButton(
-                  text: 'Book it',
-                  onPressed: onBook,
-                ),
-              ),
-              SpacingFoundation.horizontalSpace12,
-              if (model.showMagnify ?? true)
-                context.smallOutlinedButton(
-                  onPressed: onMagnify,
-                  icon: ImageWidget(
-                    svgAsset: svg.searchPeople,
-                    color: Colors.white,
-                  ),
-                ),
-            ];}()
-
-        ).paddingSymmetric(
-            vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
-            horizontal: (model.positionModel?.horizontalMargin ?? 0).toDouble()));
+                      return [
+                        if (model.showRoute ?? true)
+                          context.smallOutlinedButton(
+                              data: BaseUiKitButtonData(
+                            onPressed: onShowRoute,
+                            icon: ImageWidget(
+                              svgAsset: svg.route,
+                              color: Colors.white,
+                            )),
+                          ),
+                        SpacingFoundation.horizontalSpace12,
+                        Expanded(
+                          child: context
+                              .gradientButton(
+                            data: BaseUiKitButtonData(
+                                text: 'Book it',
+                                onPressed: onBook,
+                              ))
+                              .loadingWrap(isLoading),
+                        ),
+                        SpacingFoundation.horizontalSpace12,
+                        if (model.showMagnify ?? true)
+                          context.smallOutlinedButton(data: BaseUiKitButtonData(
+                            onPressed: onMagnify,
+                            icon: ImageWidget(
+                              svgAsset: svg.searchPeople,
+                              color: Colors.white,
+                            ),)
+                          ),
+                      ];
+                    }())
+                .paddingSymmetric(
+                    vertical:
+                        (model.positionModel?.verticalMargin ?? 0).toDouble(),
+                    horizontal: (model.positionModel?.horizontalMargin ?? 0)
+                        .toDouble())));
   }
 }
