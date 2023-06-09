@@ -31,8 +31,11 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
     unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
+
     super.initState();
   }
+
+
 
   Future<void> _getColor(String imageLink) async {
     if (imageLink.isEmpty) return;
@@ -51,6 +54,12 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
 
       _backgroundColor = HSLColor.fromColor(dominantColor).withLightness(0.45).toColor();
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override

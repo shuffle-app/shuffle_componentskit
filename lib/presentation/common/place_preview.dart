@@ -40,7 +40,7 @@ class PlacePreview extends StatelessWidget {
             UiKitTagsWidget(
               baseTags: place.baseTags ?? [],
               uniqueTags: place.tags,
-            )
+            ).paddingSymmetric(horizontal: horizontalMargin)
           ],
         ));
   }
