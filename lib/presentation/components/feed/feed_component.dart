@@ -83,7 +83,7 @@ class FeedComponent extends StatelessWidget {
               accentMessage: 'Don\'t miss it',
               image: ImageWidget(
                 link: feed.recommendedEvent?.media?.first.link,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 width: double.infinity,
               ),
             )).paddingSymmetric(horizontal: horizontalMargin),
@@ -145,7 +145,11 @@ class FeedComponent extends StatelessWidget {
               children: [
                 horizontalWidthBox,
                 context.gradientButton(
-                  icon: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.dice,height: 16,fit: BoxFit.fitHeight,),
+                  icon: ImageWidget(
+                    svgAsset: GraphicsFoundation.instance.svg.dice,
+                    height: 16,
+                    fit: BoxFit.fitHeight,
+                  ),
                   onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
                 ),
                 UiKitTitledFilterChip(
