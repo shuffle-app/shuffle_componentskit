@@ -81,10 +81,9 @@ class FeedComponent extends StatelessWidget {
               title: feed.recommendedEvent!.title ?? '',
               additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
               accentMessage: 'Don\'t miss it',
-              image:  ImageWidget(
+              image: ImageWidget(
                 link: feed.recommendedEvent?.media?.first.link,
                 fit: BoxFit.cover,
-                height: 200,
                 width: double.infinity,
               ),
             )).paddingSymmetric(horizontal: horizontalMargin),
