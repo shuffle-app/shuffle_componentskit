@@ -25,25 +25,25 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final TextEditingController phoneController;
   final bool isLoading;
 
-  const EditProfileDefaultComponent({
-    Key? key,
-    required this.selectedPreferences,
-    this.onProfileEditSubmitted,
-    this.formKey,
-    this.onPhotoChanged,
-    this.onPreferencesChanged,
-    this.textValidator,
-    this.emailValidator,
-    this.phoneValidator,
-    this.dateOfBirthValidator,
-    required this.nameController,
-    required this.nickNameController,
-    required this.emailController,
-    required this.dateOfBirthController,
-    required this.phoneController,
-     this.onPreferencesChangeRequested,
-    this.isLoading = false
-  }) : super(key: key);
+  const EditProfileDefaultComponent(
+      {Key? key,
+      required this.selectedPreferences,
+      this.onProfileEditSubmitted,
+      this.formKey,
+      this.onPhotoChanged,
+      this.onPreferencesChanged,
+      this.textValidator,
+      this.emailValidator,
+      this.phoneValidator,
+      this.dateOfBirthValidator,
+      required this.nameController,
+      required this.nickNameController,
+      required this.emailController,
+      required this.dateOfBirthController,
+      required this.phoneController,
+      this.onPreferencesChangeRequested,
+      this.isLoading = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
               ),
             ],
           ),
-          body: Form(
+          body: SingleChildScrollView(child: Form(
             key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -130,15 +130,16 @@ class EditProfileDefaultComponent extends StatelessWidget {
               horizontal: horizontalMargin,
               vertical: verticalMargin,
             ),
-          )),
+          ))),
       bottomSheet: Visibility(
         visible: MediaQuery.of(context).viewInsets.bottom == 0,
         child: context
             .gradientButton(
-    data: BaseUiKitButtonData(
+                data: BaseUiKitButtonData(
               text: 'SAVE',
-              onPressed: onProfileEditSubmitted?.call,)
-            ).loadingWrap(isLoading)
+              onPressed: onProfileEditSubmitted?.call,
+            ))
+            .loadingWrap(isLoading)
             .paddingOnly(
               left: horizontalMargin,
               right: horizontalMargin,

@@ -54,14 +54,14 @@ class EventComponent extends StatelessWidget {
                     width: 1.sw - horizontalMargin * 2,
                     height: 156.h,
                   )),
-              SpacingFoundation.verticalSpace12
+              SpacingFoundation.verticalSpace14
             ],
             UiKitTagsWidget(
               rating: event.rating,
               baseTags: event.baseTags ?? [],
               uniqueTags: event.tags ?? [],
             ),
-            SpacingFoundation.verticalSpace12,
+            SpacingFoundation.verticalSpace14,
             if (event.description != null) ...[
               DescriptionWidget(description: event.description!),
               SpacingFoundation.verticalSpace16
