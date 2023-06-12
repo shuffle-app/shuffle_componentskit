@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
@@ -18,8 +19,13 @@ class MoodComponent extends StatelessWidget {
         ComponentMoodModel.fromJson(config['mood']);
 
     final theme = context.uiKitTheme;
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final bodyAlignment = model.positionModel?.bodyAlignment;
+    final cardWidth = 0.5.sw - horizontalMargin * 2;
+    final smallCardHeight =
+        cardWidth / 2 - SpacingFoundation.verticalSpacing8 / 2;
 
     return Column(
       mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -34,10 +40,11 @@ class MoodComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace14,
         Row(
           children: [
-            const Flexible(
+            Flexible(
               child: UiKitGradientAttentionCard(
                 message: 'Then check this out',
                 textColor: Colors.black,
+                width: cardWidth,
               ),
             ),
             Flexible(
@@ -52,20 +59,27 @@ class MoodComponent extends StatelessWidget {
                     return UiKitWeatherInfoCard(
                       weatherType: item.title,
                       temperature: item.description,
+                      active: item.active,
+                      height: smallCardHeight,
                     );
                   }(),
-                SpacingFoundation.verticalSpace8,
+                SpacingFoundation.verticalSpacing8.heightBox,
                 if (mood.descriptionItems != null &&
                     mood.descriptionItems!.length >= 2)
                   () {
                     final item = mood.descriptionItems!.last;
 
                     return UiKitMetricsCard(
+                      active: item.active,
+                      height: smallCardHeight,
                       title: item.title,
                       value: item.description,
                       unit: 'kCal',
                       icon: ImageWidget(
                         svgAsset: Assets.images.svg.fireWhite,
+                        color: item.active
+                            ? Colors.white
+                            : UiKitColors.darkNeutral200,
                       ),
                     );
                   }(),

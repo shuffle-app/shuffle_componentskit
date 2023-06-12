@@ -26,4 +26,17 @@ extension AligmentExtention on Alignment? {
       return CrossAxisAlignment.end;
     }
   }
+
+  TextAlign get textAlign {
+    if (this == null) return TextAlign.start;
+    final pos = this!.x;
+
+    if (pos == 0) {
+      return TextAlign.center;
+    } else if (pos < 0) {
+      return TextAlign.start;
+    } else {
+      return TextAlign.end;
+    }
+  }
 }
