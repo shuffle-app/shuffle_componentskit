@@ -7,7 +7,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final VoidCallback? onProfileEditSubmitted;
   final GlobalKey? formKey;
   final VoidCallback? onPreferencesChangeRequested;
-  final ValueChanged<String>? onPhotoChanged;
+  final VoidCallback? onPhotoChangeRequested;
+  final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
   final String? Function(String?)? textValidator;
@@ -30,10 +31,11 @@ class EditProfileDefaultComponent extends StatelessWidget {
       required this.selectedPreferences,
       this.onProfileEditSubmitted,
       this.formKey,
-      this.onPhotoChanged,
+      this.onPhotoChangeRequested,
       this.onPreferencesChanged,
       this.textValidator,
       this.emailValidator,
+      this.avatarUrl,
       this.phoneValidator,
       this.dateOfBirthValidator,
       required this.nameController,
@@ -67,18 +69,21 @@ class EditProfileDefaultComponent extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ImageWidget(
-                rasterAsset: GraphicsFoundation.instance.png.mockUserAvatar,
+              CircularAvatar(
+                avatarUrl: avatarUrl ?? '',
+                name: nameController.text,
                 height: 48,
               ),
               SpacingFoundation.verticalSpace4,
-              Text(
-                'Change Photo',
-                style: textTheme?.caption2Bold,
-              ),
+              InkWell(
+                  onTap: onPhotoChangeRequested,
+                  child: Text(
+                    'Change Photo',
+                    style: textTheme?.caption2Bold,
+                  )),
             ],
           ),
-          body: SingleChildScrollView(child: Form(
+          body: Form(
             key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -130,7 +135,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
               horizontal: horizontalMargin,
               vertical: verticalMargin,
             ),
-          ))),
+          ).paddingOnly(bottom: MediaQuery.of(context).viewInsets.bottom)),
+      resizeToAvoidBottomInset: true,
       bottomSheet: Visibility(
         visible: MediaQuery.of(context).viewInsets.bottom == 0,
         child: context

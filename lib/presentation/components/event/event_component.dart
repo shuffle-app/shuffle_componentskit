@@ -34,6 +34,7 @@ class EventComponent extends StatelessWidget {
                 Text(
                   event.title!,
                   style: theme?.boldTextTheme.title2,
+                  textAlign: titleAlignment.textAlign,
                 ),
                 SpacingFoundation.verticalSpace8,
               ],
