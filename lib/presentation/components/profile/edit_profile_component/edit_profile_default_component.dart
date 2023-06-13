@@ -62,6 +62,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
     return Scaffold(
       body: BlurredAppBarPage(
+          wrapSliverBox: false,
           title: 'Edit Profile',
           autoImplyLeading: true,
           centerTitle: true,
@@ -135,10 +136,12 @@ class EditProfileDefaultComponent extends StatelessWidget {
               horizontal: horizontalMargin,
               vertical: verticalMargin,
             ),
-          ).paddingOnly(bottom: MediaQuery.of(context).viewInsets.bottom)),
-      resizeToAvoidBottomInset: true,
-      bottomSheet: Visibility(
-        visible: MediaQuery.of(context).viewInsets.bottom == 0,
+          )),
+
+      bottomNavigationBar: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.bounceIn,
+        opacity: MediaQuery.of(context).viewInsets.bottom == 0 ? 1 : 0,
         child: context
             .gradientButton(
                 data: BaseUiKitButtonData(

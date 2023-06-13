@@ -85,7 +85,7 @@ class FeedComponent extends StatelessWidget {
               (model.showDailyRecomendation ?? true)) ...[
             SafeArea(
                 bottom: false,
-                child: UiKitAccentCard(
+                child:  UiKitAccentCard(
                   onPressed: onEventPressed == null
                       ? null
                       : () => onEventPressed!(feed.recommendedEvent?.id),

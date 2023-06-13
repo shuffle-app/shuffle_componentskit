@@ -42,6 +42,7 @@ class SpinnerComponent extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, size) {
               return UiKitHorizontalScrollableList(
+                scrollController: spinner.cardsScrollController,
                 leftPadding: SpacingFoundation.horizontalSpacing16,
                 spacing: SpacingFoundation.horizontalSpacing12,
                 children: spinner.events.map((e) {
@@ -57,7 +58,7 @@ class SpinnerComponent extends StatelessWidget {
                       ownerTrailing = PremiumAccountMark();
                       break;
                     case UserTileType.influencer:
-                      InfluencerAccountMark();
+                      ownerTrailing = InfluencerAccountMark();
                       break;
                   }
 
@@ -87,8 +88,8 @@ class SpinnerComponent extends StatelessWidget {
         ),
         spacing,
         UiKitSpinner(
-          scrollController: spinner.scrollController,
-          categories: spinner.categories,
+          scrollController: spinner.categoriesScrollController,
+          categories: spinner.categories.map((e) => e.substring(0,1).toUpperCase() + e.substring(1)).toList(),
           onSpinChangedCategory: spinner.onSpinChangedCategory,
         ),
       ],

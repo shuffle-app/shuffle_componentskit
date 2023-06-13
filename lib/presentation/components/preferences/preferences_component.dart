@@ -55,7 +55,7 @@ class PreferencesComponent extends StatelessWidget {
                       rand.nextInt(40).w * (rand.nextInt(2) > 1 ? -1 : 1), 0),
                   // offset: Offset(-rand.nextInt(15) / 2, rand.nextInt(30) / 2),
                   child: preferences.chips[map.key + index])
-              .paddingOnly(top: rand.nextInt(30) / 2 + SpacingFoundation.verticalSpacing4),
+              .paddingOnly(top: rand.nextInt(30) / 2 + SpacingFoundation.verticalSpacing2),
         ),
       ).paddingLTRB(SpacingFoundation.horizontalSpacing6, topPadding,
           SpacingFoundation.horizontalSpacing4, (topPadding - padding).abs()));
@@ -64,6 +64,7 @@ class PreferencesComponent extends StatelessWidget {
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             'Tell us more\nabout yourself',
@@ -109,14 +110,14 @@ class PreferencesComponent extends StatelessWidget {
                   print('search');
                 },
               )).paddingSymmetric(horizontal: horizontalMargin),
-          SpacingFoundation.verticalSpace16,
+          // SpacingFoundation.verticalSpace16,
           Expanded(
               child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: widgets,
-                  ).paddingOnly(right: SpacingFoundation.horizontalSpacing24))),
-          SpacingFoundation.verticalSpace16,
+                  ).paddingOnly(right: SpacingFoundation.horizontalSpacing24*1.5))),
+          SpacingFoundation.verticalSpace8,
           SizedBox(
                   width: double.infinity,
                   child: context
@@ -126,7 +127,7 @@ class PreferencesComponent extends StatelessWidget {
                           onPressed: onSubmit))
                       .loadingWrap(isLoading))
               .paddingSymmetric(horizontal: horizontalMargin),
-          SpacingFoundation.verticalSpace16,
+          // SpacingFoundation.verticalSpace8,
         ],
       ).paddingSymmetric(vertical: verticalMargin),
     );
