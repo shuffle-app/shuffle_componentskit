@@ -35,25 +35,25 @@ class FeedComponent extends StatelessWidget {
         hintTiles: [
           UiKitIconHintCard(
             icon: ImageWidget(
-              svgAsset: GraphicsFoundation.instance.svg.map,
+              rasterAsset: GraphicsFoundation.instance.png.map,
             ),
             hint: 'your location',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              svgAsset: GraphicsFoundation.instance.svg.dart,
+              rasterAsset: GraphicsFoundation.instance.png.dart,
             ),
             hint: 'your interests',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              svgAsset: GraphicsFoundation.instance.svg.sunClouds,
+              rasterAsset: GraphicsFoundation.instance.png.sunClouds,
             ),
             hint: 'weather around',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
-              svgAsset: GraphicsFoundation.instance.svg.smileMood,
+              rasterAsset: GraphicsFoundation.instance.png.smileMood,
             ),
             hint: 'and other 14 scales',
           ),
@@ -85,7 +85,7 @@ class FeedComponent extends StatelessWidget {
               (model.showDailyRecomendation ?? true)) ...[
             SafeArea(
                 bottom: false,
-                child:  UiKitAccentCard(
+                child: UiKitAccentCard(
                   onPressed: onEventPressed == null
                       ? null
                       : () => onEventPressed!(feed.recommendedEvent?.id),
@@ -139,7 +139,10 @@ class FeedComponent extends StatelessWidget {
                   ...feed.moods!
                       .map((e) => UiKitMessageCardWithIcon(
                             message: e.title,
-                            icon: ImageWidget(link: e.logo),
+                            icon: ImageWidget(
+                              link: e.logo,
+                              fit: BoxFit.fitWidth,
+                            ),
                             layoutDirection: Axis.vertical,
                             onPressed: onMoodPressed == null
                                 ? null

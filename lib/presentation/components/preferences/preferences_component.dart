@@ -37,19 +37,20 @@ class PreferencesComponent extends StatelessWidget {
         (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     final double padding = 27.h;
+    const deviceHeightConst = 650;
 
     final List<Widget> widgets = [];
     for (MapEntry<int, UiKitImportanceChip> map
         in preferences.chips.asMap().entries) {
-      if ((screenHeight <= 600 && (map.key) % 2 != 0) ||
-          (screenHeight > 600 && (map.key) % 3 != 0)) continue;
+      if ((screenHeight <= deviceHeightConst && (map.key) % 2 != 0) ||
+          (screenHeight > deviceHeightConst && (map.key) % 3 != 0)) continue;
       final rand = Random(map.key);
       final double topPadding =
-          (map.key % (screenHeight <= 600 ? 4 : 6)) == 0 ? padding : 0;
+          (map.key % (screenHeight <= deviceHeightConst ? 4 : 6)) == 0 ? padding : 0;
       widgets.add(Column(
         mainAxisSize: MainAxisSize.min,
         children: List.generate(
-          screenHeight <= 600 ? 2 : 3,
+          screenHeight <= deviceHeightConst ? 2 : 3,
           (index) => Transform.translate(
                   offset: Offset(
                       rand.nextInt(40).w * (rand.nextInt(2) > 1 ? -1 : 1), 0),
