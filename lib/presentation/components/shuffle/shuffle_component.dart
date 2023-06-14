@@ -35,8 +35,6 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
     super.initState();
   }
 
-
-
   Future<void> _getColor(String imageLink) async {
     if (imageLink.isEmpty) return;
     late final PaletteGenerator paletteGenerator;
@@ -53,6 +51,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
       final dominantColor = paletteGenerator.dominantColor?.color ?? Colors.black12;
 
       _backgroundColor = HSLColor.fromColor(dominantColor).withLightness(0.45).toColor();
+      print(_backgroundColor);
     });
   }
 
@@ -70,7 +69,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
     return Stack(
       children: [
         Center(
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
             height: 0.6.sh,
             width: 0.7.sw,
             decoration: BoxDecoration(
@@ -156,35 +156,34 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
 
                     return [
                       context.smallButton(
-
                         blurred: true,
-                          data: BaseUiKitButtonData(
-                        onPressed: () => controller.swipeLeft(),
-                        icon: ImageWidget(
-                          svgAsset: svg.heartBrokenFill,
-                          color: Colors.white,
-                        )),
+                        data: BaseUiKitButtonData(
+                            onPressed: () => controller.swipeLeft(),
+                            icon: ImageWidget(
+                              svgAsset: svg.heartBrokenFill,
+                              color: Colors.white,
+                            )),
                       ),
                       SpacingFoundation.horizontalSpace24,
                       if (model.showFavorite ?? true)
                         context.button(
                           blurred: true,
-                    data: BaseUiKitButtonData(
-                          onPressed: () => controller.swipeTop(),
-                          icon: ImageWidget(
-                            svgAsset: svg.starOutline,
-                            color: Colors.white,
-                          )),
+                          data: BaseUiKitButtonData(
+                              onPressed: () => controller.swipeTop(),
+                              icon: ImageWidget(
+                                svgAsset: svg.starOutline,
+                                color: Colors.white,
+                              )),
                         ),
                       SpacingFoundation.horizontalSpace24,
                       context.smallButton(
                         blurred: true,
-                      data: BaseUiKitButtonData(
-                        onPressed: () => controller.swipeRight(),
-                        icon: ImageWidget(
-                          svgAsset: svg.heartFill,
-                          color: Colors.white,
-                        )),
+                        data: BaseUiKitButtonData(
+                            onPressed: () => controller.swipeRight(),
+                            icon: ImageWidget(
+                              svgAsset: svg.heartFill,
+                              color: Colors.white,
+                            )),
                       ),
                     ];
                   }(),

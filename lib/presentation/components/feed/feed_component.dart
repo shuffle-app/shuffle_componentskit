@@ -98,6 +98,7 @@ class FeedComponent extends StatelessWidget {
                     link: feed.recommendedEvent?.media?.first.link,
                     fit: BoxFit.cover,
                     width: double.infinity,
+                    errorWidget: const UiKitBigPhotoErrorWidget(),
                   ),
                 )).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace24,
