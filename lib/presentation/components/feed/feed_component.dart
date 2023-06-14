@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -35,24 +35,32 @@ class FeedComponent extends StatelessWidget {
         hintTiles: [
           UiKitIconHintCard(
             icon: ImageWidget(
+              height: 74.h,
+              fit: BoxFit.fitHeight,
               rasterAsset: GraphicsFoundation.instance.png.map,
             ),
             hint: 'your location',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
+              height: 74.h,
+              fit: BoxFit.fitHeight,
               rasterAsset: GraphicsFoundation.instance.png.dart,
             ),
             hint: 'your interests',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
+              height: 74.h,
+              fit: BoxFit.fitHeight,
               rasterAsset: GraphicsFoundation.instance.png.sunClouds,
             ),
             hint: 'weather around',
           ),
           UiKitIconHintCard(
             icon: ImageWidget(
+              height: 74.h,
+              fit: BoxFit.fitHeight,
               rasterAsset: GraphicsFoundation.instance.png.smileMood,
             ),
             hint: 'and other 14 scales',

@@ -164,7 +164,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                                 if (widget.onFavorite != null &&
                                     (model.showFavorite ?? true)) {
                                   widget.onFavorite!(widget
-                                      .shuffle.items[currentIndex!].title);
+                                      .shuffle.items[currentIndex].title);
                                 } else {
                                   return false;
                                 }
@@ -174,7 +174,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                               case CardSwiperDirection.left:
                                 if (widget.onDislike != null) {
                                   widget.onDislike!(widget
-                                      .shuffle.items[currentIndex!].title);
+                                      .shuffle.items[currentIndex].title);
                                 } else {
                                   return false;
                                 }
@@ -182,7 +182,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                               case CardSwiperDirection.right:
                                 if (widget.onLike != null) {
                                   widget.onLike!(widget
-                                      .shuffle.items[currentIndex!].title);
+                                      .shuffle.items[currentIndex].title);
                                 } else {
                                   return false;
                                 }
