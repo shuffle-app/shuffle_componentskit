@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -63,33 +61,33 @@ class PlaceComponent extends StatelessWidget {
             //   style: theme?.boldTextTheme.caption1Bold
             //       .copyWith(color: Colors.white),
             // ),
-            SpacingFoundation.verticalSpace16,
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: () {
-                return [
-                  Expanded(
-                    child: UpcomingEventPlaceActionCard(
-                      value: 'in 2 days',
-                      vectorIconAsset: GraphicsFoundation.instance.svg.events,
-                      action: () {
-                        log('calendar was pressed');
-                      },
-                    ),
-                  ),
-                  SpacingFoundation.horizontalSpace8,
-                  Expanded(
-                    child: PointBalancePlaceActionCard(
-                      value: '2 650',
-                      vectorIconAsset: GraphicsFoundation.instance.svg.coin,
-                      action: () {
-                        log('balance was pressed');
-                      },
-                    ),
-                  ),
-                ];
-              }(),
-            ),
+            // SpacingFoundation.verticalSpace16,
+            // Row(
+            //   mainAxisSize: MainAxisSize.max,
+            //   children: () {
+            //     return [
+            //       Expanded(
+            //         child: UpcomingEventPlaceActionCard(
+            //           value: 'in 2 days',
+            //           vectorIconAsset: GraphicsFoundation.instance.svg.events,
+            //           action: () {
+            //             log('calendar was pressed');
+            //           },
+            //         ),
+            //       ),
+            //       SpacingFoundation.horizontalSpace8,
+            //       Expanded(
+            //         child: PointBalancePlaceActionCard(
+            //           value: '2 650',
+            //           vectorIconAsset: GraphicsFoundation.instance.svg.coin,
+            //           action: () {
+            //             log('balance was pressed');
+            //           },
+            //         ),
+            //       ),
+            //     ];
+            //   }(),
+            // ),
             SpacingFoundation.verticalSpace8,
             GridView.count(
               padding: EdgeInsets.zero,
