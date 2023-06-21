@@ -53,7 +53,9 @@ class PlacePreview extends StatelessWidget {
           children: [
             Align(
                 alignment: Alignment.center,
-                child: Stack(children: [
+                child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
                   UiKitPhotoSlider(
                     media: place.media,
                     onTap: onTap != null ? () => onTap!(place.id) : null,
@@ -62,15 +64,16 @@ class PlacePreview extends StatelessWidget {
                   ),
                   if(showFavoriteBtn)
                   Positioned(
-                    bottom: 0,
-                      right: 0,
+                    bottom: -20.h,
+                      right: -5.w,
                       child: context.button(
                           blurred: true,
                           data: BaseUiKitButtonData(
                               onPressed: onFavoriteChanged,
                               icon: ImageWidget(
-                                  height: 18.w,
-                                  fit: BoxFit.fitWidth,
+                                  height: isFavorite ?  15.w : null,
+                                  fit: isFavorite ? BoxFit.fitWidth : null,
+                                  color: Colors.white,
                                   svgAsset: isFavorite
                                       ? GraphicsFoundation.instance.svg.star
                                       : GraphicsFoundation
