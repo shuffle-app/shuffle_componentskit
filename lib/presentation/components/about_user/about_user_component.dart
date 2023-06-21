@@ -15,7 +15,8 @@ class AboutUserComponent extends StatelessWidget {
 
   final TextEditingController nameController;
   final TextEditingController nickNameController;
-  final GlobalKey _myKey = GlobalKey();
+  final GlobalKey _richTextKey = GlobalKey();
+
   final GlobalKey? formKey;
 
   AboutUserComponent({
@@ -34,13 +35,22 @@ class AboutUserComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(aboutUserModel.selectedAge==null){
+    if (aboutUserModel.selectedAge == null) {
       onAgeChanged?.call(24);
     }
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentAboutUserModel model = ComponentAboutUserModel.fromJson(config['about_user']);
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final config =
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ??
+            GlobalConfiguration().appConfig.content;
+    final ComponentAboutUserModel model =
+    ComponentAboutUserModel.fromJson(config['about_user']);
+    final horizontalMargin =
+    (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin =
+    (model.positionModel?.verticalMargin ?? 0).toDouble();
     final subHeadline = context.uiKitTheme?.boldTextTheme.subHeadline;
 
     final AutoSizeGroup genderGroup = AutoSizeGroup();
@@ -55,7 +65,7 @@ class AboutUserComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace16,
           RichText(
-            key: _myKey,
+            key: _richTextKey,
             text: TextSpan(
               children: [
                 TextSpan(
@@ -68,7 +78,10 @@ class AboutUserComponent extends StatelessWidget {
                       foreground: Paint()
                         ..style = PaintingStyle.fill
                         ..shader = GradientFoundation.buttonGradient
-                            .createShader(_myKey.currentContext?.findRenderObject()?.paintBounds ?? Rect.zero)),
+                            .createShader(_richTextKey.currentContext
+                            ?.findRenderObject()
+                            ?.paintBounds ??
+                            Rect.zero)),
                 ),
                 TextSpan(
                   text: ' will be.',
@@ -76,6 +89,7 @@ class AboutUserComponent extends StatelessWidget {
                 )
               ],
             ),
+
           ),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
@@ -83,9 +97,11 @@ class AboutUserComponent extends StatelessWidget {
             child: Form(
                 key: formKey,
                 child: Column(
-                  mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
+                  mainAxisAlignment:
+                  (model.positionModel?.titleAlignment).mainAxisAlignment,
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
+                  crossAxisAlignment:
+                  (model.positionModel?.titleAlignment).crossAxisAlignment,
                   children: [
                     UiKitInputFieldNoIcon(
                       controller: nameController,
@@ -107,25 +123,36 @@ class AboutUserComponent extends StatelessWidget {
           ),
           if (aboutUserModel.personTypes != null) ...[
             SpacingFoundation.verticalSpace16,
-            UiKitMenu<String>(
-              title: 'Describe yourself',
-              selectedItem: aboutUserModel.selectedPersonType,
-              items: aboutUserModel.personTypes!
-                  .map<UiKitMenuItem<String>>(
-                    (e) => UiKitMenuItem<String>(
-                      title: e.title,
-                      value: e.value,
-                      icon: e.icon,
-                    ),
+            UiKitTitledSection(
+              color: Colors.black,
+                title: 'Describe yourself',
+                hasError: aboutUserModel.errorPersonTypeMessage != null,
+                errorText: aboutUserModel.errorPersonTypeMessage,
+                child:
+                UiKitMenu<String>(
+                  title: 'Describe yourself',
+                  selectedItem: aboutUserModel.selectedPersonType,
+                  items: aboutUserModel.personTypes!
+                      .map<UiKitMenuItem<String>>(
+                        (e) =>
+                        UiKitMenuItem<String>(
+                          title: e.title,
+                          value: e.value,
+                          icon: e.icon,
+                        ),
                   )
-                  .toList(),
-              onSelected: (personType) => onPersonTypeChanged?.call(personType),
-            ),
+                      .toList(),
+                  onSelected: (personType) =>
+                      onPersonTypeChanged?.call(personType),
+
+                )),
           ],
           if (aboutUserModel.religions != null) ...[
             SpacingFoundation.verticalSpace16,
             UiKitTitledSection(
               title: 'Select your religions',
+              hasError: aboutUserModel.errorReligionMessage != null,
+              errorText: aboutUserModel.errorReligionMessage,
               child: SizedBox(
                   height: 40,
                   child: ListView.separated(
@@ -137,11 +164,14 @@ class AboutUserComponent extends StatelessWidget {
                       return UiKitBorderedChipWithIcon(
                         icon: data.icon,
                         title: data.title,
-                        isSelected: aboutUserModel.selectedReligions?.contains(data.title) ?? false,
+                        isSelected: aboutUserModel.selectedReligions
+                            ?.contains(data.title) ??
+                            false,
                         onPressed: () => onReligionSelected?.call(data.title),
                       );
                     },
-                    separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                    separatorBuilder: (context, index) =>
+                    SpacingFoundation.horizontalSpace8,
                     itemCount: aboutUserModel.religions!.length,
                   )).paddingOnly(
                 left: EdgeInsetsFoundation.horizontal4,
@@ -159,6 +189,8 @@ class AboutUserComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             UiKitTitledSection(
               title: 'Gender',
+              hasError: aboutUserModel.errorGenderMessage != null,
+              errorText: aboutUserModel.errorGenderMessage,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -166,16 +198,19 @@ class AboutUserComponent extends StatelessWidget {
                   SpacingFoundation.horizontalSpace16,
                   ...aboutUserModel.genders!
                       .map(
-                        (e) => Expanded(
+                        (e) =>
+                        Expanded(
                           child: UiKitVerticalChip(
-                            selected: aboutUserModel.selectedGender == e.caption,
+                            selected:
+                            aboutUserModel.selectedGender == e.caption,
                             caption: e.caption,
                             sign: e.sign,
                             autoSizeGroup: genderGroup,
                             onTap: () => onGenderChanged?.call(e.caption),
-                          ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                          ).paddingOnly(
+                              right: EdgeInsetsFoundation.horizontal4),
                         ),
-                      )
+                  )
                       .toList(),
                   SpacingFoundation.horizontalSpace16,
                 ],
@@ -184,10 +219,10 @@ class AboutUserComponent extends StatelessWidget {
           ],
           SpacingFoundation.verticalSpace16,
           context.button(
-    data: BaseUiKitButtonData(
-            text: 'CONFIRM',
-            onPressed: onSubmitUserData,)
-          ),
+              data: BaseUiKitButtonData(
+                text: 'CONFIRM',
+                onPressed: onSubmitUserData,
+              )),
           SpacingFoundation.verticalSpace24,
         ],
       ).paddingSymmetric(

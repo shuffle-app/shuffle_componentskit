@@ -8,16 +8,21 @@ class UiAboutUserModel {
   final List<String>? selectedReligions;
   final String? selectedGender;
   final int? selectedAge;
+  String? errorPersonTypeMessage;
+  String? errorGenderMessage;
+  String? errorReligionMessage;
+
 
   bool get checkFields {
     if (selectedPersonType != null && selectedGender != null &&
-        selectedAge != null && selectedReligions != null && selectedReligions!.isNotEmpty) {
-
+        selectedAge != null && selectedReligions != null &&
+        selectedReligions!.isNotEmpty) {
       return true;
     }
 
     return false;
   }
+
 
   UiAboutUserModel({
     this.religions,
@@ -27,6 +32,9 @@ class UiAboutUserModel {
     this.selectedReligions,
     this.selectedGender,
     this.selectedAge,
+    this.errorReligionMessage,
+    this.errorGenderMessage,
+    this.errorPersonTypeMessage,
   });
 
 
@@ -48,6 +56,27 @@ class UiAboutUserModel {
         selectedGender: selectedGender ?? this.selectedGender,
         selectedAge: selectedAge ?? this.selectedAge,
       );
+
+  UiAboutUserModel withErrors() =>
+      UiAboutUserModel(
+        religions: this.religions,
+        genders: this.genders,
+        personTypes: this.personTypes,
+        selectedPersonType: this.selectedPersonType,
+        selectedReligions: this.selectedReligions,
+        selectedGender: this.selectedGender,
+        selectedAge: this.selectedAge,
+      )
+        .. errorPersonTypeMessage =
+        selectedPersonType != null
+            ? null
+            : 'Please select one type'
+        ..
+        errorGenderMessage =
+        selectedGender != null ? null : 'Please select a gender'
+        ..
+        errorReligionMessage =
+        (selectedReligions != null && selectedReligions!.isNotEmpty) ? null : 'Please select at least 1 religion';
 
 
 }
