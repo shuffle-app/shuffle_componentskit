@@ -121,6 +121,7 @@ class FeedComponent extends StatelessWidget {
                     child: Transform.rotate(
                       angle: pi * -20 / 180,
                       child: RotatableWidget(
+                        animDuration: const Duration(milliseconds: 150),
                         endAngle: pi * 20 / 180,
                         alignment: Alignment.center,
                         applyReverseOnEnd: true,

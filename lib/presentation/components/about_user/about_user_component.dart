@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -7,8 +8,6 @@ class AboutUserComponent extends StatelessWidget {
   final UiAboutUserModel aboutUserModel;
   final VoidCallback? onSubmitUserData;
   final ValueChanged<String>? onReligionSelected;
-  // final ValueChanged<String>? onNameChanged;
-  // final ValueChanged<String>? onNickNameChanged;
   final ValueChanged<UiKitMenuItem<String>?>? onPersonTypeChanged;
   final ValueChanged<int?>? onAgeChanged;
   final String? Function(String?)? inputFieldValidator;
@@ -44,9 +43,10 @@ class AboutUserComponent extends StatelessWidget {
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final subHeadline = context.uiKitTheme?.boldTextTheme.subHeadline;
 
+    final AutoSizeGroup genderGroup = AutoSizeGroup();
+
     return KeyboardDismisser(
       child: Column(
-        // mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
@@ -171,6 +171,7 @@ class AboutUserComponent extends StatelessWidget {
                             selected: aboutUserModel.selectedGender == e.caption,
                             caption: e.caption,
                             sign: e.sign,
+                            autoSizeGroup: genderGroup,
                             onTap: () => onGenderChanged?.call(e.caption),
                           ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
                         ),

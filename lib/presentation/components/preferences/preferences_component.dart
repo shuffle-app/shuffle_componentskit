@@ -37,7 +37,7 @@ class PreferencesComponent extends StatelessWidget {
         (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     final double padding = 27.h;
-    const deviceHeightConst = 650;
+    const deviceHeightConst = 700;
 
     final List<Widget> widgets = [];
     for (MapEntry<int, UiKitImportanceChip> map
@@ -53,9 +53,15 @@ class PreferencesComponent extends StatelessWidget {
           screenHeight <= deviceHeightConst ? 2 : 3,
           (index) => Transform.translate(
                   offset: Offset(
-                      rand.nextInt(40).w * (rand.nextInt(2) > 1 ? -1 : 1), 0),
+                      rand.nextInt(screenHeight <= deviceHeightConst ?20 :40).w * (rand.nextInt(2) > 1 ? -1 : 1), 0),
                   // offset: Offset(-rand.nextInt(15) / 2, rand.nextInt(30) / 2),
-                  child: preferences.chips[map.key + index])
+                  child: () {
+
+                    if(preferences.chips.length <=map.key + index) return const SizedBox.shrink();
+
+                    return preferences.chips[map.key + index];
+                  }()
+          )
               .paddingOnly(top: rand.nextInt(30) / 2 + SpacingFoundation.verticalSpacing2),
         ),
       ).paddingLTRB(SpacingFoundation.horizontalSpacing6, topPadding,
