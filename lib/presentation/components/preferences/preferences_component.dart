@@ -108,14 +108,14 @@ class PreferencesComponent extends StatelessWidget {
               width: double.infinity,
               child: UiKitInputFieldRightIcon(
                 hintText: 'search'.toUpperCase(),
-                controller: TextEditingController(),
-                icon: ImageWidget(
+                controller: preferences.searchController,
+                icon: preferences.searchController.text.isEmpty ? ImageWidget(
                   svgAsset: GraphicsFoundation.instance.svg.search,
                   color: Colors.white.withOpacity(0.5),
-                ),
-                onPressed: () {
-                  print('search');
-                },
+                ) : null,
+                // onPressed: () {
+                //   if(preferences.searchController.text.isNotEmpty) preferences.searchController.clear();
+                // },
               )).paddingSymmetric(horizontal: horizontalMargin),
           // SpacingFoundation.verticalSpace16,
           Expanded(
