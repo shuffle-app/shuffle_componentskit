@@ -23,7 +23,7 @@ class Bubbles extends StatelessWidget {
       paddingY: 0,
       size: 120,
       highRatio: 0.25,
-      lowRatio: 0.25,
+      lowRatio: 0.01,
     );
   }
 }

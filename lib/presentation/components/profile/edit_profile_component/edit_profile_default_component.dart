@@ -62,7 +62,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
     return Scaffold(
       body: BlurredAppBarPage(
-          wrapSliverBox: false,
+          // wrapSliverBox: false,
           title: 'Edit Profile',
           autoImplyLeading: true,
           centerTitle: true,
