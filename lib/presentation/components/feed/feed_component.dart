@@ -221,12 +221,16 @@ class FeedComponent extends StatelessWidget {
               ),
             ],
             SpacingFoundation.verticalSpace4,
-            ...feed.places!.map((e) => PlacePreview(
-                  onTap: onPlacePressed,
-                  place: e,
-                  model: model,
-                ).paddingSymmetric(
-                    vertical: SpacingFoundation.verticalSpacing12)),
+            ...?
+            // feed.places!.map((e) => PlacePreview(
+            //       onTap: onPlacePressed,
+            //       place: e,
+            //       model: model,
+            //     )
+            feed.mixedItems
+                ?.map((e) => e.paddingSymmetric(
+                    vertical: SpacingFoundation.verticalSpacing12))
+                .toList(),
             kBottomNavigationBarHeight.heightBox,
           ],
         ]).paddingSymmetric(

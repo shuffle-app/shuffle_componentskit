@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:keyboard_dismisser/keyboard_dismisser.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -38,7 +36,8 @@ class AboutUserComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (aboutUserModel.selectedAge == null) {
-      onAgeChanged?.call(24);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
+      onAgeChanged?.call(24));
     }
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??

@@ -7,10 +7,9 @@ class SpinnerComponent extends StatelessWidget {
   final UiSpinnerModel spinner;
   final Function? onEventTap;
   final Function? onFavoriteTap;
-  final GlobalKey? layoutKey;
 
   const SpinnerComponent(
-      {Key? key, required this.spinner, this.onEventTap, this.onFavoriteTap,this.layoutKey})
+      {Key? key, required this.spinner, this.onEventTap, this.onFavoriteTap})
       : super(key: key);
 
   @override
@@ -39,11 +38,10 @@ class SpinnerComponent extends StatelessWidget {
           style: context.uiKitTheme?.boldTextTheme.title1,
           textAlign: TextAlign.center,
         ),
-        spacing,
+        SizesFoundation.screenWidth <= 375 ?SpacingFoundation.verticalSpace2 :SpacingFoundation.verticalSpace4,
         Expanded(
           child:
           LayoutBuilder(
-            // key: layoutKey,
             builder: (context, size) {
               return
                 UiKitHorizontalScrollableList(
