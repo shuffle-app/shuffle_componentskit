@@ -14,9 +14,10 @@ class SpinnerComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spacing = SizesFoundation.screenWidth <= 375
-        ? SpacingFoundation.verticalSpace16
-        : SpacingFoundation.verticalSpace24;
+    final spacing = SpacingFoundation.verticalSpace16;
+    // final spacing = SizesFoundation.screenWidth <= 375
+    //     ? SpacingFoundation.verticalSpace16
+    //     : SpacingFoundation.verticalSpace24;
 
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
@@ -38,7 +39,7 @@ class SpinnerComponent extends StatelessWidget {
           style: context.uiKitTheme?.boldTextTheme.title1,
           textAlign: TextAlign.center,
         ),
-        SizesFoundation.screenWidth <= 375 ?SpacingFoundation.verticalSpace2 :SpacingFoundation.verticalSpace4,
+        // SizesFoundation.screenWidth <= 375 ?SpacingFoundation.verticalSpace2 :SpacingFoundation.verticalSpace4,
         Expanded(
           child:
           LayoutBuilder(
