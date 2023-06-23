@@ -17,7 +17,6 @@ class PlaceComponent extends StatelessWidget {
 
     return Column(
       children: [
-        // SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: titleAlignment.mainAxisAlignment,
@@ -30,7 +29,6 @@ class PlaceComponent extends StatelessWidget {
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
-        // SpacingFoundation.verticalSpace4,
         Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -44,50 +42,6 @@ class PlaceComponent extends StatelessWidget {
               uniqueTags: place.tags,
               horizontalMargin: horizontalMargin,
             ),
-            // UiKitPhotoSlider(
-            //   media: placeData.media,
-            //   width: size.width,
-            //   height: 256,
-            // ),
-            // SpacingFoundation.verticalSpace12,
-            // UiKitTagsWidget(
-            //   rating: (model.showRating ?? false) ? placeData.rating : null,
-            //   uniqueTags: placeData.tags,
-            //   baseTags: placeData.baseTags ?? [],
-            // ),
-            // SpacingFoundation.verticalSpace12,
-            // Text(
-            //   placeData.description,
-            //   style: theme?.boldTextTheme.caption1Bold
-            //       .copyWith(color: Colors.white),
-            // ),
-            // SpacingFoundation.verticalSpace16,
-            // Row(
-            //   mainAxisSize: MainAxisSize.max,
-            //   children: () {
-            //     return [
-            //       Expanded(
-            //         child: UpcomingEventPlaceActionCard(
-            //           value: 'in 2 days',
-            //           vectorIconAsset: GraphicsFoundation.instance.svg.events,
-            //           action: () {
-            //             log('calendar was pressed');
-            //           },
-            //         ),
-            //       ),
-            //       SpacingFoundation.horizontalSpace8,
-            //       Expanded(
-            //         child: PointBalancePlaceActionCard(
-            //           value: '2 650',
-            //           vectorIconAsset: GraphicsFoundation.instance.svg.coin,
-            //           action: () {
-            //             log('balance was pressed');
-            //           },
-            //         ),
-            //       ),
-            //     ];
-            //   }(),
-            // ),
             SpacingFoundation.verticalSpace8,
             GridView.count(
               padding: EdgeInsets.zero,
