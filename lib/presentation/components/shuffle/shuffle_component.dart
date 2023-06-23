@@ -145,8 +145,9 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                           duration: animDuration,
                           child: UiKitLastSwiperCard(),
                         ),
-                        if(!isEnded) UiKitCardSwiper(
-                          onEnd: _onEnd,
+                        if(!isEnded)
+                          UiKitCardSwiper(
+                          // onEnd: _onEnd,
                           onSwipe: (previousIndex,
                               currentIndex,
                               direction,) {

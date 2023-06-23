@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class SpinnerComponent extends StatelessWidget {
   final UiSpinnerModel spinner;
   final Function? onEventTap;
   final Function? onFavoriteTap;
+  final GlobalKey? layoutKey;
 
   const SpinnerComponent(
-      {Key? key, required this.spinner, this.onEventTap, this.onFavoriteTap})
+      {Key? key, required this.spinner, this.onEventTap, this.onFavoriteTap,this.layoutKey})
       : super(key: key);
 
   @override
@@ -39,9 +41,12 @@ class SpinnerComponent extends StatelessWidget {
         ),
         spacing,
         Expanded(
-          child: LayoutBuilder(
+          child:
+          LayoutBuilder(
+            // key: layoutKey,
             builder: (context, size) {
-              return UiKitHorizontalScrollableList(
+              return
+                UiKitHorizontalScrollableList(
                 scrollController: spinner.cardsScrollController,
                 leftPadding: SpacingFoundation.horizontalSpacing16,
                 spacing: SpacingFoundation.horizontalSpacing12,
@@ -64,6 +69,7 @@ class SpinnerComponent extends StatelessWidget {
 
                   return UiKitSpinnerCard(
                     availableHeight: size.maxHeight,
+                    // availableHeight: 0.56.sh,
                     title: e.title,
                     date: e.date,
                     favourite: e.favorite,
