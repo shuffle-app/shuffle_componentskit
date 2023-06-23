@@ -45,31 +45,47 @@ class PreferencesComponent extends StatelessWidget {
                 style: context.uiKitTheme?.boldTextTheme.title1,
               ).paddingSymmetric(horizontal: horizontalMargin),
               SpacingFoundation.verticalSpace16,
+            Stack(children: [
               RichText(
-                key: _myKey,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Tap once to ',
-                      style: subHeadline,
-                    ),
-                    TextSpan(
-                      text: 'choose what you like',
-                      style: subHeadline?.copyWith(
-                          foreground: Paint()
-                            ..shader = GradientFoundation.buttonGradient
-                                .createShader(_myKey.currentContext
-                                        ?.findRenderObject()
-                                        ?.paintBounds ??
-                                    Rect.zero)),
-                    ),
-                    TextSpan(
-                      text: '. Tap twice to mark your favorites.',
-                      style: subHeadline,
-                    )
-                  ],
-                ),
-              ).paddingSymmetric(horizontal: horizontalMargin),
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Tap once to choose ',
+                        style:
+                        subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
+                      ),
+                      TextSpan(
+                          text: 'what you like',
+                          style: subHeadline?.copyWith(
+                              color: Colors.white.withOpacity(0))),
+                      TextSpan(
+                        text: '. Tap twice to mark your favorites.',
+                        style:
+                        subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
+                      )
+                    ],
+                  )),
+              GradientableWidget(
+                gradient: GradientFoundation.attentionCard,
+                child: RichText(
+                  // key: _richTextKey,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Tap once to choose ',
+                          style:
+                          subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
+                        ),
+                        TextSpan(text: 'what you like', style: subHeadline),
+                        TextSpan(
+                          text: '. Tap twice to mark your favorites.',
+                          style:
+                          subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
+                        )
+                      ],
+                    )),
+              )
+            ]).paddingSymmetric(horizontal: horizontalMargin),
               // SpacingFoundation.verticalSpace16,
               // SizedBox(
               //     width: double.infinity,
