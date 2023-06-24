@@ -70,7 +70,11 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
     });
   }
 
-  _onEnd() {}
+  _onEnd() {
+    setState((){
+      isEnded = true;
+    });
+  }
 
   @override
   void dispose() {
