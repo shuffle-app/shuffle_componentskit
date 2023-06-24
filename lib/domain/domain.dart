@@ -3,6 +3,7 @@ export 'config_models/common/booking_element_model.dart';
 export 'config_models/event/component_event_model.dart';
 export 'config_models/feed/component_feed_model.dart';
 export 'config_models/mood/component_mood_model.dart';
+export 'config_models/search/component_search_model.dart';
 export 'config_models/place/component_place_model.dart';
 export 'config_models/profile/component_edit_profile_model.dart';
 export 'config_models/profile/component_edit_profile_preferences_model.dart';
