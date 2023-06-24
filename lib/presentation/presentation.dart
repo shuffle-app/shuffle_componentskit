@@ -30,3 +30,5 @@ export 'utils/theme_matcher.dart';
 export 'widgets/bubbles.dart';
 export 'widgets/global_component.dart';
 export 'widgets/under_development.dart';
+export 'components/search/search_component.dart';
+export 'components/search/uisearch_model.dart';

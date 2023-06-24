@@ -14,12 +14,15 @@ class ShuffleComponent extends StatefulWidget {
   final Function? onLike;
   final Function? onDislike;
   final Function? onFavorite;
+  final Function? onCardTap;
 
-  const ShuffleComponent({Key? key,
-    required this.shuffle,
-    this.onLike,
-    this.onDislike,
-    this.onFavorite})
+  const ShuffleComponent(
+      {Key? key,
+      required this.shuffle,
+      this.onLike,
+      this.onDislike,
+      this.onCardTap,
+      this.onFavorite})
       : super(key: key);
 
   @override
@@ -36,11 +39,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
   @override
   void initState() {
     final config =
-        GlobalComponent
-            .of(context)
-            ?.globalConfiguration
-            .appConfig
-            .content ??
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
     unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
@@ -56,16 +55,12 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
           .getFileStream(imageLink)
           .firstWhere((element) => element is FileInfo);
       paletteGenerator = await PaletteGenerator.fromImageProvider(
-          Image
-              .file((file as FileInfo).file)
-              .image);
+          Image.file((file as FileInfo).file).image);
     } else {
-      paletteGenerator = await PaletteGenerator.fromImageProvider(Image
-          .asset(
+      paletteGenerator = await PaletteGenerator.fromImageProvider(Image.asset(
         imageLink,
         package: 'shuffle_uikit',
-      )
-          .image);
+      ).image);
     }
     setState(() {
       final dominantColor =
@@ -130,70 +125,78 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
               crossAxisAlignment: bodyAlignment.crossAxisAlignment,
               children: [
                 Text('Try\nyourself',
-                    style: theme?.boldTextTheme.title1,
-                    textAlign: TextAlign.center)
+                        style: theme?.boldTextTheme.title1,
+                        textAlign: TextAlign.center)
                     .paddingSymmetric(
-                    vertical: SpacingFoundation.verticalSpacing12),
+                        vertical: SpacingFoundation.verticalSpacing12),
                 SizedBox(
                   height: 1.sh / 1.6,
                   width: 1.sw - 24,
-                  child: Stack(
-                      fit: StackFit.passthrough,
-                      children: [
+                  child: GestureDetector(
+                      onTap: widget.onCardTap == null
+                          ? null
+                          : () => widget.onCardTap!(
+                              widget.shuffle.items[controller.state?.index ?? 0]
+                                  .title,
+                              widget.shuffle.items[controller.state?.index ?? 0]
+                                  .imageLink),
+                      child: Stack(fit: StackFit.passthrough, children: [
                         AnimatedScale(
                           scale: isEnded ? 1 : 0.3,
                           duration: animDuration,
                           child: UiKitLastSwiperCard(),
                         ),
-                        if(!isEnded)
+                        if (!isEnded)
                           UiKitCardSwiper(
-                          // onEnd: _onEnd,
-                          onSwipe: (previousIndex,
+                            // onEnd: _onEnd,
+                            onSwipe: (
+                              previousIndex,
                               currentIndex,
-                              direction,) {
-                            if (currentIndex == null) return true;
-                            if (direction != CardSwiperDirection.bottom) {
-                              _getColor(widget.shuffle.items[currentIndex ?? 0]
-                                  .imageLink ??
-                                  '');
-                            }
+                              direction,
+                            ) {
+                              if (currentIndex == null) return true;
+                              if (direction != CardSwiperDirection.bottom) {
+                                _getColor(widget.shuffle
+                                        .items[currentIndex ?? 0].imageLink ??
+                                    '');
+                              }
 
-                            switch (direction) {
-                              case CardSwiperDirection.bottom:
-                                return false;
-                              case CardSwiperDirection.top:
-                                if (widget.onFavorite != null &&
-                                    (model.showFavorite ?? true)) {
-                                  widget.onFavorite!(widget
-                                      .shuffle.items[currentIndex].title);
-                                } else {
+                              switch (direction) {
+                                case CardSwiperDirection.bottom:
                                   return false;
-                                }
-                                return true;
-                              case CardSwiperDirection.none:
-                                return false;
-                              case CardSwiperDirection.left:
-                                if (widget.onDislike != null) {
-                                  widget.onDislike!(widget
-                                      .shuffle.items[currentIndex].title);
-                                } else {
+                                case CardSwiperDirection.top:
+                                  if (widget.onFavorite != null &&
+                                      (model.showFavorite ?? true)) {
+                                    widget.onFavorite!(widget
+                                        .shuffle.items[currentIndex].title);
+                                  } else {
+                                    return false;
+                                  }
+                                  return true;
+                                case CardSwiperDirection.none:
                                   return false;
-                                }
-                                return true;
-                              case CardSwiperDirection.right:
-                                if (widget.onLike != null) {
-                                  widget.onLike!(widget
-                                      .shuffle.items[currentIndex].title);
-                                } else {
-                                  return false;
-                                }
-                                return true;
-                            }
-                          },
-                          cards: widget.shuffle.items,
-                          controller: controller,
-                        )
-                      ]),
+                                case CardSwiperDirection.left:
+                                  if (widget.onDislike != null) {
+                                    widget.onDislike!(widget
+                                        .shuffle.items[currentIndex].title);
+                                  } else {
+                                    return false;
+                                  }
+                                  return true;
+                                case CardSwiperDirection.right:
+                                  if (widget.onLike != null) {
+                                    widget.onLike!(widget
+                                        .shuffle.items[currentIndex].title);
+                                  } else {
+                                    return false;
+                                  }
+                                  return true;
+                              }
+                            },
+                            cards: widget.shuffle.items,
+                            controller: controller,
+                          )
+                      ])),
                 ),
                 SpacingFoundation.verticalSpace4,
                 AnimatedOpacity(
