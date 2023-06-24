@@ -23,6 +23,7 @@ class ShuffleComponent extends StatefulWidget {
 
 class _ShuffleComponentState extends State<ShuffleComponent> {
   late final ComponentShuffleModel model;
+  bool isEnded = false;
   Color _backgroundColor = Colors.black12;
   final CardSwiperController controller = CardSwiperController();
   final animDuration = const Duration(milliseconds: 250);
@@ -108,63 +109,57 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                 SizedBox(
                   height: 1.sh / 1.6,
                   width: 1.sw - 24,
-                  child: Stack(
-                      fit: StackFit.passthrough,
-                      children: [
-                        AnimatedScale(
-                          scale: isEnded ? 1 : 0.3,
-                          duration: animDuration,
-                          child: UiKitLastSwiperCard(),
-                        ),
-                        if(!isEnded)
-                          UiKitCardSwiper(
-                          // onEnd: _onEnd,
-                          onSwipe: (previousIndex,
-                              currentIndex,
-                              direction,) {
-                            if (currentIndex == null) return true;
-                            if (direction != CardSwiperDirection.bottom) {
-                              _getColor(widget.shuffle.items[currentIndex ?? 0]
-                                  .imageLink ??
-                                  '');
-                            }
+                  child: Stack(fit: StackFit.passthrough, children: [
+                    AnimatedScale(
+                      scale: isEnded ? 1 : 0.3,
+                      duration: animDuration,
+                      child: UiKitLastSwiperCard(),
+                    ),
+                    if (!isEnded)
+                      UiKitCardSwiper(
+                        // onEnd: _onEnd,
+                        onSwipe: (
+                          previousIndex,
+                          currentIndex,
+                          direction,
+                        ) {
+                          if (currentIndex == null) return true;
+                          if (direction != CardSwiperDirection.bottom) {
+                            _getColor(widget.shuffle.items[currentIndex ?? 0].imageLink ?? '');
+                          }
 
-                            switch (direction) {
-                              case CardSwiperDirection.bottom:
+                          switch (direction) {
+                            case CardSwiperDirection.bottom:
+                              return false;
+                            case CardSwiperDirection.top:
+                              if (widget.onFavorite != null && (model.showFavorite ?? true)) {
+                                widget.onFavorite!(widget.shuffle.items[currentIndex].title);
+                              } else {
                                 return false;
-                              case CardSwiperDirection.top:
-                                if (widget.onFavorite != null &&
-                                    (model.showFavorite ?? true)) {
-                                  widget.onFavorite!(widget
-                                      .shuffle.items[currentIndex].title);
-                                } else {
-                                  return false;
-                                }
-                                return true;
-                              case CardSwiperDirection.none:
+                              }
+                              return true;
+                            case CardSwiperDirection.none:
+                              return false;
+                            case CardSwiperDirection.left:
+                              if (widget.onDislike != null) {
+                                widget.onDislike!(widget.shuffle.items[currentIndex].title);
+                              } else {
                                 return false;
-                              case CardSwiperDirection.left:
-                                if (widget.onDislike != null) {
-                                  widget.onDislike!(widget
-                                      .shuffle.items[currentIndex].title);
-                                } else {
-                                  return false;
-                                }
-                                return true;
-                              case CardSwiperDirection.right:
-                                if (widget.onLike != null) {
-                                  widget.onLike!(widget
-                                      .shuffle.items[currentIndex].title);
-                                } else {
-                                  return false;
-                                }
-                                return true;
-                            }
-                          },
-                          cards: widget.shuffle.items,
-                          controller: controller,
-                        )
-                      ]),
+                              }
+                              return true;
+                            case CardSwiperDirection.right:
+                              if (widget.onLike != null) {
+                                widget.onLike!(widget.shuffle.items[currentIndex].title);
+                              } else {
+                                return false;
+                              }
+                              return true;
+                          }
+                        },
+                        cards: widget.shuffle.items,
+                        controller: controller,
+                      )
+                  ]),
                 ),
                 SpacingFoundation.verticalSpace4,
                 AnimatedOpacity(
