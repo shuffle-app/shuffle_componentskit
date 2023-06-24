@@ -35,6 +35,13 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
   Color _backgroundColor = Colors.black12;
   final CardSwiperController controller = CardSwiperController();
   final animDuration = const Duration(milliseconds: 250);
+  late Widget currentImage = ImageWidget(
+    key: UniqueKey(),
+    link: widget.shuffle.items.first.imageLink ?? '',
+    fit: BoxFit.cover,
+    height: 1.sh,
+    width: 1.sw,
+  );
 
   @override
   void initState() {
@@ -51,11 +58,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
     if (imageLink.isEmpty) return;
     late final PaletteGenerator paletteGenerator;
     if (imageLink.substring(0, 4) == 'http') {
-      final file = await CustomCacheManager.instance
-          .getFileStream(imageLink)
-          .firstWhere((element) => element is FileInfo);
-      paletteGenerator = await PaletteGenerator.fromImageProvider(
-          Image.file((file as FileInfo).file).image);
+      final file = await CustomCacheManager.instance.getFileStream(imageLink).firstWhere((element) => element is FileInfo);
+      paletteGenerator = await PaletteGenerator.fromImageProvider(Image.file((file as FileInfo).file).image);
     } else {
       paletteGenerator = await PaletteGenerator.fromImageProvider(Image.asset(
         imageLink,
@@ -63,17 +67,21 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
       ).image);
     }
     setState(() {
-      final dominantColor =
-          paletteGenerator.dominantColor?.color ?? Colors.black12;
+      final dominantColor = paletteGenerator.dominantColor?.color ?? Colors.black12;
 
-      _backgroundColor =
-          HSLColor.fromColor(dominantColor).withLightness(0.45).toColor();
-      print(_backgroundColor);
+      _backgroundColor = HSLColor.fromColor(dominantColor).withLightness(0.45).toColor();
+      currentImage = ImageWidget(
+        key: UniqueKey(),
+        link: imageLink,
+        fit: BoxFit.cover,
+        height: 1.sh,
+        width: 1.sw,
+      );
     });
   }
 
   _onEnd() {
-    setState(() {
+    setState((){
       isEnded = true;
     });
   }
@@ -91,24 +99,10 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
 
     return Stack(
       children: [
-        Center(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            height: 0.6.sh,
-            width: 0.7.sw,
-            decoration: BoxDecoration(
-              color: _backgroundColor,
-              borderRadius: BorderRadiusFoundation.max,
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset.zero,
-                  blurRadius: 50,
-                  color: _backgroundColor,
-                  spreadRadius: 50,
-                ),
-              ],
-            ),
-          ),
+        AnimatedSwitcher(
+          switchInCurve: Curves.decelerate,
+          duration: animDuration,
+          child: currentImage,
         ),
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -157,8 +151,8 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                               if (currentIndex == null) return true;
                               if (direction != CardSwiperDirection.bottom) {
                                 _getColor(widget.shuffle
-                                        .items[currentIndex ?? 0].imageLink ??
-                                    '');
+                                        .items[currentIndex ?? 0].imageLink ??'');
+
                               }
 
                               switch (direction) {
