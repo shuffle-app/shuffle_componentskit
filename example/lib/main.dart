@@ -294,7 +294,7 @@ class ComponentsTestPage extends StatelessWidget {
                             importance: ImportanceChip.none),
                         UiKitImportanceChip(
                             title: 'Hookah', importance: ImportanceChip.high),
-                      ]),
+                      ],TextEditingController()),
                       onSubmit: () {}, onSelect: (){},
                     ))))),
             SpacingFoundation.verticalSpace16,

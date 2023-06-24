@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class SpinnerComponent extends StatelessWidget {
@@ -13,9 +14,10 @@ class SpinnerComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spacing = SizesFoundation.screenWidth <= 375
-        ? SpacingFoundation.verticalSpace16
-        : SpacingFoundation.verticalSpace24;
+    final spacing = SpacingFoundation.verticalSpace16;
+    // final spacing = SizesFoundation.screenWidth <= 375
+    //     ? SpacingFoundation.verticalSpace16
+    //     : SpacingFoundation.verticalSpace24;
 
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
@@ -37,11 +39,13 @@ class SpinnerComponent extends StatelessWidget {
           style: context.uiKitTheme?.boldTextTheme.title1,
           textAlign: TextAlign.center,
         ),
-        spacing,
+        // SizesFoundation.screenWidth <= 375 ?SpacingFoundation.verticalSpace2 :SpacingFoundation.verticalSpace4,
         Expanded(
-          child: LayoutBuilder(
+          child:
+          LayoutBuilder(
             builder: (context, size) {
-              return UiKitHorizontalScrollableList(
+              return
+                UiKitHorizontalScrollableList(
                 scrollController: spinner.cardsScrollController,
                 leftPadding: SpacingFoundation.horizontalSpacing16,
                 spacing: SpacingFoundation.horizontalSpacing12,
@@ -64,6 +68,7 @@ class SpinnerComponent extends StatelessWidget {
 
                   return UiKitSpinnerCard(
                     availableHeight: size.maxHeight,
+                    // availableHeight: 0.56.sh,
                     title: e.title,
                     date: e.date,
                     favourite: e.favorite,

@@ -121,6 +121,7 @@ class FeedComponent extends StatelessWidget {
                     child: Transform.rotate(
                       angle: pi * -20 / 180,
                       child: RotatableWidget(
+                        animDuration: const Duration(milliseconds: 150),
                         endAngle: pi * 20 / 180,
                         alignment: Alignment.center,
                         applyReverseOnEnd: true,
@@ -220,12 +221,17 @@ class FeedComponent extends StatelessWidget {
               ),
             ],
             SpacingFoundation.verticalSpace4,
-            ...feed.places!.map((e) => PlacePreview(
+            ...
+            feed.places!.map((e) => PlacePreview(
                   onTap: onPlacePressed,
                   place: e,
                   model: model,
-                ).paddingSymmetric(
+                )
+            // feed.mixedItems
+            //     ?.map((e) => e.
+                .paddingSymmetric(
                     vertical: SpacingFoundation.verticalSpacing12)),
+            //     .toList(),
             kBottomNavigationBarHeight.heightBox,
           ],
         ]).paddingSymmetric(

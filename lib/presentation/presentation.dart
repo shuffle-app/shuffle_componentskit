@@ -27,5 +27,6 @@ export 'utils/extentions/aligment_extention.dart';
 export 'utils/input_formatters.dart';
 export 'utils/snack_bar_utils.dart';
 export 'utils/theme_matcher.dart';
+export 'widgets/bubbles.dart';
 export 'widgets/global_component.dart';
 export 'widgets/under_development.dart';

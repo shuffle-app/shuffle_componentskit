@@ -6,6 +6,7 @@ class UiFeedModel {
   final bool showHowItWorks;
   final List<UiMoodModel>? moods;
   final List<UiPlaceModel>? places;
+  final List<PlacePreview>? mixedItems;
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
 
@@ -15,5 +16,6 @@ class UiFeedModel {
       this.recommendedEvent,
       this.showHowItWorks = false,
       this.moods,
+      this.mixedItems,
       this.places});
 }
