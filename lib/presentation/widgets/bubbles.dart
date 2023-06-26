@@ -21,9 +21,10 @@ class Bubbles extends StatelessWidget {
       widgets: widgets,
       paddingX: 0,
       paddingY: 0,
-      size: 120,
-      highRatio: 0.25,
-      lowRatio: 0.01,
+      itemSize: 120,
+      duration: Duration(milliseconds: 250),
+      // highRatio: 0.25,
+      // lowRatio: 0.01,
     );
   }
 }

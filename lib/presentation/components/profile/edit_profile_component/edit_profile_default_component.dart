@@ -84,7 +84,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   )),
             ],
           ),
-          body: Form(
+          body: SingleChildScrollView(child: Form(
             key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -136,7 +136,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
               horizontal: horizontalMargin,
               vertical: verticalMargin,
             ),
-          )),
+          ))),
 
       bottomNavigationBar: AnimatedOpacity(
         duration: const Duration(milliseconds: 200),
