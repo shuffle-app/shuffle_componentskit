@@ -32,3 +32,4 @@ export 'widgets/global_component.dart';
 export 'widgets/under_development.dart';
 export 'components/search/search_component.dart';
 export 'components/search/uisearch_model.dart';
+export 'components/search/results/search_result_component.dart';

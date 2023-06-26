@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiSearchModel {
   final List<ImageCard> chooseCards;
+  final List<UiPlaceModel> places;
+  final List<UiKitTag>? filterChips;
+  final List<UiKitTag>? activeFilterChips;
+  final String heroSearchTag;
 
-  UiSearchModel(this.chooseCards) ;
+  UiSearchModel({
+    required this.heroSearchTag,
+    required this.chooseCards,
+    required this.places,
+    this.filterChips,
+    this.activeFilterChips,
+  });
 }
 
 class ImageCard {
@@ -12,6 +24,9 @@ class ImageCard {
   final Color backgroundColor;
   final VoidCallback? callback;
 
-  ImageCard({required this.title,this.callback,  required this.backgroundImage, required this.backgroundColor});
-
+  ImageCard(
+      {required this.title,
+      this.callback,
+      required this.backgroundImage,
+      required this.backgroundColor});
 }

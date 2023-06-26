@@ -106,7 +106,6 @@ class PreferencesComponent extends StatelessWidget {
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, size) {
-                    print(size.maxHeight);
 
                     return Bubbles(
                       width: 1.sw,
