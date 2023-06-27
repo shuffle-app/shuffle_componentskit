@@ -15,11 +15,10 @@ class AboutUserComponent extends StatelessWidget {
 
   final TextEditingController nameController;
   final TextEditingController nickNameController;
-  final GlobalKey _richTextKey = GlobalKey();
 
   final GlobalKey? formKey;
 
-  AboutUserComponent({
+  const AboutUserComponent({
     Key? key,
     required this.aboutUserModel,
     this.onReligionSelected,
@@ -36,8 +35,8 @@ class AboutUserComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (aboutUserModel.selectedAge == null) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-      onAgeChanged?.call(24));
+      WidgetsBinding.instance
+          .addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
     }
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
@@ -48,60 +47,81 @@ class AboutUserComponent extends StatelessWidget {
         (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin =
         (model.positionModel?.verticalMargin ?? 0).toDouble();
-    final subHeadline = context.uiKitTheme?.boldTextTheme.subHeadline;
+    final theme = context.uiKitTheme;
+    final subHeadline = theme?.boldTextTheme.subHeadline;
+    final titleAlignment = model.positionModel?.titleAlignment;
 
     final AutoSizeGroup genderGroup = AutoSizeGroup();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          'Now let\'s get to know each other',
-          style: context.uiKitTheme?.boldTextTheme.title1,
-        ),
-        SpacingFoundation.verticalSpace16,
-        Stack(children: [
-          RichText(
-              text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'The more info we get about you, the better ',
-                style:
-                    subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
-              ),
-              TextSpan(
-                  text: 'your leisure selection',
-                  style: subHeadline?.copyWith(
-                      color: Colors.white.withOpacity(0))),
-              TextSpan(
-                text: ' will be.',
-                style:
-                    subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
-              )
-            ],
-          )),
-          GradientableWidget(
-            gradient: GradientFoundation.attentionCard,
-            child: RichText(
-                // key: _richTextKey,
-                text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'The more info we get about you, the better ',
-                  style:
-                      subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
-                ),
-                TextSpan(text: 'your leisure selection', style: subHeadline),
-                TextSpan(
-                  text: ' will be.',
-                  style:
-                      subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
-                )
-              ],
-            )),
-          )
-        ]),
-        SpacingFoundation.verticalSpace16,
+        if (model.content.title != null)
+          Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: titleAlignment.crossAxisAlignment,
+              mainAxisAlignment: titleAlignment.mainAxisAlignment,
+              children: () {
+                final List<ContentItemType> contentTypeList =
+                    model.content.title!.keys.toList();
+                final List<ContentBaseModel> contents =
+                    model.content.title!.values.toList();
+
+                return [
+                  if (contentTypeList.first == ContentItemType.text)
+                    Text(
+                      contents.first.properties?.keys.first ??
+                          'Now let\'s get to know each other',
+                      style: theme?.boldTextTheme.title1,
+                    ),
+                  SpacingFoundation.verticalSpace16,
+                  Stack(children: [
+                    RichText(
+                        text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'The more info we get about you, the better ',
+                          style: subHeadline?.copyWith(
+                              color: Colors.white.withOpacity(1)),
+                        ),
+                        TextSpan(
+                            text: 'your leisure selection',
+                            style: subHeadline?.copyWith(
+                                color: Colors.white.withOpacity(0))),
+                        TextSpan(
+                          text: ' will be.',
+                          style: subHeadline?.copyWith(
+                              color: Colors.white.withOpacity(1)),
+                        )
+                      ],
+                    )),
+                    GradientableWidget(
+                      gradient: GradientFoundation.attentionCard,
+                      child: RichText(
+                          // key: _richTextKey,
+                          text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'The more info we get about you, the better ',
+                            style: subHeadline?.copyWith(
+                                color: Colors.white.withOpacity(0)),
+                          ),
+                          TextSpan(
+                              text: 'your leisure selection',
+                              style: subHeadline),
+                          TextSpan(
+                            text: ' will be.',
+                            style: subHeadline?.copyWith(
+                                color: Colors.white.withOpacity(0)),
+                          )
+                        ],
+                      )),
+                    )
+                  ]),
+                  SpacingFoundation.verticalSpace16,
+                ];
+              }()),
+
         UiKitCardWrapper(
           color: ColorsFoundation.surface1,
           child: Form(

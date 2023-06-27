@@ -84,10 +84,11 @@ packages:
   bubble_lens:
     dependency: "direct main"
     description:
-      name: bubble_lens
-      sha256: "6c066e00e830a3cdb1bdfd71d602c62c0f489beb90d83ff1fced2b831783cb9a"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: c41ee0d3d8974b494ef25a0ff0e39aa664eaa1c7
+      url: "https://github.com/romancores/bubble_lens.git"
+    source: git
     version: "2.0.0"
   build:
     dependency: transitive
@@ -366,14 +367,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.7.0"
-  flutter_staggered_grid_view:
-    dependency: "direct main"
-    description:
-      name: flutter_staggered_grid_view
-      sha256: "1312314293acceb65b92754298754801b0e1f26a1845833b740b30415bbbcf07"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.2"
   flutter_svg:
     dependency: transitive
     description:
@@ -628,10 +621,10 @@ packages:
     dependency: "direct main"
     description:
       name: path_provider
-      sha256: c7edf82217d4b2952b2129a61d3ad60f1075b9299e629e149a8d2e39c2e6aad4
+      sha256: "3087813781ab814e4157b172f1a11c46be20179fcc9bea043e0fba36bc0acaa2"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.14"
+    version: "2.0.15"
   path_provider_android:
     dependency: transitive
     description:

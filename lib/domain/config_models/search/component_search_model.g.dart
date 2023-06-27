@@ -31,4 +31,6 @@ Map<String, dynamic> _$ComponentSearchModelToJson(
 const _$PageBuilderTypeEnumMap = {
   PageBuilderType.modalBottomSheet: 'modal_bottom_sheet',
   PageBuilderType.page: 'page',
+  PageBuilderType.dialog: 'dialog',
+  PageBuilderType.generalDialog: 'general_dialog',
 };

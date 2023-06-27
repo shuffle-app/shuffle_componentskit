@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
                       child: ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
-                          .load(version: '1.0.1')
+                          .load(version: '1.0.2')
                           .then(
                               (_) => Future.delayed(const Duration(seconds: 1)))
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(
@@ -137,354 +137,371 @@ class ComponentsTestPage extends StatelessWidget {
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
-    data: BaseUiKitButtonData(
-                text: 'show about user step 1',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentAboutUserModel.fromJson(
-                        configuration.appConfig.content['about_user']),
-                    Scaffold(
-                      body: SafeArea(
-                        child: SingleChildScrollView(
-                            child: AboutUserComponent(
+                data: BaseUiKitButtonData(
+                    text: 'show onboarding',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentOnboardingModel.fromJson(
+                            configuration.appConfig.content['onboarding']),
+                        Scaffold(body: OnboardingComponent())))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show about user step 1',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentAboutUserModel.fromJson(
+                            configuration.appConfig.content['about_user']),
+                        Scaffold(
+                          body: SafeArea(
+                            child: SingleChildScrollView(
+                                child: AboutUserComponent(
                               nameController: TextEditingController(),
-                          nickNameController: TextEditingController(),
-                          aboutUserModel: UiAboutUserModel(
-                            religions: [
-                              UiKitBorderedChipWithIconData(
-                                  title: 'Buddism',
-                                  icon: ImageWidget(
-                                    rasterAsset: GraphicsFoundation
-                                        .instance.png.buddismFlag,
+                              nickNameController: TextEditingController(),
+                              aboutUserModel: UiAboutUserModel(
+                                religions: [
+                                  UiKitBorderedChipWithIconData(
+                                      title: 'Buddism',
+                                      icon: ImageWidget(
+                                        rasterAsset: GraphicsFoundation
+                                            .instance.png.buddismFlag,
+                                      ),
+                                      isSelected: false),
+                                  UiKitBorderedChipWithIconData(
+                                      title: 'Islam',
+                                      icon: ImageWidget(
+                                        rasterAsset: GraphicsFoundation
+                                            .instance.png.muslimFlag,
+                                      ),
+                                      isSelected: false),
+                                  UiKitBorderedChipWithIconData(
+                                      title: 'Christianity',
+                                      icon: ImageWidget(
+                                        rasterAsset: GraphicsFoundation
+                                            .instance.png.jordanFlag,
+                                      ),
+                                      isSelected: false)
+                                ],
+                                genders: [
+                                  UiKitSignWithCaptionModel(
+                                    caption: 'Male',
+                                    sign: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.male,
+                                    ),
                                   ),
-                                  isSelected: false),
-                              UiKitBorderedChipWithIconData(
-                                  title: 'Islam',
-                                  icon: ImageWidget(
-                                    rasterAsset: GraphicsFoundation
-                                        .instance.png.muslimFlag,
+                                  UiKitSignWithCaptionModel(
+                                    caption: 'Female',
+                                    sign: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.femle,
+                                    ),
                                   ),
-                                  isSelected: false),
-                              UiKitBorderedChipWithIconData(
-                                  title: 'Christianity',
-                                  icon: ImageWidget(
-                                    rasterAsset: GraphicsFoundation
-                                        .instance.png.jordanFlag,
+                                  UiKitSignWithCaptionModel(
+                                    caption: 'Other',
+                                    sign: ImageWidget(
+                                      svgAsset: GraphicsFoundation
+                                          .instance.svg.otherGender,
+                                    ),
                                   ),
-                                  isSelected: false)
-                            ],
-                            genders: [
-                              UiKitSignWithCaptionModel(
-                                caption: 'Male',
-                                sign: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.male,
-                                ),
+                                ],
+                                personTypes: [
+                                  UiKitMenuItemTileModel<String>(
+                                    title: 'Active Tiger',
+                                    value: 'tiger',
+                                    icon: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.tiger,
+                                    ),
+                                  ),
+                                  UiKitMenuItemTileModel<String>(
+                                    title: 'interested Adventurer',
+                                    value: 'adventurer',
+                                    icon: ImageWidget(
+                                      svgAsset: GraphicsFoundation
+                                          .instance.svg.adventure,
+                                    ),
+                                  ),
+                                  UiKitMenuItemTileModel<String>(
+                                    title: 'forever Resting sloth',
+                                    value: 'resting sloth',
+                                    icon: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.sleep,
+                                    ),
+                                  ),
+                                  UiKitMenuItemTileModel<String>(
+                                    title: 'Active Tiger',
+                                    value: 'tiger',
+                                    icon: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.swim,
+                                    ),
+                                  ),
+                                  UiKitMenuItemTileModel<String>(
+                                    title: 'Active Tiger',
+                                    value: 'tiger',
+                                    icon: ImageWidget(
+                                      svgAsset: GraphicsFoundation
+                                          .instance.svg.athlete,
+                                    ),
+                                  ),
+                                  UiKitMenuItemTileModel<String>(
+                                    title: 'Active Tiger',
+                                    value: 'tiger',
+                                    icon: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.food,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              UiKitSignWithCaptionModel(
-                                caption: 'Female',
-                                sign: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.femle,
-                                ),
-                              ),
-                              UiKitSignWithCaptionModel(
-                                caption: 'Other',
-                                sign: ImageWidget(
-                                  svgAsset: GraphicsFoundation
-                                      .instance.svg.otherGender,
-                                ),
-                              ),
-                            ],
-                            personTypes: [
-                              UiKitMenuItemTileModel<String>(
-                                title: 'Active Tiger',
-                                value: 'tiger',
-                                icon: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.tiger,
-                                ),
-                              ),
-                              UiKitMenuItemTileModel<String>(
-                                title: 'interested Adventurer',
-                                value: 'adventurer',
-                                icon: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.adventure,
-                                ),
-                              ),
-                              UiKitMenuItemTileModel<String>(
-                                title: 'forever Resting sloth',
-                                value: 'resting sloth',
-                                icon: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.sleep,
-                                ),
-                              ),
-                              UiKitMenuItemTileModel<String>(
-                                title: 'Active Tiger',
-                                value: 'tiger',
-                                icon: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.swim,
-                                ),
-                              ),
-                              UiKitMenuItemTileModel<String>(
-                                title: 'Active Tiger',
-                                value: 'tiger',
-                                icon: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.athlete,
-                                ),
-                              ),
-                              UiKitMenuItemTileModel<String>(
-                                title: 'Active Tiger',
-                                value: 'tiger',
-                                icon: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.food,
-                                ),
-                              ),
-                            ],
+                            )),
                           ),
-                        )),
-                      ),
-                    )))),
+                        )))),
             SpacingFoundation.verticalSpace16,
             context.button(
-    data: BaseUiKitButtonData(
-                text: 'show preferences selector',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentShuffleModel.fromJson(
-                        configuration.appConfig.content['about_user']),
-                    Scaffold(
-                        body: PreferencesComponent(
-                      preferences: UiPreferencesModel([
-                        UiKitImportanceChip(
-                            title: 'Electronic\nMusic',
-                            importance: ImportanceChip.high),
-                        UiKitImportanceChip(
-                            title: 'Swimming',
-                            importance: ImportanceChip.medium),
-                        UiKitImportanceChip(
-                            title: 'Theme\nParks',
-                            importance: ImportanceChip.none),
-                        UiKitImportanceChip(
-                            title: 'Hookah', importance: ImportanceChip.high),
-                        UiKitImportanceChip(
-                            title: 'Electronic\nMusic',
-                            importance: ImportanceChip.high),
-                        UiKitImportanceChip(
-                            title: 'Swimming',
-                            importance: ImportanceChip.medium),
-                        UiKitImportanceChip(
-                            title: 'Theme\nParks',
-                            importance: ImportanceChip.none),
-                        UiKitImportanceChip(
-                            title: 'Hookah', importance: ImportanceChip.high),
-                        UiKitImportanceChip(
-                            title: 'Electronic\nMusic',
-                            importance: ImportanceChip.high),
-                        UiKitImportanceChip(
-                            title: 'Swimming',
-                            importance: ImportanceChip.medium),
-                        UiKitImportanceChip(
-                            title: 'Theme\nParks',
-                            importance: ImportanceChip.none),
-                        UiKitImportanceChip(
-                            title: 'Hookah', importance: ImportanceChip.high),
-                      ],TextEditingController()),
-                      onSubmit: () {}, onSelect: (){},
-                    ))))),
+                data: BaseUiKitButtonData(
+                    text: 'show preferences selector',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentShuffleModel.fromJson(
+                            configuration.appConfig.content['about_user']),
+                        Scaffold(
+                            body: PreferencesComponent(
+                          preferences: UiPreferencesModel([
+                            UiKitImportanceChip(
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium),
+                            UiKitImportanceChip(
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none),
+                            UiKitImportanceChip(
+                                title: 'Hookah',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium),
+                            UiKitImportanceChip(
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none),
+                            UiKitImportanceChip(
+                                title: 'Hookah',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium),
+                            UiKitImportanceChip(
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none),
+                            UiKitImportanceChip(
+                                title: 'Hookah',
+                                importance: ImportanceChip.high),
+                          ], TextEditingController()),
+                          onSubmit: () {},
+                          onSelect: () {},
+                        ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
-    data: BaseUiKitButtonData(
-                text: 'show profile',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentShuffleModel.fromJson(
-                        configuration.appConfig.content['profile']),
-                    Scaffold(
-                      body: BlurredAppBarPage(
-                        title: 'My card',
-                        centerTitle: true,
-                        body: ProfileComponent(
-                            profile: UiProfileModel(
-                          name: 'Marry Williams',
-                          nickname: '@marywill',
-                          description:
-                              'Just walking here and there trying to find something unique and interesting to show you!',
-                          avatarUrl: 'assets/images/png/profile_avatar.png',
-                          interests: [
-                            'Restaurants',
-                            'Hookah',
-                            'Roller Coaster',
-                            'Swimmings'
-                          ],
-                          // followers: 2650,
-                        )),
-                      ),
-                    )))),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-    data: BaseUiKitButtonData(
-                text: 'show shuffle',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentShuffleModel.fromJson(
-                        configuration.appConfig.content['shuffle']),
-                    Scaffold(
-                        body: ShuffleComponent(
-                      shuffle: UiShuffleModel(
-                          items: List.generate(
-                        4,
-                        (index) => UiKitSwiperCard(
-                            title: 'Dance Again',
-                            subtitle: 'Unique place for unique people',
-                            imageLink: index == 0
-                                ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
-                                : index == 1
-                                    ? 'https://www.trutravels.com/blog/finns-beach-club.png'
-                                    : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
-                            tags: [
-                              UiKitTagWidget(
-                                title: 'Club',
-                                icon: Assets.images.svg.cocktail.path,
-                              ),
-                              UiKitTagWidget(
-                                title: 'Club',
-                                icon: Assets.images.svg.cocktail.path,
-                                customSpace: SpacingFoundation.horizontalSpace8,
-                                showSpacing: true,
-                              ),
-                              UiKitTagWidget(
-                                title: 'Club',
-                                icon: Assets.images.svg.cocktail.path,
-                                customSpace: SpacingFoundation.horizontalSpace8,
-                                showSpacing: true,
-                              ),
-                              UiKitTagWidget(
-                                title: 'Club',
-                                icon: Assets.images.svg.cocktail.path,
-                                customSpace: SpacingFoundation.horizontalSpace8,
-                                showSpacing: true,
-                              ),
-                              UiKitTagWidget(
-                                title: 'Club',
-                                icon: Assets.images.svg.cocktail.path,
-                                customSpace: SpacingFoundation.horizontalSpace8,
-                                showSpacing: true,
-                              ),
-                            ]),
-                      )),
-                    ))))),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-    data: BaseUiKitButtonData(
-                text: 'show spinner',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentSpinnerModel.fromJson(
-                        configuration.appConfig.content['spinner']),
-                    Scaffold(
-                        body: SpinnerComponent(
-                            onEventTap: () {},
-                            onFavoriteTap: () {},
-                            spinner: UiSpinnerModel(
-                                categories: List<String>.generate(
-                                  10,
-                                  (index) => 'Category ${index + 1}',
-                                ),
-
-                                events:  List.generate(
-                                      5,
-                                      (index) => event))))))),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-    data: BaseUiKitButtonData(
-                text: 'show feed',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentFeedModel.fromJson(
-                        configuration.appConfig.content['feed']),
-                    Scaffold(
-                        // appBar: AppBar(
-                        //   backgroundColor: Colors.transparent,
-                        //   toolbarHeight: 0,
-                        //   bottomOpacity: 0,
-                        //   toolbarOpacity: 0,
-                        // ),
-                        body: SingleChildScrollView(
-                            child: FeedComponent(
-                                feed: UiFeedModel(
-                      places: List.generate(4, (index) => place),
-                      recommendedEvent: event,
-                      moods: List.generate(
-                          4,
-                          (index) => UiMoodModel(
-                              id: 1,
-                              title: 'Want to have some fun',
-                              logo: 'assets/images/png/crazy_emoji.png')),
-                    ))))))),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-    data: BaseUiKitButtonData(
-                text: 'show mood',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentMoodModel.fromJson(
-                        configuration.appConfig.content['mood']),
-                    Scaffold(
-                        appBar: const CustomAppBar(
-                          title: 'Feeling',
-                          centerTitle: true,
-                        ),
-                        body: SingleChildScrollView(
-                            child: MoodComponent(
-                          mood: UiMoodModel(
-                            descriptionItems: [
-                              const UiDescriptionItemModel(
-                                active: true,
-                                  title: 'Sunny', description: '+32'),
-                              const UiDescriptionItemModel(
-                                  active: true,
-                                  title: 'Burned today', description: '432'),
-                            ],
-                            title: 'need to cool down a bit?',
-                            logo: 'assets/images/png/crazy_emoji.png',
-                            id: 1,
-                            places: List.generate(4, (index) => place),
+                data: BaseUiKitButtonData(
+                    text: 'show profile',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentShuffleModel.fromJson(
+                            configuration.appConfig.content['profile']),
+                        Scaffold(
+                          body: BlurredAppBarPage(
+                            title: 'My card',
+                            centerTitle: true,
+                            body: ProfileComponent(
+                                profile: UiProfileModel(
+                              name: 'Marry Williams',
+                              nickname: '@marywill',
+                              description:
+                                  'Just walking here and there trying to find something unique and interesting to show you!',
+                              avatarUrl: 'assets/images/png/profile_avatar.png',
+                              interests: [
+                                'Restaurants',
+                                'Hookah',
+                                'Roller Coaster',
+                                'Swimmings'
+                              ],
+                              // followers: 2650,
+                            )),
                           ),
-                        )))))),
+                        )))),
             SpacingFoundation.verticalSpace16,
             context.button(
-    data: BaseUiKitButtonData(
-                text: 'show place',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentPlaceModel.fromJson(
-                        configuration.appConfig.content['place']),
-                    PlaceComponent(place: place),
-                    BottomBookingBar(
-                        model: ComponentPlaceModel.fromJson(
-                                    configuration.appConfig.content['place'])
-                                .bookingElementModel ??
-                            BookingElementModel(version: '0'))))),
+                data: BaseUiKitButtonData(
+                    text: 'show shuffle',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentShuffleModel.fromJson(
+                            configuration.appConfig.content['shuffle']),
+                        Scaffold(
+                            body: ShuffleComponent(
+                          shuffle: UiShuffleModel(
+                              items: List.generate(
+                            4,
+                            (index) => UiKitSwiperCard(
+                                title: 'Dance Again',
+                                subtitle: 'Unique place for unique people',
+                                imageLink: index == 0
+                                    ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
+                                    : index == 1
+                                        ? 'https://www.trutravels.com/blog/finns-beach-club.png'
+                                        : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
+                                tags: [
+                                  UiKitTagWidget(
+                                    title: 'Club',
+                                    icon: Assets.images.svg.cocktail.path,
+                                  ),
+                                  UiKitTagWidget(
+                                    title: 'Club',
+                                    icon: Assets.images.svg.cocktail.path,
+                                    customSpace:
+                                        SpacingFoundation.horizontalSpace8,
+                                    showSpacing: true,
+                                  ),
+                                  UiKitTagWidget(
+                                    title: 'Club',
+                                    icon: Assets.images.svg.cocktail.path,
+                                    customSpace:
+                                        SpacingFoundation.horizontalSpace8,
+                                    showSpacing: true,
+                                  ),
+                                  UiKitTagWidget(
+                                    title: 'Club',
+                                    icon: Assets.images.svg.cocktail.path,
+                                    customSpace:
+                                        SpacingFoundation.horizontalSpace8,
+                                    showSpacing: true,
+                                  ),
+                                  UiKitTagWidget(
+                                    title: 'Club',
+                                    icon: Assets.images.svg.cocktail.path,
+                                    customSpace:
+                                        SpacingFoundation.horizontalSpace8,
+                                    showSpacing: true,
+                                  ),
+                                ]),
+                          )),
+                        ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
-    data: BaseUiKitButtonData(
-                text: 'show event',
-                onPressed: () => buildComponent(
-                    context,
-                    ComponentEventModel.fromJson(
-                        configuration.appConfig.content['event']),
-                    EventComponent(event: event),
-                    BottomBookingBar(
-                        model: ComponentPlaceModel.fromJson(
-                                    configuration.appConfig.content['event'])
-                                .bookingElementModel ??
-                            BookingElementModel(version: '0'))))),
+                data: BaseUiKitButtonData(
+                    text: 'show spinner',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentSpinnerModel.fromJson(
+                            configuration.appConfig.content['spinner']),
+                        Scaffold(
+                            body: SpinnerComponent(
+                                onEventTap: () {},
+                                onFavoriteTap: () {},
+                                spinner: UiSpinnerModel(
+                                    categories: List<String>.generate(
+                                      10,
+                                      (index) => 'Category ${index + 1}',
+                                    ),
+                                    events: List.generate(
+                                        5, (index) => event))))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show feed',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentFeedModel.fromJson(
+                            configuration.appConfig.content['feed']),
+                        Scaffold(
+                            // appBar: AppBar(
+                            //   backgroundColor: Colors.transparent,
+                            //   toolbarHeight: 0,
+                            //   bottomOpacity: 0,
+                            //   toolbarOpacity: 0,
+                            // ),
+                            body: SingleChildScrollView(
+                                child: FeedComponent(
+                                    feed: UiFeedModel(
+                          places: List.generate(4, (index) => place),
+                          recommendedEvent: event,
+                          moods: List.generate(
+                              4,
+                              (index) => UiMoodModel(
+                                  id: 1,
+                                  title: 'Want to have some fun',
+                                  logo: 'assets/images/png/crazy_emoji.png')),
+                        ))))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show mood',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentMoodModel.fromJson(
+                            configuration.appConfig.content['mood']),
+                        Scaffold(
+                            appBar: const CustomAppBar(
+                              title: 'Feeling',
+                              centerTitle: true,
+                            ),
+                            body: SingleChildScrollView(
+                                child: MoodComponent(
+                              mood: UiMoodModel(
+                                descriptionItems: [
+                                  const UiDescriptionItemModel(
+                                      active: true,
+                                      title: 'Sunny',
+                                      description: '+32'),
+                                  const UiDescriptionItemModel(
+                                      active: true,
+                                      title: 'Burned today',
+                                      description: '432'),
+                                ],
+                                title: 'need to cool down a bit?',
+                                logo: 'assets/images/png/crazy_emoji.png',
+                                id: 1,
+                                places: List.generate(4, (index) => place),
+                              ),
+                            )))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show place',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentPlaceModel.fromJson(
+                            configuration.appConfig.content['place']),
+                        PlaceComponent(place: place),
+                        BottomBookingBar(
+                            model: ComponentPlaceModel.fromJson(configuration
+                                        .appConfig.content['place'])
+                                    .bookingElementModel ??
+                                BookingElementModel(version: '0'))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show event',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentEventModel.fromJson(
+                            configuration.appConfig.content['event']),
+                        EventComponent(event: event),
+                        BottomBookingBar(
+                            model: ComponentPlaceModel.fromJson(configuration
+                                        .appConfig.content['event'])
+                                    .bookingElementModel ??
+                                BookingElementModel(version: '0'))))),
             SpacingFoundation.verticalSpace16,
           ],
         ),

@@ -4,5 +4,9 @@ enum PageBuilderType {
   @JsonValue('modal_bottom_sheet')
   modalBottomSheet,
   @JsonValue('page')
-  page
+  page,
+  @JsonValue('dialog')
+  dialog,
+  @JsonValue('general_dialog')
+  generalDialog,
 }
