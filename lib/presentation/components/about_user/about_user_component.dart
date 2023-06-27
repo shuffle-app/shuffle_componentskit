@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -121,7 +120,6 @@ class AboutUserComponent extends StatelessWidget {
                   SpacingFoundation.verticalSpace16,
                 ];
               }()),
-
         UiKitCardWrapper(
           color: ColorsFoundation.surface1,
           child: Form(
@@ -151,60 +149,77 @@ class AboutUserComponent extends StatelessWidget {
                 ],
               )).paddingAll(EdgeInsetsFoundation.all4),
         ),
-        if (aboutUserModel.personTypes != null) ...[
+        if (model.content.body?[ContentItemType.singleDropdown] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
               color: Colors.black,
-              title: 'Describe yourself',
+              title: model.content.body?[ContentItemType.singleDropdown]?.title
+                      ?.entries.first.value.properties?.keys.first ??
+                  'Describe yourself',
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
               child: UiKitMenu<String>(
-                title: 'Describe yourself',
+                title: model.content.body?[ContentItemType.singleDropdown]
+                        ?.title?.entries.first.value.properties?.keys.first ??
+                    'Describe yourself',
                 selectedItem: aboutUserModel.selectedPersonType,
-                items: aboutUserModel.personTypes!
-                    .map<UiKitMenuItem<String>>(
-                      (e) => UiKitMenuItem<String>(
-                        title: e.title,
-                        value: e.value,
-                        icon: e.icon,
-                      ),
-                    )
-                    .toList(),
+                items: model
+                        .content
+                        .body?[ContentItemType.singleDropdown]
+                        ?.body?[ContentItemType.singleDropdown]
+                        ?.properties
+                        ?.entries
+                        .map<UiKitMenuItem<String>>(
+                          (e) => UiKitMenuItem<String>(
+                            title: e.key,
+                            value: e.value.value,
+                            icon: ImageWidget(link: e.value.imageLink),
+                          ),
+                        )
+                        .toList() ??
+                    [],
                 onSelected: (personType) =>
                     onPersonTypeChanged?.call(personType),
               )),
         ],
-        if (aboutUserModel.religions != null) ...[
+        if (model.content.body?[ContentItemType.multiSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-            title: 'Select your religions',
-            hasError: aboutUserModel.errorReligionMessage != null,
-            errorText: aboutUserModel.errorReligionMessage,
-            child: SizedBox(
-                height: 40,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final data = aboutUserModel.religions![index];
-
-                    return UiKitBorderedChipWithIcon(
-                      icon: data.icon,
-                      title: data.title,
-                      isSelected: aboutUserModel.selectedReligions
-                              ?.contains(data.title) ??
-                          false,
-                      onPressed: () => onReligionSelected?.call(data.title),
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      SpacingFoundation.horizontalSpace8,
-                  itemCount: aboutUserModel.religions!.length,
-                )).paddingOnly(
-              left: EdgeInsetsFoundation.horizontal4,
-              bottom: EdgeInsetsFoundation.vertical4,
-            ),
-          ),
+              title: model.content.body?[ContentItemType.multiSelect]?.title
+                      ?.entries.first.value.properties?.keys.first ??
+                  'Select your religions',
+              hasError: aboutUserModel.errorReligionMessage != null,
+              errorText: aboutUserModel.errorReligionMessage,
+              child:  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      spacing: SpacingFoundation.horizontalSpacing8,
+                      children: model
+                              .content
+                              .body?[ContentItemType.multiSelect]
+                              ?.body?[ContentItemType.multiSelect]
+                              ?.properties
+                              ?.entries
+                              .map((e) {
+                            return SizedBox(
+                            height: 40,
+                            child: UiKitBorderedChipWithIcon(
+                              icon: ImageWidget(
+                                link: e.value.imageLink,
+                              ),
+                              title: e.key,
+                              isSelected: aboutUserModel.selectedReligions
+                                      ?.contains(e.key) ??
+                                  false,
+                              onPressed: () => onReligionSelected?.call(e.key),
+                            ));
+                          }).toList() ??
+                          [],
+                    ).paddingOnly(
+                      left: EdgeInsetsFoundation.horizontal4,
+                      bottom: EdgeInsetsFoundation.vertical4,
+                    ),
+                  )),
         ],
         SpacingFoundation.verticalSpace16,
         UiKitHorizontalWheelNumberSelector(
@@ -212,10 +227,12 @@ class AboutUserComponent extends StatelessWidget {
           title: 'Your age',
           onValueChanged: (age) => onAgeChanged?.call(age),
         ),
-        if (aboutUserModel.genders != null) ...[
+        if (model.content.body?[ContentItemType.singleSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-            title: 'Gender',
+            title: model.content.body?[ContentItemType.singleSelect]?.title
+                    ?.entries.first.value.properties?.keys.first ??
+                'Gender',
             hasError: aboutUserModel.errorGenderMessage != null,
             errorText: aboutUserModel.errorGenderMessage,
             child: Row(
@@ -223,19 +240,26 @@ class AboutUserComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SpacingFoundation.horizontalSpace16,
-                ...aboutUserModel.genders!
-                    .map(
-                      (e) => Expanded(
-                        child: UiKitVerticalChip(
-                          selected: aboutUserModel.selectedGender == e.caption,
-                          caption: e.caption,
-                          sign: e.sign,
-                          autoSizeGroup: genderGroup,
-                          onTap: () => onGenderChanged?.call(e.caption),
-                        ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                      ),
-                    )
-                    .toList(),
+                ...model
+                        .content
+                        .body?[ContentItemType.singleSelect]
+                        ?.body?[ContentItemType.singleSelect]
+                        ?.properties
+                        ?.entries
+                        .map(
+                          (e) => Expanded(
+                            child: UiKitVerticalChip(
+                              selected: aboutUserModel.selectedGender == e.key,
+                              caption: e.key,
+                              sign: ImageWidget(link: e.value.imageLink),
+                              autoSizeGroup: genderGroup,
+                              onTap: () => onGenderChanged?.call(e.key),
+                            ).paddingOnly(
+                                right: EdgeInsetsFoundation.horizontal4),
+                          ),
+                        )
+                        .toList() ??
+                    [],
                 SpacingFoundation.horizontalSpace16,
               ],
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),

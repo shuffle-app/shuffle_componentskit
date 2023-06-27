@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shuffle_uikit/foundation/gradient_foundation.dart';
 
@@ -16,14 +15,18 @@ class PropertiesBaseModel {
   @JsonKey(name: 'imageLink')
   final String? imageLink;
 
+  @JsonKey(name: 'value')
+  final String? value;
+
   @JsonKey(
       name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
-  final Gradient? gradient;
+  final LinearGradient? gradient;
 
   PropertiesBaseModel({
     this.duration = const Duration(milliseconds: 250),
     this.imageLink,
     this.gradient,
+    this.value,
     this.sortNumber = 0,
   });
 
@@ -47,8 +50,8 @@ _stringToGradient(val) {
       return GradientFoundation.buttonGradientLinear;
     case 'defaultRadialGradient':
       return GradientFoundation.defaultRadialGradient;
-    case 'buttonGradient':
-      return GradientFoundation.buttonGradient;
+    // case 'buttonGradient':
+    //   return GradientFoundation.buttonGradient;
     case 'weatherOffState':
       return GradientFoundation.weatherOffState;
     case 'solidSurfaceLinearGradient':

@@ -159,102 +159,102 @@ class ComponentsTestPage extends StatelessWidget {
                               nameController: TextEditingController(),
                               nickNameController: TextEditingController(),
                               aboutUserModel: UiAboutUserModel(
-                                religions: [
-                                  UiKitBorderedChipWithIconData(
-                                      title: 'Buddism',
-                                      icon: ImageWidget(
-                                        rasterAsset: GraphicsFoundation
-                                            .instance.png.buddismFlag,
-                                      ),
-                                      isSelected: false),
-                                  UiKitBorderedChipWithIconData(
-                                      title: 'Islam',
-                                      icon: ImageWidget(
-                                        rasterAsset: GraphicsFoundation
-                                            .instance.png.muslimFlag,
-                                      ),
-                                      isSelected: false),
-                                  UiKitBorderedChipWithIconData(
-                                      title: 'Christianity',
-                                      icon: ImageWidget(
-                                        rasterAsset: GraphicsFoundation
-                                            .instance.png.jordanFlag,
-                                      ),
-                                      isSelected: false)
-                                ],
-                                genders: [
-                                  UiKitSignWithCaptionModel(
-                                    caption: 'Male',
-                                    sign: ImageWidget(
-                                      svgAsset:
-                                          GraphicsFoundation.instance.svg.male,
-                                    ),
-                                  ),
-                                  UiKitSignWithCaptionModel(
-                                    caption: 'Female',
-                                    sign: ImageWidget(
-                                      svgAsset:
-                                          GraphicsFoundation.instance.svg.femle,
-                                    ),
-                                  ),
-                                  UiKitSignWithCaptionModel(
-                                    caption: 'Other',
-                                    sign: ImageWidget(
-                                      svgAsset: GraphicsFoundation
-                                          .instance.svg.otherGender,
-                                    ),
-                                  ),
-                                ],
-                                personTypes: [
-                                  UiKitMenuItemTileModel<String>(
-                                    title: 'Active Tiger',
-                                    value: 'tiger',
-                                    icon: ImageWidget(
-                                      svgAsset:
-                                          GraphicsFoundation.instance.svg.tiger,
-                                    ),
-                                  ),
-                                  UiKitMenuItemTileModel<String>(
-                                    title: 'interested Adventurer',
-                                    value: 'adventurer',
-                                    icon: ImageWidget(
-                                      svgAsset: GraphicsFoundation
-                                          .instance.svg.adventure,
-                                    ),
-                                  ),
-                                  UiKitMenuItemTileModel<String>(
-                                    title: 'forever Resting sloth',
-                                    value: 'resting sloth',
-                                    icon: ImageWidget(
-                                      svgAsset:
-                                          GraphicsFoundation.instance.svg.sleep,
-                                    ),
-                                  ),
-                                  UiKitMenuItemTileModel<String>(
-                                    title: 'Active Tiger',
-                                    value: 'tiger',
-                                    icon: ImageWidget(
-                                      svgAsset:
-                                          GraphicsFoundation.instance.svg.swim,
-                                    ),
-                                  ),
-                                  UiKitMenuItemTileModel<String>(
-                                    title: 'Active Tiger',
-                                    value: 'tiger',
-                                    icon: ImageWidget(
-                                      svgAsset: GraphicsFoundation
-                                          .instance.svg.athlete,
-                                    ),
-                                  ),
-                                  UiKitMenuItemTileModel<String>(
-                                    title: 'Active Tiger',
-                                    value: 'tiger',
-                                    icon: ImageWidget(
-                                      svgAsset:
-                                          GraphicsFoundation.instance.svg.food,
-                                    ),
-                                  ),
-                                ],
+                                // religions: [
+                                //   UiKitBorderedChipWithIconData(
+                                //       title: 'Buddism',
+                                //       icon: ImageWidget(
+                                //         rasterAsset: GraphicsFoundation
+                                //             .instance.png.buddismFlag,
+                                //       ),
+                                //       isSelected: false),
+                                //   UiKitBorderedChipWithIconData(
+                                //       title: 'Islam',
+                                //       icon: ImageWidget(
+                                //         rasterAsset: GraphicsFoundation
+                                //             .instance.png.muslimFlag,
+                                //       ),
+                                //       isSelected: false),
+                                //   UiKitBorderedChipWithIconData(
+                                //       title: 'Christianity',
+                                //       icon: ImageWidget(
+                                //         rasterAsset: GraphicsFoundation
+                                //             .instance.png.jordanFlag,
+                                //       ),
+                                //       isSelected: false)
+                                // ],
+                                // genders: [
+                                //   UiKitSignWithCaptionModel(
+                                //     caption: 'Male',
+                                //     sign: ImageWidget(
+                                //       svgAsset:
+                                //           GraphicsFoundation.instance.svg.male,
+                                //     ),
+                                //   ),
+                                //   UiKitSignWithCaptionModel(
+                                //     caption: 'Female',
+                                //     sign: ImageWidget(
+                                //       svgAsset:
+                                //           GraphicsFoundation.instance.svg.femle,
+                                //     ),
+                                //   ),
+                                //   UiKitSignWithCaptionModel(
+                                //     caption: 'Other',
+                                //     sign: ImageWidget(
+                                //       svgAsset: GraphicsFoundation
+                                //           .instance.svg.otherGender,
+                                //     ),
+                                //   ),
+                                // ],
+                                // personTypes: [
+                                //   UiKitMenuItemTileModel<String>(
+                                //     title: 'Active Tiger',
+                                //     value: 'tiger',
+                                //     icon: ImageWidget(
+                                //       svgAsset:
+                                //           GraphicsFoundation.instance.svg.tiger,
+                                //     ),
+                                //   ),
+                                //   UiKitMenuItemTileModel<String>(
+                                //     title: 'interested Adventurer',
+                                //     value: 'adventurer',
+                                //     icon: ImageWidget(
+                                //       svgAsset: GraphicsFoundation
+                                //           .instance.svg.adventure,
+                                //     ),
+                                //   ),
+                                //   UiKitMenuItemTileModel<String>(
+                                //     title: 'forever Resting sloth',
+                                //     value: 'resting sloth',
+                                //     icon: ImageWidget(
+                                //       svgAsset:
+                                //           GraphicsFoundation.instance.svg.sleep,
+                                //     ),
+                                //   ),
+                                //   UiKitMenuItemTileModel<String>(
+                                //     title: 'Active Tiger',
+                                //     value: 'tiger',
+                                //     icon: ImageWidget(
+                                //       svgAsset:
+                                //           GraphicsFoundation.instance.svg.swim,
+                                //     ),
+                                //   ),
+                                //   UiKitMenuItemTileModel<String>(
+                                //     title: 'Active Tiger',
+                                //     value: 'tiger',
+                                //     icon: ImageWidget(
+                                //       svgAsset: GraphicsFoundation
+                                //           .instance.svg.athlete,
+                                //     ),
+                                //   ),
+                                //   UiKitMenuItemTileModel<String>(
+                                //     title: 'Active Tiger',
+                                //     value: 'tiger',
+                                //     icon: ImageWidget(
+                                //       svgAsset:
+                                //           GraphicsFoundation.instance.svg.food,
+                                //     ),
+                                //   ),
+                                // ],
                               ),
                             )),
                           ),
