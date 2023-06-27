@@ -17,8 +17,6 @@ class PreferencesComponent extends StatelessWidget {
       required this.onSelect})
       : super(key: key);
 
-  final GlobalKey _myKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     final subHeadline = context.uiKitTheme?.boldTextTheme.subHeadline;

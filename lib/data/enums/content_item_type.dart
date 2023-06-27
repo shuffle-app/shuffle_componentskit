@@ -13,6 +13,8 @@ enum ContentItemType {
   separator,
   @JsonValue('text')
   text,
+  @JsonValue('text_gradientable')
+  textGradientable,
   @JsonValue('image')
   image,
   @JsonValue('video')
@@ -23,6 +25,8 @@ enum ContentItemType {
   button,
   @JsonValue('single_select')
   singleSelect,
+  @JsonValue('single_dropdown')
+  singleDropdown,
   @JsonValue('multi_select')
   multiSelect,
   @JsonValue('toggles')
