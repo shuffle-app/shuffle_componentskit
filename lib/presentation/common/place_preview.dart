@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/data/base_ui_model/uibase_model.dart';
-import 'package:shuffle_components_kit/presentation/components/event/uievent_model.dart';
-import 'package:shuffle_components_kit/presentation/components/place/uiplace_model.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

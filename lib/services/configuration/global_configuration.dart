@@ -29,33 +29,26 @@ class GlobalConfiguration {
 
   Future<GlobalConfiguration> load(
       {String version = '1.0.0', String? userId}) async {
-    try {
-      File? cache = kIsWeb ? null : await _loadFromDocument();
-      late final String cacheAsString;
-      late ConfigurationModel model;
-      if (cache != null && cache.existsSync()) {
-        cacheAsString = await cache.readAsString();
-        if (cacheAsString.isNotEmpty) {
-          model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
-          //TODO change to days
-          // print('here is load from GlobalConfiguration model.updated.difference(DateTime.now()) ${model.updated.difference(DateTime.now())} ${model.updated.difference(DateTime.now()).inMinutes}');
-          if (model.updated.difference(DateTime.now()).inMinutes.abs() > 1) {
-            model = await _loadAndSaveConfig(version, userId);
-          }
-        } else {
+    File? cache = kIsWeb ? null : await _loadFromDocument();
+    late final String cacheAsString;
+    late ConfigurationModel model;
+    if (cache != null && cache.existsSync()) {
+      cacheAsString = await cache.readAsString();
+      if (cacheAsString.isNotEmpty) {
+        model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
+        //TODO change to days
+        // print('here is load from GlobalConfiguration model.updated.difference(DateTime.now()) ${model.updated.difference(DateTime.now())} ${model.updated.difference(DateTime.now()).inMinutes}');
+        if (model.updated.difference(DateTime.now()).inMinutes.abs() > 1) {
           model = await _loadAndSaveConfig(version, userId);
         }
       } else {
         model = await _loadAndSaveConfig(version, userId);
       }
-      appConfig = model;
-      if (!_completer.isCompleted) _completer.complete();
-    } catch (e, t) {
-      generalErrorCatch(e, t);
-      if (kDebugMode) {
-        rethrow;
-      }
+    } else {
+      model = await _loadAndSaveConfig(version, userId);
     }
+    appConfig = model;
+    if (!_completer.isCompleted) _completer.complete();
 
     return _singleton;
   }

@@ -35,4 +35,6 @@ Map<String, dynamic> _$ComponentFeedModelToJson(ComponentFeedModel instance) =>
 const _$PageBuilderTypeEnumMap = {
   PageBuilderType.modalBottomSheet: 'modal_bottom_sheet',
   PageBuilderType.page: 'page',
+  PageBuilderType.dialog: 'dialog',
+  PageBuilderType.generalDialog: 'general_dialog',
 };
