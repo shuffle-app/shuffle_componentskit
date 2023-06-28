@@ -7,6 +7,4 @@ enum PageBuilderType {
   page,
   @JsonValue('dialog')
   dialog,
-  @JsonValue('general_dialog')
-  generalDialog,
 }

@@ -143,7 +143,8 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentOnboardingModel.fromJson(
                             configuration.appConfig.content['onboarding']),
-                        Scaffold(body: OnboardingComponent())))),
+                        ComponentBuilder(
+                            child: Scaffold(body: OnboardingComponent()))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -152,113 +153,17 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentAboutUserModel.fromJson(
                             configuration.appConfig.content['about_user']),
-                        Scaffold(
+                        ComponentBuilder(
+                            child: Scaffold(
                           body: SafeArea(
                             child: SingleChildScrollView(
                                 child: AboutUserComponent(
                               nameController: TextEditingController(),
                               nickNameController: TextEditingController(),
-                              aboutUserModel: UiAboutUserModel(
-                                // religions: [
-                                //   UiKitBorderedChipWithIconData(
-                                //       title: 'Buddism',
-                                //       icon: ImageWidget(
-                                //         rasterAsset: GraphicsFoundation
-                                //             .instance.png.buddismFlag,
-                                //       ),
-                                //       isSelected: false),
-                                //   UiKitBorderedChipWithIconData(
-                                //       title: 'Islam',
-                                //       icon: ImageWidget(
-                                //         rasterAsset: GraphicsFoundation
-                                //             .instance.png.muslimFlag,
-                                //       ),
-                                //       isSelected: false),
-                                //   UiKitBorderedChipWithIconData(
-                                //       title: 'Christianity',
-                                //       icon: ImageWidget(
-                                //         rasterAsset: GraphicsFoundation
-                                //             .instance.png.jordanFlag,
-                                //       ),
-                                //       isSelected: false)
-                                // ],
-                                // genders: [
-                                //   UiKitSignWithCaptionModel(
-                                //     caption: 'Male',
-                                //     sign: ImageWidget(
-                                //       svgAsset:
-                                //           GraphicsFoundation.instance.svg.male,
-                                //     ),
-                                //   ),
-                                //   UiKitSignWithCaptionModel(
-                                //     caption: 'Female',
-                                //     sign: ImageWidget(
-                                //       svgAsset:
-                                //           GraphicsFoundation.instance.svg.femle,
-                                //     ),
-                                //   ),
-                                //   UiKitSignWithCaptionModel(
-                                //     caption: 'Other',
-                                //     sign: ImageWidget(
-                                //       svgAsset: GraphicsFoundation
-                                //           .instance.svg.otherGender,
-                                //     ),
-                                //   ),
-                                // ],
-                                // personTypes: [
-                                //   UiKitMenuItemTileModel<String>(
-                                //     title: 'Active Tiger',
-                                //     value: 'tiger',
-                                //     icon: ImageWidget(
-                                //       svgAsset:
-                                //           GraphicsFoundation.instance.svg.tiger,
-                                //     ),
-                                //   ),
-                                //   UiKitMenuItemTileModel<String>(
-                                //     title: 'interested Adventurer',
-                                //     value: 'adventurer',
-                                //     icon: ImageWidget(
-                                //       svgAsset: GraphicsFoundation
-                                //           .instance.svg.adventure,
-                                //     ),
-                                //   ),
-                                //   UiKitMenuItemTileModel<String>(
-                                //     title: 'forever Resting sloth',
-                                //     value: 'resting sloth',
-                                //     icon: ImageWidget(
-                                //       svgAsset:
-                                //           GraphicsFoundation.instance.svg.sleep,
-                                //     ),
-                                //   ),
-                                //   UiKitMenuItemTileModel<String>(
-                                //     title: 'Active Tiger',
-                                //     value: 'tiger',
-                                //     icon: ImageWidget(
-                                //       svgAsset:
-                                //           GraphicsFoundation.instance.svg.swim,
-                                //     ),
-                                //   ),
-                                //   UiKitMenuItemTileModel<String>(
-                                //     title: 'Active Tiger',
-                                //     value: 'tiger',
-                                //     icon: ImageWidget(
-                                //       svgAsset: GraphicsFoundation
-                                //           .instance.svg.athlete,
-                                //     ),
-                                //   ),
-                                //   UiKitMenuItemTileModel<String>(
-                                //     title: 'Active Tiger',
-                                //     value: 'tiger',
-                                //     icon: ImageWidget(
-                                //       svgAsset:
-                                //           GraphicsFoundation.instance.svg.food,
-                                //     ),
-                                //   ),
-                                // ],
-                              ),
+                              aboutUserModel: UiAboutUserModel(),
                             )),
                           ),
-                        )))),
+                        ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -267,8 +172,9 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentShuffleModel.fromJson(
                             configuration.appConfig.content['about_user']),
-                        Scaffold(
-                            body: PreferencesComponent(
+                        ComponentBuilder(
+                            child: Scaffold(
+                                body: PreferencesComponent(
                           preferences: UiPreferencesModel([
                             UiKitImportanceChip(
                                 title: 'Electronic\nMusic',
@@ -309,7 +215,7 @@ class ComponentsTestPage extends StatelessWidget {
                           ], TextEditingController()),
                           onSubmit: () {},
                           onSelect: () {},
-                        ))))),
+                        )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -318,7 +224,8 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentShuffleModel.fromJson(
                             configuration.appConfig.content['profile']),
-                        Scaffold(
+                        ComponentBuilder(
+                            child: Scaffold(
                           body: BlurredAppBarPage(
                             title: 'My card',
                             centerTitle: true,
@@ -338,7 +245,7 @@ class ComponentsTestPage extends StatelessWidget {
                               // followers: 2650,
                             )),
                           ),
-                        )))),
+                        ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -347,8 +254,9 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentShuffleModel.fromJson(
                             configuration.appConfig.content['shuffle']),
-                        Scaffold(
-                            body: ShuffleComponent(
+                        ComponentBuilder(
+                            child: Scaffold(
+                                body: ShuffleComponent(
                           shuffle: UiShuffleModel(
                               items: List.generate(
                             4,
@@ -395,7 +303,7 @@ class ComponentsTestPage extends StatelessWidget {
                                   ),
                                 ]),
                           )),
-                        ))))),
+                        )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -404,17 +312,18 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentSpinnerModel.fromJson(
                             configuration.appConfig.content['spinner']),
-                        Scaffold(
-                            body: SpinnerComponent(
-                                onEventTap: () {},
-                                onFavoriteTap: () {},
-                                spinner: UiSpinnerModel(
-                                    categories: List<String>.generate(
-                                      10,
-                                      (index) => 'Category ${index + 1}',
-                                    ),
-                                    events: List.generate(
-                                        5, (index) => event))))))),
+                        ComponentBuilder(
+                            child: Scaffold(
+                                body: SpinnerComponent(
+                                    onEventTap: () {},
+                                    onFavoriteTap: () {},
+                                    spinner: UiSpinnerModel(
+                                        categories: List<String>.generate(
+                                          10,
+                                          (index) => 'Category ${index + 1}',
+                                        ),
+                                        events: List.generate(
+                                            5, (index) => event)))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -423,16 +332,17 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentFeedModel.fromJson(
                             configuration.appConfig.content['feed']),
-                        Scaffold(
-                            // appBar: AppBar(
-                            //   backgroundColor: Colors.transparent,
-                            //   toolbarHeight: 0,
-                            //   bottomOpacity: 0,
-                            //   toolbarOpacity: 0,
-                            // ),
-                            body: SingleChildScrollView(
-                                child: FeedComponent(
-                                    feed: UiFeedModel(
+                        ComponentBuilder(
+                            child: Scaffold(
+                                // appBar: AppBar(
+                                //   backgroundColor: Colors.transparent,
+                                //   toolbarHeight: 0,
+                                //   bottomOpacity: 0,
+                                //   toolbarOpacity: 0,
+                                // ),
+                                body: SingleChildScrollView(
+                                    child: FeedComponent(
+                                        feed: UiFeedModel(
                           places: List.generate(4, (index) => place),
                           recommendedEvent: event,
                           moods: List.generate(
@@ -441,7 +351,7 @@ class ComponentsTestPage extends StatelessWidget {
                                   id: 1,
                                   title: 'Want to have some fun',
                                   logo: 'assets/images/png/crazy_emoji.png')),
-                        ))))))),
+                        )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -450,30 +360,31 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentMoodModel.fromJson(
                             configuration.appConfig.content['mood']),
-                        Scaffold(
-                            appBar: const CustomAppBar(
-                              title: 'Feeling',
-                              centerTitle: true,
-                            ),
-                            body: SingleChildScrollView(
-                                child: MoodComponent(
-                              mood: UiMoodModel(
-                                descriptionItems: [
-                                  const UiDescriptionItemModel(
-                                      active: true,
-                                      title: 'Sunny',
-                                      description: '+32'),
-                                  const UiDescriptionItemModel(
-                                      active: true,
-                                      title: 'Burned today',
-                                      description: '432'),
-                                ],
-                                title: 'need to cool down a bit?',
-                                logo: 'assets/images/png/crazy_emoji.png',
-                                id: 1,
-                                places: List.generate(4, (index) => place),
-                              ),
-                            )))))),
+                        ComponentBuilder(
+                            child: Scaffold(
+                                appBar: const CustomAppBar(
+                                  title: 'Feeling',
+                                  centerTitle: true,
+                                ),
+                                body: SingleChildScrollView(
+                                    child: MoodComponent(
+                                  mood: UiMoodModel(
+                                    descriptionItems: [
+                                      const UiDescriptionItemModel(
+                                          active: true,
+                                          title: 'Sunny',
+                                          description: '+32'),
+                                      const UiDescriptionItemModel(
+                                          active: true,
+                                          title: 'Burned today',
+                                          description: '432'),
+                                    ],
+                                    title: 'need to cool down a bit?',
+                                    logo: 'assets/images/png/crazy_emoji.png',
+                                    id: 1,
+                                    places: List.generate(4, (index) => place),
+                                  ),
+                                ))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -482,12 +393,14 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentPlaceModel.fromJson(
                             configuration.appConfig.content['place']),
-                        PlaceComponent(place: place),
-                        BottomBookingBar(
-                            model: ComponentPlaceModel.fromJson(configuration
-                                        .appConfig.content['place'])
-                                    .bookingElementModel ??
-                                BookingElementModel(version: '0'))))),
+                        ComponentBuilder(
+                            child: PlaceComponent(place: place),
+                            bottomBar: BottomBookingBar(
+                                model: ComponentPlaceModel.fromJson(
+                                            configuration
+                                                .appConfig.content['place'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -496,12 +409,14 @@ class ComponentsTestPage extends StatelessWidget {
                         context,
                         ComponentEventModel.fromJson(
                             configuration.appConfig.content['event']),
-                        EventComponent(event: event),
-                        BottomBookingBar(
-                            model: ComponentPlaceModel.fromJson(configuration
-                                        .appConfig.content['event'])
-                                    .bookingElementModel ??
-                                BookingElementModel(version: '0'))))),
+                        ComponentBuilder(
+                            child: EventComponent(event: event),
+                            bottomBar: BottomBookingBar(
+                                model: ComponentPlaceModel.fromJson(
+                                            configuration
+                                                .appConfig.content['event'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
           ],
         ),
