@@ -22,8 +22,12 @@ class PropertiesBaseModel {
       name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
   final LinearGradient? gradient;
 
-  PropertiesBaseModel({
-    this.duration = const Duration(milliseconds: 250),
+  @JsonKey(name: 'color', fromJson: _fromHex, toJson: _colorToJson)
+  final Color? color;
+
+  PropertiesBaseModel(
+    {this.color,
+      this.duration = const Duration(milliseconds: 250),
     this.imageLink,
     this.gradient,
     this.value,
@@ -66,3 +70,18 @@ _stringToGradient(val) {
 }
 
 _gradientToJson(Gradient? g) => g?.toString();
+
+_fromHex(String? hexString) {
+  if(hexString == null) return null;
+  try {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+
+    return Color(int.parse(buffer.toString(), radix: 16));
+  } catch (e) {
+    return null;
+  }
+}
+
+_colorToJson(Color? c)=>c?.toString();

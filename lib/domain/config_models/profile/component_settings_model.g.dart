@@ -1,31 +1,33 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'component_mood_model.dart';
+part of 'component_settings_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ComponentMoodModel _$ComponentMoodModelFromJson(Map<String, dynamic> json) =>
-    ComponentMoodModel(
-      showPlaces: json['show_places'] as bool?,
-      showStats: json['show_stats'] as bool?,
+ComponentSettingsModel _$ComponentSettingsModelFromJson(
+        Map<String, dynamic> json) =>
+    ComponentSettingsModel(
+      version: json['version'] as String? ?? '0',
+      content: json['content'] == null
+          ? null
+          : ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
           ? null
           : PositionModel.fromJson(
               json['position_model'] as Map<String, dynamic>),
-      version: json['version'] as String? ?? '0',
     );
 
-Map<String, dynamic> _$ComponentMoodModelToJson(ComponentMoodModel instance) =>
+Map<String, dynamic> _$ComponentSettingsModelToJson(
+        ComponentSettingsModel instance) =>
     <String, dynamic>{
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
-      'show_stats': instance.showStats,
-      'show_places': instance.showPlaces,
+      'content': instance.content,
     };
 
 const _$PageBuilderTypeEnumMap = {

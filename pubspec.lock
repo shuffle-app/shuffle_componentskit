@@ -84,11 +84,9 @@ packages:
   bubble_lens:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: c41ee0d3d8974b494ef25a0ff0e39aa664eaa1c7
-      url: "https://github.com/romancores/bubble_lens.git"
-    source: git
+      path: "../bubble_lens"
+      relative: true
+    source: path
     version: "2.0.0"
   build:
     dependency: transitive

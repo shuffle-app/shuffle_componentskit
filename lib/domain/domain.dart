@@ -7,6 +7,7 @@ export 'config_models/search/component_search_model.dart';
 export 'config_models/place/component_place_model.dart';
 export 'config_models/profile/component_edit_profile_model.dart';
 export 'config_models/profile/component_edit_profile_preferences_model.dart';
+export 'config_models/profile/component_settings_model.dart';
 export 'config_models/shuffle/component_shuffle_model.dart';
 export 'config_models/spinner/component_spinner_model.dart';
 export 'config_models/onboarding/component_onboarding_model.dart';

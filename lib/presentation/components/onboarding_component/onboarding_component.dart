@@ -22,14 +22,8 @@ class OnboardingComponent extends StatefulWidget {
                 autoSwitchDuration: e.value.duration!))
             .toList() ??
         [];
-    items.sort((a, b) {
-      print('comparing ${a.title} and ${b.title}');
-      print(rawItems?[a.title]?.sortNumber);
-      print(rawItems?[b.title]?.sortNumber);
-
-      return (rawItems?[a.title]?.sortNumber ?? 0)
-          .compareTo((rawItems?[b.title]?.sortNumber ?? 0));
-    });
+    items.sort((a, b) =>(rawItems?[a.title]?.sortNumber ?? 0)
+          .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
   }
 
   Duration get transitionDuration =>

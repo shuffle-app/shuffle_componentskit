@@ -22,27 +22,27 @@ class SearchComponent extends StatelessWidget {
       this.onFreeCardPressed});
 
   final _decorationItemsForFreeCards = [
-    OverflownActionCardDecorationIconData(
+    ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.coin.path,
         position: DecorationIconPosition(top: 4, right: -4),
         iconSize: 24,
         rotationAngle: -26),
-    OverflownActionCardDecorationIconData(
+    ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.coin.path,
         iconSize: 27,
         position: DecorationIconPosition(bottom: 0, right: 64),
         rotationAngle: 47.5),
-    OverflownActionCardDecorationIconData(
+    ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.icecream.path,
         iconSize: 40,
         position: DecorationIconPosition(right: 86, bottom: 0),
         rotationAngle: -15),
-    OverflownActionCardDecorationIconData(
+    ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.firstAidKit.path,
         iconSize: 44,
         position: DecorationIconPosition(top: 32, right: 69),
         rotationAngle: 30),
-    OverflownActionCardDecorationIconData(
+    ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.coin.path,
         iconSize: 34,
         position: DecorationIconPosition(top: 8, right: 30),

@@ -163,21 +163,26 @@ class AboutUserComponent extends StatelessWidget {
                         ?.title?.entries.first.value.properties?.keys.first ??
                     'Describe yourself',
                 selectedItem: aboutUserModel.selectedPersonType,
-                items: model
-                        .content
-                        .body?[ContentItemType.singleDropdown]
-                        ?.body?[ContentItemType.singleDropdown]
-                        ?.properties
-                        ?.entries
-                        .map<UiKitMenuItem<String>>(
-                          (e) => UiKitMenuItem<String>(
-                            title: e.key,
-                            value: e.value.value,
-                            icon: ImageWidget(link: e.value.imageLink),
-                          ),
-                        )
-                        .toList() ??
-                    [],
+                items: () {
+                  final rawItems = model
+                      .content
+                      .body?[ContentItemType.singleDropdown]
+                      ?.body?[ContentItemType.singleDropdown]
+                      ?.properties;
+
+                  return (rawItems?.entries
+                          .map<UiKitMenuItem<String>>(
+                            (e) => UiKitMenuItem<String>(
+                              title: e.key,
+                              value: e.value.value,
+                              icon: ImageWidget(link: e.value.imageLink),
+                            ),
+                          )
+                          .toList() ??
+                      [])
+                    ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0)
+                        .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+                }(),
                 onSelected: (personType) =>
                     onPersonTypeChanged?.call(personType),
               )),
@@ -190,36 +195,42 @@ class AboutUserComponent extends StatelessWidget {
                   'Select your religions',
               hasError: aboutUserModel.errorReligionMessage != null,
               errorText: aboutUserModel.errorReligionMessage,
-              child:  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Wrap(
-                      spacing: SpacingFoundation.horizontalSpacing8,
-                      children: model
-                              .content
-                              .body?[ContentItemType.multiSelect]
-                              ?.body?[ContentItemType.multiSelect]
-                              ?.properties
-                              ?.entries
-                              .map((e) {
-                            return SizedBox(
-                            height: 40,
-                            child: UiKitBorderedChipWithIcon(
-                              icon: ImageWidget(
-                                link: e.value.imageLink,
-                              ),
-                              title: e.key,
-                              isSelected: aboutUserModel.selectedReligions
-                                      ?.contains(e.key) ??
-                                  false,
-                              onPressed: () => onReligionSelected?.call(e.key),
-                            ));
-                          }).toList() ??
-                          [],
-                    ).paddingOnly(
-                      left: EdgeInsetsFoundation.horizontal4,
-                      bottom: EdgeInsetsFoundation.vertical4,
-                    ),
-                  )),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Wrap(
+                  spacing: SpacingFoundation.horizontalSpacing8,
+                  children: () {
+                    final rawItems = model
+                        .content
+                        .body?[ContentItemType.multiSelect]
+                        ?.body?[ContentItemType.multiSelect]
+                        ?.properties;
+
+                    final items = (rawItems?.entries.map((e) {
+                          return UiKitBorderedChipWithIcon(
+                            icon: ImageWidget(
+                              link: e.value.imageLink,
+                            ),
+                            title: e.key,
+                            isSelected: aboutUserModel.selectedReligions
+                                    ?.contains(e.key) ??
+                                false,
+                            onPressed: () => onReligionSelected?.call(e.key),
+                          );
+                        }).toList() ??
+                        [])
+                      ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0)
+                          .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+
+                    return items
+                        .map((e) => SizedBox(height: 40, child: e))
+                        .toList();
+                  }(),
+                ).paddingOnly(
+                  left: EdgeInsetsFoundation.horizontal4,
+                  bottom: EdgeInsetsFoundation.vertical4,
+                ),
+              )),
         ],
         SpacingFoundation.verticalSpace16,
         UiKitHorizontalWheelNumberSelector(
@@ -240,26 +251,34 @@ class AboutUserComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SpacingFoundation.horizontalSpace16,
-                ...model
-                        .content
-                        .body?[ContentItemType.singleSelect]
-                        ?.body?[ContentItemType.singleSelect]
-                        ?.properties
-                        ?.entries
-                        .map(
-                          (e) => Expanded(
-                            child: UiKitVerticalChip(
-                              selected: aboutUserModel.selectedGender == e.key,
-                              caption: e.key,
-                              sign: ImageWidget(link: e.value.imageLink),
-                              autoSizeGroup: genderGroup,
-                              onTap: () => onGenderChanged?.call(e.key),
-                            ).paddingOnly(
+                ...() {
+                  final rawItems = model
+                      .content
+                      .body?[ContentItemType.singleSelect]
+                      ?.body?[ContentItemType.singleSelect]
+                      ?.properties;
+
+                  final items = (rawItems?.entries
+                          .map((e) => UiKitVerticalChip(
+                                selected:
+                                    aboutUserModel.selectedGender == e.key,
+                                caption: e.key,
+                                sign: ImageWidget(link: e.value.imageLink),
+                                autoSizeGroup: genderGroup,
+                                onTap: () => onGenderChanged?.call(e.key),
+                              ))
+                          .toList() ??
+                      [])
+                    ..sort((a, b) => (rawItems?[a.caption]?.sortNumber ?? 0)
+                        .compareTo((rawItems?[b.caption]?.sortNumber ?? 0)));
+
+                  return items
+                      .map((e) => Expanded(
+                            child: e.paddingOnly(
                                 right: EdgeInsetsFoundation.horizontal4),
-                          ),
-                        )
-                        .toList() ??
-                    [],
+                          ))
+                      .toList();
+                }(),
                 SpacingFoundation.horizontalSpace16,
               ],
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
