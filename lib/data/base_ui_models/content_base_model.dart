@@ -15,7 +15,7 @@ class ContentBaseModel {
   @JsonKey(name: 'properties')
   final Map<String,PropertiesBaseModel>? properties;
 
-  ContentBaseModel({
+  const ContentBaseModel({
     this.title,
     this.body,
     this.properties,

@@ -141,7 +141,7 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show onboarding',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentOnboardingModel.fromJson(
+                        ComponentModel.fromJson(
                             configuration.appConfig.content['onboarding']),
                         ComponentBuilder(
                             child: Scaffold(body: OnboardingComponent()))))),
@@ -151,7 +151,7 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show about user step 1',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentAboutUserModel.fromJson(
+                        ComponentModel.fromJson(
                             configuration.appConfig.content['about_user']),
                         ComponentBuilder(
                             child: Scaffold(

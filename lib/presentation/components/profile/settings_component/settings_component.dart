@@ -13,7 +13,7 @@ class SettingsComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config = GlobalConfiguration().appConfig.content['profile_settings'];
-    final model = ComponentSettingsModel.fromJson(config);
+    final model = ComponentModel.fromJson(config);
 
     final titleAligment = model.positionModel?.titleAlignment;
     final bodyAligment = model.positionModel?.bodyAlignment;
@@ -27,12 +27,12 @@ class SettingsComponent extends StatelessWidget {
     const double iconWidht = 20.0;
 
     final Map<String, PropertiesBaseModel> buttons =
-    Map.of(model.content!.body?[ContentItemType.button]?.properties ?? {}).map((
+    Map.of(model.content.body?[ContentItemType.button]?.properties ?? {}).map((
         key, value) => MapEntry(key.toUpperCase(), value))
       ..removeWhere((key, value) => value.color != null);
 
     final Map<String, PropertiesBaseModel> redButtons =
-    Map.of(model.content!.body?[ContentItemType.button]?.properties ?? {}).map((
+    Map.of(model.content.body?[ContentItemType.button]?.properties ?? {}).map((
         key, value) => MapEntry(key.toUpperCase(), value))
       ..removeWhere((key, value) => value.color == null);
 
@@ -73,14 +73,14 @@ class SettingsComponent extends StatelessWidget {
             .compareTo(redButtons[b.text]!.sortNumber!));
 
     return Column(children: [
-      if (model.content!.title != null)
+      if (model.content.title != null)
         Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: titleAligment.crossAxisAlignment,
             mainAxisAlignment: titleAligment.mainAxisAlignment,
             children: [
               Text(
-                model.content!.title![ContentItemType.text]?.properties?.keys
+                model.content.title![ContentItemType.text]?.properties?.keys
                     .first ??
                     'Settings',
                 style: textStyle?.title1,

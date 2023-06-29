@@ -1,17 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'component_settings_model.dart';
+part of 'component_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ComponentSettingsModel _$ComponentSettingsModelFromJson(
-        Map<String, dynamic> json) =>
-    ComponentSettingsModel(
+ComponentModel _$ComponentModelFromJson(Map<String, dynamic> json) =>
+    ComponentModel(
       version: json['version'] as String? ?? '0',
       content: json['content'] == null
-          ? null
+          ? const ContentBaseModel()
           : ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
@@ -21,8 +20,7 @@ ComponentSettingsModel _$ComponentSettingsModelFromJson(
               json['position_model'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$ComponentSettingsModelToJson(
-        ComponentSettingsModel instance) =>
+Map<String, dynamic> _$ComponentModelToJson(ComponentModel instance) =>
     <String, dynamic>{
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
