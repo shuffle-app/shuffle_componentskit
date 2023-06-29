@@ -9,7 +9,7 @@ class PreferencesComponent extends StatelessWidget {
   final Function onSelect;
   final bool isLoading;
 
-  PreferencesComponent(
+  const PreferencesComponent(
       {Key? key,
       this.onSubmit,
       required this.preferences,
@@ -24,8 +24,8 @@ class PreferencesComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentAboutUserModel model =
-        ComponentAboutUserModel.fromJson(config['about_user']);
+    final ComponentModel model =
+    ComponentModel.fromJson(config['about_user']);
     final horizontalMargin =
         (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin =

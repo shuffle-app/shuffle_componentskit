@@ -1,4 +1,3 @@
-import 'package:shuffle_components_kit/data/data.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +6,12 @@ class NotificationsComponent extends StatelessWidget {
   final PositionModel? screenParams;
   final VoidCallback seeAllNotificationsCallback;
   final List<UiKitGradientSwitchTile>? params;
+  final bool hasNotifications;
 
   const NotificationsComponent(
       {super.key,
       this.screenParams,
+        this.hasNotifications = false,
       required this.seeAllNotificationsCallback,
       this.params});
 
@@ -27,6 +28,7 @@ class NotificationsComponent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: bodyAlignment.crossAxisAlignment,
             children: [
+              if(hasNotifications)
               UiKitDecoratedActionCard(
                 title: 'Notifications',
                 action: context.smallButton(

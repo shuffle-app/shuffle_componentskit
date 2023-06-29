@@ -11,7 +11,7 @@ abstract class UiBaseModel {
   @JsonKey(name: 'position_model')
   final PositionModel? positionModel;
 
-  UiBaseModel(
+  const UiBaseModel(
       {required this.version,
       required this.pageBuilderType,
       this.positionModel});

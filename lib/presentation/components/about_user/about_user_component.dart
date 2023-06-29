@@ -40,8 +40,8 @@ class AboutUserComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentAboutUserModel model =
-        ComponentAboutUserModel.fromJson(config['about_user']);
+    final ComponentModel model =
+    ComponentModel.fromJson(config['about_user']);
     final horizontalMargin =
         (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin =

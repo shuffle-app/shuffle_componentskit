@@ -17,6 +17,8 @@ export 'components/profile/edit_profile_component/ui_edit_default_profile_model.
 export 'components/profile/profile_component.dart';
 export 'components/profile/settings_component/settings_component.dart';
 export 'components/profile/notifications_component/notifications_component.dart';
+export 'components/profile/notifications_component/notifications_list_component.dart';
+export 'components/profile/followings_component/followings_component.dart';
 export 'components/profile/profile_preferences/edit_default_profile_preferences_component.dart';
 export 'components/profile/profile_preferences/ui_edit_default_profile_preferences_model.dart';
 export 'components/profile/uiprofile_model.dart';

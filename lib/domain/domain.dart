@@ -1,4 +1,3 @@
-export 'config_models/about_user/component_about_user_model.dart';
 export 'config_models/common/booking_element_model.dart';
 export 'config_models/event/component_event_model.dart';
 export 'config_models/feed/component_feed_model.dart';
@@ -7,9 +6,8 @@ export 'config_models/search/component_search_model.dart';
 export 'config_models/place/component_place_model.dart';
 export 'config_models/profile/component_edit_profile_model.dart';
 export 'config_models/profile/component_edit_profile_preferences_model.dart';
-export 'config_models/profile/component_settings_model.dart';
+export 'config_models/universal_model/component_model.dart';
 export 'config_models/shuffle/component_shuffle_model.dart';
 export 'config_models/spinner/component_spinner_model.dart';
-export 'config_models/onboarding/component_onboarding_model.dart';
 export 'data_uimodels/uidescriptionitem_model.dart';
 export 'data_uimodels/uiowner_model.dart';

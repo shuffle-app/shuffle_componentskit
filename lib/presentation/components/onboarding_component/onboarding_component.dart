@@ -5,11 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingComponent extends StatefulWidget {
   late final List<OnBoardingPageItem> items;
-  late final ComponentOnboardingModel model;
+  late final ComponentModel model;
   final VoidCallback? onFinished;
 
   OnboardingComponent({super.key, this.onFinished}) {
-    model = ComponentOnboardingModel.fromJson(
+    model = ComponentModel.fromJson(
         GlobalConfiguration().appConfig.content['onboarding']);
     final rawItems = model.content.body?.entries
         .firstWhere((element) => element.key == ContentItemType.onboardingCard)
