@@ -12,6 +12,9 @@ class PropertiesBaseModel {
   @JsonKey(name: 'duration', fromJson: _intToDuration)
   final Duration? duration;
 
+  @JsonKey(name: 'startDelay', fromJson: _intToDuration)
+  final Duration? startDelay;
+
   @JsonKey(name: 'imageLink')
   final String? imageLink;
 
@@ -25,12 +28,13 @@ class PropertiesBaseModel {
   @JsonKey(name: 'color', fromJson: _fromHex, toJson: _colorToJson)
   final Color? color;
 
-  PropertiesBaseModel(
-    {this.color,
-      this.duration = const Duration(milliseconds: 250),
+  PropertiesBaseModel({
+    this.color,
+    this.duration = const Duration(milliseconds: 250),
     this.imageLink,
     this.gradient,
     this.value,
+    this.startDelay,
     this.sortNumber = 0,
   });
 
@@ -72,7 +76,7 @@ _stringToGradient(val) {
 _gradientToJson(Gradient? g) => g?.toString();
 
 _fromHex(String? hexString) {
-  if(hexString == null) return null;
+  if (hexString == null) return null;
   try {
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
@@ -84,4 +88,4 @@ _fromHex(String? hexString) {
   }
 }
 
-_colorToJson(Color? c)=>c?.toString();
+_colorToJson(Color? c) => c?.toString();

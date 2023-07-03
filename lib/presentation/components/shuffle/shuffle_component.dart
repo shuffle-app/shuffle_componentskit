@@ -136,7 +136,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
 
                           switch (direction) {
                             case CardSwiperDirection.bottom:
-                              return false;
+                              return true;
                             case CardSwiperDirection.top:
                               if (widget.onFavorite != null && (model.showFavorite ?? true)) {
                                 widget.onFavorite!(widget.shuffle.items[currentIndex].title);

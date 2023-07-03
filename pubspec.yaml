@@ -34,6 +34,7 @@ dependencies:
       url: https://github.com/romancores/bubble_lens.git
 
 
+  url_launcher: ^6.1.11
 dev_dependencies:
   flutter_test:
     sdk: flutter

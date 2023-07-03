@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class PlaceComponent extends StatelessWidget {
   final UiPlaceModel place;
@@ -9,11 +10,15 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentPlaceModel model = ComponentPlaceModel.fromJson(config['place']);
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+            GlobalConfiguration().appConfig.content;
+    final ComponentPlaceModel model =
+        ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return Column(
       children: [
@@ -28,7 +33,9 @@ class PlaceComponent extends StatelessWidget {
               horizontalMargin: horizontalMargin,
             ),
           ],
-        ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
+        ).paddingSymmetric(
+            horizontal: horizontalMargin,
+            vertical: SpacingFoundation.verticalSpacing16),
         Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -51,10 +58,21 @@ class PlaceComponent extends StatelessWidget {
               crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
               childAspectRatio: 2,
               children: place.descriptionItems!
-                  .map((e) => TitledAccentInfo(
+                  .map((e) => GestureDetector(
+                      onTap: () {
+                        if (e.description.startsWith('http')) {
+                          launchUrlString(e.description);
+                        } else if (e.description
+                            .replaceAll(RegExp(r'[0-9]'), '')
+                            .replaceAll('+', '').trim()
+                            .isEmpty) {
+                          launchUrlString('tel:${e.description}');
+                        }
+                      },
+                      child: TitledAccentInfo(
                         title: e.title,
                         info: e.description,
-                      ))
+                      )))
                   .toList(),
             ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,

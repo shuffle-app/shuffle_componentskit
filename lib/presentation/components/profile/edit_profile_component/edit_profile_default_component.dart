@@ -11,7 +11,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
-  final String? Function(String?)? textValidator;
+  final String? Function(String?)? nameValidator;
   final String? Function(String?)? emailValidator;
   final String? Function(String?)? phoneValidator;
   final String? Function(String?)? dateOfBirthValidator;
@@ -33,7 +33,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
       this.formKey,
       this.onPhotoChangeRequested,
       this.onPreferencesChanged,
-      this.textValidator,
+      this.nameValidator,
       this.emailValidator,
       this.avatarUrl,
       this.phoneValidator,
@@ -93,14 +93,14 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 UiKitInputFieldNoFill(
                   controller: nameController,
                   label: 'Name',
-                  validator: textValidator,
+                  validator: nameValidator,
                   keyboardType: TextInputType.name,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: nickNameController,
                   label: 'Nickname',
-                  validator: textValidator,
+                  validator: nameValidator,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(

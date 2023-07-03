@@ -139,6 +139,7 @@ class SearchComponent extends StatelessWidget {
                                   GraphicsFoundation.instance.png.map.path,
                               decorationIcons: _decorationItemsForFreeCards)
                         ],
+                        SpacingFoundation.verticalSpace24,
                         Text('Choose yourself',
                                 style: theme?.boldTextTheme.title1)
                             .paddingSymmetric(horizontal: horizontalMargin),
