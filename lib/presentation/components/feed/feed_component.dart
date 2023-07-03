@@ -80,8 +80,8 @@ class FeedComponent extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final horizontalMargin =
         (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final horizontalWidthBox =
-        (horizontalMargin - SpacingFoundation.horizontalSpacing4).widthBox;
+    // final horizontalWidthBox =
+    //     (horizontalMargin - SpacingFoundation.horizontalSpacing4).widthBox;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
@@ -177,12 +177,13 @@ class FeedComponent extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    horizontalWidthBox,
+                    horizontalMargin.widthBox,
+                    // horizontalWidthBox,
                     context.gradientButton(
                       data: BaseUiKitButtonData(
                           icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.dice,
-                            height: 16,
+                            height: 17,
                             fit: BoxFit.fitHeight,
                           ),
                           onPressed: onTagSortPressed == null

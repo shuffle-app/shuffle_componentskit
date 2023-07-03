@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class EventComponent extends StatelessWidget {
   final UiEventModel event;
@@ -70,10 +71,23 @@ class EventComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             if (event.descriptionItems != null)
               ...event.descriptionItems!
-                  .map((e) => TitledAccentInfo(
-                        title: e.title,
-                        info: e.description,
-                      ).paddingSymmetric(
+                  .map((e) => GestureDetector(
+                          onTap: () {
+                            if (e.description.startsWith('http')) {
+                              launchUrlString(e.description);
+                            } else if (e.description
+                                .replaceAll(RegExp(r'[0-9]'), '')
+                                .replaceAll('+', '')
+                                .trim()
+                                .isEmpty) {
+                              launchUrlString('tel:${e.description}');
+                            }
+                          },
+                          child: TitledAccentInfo(
+                            title: e.title,
+                            info: e.description,
+                          ))
+                      .paddingSymmetric(
                           vertical: SpacingFoundation.verticalSpacing4))
                   .toList(),
             SpacingFoundation.verticalSpace16,
