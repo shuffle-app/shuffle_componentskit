@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -66,6 +68,7 @@ class PlaceComponent extends StatelessWidget {
                             .replaceAll(RegExp(r'[0-9]'), '')
                             .replaceAll('+', '').trim()
                             .isEmpty) {
+                          log('launching $e.description',name: 'PlaceComponent');
                           launchUrlString('tel:${e.description}');
                         }
                       },
