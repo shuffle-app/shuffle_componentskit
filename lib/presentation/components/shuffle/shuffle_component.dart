@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/src/result/file_info.dart';
+// import 'package:flutter_cache_manager/src/result/file_info.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:palette_generator/palette_generator.dart';
+// import 'package:palette_generator/palette_generator.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -48,16 +48,16 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
 
   Future<void> _getColor(String imageLink) async {
     if (imageLink.isEmpty) return;
-    late final PaletteGenerator paletteGenerator;
-    if (imageLink.substring(0, 4) == 'http') {
-      final file = await CustomCacheManager.instance.getFileStream(imageLink).firstWhere((element) => element is FileInfo);
-      paletteGenerator = await PaletteGenerator.fromImageProvider(Image.file((file as FileInfo).file).image);
-    } else {
-      paletteGenerator = await PaletteGenerator.fromImageProvider(Image.asset(
-        imageLink,
-        package: 'shuffle_uikit',
-      ).image);
-    }
+    // late final PaletteGenerator paletteGenerator;
+    // if (imageLink.substring(0, 4) == 'http') {
+    //   final file = await CustomCacheManager.instance.getFileStream(imageLink).firstWhere((element) => element is FileInfo);
+    //   paletteGenerator = await PaletteGenerator.fromImageProvider(Image.file((file as FileInfo).file).image);
+    // } else {
+    //   paletteGenerator = await PaletteGenerator.fromImageProvider(Image.asset(
+    //     imageLink,
+    //     package: 'shuffle_uikit',
+    //   ).image);
+    // }
     setState(() {
       // final dominantColor = paletteGenerator.dominantColor?.color ?? Colors.black12;
 

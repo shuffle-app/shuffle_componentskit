@@ -84,11 +84,16 @@ class FeedComponent extends StatelessWidget {
     //     (horizontalMargin - SpacingFoundation.horizontalSpacing4).widthBox;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
-    return Column(
-        mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-        children: [
-          SpacingFoundation.verticalSpace16,
+
+    return CustomScrollView(
+        controller: ScrollController(),
+        slivers:
+            // Column(
+            //   mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+            //   crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+            //   children:
+            [
+          SpacingFoundation.verticalSpace16.wrapSliverBox,
           if (feed.recommendedEvent != null &&
               (model.showDailyRecomendation ?? true)) ...[
             SafeArea(
@@ -108,8 +113,8 @@ class FeedComponent extends StatelessWidget {
                     width: double.infinity,
                     errorWidget: const UiKitBigPhotoErrorWidget(),
                   ),
-                )).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace24,
+                )).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+            SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
           if (feed.moods != null && (model.showFeelings ?? true)) ...[
             Stack(
@@ -136,8 +141,8 @@ class FeedComponent extends StatelessWidget {
                     ),
                   ),
               ],
-            ).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace16,
+            ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+            SpacingFoundation.verticalSpace16.wrapSliverBox,
             SingleChildScrollView(
               primary: false,
               scrollDirection: Axis.horizontal,
@@ -161,17 +166,17 @@ class FeedComponent extends StatelessWidget {
                   const SizedBox.shrink(),
                 ],
               ),
-            ),
-            SpacingFoundation.verticalSpace24,
+            ).wrapSliverBox,
+            SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
           if (feed.places != null && (model.showPlaces ?? true)) ...[
             Text(
               'You better check this out',
               style: themeTitleStyle,
               textAlign: TextAlign.left,
-            ).paddingSymmetric(horizontal: horizontalMargin),
+            ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
-              SpacingFoundation.verticalSpace8,
+              SpacingFoundation.verticalSpace8.wrapSliverBox,
               SingleChildScrollView(
                 primary: false,
                 scrollDirection: Axis.horizontal,
@@ -219,22 +224,38 @@ class FeedComponent extends StatelessWidget {
                             .toList()),
                   ],
                 ),
-              ),
+              ).wrapSliverBox,
             ],
-            SpacingFoundation.verticalSpace4,
-            ...
-            feed.places!.map((e) => PlacePreview(
-                  onTap: onPlacePressed,
-                  place: e,
-                  model: model,
-                )
-            // feed.mixedItems
-            //     ?.map((e) => e.
-                .paddingSymmetric(
-                    vertical: SpacingFoundation.verticalSpacing12)),
-            //     .toList(),
-            kBottomNavigationBarHeight.heightBox,
+            SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
+          SliverList.separated(
+              //     ],
+              // body:
+              // ListView.separated(
+              //     shrinkWrap: true,
+              //     primary: false,
+              itemBuilder: (_, index) => index == feed.places!.length
+                  ? kBottomNavigationBarHeight.heightBox
+                  : PlacePreview(
+                      onTap: onPlacePressed,
+                      place: feed.places![index],
+                      model: model,
+                    ),
+              separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
+              itemCount: feed.places!.length + 1)
+          // ...
+          // feed.places!.map((e) => PlacePreview(
+          //       onTap: onPlacePressed,
+          //       place: e,
+          //       model: model,
+          //     )
+          // feed.mixedItems
+          //     ?.map((e) => e.
+          //     .paddingSymmetric(
+          //         vertical: SpacingFoundation.verticalSpacing12)),
+          //     .toList(),
+          // ,
+          // ],
         ]).paddingSymmetric(
       vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
