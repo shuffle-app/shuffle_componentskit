@@ -161,7 +161,9 @@ class SearchComponent extends StatelessWidget {
                               const SizedBox.shrink()
                             ])),
                         SpacingFoundation.verticalSpace24,
-                        Stack(children: [
+                        Stack(
+                            clipBehavior: Clip.none,
+                            children: [
                           Text('Top places rated\nby',
                               style: theme?.boldTextTheme.title1),
                           () {
