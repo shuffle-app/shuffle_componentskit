@@ -34,7 +34,8 @@ class PlacePreview extends StatelessWidget {
             title: event.title ?? '',
             description: event.description ?? '',
             media: event.media!,
-            tags: event.tags ?? []);
+            tags: event.tags ?? [],
+            baseTags: event.baseTags ?? []);
 
   @override
   Widget build(BuildContext context) {
@@ -51,31 +52,29 @@ class PlacePreview extends StatelessWidget {
           children: [
             Align(
                 alignment: Alignment.center,
-                child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
+                child: Stack(clipBehavior: Clip.none, children: [
                   UiKitPhotoSlider(
                     media: place.media,
                     onTap: onTap != null ? () => onTap!(place.id) : null,
                     width: size.width - horizontalMargin * 2,
                     height: 156.h,
                   ),
-                  if(showFavoriteBtn)
-                  Positioned(
-                    bottom: -20.h,
-                      right: -5.w,
-                      child: context.button(
-                          blurred: true,
-                          data: BaseUiKitButtonData(
-                              onPressed: onFavoriteChanged,
-                              icon: ImageWidget(
-                                  height: isFavorite ?  15.w : null,
-                                  fit: isFavorite ? BoxFit.fitWidth : null,
-                                  color: Colors.white,
-                                  svgAsset: isFavorite
-                                      ? GraphicsFoundation.instance.svg.star
-                                      : GraphicsFoundation
-                                          .instance.svg.starOutline)))),
+                  if (showFavoriteBtn)
+                    Positioned(
+                        bottom: -20.h,
+                        right: -5.w,
+                        child: context.button(
+                            blurred: true,
+                            data: BaseUiKitButtonData(
+                                onPressed: onFavoriteChanged,
+                                icon: ImageWidget(
+                                    height: isFavorite ? 15.w : null,
+                                    fit: isFavorite ? BoxFit.fitWidth : null,
+                                    color: Colors.white,
+                                    svgAsset: isFavorite
+                                        ? GraphicsFoundation.instance.svg.star
+                                        : GraphicsFoundation
+                                            .instance.svg.starOutline)))),
                 ])),
             SpacingFoundation.verticalSpace8,
             Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)

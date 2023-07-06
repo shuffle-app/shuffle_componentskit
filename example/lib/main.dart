@@ -343,7 +343,7 @@ class ComponentsTestPage extends StatelessWidget {
                                 body: SingleChildScrollView(
                                     child: FeedComponent(
                                         feed: UiFeedModel(
-                          places: List.generate(4, (index) => place),
+                          mixedItems: List.generate(4, (index) => item),
                           recommendedEvent: event,
                           moods: List.generate(
                               4,
@@ -490,6 +490,99 @@ class ComponentsTestPage extends StatelessWidget {
         iconPath: 'assets/images/svg/cocktail.svg',
         unique: true),
   ];
+
+  final UiUniversalModel item = UiUniversalModel(
+      title: 'title',
+      id: 1,
+      media: [
+        UiKitMediaVideo(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+        UiKitMediaPhoto(
+          link: 'assets/images/png/place.png',
+        ),
+      ],
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+          'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+          'Nulla facilisi. '
+          'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+          'Nulla facilisi',
+      tags: [
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+        UiKitTag(
+            title: 'uniqueCheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: false),
+        UiKitTag(
+            title: 'Cheap',
+            iconPath: 'assets/images/svg/cocktail.svg',
+            unique: true),
+      ],
+      type: UiPlaceModel);
 
   final UiPlaceModel place = UiPlaceModel(
       title: 'title',
