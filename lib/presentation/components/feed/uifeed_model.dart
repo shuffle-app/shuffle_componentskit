@@ -5,8 +5,7 @@ class UiFeedModel {
   final UiEventModel? recommendedEvent;
   final bool showHowItWorks;
   final List<UiMoodModel>? moods;
-  final List<UiPlaceModel>? places;
-  final List<PlacePreview>? mixedItems;
+  final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
 
@@ -16,6 +15,24 @@ class UiFeedModel {
       this.recommendedEvent,
       this.showHowItWorks = false,
       this.moods,
-      this.mixedItems,
-      this.places});
+      this.mixedItems});
+}
+
+class UiUniversalModel {
+  final int id;
+  final Type type;
+  final List<BaseUiKitMedia> media;
+  final String description;
+  final List<UiKitTag> tags;
+  final List<UiKitTag>? baseTags;
+  final String? title;
+
+  UiUniversalModel(
+      {required this.id,
+      required this.type,
+      required this.media,
+      required this.description,
+      required this.tags,
+      this.baseTags,
+      this.title});
 }
