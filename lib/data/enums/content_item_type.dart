@@ -35,4 +35,6 @@ enum ContentItemType {
   progressBars,
   @JsonValue('onboarding_card')
   onboardingCard,
+  @JsonValue('page_opener')
+  pageOpener,
 }

@@ -49,4 +49,5 @@ const _$ContentItemTypeEnumMap = {
   ContentItemType.toggles: 'toggles',
   ContentItemType.progressBars: 'progress_bars',
   ContentItemType.onboardingCard: 'onboarding_card',
+  ContentItemType.pageOpener: 'page_opener',
 };

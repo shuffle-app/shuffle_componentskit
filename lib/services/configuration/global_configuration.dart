@@ -11,15 +11,19 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 class GlobalConfiguration {
   static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
   static String _configUrl = ConfigConstants.configUrl;
+  static int _timeout = 1;
   final Completer _completer = Completer();
   ConfigurationModel appConfig = ConfigurationModel(
       updated: DateTime.now(), content: {}, theme: 'default');
 
   bool get isLoaded => _completer.isCompleted;
 
-  factory GlobalConfiguration([String? configUrl]) {
+  factory GlobalConfiguration([String? configUrl,int? timeout]) {
     if (configUrl != null) {
       _configUrl = configUrl;
+    }
+    if(timeout!= null){
+      _timeout = timeout;
     }
 
     return _singleton;
@@ -38,7 +42,7 @@ class GlobalConfiguration {
         model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
         //TODO change to days
         // print('here is load from GlobalConfiguration model.updated.difference(DateTime.now()) ${model.updated.difference(DateTime.now())} ${model.updated.difference(DateTime.now()).inMinutes}');
-        if (model.updated.difference(DateTime.now()).inMinutes.abs() > 1) {
+        if (model.updated.difference(DateTime.now()).inMinutes.abs() > _timeout) {
           model = await _loadAndSaveConfig(version, userId);
         }
       } else {

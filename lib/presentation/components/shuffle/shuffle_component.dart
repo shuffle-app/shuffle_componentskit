@@ -177,7 +177,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                         final svg = GraphicsFoundation.instance.svg;
 
                         return [
-                          context.smallButton(
+                          context.bouncingButton(
                             blurred: true,
                             data: BaseUiKitButtonData(
                                 onPressed: () => controller.swipeLeft(),
@@ -188,7 +188,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                           ),
                           SpacingFoundation.horizontalSpace24,
                           if (model.showFavorite ?? true)
-                            context.button(
+                            context.bouncingButton(
                               blurred: true,
                               data: BaseUiKitButtonData(
                                   onPressed: () => controller.swipeTop(),
@@ -198,7 +198,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                                   )),
                             ),
                           SpacingFoundation.horizontalSpace24,
-                          context.smallButton(
+                          context.bouncingButton(
                             blurred: true,
                             data: BaseUiKitButtonData(
                                 onPressed: () => controller.swipeRight(),
