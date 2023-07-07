@@ -15,6 +15,7 @@ PropertiesBaseModel _$PropertiesBaseModelFromJson(Map<String, dynamic> json) =>
       imageLink: json['imageLink'] as String?,
       gradient: _stringToGradient(json['gradient']),
       value: json['value'] as String?,
+      startDelay: _intToDuration(json['startDelay']),
       sortNumber: json['sortNumber'] as num? ?? 0,
     );
 
@@ -23,6 +24,7 @@ Map<String, dynamic> _$PropertiesBaseModelToJson(
     <String, dynamic>{
       'sortNumber': instance.sortNumber,
       'duration': instance.duration?.inMicroseconds,
+      'startDelay': instance.startDelay?.inMicroseconds,
       'imageLink': instance.imageLink,
       'value': instance.value,
       'gradient': _gradientToJson(instance.gradient),
