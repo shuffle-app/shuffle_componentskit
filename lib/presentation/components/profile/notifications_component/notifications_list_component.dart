@@ -23,7 +23,7 @@ class NotificationsListComponent extends StatelessWidget {
           .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
       AnimatedList(
         key: listKey,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         initialItemCount: notifications.length,
         shrinkWrap: true,
         itemBuilder:
