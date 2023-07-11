@@ -17,12 +17,14 @@ class _FAQComponentState extends State<FAQComponent> {
 
   @override
   void initState() {
+    //ignore: no-empty-block
     _controller.addListener(() => setState(() {}));
     super.initState();
   }
 
   @override
   void dispose() {
+    //ignore: no-empty-block
     _controller.removeListener(() => setState(() {}));
     _controller.dispose();
     super.dispose();
@@ -72,7 +74,8 @@ class _FAQComponentState extends State<FAQComponent> {
               return Theme(
                   data: ThemeData(textButtonTheme: TextButtonThemeData(style:
                   context.uiKitTheme?.textButtonStyle.copyWith(
-                    padding: MaterialStateProperty.all<EdgeInsets>( EdgeInsets.zero),
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.zero),
                       textStyle: MaterialStateTextStyle.resolveWith((states) {
                         return context.uiKitTheme!.regularTextTheme.body;
                       })))),
@@ -84,15 +87,22 @@ class _FAQComponentState extends State<FAQComponent> {
                               showUiKitGeneralFullScreenDialog(
                                   context,
                                   GeneralDialogData(
-                                      child: WebContentComponent(
-                                          url: widget
-                                              .faqData[itemsToShow[index -
-                                              1]]!))),
-                          text: itemsToShow[index - 1],
-                          icon: ImageWidget(
-                              svgAsset:
-                              GraphicsFoundation.instance.svg.chevronRight,
-                              color: Colors.white))));
+                                    child: WebContentComponent(
+                                        url: widget
+                                            .faqData[itemsToShow[index -
+                                            1]]!).paddingSymmetric(vertical:
+                                    widget.positionModel?.verticalMargin
+                                        ?.toDouble() ?? 0,
+                                        horizontal:
+                                        widget.positionModel?.horizontalMargin
+                                            ?.toDouble() ??
+                                            0))),
+                      text: itemsToShow[index - 1],
+                      icon: ImageWidget(
+                          svgAsset:
+                          GraphicsFoundation.instance.svg.chevronRight,
+                          color: Colors.white)))
+              );
             },
             separatorBuilder: (_, index) =>
             index == 0
