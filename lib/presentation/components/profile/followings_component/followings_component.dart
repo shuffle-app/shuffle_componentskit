@@ -34,7 +34,7 @@ class FollowingsComponent extends StatelessWidget {
                         children: [
                           SpacingFoundation.verticalSpace24,
                           if (followers != null && followers!.isNotEmpty) ...[
-                            ProfileAttitudeTabs(
+                            UiKitCustomTabBar(
                               onTappedTab: (index) {
                                 if (index == 0) {
                                   setState(() {
@@ -47,9 +47,9 @@ class FollowingsComponent extends StatelessWidget {
                                 }
                               },
                               tabs: [
-                                ProfileAttitudeTab(
+                                UiKitAttitudeTab(
                                     title: 'Followings'.toUpperCase()),
-                                ProfileAttitudeTab(
+                                UiKitAttitudeTab(
                                     title: 'Followers'.toUpperCase()),
                               ],
                             ),

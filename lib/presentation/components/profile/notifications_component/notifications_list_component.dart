@@ -8,35 +8,41 @@ class NotificationsListComponent extends StatelessWidget {
   final GlobalKey<SliverAnimatedListState> listKey;
   final PositionModel? screenParams;
 
-  const NotificationsListComponent(
-      {super.key,
-      required this.listKey,
-      required this.notifications,
-      required this.onDismissed,
-      this.screenParams});
+  const NotificationsListComponent({super.key,
+    required this.listKey,
+    required this.notifications,
+    required this.onDismissed,
+    this.screenParams});
 
   @override
   Widget build(BuildContext context) {
     final horizontalMargin = screenParams?.horizontalMargin?.toDouble() ?? 0;
 
-    return SliverAnimatedList(
-      key: listKey,
-      initialItemCount: notifications.length,
-      itemBuilder:
-          (BuildContext context, int index, Animation<double> animation) {
-        return ScaleTransition(
-                scale: animation,
-                child: Dismissible(
-                    key:
-                        ValueKey(notifications[index]),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) => onDismissed
-                        .call(index),
-                    child: notifications[index]))
-            .paddingSymmetric(
-                horizontal: horizontalMargin,
-                vertical: SpacingFoundation.verticalSpacing8);
-      },
-    );
+    return Column(children: [
+      Text('Notifications', style: context.uiKitTheme?.boldTextTheme.subHeadline)
+          .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
+      AnimatedList(
+        key: listKey,
+        physics: const NeverScrollableScrollPhysics(),
+        initialItemCount: notifications.length,
+        shrinkWrap: true,
+        itemBuilder:
+            (BuildContext context, int index, Animation<double> animation) {
+          return ScaleTransition(
+              scale: animation,
+              child: Dismissible(
+                  key:
+                  ValueKey(notifications[index]),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) =>
+                      onDismissed
+                          .call(index),
+                  child: notifications[index]
+              .paddingSymmetric(
+              horizontal: horizontalMargin,
+              vertical: SpacingFoundation.verticalSpacing8)));
+        },
+      )
+    ]);
   }
 }
