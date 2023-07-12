@@ -1,26 +1,35 @@
 import 'dart:math';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FeedComponent extends StatelessWidget {
   final UiFeedModel feed;
+  final PagingController controller;
   final Function? onMoodPressed;
   final Function? onEventPressed;
-  final Function(int id, Type type)? onListItemPressed;
+  final Function(int id, String type,[String? source])? onListItemPressed;
   final Function? onTagSortPressed;
   final VoidCallback? onHowItWorksPoped;
 
   const FeedComponent(
       {Key? key,
       required this.feed,
+      required this.controller,
       this.onMoodPressed,
       this.onEventPressed,
       this.onTagSortPressed,
       this.onHowItWorksPoped,
       this.onListItemPressed})
       : super(key: key);
+
+  final progressIndicator = const GradientableWidget(
+      gradient: GradientFoundation.attentionCard,
+      active: true,
+      child: CircularProgressIndicator.adaptive(
+          backgroundColor: Colors.white));
 
   Widget _howItWorksDialog(context, textStyle) => UiKitHintDialog(
         title: 'Depending on...',
@@ -67,6 +76,8 @@ class FeedComponent extends StatelessWidget {
           ),
         ],
       );
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +172,7 @@ class FeedComponent extends StatelessWidget {
         ).wrapSliverBox,
         SpacingFoundation.verticalSpace24.wrapSliverBox,
       ],
-      if (feed.mixedItems != null && (model.showPlaces ?? true)) ...[
+      if ( (model.showPlaces ?? true)) ...[
         Text(
           'You better check this out',
           style: themeTitleStyle,
@@ -220,27 +231,35 @@ class FeedComponent extends StatelessWidget {
         ],
         SpacingFoundation.verticalSpace24.wrapSliverBox,
       ],
-      SliverList.separated(
-          itemBuilder: (_, index) => index == feed.mixedItems!.length
-              ? kBottomNavigationBarHeight.heightBox
-              : () {
-                  final item = feed.mixedItems![index];
+      PagedSliverList.separated(
+        shrinkWrapFirstPageIndicators: true,
+        builderDelegate: PagedChildBuilderDelegate(
+            animateTransitions: true,
+            firstPageProgressIndicatorBuilder: (c)=>progressIndicator,
+            newPageProgressIndicatorBuilder: (c) => progressIndicator,
+            itemBuilder: (_, item, index) {
+              item as UiUniversalModel;
 
-                  return PlacePreview(
-                    onTap: (id) => onListItemPressed?.call(id, item.type),
-                    place: UiPlaceModel(
-                      id: item.id,
-                      title: item.title,
-                      description: item.description,
-                      media: item.media,
-                      tags: item.tags,
-                      baseTags: item.baseTags,
-                    ),
-                    model: model,
-                  );
-                }(),
-          separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
-          itemCount: feed.mixedItems!.length + 1)
+              return PlacePreview(
+                onTap: (id) => onListItemPressed?.call(
+                    id,
+                    item.type ,item.source),
+                place: UiPlaceModel(
+                  id: item.id,
+                  title: item.title,
+                  description: item.description,
+                  media: item.media,
+                  tags: item.tags,
+                  baseTags: item.baseTags,
+                ),
+                model: model,
+              );
+            }),
+        itemExtent: 200.h,
+        separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
+        // itemCount: feed.mixedItems!.length + 1,
+        pagingController: controller,
+      )
     ]).paddingSymmetric(
       vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
