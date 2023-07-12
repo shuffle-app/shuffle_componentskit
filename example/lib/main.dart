@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -342,16 +344,20 @@ class ComponentsTestPage extends StatelessWidget {
                                 // ),
                                 body: SingleChildScrollView(
                                     child: FeedComponent(
+                                        controller:
+                                            PagingController(firstPageKey: 1),
                                         feed: UiFeedModel(
-                          mixedItems: List.generate(4, (index) => item),
-                          recommendedEvent: event,
-                          moods: List.generate(
-                              4,
-                              (index) => UiMoodModel(
-                                  id: 1,
-                                  title: 'Want to have some fun',
-                                  logo: 'assets/images/png/crazy_emoji.png')),
-                        )))))))),
+                                          // mixedItems: List.generate(4, (index) => item),
+                                          recommendedEvent: event,
+                                          moods: List.generate(
+                                              4,
+                                              (index) => UiMoodModel(
+                                                  id: 1,
+                                                  title:
+                                                      'Want to have some fun',
+                                                  logo:
+                                                      'assets/images/png/crazy_emoji.png')),
+                                        )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -582,7 +588,7 @@ class ComponentsTestPage extends StatelessWidget {
             iconPath: 'assets/images/svg/cocktail.svg',
             unique: true),
       ],
-      type: UiPlaceModel);
+      type: '');
 
   final UiPlaceModel place = UiPlaceModel(
       title: 'title',

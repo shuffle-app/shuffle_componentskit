@@ -18,6 +18,8 @@ class NotificationsListComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final horizontalMargin = screenParams?.horizontalMargin?.toDouble() ?? 0;
 
+    // listKey.currentState.
+
     return Column(children: [
       Text('Notifications', style: context.uiKitTheme?.boldTextTheme.subHeadline)
           .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
