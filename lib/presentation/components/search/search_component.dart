@@ -58,6 +58,26 @@ class SearchComponent extends StatelessWidget {
     final horizontalMargin =
         (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
+    final title = model.content.title;
+    final body = model.content.body;
+
+    print('model.content ${model.content.body?.keys}');
+
+    final List<Widget> chooseCards = body?[ContentItemType.horizontalList]
+            ?.properties
+            ?.entries
+            .map((e) => GestureDetector(
+                onTap: () {
+                  onSearchFieldTap?.call();
+                  searchController.text = e.key;
+                },
+                child: UiKitTitledCardWithBackground(
+                    title: e.key,
+                    backgroundImageLink: e.value.imageLink ?? '',
+                    backgroundColor: e.value.color ?? Colors.white)))
+            .toList() ??
+        [];
+
     return SafeArea(
         bottom: false,
         child: Column(children: [
@@ -68,7 +88,13 @@ class SearchComponent extends StatelessWidget {
               crossAxisAlignment:
                   (model.positionModel?.titleAlignment).crossAxisAlignment,
               children: [
-                Text('You’ll find it', style: theme?.boldTextTheme.title1)
+                Text(
+                        title?[ContentItemType.text]
+                                ?.properties
+                                ?.keys
+                                .firstOrNull ??
+                            'You’ll find it',
+                        style: theme?.boldTextTheme.title1)
                     .paddingSymmetric(horizontal: horizontalMargin),
                 SpacingFoundation.verticalSpace24,
                 GestureDetector(
@@ -140,7 +166,12 @@ class SearchComponent extends StatelessWidget {
                               decorationIcons: _decorationItemsForFreeCards)
                         ],
                         SpacingFoundation.verticalSpace24,
-                        Text('Choose yourself',
+                        Text(
+                                body?[ContentItemType.text]
+                                        ?.properties
+                                        ?.keys
+                                        .firstOrNull ??
+                                    'Choose yourself',
                                 style: theme?.boldTextTheme.title1)
                             .paddingSymmetric(horizontal: horizontalMargin),
                         SpacingFoundation.verticalSpace24,
@@ -149,21 +180,11 @@ class SearchComponent extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             child: Wrap(spacing: horizontalMargin, children: [
                               const SizedBox.shrink(),
-                              ...search.chooseCards.map((item) =>
-                                  GestureDetector(
-                                      onTap: item.callback,
-                                      child: UiKitTitledCardWithBackground(
-                                          title: item.title,
-                                          backgroundImageLink:
-                                              item.backgroundImage,
-                                          backgroundColor:
-                                              item.backgroundColor))),
+                              ...chooseCards,
                               const SizedBox.shrink()
                             ])),
                         SpacingFoundation.verticalSpace24,
-                        Stack(
-                            clipBehavior: Clip.none,
-                            children: [
+                        Stack(clipBehavior: Clip.none, children: [
                           Text('Top places rated\nby',
                               style: theme?.boldTextTheme.title1),
                           () {
