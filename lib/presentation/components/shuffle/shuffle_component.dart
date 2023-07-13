@@ -177,6 +177,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                         return [
                           context.bouncingButton(
                             blurred: true,
+                            small: true,
                             data: BaseUiKitButtonData(
                                 onPressed: () => widget.onDislike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
                                 icon: ImageWidget(
@@ -198,6 +199,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                           SpacingFoundation.horizontalSpace24,
                           context.bouncingButton(
                             blurred: true,
+                            small: true,
                             data: BaseUiKitButtonData(
                                 onPressed: () => widget.onLike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
                                 icon: ImageWidget(
