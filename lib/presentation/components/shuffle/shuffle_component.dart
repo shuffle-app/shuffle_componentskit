@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-// import 'package:flutter_cache_manager/src/result/file_info.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:palette_generator/palette_generator.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -138,27 +136,27 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                             case CardSwiperDirection.bottom:
                               return true;
                             case CardSwiperDirection.top:
-                              if (widget.onFavorite != null && (model.showFavorite ?? true)) {
-                                widget.onFavorite!(widget.shuffle.items[currentIndex].title);
-                              } else {
-                                return false;
-                              }
+                              // if (widget.onFavorite != null && (model.showFavorite ?? true)) {
+                              //   widget.onFavorite!(widget.shuffle.items[currentIndex].title);
+                              // } else {
+                              //   return false;
+                              // }
                               return true;
                             case CardSwiperDirection.none:
                               return false;
                             case CardSwiperDirection.left:
-                              if (widget.onDislike != null) {
-                                widget.onDislike!(widget.shuffle.items[currentIndex].title);
-                              } else {
-                                return false;
-                              }
+                              // if (widget.onDislike != null) {
+                              //   widget.onDislike!(widget.shuffle.items[currentIndex].title);
+                              // } else {
+                              //   return false;
+                              // }
                               return true;
                             case CardSwiperDirection.right:
-                              if (widget.onLike != null) {
-                                widget.onLike!(widget.shuffle.items[currentIndex].title);
-                              } else {
-                                return false;
-                              }
+                              // if (widget.onLike != null) {
+                              //   widget.onLike!(widget.shuffle.items[currentIndex].title);
+                              // } else {
+                              //   return false;
+                              // }
                               return true;
                           }
                         },
@@ -180,7 +178,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                           context.bouncingButton(
                             blurred: true,
                             data: BaseUiKitButtonData(
-                                onPressed: () => controller.swipeLeft(),
+                                onPressed: () => widget.onDislike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
                                 icon: ImageWidget(
                                   svgAsset: svg.heartBrokenFill,
                                   color: Colors.white,
@@ -191,7 +189,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                             context.bouncingButton(
                               blurred: true,
                               data: BaseUiKitButtonData(
-                                  onPressed: () => controller.swipeTop(),
+                                  onPressed: () => widget.onFavorite?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
                                   icon: ImageWidget(
                                     svgAsset: svg.starOutline,
                                     color: Colors.white,
@@ -201,7 +199,7 @@ class _ShuffleComponentState extends State<ShuffleComponent> {
                           context.bouncingButton(
                             blurred: true,
                             data: BaseUiKitButtonData(
-                                onPressed: () => controller.swipeRight(),
+                                onPressed: () => widget.onLike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
                                 icon: ImageWidget(
                                   svgAsset: svg.heartFill,
                                   color: Colors.white,
