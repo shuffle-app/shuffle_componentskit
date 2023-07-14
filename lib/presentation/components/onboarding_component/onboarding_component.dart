@@ -22,8 +22,8 @@ class OnboardingComponent extends StatefulWidget {
                 autoSwitchDuration: e.value.duration!))
             .toList() ??
         [];
-    items.sort((a, b) =>(rawItems?[a.title]?.sortNumber ?? 0)
-          .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+    items.sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0)
+        .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
   }
 
   Duration get transitionDuration =>
@@ -36,6 +36,8 @@ class OnboardingComponent extends StatefulWidget {
 
 class _OnboardingComponentState extends State<OnboardingComponent>
     with SingleTickerProviderStateMixin {
+  bool isLoading = false;
+
   late final AnimationController _progressAnimationController =
       AnimationController(
     vsync: this,
@@ -92,7 +94,12 @@ class _OnboardingComponentState extends State<OnboardingComponent>
         _switchToNextPage();
       }
     }
-    if (value == 1.0) widget.onFinished?.call();
+    if (value == 1.0) {
+      widget.onFinished?.call();
+      setState(() {
+        isLoading = true;
+      });
+    }
   }
 
   Future<void> _switchToNextPage() async {
@@ -169,26 +176,34 @@ class _OnboardingComponentState extends State<OnboardingComponent>
             AnimatedBuilder(
               animation: _progressAnimationController,
               builder: (context, value) {
-                return SafeArea(
-                    child: context.buttonWithProgress(
-                  data: BaseUiKitButtonData(
-                    text: 'NEXT >>>',
-                    onPressed: () {
-                      if(currentIndex != widget.items.length-1) {
-                        _switchToNextPage();
-                        _progressAnimationController.forward(from: currentItemProgressPortion);
-                      } else {
-                        widget.onFinished?.call();
-                      }
-                      // _progressAnimationController.forward(from: 0);
-                      // setState(() {
-                      //   currentIndex = 0;
-                      // });
-                    },
-                  ),
-                  progress: _progressAnimationController.value,
-                  blurred: true,
-                )).paddingSymmetric(horizontal: horizontalMargin);
+                return context
+                    .buttonWithProgress(
+                      data: BaseUiKitButtonData(
+                        text: 'NEXT >>>',
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                if (currentIndex != widget.items.length - 1) {
+                                  _switchToNextPage();
+                                  _progressAnimationController.forward(
+                                      from: currentItemProgressPortion);
+                                } else {
+                                  widget.onFinished?.call();
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                }
+                                // _progressAnimationController.forward(from: 0);
+                                // setState(() {
+                                //   currentIndex = 0;
+                                // });
+                              },
+                      ),
+                      progress: _progressAnimationController.value,
+                      blurred: true,
+                    )
+                    .loadingWrap(isLoading)
+                    .paddingSymmetric(horizontal: horizontalMargin);
               },
             ),
             SpacingFoundation.verticalSpace24,

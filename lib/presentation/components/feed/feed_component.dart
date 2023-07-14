@@ -25,11 +25,11 @@ class FeedComponent extends StatelessWidget {
       this.onListItemPressed})
       : super(key: key);
 
-  final progressIndicator = const GradientableWidget(
+  final progressIndicator =const SizedBox(width: 20, height: 20,child:  GradientableWidget(
       gradient: GradientFoundation.attentionCard,
       active: true,
       child: CircularProgressIndicator.adaptive(
-          backgroundColor: Colors.white));
+          backgroundColor: Colors.white)));
 
   Widget _howItWorksDialog(context, textStyle) => UiKitHintDialog(
         title: 'Depending on...',
@@ -230,7 +230,7 @@ class FeedComponent extends StatelessWidget {
           ).wrapSliverBox,
         ],
         SpacingFoundation.verticalSpace24.wrapSliverBox,
-      ],
+
       PagedSliverList.separated(
         shrinkWrapFirstPageIndicators: true,
         builderDelegate: PagedChildBuilderDelegate(
@@ -259,7 +259,9 @@ class FeedComponent extends StatelessWidget {
         separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
         // itemCount: feed.mixedItems!.length + 1,
         pagingController: controller,
-      )
+      ),
+        kBottomNavigationBarHeight.heightBox.wrapSliverBox
+      ],
     ]).paddingSymmetric(
       vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
