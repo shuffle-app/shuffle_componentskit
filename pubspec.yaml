@@ -19,7 +19,7 @@ dependencies:
       ref: master
 
 #tools for config workers
-  json_annotation: ^4.7.0
+  json_annotation: ^4.8.1
   json_serializable: ^6.6.1
 
 #configuration libs
