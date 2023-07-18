@@ -360,27 +360,59 @@ class ComponentsTestPage extends StatelessWidget {
                     'builder_type': 'page',
                   }),
                   ComponentBuilder(
-                    child: Scaffold(
-                      body: CompanyLoginComponent(
-                        model: UiCompanyLoginModel(
-                          welcomeMessageTitle: 'Welcome back',
-                          welcomeMessageBody: 'We are happy to see you again. To gain access you must log in first.',
-                          registrationTypes: [
-                            RegistrationTypeData(
-                              title: 'Phone'.toUpperCase(),
-                              type: RegistrationType.phone,
-                            ),
-                            RegistrationTypeData(
-                              title: 'Email'.toUpperCase(),
-                              type: RegistrationType.email,
-                            ),
-                          ],
-                          selectedRegistrationType: RegistrationType.phone,
-                          selectedCountry: CountriesFoundation.instance.unitedArabEmirates,
-                        ),
-                        nameController: TextEditingController(),
-                        positionController: TextEditingController(),
-                        anotherFieldController: TextEditingController(),
+                    child: CompanyLoginComponent(
+                      model: UiCompanyLoginModel(
+                        welcomeMessageTitle: 'Welcome back',
+                        welcomeMessageBody: 'We are happy to see you again. To gain access you must log in first.',
+                        registrationTypes: [
+                          RegistrationTypeData(
+                            title: 'Phone'.toUpperCase(),
+                            type: RegistrationType.phone,
+                          ),
+                          RegistrationTypeData(
+                            title: 'Email'.toUpperCase(),
+                            type: RegistrationType.email,
+                          ),
+                        ],
+                        selectedRegistrationType: RegistrationType.phone,
+                        selectedCountry: CountriesFoundation.instance.unitedArabEmirates,
+                      ),
+                      nameController: TextEditingController(),
+                      positionController: TextEditingController(),
+                      anotherFieldController: TextEditingController(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show user selection',
+                onPressed: () => buildComponent(
+                  context,
+                  UserTypeSelectionModel.fromJson({
+                    'version': '1.0.2',
+                    'builder_type': 'page',
+                  }),
+                  ComponentBuilder(
+                    child: UserTypeSelectionComponent(
+                      onUserTypeSelected: (userType) => print(userType),
+                      model: UiUserTypeSelectionModel(
+                        pageTitle: 'Welcome',
+                        pageBodyText: 'Select the type of account you would like to create',
+                        userTypes: [
+                          UserTypeModel(
+                            title: 'Personal',
+                            iconPath: GraphicsFoundation.instance.svg.male.path,
+                            type: 'personal',
+                          ),
+                          UserTypeModel(
+                            title: 'Company',
+                            iconPath: GraphicsFoundation.instance.svg.company.path,
+                            type: 'company',
+                          ),
+                        ],
                       ),
                     ),
                   ),
