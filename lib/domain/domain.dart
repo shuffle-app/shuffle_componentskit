@@ -1,4 +1,6 @@
 export 'config_models/auth/company/company_login_model.dart';
+export 'config_models/auth/sms_verification/sms_verification_model.dart';
+export 'config_models/auth/user_selection/user_type_selection_model.dart';
 export 'config_models/common/booking_element_model.dart';
 export 'config_models/event/component_event_model.dart';
 export 'config_models/feed/component_feed_model.dart';
