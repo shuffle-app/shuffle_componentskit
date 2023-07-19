@@ -9,6 +9,7 @@ class SpinnerComponent extends StatelessWidget {
   final PagingController<int, UiEventModel> itemsController;
   final Function? onEventTap;
   final Function? onFavoriteTap;
+  final favoriteStream;
 
   const SpinnerComponent(
       {Key? key,
@@ -16,7 +17,7 @@ class SpinnerComponent extends StatelessWidget {
       this.onEventTap,
       this.onFavoriteTap,
       required this.categoriesController,
-      required this.itemsController})
+      required this.itemsController, this.favoriteStream})
       : super(key: key);
 
   @override
@@ -55,9 +56,9 @@ class SpinnerComponent extends StatelessWidget {
                   UiKitHorizontalScrollableList<UiEventModel>(
                       pagingController: itemsController,
                       scrollController: spinner.cardsScrollController,
-                      leftPadding: SpacingFoundation.horizontalSpacing16,
+                      // leftPadding: SpacingFoundation.horizontalSpacing16,
                       spacing: SpacingFoundation.horizontalSpacing12,
-                      itemBuilder: (_, item, idex) {
+                      itemBuilder: (_, item, index) {
                         late final Widget? ownerTrailing;
                         switch (item.owner?.type ?? UserTileType.ordinary) {
                           case UserTileType.ordinary:
@@ -74,27 +75,33 @@ class SpinnerComponent extends StatelessWidget {
                             break;
                         }
 
-                        return UiKitSpinnerCard(
-                          availableHeight: size.maxHeight,
-                          // availableHeight: 0.56.sh,
-                          title: item.title,
-                          date: item.date,
-                          favourite: item.favorite,
-                          photoLink: item.media
-                              ?.firstWhere((element) =>
-                                  element.type == UiKitMediaType.image)
-                              .link,
-                          ownerTileTitle: item.owner?.name,
-                          ownerPhotoLink: item.owner?.logo,
-                          ownerTileSubtitle: item.owner?.username,
-                          ownerTileTitleTrailing: ownerTrailing,
-                          onTap: onEventTap != null
-                              ? () => onEventTap!(item.id)
-                              : null,
-                          onFavoriteTap: onFavoriteTap != null
-                              ? () => onFavoriteTap!(item.id)
-                              : null,
-                        );
+                        return StreamBuilder(
+                            stream: favoriteStream(item.id),
+                            builder: (_, favoriteValue) => UiKitSpinnerCard(
+                                  availableHeight: size.maxHeight,
+                                  // availableHeight: 0.56.sh,
+                                  title: item.title,
+                                  date: item.date,
+                                  favourite: favoriteValue.data as bool? ?? item.favorite,
+                                  photoLink: item.media
+                                      ?.firstWhere((element) =>
+                                          element.type == UiKitMediaType.image)
+                                      .link,
+                                  ownerTileTitle: item.owner?.name,
+                                  ownerPhotoLink: item.owner?.logo,
+                                  ownerTileSubtitle: item.owner?.username,
+                                  ownerTileTitleTrailing: ownerTrailing,
+                                  onTap: () => onEventTap?.call(item.id),
+                                  onFavoriteTap: () =>
+                                      onFavoriteTap?.call(item.id),
+                                ).paddingOnly(
+                                    left: index == 0
+                                        ? SpacingFoundation.horizontalSpacing16
+                                        : 0,
+                                    right: itemsController.itemList?.length ==
+                                            index + 1
+                                        ? SpacingFoundation.horizontalSpacing16
+                                        : 0));
                         // }).toList(),
                       }
                       // children: spinner.events.call(size),
