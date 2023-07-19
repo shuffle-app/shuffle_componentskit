@@ -256,24 +256,24 @@ class ComponentsTestPage extends StatelessWidget {
                           )),
                         )))))),
             SpacingFoundation.verticalSpace16,
-            context.button(
-                data: BaseUiKitButtonData(
-                    text: 'show spinner',
-                    onPressed: () => buildComponent(
-                        context,
-                        ComponentSpinnerModel.fromJson(configuration.appConfig.content['spinner']),
-                        ComponentBuilder(
-                            child: Scaffold(
-                                body: SpinnerComponent(
-                                    onEventTap: () {},
-                                    onFavoriteTap: () {},
-                                    spinner: UiSpinnerModel(
-                                        categories: List<String>.generate(
-                                          10,
-                                          (index) => 'Category ${index + 1}',
-                                        ),
-                                        events: List.generate(5, (index) => event)))))))),
-            SpacingFoundation.verticalSpace16,
+            // context.button(
+            //     data: BaseUiKitButtonData(
+            //         text: 'show spinner',
+            //         onPressed: () => buildComponent(
+            //             context,
+            //             ComponentSpinnerModel.fromJson(configuration.appConfig.content['spinner']),
+            //             ComponentBuilder(
+            //                 child: Scaffold(
+            //                     body: SpinnerComponent(
+            //                         onEventTap: () {},
+            //                         onFavoriteTap: () {},
+            //                         spinner: UiSpinnerModel(
+            //                             categories: List<String>.generate(
+            //                               10,
+            //                               (index) => 'Category ${index + 1}',
+            //                             ),
+            //                             events: List.generate(5, (index) => event)))))))),
+            // SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
                     text: 'show feed',
