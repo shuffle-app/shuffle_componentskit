@@ -391,14 +391,11 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show user selection',
                 onPressed: () => buildComponent(
                   context,
-                  UserTypeSelectionModel.fromJson({
-                    'version': '1.0.2',
-                    'builder_type': 'page',
-                  }),
+                  UserTypeSelectionModel.fromJson(configuration.appConfig.content['user_type_selection']),
                   ComponentBuilder(
                     child: UserTypeSelectionComponent(
                       onUserTypeSelected: (userType) => print(userType),
-                      model: UiUserTypeSelectionModel(
+                      uiModel: UiUserTypeSelectionModel(
                         pageTitle: 'Welcome',
                         pageBodyText: 'Select the type of account you would like to create',
                         userTypes: [
@@ -419,6 +416,20 @@ class ComponentsTestPage extends StatelessWidget {
                 ),
               ),
             ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company registration',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(configuration.appConfig.content['about_user']),
+                  ComponentBuilder(
+                    child: AboutCompanyComponent(),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace24,
           ],
         ),
       ),
