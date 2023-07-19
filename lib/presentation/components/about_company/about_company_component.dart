@@ -118,15 +118,15 @@ class AboutCompanyComponent extends StatelessWidget {
                 spacing: SpacingFoundation.horizontalSpacing8,
                 children: [
                   UiKitOrdinaryChip(
-                    title: '0-18',
+                    title: 'Luxury',
                     selected: false,
                   ),
                   UiKitOrdinaryChip(
-                    title: '0-18',
+                    title: 'Luxury',
                     selected: true,
                   ),
                   UiKitOrdinaryChip(
-                    title: '0-18',
+                    title: 'Luxury',
                     selected: false,
                   ),
                 ],
