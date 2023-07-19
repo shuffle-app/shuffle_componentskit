@@ -19,7 +19,7 @@ class AboutCompanyComponent extends StatelessWidget {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
 
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentModel model = ComponentModel.fromJson(config['about_user']);
+    final ComponentModel model = ComponentModel.fromJson(config['about_company']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 

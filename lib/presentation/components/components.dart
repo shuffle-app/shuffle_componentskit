@@ -33,5 +33,7 @@ export 'search/search_component.dart';
 export 'search/uisearch_model.dart';
 export 'shuffle/shuffle_component.dart';
 export 'shuffle/uishuffle_model.dart';
+export 'sms_code_verification/sms_code_verification_component.dart';
+export 'sms_code_verification/ui_sms_code_verification_model.dart';
 export 'spinner/spinner_component.dart';
 export 'spinner/uispinner_model.dart';

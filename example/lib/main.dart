@@ -429,6 +429,25 @@ class ComponentsTestPage extends StatelessWidget {
                 ),
               ),
             ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show sms verification',
+                onPressed: () => buildComponent(
+                  context,
+                  SmsVerificationModel.fromJson({
+                    'version': '1.0.2',
+                    'builder_type': 'page',
+                  }),
+                  ComponentBuilder(
+                    child: SmsCodeVerificationComponent(
+                      smsController: TextEditingController(),
+                      uiModel: UiSmsCodeVerificationModel(phone: '+998937777777'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SpacingFoundation.verticalSpace24,
           ],
         ),
