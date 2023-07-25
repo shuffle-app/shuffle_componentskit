@@ -3,6 +3,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class EventComponent extends StatelessWidget {
   final UiEventModel event;
@@ -32,8 +33,10 @@ class EventComponent extends StatelessWidget {
             crossAxisAlignment: titleAlignment.crossAxisAlignment,
             children: [
               if (event.title != null) ...[
-                Text(
+                AutoSizeText(
                   event.title!,
+                  minFontSize: 18.w,
+                  stepGranularity: 1.w,
                   style: theme?.boldTextTheme.title2,
                   textAlign: titleAlignment.textAlign,
                 ),

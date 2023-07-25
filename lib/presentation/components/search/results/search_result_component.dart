@@ -10,6 +10,7 @@ class SearchResultComponent extends StatelessWidget {
   final FocusNode? searchFieldFocus;
   final ValueChanged<String>? onFieldSubmitted;
   final TextEditingController searchController;
+  final bool autofocus;
 
   const SearchResultComponent(
       {super.key,
@@ -17,6 +18,7 @@ class SearchResultComponent extends StatelessWidget {
       required this.heroSearchTag,
       required this.searchController,
       this.onFieldSubmitted,
+        this.autofocus = true,
       this.searchFieldFocus,
       this.errorText});
 
@@ -38,7 +40,7 @@ class SearchResultComponent extends StatelessWidget {
             child: SizedBox(
                 width: double.infinity,
                 child: UiKitInputFieldRightIcon(
-                  autofocus: true,
+                  autofocus: autofocus,
                   hintText: 'search'.toUpperCase(),
                   controller: searchController,
                   errorText: errorText,
@@ -63,8 +65,6 @@ class SearchResultComponent extends StatelessWidget {
                 context.pop();
               }
             },
-            child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
-                child: resultBody)));
+            child: resultBody.paddingSymmetric(horizontal: horizontalMargin)));
   }
 }

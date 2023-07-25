@@ -44,7 +44,7 @@ class PropertiesBaseModel {
   Map<String, dynamic> toJson() => _$PropertiesBaseModelToJson(this);
 }
 
-_intToDuration(val) => Duration(milliseconds: val);
+_intToDuration(val) => Duration(milliseconds: val ?? 250);
 
 _stringToGradient(val) {
   switch (val) {

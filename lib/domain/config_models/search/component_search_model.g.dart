@@ -10,6 +10,8 @@ ComponentSearchModel _$ComponentSearchModelFromJson(
         Map<String, dynamic> json) =>
     ComponentSearchModel(
       showFree: json['show_free'] as bool?,
+      content:
+          ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -26,6 +28,7 @@ Map<String, dynamic> _$ComponentSearchModelToJson(
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
       'show_free': instance.showFree,
+      'content': instance.content,
     };
 
 const _$PageBuilderTypeEnumMap = {

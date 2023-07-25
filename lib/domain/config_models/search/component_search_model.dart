@@ -8,8 +8,12 @@ class ComponentSearchModel extends UiBaseModel {
   @JsonKey(name: 'show_free')
   final bool? showFree;
 
+  @JsonKey(name: 'content',)
+  final ContentBaseModel content;
+
   ComponentSearchModel({
     this.showFree,
+    required this.content,
     required super.pageBuilderType,
     super.positionModel,
     required super.version,

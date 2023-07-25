@@ -17,7 +17,7 @@ class GlobalConfiguration {
 
   bool get isLoaded => _completer.isCompleted;
 
-  factory GlobalConfiguration([String? configUrl, int? timeout]) {
+  factory GlobalConfiguration([String? configUrl,int? timeout]) {
     if (configUrl != null) {
       _configUrl = configUrl;
     }
