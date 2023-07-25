@@ -4,22 +4,25 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class GlobalConfiguration {
   static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
   static String _configUrl = ConfigConstants.configUrl;
+  static int _timeout = 1;
   final Completer _completer = Completer();
-  ConfigurationModel appConfig = ConfigurationModel(
-      updated: DateTime.now(), content: {}, theme: 'default');
+  ConfigurationModel appConfig = ConfigurationModel(updated: DateTime.now(), content: {}, theme: 'default');
 
   bool get isLoaded => _completer.isCompleted;
 
-  factory GlobalConfiguration([String? configUrl]) {
+  factory GlobalConfiguration([String? configUrl, int? timeout]) {
     if (configUrl != null) {
       _configUrl = configUrl;
+    }
+    if (timeout != null) {
+      _timeout = timeout;
     }
 
     return _singleton;
@@ -27,8 +30,7 @@ class GlobalConfiguration {
 
   GlobalConfiguration._internal();
 
-  Future<GlobalConfiguration> load(
-      {String version = '1.0.0', String? userId}) async {
+  Future<GlobalConfiguration> load({String version = '1.0.0', String? userId}) async {
     File? cache = kIsWeb ? null : await _loadFromDocument();
     late final String cacheAsString;
     late ConfigurationModel model;
@@ -38,7 +40,7 @@ class GlobalConfiguration {
         model = ConfigurationModel.fromJson(jsonDecode(cacheAsString));
         //TODO change to days
         // print('here is load from GlobalConfiguration model.updated.difference(DateTime.now()) ${model.updated.difference(DateTime.now())} ${model.updated.difference(DateTime.now()).inMinutes}');
-        if (model.updated.difference(DateTime.now()).inMinutes.abs() > 1) {
+        if (model.updated.difference(DateTime.now()).inMinutes.abs() > _timeout) {
           model = await _loadAndSaveConfig(version, userId);
         }
       } else {
@@ -53,18 +55,13 @@ class GlobalConfiguration {
     return _singleton;
   }
 
-  Future<ConfigurationModel> _loadAndSaveConfig(String version,
-      [String? userId]) async {
+  Future<ConfigurationModel> _loadAndSaveConfig(String version, [String? userId]) async {
     if (userId != null) {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
-    Map<String, dynamic> configAsMap = await _getFromUrl(
-        'http://${_configUrl}/settings/config/v$version',
-        headers: ConfigConstants.configHeaders);
-    final model = ConfigurationModel(
-        updated: DateTime.now(),
-        content: configAsMap,
-        theme: configAsMap['theme_name']);
+    Map<String, dynamic> configAsMap =
+        await _getFromUrl('http://${_configUrl}/api/settings/config/v$version', headers: ConfigConstants.configHeaders);
+    final model = ConfigurationModel(updated: DateTime.now(), content: configAsMap, theme: configAsMap['theme_name']);
     unawaited(_saveToDocument());
 
     return model;
@@ -86,9 +83,7 @@ class GlobalConfiguration {
     return File(p.join(provider.path, ConfigConstants.configPath));
   }
 
-  Future<Map<String, dynamic>> _getFromUrl(String url,
-      {Map<String, String>? queryParameters,
-      Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> _getFromUrl(String url, {Map<String, String>? queryParameters, Map<String, String>? headers}) async {
     String finalUrl = url;
     if (queryParameters != null) {
       queryParameters.forEach((k, v) {
@@ -102,8 +97,7 @@ class GlobalConfiguration {
     var encodedUri = Uri.encodeFull(finalUrl);
     var response = await http.get(Uri.parse(encodedUri), headers: usableHeader);
     if (response.statusCode != 200) {
-      throw Exception(
-          'HTTP request failed, statusCode: ${response.statusCode}, $finalUrl');
+      throw Exception('HTTP request failed, statusCode: ${response.statusCode}, $finalUrl');
     }
 
     return json.decode(response.body);
