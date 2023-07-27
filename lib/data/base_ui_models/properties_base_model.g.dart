@@ -9,6 +9,7 @@ part of 'properties_base_model.dart';
 PropertiesBaseModel _$PropertiesBaseModelFromJson(Map<String, dynamic> json) =>
     PropertiesBaseModel(
       color: _fromHex(json['color'] as String?),
+      type: json['type'] as String?,
       duration: json['duration'] == null
           ? const Duration(milliseconds: 250)
           : _intToDuration(json['duration']),
@@ -29,4 +30,5 @@ Map<String, dynamic> _$PropertiesBaseModelToJson(
       'value': instance.value,
       'gradient': _gradientToJson(instance.gradient),
       'color': _colorToJson(instance.color),
+      'type': instance.type,
     };

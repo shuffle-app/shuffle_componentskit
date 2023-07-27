@@ -37,4 +37,8 @@ enum ContentItemType {
   onboardingCard,
   @JsonValue('page_opener')
   pageOpener,
+  @JsonValue('redirects')
+  redirect,
+  @JsonValue('additional_multi_select')
+  additionalMultiSelect,
 }
