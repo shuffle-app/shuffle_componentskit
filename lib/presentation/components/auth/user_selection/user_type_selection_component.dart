@@ -18,12 +18,17 @@ class UserTypeSelectionComponent extends StatelessWidget {
 
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['user_type_selection']);
-    List<ContentBaseModel> contents = [];
-    List<ContentItemType> contentTypeList = [];
-    if (model.content.title != null) {
-      contents = model.content.title!.values.toList();
-      contentTypeList = model.content.title!.keys.toList();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+    String title = '';
+    if (model.content.title?[ContentItemType.text]?.properties?.isNotEmpty ?? false) {
+      title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     }
+    String subtitle = '';
+    if (model.content.subtitle?[ContentItemType.text]?.properties?.isNotEmpty ?? false) {
+      subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
+    }
+    final redirects = model.content.body?[ContentItemType.redirect]?.properties;
 
     return Stack(
       fit: StackFit.passthrough,
@@ -35,14 +40,14 @@ class UserTypeSelectionComponent extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing16,
             ),
-            if (contentTypeList.first == ContentItemType.text)
-              Text(
-                'Welcome',
-                style: boldTextTheme?.titleLarge,
-              ),
+            // if (contentTypeList.first == ContentItemType.text)
+            Text(
+              title,
+              style: boldTextTheme?.titleLarge,
+            ),
             SpacingFoundation.verticalSpace16,
             Text(
-              'Select the type of account you would like to create',
+              subtitle,
               style: boldTextTheme?.subHeadline,
             ),
           ],
@@ -53,19 +58,20 @@ class UserTypeSelectionComponent extends StatelessWidget {
             alignment: WrapAlignment.center,
             spacing: SpacingFoundation.horizontalSpacing16,
             runSpacing: SpacingFoundation.verticalSpacing16,
-            children: model.content.body?[ContentItemType.singleSelect]?.body?[ContentItemType.singleSelect]?.properties?.entries
-                    .map<Widget>(
-                      (e) => UiKitVerticalChip(
-                        caption: e.key ?? '',
-                        sign: ImageWidget(link: e.value.imageLink ?? ''),
-                        onTap: () => onUserTypeSelected?.call(e.key.toLowerCase() ?? ''),
-                      ),
-                    )
-                    .toList() ??
+            children: redirects?.keys.map((item) {
+                  return UiKitVerticalChip(
+                    caption: item,
+                    sign: ImageWidget(link: redirects[item]?.imageLink ?? ''),
+                    onTap: () => onUserTypeSelected?.call(item.toLowerCase()),
+                  );
+                }).toList() ??
                 [],
           ),
         ),
       ],
-    ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16);
+    ).paddingSymmetric(
+      horizontal: horizontalMargin,
+      vertical: verticalMargin,
+    );
   }
 }

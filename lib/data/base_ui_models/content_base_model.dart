@@ -5,24 +5,26 @@ part 'content_base_model.g.dart';
 
 @JsonSerializable()
 class ContentBaseModel {
+  @JsonKey(name: 'subtitle')
+  final Map<ContentItemType, ContentBaseModel>? subtitle;
 
-  @JsonKey(name: 'title',)
-  final Map<ContentItemType,ContentBaseModel>? title;
+  @JsonKey(name: 'title')
+  final Map<ContentItemType, ContentBaseModel>? title;
 
   @JsonKey(name: 'body')
-  final Map<ContentItemType,ContentBaseModel>? body;
+  final Map<ContentItemType, ContentBaseModel>? body;
 
   @JsonKey(name: 'properties')
-  final Map<String,PropertiesBaseModel>? properties;
+  final Map<String, PropertiesBaseModel>? properties;
 
   const ContentBaseModel({
     this.title,
     this.body,
     this.properties,
+    this.subtitle,
   });
 
-  factory ContentBaseModel.fromJson(Map<String, dynamic> json) =>
-      _$ContentBaseModelFromJson(json);
+  factory ContentBaseModel.fromJson(Map<String, dynamic> json) => _$ContentBaseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ContentBaseModelToJson(this);
 }
