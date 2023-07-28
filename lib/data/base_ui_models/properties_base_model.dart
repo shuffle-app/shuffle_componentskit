@@ -21,8 +21,7 @@ class PropertiesBaseModel {
   @JsonKey(name: 'value')
   final String? value;
 
-  @JsonKey(
-      name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
+  @JsonKey(name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
   final LinearGradient? gradient;
 
   @JsonKey(name: 'color', fromJson: _fromHex, toJson: _colorToJson)
