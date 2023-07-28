@@ -21,14 +21,15 @@ class PropertiesBaseModel {
   @JsonKey(name: 'value')
   final String? value;
 
-  @JsonKey(name: 'type')
-  final String? type;
-
-  @JsonKey(name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
+  @JsonKey(
+      name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
   final LinearGradient? gradient;
 
   @JsonKey(name: 'color', fromJson: _fromHex, toJson: _colorToJson)
   final Color? color;
+
+  @JsonKey(name: 'type')
+  final String? type;
 
   PropertiesBaseModel({
     this.color,

@@ -41,4 +41,8 @@ enum ContentItemType {
   tabBar,
   @JsonValue('country_selector')
   countrySelector,
+  @JsonValue('redirects')
+  redirect,
+  @JsonValue('additional_multi_select')
+  additionalMultiSelect,
 }

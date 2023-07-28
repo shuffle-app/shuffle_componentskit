@@ -20,10 +20,16 @@ ContentBaseModel _$ContentBaseModelFromJson(Map<String, dynamic> json) =>
         (k, e) => MapEntry(
             k, PropertiesBaseModel.fromJson(e as Map<String, dynamic>)),
       ),
+      subtitle: (json['subtitle'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry($enumDecode(_$ContentItemTypeEnumMap, k),
+            ContentBaseModel.fromJson(e as Map<String, dynamic>)),
+      ),
     );
 
 Map<String, dynamic> _$ContentBaseModelToJson(ContentBaseModel instance) =>
     <String, dynamic>{
+      'subtitle': instance.subtitle
+          ?.map((k, e) => MapEntry(_$ContentItemTypeEnumMap[k]!, e)),
       'title': instance.title
           ?.map((k, e) => MapEntry(_$ContentItemTypeEnumMap[k]!, e)),
       'body': instance.body
@@ -50,4 +56,6 @@ const _$ContentItemTypeEnumMap = {
   ContentItemType.progressBars: 'progress_bars',
   ContentItemType.onboardingCard: 'onboarding_card',
   ContentItemType.pageOpener: 'page_opener',
+  ContentItemType.redirect: 'redirects',
+  ContentItemType.additionalMultiSelect: 'additional_multi_select',
 };
