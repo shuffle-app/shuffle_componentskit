@@ -21,8 +21,10 @@ class PropertiesBaseModel {
   @JsonKey(name: 'value')
   final String? value;
 
-  @JsonKey(
-      name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
+  @JsonKey(name: 'type')
+  final String? type;
+
+  @JsonKey(name: 'gradient', fromJson: _stringToGradient, toJson: _gradientToJson)
   final LinearGradient? gradient;
 
   @JsonKey(name: 'color', fromJson: _fromHex, toJson: _colorToJson)
@@ -30,6 +32,7 @@ class PropertiesBaseModel {
 
   PropertiesBaseModel({
     this.color,
+    this.type,
     this.duration = const Duration(milliseconds: 250),
     this.imageLink,
     this.gradient,
@@ -38,8 +41,7 @@ class PropertiesBaseModel {
     this.sortNumber = 0,
   });
 
-  factory PropertiesBaseModel.fromJson(Map<String, dynamic> json) =>
-      _$PropertiesBaseModelFromJson(json);
+  factory PropertiesBaseModel.fromJson(Map<String, dynamic> json) => _$PropertiesBaseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$PropertiesBaseModelToJson(this);
 }
