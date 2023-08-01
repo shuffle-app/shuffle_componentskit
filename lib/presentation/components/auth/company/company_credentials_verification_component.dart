@@ -1,39 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/components/auth/company/ui_company_login_model.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class CompanyLoginComponent extends StatelessWidget {
-  final UiCompanyLoginModel model;
+class CompanyCredentialsVerificationComponent extends StatelessWidget {
+  final UiCompanyCredentialsVerificationModel uiModel;
   final VoidCallback? onSubmitted;
-  final ValueChanged<RegistrationType>? onRegistrationTypeChanged;
+  final ValueChanged<int>? onTabChanged;
+  final ValueChanged<CountryModel>? onCountryChanged;
   final TextEditingController nameController;
   final TextEditingController positionController;
-  final TextEditingController anotherFieldController;
+  final TextEditingController credentialsController;
+  final GlobalKey<FormState> formKey;
+  final bool? loading;
 
-  const CompanyLoginComponent({
+  const CompanyCredentialsVerificationComponent({
     super.key,
-    required this.model,
-    this.onSubmitted,
-    this.onRegistrationTypeChanged,
+    required this.uiModel,
+    required this.formKey,
     required this.nameController,
     required this.positionController,
-    required this.anotherFieldController,
+    required this.credentialsController,
+    this.loading,
+    this.onSubmitted,
+    this.onTabChanged,
+    this.onCountryChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentModel model = ComponentModel.fromJson(config['company_credentials_verification']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    final subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
+    final decorationLink = model.content.decoration?.values.first;
+    final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
+    final countrySelectorTitle =
+        model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
 
-    return SafeArea(
+    return Form(
+      key: formKey,
       child: Stack(
         fit: StackFit.expand,
         children: [
           Positioned(
             width: 1.sw,
-            top: SpacingFoundation.verticalSpacing6,
-            left: -SpacingFoundation.horizontalSpacing16,
+            right: SpacingFoundation.horizontalSpacing16,
+            top: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing6,
             child: ImageWidget(
-              svgAsset: GraphicsFoundation.instance.svg.bigArrow,
+              link: decorationLink?.imageLink ?? '',
               fit: BoxFit.fitWidth,
               width: 1.sw,
             ),
@@ -50,30 +67,26 @@ class CompanyLoginComponent extends StatelessWidget {
                   height: MediaQuery.of(context).viewPadding.top + (SpacingFoundation.verticalSpacing24 * 2),
                 ),
                 Text(
-                  model.welcomeMessageTitle ?? '',
+                  title,
                   style: boldTextTheme?.titleLarge,
                 ),
                 SpacingFoundation.verticalSpace16,
                 Text(
-                  model.welcomeMessageBody ?? '',
+                  subtitle,
                   style: boldTextTheme?.subHeadline,
                 ),
                 const Spacer(),
-                if (model.registrationTypes != null && model.registrationTypes!.length > 1) ...[
+                if (tabBar != null) ...[
                   UiKitCustomTabBar(
-                    tabs: model.registrationTypes!.map((e) => UiKitCustomTab(title: e.title)).toList(),
-                    onTappedTab: (index) => onRegistrationTypeChanged?.call(
-                      model.registrationTypes![index].type,
-                    ),
+                    tabs: tabBar.keys.map<UiKitCustomTab>((key) => UiKitCustomTab(title: key)).toList(),
+                    onTappedTab: (tabIndex) => onTabChanged?.call(tabIndex),
                   ),
                   SpacingFoundation.verticalSpace16,
                 ],
                 UiKitCountrySelector(
-                  selectedCountry: model.selectedCountry,
-                  onSelected: (country) => onRegistrationTypeChanged?.call(
-                    RegistrationType.phone,
-                  ),
-                  title: 'Where are you located',
+                  selectedCountry: uiModel.selectedCountry,
+                  onSelected: (country) => onCountryChanged?.call(country),
+                  title: countrySelectorTitle,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitCardWrapper(
@@ -95,27 +108,27 @@ class CompanyLoginComponent extends StatelessWidget {
                     fillColor: ColorsFoundation.surface3,
                   ).paddingAll(EdgeInsetsFoundation.all4),
                 ),
-                if (model.selectedRegistrationType == RegistrationType.phone) ...[
+                if (uiModel.selectedRegistrationType == RegistrationType.phone) ...[
                   SpacingFoundation.verticalSpace16,
                   UiKitCardWrapper(
                     color: ColorsFoundation.surface1,
                     borderRadius: BorderRadiusFoundation.max,
                     child: UiKitPhoneNumberInput(
-                      controller: anotherFieldController,
+                      controller: credentialsController,
                       enabled: true,
                       fillColor: ColorsFoundation.surface3,
-                      countryCode: model.selectedCountry?.countryPhoneCode ?? '',
+                      countryCode: uiModel.selectedCountry?.countryPhoneCode ?? '',
                     ).paddingAll(EdgeInsetsFoundation.all4),
                   ),
                 ],
-                if (model.selectedRegistrationType == RegistrationType.email) ...[
+                if (uiModel.selectedRegistrationType == RegistrationType.email) ...[
                   SpacingFoundation.verticalSpace16,
                   UiKitCardWrapper(
                     color: ColorsFoundation.surface1,
                     borderRadius: BorderRadiusFoundation.max,
                     child: UiKitInputFieldNoIcon(
                       fillColor: ColorsFoundation.surface3,
-                      controller: anotherFieldController,
+                      controller: credentialsController,
                       hintText: 'Johndoe@gmail.com',
                     ).paddingAll(EdgeInsetsFoundation.all4),
                   ),
@@ -125,8 +138,10 @@ class CompanyLoginComponent extends StatelessWidget {
                   data: BaseUiKitButtonData(
                     text: 'get code'.toUpperCase(),
                     onPressed: onSubmitted,
+                    loading: loading,
                   ),
                 ),
+                SpacingFoundation.verticalSpace24,
               ],
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ),

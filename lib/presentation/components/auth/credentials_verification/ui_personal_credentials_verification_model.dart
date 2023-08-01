@@ -1,19 +1,22 @@
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class UiCredentialsVerificationModel {
+class UiPersonalCredentialsVerificationModel {
   final CountryModel? selectedCountry;
   final String? selectedTab;
+  final RegistrationType? selectedRegistrationType;
 
-  UiCredentialsVerificationModel({
+  UiPersonalCredentialsVerificationModel({
     this.selectedCountry,
+    this.selectedRegistrationType,
     this.selectedTab,
   });
 
-  UiCredentialsVerificationModel copyWith({
+  UiPersonalCredentialsVerificationModel copyWith({
     CountryModel? selectedCountry,
     String? selectedTab,
   }) {
-    return UiCredentialsVerificationModel(
+    return UiPersonalCredentialsVerificationModel(
       selectedCountry: selectedCountry ?? this.selectedCountry,
       selectedTab: selectedTab ?? this.selectedTab,
     );
