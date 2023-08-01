@@ -4,16 +4,18 @@ import '../../../shuffle_components_kit.dart';
 
 class UiEventModel {
   final int id;
-  final String? title;
-  final UiOwnerModel? owner;
-  final List<BaseUiKitMedia>? media;
-  final bool? favorite;
-  final DateTime? date;
-  final String? description;
-  final List<UiKitTag>? tags;
-  final List<UiKitTag>? baseTags;
-  final double? rating;
-  final List<UiDescriptionItemModel>? descriptionItems;
+  String? title;
+  UiOwnerModel? owner;
+  List<BaseUiKitMedia>? media;
+  bool? favorite;
+  bool isRecurrent;
+  DateTime? date;
+  String? description;
+  List<UiKitTag>? tags;
+  List<UiKitTag>? baseTags;
+  double? rating;
+  bool archived;
+  List<UiDescriptionItemModel>? descriptionItems;
 
   UiEventModel({required this.id,
       this.title,
@@ -25,5 +27,7 @@ class UiEventModel {
       this.tags,
       this.baseTags,
       this.rating,
+      this.isRecurrent = false,
+    this.archived = false,
       this.descriptionItems});
 }

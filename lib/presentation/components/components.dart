@@ -4,6 +4,7 @@ export 'about_user/about_user_component.dart';
 export 'about_user/ui_about_user_model.dart';
 export 'auth/auth_components.dart';
 export 'event/event_component.dart';
+export 'event/create_event_component.dart';
 export 'event/uievent_model.dart';
 export 'feed/feed_component.dart';
 export 'feed/uifeed_model.dart';
