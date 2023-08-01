@@ -132,6 +132,36 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     data: ThemeData(
                         textButtonTheme: TextButtonThemeData(
                             style:
+                            context.uiKitTheme?.textButtonLabelSmallStyle)),
+                    child: context
+                        .button(
+                        reversed: true,
+                        isTextButton: true,
+                        data: BaseUiKitButtonData(
+                            onPressed: () {},
+                            text: 'Base properties',
+                            icon: DecoratedBox(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.fromBorderSide(BorderSide(
+                                    width: 2, color: Colors.white)),
+                              ),
+                              child: ImageWidget(
+                                svgAsset: GraphicsFoundation
+                                    .instance.svg.chevronRight,
+                                color: Colors.white,
+                              ).paddingAll(
+                                  SpacingFoundation.verticalSpacing12),
+                            )))
+                        .paddingSymmetric(horizontal: horizontalPadding),
+                  ),
+                  UiKitTagsWidget(
+                      baseTags: _eventToEdit.baseTags ?? []),
+                  SpacingFoundation.verticalSpace24,
+                  Theme(
+                    data: ThemeData(
+                        textButtonTheme: TextButtonThemeData(
+                            style:
                                 context.uiKitTheme?.textButtonLabelSmallStyle)),
                     child: context
                         .button(
