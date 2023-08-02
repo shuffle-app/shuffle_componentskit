@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -58,9 +59,24 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     });
   }
 
-  _onPhotoAddRequested() {}
+  _onPhotoAddRequested() async {
+    final files = await ImagePicker().pickMultiImage();
+    if (files.isNotEmpty) {
+      setState(() {
+        _photos.addAll(files.map((file) => UiKitMediaPhoto(link: file.path)));
+      });
+    }
+  }
 
-  _onVideoAddRequested() {}
+  _onVideoAddRequested() async {
+    final videoFile =
+        await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (videoFile != null) {
+      setState(() {
+        _videos.add(UiKitMediaVideo(link: videoFile.path));
+      });
+    }
+  }
 
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
     setState(() {
@@ -132,31 +148,30 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     data: ThemeData(
                         textButtonTheme: TextButtonThemeData(
                             style:
-                            context.uiKitTheme?.textButtonLabelSmallStyle)),
+                                context.uiKitTheme?.textButtonLabelSmallStyle)),
                     child: context
                         .button(
-                        reversed: true,
-                        isTextButton: true,
-                        data: BaseUiKitButtonData(
-                            onPressed: () {},
-                            text: 'Base properties',
-                            icon: DecoratedBox(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.fromBorderSide(BorderSide(
-                                    width: 2, color: Colors.white)),
-                              ),
-                              child: ImageWidget(
-                                svgAsset: GraphicsFoundation
-                                    .instance.svg.chevronRight,
-                                color: Colors.white,
-                              ).paddingAll(
-                                  SpacingFoundation.verticalSpacing12),
-                            )))
+                            reversed: true,
+                            isTextButton: true,
+                            data: BaseUiKitButtonData(
+                                onPressed: () {},
+                                text: 'Base properties',
+                                icon: DecoratedBox(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.fromBorderSide(BorderSide(
+                                        width: 2, color: Colors.white)),
+                                  ),
+                                  child: ImageWidget(
+                                    svgAsset: GraphicsFoundation
+                                        .instance.svg.chevronRight,
+                                    color: Colors.white,
+                                  ).paddingAll(
+                                      SpacingFoundation.verticalSpacing12),
+                                )))
                         .paddingSymmetric(horizontal: horizontalPadding),
                   ),
-                  UiKitTagsWidget(
-                      baseTags: _eventToEdit.baseTags ?? []),
+                  UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                   SpacingFoundation.verticalSpace24,
                   Theme(
                     data: ThemeData(
@@ -217,9 +232,16 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           reversed: true,
                           isTextButton: true,
                           data: BaseUiKitButtonData(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final maybeTime = await showUiKitTimeDialog(context);
+                                if (maybeTime!= null) {
+                                  setState(() {
+                                    _eventToEdit.time = maybeTime;
+                                  });
+                                }
+                              },
                               text:
-                                  '${_eventToEdit.date == null ? 'select time' : DateFormat('HH:mm').format(_eventToEdit.date!)}  ',
+                                  '${_eventToEdit.time == null ? 'select time' : _eventToEdit.time.toString()}  ',
                               icon: DecoratedBox(
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
@@ -248,7 +270,14 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           reversed: true,
                           isTextButton: true,
                           data: BaseUiKitButtonData(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final maybeDate = await showUiKitCalendarDialog(context);
+                                if (maybeDate!= null) {
+                                  setState(() {
+                                    _eventToEdit.date = maybeDate;
+                                  });
+                                }
+                              },
                               text:
                                   '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)}  ',
                               icon: DecoratedBox(

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -10,6 +11,7 @@ class UiEventModel {
   bool? favorite;
   bool isRecurrent;
   DateTime? date;
+  TimeOfDay? time;
   String? description;
   List<UiKitTag>? tags;
   List<UiKitTag>? baseTags;
@@ -27,6 +29,7 @@ class UiEventModel {
       this.tags,
       this.baseTags,
       this.rating,
+      this.time,
       this.isRecurrent = false,
     this.archived = false,
       this.descriptionItems});
