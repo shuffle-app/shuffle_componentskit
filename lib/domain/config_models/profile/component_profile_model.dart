@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/hangout_recommendation.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 part 'component_profile_model.g.dart';
@@ -20,19 +21,22 @@ class ComponentProfileModel extends UiBaseModel {
   @JsonKey(name: 'show_reactions')
   final bool? showReactions;
 
+  @JsonKey(name: 'hangout_recs')
+  final List<HangoutRecommendation>? hangoutRecs;
+
   ComponentProfileModel({
     this.showFindPeople,
     this.showMessages,
     this.showReviews,
     this.showReactions,
+    this.hangoutRecs,
     this.showBalance,
     required super.pageBuilderType,
     super.positionModel,
     required super.version,
   }) : super();
 
-  factory ComponentProfileModel.fromJson(Map<String, dynamic> json) =>
-      _$ComponentProfileModelFromJson(json);
+  factory ComponentProfileModel.fromJson(Map<String, dynamic> json) => _$ComponentProfileModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ComponentProfileModelToJson(this);
 }
