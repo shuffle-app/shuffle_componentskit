@@ -13,10 +13,6 @@ ComponentProfileModel _$ComponentProfileModelFromJson(
       showMessages: json['show_messages'] as bool?,
       showReviews: json['show_reviews'] as bool?,
       showReactions: json['show_reactions'] as bool?,
-      hangoutRecs: (json['hangout_recs'] as List<dynamic>?)
-          ?.map(
-              (e) => HangoutRecommendation.fromJson(e as Map<String, dynamic>))
-          .toList(),
       showBalance: json['show_balace'] as bool?,
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
@@ -38,7 +34,6 @@ Map<String, dynamic> _$ComponentProfileModelToJson(
       'show_messages': instance.showMessages,
       'show_reviews': instance.showReviews,
       'show_reactions': instance.showReactions,
-      'hangout_recs': instance.hangoutRecs,
     };
 
 const _$PageBuilderTypeEnumMap = {
