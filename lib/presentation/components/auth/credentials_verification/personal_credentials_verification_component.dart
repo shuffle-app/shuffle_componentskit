@@ -9,7 +9,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
   final ValueChanged<int>? onTabChanged;
   final ValueChanged<CountryModel>? onCountrySelected;
   final GlobalKey<FormState> formKey;
-  final String? Function(String?)? validator;
+  final String? Function(String?)? credentialsValidator;
   final bool? loading;
 
   const PersonalCredentialsVerificationComponent({
@@ -20,7 +20,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
     this.onSubmit,
     this.onTabChanged,
     this.onCountrySelected,
-    this.validator,
+    this.credentialsValidator,
     required this.credentialsController,
   });
 
@@ -93,6 +93,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
                   controller: credentialsController,
                   countryCode: uiModel.selectedCountry?.countryPhoneCode ?? '',
                   fillColor: ColorsFoundation.surface3,
+                  validator: credentialsValidator,
                 ).paddingAll(EdgeInsetsFoundation.all4),
               ),
               // if (uiModel.selectedTab == 'email')

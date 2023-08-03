@@ -85,7 +85,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                 actionButton: context.gradientButton(
                   data: BaseUiKitButtonData(
                     text: 'Create place'.toUpperCase(),
-                    onPressed: () {},
+                    onPressed: onCreatePlace,
                   ),
                 ),
               ),
@@ -113,13 +113,15 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                 separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
                 itemCount: places.length,
               ),
-            SpacingFoundation.verticalSpace24,
-            context.gradientButton(
-              data: BaseUiKitButtonData(
-                text: 'Create place',
-                onPressed: onCreatePlace,
+            if (places.isNotEmpty) ...[
+              SpacingFoundation.verticalSpace24,
+              context.gradientButton(
+                data: BaseUiKitButtonData(
+                  text: 'Create place',
+                  onPressed: onCreatePlace,
+                ),
               ),
-            ),
+            ],
             SpacingFoundation.verticalSpace24,
           ],
         ).paddingSymmetric(

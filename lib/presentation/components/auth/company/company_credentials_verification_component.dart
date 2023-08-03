@@ -12,6 +12,9 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
   final TextEditingController credentialsController;
   final GlobalKey<FormState> formKey;
   final bool? loading;
+  final String? Function(String?)? companyNameValidator;
+  final String? Function(String?)? companyPositionValidator;
+  final String? Function(String?)? companyCredentialsValidator;
 
   const CompanyCredentialsVerificationComponent({
     super.key,
@@ -24,6 +27,9 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     this.onSubmitted,
     this.onTabChanged,
     this.onCountryChanged,
+    this.companyNameValidator,
+    this.companyPositionValidator,
+    this.companyCredentialsValidator,
   });
 
   @override
@@ -96,6 +102,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                     controller: nameController,
                     hintText: 'Your Name'.toUpperCase(),
                     fillColor: ColorsFoundation.surface3,
+                    validator: companyNameValidator,
                   ).paddingAll(EdgeInsetsFoundation.all4),
                 ),
                 SpacingFoundation.verticalSpace16,
@@ -106,6 +113,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                     controller: positionController,
                     hintText: 'Your Position'.toUpperCase(),
                     fillColor: ColorsFoundation.surface3,
+                    validator: companyPositionValidator,
                   ).paddingAll(EdgeInsetsFoundation.all4),
                 ),
                 if (uiModel.selectedRegistrationType == RegistrationType.phone) ...[
@@ -118,6 +126,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                       enabled: true,
                       fillColor: ColorsFoundation.surface3,
                       countryCode: uiModel.selectedCountry?.countryPhoneCode ?? '',
+                      validator: companyCredentialsValidator,
                     ).paddingAll(EdgeInsetsFoundation.all4),
                   ),
                 ],

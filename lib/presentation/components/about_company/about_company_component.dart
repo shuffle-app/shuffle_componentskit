@@ -7,7 +7,7 @@ class AboutCompanyComponent extends StatelessWidget {
   final UiAboutCompanyModel uiModel;
   final ValueChanged<String>? onAgeRangesChanged;
   final ValueChanged<String>? onAudiencesChanged;
-  final ValueChanged<String?>? onNicheChanged;
+  final ValueChanged<UiKitMenuItem<String>?>? onNicheChanged;
 
   const AboutCompanyComponent({
     super.key,
@@ -101,10 +101,13 @@ class AboutCompanyComponent extends StatelessWidget {
         ),
         const Spacer(),
         UiKitTitledSection(
+          errorText: uiModel.errorSelectedMenuItem,
+          hasError: uiModel.errorSelectedMenuItem != null,
           title: nicheTitle,
           child: UiKitMenu<String>(
-            onSelected: (item) => onNicheChanged?.call(item.value),
+            onSelected: (item) => onNicheChanged?.call(item),
             title: nicheTitle,
+            selectedItem: uiModel.selectedMenuItem,
             items: niches?.keys.map<UiKitMenuItem<String>>((e) {
                   final item = niches[e];
 
@@ -120,6 +123,8 @@ class AboutCompanyComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         UiKitTitledSection(
+          errorText: uiModel.errorSelectedAudiences,
+          hasError: uiModel.errorSelectedAudiences != null,
           title: audiencesTitle,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -135,13 +140,12 @@ class AboutCompanyComponent extends StatelessWidget {
                   )
                   .toList(),
             ),
-          ).paddingOnly(
-            left: EdgeInsetsFoundation.horizontal4,
-            bottom: EdgeInsetsFoundation.vertical4,
-          ),
+          ).paddingAll(EdgeInsetsFoundation.all4),
         ),
         SpacingFoundation.verticalSpace12,
         UiKitTitledSection(
+          errorText: uiModel.errorSelectedAgeRanges,
+          hasError: uiModel.errorSelectedAgeRanges != null,
           title: ageGroupsTitle,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -151,7 +155,7 @@ class AboutCompanyComponent extends StatelessWidget {
                   .map<Widget>(
                     (e) => UiKitOrdinaryChip(
                       title: e,
-                      selected: uiModel.selectedAudiences?.contains(e) ?? false,
+                      selected: uiModel.selectedAgeRanges?.contains(e) ?? false,
                       onPressed: () => onAgeRangesChanged?.call(e),
                     ),
                   )
