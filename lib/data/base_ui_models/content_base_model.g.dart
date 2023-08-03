@@ -16,10 +16,6 @@ ContentBaseModel _$ContentBaseModelFromJson(Map<String, dynamic> json) =>
         (k, e) => MapEntry($enumDecode(_$ContentItemTypeEnumMap, k),
             ContentBaseModel.fromJson(e as Map<String, dynamic>)),
       ),
-      decoration: (json['decoration'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(
-            k, PropertiesBaseModel.fromJson(e as Map<String, dynamic>)),
-      ),
       body: (json['body'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry($enumDecode(_$ContentItemTypeEnumMap, k),
             ContentBaseModel.fromJson(e as Map<String, dynamic>)),
@@ -39,7 +35,6 @@ Map<String, dynamic> _$ContentBaseModelToJson(ContentBaseModel instance) =>
       'body': instance.body
           ?.map((k, e) => MapEntry(_$ContentItemTypeEnumMap[k]!, e)),
       'properties': instance.properties,
-      'decoration': instance.decoration,
     };
 
 const _$ContentItemTypeEnumMap = {

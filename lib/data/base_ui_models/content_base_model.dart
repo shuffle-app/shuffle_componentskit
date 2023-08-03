@@ -17,13 +17,9 @@ class ContentBaseModel {
   @JsonKey(name: 'properties')
   final Map<String, PropertiesBaseModel>? properties;
 
-  @JsonKey(name: 'decoration')
-  final Map<String, PropertiesBaseModel>? decoration;
-
   const ContentBaseModel({
     this.title,
     this.subtitle,
-    this.decoration,
     this.body,
     this.properties,
   });

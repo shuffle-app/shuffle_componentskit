@@ -35,7 +35,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
-    final decorationLink = model.content.decoration?.values.first;
+    final decorationLink = model.content.properties?.values.first;
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
     final countrySelectorTitle =
         model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
