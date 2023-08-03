@@ -3,12 +3,10 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UserTypeSelectionComponent extends StatelessWidget {
-  final UiUserTypeSelectionModel uiModel;
   final ValueChanged<String>? onUserTypeSelected;
 
   const UserTypeSelectionComponent({
     super.key,
-    required this.uiModel,
     this.onUserTypeSelected,
   });
 
@@ -29,6 +27,12 @@ class UserTypeSelectionComponent extends StatelessWidget {
       subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
     }
     final redirects = model.content.body?[ContentItemType.redirect]?.properties;
+    List<String> redirectsSorted = List<String>.generate(redirects?.length ?? 0, (index) => '');
+    redirects?.forEach((key, value) {
+      redirectsSorted.insert((value.sortNumber?.toInt() ?? 1) - 1, key);
+    });
+    final redirectCardWidth = 1.sw * 0.325;
+    final redirectCardHeight = redirectCardWidth * 0.923;
 
     return Stack(
       fit: StackFit.passthrough,
@@ -58,14 +62,14 @@ class UserTypeSelectionComponent extends StatelessWidget {
             alignment: WrapAlignment.center,
             spacing: SpacingFoundation.horizontalSpacing16,
             runSpacing: SpacingFoundation.verticalSpacing16,
-            children: redirects?.keys.map((item) {
-                  return UiKitVerticalChip(
-                    caption: item,
-                    sign: ImageWidget(link: redirects[item]?.imageLink ?? ''),
-                    onTap: () => onUserTypeSelected?.call(item.toLowerCase()),
-                  );
-                }).toList() ??
-                [],
+            children: redirectsSorted.where((element) => element.isNotEmpty).map((item) {
+              return UiKitVerticalChip(
+                size: Size(redirectCardWidth, redirectCardHeight),
+                caption: item,
+                sign: ImageWidget(link: redirects?[item]?.imageLink ?? ''),
+                onTap: () => onUserTypeSelected?.call(item.toLowerCase()),
+              );
+            }).toList(),
           ),
         ),
       ],
