@@ -13,6 +13,7 @@ export 'config_models/search/component_search_model.dart';
 export 'config_models/shuffle/component_shuffle_model.dart';
 export 'config_models/spinner/component_spinner_model.dart';
 export 'config_models/universal_model/component_model.dart';
+export 'data_uimodels/hangout_recommendation.dart';
 export 'data_uimodels/registration_type.dart';
 export 'data_uimodels/uidescriptionitem_model.dart';
 export 'data_uimodels/uiowner_model.dart';

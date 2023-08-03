@@ -5,8 +5,13 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ProfileComponent extends StatelessWidget {
   final UiProfileModel profile;
+  final List<HangoutRecommendation>? recommendedUsers;
 
-  const ProfileComponent({Key? key, required this.profile}) : super(key: key);
+  const ProfileComponent({
+    Key? key,
+    required this.profile,
+    this.recommendedUsers,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,35 +28,36 @@ class ProfileComponent extends StatelessWidget {
           crossAxisAlignment: titleAlignment.crossAxisAlignment,
           children: [profile.cardWidget]).paddingSymmetric(horizontal: horizontalMargin),
       Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-          children: [
-            // SpacingFoundation.verticalSpace24,
-            // ProfileAttitudeTabs(
-            //   onTappedTab: (index) {},
-            //   tabs: const [
-            //     ProfileAttitudeTab(title: 'LOVED'),
-            //     ProfileAttitudeTab(title: 'HATED'),
-            //   ],
-            // ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-            SpacingFoundation.verticalSpace24,
-            Text(
-              'Find someone to hang out with',
-              style: context.uiKitTheme?.boldTextTheme.title1,
-            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-            SpacingFoundation.verticalSpace24,
-            const UnderDevelopment(),
-            // ProfileStoriesList(
-            //   stories: List.generate(
-            //     5,
-            //     (index) => const ProfileStory(
-            //       image: 'assets/images/png/profile_story_1.png',
-            //     ),
-            //   ),
-            // ),
-            // SpacingFoundation.verticalSpace24,
-          ])
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+        children: [
+          // SpacingFoundation.verticalSpace24,
+          // ProfileAttitudeTabs(
+          //   onTappedTab: (index) {},
+          //   tabs: const [
+          //     ProfileAttitudeTab(title: 'LOVED'),
+          //     ProfileAttitudeTab(title: 'HATED'),
+          //   ],
+          // ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+          SpacingFoundation.verticalSpace24,
+          Text(
+            'Find someone to hang out with',
+            style: context.uiKitTheme?.boldTextTheme.title1,
+          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+          SpacingFoundation.verticalSpace24,
+          const UnderDevelopment(),
+          // ProfileStoriesList(
+          //   stories: List.generate(
+          //     5,
+          //     (index) => const ProfileStory(
+          //       image: 'assets/images/png/profile_story_1.png',
+          //     ),
+          //   ),
+          // ),
+          // SpacingFoundation.verticalSpace24,
+        ],
+      )
     ]).paddingSymmetric(vertical: (model.positionModel?.verticalMargin ?? 0).toDouble());
   }
 }
