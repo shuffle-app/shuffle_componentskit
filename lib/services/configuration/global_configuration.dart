@@ -10,7 +10,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class GlobalConfiguration {
   static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
-  static String _configUrl = ConfigConstants.configUrl;
+  static String _configUrl = ConfigConstants.configAlternativeUrl;
   static int _timeout = 1;
   final Completer _completer = Completer();
   ConfigurationModel appConfig = ConfigurationModel(updated: DateTime.now(), content: {}, theme: 'default');

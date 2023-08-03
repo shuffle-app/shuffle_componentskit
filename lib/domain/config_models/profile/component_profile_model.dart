@@ -31,8 +31,7 @@ class ComponentProfileModel extends UiBaseModel {
     required super.version,
   }) : super();
 
-  factory ComponentProfileModel.fromJson(Map<String, dynamic> json) =>
-      _$ComponentProfileModelFromJson(json);
+  factory ComponentProfileModel.fromJson(Map<String, dynamic> json) => _$ComponentProfileModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ComponentProfileModelToJson(this);
 }

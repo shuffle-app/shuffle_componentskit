@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PlacePreview extends StatelessWidget {
   final Function? onTap;
@@ -44,8 +43,7 @@ class PlacePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final size = cellSize ?? MediaQuery.of(context).size;
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return SizedBox(
         width: double.infinity,
@@ -58,7 +56,7 @@ class PlacePreview extends StatelessWidget {
                 child: Stack(clipBehavior: Clip.none, children: [
                   UiKitPhotoSlider(
                     media: place.media,
-                    onTap:  () => onTap?.call(place.id) ,
+                    onTap: () => onTap?.call(place.id),
                     width: size.width - horizontalMargin * 2,
                     height: 156.h,
                   ),
@@ -76,12 +74,10 @@ class PlacePreview extends StatelessWidget {
                                     color: Colors.white,
                                     svgAsset: isFavorite
                                         ? GraphicsFoundation.instance.svg.star
-                                        : GraphicsFoundation
-                                            .instance.svg.starOutline)))),
+                                        : GraphicsFoundation.instance.svg.starOutline)))),
                 ])),
             SpacingFoundation.verticalSpace8,
-            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
-                .paddingSymmetric(horizontal: horizontalMargin),
+            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
               baseTags: place.baseTags ?? [],
