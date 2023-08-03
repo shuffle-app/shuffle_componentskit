@@ -352,42 +352,6 @@ class ComponentsTestPage extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
-                text: 'show company login',
-                onPressed: () => buildComponent(
-                  context,
-                  CompanyLoginModel.fromJson({
-                    'version': '1.0.2',
-                    'builder_type': 'page',
-                  }),
-                  ComponentBuilder(
-                    child: CompanyLoginComponent(
-                      model: UiCompanyLoginModel(
-                        welcomeMessageTitle: 'Welcome back',
-                        welcomeMessageBody: 'We are happy to see you again. To gain access you must log in first.',
-                        registrationTypes: [
-                          RegistrationTypeData(
-                            title: 'Phone'.toUpperCase(),
-                            type: RegistrationType.phone,
-                          ),
-                          RegistrationTypeData(
-                            title: 'Email'.toUpperCase(),
-                            type: RegistrationType.email,
-                          ),
-                        ],
-                        selectedRegistrationType: RegistrationType.phone,
-                        selectedCountry: CountriesFoundation.instance.unitedArabEmirates,
-                      ),
-                      nameController: TextEditingController(),
-                      positionController: TextEditingController(),
-                      anotherFieldController: TextEditingController(),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
                 text: 'show user selection',
                 onPressed: () => buildComponent(
                   context,
@@ -395,22 +359,6 @@ class ComponentsTestPage extends StatelessWidget {
                   ComponentBuilder(
                     child: UserTypeSelectionComponent(
                       onUserTypeSelected: (userType) => print(userType),
-                      uiModel: UiUserTypeSelectionModel(
-                        pageTitle: 'Welcome',
-                        pageBodyText: 'Select the type of account you would like to create',
-                        userTypes: [
-                          UserTypeModel(
-                            title: 'Personal',
-                            iconPath: GraphicsFoundation.instance.svg.male.path,
-                            type: 'personal',
-                          ),
-                          UserTypeModel(
-                            title: 'Company',
-                            iconPath: GraphicsFoundation.instance.svg.company.path,
-                            type: 'company',
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
@@ -422,7 +370,7 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show company registration',
                 onPressed: () => buildComponent(
                   context,
-                  ComponentModel.fromJson(configuration.appConfig.content['about_user']),
+                  ComponentModel.fromJson(configuration.appConfig.content['about_company']),
                   ComponentBuilder(
                     child: AboutCompanyComponent(
                       uiModel: UiAboutCompanyModel(),
@@ -442,9 +390,50 @@ class ComponentsTestPage extends StatelessWidget {
                     'builder_type': 'page',
                   }),
                   ComponentBuilder(
-                    child: SmsCodeVerificationComponent(
-                      smsController: TextEditingController(),
-                      uiModel: UiSmsCodeVerificationModel(phone: '+998937777777'),
+                    child: CredentialsCodeVerificationComponent(
+                      codeController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
+                      credentials: '+380 66 123 45 67',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company credential verification',
+                onPressed: () => buildComponent(
+                  context,
+                  PersonalCredentialVerificationModel.fromJson(
+                    configuration.appConfig.content['company_credentials_verification'],
+                  ),
+                  ComponentBuilder(
+                    child: CompanyCredentialsVerificationComponent(
+                      uiModel: UiCompanyCredentialsVerificationModel(),
+                      credentialsController: TextEditingController(),
+                      nameController: TextEditingController(),
+                      positionController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show personal credential verification',
+                onPressed: () => buildComponent(
+                  context,
+                  PersonalCredentialVerificationModel.fromJson(
+                    configuration.appConfig.content['personal_credentials_verification'],
+                  ),
+                  ComponentBuilder(
+                    child: PersonalCredentialsVerificationComponent(
+                      uiModel: UiPersonalCredentialsVerificationModel(),
+                      credentialsController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
                     ),
                   ),
                 ),
