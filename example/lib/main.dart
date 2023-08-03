@@ -130,6 +130,135 @@ class ComponentsTestPage extends StatelessWidget {
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company profile',
+                onPressed: () => buildComponent(
+                  context,
+                  const ComponentModel(
+                    version: '1.0.0',
+                    pageBuilderType: PageBuilderType.page,
+                  ),
+                  ComponentBuilder(
+                    child: CompanyHomeScreenComponent(
+                      profileStats: [
+                        UiKitStats(
+                          title: 'Invited',
+                          value: 934,
+                          actionButton: context.smallButton(
+                            data: BaseUiKitButtonData(
+                              text: 'MORE',
+                              onPressed: () {},
+                            ),
+                          ),
+                        ),
+                        UiKitStats(
+                          title: 'Booked',
+                          value: 133,
+                          actionButton: context.smallButton(
+                            data: BaseUiKitButtonData(
+                              text: 'MORE',
+                              onPressed: () {},
+                            ),
+                          ),
+                        ),
+                      ],
+                      name: 'Name asads',
+                      places: List.generate(
+                        2,
+                        (index) => UiPlaceModel(
+                          id: index + 1,
+                          media: [
+                            UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                          ],
+                          title: 'lorem ipsum dolor sit amet',
+                          description:
+                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                          baseTags: [
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: false,
+                            ),
+                          ],
+                          tags: [
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Duh',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Metal',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Heavy',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Club',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Cheaper',
+                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              unique: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'show onboarding',
                     onPressed: () => buildComponent(context, ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
