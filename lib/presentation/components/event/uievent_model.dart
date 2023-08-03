@@ -13,10 +13,12 @@ class UiEventModel {
   DateTime? date;
   TimeOfDay? time;
   String? description;
+  String? location;
   List<UiKitTag>? tags;
   List<UiKitTag>? baseTags;
   double? rating;
   bool archived;
+  List<String>? weekdays;
   List<UiDescriptionItemModel>? descriptionItems;
 
   UiEventModel({required this.id,
@@ -26,10 +28,12 @@ class UiEventModel {
       this.date,
       this.media,
       this.description,
+      this.location,
       this.tags,
       this.baseTags,
       this.rating,
       this.time,
+      this.weekdays,
       this.isRecurrent = false,
     this.archived = false,
       this.descriptionItems});

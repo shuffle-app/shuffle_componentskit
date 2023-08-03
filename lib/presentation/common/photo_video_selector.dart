@@ -4,7 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter/material.dart';
 
 class PhotoVideoSelector extends StatelessWidget {
-  static const Size itemsSize = Size(60, 60);
+  final Size itemsSize;
   final List<BaseUiKitMedia> photos;
   final List<BaseUiKitMedia> videos;
   final VoidCallback onPhotoAddRequested;
@@ -20,6 +20,7 @@ class PhotoVideoSelector extends StatelessWidget {
       {super.key,
       this.photos = const [],
       this.videos = const [],
+      this.itemsSize = const Size(60, 60),
       required this.onPhotoAddRequested,
       required this.onVideoAddRequested,
       required this.onPhotoReorderRequested,
@@ -47,38 +48,43 @@ class PhotoVideoSelector extends StatelessWidget {
             child: Stack(alignment: Alignment.centerRight, children: [
               ReorderableList(
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) =>
-                      Stack(alignment: Alignment.topRight, children: [
-                        ClipPath(
-                                clipper: ShapeBorderClipper(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadiusFoundation.all8)),
-                                child: photos[index].widget(itemsSize))
-                            .paddingAll(4),
-                        context.outlinedButton(
-                            hideBorder: true,
-                            data: BaseUiKitButtonData(
-                                onPressed: () => onPhotoDeleted.call(index),
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.x,
-                                  color: Colors.white,
-                                  height: 8,
-                                  width: 8,
-                                )))
-                      ]),
+                  itemBuilder: (BuildContext context, int index) => Stack(
+                          key: ValueKey(photos[index].link),
+                          alignment: Alignment.topRight,
+                          children: [
+                            ClipPath(
+                                    clipper: ShapeBorderClipper(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadiusFoundation.all8)),
+                                    child: photos[index].widget(itemsSize))
+                                .paddingAll(4),
+                            context.outlinedButton(
+                                hideBorder: true,
+                                data: BaseUiKitButtonData(
+                                    onPressed: () => onPhotoDeleted.call(index),
+                                    icon: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.x,
+                                      color: Colors.white,
+                                      height: 8,
+                                      width: 8,
+                                    )))
+                          ]),
                   itemCount: photos.length,
                   onReorder: onPhotoReorderRequested),
-              context.outlinedButton(
-                data: BaseUiKitButtonData(
-                    onPressed: onPhotoAddRequested,
-                    icon: ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.cameraPlus,
-                      color: Colors.white,
-                      height: 18,
-                      width: 18,
-                    )),
-              ).paddingSymmetric(horizontal: horizontalPadding),
+              context
+                  .outlinedButton(
+                    data: BaseUiKitButtonData(
+                        onPressed: onPhotoAddRequested,
+                        icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.cameraPlus,
+                          color: Colors.white,
+                          height: 18,
+                          width: 18,
+                        )),
+                  )
+                  .paddingSymmetric(horizontal: horizontalPadding),
             ])),
         Text(
           'Video',
@@ -105,22 +111,24 @@ class PhotoVideoSelector extends StatelessWidget {
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.x,
                                   color: Colors.white,
-                                  height: 8,
-                                  width: 8,
+                                  height: 6,
+                                  width: 6,
                                 )))
                       ]),
                   itemCount: videos.length,
                   onReorder: onVideoReorderRequested),
-              context.outlinedButton(
-                data: BaseUiKitButtonData(
-                    onPressed: onPhotoAddRequested,
-                    icon: ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.videoPlus,
-                      color: Colors.white,
-                      height: 18,
-                      width: 18,
-                    )),
-              ).paddingSymmetric(horizontal: horizontalPadding),
+              context
+                  .outlinedButton(
+                    data: BaseUiKitButtonData(
+                        onPressed: onPhotoAddRequested,
+                        icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.videoPlus,
+                          color: Colors.white,
+                          height: 18,
+                          width: 18,
+                        )),
+                  )
+                  .paddingSymmetric(horizontal: horizontalPadding),
             ])),
       ],
     );

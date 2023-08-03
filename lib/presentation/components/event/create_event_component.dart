@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -95,7 +96,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model =
+    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1',pageBuilderType: PageBuilderType.page):
         ComponentEventModel.fromJson(config['event_edit']);
     final horizontalPadding =
         model.positionModel?.horizontalMargin?.toDouble() ?? 0;
