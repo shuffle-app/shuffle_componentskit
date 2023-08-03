@@ -1,41 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
   final Function? onPlacePressed;
 
-  const MoodComponent({Key? key, required this.mood, this.onPlacePressed})
-      : super(key: key);
+  const MoodComponent({Key? key, required this.mood, this.onPlacePressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentMoodModel model =
-        ComponentMoodModel.fromJson(config['mood']);
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentMoodModel model = ComponentMoodModel.fromJson(config['mood']);
 
     final theme = context.uiKitTheme;
 
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final cardWidth = 0.5.sw - horizontalMargin * 2;
-    final smallCardHeight =
-        cardWidth / 2 - SpacingFoundation.verticalSpacing8 / 2;
+    final smallCardHeight = cardWidth / 2 - SpacingFoundation.verticalSpacing8 / 2;
 
     return Column(
       mainAxisAlignment: bodyAlignment.mainAxisAlignment,
       crossAxisAlignment: bodyAlignment.crossAxisAlignment,
       children: [
         SpacingFoundation.verticalSpace16,
-        UiKitMessageCardWithIcon(
-                message: mood.title,
-                icon: ImageWidget(link: mood.logo),
-                layoutDirection: Axis.horizontal)
+        UiKitMessageCardWithIcon(message: mood.title, icon: ImageWidget(link: mood.logo), layoutDirection: Axis.horizontal)
             .paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace14,
         Row(
@@ -51,8 +41,7 @@ class MoodComponent extends StatelessWidget {
                 child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (mood.descriptionItems != null &&
-                    mood.descriptionItems!.isNotEmpty)
+                if (mood.descriptionItems != null && mood.descriptionItems!.isNotEmpty)
                   () {
                     final item = mood.descriptionItems!.first;
 
@@ -64,8 +53,7 @@ class MoodComponent extends StatelessWidget {
                     );
                   }(),
                 SpacingFoundation.verticalSpacing8.heightBox,
-                if (mood.descriptionItems != null &&
-                    mood.descriptionItems!.length >= 2)
+                if (mood.descriptionItems != null && mood.descriptionItems!.length >= 2)
                   () {
                     final item = mood.descriptionItems!.last;
 
@@ -77,9 +65,7 @@ class MoodComponent extends StatelessWidget {
                       unit: 'kCal',
                       icon: ImageWidget(
                         svgAsset: Assets.images.svg.fireWhite,
-                        color: item.active
-                            ? Colors.white
-                            : UiKitColors.darkNeutral200,
+                        color: item.active ? Colors.white : UiKitColors.darkNeutral200,
                       ),
                     );
                   }(),
@@ -99,8 +85,7 @@ class MoodComponent extends StatelessWidget {
                     onTap: onPlacePressed,
                     place: e,
                     model: model,
-                  ).paddingSymmetric(
-                      vertical: SpacingFoundation.verticalSpacing12))
+                  ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
               .toList(),
         ],
       ],
