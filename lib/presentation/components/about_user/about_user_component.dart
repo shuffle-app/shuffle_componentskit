@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -34,18 +34,12 @@ class AboutUserComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (aboutUserModel.selectedAge == null) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
     }
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentModel model =
-    ComponentModel.fromJson(config['about_user']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentModel model = ComponentModel.fromJson(config['about_user']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final theme = context.uiKitTheme;
     final subHeadline = theme?.boldTextTheme.subHeadline;
     final titleAlignment = model.positionModel?.titleAlignment;
@@ -61,16 +55,13 @@ class AboutUserComponent extends StatelessWidget {
               crossAxisAlignment: titleAlignment.crossAxisAlignment,
               mainAxisAlignment: titleAlignment.mainAxisAlignment,
               children: () {
-                final List<ContentItemType> contentTypeList =
-                    model.content.title!.keys.toList();
-                final List<ContentBaseModel> contents =
-                    model.content.title!.values.toList();
+                final List<ContentItemType> contentTypeList = model.content.title!.keys.toList();
+                final List<ContentBaseModel> contents = model.content.title!.values.toList();
 
                 return [
                   if (contentTypeList.first == ContentItemType.text)
                     Text(
-                      contents.first.properties?.keys.first ??
-                          'Now let\'s get to know each other',
+                      contents.first.properties?.keys.first ?? 'Now let\'s get to know each other',
                       style: theme?.boldTextTheme.title1,
                     ),
                   SpacingFoundation.verticalSpace16,
@@ -80,17 +71,12 @@ class AboutUserComponent extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: 'The more info we get about you, the better ',
-                          style: subHeadline?.copyWith(
-                              color: Colors.white.withOpacity(1)),
+                          style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         ),
-                        TextSpan(
-                            text: 'your leisure selection',
-                            style: subHeadline?.copyWith(
-                                color: Colors.white.withOpacity(0))),
+                        TextSpan(text: 'your leisure selection', style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
                         TextSpan(
                           text: ' will be.',
-                          style: subHeadline?.copyWith(
-                              color: Colors.white.withOpacity(1)),
+                          style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         )
                       ],
                     )),
@@ -102,16 +88,12 @@ class AboutUserComponent extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: 'The more info we get about you, the better ',
-                            style: subHeadline?.copyWith(
-                                color: Colors.white.withOpacity(0)),
+                            style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           ),
-                          TextSpan(
-                              text: 'your leisure selection',
-                              style: subHeadline),
+                          TextSpan(text: 'your leisure selection', style: subHeadline),
                           TextSpan(
                             text: ' will be.',
-                            style: subHeadline?.copyWith(
-                                color: Colors.white.withOpacity(0)),
+                            style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           )
                         ],
                       )),
@@ -125,11 +107,9 @@ class AboutUserComponent extends StatelessWidget {
           child: Form(
               key: formKey,
               child: Column(
-                mainAxisAlignment:
-                    (model.positionModel?.titleAlignment).mainAxisAlignment,
+                mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment:
-                    (model.positionModel?.titleAlignment).crossAxisAlignment,
+                crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
                 children: [
                   UiKitInputFieldNoIcon(
                     controller: nameController,
@@ -153,45 +133,37 @@ class AboutUserComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
               color: Colors.black,
-              title: model.content.body?[ContentItemType.singleDropdown]?.title
-                      ?.entries.first.value.properties?.keys.first ??
+              title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                   'Describe yourself',
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
               child: UiKitMenu<String>(
-                title: model.content.body?[ContentItemType.singleDropdown]
-                        ?.title?.entries.first.value.properties?.keys.first ??
+                title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                     'Describe yourself',
                 selectedItem: aboutUserModel.selectedPersonType,
                 items: () {
-                  final rawItems = model
-                      .content
-                      .body?[ContentItemType.singleDropdown]
-                      ?.body?[ContentItemType.singleDropdown]
-                      ?.properties;
+                  final rawItems =
+                      model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
 
                   return (rawItems?.entries
                           .map<UiKitMenuItem<String>>(
                             (e) => UiKitMenuItem<String>(
                               title: e.key,
                               value: e.value.value,
-                              icon: ImageWidget(link: e.value.imageLink),
+                              iconPath: e.value.imageLink,
                             ),
                           )
                           .toList() ??
                       [])
-                    ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0)
-                        .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+                    ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
                 }(),
-                onSelected: (personType) =>
-                    onPersonTypeChanged?.call(personType),
+                onSelected: (personType) => onPersonTypeChanged?.call(personType),
               )),
         ],
         if (model.content.body?[ContentItemType.multiSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-              title: model.content.body?[ContentItemType.multiSelect]?.title
-                      ?.entries.first.value.properties?.keys.first ??
+              title: model.content.body?[ContentItemType.multiSelect]?.title?.entries.first.value.properties?.keys.first ??
                   'Select your religions',
               hasError: aboutUserModel.errorReligionMessage != null,
               errorText: aboutUserModel.errorReligionMessage,
@@ -200,11 +172,7 @@ class AboutUserComponent extends StatelessWidget {
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing8,
                   children: () {
-                    final rawItems = model
-                        .content
-                        .body?[ContentItemType.multiSelect]
-                        ?.body?[ContentItemType.multiSelect]
-                        ?.properties;
+                    final rawItems = model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties;
 
                     final items = (rawItems?.entries.map((e) {
                           return UiKitBorderedChipWithIcon(
@@ -212,19 +180,14 @@ class AboutUserComponent extends StatelessWidget {
                               link: e.value.imageLink,
                             ),
                             title: e.key,
-                            isSelected: aboutUserModel.selectedReligions
-                                    ?.contains(e.key) ??
-                                false,
+                            isSelected: aboutUserModel.selectedReligions?.contains(e.key) ?? false,
                             onPressed: () => onReligionSelected?.call(e.key),
                           );
                         }).toList() ??
                         [])
-                      ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0)
-                          .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+                      ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
 
-                    return items
-                        .map((e) => SizedBox(height: 40, child: e))
-                        .toList();
+                    return items.map((e) => SizedBox(height: 40, child: e)).toList();
                   }(),
                 ).paddingOnly(
                   left: EdgeInsetsFoundation.horizontal4,
@@ -241,9 +204,7 @@ class AboutUserComponent extends StatelessWidget {
         if (model.content.body?[ContentItemType.singleSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-            title: model.content.body?[ContentItemType.singleSelect]?.title
-                    ?.entries.first.value.properties?.keys.first ??
-                'Gender',
+            title: model.content.body?[ContentItemType.singleSelect]?.title?.entries.first.value.properties?.keys.first ?? 'Gender',
             hasError: aboutUserModel.errorGenderMessage != null,
             errorText: aboutUserModel.errorGenderMessage,
             child: Row(
@@ -252,16 +213,11 @@ class AboutUserComponent extends StatelessWidget {
               children: [
                 SpacingFoundation.horizontalSpace16,
                 ...() {
-                  final rawItems = model
-                      .content
-                      .body?[ContentItemType.singleSelect]
-                      ?.body?[ContentItemType.singleSelect]
-                      ?.properties;
+                  final rawItems = model.content.body?[ContentItemType.singleSelect]?.body?[ContentItemType.singleSelect]?.properties;
 
                   final items = (rawItems?.entries
                           .map((e) => UiKitVerticalChip(
-                                selected:
-                                    aboutUserModel.selectedGender == e.key,
+                                selected: aboutUserModel.selectedGender == e.key,
                                 caption: e.key,
                                 sign: ImageWidget(link: e.value.imageLink),
                                 autoSizeGroup: genderGroup,
@@ -269,13 +225,11 @@ class AboutUserComponent extends StatelessWidget {
                               ))
                           .toList() ??
                       [])
-                    ..sort((a, b) => (rawItems?[a.caption]?.sortNumber ?? 0)
-                        .compareTo((rawItems?[b.caption]?.sortNumber ?? 0)));
+                    ..sort((a, b) => (rawItems?[a.caption]?.sortNumber ?? 0).compareTo((rawItems?[b.caption]?.sortNumber ?? 0)));
 
                   return items
                       .map((e) => Expanded(
-                            child: e.paddingOnly(
-                                right: EdgeInsetsFoundation.horizontal4),
+                            child: e.paddingOnly(right: EdgeInsetsFoundation.horizontal4),
                           ))
                       .toList();
                 }(),
