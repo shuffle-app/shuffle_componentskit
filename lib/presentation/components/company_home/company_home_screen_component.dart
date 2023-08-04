@@ -6,6 +6,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   final String name;
   final List<String>? interests;
   final List<UiPlaceModel> places;
+  final UiKitTag? tag;
   final VoidCallback? onCreatePlace;
   final ValueChanged<int>? onPlaceTapped;
   final List<UiKitStats>? profileStats;
@@ -15,6 +16,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     required this.name,
     required this.places,
     this.interests,
+    this.tag,
     this.onCreatePlace,
     this.onPlaceTapped,
     this.profileStats,
@@ -41,19 +43,9 @@ class CompanyHomeScreenComponent extends StatelessWidget {
             ProfileCard(
               name: name,
               tags: [
-                UiKitTag(
-                  title: 'Restaurant',
-                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
-                ),
-                UiKitTag(
-                  title: 'Restaurant',
-                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
-                ),
+                if (tag != null) tag!,
               ],
-              interests: [
-                'Tourists',
-                'Luxury',
-              ],
+              interests: interests,
               badge: DynamicGradientPlate(
                 content: Row(
                   mainAxisSize: MainAxisSize.min,
