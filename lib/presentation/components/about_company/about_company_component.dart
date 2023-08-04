@@ -114,7 +114,7 @@ class AboutCompanyComponent extends StatelessWidget {
                   return UiKitMenuItem<String>(
                     title: e.toUpperCase(),
                     value: item?.value,
-                    icon: ImageWidget(link: item?.imageLink ?? ''),
+                    iconPath: item?.imageLink ?? '',
                     type: item?.type,
                   );
                 }).toList() ??
