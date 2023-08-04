@@ -6,6 +6,7 @@ export 'auth/auth_components.dart';
 export 'company_home/company_home_screen_component.dart';
 export 'credentials_code_verification/credentials_code_verification_component.dart';
 export 'event/event_component.dart';
+export 'event/create_event_component.dart';
 export 'event/uievent_model.dart';
 export 'feed/feed_component.dart';
 export 'feed/uifeed_model.dart';

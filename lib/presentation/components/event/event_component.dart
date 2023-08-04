@@ -7,8 +7,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 class EventComponent extends StatelessWidget {
   final UiEventModel event;
+  final bool isEligibleForEdit;
+  final VoidCallback? onEditPressed;
 
-  const EventComponent({Key? key, required this.event}) : super(key: key);
+  const EventComponent(
+      {Key? key,
+      required this.event,
+      this.isEligibleForEdit = false,
+      this.onEditPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +40,39 @@ class EventComponent extends StatelessWidget {
             crossAxisAlignment: titleAlignment.crossAxisAlignment,
             children: [
               if (event.title != null) ...[
-                AutoSizeText(
-                  event.title!,
-                  minFontSize: 18.w,
-                  stepGranularity: 1.w,
-                  style: theme?.boldTextTheme.title2,
-                  textAlign: titleAlignment.textAlign,
-                ),
+                Stack(
+                    alignment: titleAlignment.crossAxisAlignment ==
+                            CrossAxisAlignment.center
+                        ? Alignment.center
+                        : AlignmentDirectional.topStart,
+                    children: [
+                      AutoSizeText(
+                        event.title!,
+                        minFontSize: 18.w,
+                        stepGranularity: 1.w,
+                        style: theme?.boldTextTheme.title2,
+                        textAlign: titleAlignment.textAlign,
+                      ),
+                      if (isEligibleForEdit)
+                        Positioned(
+                            right: 0,
+                            child: IconButton(
+                              icon: ImageWidget(
+                                  svgAsset:
+                                      GraphicsFoundation.instance.svg.pencil,
+                                  color: Colors.white,
+                                  height: 20.h,
+                                  fit: BoxFit.fitHeight),
+                              onPressed: () => onEditPressed?.call(),
+                            ))
+                    ]),
                 SpacingFoundation.verticalSpace8,
+              ],
+              if (event.archived) ...[
+                UiKitBadgeOutlined.text(
+                  text: 'Archived',
+                ),
+                SpacingFoundation.verticalSpace4,
               ],
               if (event.owner != null) event.owner!.buildUserTile(context)
             ]),

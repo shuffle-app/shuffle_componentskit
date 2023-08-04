@@ -8,6 +8,7 @@ class PlacePreview extends StatelessWidget {
   final UiBaseModel model;
   final bool showFavoriteBtn;
   final bool isFavorite;
+  final Size? cellSize;
   final VoidCallback? onFavoriteChanged;
 
   const PlacePreview(
@@ -16,6 +17,7 @@ class PlacePreview extends StatelessWidget {
       required this.place,
       required this.model,
       this.onFavoriteChanged,
+      this.cellSize,
       this.showFavoriteBtn = false,
       this.isFavorite = false})
       : super(key: key);
@@ -26,6 +28,7 @@ class PlacePreview extends StatelessWidget {
       required UiEventModel event,
       required this.model,
       this.onFavoriteChanged,
+      this.cellSize,
       this.showFavoriteBtn = false,
       this.isFavorite = false})
       : place = UiPlaceModel(
@@ -39,7 +42,7 @@ class PlacePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final size = MediaQuery.of(context).size;
+    final size = cellSize ?? MediaQuery.of(context).size;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return SizedBox(
@@ -55,7 +58,7 @@ class PlacePreview extends StatelessWidget {
                     media: place.media,
                     onTap: () => onTap?.call(place.id),
                     width: size.width - horizontalMargin * 2,
-                    height: 156.h,
+                    height: cellSize?.height ?? 156.h,
                   ),
                   if (showFavoriteBtn)
                     Positioned(
