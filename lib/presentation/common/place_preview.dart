@@ -58,7 +58,7 @@ class PlacePreview extends StatelessWidget {
                     media: place.media,
                     onTap: () => onTap?.call(place.id),
                     width: size.width - horizontalMargin * 2,
-                    height: 156.h,
+                    height: cellSize?.height ?? 156.h,
                   ),
                   if (showFavoriteBtn)
                     Positioned(

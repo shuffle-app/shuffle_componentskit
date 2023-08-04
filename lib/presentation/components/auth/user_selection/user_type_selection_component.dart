@@ -31,7 +31,7 @@ class UserTypeSelectionComponent extends StatelessWidget {
     redirects?.forEach((key, value) {
       redirectsSorted.insert((value.sortNumber?.toInt() ?? 1) - 1, key);
     });
-    final redirectCardWidth = 1.sw * 0.325;
+    final redirectCardWidth = 1.sw * 0.337;
     final redirectCardHeight = redirectCardWidth * 0.923;
 
     return Stack(

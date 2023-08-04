@@ -96,8 +96,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1',pageBuilderType: PageBuilderType.page):
-        ComponentEventModel.fromJson(config['event_edit']);
+    final ComponentEventModel model = kIsWeb
+        ? ComponentEventModel(
+            version: '1', pageBuilderType: PageBuilderType.page)
+        : ComponentEventModel.fromJson(config['event_edit']);
     final horizontalPadding =
         model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
@@ -234,8 +236,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           isTextButton: true,
                           data: BaseUiKitButtonData(
                               onPressed: () async {
-                                final maybeTime = await showUiKitTimeDialog(context);
-                                if (maybeTime!= null) {
+                                final maybeTime =
+                                    await showUiKitTimeDialog(context);
+                                if (maybeTime != null) {
                                   setState(() {
                                     _eventToEdit.time = maybeTime;
                                   });
@@ -271,16 +274,32 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           reversed: true,
                           isTextButton: true,
                           data: BaseUiKitButtonData(
-                              onPressed: () async {
-                                final maybeDate = await showUiKitCalendarDialog(context);
-                                if (maybeDate!= null) {
-                                  setState(() {
-                                    _eventToEdit.date = maybeDate;
-                                  });
-                                }
-                              },
-                              text:
-                                  '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)}  ',
+                              onPressed: _eventToEdit.isRecurrent
+                                  ? () async {
+                                      final maybeDaysOfWeek =
+                                          await showUiKitWeekdaySelector(
+                                              context);
+                                      if (maybeDaysOfWeek != null) {
+                                        setState(() {
+                                          _eventToEdit.weekdays =
+                                              maybeDaysOfWeek;
+                                        });
+                                      }
+                                    }
+                                  : () async {
+                                      final maybeDate =
+                                          await showUiKitCalendarDialog(
+                                              context);
+                                      if (maybeDate != null) {
+                                        setState(() {
+                                          _eventToEdit.date = maybeDate;
+                                        });
+                                      }
+                                    },
+                              text: _eventToEdit.isRecurrent
+                                  ? _eventToEdit.weekdays?.join(', ') ??
+                                      'none selected'
+                                  : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)}  ',
                               icon: DecoratedBox(
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
