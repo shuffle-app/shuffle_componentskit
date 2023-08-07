@@ -10,9 +10,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -56,18 +54,13 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(
-                      globalConfiguration: configuration,
-                      child: ComponentsTestPage())
+                  ? GlobalComponent(globalConfiguration: configuration, child: ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.3')
-                          .then(
-                              (_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(
-                              themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(
-                          body: Center(child: LoadingWidget()));
+                          .then((_) => Future.delayed(const Duration(seconds: 1)))
+                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
+                      return const Scaffold(body: Center(child: LoadingWidget()));
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -279,20 +272,15 @@ class ComponentsTestPage extends StatelessWidget {
             context.button(
                 data: BaseUiKitButtonData(
                     text: 'show onboarding',
-                    onPressed: () => buildComponent(
-                        context,
-                        ComponentModel.fromJson(
-                            configuration.appConfig.content['onboarding']),
-                        ComponentBuilder(
-                            child: Scaffold(body: OnboardingComponent()))))),
+                    onPressed: () => buildComponent(context, ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
+                        ComponentBuilder(child: Scaffold(body: OnboardingComponent()))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
                     text: 'show about user step 1',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentModel.fromJson(
-                            configuration.appConfig.content['about_user']),
+                        ComponentModel.fromJson(configuration.appConfig.content['about_user']),
                         ComponentBuilder(
                             child: Scaffold(
                           body: SafeArea(
@@ -310,48 +298,23 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show preferences selector',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentShuffleModel.fromJson(
-                            configuration.appConfig.content['about_user']),
+                        ComponentShuffleModel.fromJson(configuration.appConfig.content['about_user']),
                         ComponentBuilder(
                             child: Scaffold(
                                 body: PreferencesComponent(
                           preferences: UiPreferencesModel([
-                            UiKitImportanceChip(
-                                title: 'Electronic\nMusic',
-                                importance: ImportanceChip.high),
-                            UiKitImportanceChip(
-                                title: 'Swimming',
-                                importance: ImportanceChip.medium),
-                            UiKitImportanceChip(
-                                title: 'Theme\nParks',
-                                importance: ImportanceChip.none),
-                            UiKitImportanceChip(
-                                title: 'Hookah',
-                                importance: ImportanceChip.high),
-                            UiKitImportanceChip(
-                                title: 'Electronic\nMusic',
-                                importance: ImportanceChip.high),
-                            UiKitImportanceChip(
-                                title: 'Swimming',
-                                importance: ImportanceChip.medium),
-                            UiKitImportanceChip(
-                                title: 'Theme\nParks',
-                                importance: ImportanceChip.none),
-                            UiKitImportanceChip(
-                                title: 'Hookah',
-                                importance: ImportanceChip.high),
-                            UiKitImportanceChip(
-                                title: 'Electronic\nMusic',
-                                importance: ImportanceChip.high),
-                            UiKitImportanceChip(
-                                title: 'Swimming',
-                                importance: ImportanceChip.medium),
-                            UiKitImportanceChip(
-                                title: 'Theme\nParks',
-                                importance: ImportanceChip.none),
-                            UiKitImportanceChip(
-                                title: 'Hookah',
-                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(title: 'Electronic\nMusic', importance: ImportanceChip.high),
+                            UiKitImportanceChip(title: 'Swimming', importance: ImportanceChip.medium),
+                            UiKitImportanceChip(title: 'Theme\nParks', importance: ImportanceChip.none),
+                            UiKitImportanceChip(title: 'Hookah', importance: ImportanceChip.high),
+                            UiKitImportanceChip(title: 'Electronic\nMusic', importance: ImportanceChip.high),
+                            UiKitImportanceChip(title: 'Swimming', importance: ImportanceChip.medium),
+                            UiKitImportanceChip(title: 'Theme\nParks', importance: ImportanceChip.none),
+                            UiKitImportanceChip(title: 'Hookah', importance: ImportanceChip.high),
+                            UiKitImportanceChip(title: 'Electronic\nMusic', importance: ImportanceChip.high),
+                            UiKitImportanceChip(title: 'Swimming', importance: ImportanceChip.medium),
+                            UiKitImportanceChip(title: 'Theme\nParks', importance: ImportanceChip.none),
+                            UiKitImportanceChip(title: 'Hookah', importance: ImportanceChip.high),
                           ], TextEditingController()),
                           onSubmit: () {},
                           onSelect: () {},
@@ -362,8 +325,7 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show profile',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentShuffleModel.fromJson(
-                            configuration.appConfig.content['profile']),
+                        ComponentShuffleModel.fromJson(configuration.appConfig.content['profile']),
                         ComponentBuilder(
                             child: Scaffold(
                           body: BlurredAppBarPage(
@@ -373,15 +335,9 @@ class ComponentsTestPage extends StatelessWidget {
                                 profile: UiProfileModel(
                               name: 'Marry Williams',
                               nickname: '@marywill',
-                              description:
-                                  'Just walking here and there trying to find something unique and interesting to show you!',
+                              description: 'Just walking here and there trying to find something unique and interesting to show you!',
                               avatarUrl: 'assets/images/png/profile_avatar.png',
-                              interests: [
-                                'Restaurants',
-                                'Hookah',
-                                'Roller Coaster',
-                                'Swimmings'
-                              ],
+                              interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
                               // followers: 2650,
                             )),
                           ),
@@ -392,8 +348,7 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show shuffle',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentShuffleModel.fromJson(
-                            configuration.appConfig.content['shuffle']),
+                        ComponentShuffleModel.fromJson(configuration.appConfig.content['shuffle']),
                         ComponentBuilder(
                             child: Scaffold(
                                 body: ShuffleComponent(
@@ -416,34 +371,45 @@ class ComponentsTestPage extends StatelessWidget {
                                   UiKitTagWidget(
                                     title: 'Club',
                                     icon: Assets.images.svg.cocktail.path,
-                                    customSpace:
-                                        SpacingFoundation.horizontalSpace8,
+                                    customSpace: SpacingFoundation.horizontalSpace8,
                                     showSpacing: true,
                                   ),
                                   UiKitTagWidget(
                                     title: 'Club',
                                     icon: Assets.images.svg.cocktail.path,
-                                    customSpace:
-                                        SpacingFoundation.horizontalSpace8,
+                                    customSpace: SpacingFoundation.horizontalSpace8,
                                     showSpacing: true,
                                   ),
                                   UiKitTagWidget(
                                     title: 'Club',
                                     icon: Assets.images.svg.cocktail.path,
-                                    customSpace:
-                                        SpacingFoundation.horizontalSpace8,
+                                    customSpace: SpacingFoundation.horizontalSpace8,
                                     showSpacing: true,
                                   ),
                                   UiKitTagWidget(
                                     title: 'Club',
                                     icon: Assets.images.svg.cocktail.path,
-                                    customSpace:
-                                        SpacingFoundation.horizontalSpace8,
+                                    customSpace: SpacingFoundation.horizontalSpace8,
                                     showSpacing: true,
                                   ),
                                 ]),
                           )),
                         )))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company profile',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(configuration.appConfig.content['company_profile']),
+                  ComponentBuilder(
+                    child: CompanyProfileComponent(
+                      onProfileItemChosen: (value) {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SpacingFoundation.verticalSpace16,
             // context.button(
             //     data: BaseUiKitButtonData(
@@ -468,8 +434,7 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show feed',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentFeedModel.fromJson(
-                            configuration.appConfig.content['feed']),
+                        ComponentFeedModel.fromJson(configuration.appConfig.content['feed']),
                         ComponentBuilder(
                             child: Scaffold(
                                 // appBar: AppBar(
@@ -480,19 +445,14 @@ class ComponentsTestPage extends StatelessWidget {
                                 // ),
                                 body: SingleChildScrollView(
                                     child: FeedComponent(
-                                        controller:
-                                            PagingController(firstPageKey: 1),
+                                        controller: PagingController(firstPageKey: 1),
                                         feed: UiFeedModel(
                                           // mixedItems: List.generate(4, (index) => item),
                                           recommendedEvent: event,
                                           moods: List.generate(
                                               4,
                                               (index) => UiMoodModel(
-                                                  id: 1,
-                                                  title:
-                                                      'Want to have some fun',
-                                                  logo:
-                                                      'assets/images/png/crazy_emoji.png')),
+                                                  id: 1, title: 'Want to have some fun', logo: 'assets/images/png/crazy_emoji.png')),
                                         )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -500,8 +460,7 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show mood',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentMoodModel.fromJson(
-                            configuration.appConfig.content['mood']),
+                        ComponentMoodModel.fromJson(configuration.appConfig.content['mood']),
                         ComponentBuilder(
                             child: Scaffold(
                                 appBar: const CustomAppBar(
@@ -512,14 +471,8 @@ class ComponentsTestPage extends StatelessWidget {
                                     child: MoodComponent(
                                   mood: UiMoodModel(
                                     descriptionItems: [
-                                      const UiDescriptionItemModel(
-                                          active: true,
-                                          title: 'Sunny',
-                                          description: '+32'),
-                                      const UiDescriptionItemModel(
-                                          active: true,
-                                          title: 'Burned today',
-                                          description: '432'),
+                                      const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
+                                      const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
                                     ],
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
@@ -533,15 +486,11 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show place',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentPlaceModel.fromJson(
-                            configuration.appConfig.content['place']),
+                        ComponentPlaceModel.fromJson(configuration.appConfig.content['place']),
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(
-                                            configuration
-                                                .appConfig.content['place'])
-                                        .bookingElementModel ??
+                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
                                     BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -549,15 +498,11 @@ class ComponentsTestPage extends StatelessWidget {
                     text: 'show event',
                     onPressed: () => buildComponent(
                         context,
-                        ComponentEventModel.fromJson(
-                            configuration.appConfig.content['event']),
+                        ComponentEventModel.fromJson(configuration.appConfig.content['event']),
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(
-                                            configuration
-                                                .appConfig.content['event'])
-                                        .bookingElementModel ??
+                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
                                     BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -565,8 +510,7 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show user selection',
                 onPressed: () => buildComponent(
                   context,
-                  UserTypeSelectionModel.fromJson(
-                      configuration.appConfig.content['user_type_selection']),
+                  UserTypeSelectionModel.fromJson(configuration.appConfig.content['user_type_selection']),
                   ComponentBuilder(
                     child: UserTypeSelectionComponent(
                       onUserTypeSelected: (userType) => print(userType),
@@ -581,8 +525,7 @@ class ComponentsTestPage extends StatelessWidget {
                 text: 'show company registration',
                 onPressed: () => buildComponent(
                   context,
-                  ComponentModel.fromJson(
-                      configuration.appConfig.content['about_company']),
+                  ComponentModel.fromJson(configuration.appConfig.content['about_company']),
                   ComponentBuilder(
                     child: AboutCompanyComponent(
                       uiModel: UiAboutCompanyModel(),
@@ -642,8 +585,8 @@ class ComponentsTestPage extends StatelessWidget {
                     configuration.appConfig.content['personal_credentials_verification'],
                   ),
                   ComponentBuilder(
-                    child: PersonalCredentialsVerificationComponent(uiModel:
-                          UiPersonalCredentialsVerificationModel(),
+                    child: PersonalCredentialsVerificationComponent(
+                      uiModel: UiPersonalCredentialsVerificationModel(),
                       credentialsController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
                     ),
@@ -659,70 +602,22 @@ class ComponentsTestPage extends StatelessWidget {
   }
 
   final List<UiKitTag> tags = [
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: false),
-    UiKitTag(
-        title: 'Cheap',
-        iconPath: 'assets/images/svg/cocktail.svg',
-        unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
   ];
 
   final UiUniversalModel item = UiUniversalModel(
@@ -751,70 +646,22 @@ class ComponentsTestPage extends StatelessWidget {
           'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
           'Nulla facilisi',
       tags: [
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'uniqueCheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'uniqueCheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
       ],
       type: '');
 
@@ -845,87 +692,27 @@ class ComponentsTestPage extends StatelessWidget {
           'Nulla facilisi',
       rating: 4.8,
       tags: [
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'uniqueCheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: false),
-        UiKitTag(
-            title: 'Cheap',
-            iconPath: 'assets/images/svg/cocktail.svg',
-            unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'uniqueCheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
       ],
       descriptionItems: [
-        const UiDescriptionItemModel(
-            title: 'test 1',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-        const UiDescriptionItemModel(
-            title: 'test 2',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-        const UiDescriptionItemModel(
-            title: 'test 3',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-        const UiDescriptionItemModel(
-            title: 'test 4',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+        const UiDescriptionItemModel(title: 'test 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+        const UiDescriptionItemModel(title: 'test 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+        const UiDescriptionItemModel(title: 'test 3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+        const UiDescriptionItemModel(title: 'test 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
       ]);
 }
