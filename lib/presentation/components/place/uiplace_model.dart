@@ -1,27 +1,37 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
 class UiPlaceModel {
-  final int id;
-  final List<BaseUiKitMedia> media;
-  final String description;
-  final List<UiKitTag> tags;
-  final List<UiKitTag>? baseTags;
-  final double? rating;
-  final String? title;
-  final String? logo;
-  final List<UiDescriptionItemModel>? descriptionItems;
+  int id;
+  List<BaseUiKitMedia> media;
+  List<String> weekdays;
+  String description;
+  List<UiKitTag> tags;
+  List<UiKitTag>? baseTags;
+  double? rating;
+  String? title;
+  String? logo;
+  List<UiDescriptionItemModel>? descriptionItems;
+  TimeOfDay? openFrom;
+  TimeOfDay? openTo;
+  String? location;
+  String? website;
+  String? phone;
 
   UiPlaceModel({
     required this.id,
     this.title,
-    required this.media,
+    this.openFrom,
+    this.openTo,
+     this.media = const [],
     this.logo,
     required this.description,
     this.rating,
     required this.tags,
     this.baseTags,
+    this.weekdays = const [],
     this.descriptionItems,
   });
 }

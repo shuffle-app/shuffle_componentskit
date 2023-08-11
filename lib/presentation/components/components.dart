@@ -15,6 +15,7 @@ export 'mood/uimood_model.dart';
 export 'onboarding_component/onboarding_component.dart';
 export 'onboarding_component/onboarding_page_item.dart';
 export 'place/place_component.dart';
+export 'place/create_place_component.dart';
 export 'place/uiplace_model.dart';
 export 'preferences/preferences_component.dart';
 export 'preferences/uipreferences_model.dart';
