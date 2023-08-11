@@ -46,6 +46,16 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _videos.addAll(_eventToEdit.media
             ?.where((element) => element.type == UiKitMediaType.video) ??
         []);
+    _descriptionController.addListener(_checkDescriptionHeightConstraint);
+  }
+
+  _checkDescriptionHeightConstraint() {
+    if (_descriptionController.text.length * 5.8.w / 0.9.sw >
+        descriptionHeightConstraint / 50.h) {
+      setState(() {
+        descriptionHeightConstraint += 30.h;
+      });
+    }
   }
 
   _onVideoDeleted(int index) {
@@ -92,6 +102,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   @override
+  void dispose() {
+    _descriptionController.removeListener(_checkDescriptionHeightConstraint);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
@@ -109,7 +125,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         title: 'Event',
         centerTitle: true,
         autoImplyLeading: true,
-        appBarTrailing: widget.onEventDeleted != null
+        appBarTrailing: widget.eventToEdit != null
             ? IconButton(
                 icon: ImageWidget(
                     svgAsset: GraphicsFoundation.instance.svg.trash,
@@ -245,7 +261,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                 }
                               },
                               text:
-                                  '${_eventToEdit.time == null ? 'select time' : _eventToEdit.time.toString()}  ',
+                                  '${_eventToEdit.time == null ? 'select time' : '${_eventToEdit.time!.hour}:${_eventToEdit.time!.minute} ${_eventToEdit.time!.period.name}'}  ',
                               icon: DecoratedBox(
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,

@@ -12,11 +12,12 @@ class PhotoVideoSelector extends StatelessWidget {
   final ReorderCallback onPhotoReorderRequested;
   final ReorderCallback onVideoReorderRequested;
   final PositionModel? positionModel;
-
+  final GlobalKey<ReorderableListState> listPhotosKey = GlobalKey<ReorderableListState>();
+  final GlobalKey<ReorderableListState> listVideosKey = GlobalKey<ReorderableListState>();
   final Function(int index) onPhotoDeleted;
   final Function(int index) onVideoDeleted;
 
-  const PhotoVideoSelector(
+  PhotoVideoSelector(
       {super.key,
       this.photos = const [],
       this.videos = const [],
@@ -45,8 +46,11 @@ class PhotoVideoSelector extends StatelessWidget {
         ).paddingSymmetric(horizontal: horizontalPadding),
         SizedBox(
             height: itemsSize.height * 1.2,
+            width: double.infinity,
             child: Stack(alignment: Alignment.centerRight, children: [
               ReorderableList(
+                key: listPhotosKey,
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) => Stack(
                           key: ValueKey(photos[index].link),
@@ -92,29 +96,36 @@ class PhotoVideoSelector extends StatelessWidget {
         ).paddingSymmetric(horizontal: horizontalPadding),
         SizedBox(
             height: itemsSize.height * 1.2,
+            width: double.infinity,
             child: Stack(alignment: Alignment.centerRight, children: [
               ReorderableList(
+                key:listVideosKey,
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) =>
-                      Stack(alignment: Alignment.topRight, children: [
-                        ClipPath(
-                                clipper: ShapeBorderClipper(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadiusFoundation.all8)),
-                                child: videos[index].widget(itemsSize))
-                            .paddingAll(4),
-                        context.outlinedButton(
-                            hideBorder: true,
-                            data: BaseUiKitButtonData(
-                                onPressed: () => onVideoDeleted.call(index),
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.x,
-                                  color: Colors.white,
-                                  height: 6,
-                                  width: 6,
-                                )))
-                      ]),
+                      ReorderableDragStartListener(
+                          index: index,
+                          child:
+                              Stack(alignment: Alignment.topRight, children: [
+                            ClipPath(
+                                    clipper: ShapeBorderClipper(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadiusFoundation.all8)),
+                                    child: videos[index].widget(itemsSize))
+                                .paddingAll(4),
+                            context.outlinedButton(
+                                hideBorder: true,
+                                data: BaseUiKitButtonData(
+                                    onPressed: () => onVideoDeleted.call(index),
+                                    icon: ImageWidget(
+                                      svgAsset:
+                                          GraphicsFoundation.instance.svg.x,
+                                      color: Colors.white,
+                                      height: 6,
+                                      width: 6,
+                                    )))
+                          ])),
                   itemCount: videos.length,
                   onReorder: onVideoReorderRequested),
               context
