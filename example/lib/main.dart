@@ -141,6 +141,16 @@ class ComponentsTestPage extends StatelessWidget {
                     })),
             SpacingFoundation.verticalSpace16,
             context.button(
+                data: BaseUiKitButtonData(
+                    text: 'create place',
+                    onPressed: () {
+                      context.push(Scaffold(
+                          body: CreatePlaceComponent(
+                            onPlaceCreated: (UiPlaceModel model) async {},
+                          )));
+                    })),
+            SpacingFoundation.verticalSpace16,
+            context.button(
               data: BaseUiKitButtonData(
                 text: 'show company profile',
                 onPressed: () => buildComponent(

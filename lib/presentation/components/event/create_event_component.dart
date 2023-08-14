@@ -137,7 +137,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         body: SingleChildScrollView(
             child: Form(
                 key: _formKey,
-                child: Column(children: [
+                child: Column(
+                    mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
+                    crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
+                    children: [
                   UiKitInputFieldNoFill(
                           label: 'Title', controller: _titleController)
                       .paddingSymmetric(horizontal: horizontalPadding),
@@ -163,62 +166,34 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         expands: true,
                       )).paddingSymmetric(horizontal: horizontalPadding),
                   SpacingFoundation.verticalSpace24,
-                  Theme(
-                    data: ThemeData(
-                        textButtonTheme: TextButtonThemeData(
-                            style:
-                                context.uiKitTheme?.textButtonLabelSmallStyle)),
-                    child: context
-                        .button(
-                            reversed: true,
-                            isTextButton: true,
-                            data: BaseUiKitButtonData(
-                                onPressed: () {},
-                                text: 'Base properties',
-                                icon: DecoratedBox(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(BorderSide(
-                                        width: 2, color: Colors.white)),
-                                  ),
-                                  child: ImageWidget(
-                                    svgAsset: GraphicsFoundation
-                                        .instance.svg.chevronRight,
-                                    color: Colors.white,
-                                  ).paddingAll(
-                                      SpacingFoundation.verticalSpacing12),
-                                )))
-                        .paddingSymmetric(horizontal: horizontalPadding),
-                  ),
+                  Row(children: [
+                    Text('Base properties',
+                        style: theme?.regularTextTheme.labelSmall),
+                    const Spacer(),
+                    context.outlinedButton(
+                        data: BaseUiKitButtonData(
+                            onPressed: () {},
+                            icon: ImageWidget(
+                              svgAsset:
+                                  GraphicsFoundation.instance.svg.chevronRight,
+                              color: Colors.white,
+                            )))
+                  ]).paddingSymmetric(horizontal: horizontalPadding),
                   UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                   SpacingFoundation.verticalSpace24,
-                  Theme(
-                    data: ThemeData(
-                        textButtonTheme: TextButtonThemeData(
-                            style:
-                                context.uiKitTheme?.textButtonLabelSmallStyle)),
-                    child: context
-                        .button(
-                            reversed: true,
-                            isTextButton: true,
-                            data: BaseUiKitButtonData(
-                                onPressed: () {},
-                                text: 'Unique properties',
-                                icon: DecoratedBox(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(BorderSide(
-                                        width: 2, color: Colors.white)),
-                                  ),
-                                  child: ImageWidget(
-                                    svgAsset: GraphicsFoundation
-                                        .instance.svg.chevronRight,
-                                    color: Colors.white,
-                                  ).paddingAll(
-                                      SpacingFoundation.verticalSpacing12),
-                                )))
-                        .paddingSymmetric(horizontal: horizontalPadding),
-                  ),
+                  Row(children: [
+                    Text('Unique properties',
+                        style: theme?.regularTextTheme.labelSmall),
+                    const Spacer(),
+                    context.outlinedButton(
+                        data: BaseUiKitButtonData(
+                            onPressed: () {},
+                            icon: ImageWidget(
+                              svgAsset:
+                                  GraphicsFoundation.instance.svg.chevronRight,
+                              color: Colors.white,
+                            )))
+                  ]).paddingSymmetric(horizontal: horizontalPadding),
                   UiKitTagsWidget(
                       baseTags: [], uniqueTags: _eventToEdit.tags ?? []),
                   SpacingFoundation.verticalSpace24,
@@ -243,93 +218,62 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   Row(children: [
                     Text('Time', style: theme?.regularTextTheme.labelSmall),
                     const Spacer(),
-                    Theme(
-                      data: ThemeData(
-                          textButtonTheme: TextButtonThemeData(
-                              style: context.uiKitTheme?.textButtonStyle)),
-                      child: context.button(
-                          reversed: true,
-                          isTextButton: true,
-                          data: BaseUiKitButtonData(
-                              onPressed: () async {
-                                final maybeTime =
-                                    await showUiKitTimeDialog(context);
-                                if (maybeTime != null) {
-                                  setState(() {
-                                    _eventToEdit.time = maybeTime;
-                                  });
-                                }
-                              },
-                              text:
-                                  '${_eventToEdit.time == null ? 'select time' : '${_eventToEdit.time!.hour}:${_eventToEdit.time!.minute} ${_eventToEdit.time!.period.name}'}  ',
-                              icon: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.fromBorderSide(BorderSide(
-                                      width: 2, color: Colors.white)),
-                                ),
-                                child: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.clock,
-                                  color: Colors.white,
-                                ).paddingAll(
-                                    SpacingFoundation.verticalSpacing12),
-                              ))),
-                    ),
+                    Text(
+                        '${_eventToEdit.time == null ? 'select time' : '${_eventToEdit.time!.hour}:${_eventToEdit.time!.minute} ${_eventToEdit.time!.period.name}'}  ',
+                        style: theme?.boldTextTheme.body),
+                    context.outlinedButton(
+                        data: BaseUiKitButtonData(
+                            onPressed: () async {
+                              final maybeTime =
+                                  await showUiKitTimeDialog(context);
+                              if (maybeTime != null) {
+                                setState(() {
+                                  _eventToEdit.time = maybeTime;
+                                });
+                              }
+                            },
+                            icon: ImageWidget(
+                              svgAsset: GraphicsFoundation.instance.svg.clock,
+                              color: Colors.white,
+                            ))),
                   ]).paddingSymmetric(horizontal: horizontalPadding),
                   SpacingFoundation.verticalSpace24,
                   Row(children: [
                     Text(_eventToEdit.isRecurrent ? 'Days of week' : 'Date',
                         style: theme?.regularTextTheme.labelSmall),
                     const Spacer(),
-                    Theme(
-                      data: ThemeData(
-                          textButtonTheme: TextButtonThemeData(
-                              style: context.uiKitTheme?.textButtonStyle)),
-                      child: context.button(
-                          reversed: true,
-                          isTextButton: true,
-                          data: BaseUiKitButtonData(
-                              onPressed: _eventToEdit.isRecurrent
-                                  ? () async {
-                                      final maybeDaysOfWeek =
-                                          await showUiKitWeekdaySelector(
-                                              context);
-                                      if (maybeDaysOfWeek != null) {
-                                        setState(() {
-                                          _eventToEdit.weekdays =
-                                              maybeDaysOfWeek;
-                                        });
-                                      }
+                    Expanded(child: Text(
+                        _eventToEdit.isRecurrent
+                            ? _eventToEdit.weekdays?.join(', ') ??
+                                'select days '
+                            : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)}  ',
+                        style: theme?.boldTextTheme.body)),
+                    context.outlinedButton(
+                        data: BaseUiKitButtonData(
+                            onPressed: _eventToEdit.isRecurrent
+                                ? () async {
+                                    final maybeDaysOfWeek =
+                                        await showUiKitWeekdaySelector(context);
+                                    if (maybeDaysOfWeek != null) {
+                                      setState(() {
+                                        _eventToEdit.weekdays = maybeDaysOfWeek;
+                                      });
                                     }
-                                  : () async {
-                                      final maybeDate =
-                                          await showUiKitCalendarDialog(
-                                              context);
-                                      if (maybeDate != null) {
-                                        setState(() {
-                                          _eventToEdit.date = maybeDate;
-                                        });
-                                      }
-                                    },
-                              text: _eventToEdit.isRecurrent
-                                  ? _eventToEdit.weekdays?.join(', ') ??
-                                      'none selected'
-                                  : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)}  ',
-                              icon: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.fromBorderSide(BorderSide(
-                                      width: 2, color: Colors.white)),
-                                ),
-                                child: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.calendar,
-                                  color: Colors.white,
-                                ).paddingAll(
-                                    SpacingFoundation.verticalSpacing12),
-                              ))),
-                    ),
+                                  }
+                                : () async {
+                                    final maybeDate =
+                                        await showUiKitCalendarDialog(context);
+                                    if (maybeDate != null) {
+                                      setState(() {
+                                        _eventToEdit.date = maybeDate;
+                                      });
+                                    }
+                                  },
+                            icon: ImageWidget(
+                              svgAsset:
+                                  GraphicsFoundation.instance.svg.calendar,
+                              color: Colors.white,
+                            ))),
                   ]).paddingSymmetric(horizontal: horizontalPadding),
                   SpacingFoundation.verticalSpace24,
                   SafeArea(
