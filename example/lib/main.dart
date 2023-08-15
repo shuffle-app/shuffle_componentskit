@@ -108,16 +108,13 @@ class ComponentsTestPage extends StatelessWidget {
           'Nulla facilisi',
       rating: 4.8,
       tags: tags,
-      descriptionItems: const [
-        UiDescriptionItemModel(
-          title: 'Don\'t miss out',
-          description: 'Burj Khalifa 122nd Floor',
-        ),
-        UiDescriptionItemModel(
-          title: 'Open now',
-          description: '9:30 am - 10:30 pm',
-        ),
-      ],
+      location: 'Burj Khalifa 122nd Floor',
+        date: DateTime.now(),
+      //   UiDescriptionItemModel(
+      //     title: 'Open now',
+      //     description: '9:30 am - 10:30 pm',
+      //   ),
+      // ],
     );
 
     return Scaffold(
@@ -149,6 +146,16 @@ class ComponentsTestPage extends StatelessWidget {
                           body: CreateEventComponent(
                         onEventCreated: (UiEventModel model) async {},
                       )));
+                    })),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'create place',
+                    onPressed: () {
+                      context.push(Scaffold(
+                          body: CreatePlaceComponent(
+                            onPlaceCreated: (UiPlaceModel model) async {},
+                          )));
                     })),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -727,10 +734,12 @@ class ComponentsTestPage extends StatelessWidget {
         UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
         UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
       ],
-      descriptionItems: [
-        const UiDescriptionItemModel(title: 'test 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-        const UiDescriptionItemModel(title: 'test 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-        const UiDescriptionItemModel(title: 'test 3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-        const UiDescriptionItemModel(title: 'test 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-      ]);
+
+      // descriptionItems: [
+      //   const UiDescriptionItemModel(title: 'test 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+      //   const UiDescriptionItemModel(title: 'test 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+      //   const UiDescriptionItemModel(title: 'test 3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+      //   const UiDescriptionItemModel(title: 'test 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+      // ]
+  );
 }

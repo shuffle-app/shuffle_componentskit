@@ -26,6 +26,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _phoneController = TextEditingController();
   late final TextEditingController _websiteController = TextEditingController();
+  late final TextEditingController _locationController =
+      TextEditingController();
   late final TextEditingController _descriptionController =
       TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
@@ -41,6 +43,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     super.initState();
     _titleController.text = widget.placeToEdit?.title ?? '';
     _descriptionController.text = widget.placeToEdit?.description ?? '';
+    _locationController.text = widget.placeToEdit?.location ?? '';
     _placeToEdit = widget.placeToEdit ??
         UiPlaceModel(
           id: -1,
@@ -81,6 +84,15 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     if (files.isNotEmpty) {
       setState(() {
         _photos.addAll(files.map((file) => UiKitMediaPhoto(link: file.path)));
+      });
+    }
+  }
+
+  _onLogoAddRequested() async {
+    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      setState(() {
+        _placeToEdit.logo = file.path;
       });
     }
   }
@@ -143,43 +155,66 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         body: SingleChildScrollView(
             child: Form(
                 key: _formKey,
-                child: Column(children: [
-                  UiKitInputFieldNoFill(
-                          label: 'Title', controller: _titleController)
-                      .paddingSymmetric(horizontal: horizontalPadding),
-                  SpacingFoundation.verticalSpace24,
-                  PhotoVideoSelector(
-                    positionModel: model.positionModel,
-                    videos: _videos,
-                    photos: _photos,
-                    onVideoAddRequested: _onVideoAddRequested,
-                    onVideoDeleted: _onVideoDeleted,
-                    onPhotoAddRequested: _onPhotoAddRequested,
-                    onPhotoDeleted: _onPhotoDeleted,
-                    onPhotoReorderRequested: _onPhotoReorderRequested,
-                    onVideoReorderRequested: _onVideoReorderRequested,
-                  ),
-                  SpacingFoundation.verticalSpace24,
-                  ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxHeight: descriptionHeightConstraint),
-                      child: UiKitInputFieldNoFill(
-                        label: 'Description',
-                        controller: _descriptionController,
-                        expands: true,
-                      )).paddingSymmetric(horizontal: horizontalPadding),
-                  SpacingFoundation.verticalSpace24,
-                  Row(children: [
-                    Text('Open from',
-                        style: theme?.regularTextTheme.labelSmall),
-                    const Spacer(),
-                    Theme(
-                      data: ThemeData(
-                          textButtonTheme: TextButtonThemeData(
-                              style: context.uiKitTheme?.textButtonStyle)),
-                      child: context.button(
-                          reversed: true,
-                          isTextButton: true,
+                child: Column(
+                    mainAxisAlignment:
+                        (model.positionModel?.bodyAlignment).mainAxisAlignment,
+                    crossAxisAlignment:
+                        (model.positionModel?.bodyAlignment).crossAxisAlignment,
+                    children: [
+                      UiKitInputFieldNoFill(
+                              label: 'Title', controller: _titleController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      Text(
+                        'Logo',
+                        style: theme?.regularTextTheme.labelSmall,
+                      ).paddingSymmetric(horizontal: horizontalPadding),
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                        if (_placeToEdit.logo != null)
+                          CircularAvatar(avatarUrl: _placeToEdit.logo!),
+                        const Spacer(),
+                        context.outlinedButton(
+                          data: BaseUiKitButtonData(
+                              onPressed: _onLogoAddRequested,
+                              icon: ImageWidget(
+                                svgAsset:
+                                    GraphicsFoundation.instance.svg.cameraPlus,
+                                color: Colors.white,
+                                height: 18,
+                                width: 18,
+                              )),
+                        )
+                      ]).paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      PhotoVideoSelector(
+                        positionModel: model.positionModel,
+                        videos: _videos,
+                        photos: _photos,
+                        onVideoAddRequested: _onVideoAddRequested,
+                        onVideoDeleted: _onVideoDeleted,
+                        onPhotoAddRequested: _onPhotoAddRequested,
+                        onPhotoDeleted: _onPhotoDeleted,
+                        onPhotoReorderRequested: _onPhotoReorderRequested,
+                        onVideoReorderRequested: _onVideoReorderRequested,
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxHeight: descriptionHeightConstraint),
+                          child: UiKitInputFieldNoFill(
+                            label: 'Description',
+                            controller: _descriptionController,
+                            expands: true,
+                          )).paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      Row(children: [
+                        Text('Open from',
+                            style: theme?.regularTextTheme.labelSmall),
+                        const Spacer(),
+                        Text(
+                            '${_placeToEdit.openTo == null ? 'select time' : '${_placeToEdit.openTo!.hour}:${_placeToEdit.openTo!.minute} ${_placeToEdit.openTo!.period.name}'}  ',
+                            style: theme?.boldTextTheme.body),
+                        context.outlinedButton(
                           data: BaseUiKitButtonData(
                               onPressed: () async {
                                 final maybeDate =
@@ -190,34 +225,22 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                   });
                                 }
                               },
-                              text:
-                                  '${_placeToEdit.openFrom == null ? 'select time' : '${_placeToEdit.openFrom!.hour}:${_placeToEdit.openFrom!.minute} ${_placeToEdit.openFrom!.period.name}'}  ',
-                              icon: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.fromBorderSide(BorderSide(
-                                      width: 2, color: Colors.white)),
-                                ),
-                                child: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.calendar,
-                                  color: Colors.white,
-                                ).paddingAll(
-                                    SpacingFoundation.verticalSpacing12),
-                              ))),
-                    ),
-                  ]).paddingSymmetric(horizontal: horizontalPadding),
-                  SpacingFoundation.verticalSpace24,
-                  Row(children: [
-                    Text('Open to', style: theme?.regularTextTheme.labelSmall),
-                    const Spacer(),
-                    Theme(
-                      data: ThemeData(
-                          textButtonTheme: TextButtonThemeData(
-                              style: context.uiKitTheme?.textButtonStyle)),
-                      child: context.button(
-                          reversed: true,
-                          isTextButton: true,
+                              icon: ImageWidget(
+                                svgAsset:
+                                    GraphicsFoundation.instance.svg.calendar,
+                                color: Colors.white,
+                              )),
+                        ),
+                      ]).paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      Row(children: [
+                        Text('Open to',
+                            style: theme?.regularTextTheme.labelSmall),
+                        const Spacer(),
+                        Text(
+                            '${_placeToEdit.openTo == null ? 'select time' : '${_placeToEdit.openTo!.hour}:${_placeToEdit.openTo!.minute} ${_placeToEdit.openTo!.period.name}'}  ',
+                            style: theme?.boldTextTheme.body),
+                        context.outlinedButton(
                           data: BaseUiKitButtonData(
                               onPressed: () async {
                                 final maybeDate =
@@ -228,35 +251,27 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                   });
                                 }
                               },
-                              text:
-                                  '${_placeToEdit.openTo == null ? 'select time' : '${_placeToEdit.openTo!.hour}:${_placeToEdit.openTo!.minute} ${_placeToEdit.openTo!.period.name}'}  ',
-                              icon: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.fromBorderSide(BorderSide(
-                                      width: 2, color: Colors.white)),
-                                ),
-                                child: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.calendar,
-                                  color: Colors.white,
-                                ).paddingAll(
-                                    SpacingFoundation.verticalSpacing12),
-                              ))),
-                    ),
-                  ]).paddingSymmetric(horizontal: horizontalPadding),
-                  SpacingFoundation.verticalSpace24,
-                  Row(children: [
-                    Text('Days of week',
-                        style: theme?.regularTextTheme.labelSmall),
-                    const Spacer(),
-                    Theme(
-                      data: ThemeData(
-                          textButtonTheme: TextButtonThemeData(
-                              style: context.uiKitTheme?.textButtonStyle)),
-                      child: context.button(
-                          reversed: true,
-                          isTextButton: true,
+                              icon: ImageWidget(
+                                svgAsset:
+                                    GraphicsFoundation.instance.svg.calendar,
+                                color: Colors.white,
+                              )),
+                        ),
+                      ]).paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      Row(children: [
+                        Text('Days of week',
+                            style: theme?.regularTextTheme.labelSmall),
+                        const Spacer(),
+                        Expanded(child:
+                        Text(
+                            _placeToEdit.weekdays.isEmpty
+                                ? 'select days '
+                                : _placeToEdit.weekdays.length == 7
+                                    ? 'Daily '
+                                    : _placeToEdit.weekdays.join(', '),
+                            style: theme?.boldTextTheme.body)),
+                        context.outlinedButton(
                           data: BaseUiKitButtonData(
                               onPressed: () async {
                                 final maybeDaysOfWeek =
@@ -267,112 +282,93 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                   });
                                 }
                               },
-                              text: _placeToEdit.weekdays.isEmpty
-                                  ? 'none '
-                                  : _placeToEdit.weekdays.length == 7
-                                      ? 'Daily '
-                                      : _placeToEdit.weekdays.join(', '),
-                              icon: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.fromBorderSide(BorderSide(
-                                      width: 2, color: Colors.white)),
-                                ),
-                                child: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.calendar,
+                              icon: ImageWidget(
+                                svgAsset:
+                                    GraphicsFoundation.instance.svg.calendar,
+                                color: Colors.white,
+                              )),
+                        ),
+                      ]).paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      InkWell(
+                          onTap: () async {
+                            SnackBarUtils.show(
+                                message: 'in development', context: context);
+                            _locationController.text = 'random location';
+                          },
+                          child: IgnorePointer(
+                              child: UiKitInputFieldNoFill(
+                                      label: 'Address',
+                                      controller: _locationController,
+                                      icon: ImageWidget(
+                                          svgAsset: GraphicsFoundation
+                                              .instance.svg.location,
+                                          color: Colors.white))
+                                  .paddingSymmetric(
+                                      horizontal: horizontalPadding))),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                              keyboardType: TextInputType.url,
+                              label: 'Website',
+                              controller: _websiteController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                              keyboardType: TextInputType.phone,
+                              label: 'Phone',
+                              controller: _phoneController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      Row(children: [
+                        Text('Base properties',
+                            style: theme?.regularTextTheme.labelSmall),
+                        const Spacer(),
+                        context.outlinedButton(
+                            data: BaseUiKitButtonData(
+                                onPressed: () {},
+                                icon: ImageWidget(
+                                  svgAsset: GraphicsFoundation
+                                      .instance.svg.chevronRight,
                                   color: Colors.white,
-                                ).paddingAll(
-                                    SpacingFoundation.verticalSpacing12),
-                              ))),
-                    ),
-                  ]).paddingSymmetric(horizontal: horizontalPadding),
-                  SpacingFoundation.verticalSpace24,
-                  UiKitInputFieldNoFill(
-                          keyboardType: TextInputType.url,
-                          label: 'Website',
-                          controller: _websiteController)
-                      .paddingSymmetric(horizontal: horizontalPadding),
-                  SpacingFoundation.verticalSpace24,
-                  UiKitInputFieldNoFill(
-                          keyboardType: TextInputType.phone,
-                          label: 'Phone',
-                          controller: _phoneController)
-                      .paddingSymmetric(horizontal: horizontalPadding),
-                  SpacingFoundation.verticalSpace24,
-                  Theme(
-                    data: ThemeData(
-                        textButtonTheme: TextButtonThemeData(
-                            style:
-                                context.uiKitTheme?.textButtonLabelSmallStyle)),
-                    child: context
-                        .button(
-                            reversed: true,
-                            isTextButton: true,
+                                )))
+                      ]).paddingSymmetric(horizontal: horizontalPadding),
+                      UiKitTagsWidget(baseTags: _placeToEdit.baseTags ?? []),
+                      SpacingFoundation.verticalSpace24,
+                      Row(children: [
+                        Text('Unique properties',
+                            style: theme?.regularTextTheme.labelSmall),
+                        const Spacer(),
+                        context.outlinedButton(
                             data: BaseUiKitButtonData(
                                 onPressed: () {},
-                                text: 'Base properties',
-                                icon: DecoratedBox(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(BorderSide(
-                                        width: 2, color: Colors.white)),
-                                  ),
-                                  child: ImageWidget(
-                                    svgAsset: GraphicsFoundation
-                                        .instance.svg.chevronRight,
-                                    color: Colors.white,
-                                  ).paddingAll(
-                                      SpacingFoundation.verticalSpacing12),
+                                icon: ImageWidget(
+                                  svgAsset: GraphicsFoundation
+                                      .instance.svg.chevronRight,
+                                  color: Colors.white,
                                 )))
-                        .paddingSymmetric(horizontal: horizontalPadding),
-                  ),
-                  UiKitTagsWidget(baseTags: _placeToEdit.baseTags ?? []),
-                  SpacingFoundation.verticalSpace24,
-                  Theme(
-                    data: ThemeData(
-                        textButtonTheme: TextButtonThemeData(
-                            style:
-                                context.uiKitTheme?.textButtonLabelSmallStyle)),
-                    child: context
-                        .button(
-                            reversed: true,
-                            isTextButton: true,
-                            data: BaseUiKitButtonData(
-                                onPressed: () {},
-                                text: 'Unique properties',
-                                icon: DecoratedBox(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(BorderSide(
-                                        width: 2, color: Colors.white)),
-                                  ),
-                                  child: ImageWidget(
-                                    svgAsset: GraphicsFoundation
-                                        .instance.svg.chevronRight,
-                                    color: Colors.white,
-                                  ).paddingAll(
-                                      SpacingFoundation.verticalSpacing12),
-                                )))
-                        .paddingSymmetric(horizontal: horizontalPadding),
-                  ),
-                  UiKitTagsWidget(baseTags: [], uniqueTags: _placeToEdit.tags),
-                  SpacingFoundation.verticalSpace24,
-                  SafeArea(
-                      top: false,
-                      child: context.gradientButton(
-                          data: BaseUiKitButtonData(
-                              text: 'save'.toUpperCase(),
-                              onPressed: () {
-                                _placeToEdit.title = _titleController.text;
-                                _placeToEdit.website = _websiteController.text;
-                                _placeToEdit.phone = _phoneController.text;
-                                _placeToEdit.description =
-                                    _descriptionController.text;
-                                _placeToEdit.media = [..._photos, ..._videos];
-                                widget.onPlaceCreated(_placeToEdit);
-                              }))).paddingSymmetric(
-                      horizontal: horizontalPadding)
-                ]))));
+                      ]).paddingSymmetric(horizontal: horizontalPadding),
+                      UiKitTagsWidget(
+                          baseTags: [], uniqueTags: _placeToEdit.tags),
+                      SpacingFoundation.verticalSpace24,
+                      SafeArea(
+                          top: false,
+                          child: context.gradientButton(
+                              data: BaseUiKitButtonData(
+                                  text: 'save'.toUpperCase(),
+                                  onPressed: () {
+                                    _placeToEdit.title = _titleController.text;
+                                    _placeToEdit.website =
+                                        _websiteController.text;
+                                    _placeToEdit.phone = _phoneController.text;
+                                    _placeToEdit.description =
+                                        _descriptionController.text;
+                                    _placeToEdit.media = [
+                                      ..._photos,
+                                      ..._videos
+                                    ];
+                                    widget.onPlaceCreated(_placeToEdit);
+                                  }))).paddingSymmetric(
+                          horizontal: horizontalPadding)
+                    ]))));
   }
 }

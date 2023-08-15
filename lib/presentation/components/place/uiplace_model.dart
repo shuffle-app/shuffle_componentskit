@@ -25,13 +25,29 @@ class UiPlaceModel {
     this.title,
     this.openFrom,
     this.openTo,
+    this.location,
      this.media = const [],
     this.logo,
+    this.phone,
+    this.website,
     required this.description,
     this.rating,
     required this.tags,
     this.baseTags,
     this.weekdays = const [],
-    this.descriptionItems,
-  });
+  }):descriptionItems=[
+    UiDescriptionItemModel(title: 'Website', description: website ?? ''),
+    UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
+    UiDescriptionItemModel(
+        title: 'Location', description: location ?? ''),
+    UiDescriptionItemModel(
+      title: 'Work hours',
+      description:
+      '${openFrom!=null ? normalizedTi(openFrom) : 'nn'} - ${openTo!=null ? normalizedTi(openTo) : 'nn'}',
+    ),
+  ];
+}
+
+String normalizedTi(TimeOfDay time) {
+  return '${time.hour}:${time.minute} ${time.period.name}';
 }
