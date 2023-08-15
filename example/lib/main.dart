@@ -131,6 +131,17 @@ class ComponentsTestPage extends StatelessWidget {
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show invite to event',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(configuration.appConfig.content['user_invitation']),
+                  ComponentBuilder(child: InviteToFavouritePlacesComponent()),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'create event',
                     onPressed: () {
@@ -272,7 +283,9 @@ class ComponentsTestPage extends StatelessWidget {
             context.button(
                 data: BaseUiKitButtonData(
                     text: 'show onboarding',
-                    onPressed: () => buildComponent(context, ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
                         ComponentBuilder(child: Scaffold(body: OnboardingComponent()))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -335,7 +348,8 @@ class ComponentsTestPage extends StatelessWidget {
                                 profile: UiProfileModel(
                               name: 'Marry Williams',
                               nickname: '@marywill',
-                              description: 'Just walking here and there trying to find something unique and interesting to show you!',
+                              description:
+                                  'Just walking here and there trying to find something unique and interesting to show you!',
                               avatarUrl: 'assets/images/png/profile_avatar.png',
                               interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
                               // followers: 2650,
@@ -452,7 +466,9 @@ class ComponentsTestPage extends StatelessWidget {
                                           moods: List.generate(
                                               4,
                                               (index) => UiMoodModel(
-                                                  id: 1, title: 'Want to have some fun', logo: 'assets/images/png/crazy_emoji.png')),
+                                                  id: 1,
+                                                  title: 'Want to have some fun',
+                                                  logo: 'assets/images/png/crazy_emoji.png')),
                                         )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -490,8 +506,9 @@ class ComponentsTestPage extends StatelessWidget {
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -502,8 +519,9 @@ class ComponentsTestPage extends StatelessWidget {
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
