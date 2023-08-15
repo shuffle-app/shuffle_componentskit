@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -22,8 +23,13 @@ class EventComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model =
-        ComponentEventModel.fromJson(config['event']);
+    final ComponentEventModel model = kIsWeb
+        ? ComponentEventModel(
+            version: '0',
+            pageBuilderType: PageBuilderType.page,
+            positionModel:
+                PositionModel(bodyAlignment: Alignment.topLeft, version: '',horizontalMargin: 16,verticalMargin:10))
+        : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
     final bodyAlignment = model.positionModel?.bodyAlignment;

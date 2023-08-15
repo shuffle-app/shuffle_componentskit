@@ -48,7 +48,7 @@ class PhotoVideoSelector extends StatelessWidget {
             height: itemsSize.height * 1.2,
             width: double.infinity,
             child: Stack(alignment: Alignment.centerRight, children: [
-              ReorderableList(
+              ReorderableListView.builder(
                 key: listPhotosKey,
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -98,7 +98,7 @@ class PhotoVideoSelector extends StatelessWidget {
             height: itemsSize.height * 1.2,
             width: double.infinity,
             child: Stack(alignment: Alignment.centerRight, children: [
-              ReorderableList(
+              ReorderableListView.builder(
                 key:listVideosKey,
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
