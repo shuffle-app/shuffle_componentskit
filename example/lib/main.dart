@@ -135,7 +135,24 @@ class ComponentsTestPage extends StatelessWidget {
                   ComponentModel.fromJson(configuration.appConfig.content['invite_people_places']),
                   ComponentBuilder(
                     child: InviteToFavouritePlacesComponent(
-                      uiModel: UiInviteToFavouritePlacesModel(),
+                      places: List<UiKitLeadingRadioTile>.generate(
+                        10,
+                        (index) => UiKitLeadingRadioTile(
+                          title: 'title',
+                          avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
+                          tags: [
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                          ],
+                        ),
+                      ),
+                      uiModel: UiInviteToFavouritePlacesModel(
+                        date: DateTime.now(),
+                      ),
+                      onInvite: () {},
+                      onDatePressed: () {},
                     ),
                   ),
                 ),
