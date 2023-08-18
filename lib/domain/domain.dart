@@ -17,3 +17,6 @@ export 'data_uimodels/hangout_recommendation.dart';
 export 'data_uimodels/registration_type.dart';
 export 'data_uimodels/uidescriptionitem_model.dart';
 export 'data_uimodels/uiowner_model.dart';
+export 'location_models/location_details_response.dart';
+export 'location_models/location_search_autocomplete_response.dart';
+export 'location_models/place_geocoding_response.dart';
