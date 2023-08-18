@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -15,8 +16,16 @@ class PlaceComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
-    final ComponentPlaceModel model =
-        ComponentPlaceModel.fromJson(config['place']);
+    final ComponentPlaceModel model = kIsWeb
+        ? ComponentPlaceModel(
+            version: '',
+            pageBuilderType: PageBuilderType.page,
+            positionModel: PositionModel(
+                version: '',
+                horizontalMargin: 16,
+                verticalMargin: 10,
+                bodyAlignment: Alignment.centerLeft))
+        : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final horizontalMargin =
@@ -66,9 +75,11 @@ class PlaceComponent extends StatelessWidget {
                           launchUrlString(e.description);
                         } else if (e.description
                             .replaceAll(RegExp(r'[0-9]'), '')
-                            .replaceAll('+', '').trim()
+                            .replaceAll('+', '')
+                            .trim()
                             .isEmpty) {
-                          log('launching $e.description',name: 'PlaceComponent');
+                          log('launching $e.description',
+                              name: 'PlaceComponent');
                           launchUrlString('tel:${e.description}');
                         }
                       },

@@ -41,3 +41,4 @@ export 'shuffle/shuffle_component.dart';
 export 'shuffle/uishuffle_model.dart';
 export 'spinner/spinner_component.dart';
 export 'spinner/uispinner_model.dart';
+export 'location/location_component.dart';
