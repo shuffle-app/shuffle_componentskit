@@ -11,10 +11,12 @@ class CreatePlaceComponent extends StatefulWidget {
   final UiPlaceModel? placeToEdit;
   final VoidCallback? onPlaceDeleted;
   final Future Function(UiPlaceModel) onPlaceCreated;
+  final Future<String?> Function()? getLocation;
 
   const CreatePlaceComponent(
       {super.key,
       this.placeToEdit,
+      this.getLocation,
       this.onPlaceDeleted,
       required this.onPlaceCreated});
 
@@ -59,10 +61,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / 0.9.sw >
+    if (_descriptionController.text.length * 5.8.w / (kIsWeb ? 390: 0.9.sw) >
         descriptionHeightConstraint / 50.h) {
       setState(() {
-        descriptionHeightConstraint += 30.h;
+        descriptionHeightConstraint += 35.h;
       });
     }
   }
@@ -212,7 +214,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Text(
-                            '${_placeToEdit.openTo == null ? 'select time' : '${_placeToEdit.openTo!.hour}:${_placeToEdit.openTo!.minute} ${_placeToEdit.openTo!.period.name}'}  ',
+                            '${_placeToEdit.openFrom == null ? 'select time' : '${_placeToEdit.openFrom!.hour}:${_placeToEdit.openFrom!.minute} ${_placeToEdit.openFrom!.period.name}'}  ',
                             style: theme?.boldTextTheme.body),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
@@ -292,9 +294,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       SpacingFoundation.verticalSpace24,
                       InkWell(
                           onTap: () async {
-                            SnackBarUtils.show(
-                                message: 'in development', context: context);
-                            _locationController.text = 'random location';
+                            // SnackBarUtils.show(
+                            //     message: 'in development', context: context);
+
+                            _locationController.text = await widget.getLocation?.call() ?? '';
                           },
                           child: IgnorePointer(
                               child: UiKitInputFieldNoFill(
@@ -366,7 +369,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                       ..._photos,
                                       ..._videos
                                     ];
-                                    widget.onPlaceCreated(_placeToEdit);
+                                    widget.onPlaceCreated.call(_placeToEdit);
                                   }))).paddingSymmetric(
                           horizontal: horizontalPadding)
                     ]))));

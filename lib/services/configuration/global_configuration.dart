@@ -60,7 +60,7 @@ class GlobalConfiguration {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
     Map<String, dynamic> configAsMap =
-        await _getFromUrl('http://${_configUrl}/api/settings/config/v$version', headers: ConfigConstants.configHeaders);
+        await _getFromUrl('http://${_configUrl}/api/v1/settings/config/v$version', headers: ConfigConstants.configHeaders);
     final model = ConfigurationModel(updated: DateTime.now(), content: configAsMap, theme: configAsMap['theme_name']);
     unawaited(_saveToDocument());
 
