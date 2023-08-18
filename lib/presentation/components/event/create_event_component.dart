@@ -50,7 +50,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / 0.9.sw >
+    if (_descriptionController.text.length * 5.8.w / (kIsWeb ? 390 :0.9.sw) >
         descriptionHeightConstraint / 50.h) {
       setState(() {
         descriptionHeightConstraint += 30.h;
@@ -286,7 +286,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                 _eventToEdit.description =
                                     _descriptionController.text;
                                 _eventToEdit.media = [..._photos, ..._videos];
-                                widget.onEventCreated(_eventToEdit);
+                                widget.onEventCreated.call(_eventToEdit);
                               }))).paddingSymmetric(
                       horizontal: horizontalPadding)
                 ]))));
