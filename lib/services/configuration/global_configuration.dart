@@ -10,7 +10,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class GlobalConfiguration {
   static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
-  static String _configUrl = ConfigConstants.configUrl;
+  static String _configUrl = ConfigConstants.configAlternativeUrl;
   static int _timeout = 1;
   final Completer _completer = Completer();
   ConfigurationModel appConfig = ConfigurationModel(updated: DateTime.now(), content: {}, theme: 'default');
@@ -59,6 +59,8 @@ class GlobalConfiguration {
     if (userId != null) {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
+    print('http://${_configUrl}/api/v1/settings/config/v$version');
+    print('linkchik');
     Map<String, dynamic> configAsMap =
         await _getFromUrl('http://${_configUrl}/api/v1/settings/config/v$version', headers: ConfigConstants.configHeaders);
     final model = ConfigurationModel(updated: DateTime.now(), content: configAsMap, theme: configAsMap['theme_name']);
@@ -83,7 +85,8 @@ class GlobalConfiguration {
     return File(p.join(provider.path, ConfigConstants.configPath));
   }
 
-  Future<Map<String, dynamic>> _getFromUrl(String url, {Map<String, String>? queryParameters, Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> _getFromUrl(String url,
+      {Map<String, String>? queryParameters, Map<String, String>? headers}) async {
     String finalUrl = url;
     if (queryParameters != null) {
       queryParameters.forEach((k, v) {

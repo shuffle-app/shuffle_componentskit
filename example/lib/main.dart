@@ -109,7 +109,7 @@ class ComponentsTestPage extends StatelessWidget {
       rating: 4.8,
       tags: tags,
       location: 'Burj Khalifa 122nd Floor',
-        date: DateTime.now(),
+      date: DateTime.now(),
       //   UiDescriptionItemModel(
       //     title: 'Open now',
       //     description: '9:30 am - 10:30 pm',
@@ -128,6 +128,38 @@ class ComponentsTestPage extends StatelessWidget {
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show invite to event',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(configuration.appConfig.content['invite_people_places']),
+                  ComponentBuilder(
+                    child: InviteToFavouritePlacesComponent(
+                      places: List<UiKitLeadingRadioTile>.generate(
+                        10,
+                        (index) => UiKitLeadingRadioTile(
+                          title: 'title',
+                          avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
+                          tags: [
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                          ],
+                        ),
+                      ),
+                      uiModel: UiInviteToFavouritePlacesModel(
+                        date: DateTime.now(),
+                      ),
+                      onInvite: () {},
+                      onDatePressed: () {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'create event',
                     onPressed: () {
@@ -143,8 +175,8 @@ class ComponentsTestPage extends StatelessWidget {
                     onPressed: () {
                       context.push(Scaffold(
                           body: CreatePlaceComponent(
-                            onPlaceCreated: (UiPlaceModel model) async {},
-                          )));
+                        onPlaceCreated: (UiPlaceModel model) async {},
+                      )));
                     })),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -279,7 +311,9 @@ class ComponentsTestPage extends StatelessWidget {
             context.button(
                 data: BaseUiKitButtonData(
                     text: 'show onboarding',
-                    onPressed: () => buildComponent(context, ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
                         ComponentBuilder(child: Scaffold(body: OnboardingComponent()))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -342,7 +376,8 @@ class ComponentsTestPage extends StatelessWidget {
                                 profile: UiProfileModel(
                               name: 'Marry Williams',
                               nickname: '@marywill',
-                              description: 'Just walking here and there trying to find something unique and interesting to show you!',
+                              description:
+                                  'Just walking here and there trying to find something unique and interesting to show you!',
                               avatarUrl: 'assets/images/png/profile_avatar.png',
                               interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
                               // followers: 2650,
@@ -459,7 +494,9 @@ class ComponentsTestPage extends StatelessWidget {
                                           moods: List.generate(
                                               4,
                                               (index) => UiMoodModel(
-                                                  id: 1, title: 'Want to have some fun', logo: 'assets/images/png/crazy_emoji.png')),
+                                                  id: 1,
+                                                  title: 'Want to have some fun',
+                                                  logo: 'assets/images/png/crazy_emoji.png')),
                                         )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -497,8 +534,9 @@ class ComponentsTestPage extends StatelessWidget {
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -509,8 +547,9 @@ class ComponentsTestPage extends StatelessWidget {
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -673,55 +712,55 @@ class ComponentsTestPage extends StatelessWidget {
       type: '');
 
   final UiPlaceModel place = UiPlaceModel(
-      title: 'title',
-      id: 1,
-      media: [
-        UiKitMediaVideo(
-          link: 'assets/images/png/place.png',
-        ),
-        UiKitMediaPhoto(
-          link: 'assets/images/png/place.png',
-        ),
-        UiKitMediaPhoto(
-          link: 'assets/images/png/place.png',
-        ),
-        UiKitMediaPhoto(
-          link: 'assets/images/png/place.png',
-        ),
-        UiKitMediaPhoto(
-          link: 'assets/images/png/place.png',
-        ),
-      ],
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-          'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-          'Nulla facilisi. '
-          'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
-          'Nulla facilisi',
-      rating: 4.8,
-      tags: [
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'uniqueCheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      ],
+    title: 'title',
+    id: 1,
+    media: [
+      UiKitMediaVideo(
+        link: 'assets/images/png/place.png',
+      ),
+      UiKitMediaPhoto(
+        link: 'assets/images/png/place.png',
+      ),
+      UiKitMediaPhoto(
+        link: 'assets/images/png/place.png',
+      ),
+      UiKitMediaPhoto(
+        link: 'assets/images/png/place.png',
+      ),
+      UiKitMediaPhoto(
+        link: 'assets/images/png/place.png',
+      ),
+    ],
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+        'Sed euismod, nunc ut tincidunt lacinia, nisl nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+        'Nulla facilisi. '
+        'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
+        'Nulla facilisi',
+    rating: 4.8,
+    tags: [
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'uniqueCheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
+      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    ],
 
-      // descriptionItems: [
-      //   const UiDescriptionItemModel(title: 'test 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-      //   const UiDescriptionItemModel(title: 'test 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-      //   const UiDescriptionItemModel(title: 'test 3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-      //   const UiDescriptionItemModel(title: 'test 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
-      // ]
+    // descriptionItems: [
+    //   const UiDescriptionItemModel(title: 'test 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+    //   const UiDescriptionItemModel(title: 'test 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+    //   const UiDescriptionItemModel(title: 'test 3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+    //   const UiDescriptionItemModel(title: 'test 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
+    // ]
   );
 }
