@@ -13,23 +13,17 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
             pageBuilderType: PageBuilderType.page,
-            positionModel: PositionModel(
-                version: '',
-                horizontalMargin: 16,
-                verticalMargin: 10,
-                bodyAlignment: Alignment.centerLeft))
+            positionModel:
+                PositionModel(version: '', horizontalMargin: 16, verticalMargin: 10, bodyAlignment: Alignment.centerLeft))
         : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return Column(
       children: [
@@ -44,9 +38,7 @@ class PlaceComponent extends StatelessWidget {
               horizontalMargin: horizontalMargin,
             ),
           ],
-        ).paddingSymmetric(
-            horizontal: horizontalMargin,
-            vertical: SpacingFoundation.verticalSpacing16),
+        ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
         Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -73,19 +65,15 @@ class PlaceComponent extends StatelessWidget {
                       onTap: () {
                         if (e.description.startsWith('http')) {
                           launchUrlString(e.description);
-                        } else if (e.description
-                            .replaceAll(RegExp(r'[0-9]'), '')
-                            .replaceAll('+', '')
-                            .trim()
-                            .isEmpty) {
-                          log('launching $e.description',
-                              name: 'PlaceComponent');
+                        } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                          log('launching $e.description', name: 'PlaceComponent');
                           launchUrlString('tel:${e.description}');
                         }
                       },
-                      child: TitledAccentInfo(
+                      child: UiKitTitledDescriptionGridWidget(
                         title: e.title,
-                        info: e.description,
+                        description: e.description,
+                        spacing: SpacingFoundation.horizontalSpacing8,
                       )))
                   .toList(),
             ).paddingSymmetric(horizontal: horizontalMargin),
