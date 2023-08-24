@@ -260,6 +260,7 @@ class FeedComponent extends StatelessWidget {
         // itemCount: feed.mixedItems!.length + 1,
         pagingController: controller,
       ),
+        SpacingFoundation.verticalSpace24.wrapSliverBox,
         kBottomNavigationBarHeight.heightBox.wrapSliverBox
       ],
     ]).paddingSymmetric(

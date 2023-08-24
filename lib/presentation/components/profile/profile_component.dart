@@ -75,7 +75,9 @@ class ProfileComponent extends StatelessWidget {
           context
               .gradientButton(
                   data: BaseUiKitButtonData(text: 'fulfill the dream'.toUpperCase(), onPressed: () => onFulfillDream?.call()))
-              .paddingSymmetric(horizontal: horizontalMargin)
+              .paddingSymmetric(horizontal: horizontalMargin),
+          SpacingFoundation.verticalSpace24,
+          kBottomNavigationBarHeight.heightBox,
           // const UnderDevelopment(),
           // ProfileStoriesList(
           //   stories: List.generate(
