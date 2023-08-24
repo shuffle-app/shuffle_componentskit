@@ -88,18 +88,19 @@ class SearchComponent extends StatelessWidget {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: onSearchFieldTap,
-              child: Hero(
-                tag: search.heroSearchTag,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: UiKitInputFieldRightIcon(
-                    autofocus: false,
-                    fillColor: ColorsFoundation.surface3,
-                    hintText: 'search'.toUpperCase(),
-                    controller: searchController,
-                    icon: ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.search,
-                      color: Colors.white.withOpacity(0.5),
+              child: IgnorePointer(
+                child: Hero(
+                  tag: search.heroSearchTag,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: UiKitInputFieldRightIcon(
+                      fillColor: ColorsFoundation.surface3,
+                      hintText: 'search'.toUpperCase(),
+                      controller: searchController,
+                      icon: ImageWidget(
+                        svgAsset: GraphicsFoundation.instance.svg.search,
+                        color: Colors.white.withOpacity(0.5),
+                      ),
                     ),
                   ),
                 ),
