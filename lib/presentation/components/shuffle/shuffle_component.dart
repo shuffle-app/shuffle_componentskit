@@ -125,6 +125,8 @@ class ShuffleComponentState extends State<ShuffleComponent> {
     final theme = context.uiKitTheme;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
+    log('here is rebuild',name: 'ShuffleComponent');
+
     return Stack(
       children: [
         FutureBuilder(
@@ -135,7 +137,8 @@ class ShuffleComponentState extends State<ShuffleComponent> {
                     duration: animDuration,
                     child: () {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.data != null) {
+                        log('here is snapshot with ${snapshot.data}',name: 'ShuffleComponent');
+                        if (snapshot.data != null && lastFile?.file.path!= (snapshot.data as FileInfo).file.path) {
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) =>
                               setState(() {

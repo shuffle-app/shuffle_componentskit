@@ -49,5 +49,9 @@ class UiPlaceModel {
 }
 
 String normalizedTi(TimeOfDay time) {
-  return '${time.hour}:${time.minute} ${time.period.name}';
+  return '${leadingZeros(time.hour)}:${leadingZeros(time.minute)} ${time.period.name}';
+}
+
+String leadingZeros(int number){
+  return number.toString().padLeft(2, '0');
 }
