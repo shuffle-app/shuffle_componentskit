@@ -84,23 +84,23 @@ class PreferencesComponent extends StatelessWidget {
                     )),
               )
             ]).paddingSymmetric(horizontal: horizontalMargin),
-              // SpacingFoundation.verticalSpace16,
-              // SizedBox(
-              //     width: double.infinity,
-              //     child: UiKitInputFieldRightIcon(
-              //       hintText: 'search'.toUpperCase(),
-              //       controller: preferences.searchController,
-              //       icon: preferences.searchController.text.isEmpty
-              //           ? ImageWidget(
-              //               svgAsset: GraphicsFoundation.instance.svg.search,
-              //               color: Colors.white.withOpacity(0.5),
-              //             )
-              //           : null,
-              //       // onPressed: () {
-              //       //   if(preferences.searchController.text.isNotEmpty) preferences.searchController.clear();
-              //       // },
-              //     )).paddingSymmetric(horizontal: horizontalMargin),
-              // SpacingFoundation.verticalSpace24,
+              SpacingFoundation.verticalSpace16,
+              SizedBox(
+                  width: double.infinity,
+                  child: UiKitInputFieldRightIcon(
+                    hintText: 'search'.toUpperCase(),
+                    controller: preferences.searchController,
+                    icon: preferences.searchController.text.isEmpty
+                        ? ImageWidget(
+                            svgAsset: GraphicsFoundation.instance.svg.search,
+                            color: Colors.white.withOpacity(0.5),
+                          )
+                        : null,
+                    onPressed: () {
+                      if(preferences.searchController.text.isNotEmpty) preferences.searchController.clear();
+                    },
+                  )).paddingSymmetric(horizontal: horizontalMargin),
+              SpacingFoundation.verticalSpace24,
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, size) {

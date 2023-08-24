@@ -6,9 +6,11 @@ class UiProfileModel {
   final String? name;
   final String? description;
   final String? avatarUrl;
+  final String? userCredo;
   final int? followers;
   final VoidCallback? onFollow;
   final List<String>? interests;
+  final List<String>? favorites;
   final List<String>? matchingInterests;
 
   ProfileCard get cardWidget => ProfileCard(
@@ -20,14 +22,17 @@ class UiProfileModel {
         interests: interests,
         onFollow: onFollow,
         matchingInterests: matchingInterests,
+    profileType: ProfileCardType.personal,
       );
 
   UiProfileModel({
     this.onFollow,
     this.matchingInterests,
     this.nickname,
+    this.userCredo,
     this.name,
     this.description,
+    this.favorites,
     this.avatarUrl,
     this.interests,
     this.followers,

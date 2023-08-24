@@ -56,7 +56,7 @@ class _OnboardingComponentState extends State<OnboardingComponent>
 
   int currentIndex = 0;
 
-  double get currentItemProgressPortion =>
+  double get currentItemProgressPortion => currentIndex >=widget.items.length ? widget.items.length-1 :
       ((widget.items
           .elementAt(currentIndex)
           .autoSwitchDuration
@@ -152,7 +152,7 @@ class _OnboardingComponentState extends State<OnboardingComponent>
               duration: widget.transitionDuration,
               child: ImageWidget(
                 key: UniqueKey(),
-                link: widget.items
+                link: currentIndex >= widget.items.length ? widget.items.last.imageLink :widget.items
                     .elementAt(currentIndex)
                     .imageLink,
                 width: 1.sw,
@@ -188,7 +188,7 @@ class _OnboardingComponentState extends State<OnboardingComponent>
               opacity: _textOpacity,
               child: Text(
                 key: UniqueKey(),
-                widget.items
+                currentIndex >= widget.items.length ? widget.items.last.title :widget.items
                     .elementAt(currentIndex)
                     .title,
                 style: context.uiKitTheme?.boldTextTheme.titleLarge,
