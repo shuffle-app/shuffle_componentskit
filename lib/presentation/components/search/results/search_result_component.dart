@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -18,7 +17,7 @@ class SearchResultComponent extends StatelessWidget {
       required this.heroSearchTag,
       required this.searchController,
       this.onFieldSubmitted,
-        this.autofocus = true,
+      this.autofocus = true,
       this.searchFieldFocus,
       this.errorText});
 
@@ -27,44 +26,45 @@ class SearchResultComponent extends StatelessWidget {
     final config = GlobalConfiguration().appConfig.content;
     final model = ComponentSearchModel.fromJson(config['search']);
 
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return BlurredAppBarPage(
-        title: 'You’ll find it',
-        wrapSliverBox: false,
-        centerTitle: true,
-        autoImplyLeading: true,
-        topFixedAddition: Hero(
-            tag: heroSearchTag,
-            child: SizedBox(
-                width: double.infinity,
-                child: UiKitInputFieldRightIcon(
-                  autofocus: autofocus,
-                  hintText: 'search'.toUpperCase(),
-                  controller: searchController,
-                  errorText: errorText,
-                  icon: searchController.text.isEmpty
-                      ? ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.search,
-                          color: Colors.white.withOpacity(0.5))
-                      : null,
-                  onPressed: () {
-                    searchController.clear();
-                    print('clooose!');
-                    context.pop();
-                  },
-                  onFieldSubmitted: onFieldSubmitted,
-                ))).paddingSymmetric(
-            vertical: SpacingFoundation.verticalSpacing24,
-            horizontal: horizontalMargin),
-        body: GestureDetector(
-            onTap: () {
-              if (searchController.text.isEmpty) {
-                FocusManager.instance.primaryFocus?.unfocus();
-                context.pop();
-              }
+      title: 'You’ll find it',
+      wrapSliverBox: false,
+      centerTitle: true,
+      autoImplyLeading: true,
+      customToolbarHeight: 150.0,
+      appBarBody: Hero(
+        tag: heroSearchTag,
+        child: SizedBox(
+          width: double.infinity,
+          child: UiKitInputFieldRightIcon(
+            autofocus: autofocus,
+            fillColor: ColorsFoundation.surface3,
+            hintText: 'search'.toUpperCase(),
+            controller: searchController,
+            errorText: errorText,
+            icon: searchController.text.isEmpty
+                ? ImageWidget(svgAsset: GraphicsFoundation.instance.svg.search, color: Colors.white.withOpacity(0.5))
+                : null,
+            onPressed: () {
+              searchController.clear();
+              print('clooose!');
+              context.pop();
             },
-            child: resultBody.paddingSymmetric(horizontal: horizontalMargin)));
+            onFieldSubmitted: onFieldSubmitted,
+          ),
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () {
+          if (searchController.text.isEmpty) {
+            FocusManager.instance.primaryFocus?.unfocus();
+            context.pop();
+          }
+        },
+        child: resultBody.paddingSymmetric(horizontal: horizontalMargin),
+      ),
+    );
   }
 }
