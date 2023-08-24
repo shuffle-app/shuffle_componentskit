@@ -129,6 +129,27 @@ class ComponentsTestPage extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show search',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(configuration.appConfig.content['search']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: SearchComponent(
+                        searchController: TextEditingController(),
+                        search: UiSearchModel(
+                          heroSearchTag: 'heroSearchTag',
+                          places: [],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show invite to event',
                 onPressed: () => buildComponent(
                   context,
