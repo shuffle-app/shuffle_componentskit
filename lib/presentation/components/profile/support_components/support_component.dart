@@ -22,46 +22,63 @@ class SupportComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final toolBarHeight = context.uiKitTheme?.customAppBapTheme.toolbarHeight ?? 90.0;
+    final remainingHeight = 1.sh - toolBarHeight - EdgeInsetsFoundation.vertical16 - SpacingFoundation.verticalSpacing24;
+
     return BlurredAppBarPage(
-        centerTitle: true,
-        autoImplyLeading: true,
-        title: 'Support',
-        body: Column(children: [
-          UiKitCardWrapper(
+      centerTitle: true,
+      autoImplyLeading: true,
+      title: 'Support',
+      body: SizedBox(
+        height: remainingHeight,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            UiKitCardWrapper(
               child: Theme(
-            data: ThemeData(
-                textButtonTheme: TextButtonThemeData(
-                    style: context.uiKitTheme?.textButtonStyle)),
-            child: context
-                .button(
-                    reversed: true,
-                    isTextButton: true,
-                    data: BaseUiKitButtonData(
-                        onPressed: () => context.push(FAQComponent(
+                data: ThemeData(
+                  textButtonTheme: TextButtonThemeData(
+                    style: context.uiKitTheme?.textButtonStyle,
+                  ),
+                ),
+                child: context
+                    .button(
+                      reversed: true,
+                      isTextButton: true,
+                      data: BaseUiKitButtonData(
+                        onPressed: () => context.push(
+                          FAQComponent(
                             positionModel: position,
-                            faqData: content
-                                .body![ContentItemType.pageOpener]!.properties!
-                                .map((key, value) =>
-                                    MapEntry(key, value.value!)))),
+                            faqData: content.body![ContentItemType.pageOpener]!.properties!.map(
+                              (key, value) => MapEntry(
+                                key,
+                                value.value!,
+                              ),
+                            ),
+                          ),
+                        ),
                         text: 'FAQ',
                         icon: DecoratedBox(
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.fromBorderSide(
-                                BorderSide(width: 2, color: Colors.white)),
+                              BorderSide(width: 2, color: Colors.white),
+                            ),
                           ),
                           child: ImageWidget(
-                            svgAsset:
-                                GraphicsFoundation.instance.svg.chevronRight,
+                            svgAsset: GraphicsFoundation.instance.svg.chevronRight,
                             color: Colors.white,
                           ).paddingAll(SpacingFoundation.verticalSpacing12),
-                        )))
-                .paddingAll(SpacingFoundation.verticalSpacing16),
-          )),
-          Spacer(),
-          UiKitCardWrapper(
-            color: ColorsFoundation.surface1,
-            child: Form(
+                        ),
+                      ),
+                    )
+                    .paddingAll(SpacingFoundation.verticalSpacing16),
+              ),
+            ),
+            const Spacer(),
+            UiKitCardWrapper(
+              color: ColorsFoundation.surface1,
+              child: Form(
                 key: GlobalKey<FormState>(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,16 +110,25 @@ class SupportComponent extends StatelessWidget {
                       // onChanged: (value) => onNickNameChanged?.call(value),
                     ),
                   ],
-                )).paddingAll(EdgeInsetsFoundation.all4),
-          ),
-          SpacingFoundation.verticalSpace24,
-          SizedBox(
-            width: double.infinity,
-            child: context.gradientButton(
-                data: BaseUiKitButtonData(text: 'send',onPressed: ()=>SnackBarUtils.show(message: 'will be implemented soon', context: context))),
-          )
-        ]).paddingSymmetric(
-            vertical: position?.verticalMargin?.toDouble() ?? 0,
-            horizontal: position?.horizontalMargin?.toDouble() ?? 0));
+                ),
+              ).paddingAll(EdgeInsetsFoundation.all4),
+            ),
+            SpacingFoundation.verticalSpace24,
+            SizedBox(
+              width: double.infinity,
+              child: context.gradientButton(
+                data: BaseUiKitButtonData(
+                  text: 'send',
+                  onPressed: () => SnackBarUtils.show(message: 'will be implemented soon', context: context),
+                ),
+              ),
+            )
+          ],
+        ).paddingSymmetric(
+          vertical: position?.verticalMargin?.toDouble() ?? 0,
+          horizontal: position?.horizontalMargin?.toDouble() ?? 0,
+        ),
+      ),
+    );
   }
 }
