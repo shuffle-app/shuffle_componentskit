@@ -62,18 +62,21 @@ class SearchComponent extends StatelessWidget {
 
     print('model.content ${model.content.body?.keys}');
 
-    final List<Widget> chooseCards = body?[ContentItemType.horizontalList]
-            ?.properties
-            ?.entries
-            .map((e) => UiKitTitledCardWithBackground(
-                  title: e.key,
-                  backgroundImageLink: e.value.imageLink ?? '',
-                  backgroundColor: e.value.color ?? Colors.white,
-                  onPressed: () {
-                    onSearchFieldTap?.call();
-                    searchController.text = e.key;
-                  },
-                ))
+    final chooseCards = body?[ContentItemType.horizontalList]?.properties?.entries.toList()
+      ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
+
+    final sortedCards = chooseCards
+            ?.map(
+              (e) => UiKitTitledCardWithBackground(
+                title: e.key,
+                backgroundImageLink: e.value.imageLink ?? '',
+                backgroundColor: e.value.color ?? Colors.white,
+                onPressed: () {
+                  onSearchFieldTap?.call();
+                  searchController.text = e.key;
+                },
+              ),
+            )
             .toList() ??
         [];
 
@@ -166,7 +169,7 @@ class SearchComponent extends StatelessWidget {
                       spacing: horizontalMargin,
                       children: [
                         const SizedBox.shrink(),
-                        ...chooseCards,
+                        ...sortedCards,
                         const SizedBox.shrink(),
                       ],
                     ),
