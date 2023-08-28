@@ -166,7 +166,7 @@ class SearchComponent extends StatelessWidget {
                     primary: false,
                     scrollDirection: Axis.horizontal,
                     child: Wrap(
-                      spacing: horizontalMargin,
+                      spacing: SpacingFoundation.horizontalSpacing12,
                       children: [
                         const SizedBox.shrink(),
                         ...sortedCards,
