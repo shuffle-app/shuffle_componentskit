@@ -27,6 +27,7 @@ class SearchResultComponent extends StatelessWidget {
     final model = ComponentSearchModel.fromJson(config['search']);
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return BlurredAppBarPage(
       title: 'You’ll find it',
@@ -49,7 +50,6 @@ class SearchResultComponent extends StatelessWidget {
                 : null,
             onPressed: () {
               searchController.clear();
-              print('clooose!');
               context.pop();
             },
             onFieldSubmitted: onFieldSubmitted,
@@ -63,7 +63,11 @@ class SearchResultComponent extends StatelessWidget {
             context.pop();
           }
         },
-        child: resultBody.paddingSymmetric(horizontal: horizontalMargin),
+        child: resultBody.paddingOnly(
+          bottom: verticalMargin,
+          left: horizontalMargin,
+          right: horizontalMargin,
+        ),
       ),
     );
   }
