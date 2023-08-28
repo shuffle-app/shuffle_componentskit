@@ -35,12 +35,12 @@ class SearchComponent extends StatelessWidget {
     ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.icecream.path,
         iconSize: 40,
-        position: DecorationIconPosition(right: 86, bottom: 0),
+        position: DecorationIconPosition(right: 96, bottom: -8),
         rotationAngle: -15),
     ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.firstAidKit.path,
         iconSize: 44,
-        position: DecorationIconPosition(top: 32, right: 69),
+        position: DecorationIconPosition(top: 32, right: 85),
         rotationAngle: 30),
     ActionCardDecorationIconData(
         iconLink: GraphicsFoundation.instance.png.coin.path,
@@ -154,7 +154,7 @@ class SearchComponent extends StatelessWidget {
                       ),
                       overflownIconLink: GraphicsFoundation.instance.png.map.path,
                       decorationIcons: _decorationItemsForFreeCards,
-                    )
+                    ).paddingOnly(right: horizontalMargin),
                   ],
                   SpacingFoundation.verticalSpace24,
                   Text(
@@ -167,13 +167,9 @@ class SearchComponent extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     child: Wrap(
                       spacing: SpacingFoundation.horizontalSpacing12,
-                      children: [
-                        const SizedBox.shrink(),
-                        ...sortedCards,
-                        const SizedBox.shrink(),
-                      ],
+                      children: sortedCards,
                     ),
-                  ),
+                  ).paddingOnly(left: horizontalMargin),
                   SpacingFoundation.verticalSpace24,
                   Stack(clipBehavior: Clip.none, children: [
                     Text('Top places rated\nby', style: theme?.boldTextTheme.title1),
