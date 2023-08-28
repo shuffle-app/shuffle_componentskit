@@ -11,14 +11,15 @@ class SearchComponent extends StatelessWidget {
   final Function? onPlaceTapped;
   final Function? onTagSortPressed;
 
-  SearchComponent({super.key,
-    required this.searchController,
-    this.scrollController,
-    required this.search,
-    this.onPlaceTapped,
-    this.onSearchFieldTap,
-    this.onTagSortPressed,
-    this.onFreeCardPressed});
+  SearchComponent(
+      {super.key,
+      required this.searchController,
+      this.scrollController,
+      required this.search,
+      this.onPlaceTapped,
+      this.onSearchFieldTap,
+      this.onTagSortPressed,
+      this.onFreeCardPressed});
 
   final _decorationItemsForFreeCards = [
     ActionCardDecorationIconData(
@@ -54,8 +55,7 @@ class SearchComponent extends StatelessWidget {
     final config = GlobalConfiguration().appConfig.content;
     final model = ComponentSearchModel.fromJson(config['search']);
 
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0)
-        .toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final title = model.content.title;
     final body = model.content.body;
@@ -63,18 +63,18 @@ class SearchComponent extends StatelessWidget {
     print('model.content ${model.content.body?.keys}');
 
     final List<Widget> chooseCards = body?[ContentItemType.horizontalList]
-        ?.properties
-        ?.entries
-        .map((e) =>
-        UiKitTitledCardWithBackground(
-          title: e.key,
-          backgroundImageLink: e.value.imageLink ?? '',
-          backgroundColor: e.value.color ?? Colors.white,
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = e.key;
-          },))
-        .toList() ??
+            ?.properties
+            ?.entries
+            .map((e) => UiKitTitledCardWithBackground(
+                  title: e.key,
+                  backgroundImageLink: e.value.imageLink ?? '',
+                  backgroundColor: e.value.color ?? Colors.white,
+                  onPressed: () {
+                    onSearchFieldTap?.call();
+                    searchController.text = e.key;
+                  },
+                ))
+            .toList() ??
         [];
 
     return Scaffold(
