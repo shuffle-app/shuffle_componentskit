@@ -44,6 +44,16 @@ class _FAQComponentState extends State<FAQComponent> {
     return Scaffold(body: BlurredAppBarPage(
         title: 'FAQ',
         autoImplyLeading: true,
+        appBarBody: SizedBox(
+            width: double.infinity,
+            child: UiKitInputFieldRightIcon(
+                hintText: 'search'.toUpperCase(),
+                controller: _controller,
+                icon: ImageWidget(
+                    svgAsset:
+                    GraphicsFoundation.instance.svg.search,
+                    color: Colors.white.withOpacity(0.5)))),
+        customToolbarHeight: 150.0,
         centerTitle: true,
         body: ListView.separated(
             padding: EdgeInsets.symmetric(
@@ -53,17 +63,7 @@ class _FAQComponentState extends State<FAQComponent> {
                 widget.positionModel?.horizontalMargin?.toDouble() ??
                     0),
             itemBuilder: (context, index) {
-              if (index == 0) {
-                return SizedBox(
-                    width: double.infinity,
-                    child: UiKitInputFieldRightIcon(
-                        hintText: 'search'.toUpperCase(),
-                        controller: _controller,
-                        icon: ImageWidget(
-                            svgAsset:
-                            GraphicsFoundation.instance.svg.search,
-                            color: Colors.white.withOpacity(0.5))));
-              }
+
               if (itemsToShow.isEmpty) {
                 return Text(
                   'nothing found'.toUpperCase(),
@@ -89,15 +89,14 @@ class _FAQComponentState extends State<FAQComponent> {
                                   GeneralDialogData(
                                     child: WebContentComponent(
                                         url: widget
-                                            .faqData[itemsToShow[index -
-                                            1]]!).paddingSymmetric(vertical:
+                                            .faqData[itemsToShow[index]]!).paddingSymmetric(vertical:
                                     widget.positionModel?.verticalMargin
                                         ?.toDouble() ?? 0,
                                         horizontal:
                                         widget.positionModel?.horizontalMargin
                                             ?.toDouble() ??
                                             0))),
-                      text: itemsToShow[index - 1],
+                      text: itemsToShow[index],
                       icon: ImageWidget(
                           svgAsset:
                           GraphicsFoundation.instance.svg.chevronRight,
@@ -105,11 +104,12 @@ class _FAQComponentState extends State<FAQComponent> {
               );
             },
             separatorBuilder: (_, index) =>
-            index == 0
-                ? SpacingFoundation.verticalSpace24
-                : const Divider(color: UiKitColors.darkNeutral600)
+            // index == 0
+            //     ? SpacingFoundation.verticalSpace24
+            //     :
+            const Divider(color: UiKitColors.darkNeutral600)
                 .paddingSymmetric(
                 vertical: SpacingFoundation.verticalSpacing16),
-            itemCount: itemsToShow.isEmpty ? 2 : itemsToShow.length + 1)));
+            itemCount: itemsToShow.isEmpty ? 1 : itemsToShow.length )));
   }
 }
