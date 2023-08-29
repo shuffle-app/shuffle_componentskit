@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                   ? GlobalComponent(globalConfiguration: configuration, child: ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
-                          .load(version: '1.0.3')
+                          .load(version: '1.0.1')
                           .then((_) => Future.delayed(const Duration(seconds: 1)))
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
                       return const Scaffold(body: Center(child: LoadingWidget()));
@@ -139,7 +139,96 @@ class ComponentsTestPage extends StatelessWidget {
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchTag',
-                          places: [],
+                          places: List.generate(
+                            10,
+                            (index) => UiPlaceModel(
+                              id: index + 1,
+                              rating: 4 + (index / 10),
+                              media: [
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                              ],
+                              title: 'lorem ipsum dolor sit amet',
+                              description:
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              baseTags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                              ],
+                              tags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Duh',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Metal',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Heavy',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Club',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheaper',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),

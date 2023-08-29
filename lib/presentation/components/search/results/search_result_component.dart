@@ -6,20 +6,21 @@ class SearchResultComponent extends StatelessWidget {
   final Widget resultBody;
   final String heroSearchTag;
   final String? errorText;
-  final FocusNode? searchFieldFocus;
   final ValueChanged<String>? onFieldSubmitted;
   final TextEditingController searchController;
   final bool autofocus;
+  final ScrollController? scrollController;
 
-  const SearchResultComponent(
-      {super.key,
-      required this.resultBody,
-      required this.heroSearchTag,
-      required this.searchController,
-      this.onFieldSubmitted,
-      this.autofocus = true,
-      this.searchFieldFocus,
-      this.errorText});
+  const SearchResultComponent({
+    super.key,
+    required this.resultBody,
+    required this.heroSearchTag,
+    required this.searchController,
+    this.onFieldSubmitted,
+    this.autofocus = true,
+    this.scrollController,
+    this.errorText,
+  });
 
   @override
   Widget build(BuildContext context) {
