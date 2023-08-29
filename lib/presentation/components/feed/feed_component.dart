@@ -146,10 +146,7 @@ class FeedComponent extends StatelessWidget {
                     .map(
                       (e) => UiKitMessageCardWithIcon(
                         message: e.title,
-                        icon: ImageWidget(
-                          link: e.logo,
-                          fit: BoxFit.fitWidth,
-                        ),
+                        iconLink: e.logo,
                         layoutDirection: Axis.vertical,
                         onPressed: onMoodPressed == null ? null : () => onMoodPressed!(e.id),
                       ),

@@ -25,7 +25,7 @@ class MoodComponent extends StatelessWidget {
       crossAxisAlignment: bodyAlignment.crossAxisAlignment,
       children: [
         SpacingFoundation.verticalSpace16,
-        UiKitMessageCardWithIcon(message: mood.title, icon: ImageWidget(link: mood.logo), layoutDirection: Axis.horizontal)
+        UiKitMessageCardWithIcon(message: mood.title, iconLink:  mood.logo, layoutDirection: Axis.horizontal)
             .paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace14,
         Row(
