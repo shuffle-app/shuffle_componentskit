@@ -35,6 +35,7 @@ class ShuffleComponentState extends State<ShuffleComponent> {
   late final ComponentShuffleModel model;
   final ValueNotifier<int> indexNotifier = ValueNotifier<int>(0);
   bool isEnded = false;
+  late final Key backImageKey;
   Widget isEndedWidget = UiKitLastSwiperCard.fixed();
 
   // Color _backgroundColor = Colors.black12;
@@ -57,6 +58,7 @@ class ShuffleComponentState extends State<ShuffleComponent> {
 
   @override
   void initState() {
+    backImageKey = UniqueKey();
     final config =
         GlobalComponent
             .of(context)
@@ -133,6 +135,7 @@ class ShuffleComponentState extends State<ShuffleComponent> {
             future: currentFutureMayBeImage,
             builder: (context, snapshot) =>
                 AnimatedSwitcher(
+                  key: backImageKey,
                     switchInCurve: Curves.decelerate,
                     duration: animDuration,
                     child: () {
