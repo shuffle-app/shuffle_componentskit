@@ -5,6 +5,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ProfileComponent extends StatelessWidget {
   final UiProfileModel profile;
+  final VoidCallback? onHowItWorksPoped;
+  final bool showHowItWorks;
   final List<HangoutRecommendation>? recommendedUsers;
   final VoidCallback? onFulfillDream;
 
@@ -12,24 +14,31 @@ class ProfileComponent extends StatelessWidget {
     Key? key,
     required this.profile,
     this.recommendedUsers,
+    this.showHowItWorks = false,
+    this.onHowItWorksPoped,
     this.onFulfillDream,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+            GlobalConfiguration().appConfig.content;
+    final ComponentProfileModel model =
+        ComponentProfileModel.fromJson(config['profile']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: titleAlignment.mainAxisAlignment,
-          crossAxisAlignment: titleAlignment.crossAxisAlignment,
-          children: [profile.cardWidget]).paddingSymmetric(horizontal: horizontalMargin),
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: titleAlignment.mainAxisAlignment,
+              crossAxisAlignment: titleAlignment.crossAxisAlignment,
+              children: [profile.cardWidget])
+          .paddingSymmetric(horizontal: horizontalMargin),
       Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -44,21 +53,34 @@ class ProfileComponent extends StatelessWidget {
           //   ],
           // ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           SpacingFoundation.verticalSpace24,
-          Text(
-            'Find someone to hang out with',
-            style: textTheme?.title1,
+          Stack(
+            children: [
+              Text(
+                'Find someone to hang out with',
+                style: textTheme?.title1,
+              ),
+              if (showHowItWorks)
+                HowItWorksWidget(
+                    element: model.content.body![ContentItemType.hintDialog]!,
+                    onPop: onHowItWorksPoped),
+            ],
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           SpacingFoundation.verticalSpace24,
           UiKitHorizontalScroll3D(
-              itemBuilder: (BuildContext context, int index) => UiKitFindSomeoneCard(
-                  avatarUrl: recommendedUsers?[index].userAvatar ?? GraphicsFoundation.instance.png.mockUserAvatar.path,
-                  userNickName: recommendedUsers?[index].userNickname ?? '',
-                  userName: recommendedUsers?[index].userName ?? '',
-                  userPoints: recommendedUsers?[index].userPointsBalance ?? 0,
-                  sameInterests: recommendedUsers?[index].commonInterests ?? 0,
-                  onMessage: () {
-                    SnackBarUtils.show(message: 'in development', context: context);
-                  }),
+              itemBuilder: (BuildContext context, int index) =>
+                  UiKitFindSomeoneCard(
+                      avatarUrl: recommendedUsers?[index].userAvatar ??
+                          GraphicsFoundation.instance.png.mockUserAvatar.path,
+                      userNickName: recommendedUsers?[index].userNickname ?? '',
+                      userName: recommendedUsers?[index].userName ?? '',
+                      userPoints:
+                          recommendedUsers?[index].userPointsBalance ?? 0,
+                      sameInterests:
+                          recommendedUsers?[index].commonInterests ?? 0,
+                      onMessage: () {
+                        SnackBarUtils.show(
+                            message: 'in development', context: context);
+                      }),
               itemCount: recommendedUsers?.length ?? 0),
           SpacingFoundation.verticalSpace24,
           Row(
@@ -74,7 +96,9 @@ class ProfileComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           context
               .gradientButton(
-                  data: BaseUiKitButtonData(text: 'fulfill the dream'.toUpperCase(), onPressed: () => onFulfillDream?.call()))
+                  data: BaseUiKitButtonData(
+                      text: 'fulfill the dream'.toUpperCase(),
+                      onPressed: () => onFulfillDream?.call()))
               .paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace24,
           kBottomNavigationBarHeight.heightBox,
@@ -90,6 +114,7 @@ class ProfileComponent extends StatelessWidget {
           // SpacingFoundation.verticalSpace24,
         ],
       )
-    ]).paddingSymmetric(vertical: (model.positionModel?.verticalMargin ?? 0).toDouble());
+    ]).paddingSymmetric(
+        vertical: (model.positionModel?.verticalMargin ?? 0).toDouble());
   }
 }

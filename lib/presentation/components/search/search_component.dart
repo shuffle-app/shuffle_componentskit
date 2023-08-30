@@ -8,6 +8,7 @@ class SearchComponent extends StatelessWidget {
   final UiSearchModel search;
   final VoidCallback? onFreeCardPressed;
   final VoidCallback? onSearchFieldTap;
+  final VoidCallback? onHowItWorksPoped;
   final Function? onPlaceTapped;
   final Function? onTagSortPressed;
 
@@ -18,6 +19,7 @@ class SearchComponent extends StatelessWidget {
     required this.search,
     this.onPlaceTapped,
     this.onSearchFieldTap,
+    this.onHowItWorksPoped,
     this.onTagSortPressed,
     this.onFreeCardPressed,
   });
@@ -61,14 +63,18 @@ class SearchComponent extends StatelessWidget {
     final config = GlobalConfiguration().appConfig.content;
     final model = ComponentSearchModel.fromJson(config['search']);
 
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final title = model.content.title;
     final body = model.content.body;
 
     print('model.content ${model.content.body?.keys}');
 
-    final chooseCards = body?[ContentItemType.horizontalList]?.properties?.entries.toList()
+    final chooseCards = body?[ContentItemType.horizontalList]
+        ?.properties
+        ?.entries
+        .toList()
       ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
 
     final sortedCards = chooseCards
@@ -91,9 +97,19 @@ class SearchComponent extends StatelessWidget {
         SizedBox(
           height: MediaQuery.of(context).viewPadding.top,
         ),
-        Text(
-          title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'You’ll find it',
-          style: theme?.boldTextTheme.title1,
+        Stack(
+          children: [
+            Text(
+              title?[ContentItemType.text]?.properties?.keys.firstOrNull ??
+                  'You’ll find it',
+              style: theme?.boldTextTheme.title1,
+            ),
+            if (search.showHowItWorks)
+              HowItWorksWidget(
+                customOffset: Offset(0.5.sw,10),
+                  element: model.content.title![ContentItemType.hintDialog]!,
+                  onPop: onHowItWorksPoped),
+          ],
         ),
         SpacingFoundation.verticalSpace16,
         GestureDetector(
@@ -123,13 +139,18 @@ class SearchComponent extends StatelessWidget {
             controller: scrollController,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
-              crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
+              mainAxisAlignment:
+                  (model.positionModel?.bodyAlignment).mainAxisAlignment,
+              crossAxisAlignment:
+                  (model.positionModel?.bodyAlignment).crossAxisAlignment,
               children: [
                 if (model.showFree ?? false) ...[
                   UiKitOverflownActionCard(
                     horizontalMargin: horizontalMargin,
-                    action: context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                    action: context.smallButton(
+                        data: BaseUiKitButtonData(
+                            onPressed: onFreeCardPressed,
+                            text: 'Check out it')),
                     title: Stack(
                       children: [
                         RichText(
@@ -139,7 +160,8 @@ class SearchComponent extends StatelessWidget {
                               const TextSpan(text: 'Selection of the best'),
                               TextSpan(
                                 text: '\nfree places',
-                                style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.transparent),
+                                style: theme?.boldTextTheme.subHeadline
+                                    .copyWith(color: Colors.transparent),
                               )
                             ],
                           ),
@@ -151,9 +173,12 @@ class SearchComponent extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text: 'Selection of the best',
-                                  style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
+                                  style: theme?.boldTextTheme.body
+                                      .copyWith(color: Colors.transparent),
                                 ),
-                                TextSpan(text: '\nfree places', style: theme?.boldTextTheme.subHeadline)
+                                TextSpan(
+                                    text: '\nfree places',
+                                    style: theme?.boldTextTheme.subHeadline)
                               ],
                             ),
                           ),
@@ -166,7 +191,8 @@ class SearchComponent extends StatelessWidget {
                 ],
                 SpacingFoundation.verticalSpace24,
                 Text(
-                  body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'Choose yourself',
+                  body?[ContentItemType.text]?.properties?.keys.firstOrNull ??
+                      'Choose yourself',
                   style: theme?.boldTextTheme.title1,
                 ).paddingSymmetric(horizontal: horizontalMargin),
                 SpacingFoundation.verticalSpace24,
@@ -180,7 +206,8 @@ class SearchComponent extends StatelessWidget {
                 ).paddingOnly(left: horizontalMargin),
                 SpacingFoundation.verticalSpace24,
                 Stack(clipBehavior: Clip.none, children: [
-                  Text('Top places rated\nby', style: theme?.boldTextTheme.title1),
+                  Text('Top places rated\nby',
+                      style: theme?.boldTextTheme.title1),
                   () {
                     const MemberPlate widget = MemberPlate();
 
@@ -192,7 +219,8 @@ class SearchComponent extends StatelessWidget {
                     );
                   }()
                 ]).paddingSymmetric(horizontal: horizontalMargin),
-                if (search.filterChips != null && search.filterChips!.isNotEmpty) ...[
+                if (search.filterChips != null &&
+                    search.filterChips!.isNotEmpty) ...[
                   SpacingFoundation.verticalSpace24,
                   SingleChildScrollView(
                     primary: false,
@@ -205,9 +233,14 @@ class SearchComponent extends StatelessWidget {
                           children: search.filterChips!
                               .map(
                                 (e) => UiKitTitledFilterChip(
-                                  selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                                  selected: search.activeFilterChips
+                                          ?.map((e) => e.title)
+                                          .contains(e.title) ??
+                                      false,
                                   title: e.title,
-                                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                                  onPressed: onTagSortPressed == null
+                                      ? null
+                                      : () => onTagSortPressed!(e.title),
                                   icon: e.iconPath,
                                 ),
                               )
@@ -223,9 +256,16 @@ class SearchComponent extends StatelessWidget {
                             order: search.places.indexOf(e) + 1,
                             rating: e.rating,
                             title: e.title,
-                            imageLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                            onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
-                        .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
+                            imageLink: e.media
+                                .firstWhere((element) =>
+                                    element.type == UiKitMediaType.image)
+                                .link,
+                            onPressed: onPlaceTapped == null
+                                ? null
+                                : () => onPlaceTapped!.call(e.id))
+                        .paddingSymmetric(
+                            horizontal: horizontalMargin,
+                            vertical: SpacingFoundation.verticalSpacing12))
                     .toList(),
                 kBottomNavigationBarHeight.heightBox,
               ],

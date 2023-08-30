@@ -15,16 +15,19 @@ class ShuffleComponent extends StatefulWidget {
   final Function? onFavorite;
   final Function? onCardTap;
   final VoidCallback? onEnd;
+  final VoidCallback? onHowItWorksPoped;
   final List<String> favoriteTitles;
 
-  const ShuffleComponent({Key? key,
-    required this.shuffle,
-    this.onLike,
-    this.favoriteTitles = const [],
-    this.onDislike,
-    this.onCardTap,
-    this.onEnd,
-    this.onFavorite})
+  const ShuffleComponent(
+      {Key? key,
+      required this.shuffle,
+      this.onLike,
+      this.favoriteTitles = const [],
+      this.onDislike,
+      this.onHowItWorksPoped,
+      this.onCardTap,
+      this.onEnd,
+      this.onFavorite})
       : super(key: key);
 
   @override
@@ -47,24 +50,11 @@ class ShuffleComponentState extends State<ShuffleComponent> {
       .imageInstance
       .getFileFromCache(_getKey(widget.shuffle.items.first.imageLink ?? ''));
 
-  // late String currentImageLink = widget.shuffle.items.first.imageLink ?? '';
-  // late Widget currentImage = ImageWidget(
-  //   key: UniqueKey(),
-  //   link: widget.shuffle.items.first.imageLink ?? '',
-  //   fit: BoxFit.cover,
-  //   height: 1.sh,
-  //   width: 1.sw,
-  // );
-
   @override
   void initState() {
     backImageKey = UniqueKey();
     final config =
-        GlobalComponent
-            .of(context)
-            ?.globalConfiguration
-            .appConfig
-            .content ??
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
     unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
@@ -73,37 +63,13 @@ class ShuffleComponentState extends State<ShuffleComponent> {
   }
 
   _getKey(String imageUrl) {
-    // key ??= url;
-    // var resizedKey = 'resized';
-    // resizedKey += '_$imageUrl';
-
     return imageUrl;
-    // return resizedKey;
   }
 
   Future<void> _getColor(String imageLink) async {
     if (imageLink.isEmpty) return;
-    // late final PaletteGenerator paletteGenerator;
-    // if (imageLink.substring(0, 4) == 'http') {
-    //   final file = await CustomCacheManager.instance.getFileStream(imageLink).firstWhere((element) => element is FileInfo);
-    //   paletteGenerator = await PaletteGenerator.fromImageProvider(Image.file((file as FileInfo).file).image);
-    // } else {
-    //   paletteGenerator = await PaletteGenerator.fromImageProvider(Image.asset(
-    //     imageLink,
-    //     package: 'shuffle_uikit',
-    //   ).image);
-    // }
-    setState(() {
-      // final dominantColor = paletteGenerator.dominantColor?.color ?? Colors.black12;
 
-      // _backgroundColor = HSLColor.fromColor(dominantColor).withLightness(0.45).toColor();
-      // currentImage = ImageWidget(
-      //   key: UniqueKey(),
-      //   link: imageLink,
-      //   fit: BoxFit.cover,
-      //   height: 1.sh,
-      //   width: 1.sw,
-      // );
+    setState(() {
       currentFutureMayBeImage =
           CustomCacheManager.imageInstance.getFileFromCache(_getKey(imageLink));
       lastAddedKey = _getKey(imageLink);
@@ -127,78 +93,76 @@ class ShuffleComponentState extends State<ShuffleComponent> {
     final theme = context.uiKitTheme;
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
-    log('here is rebuild',name: 'ShuffleComponent');
+    log('here is rebuild', name: 'ShuffleComponent');
 
     return Stack(
       children: [
         FutureBuilder(
             future: currentFutureMayBeImage,
-            builder: (context, snapshot) =>
-                AnimatedSwitcher(
-                  key: backImageKey,
-                    switchInCurve: Curves.decelerate,
-                    duration: animDuration,
-                    child: () {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        log('here is snapshot with ${snapshot.data}',name: 'ShuffleComponent');
-                        if (snapshot.data != null && lastFile?.file.path!= (snapshot.data as FileInfo).file.path) {
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) =>
-                              setState(() {
+            builder: (context, snapshot) => AnimatedSwitcher(
+                key: backImageKey,
+                switchInCurve: Curves.decelerate,
+                duration: animDuration,
+                child: () {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    log('here is snapshot with ${snapshot.data}',
+                        name: 'ShuffleComponent');
+                    if (snapshot.data != null &&
+                        lastFile?.file.path !=
+                            (snapshot.data as FileInfo).file.path) {
+                      WidgetsBinding.instance
+                          .addPostFrameCallback((_) => setState(() {
                                 lastFile = snapshot.data as FileInfo;
                               }));
 
-                          return ImageWidget(
-                            link: ['bin', 'avif'].contains(
+                      return ImageWidget(
+                        link: ['bin', 'avif'].contains(
                                 (snapshot.data as FileInfo)
                                     .file
                                     .path
                                     .split('.')
                                     .last)
-                                ? lastAddedKey
-                                : (snapshot.data as FileInfo).file.path,
-                            fit: BoxFit.cover,
-                            height: 1.sh,
-                            width: 1.sw,
-                          );
-                        } else {
-                          //waiting here the chache image network job to cache our file
-                          Future.delayed(const Duration(seconds: 2), () {
-                            currentFutureMayBeImage = CustomCacheManager
-                                .imageInstance
-                                .getFileFromCache(lastAddedKey);
-                          });
-                        }
-                      }
-
-                      // log('here is our lastFile with path ${lastFile?.file.path}',
-                      //     name: 'ShuffleComponent');
-                      // log('here is our lastAddedKey $lastAddedKey',
-                      //     name: 'ShuffleComponent');
-
-                      //TODO think about how to deal with .bin and .avif images
-
-                      return lastFile != null
-                          ? ImageWidget(
-                        link: ['bin', 'avif']
-                            .contains(lastFile!
-                            .file.path
-                            .split('.')
-                            .last)
                             ? lastAddedKey
-                            : lastFile!.file.path,
+                            : (snapshot.data as FileInfo).file.path,
                         fit: BoxFit.cover,
                         height: 1.sh,
                         width: 1.sw,
-                      )
-                          : const ColoredBox(
-                        color: UiKitColors.darkNeutral100,
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                        ),
                       );
-                    }())),
+                    } else {
+                      //waiting here the chache image network job to cache our file
+                      Future.delayed(const Duration(seconds: 2), () {
+                        currentFutureMayBeImage = CustomCacheManager
+                            .imageInstance
+                            .getFileFromCache(lastAddedKey);
+                      });
+                    }
+                  }
+
+                  // log('here is our lastFile with path ${lastFile?.file.path}',
+                  //     name: 'ShuffleComponent');
+                  // log('here is our lastAddedKey $lastAddedKey',
+                  //     name: 'ShuffleComponent');
+
+                  //TODO think about how to deal with .bin and .avif images
+
+                  return lastFile != null
+                      ? ImageWidget(
+                          link: ['bin', 'avif']
+                                  .contains(lastFile!.file.path.split('.').last)
+                              ? lastAddedKey
+                              : lastFile!.file.path,
+                          fit: BoxFit.cover,
+                          height: 1.sh,
+                          width: 1.sw,
+                        )
+                      : const ColoredBox(
+                          color: UiKitColors.darkNeutral100,
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        );
+                }())),
         // AnimatedSwitcher(
         //   switchInCurve: Curves.decelerate,
         //   duration: animDuration,
@@ -218,10 +182,19 @@ class ShuffleComponentState extends State<ShuffleComponent> {
               mainAxisAlignment: bodyAlignment.mainAxisAlignment,
               crossAxisAlignment: bodyAlignment.crossAxisAlignment,
               children: [
-                Text('Try\nyourself',
-                    style: theme?.boldTextTheme.title1,
-                    textAlign: TextAlign.center)
-                    .paddingSymmetric(
+                Stack(
+                  children: [
+                    Text('Try\nyourself',
+                        style: theme?.boldTextTheme.title1,
+                        textAlign: TextAlign.center),
+                    if (widget.shuffle.showHowItWorks)
+                      HowItWorksWidget(
+                          customOffset: Offset(0.4.sw,25),
+                          element:
+                              model.content.title![ContentItemType.hintDialog]!,
+                          onPop: widget.onHowItWorksPoped),
+                  ],
+                ).paddingSymmetric(
                     vertical: SpacingFoundation.verticalSpacing12),
                 SizedBox(
                   height: 1.sh / 1.6,
@@ -232,12 +205,14 @@ class ShuffleComponentState extends State<ShuffleComponent> {
                       duration: animDuration,
                       child: isEndedWidget,
                     ),
-                    if(widget.shuffle.items.isNotEmpty)
+                    if (widget.shuffle.items.isNotEmpty)
                       UiKitCardSwiper(
                         onEnd: widget.onEnd,
-                        onSwipe: (previousIndex,
-                            currentIndex,
-                            direction,) {
+                        onSwipe: (
+                          previousIndex,
+                          currentIndex,
+                          direction,
+                        ) {
                           if (currentIndex == null) return true;
                           indexNotifier.value = currentIndex;
                           if (direction != CardSwiperDirection.bottom) {
@@ -250,27 +225,27 @@ class ShuffleComponentState extends State<ShuffleComponent> {
                             case CardSwiperDirection.bottom:
                               return true;
                             case CardSwiperDirection.top:
-                            // if (widget.onFavorite != null && (model.showFavorite ?? true)) {
-                            //   widget.onFavorite!(widget.shuffle.items[currentIndex].title);
-                            // } else {
-                            //   return false;
-                            // }
+                              // if (widget.onFavorite != null && (model.showFavorite ?? true)) {
+                              //   widget.onFavorite!(widget.shuffle.items[currentIndex].title);
+                              // } else {
+                              //   return false;
+                              // }
                               return true;
                             case CardSwiperDirection.none:
                               return false;
                             case CardSwiperDirection.left:
-                            // if (widget.onDislike != null) {
-                            //   widget.onDislike!(widget.shuffle.items[currentIndex].title);
-                            // } else {
-                            //   return false;
-                            // }
+                              // if (widget.onDislike != null) {
+                              //   widget.onDislike!(widget.shuffle.items[currentIndex].title);
+                              // } else {
+                              //   return false;
+                              // }
                               return true;
                             case CardSwiperDirection.right:
-                            // if (widget.onLike != null) {
-                            //   widget.onLike!(widget.shuffle.items[currentIndex].title);
-                            // } else {
-                            //   return false;
-                            // }
+                              // if (widget.onLike != null) {
+                              //   widget.onLike!(widget.shuffle.items[currentIndex].title);
+                              // } else {
+                              //   return false;
+                              // }
                               return true;
                           }
                         },
@@ -281,9 +256,7 @@ class ShuffleComponentState extends State<ShuffleComponent> {
                 ),
                 SpacingFoundation.verticalSpace4,
                 AnimatedOpacity(
-                    opacity: isEnded || widget
-                        .shuffle
-                        .items.isEmpty ? 0 : 1,
+                    opacity: isEnded || widget.shuffle.items.isEmpty ? 0 : 1,
                     duration: animDuration,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -295,11 +268,10 @@ class ShuffleComponentState extends State<ShuffleComponent> {
                             blurred: true,
                             small: true,
                             data: BaseUiKitButtonData(
-                                onPressed: () =>
-                                    widget.onDislike?.call(widget
-                                        .shuffle
-                                        .items[controller.state?.index ?? 0]
-                                        .title),
+                                onPressed: () => widget.onDislike?.call(widget
+                                    .shuffle
+                                    .items[controller.state?.index ?? 0]
+                                    .title),
                                 icon: ImageWidget(
                                   svgAsset: svg.heartBrokenFill,
                                   color: Colors.white,
@@ -310,26 +282,23 @@ class ShuffleComponentState extends State<ShuffleComponent> {
                             context.bouncingButton(
                                 blurred: true,
                                 data: BaseUiKitButtonData(
-                                  onPressed: () =>
-                                      widget.onFavorite?.call(
-                                          widget
-                                              .shuffle
-                                              .items[indexNotifier.value]
-                                              .title),
+                                  onPressed: () => widget.onFavorite?.call(
+                                      widget.shuffle.items[indexNotifier.value]
+                                          .title),
                                   icon: ValueListenableBuilder(
                                       valueListenable: indexNotifier,
-                                      builder: (_, value, __) =>
-                                          ImageWidget(
-                                            svgAsset: widget
-                                                .shuffle
-                                                .items.isNotEmpty &&
-                                                widget.favoriteTitles
-                                                    .contains(widget
-                                                    .shuffle
-                                                    .items[value % widget
-                                                    .shuffle
-                                                    .items.length]
-                                                    .title)
+                                      builder: (_, value, __) => ImageWidget(
+                                            svgAsset: widget.shuffle.items
+                                                        .isNotEmpty &&
+                                                    widget.favoriteTitles
+                                                        .contains(widget
+                                                            .shuffle
+                                                            .items[value %
+                                                                widget
+                                                                    .shuffle
+                                                                    .items
+                                                                    .length]
+                                                            .title)
                                                 ? svg.starFill
                                                 : svg.starOutline,
                                             color: Colors.white,
@@ -340,11 +309,10 @@ class ShuffleComponentState extends State<ShuffleComponent> {
                             blurred: true,
                             small: true,
                             data: BaseUiKitButtonData(
-                                onPressed: () =>
-                                    widget.onLike?.call(widget
-                                        .shuffle
-                                        .items[controller.state?.index ?? 0]
-                                        .title),
+                                onPressed: () => widget.onLike?.call(widget
+                                    .shuffle
+                                    .items[controller.state?.index ?? 0]
+                                    .title),
                                 icon: ImageWidget(
                                   svgAsset: svg.heartFill,
                                   color: Colors.white,

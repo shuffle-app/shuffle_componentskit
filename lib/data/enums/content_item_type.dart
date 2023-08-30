@@ -45,4 +45,6 @@ enum ContentItemType {
   redirect,
   @JsonValue('additional_multi_select')
   additionalMultiSelect,
+  @JsonValue('hint_dialog')
+  hintDialog,
 }

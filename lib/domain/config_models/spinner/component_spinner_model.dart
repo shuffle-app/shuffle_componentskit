@@ -8,7 +8,11 @@ class ComponentSpinnerModel extends UiBaseModel {
   @JsonKey(name: 'show_favorite')
   final bool? showFavorite;
 
+  @JsonKey(name: 'content',)
+  final ContentBaseModel content;
+
   ComponentSpinnerModel({
+    required this.content,
     this.showFavorite,
     required super.pageBuilderType,
     super.positionModel,

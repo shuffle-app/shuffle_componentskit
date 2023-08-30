@@ -60,4 +60,5 @@ const _$ContentItemTypeEnumMap = {
   ContentItemType.countrySelector: 'country_selector',
   ContentItemType.redirect: 'redirects',
   ContentItemType.additionalMultiSelect: 'additional_multi_select',
+  ContentItemType.hintDialog: 'hint_dialog',
 };
