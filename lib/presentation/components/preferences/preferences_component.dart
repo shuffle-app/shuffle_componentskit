@@ -100,7 +100,7 @@ class PreferencesComponent extends StatelessWidget {
                       if(preferences.searchController.text.isNotEmpty) preferences.searchController.clear();
                     },
                   )).paddingSymmetric(horizontal: horizontalMargin),
-              SpacingFoundation.verticalSpace24,
+              // SpacingFoundation.verticalSpace24,
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, size) {
