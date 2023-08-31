@@ -37,52 +37,6 @@ class FeedComponent extends StatelessWidget {
           child: CircularProgressIndicator.adaptive(
               backgroundColor: Colors.white)));
 
-  Widget _howItWorksDialog(context, textStyle) => UiKitHintDialog(
-        title: 'Depending on...',
-        subtitle: 'you get exactly what you need',
-        textStyle: textStyle,
-        dismissText: 'OKAY, COOL!',
-        onDismiss: () {
-          onHowItWorksPoped?.call();
-
-          return Navigator.pop(context);
-        },
-        hintTiles: [
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.map,
-            ),
-            hint: 'your location',
-          ),
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.dart,
-            ),
-            hint: 'your interests',
-          ),
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.sunClouds,
-            ),
-            hint: 'weather around',
-          ),
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.smileMood,
-            ),
-            hint: 'and other 14 scales',
-          ),
-        ],
-      );
-
   @override
   Widget build(BuildContext context) {
     final config =

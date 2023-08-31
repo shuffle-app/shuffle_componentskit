@@ -68,9 +68,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
         '';
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
 
-    return Form(
-      key: formKey,
-      child: Stack(
+    return   Stack(
         fit: StackFit.expand,
         children: [
           Positioned(
@@ -83,14 +81,15 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
               width: 1.sw,
             ),
           ),
-          Column(
+    SafeArea(child:
+    Form(
+    key: formKey,
+    child:Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
+
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).viewPadding.top +
-                    SpacingFoundation.verticalSpacing16,
-              ),
+
               Text(
                 title,
                 style: textTheme?.titleLarge,
@@ -170,9 +169,9 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
           ).paddingSymmetric(
             horizontal: horizontalMargin,
             vertical: verticalMargin,
-          ),
+          ))),
         ],
-      ),
+
     );
   }
 }
