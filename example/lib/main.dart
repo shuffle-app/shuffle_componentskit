@@ -428,6 +428,18 @@ class ComponentsTestPage extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
+                    text: 'show welcome page',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentModel.fromJson(configuration.appConfig.content['welcome']),
+                        ComponentBuilder(
+                            child: Scaffold(
+                                body: WelcomeComponent(
+                          onFinished: () => context.pop(),
+                        )))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
                     text: 'show about user step 1',
                     onPressed: () => buildComponent(
                         context,
@@ -670,6 +682,9 @@ class ComponentsTestPage extends StatelessWidget {
                   ComponentBuilder(
                     child: UserTypeSelectionComponent(
                       onUserTypeSelected: (userType) => print(userType),
+                      uiModel: UiUserTypeSelectionModel(
+                        options: [],
+                      ),
                     ),
                   ),
                 ),
