@@ -48,14 +48,12 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     final countrySelectorTitle =
         model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
 
-    final captionTexts =
-    Map<String, PropertiesBaseModel>.of(model.content.properties ?? {});
+    final captionTexts = Map<String, PropertiesBaseModel>.of(model.content.properties ?? {});
 
     captionTexts.remove('image');
 
     final list = captionTexts.entries.toList();
-    list.sort(
-            (a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
+    list.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
 
     return Form(
       key: formKey,
@@ -156,26 +154,18 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
                 RichText(
                   text: TextSpan(children: [
-                    TextSpan(
-                        text: 'By continuing you accept the ',
-                        style: regTextTheme?.caption4),
+                    TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
                     TextSpan(
                         text: list.first.key,
-                        style: regTextTheme?.caption4
-                            .copyWith(color: ColorsFoundation.darkNeutral600),
+                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push(WebViewScreen(
-                              title: list.first.key,
-                              url: list.first.value.value ?? ''))),
+                          ..onTap = () => context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
                     TextSpan(text: ' and ', style: regTextTheme?.caption4),
                     TextSpan(
                         text: list.last.key,
-                        style: regTextTheme?.caption4
-                            .copyWith(color: ColorsFoundation.darkNeutral600),
+                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push(WebViewScreen(
-                              title: list.last.key,
-                              url: list.last.value.value ?? '')))
+                          ..onTap = () => context.push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
                   ]),
                 ),
                 SpacingFoundation.verticalSpace16,
@@ -188,7 +178,10 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.verticalSpace24,
               ],
-            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            ).paddingSymmetric(
+              horizontal: horizontalMargin,
+              vertical: verticalMargin,
+            ),
           ),
         ],
       ),

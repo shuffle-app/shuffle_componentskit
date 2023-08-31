@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/common/common.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -30,42 +29,25 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final regTextTheme = context.uiKitTheme?.regularTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentModel model =
-        ComponentModel.fromJson(config['personal_credentials_verification']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
-    final title =
-        model.content.title?[ContentItemType.text]?.properties?.keys.first ??
-            '';
-    final subtitle =
-        model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ??
-            '';
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentModel model = ComponentModel.fromJson(config['personal_credentials_verification']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    final subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
     final decorationLink = model.content.properties?['image'];
 
-    final captionTexts =
-        Map<String, PropertiesBaseModel>.of(model.content.properties ?? {});
+    final captionTexts = Map<String, PropertiesBaseModel>.of(model.content.properties ?? {});
 
     captionTexts.remove('image');
 
     final list = captionTexts.entries.toList();
-    list.sort(
-        (a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
+    list.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
 
     // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
     // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
-    final countrySelectorTitle = model
-            .content
-            .body?[ContentItemType.countrySelector]
-            ?.title?[ContentItemType.text]
-            ?.properties
-            ?.keys
-            .first ??
-        '';
+    final countrySelectorTitle =
+        model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
 
     return Form(
@@ -74,8 +56,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Positioned(
-            top: MediaQuery.of(context).viewPadding.top +
-                SpacingFoundation.verticalSpacing6,
+            top: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing6,
             right: SpacingFoundation.horizontalSpacing16,
             child: ImageWidget(
               link: decorationLink?.imageLink ?? '',
@@ -88,8 +69,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).viewPadding.top +
-                    SpacingFoundation.verticalSpacing16,
+                height: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing16,
               ),
               Text(
                 title,
@@ -103,9 +83,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
               const Spacer(),
               if (tabBar != null) ...[
                 UiKitCustomTabBar(
-                  tabs: tabBar.keys
-                      .map<UiKitCustomTab>((key) => UiKitCustomTab(title: key))
-                      .toList(),
+                  tabs: tabBar.keys.map<UiKitCustomTab>((key) => UiKitCustomTab(title: key)).toList(),
                   onTappedTab: (tabIndex) => onTabChanged?.call(tabIndex),
                 ),
                 SpacingFoundation.verticalSpace16,
@@ -136,26 +114,18 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace16,
               RichText(
                 text: TextSpan(children: [
-                  TextSpan(
-                      text: 'By continuing you accept the ',
-                      style: regTextTheme?.caption4),
+                  TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
                   TextSpan(
                       text: list.first.key,
-                      style: regTextTheme?.caption4
-                          .copyWith(color: ColorsFoundation.darkNeutral600),
+                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.push(WebViewScreen(
-                            title: list.first.key,
-                            url: list.first.value.value ?? ''))),
+                        ..onTap = () => context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
                   TextSpan(text: ' and ', style: regTextTheme?.caption4),
                   TextSpan(
                       text: list.last.key,
-                      style: regTextTheme?.caption4
-                          .copyWith(color: ColorsFoundation.darkNeutral600),
+                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.push(WebViewScreen(
-                            title: list.last.key,
-                            url: list.last.value.value ?? '')))
+                        ..onTap = () => context.push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
                 ]),
               ),
               SpacingFoundation.verticalSpace16,
@@ -166,6 +136,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
                   loading: loading,
                 ),
               ),
+              SpacingFoundation.verticalSpace24,
             ],
           ).paddingSymmetric(
             horizontal: horizontalMargin,

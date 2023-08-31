@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class UserTypeSelectionComponent extends StatelessWidget {
+class UserTypeSelectionComponent extends StatefulWidget {
   final ValueChanged<String>? onUserTypeSelected;
+  final UiUserTypeSelectionModel uiModel;
 
   const UserTypeSelectionComponent({
     super.key,
     this.onUserTypeSelected,
+    required this.uiModel,
   });
+
+  @override
+  State<UserTypeSelectionComponent> createState() => _UserTypeSelectionComponentState();
+}
+
+class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent> {
+  late CustomBackgroundSwitchOption selectedOption = widget.uiModel.options.last;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +35,6 @@ class UserTypeSelectionComponent extends StatelessWidget {
     if (model.content.subtitle?[ContentItemType.text]?.properties?.isNotEmpty ?? false) {
       subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
     }
-    final redirects = model.content.body?[ContentItemType.redirect]?.properties;
-    List<String> redirectsSorted = List<String>.generate(redirects?.length ?? 0, (index) => '');
-    redirects?.forEach((key, value) {
-      redirectsSorted.insert((value.sortNumber?.toInt() ?? 1) - 1, key);
-    });
-    final redirectCardWidth = 1.sw * 0.337;
-    final redirectCardHeight = redirectCardWidth * 0.923;
 
     return Stack(
       fit: StackFit.passthrough,
@@ -58,18 +60,33 @@ class UserTypeSelectionComponent extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.center,
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            spacing: SpacingFoundation.horizontalSpacing16,
-            runSpacing: SpacingFoundation.verticalSpacing16,
-            children: redirectsSorted.where((element) => element.isNotEmpty).map((item) {
-              return UiKitVerticalChip(
-                size: Size(redirectCardWidth, redirectCardHeight),
-                caption: item,
-                sign: ImageWidget(link: redirects?[item]?.imageLink ?? ''),
-                onTap: () => onUserTypeSelected?.call(item.toLowerCase()),
-              );
-            }).toList(),
+          child: UiKitSwitchWithCustomBackground(
+            firstOption: CustomBackgroundSwitchOption(
+              title: widget.uiModel.options.first.title,
+              imageLink: widget.uiModel.options.first.imageLink,
+            ),
+            secondOption: CustomBackgroundSwitchOption(
+              title: widget.uiModel.options.last.title,
+              imageLink: widget.uiModel.options.last.imageLink,
+            ),
+            selectedOption: selectedOption,
+            onChanged: (value) {
+              print('selectedOption.title: ${selectedOption.title}');
+              setState(() => selectedOption = value);
+              print('selectedOption.title: ${selectedOption.title}');
+            },
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            width: 1.sw,
+            child: context.button(
+              data: BaseUiKitButtonData(
+                text: 'NEXT',
+                onPressed: () => widget.onUserTypeSelected?.call(selectedOption?.title.toLowerCase() ?? ''),
+              ),
+            ),
           ),
         ),
       ],
