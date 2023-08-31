@@ -7,11 +7,13 @@ class UiSearchModel {
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
   final String heroSearchTag;
+  final bool showHowItWorks;
 
   UiSearchModel({
     required this.heroSearchTag,
     required this.places,
     this.filterChips,
+    this.showHowItWorks = false,
     this.activeFilterChips,
   });
 }

@@ -22,7 +22,7 @@ class Bubbles extends StatelessWidget {
       paddingX: 0,
       paddingY: 0,
       itemSize: 120,
-      duration: Duration(milliseconds: 250),
+      // duration: const Duration(milliseconds: 100),
       // highRatio: 0.25,
       // lowRatio: 0.01,
     );

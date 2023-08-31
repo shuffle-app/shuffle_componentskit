@@ -18,11 +18,15 @@ class ComponentFeedModel extends UiBaseModel {
   @JsonKey(name: 'show_places')
   final bool? showPlaces;
 
+  @JsonKey(name: 'content',)
+  final ContentBaseModel content;
+
   ComponentFeedModel(
       {this.showPlaces,
         this.showFeelings,
         this.showDailyRecomendation,
         this.showStories,
+        required this.content,
         required super.pageBuilderType,
         super.positionModel,
         required super.version,}):super();

@@ -11,6 +11,8 @@ ComponentProfileModel _$ComponentProfileModelFromJson(
     ComponentProfileModel(
       showFindPeople: json['show_find_people'] as bool?,
       showMessages: json['show_messages'] as bool?,
+      content:
+          ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       showReviews: json['show_reviews'] as bool?,
       showReactions: json['show_reactions'] as bool?,
       showBalance: json['show_balace'] as bool?,
@@ -34,6 +36,7 @@ Map<String, dynamic> _$ComponentProfileModelToJson(
       'show_messages': instance.showMessages,
       'show_reviews': instance.showReviews,
       'show_reactions': instance.showReactions,
+      'content': instance.content,
     };
 
 const _$PageBuilderTypeEnumMap = {

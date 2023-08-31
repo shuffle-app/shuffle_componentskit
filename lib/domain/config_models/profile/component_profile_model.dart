@@ -20,9 +20,13 @@ class ComponentProfileModel extends UiBaseModel {
   @JsonKey(name: 'show_reactions')
   final bool? showReactions;
 
+  @JsonKey(name: 'content',)
+  final ContentBaseModel content;
+
   ComponentProfileModel({
     this.showFindPeople,
     this.showMessages,
+    required this.content,
     this.showReviews,
     this.showReactions,
     this.showBalance,

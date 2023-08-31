@@ -10,6 +10,9 @@ ComponentShuffleModel _$ComponentShuffleModelFromJson(
         Map<String, dynamic> json) =>
     ComponentShuffleModel(
       showFavorite: json['show_favorite'] as bool?,
+      content: json['content'] == null
+          ? const ContentBaseModel()
+          : ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -26,6 +29,7 @@ Map<String, dynamic> _$ComponentShuffleModelToJson(
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
       'show_favorite': instance.showFavorite,
+      'content': instance.content,
     };
 
 const _$PageBuilderTypeEnumMap = {

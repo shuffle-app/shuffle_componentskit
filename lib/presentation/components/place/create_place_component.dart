@@ -167,13 +167,16 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               label: 'Title', controller: _titleController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
-                      Text(
-                        'Logo',
-                        style: theme?.regularTextTheme.labelSmall,
-                      ).paddingSymmetric(horizontal: horizontalPadding),
+
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                        Text(
+                          'Logo',
+                          style: theme?.regularTextTheme.labelSmall,
+                        ).paddingSymmetric(horizontal: horizontalPadding),
                         if (_placeToEdit.logo != null)
-                          CircularAvatar(avatarUrl: _placeToEdit.logo!),
+                          CircularAvatar(
+                              height: kIsWeb? 40 : 40.h,
+                              avatarUrl: _placeToEdit.logo!),
                         const Spacer(),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(

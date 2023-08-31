@@ -9,6 +9,8 @@ part of 'component_spinner_model.dart';
 ComponentSpinnerModel _$ComponentSpinnerModelFromJson(
         Map<String, dynamic> json) =>
     ComponentSpinnerModel(
+      content:
+          ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       showFavorite: json['show_favorite'] as bool?,
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
@@ -26,6 +28,7 @@ Map<String, dynamic> _$ComponentSpinnerModelToJson(
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
       'show_favorite': instance.showFavorite,
+      'content': instance.content,
     };
 
 const _$PageBuilderTypeEnumMap = {
