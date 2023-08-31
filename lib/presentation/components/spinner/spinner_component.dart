@@ -5,6 +5,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class SpinnerComponent extends StatelessWidget {
   final UiSpinnerModel spinner;
+  final VoidCallback? onHowItWorksPoped;
   final PagingController<int, String> categoriesController;
   final PagingController<int, UiEventModel> itemsController;
   final Function? onEventTap;
@@ -15,9 +16,11 @@ class SpinnerComponent extends StatelessWidget {
       {Key? key,
       required this.spinner,
       this.onEventTap,
+      this.onHowItWorksPoped,
       this.onFavoriteTap,
       required this.categoriesController,
-      required this.itemsController, this.favoriteStream})
+      required this.itemsController,
+      this.favoriteStream})
       : super(key: key);
 
   @override
@@ -42,10 +45,19 @@ class SpinnerComponent extends StatelessWidget {
           height: MediaQuery.of(context).viewPadding.top,
         ),
         spacing,
-        Text(
-          spinner.title,
-          style: context.uiKitTheme?.boldTextTheme.title1,
-          textAlign: TextAlign.center,
+        Stack(
+          children: [
+            Text(
+              spinner.title,
+              style: context.uiKitTheme?.boldTextTheme.title1,
+              textAlign: TextAlign.center,
+            ),
+            if (spinner.showHowItWorks)
+              HowItWorksWidget(
+                  customOffset: Offset(0.78.sw,35),
+                  element: model.content.title![ContentItemType.hintDialog]!,
+                  onPop: onHowItWorksPoped),
+          ],
         ),
         // SizesFoundation.screenWidth <= 375 ?SpacingFoundation.verticalSpace2 :SpacingFoundation.verticalSpace4,
         Expanded(
@@ -82,7 +94,8 @@ class SpinnerComponent extends StatelessWidget {
                                   // availableHeight: 0.56.sh,
                                   title: item.title,
                                   date: item.date,
-                                  favourite: favoriteValue.data as bool? ?? item.favorite,
+                                  favourite: favoriteValue.data as bool? ??
+                                      item.favorite,
                                   photoLink: item.media
                                       ?.firstWhere((element) =>
                                           element.type == UiKitMediaType.image)

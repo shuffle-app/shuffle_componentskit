@@ -12,6 +12,8 @@ ComponentFeedModel _$ComponentFeedModelFromJson(Map<String, dynamic> json) =>
       showFeelings: json['show_feelings'] as bool?,
       showDailyRecomendation: json['show_daily_recomendation'] as bool?,
       showStories: json['show_stories'] as bool?,
+      content:
+          ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -30,6 +32,7 @@ Map<String, dynamic> _$ComponentFeedModelToJson(ComponentFeedModel instance) =>
       'show_stories': instance.showStories,
       'show_feelings': instance.showFeelings,
       'show_places': instance.showPlaces,
+      'content': instance.content,
     };
 
 const _$PageBuilderTypeEnumMap = {

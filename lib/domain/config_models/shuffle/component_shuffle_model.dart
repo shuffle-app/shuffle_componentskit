@@ -8,8 +8,12 @@ class ComponentShuffleModel extends UiBaseModel {
   @JsonKey(name: 'show_favorite')
   final bool? showFavorite;
 
+  @JsonKey(name: 'content',)
+  final ContentBaseModel content;
+
   ComponentShuffleModel({
     this.showFavorite,
+    this.content = const ContentBaseModel(),
     required super.pageBuilderType,
     super.positionModel,
     required super.version,

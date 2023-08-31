@@ -34,6 +34,12 @@ class SupportComponent extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
+            UiKitGradientSwitchTile(
+              title: 'Enable hint system',
+              onChanged: (v){},
+              switchedOn: false,
+            ),
+            SpacingFoundation.verticalSpace24,
             UiKitCardWrapper(
               child: Theme(
                 data: ThemeData(
@@ -101,6 +107,7 @@ class SupportComponent extends StatelessWidget {
                     ),
                     SpacingFoundation.verticalSpace16,
                     UiKitInputFieldNoIcon(
+                      borderRadius: BorderRadiusFoundation.all24,
                       controller: _textController,
                       minLines: 3,
                       hintText: 'describe your issue'.toUpperCase(),

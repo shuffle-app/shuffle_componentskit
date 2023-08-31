@@ -6,6 +6,7 @@ class UiSpinnerModel {
   final ValueChanged<String>? onSpinChangedCategory;
   final ScrollController categoriesScrollController;
   final ScrollController? cardsScrollController;
+  final bool showHowItWorks;
   // final List<UiEventModel> events;
   // final List<String> categories;
 
@@ -13,6 +14,7 @@ class UiSpinnerModel {
       {this.title = 'Events you don’t wanna miss',
       this.onSpinChangedCategory,
       this.cardsScrollController,
+      this.showHowItWorks = false,
       ScrollController? scrollController,
       // required this.events,
       // required this.categories
