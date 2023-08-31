@@ -40,6 +40,7 @@ class _WelcomeComponentState extends State<WelcomeComponent> with SingleTickerPr
     duration: const Duration(milliseconds: 10000),
   );
   CrossFadeState crossFadeState = CrossFadeState.showFirst;
+  bool loading = false;
 
   @override
   void initState() {
@@ -73,8 +74,12 @@ class _WelcomeComponentState extends State<WelcomeComponent> with SingleTickerPr
           backgroundImage: widget.firstBodyItem.imageLink,
         ),
         secondChild: _LastBody(
+          loading: loading,
           bigScreen: bigHeight,
-          onFinished: widget.onFinished,
+          onFinished: () {
+            widget.onFinished?.call();
+            setState(() => loading = true);
+          },
           backgroundImage: widget.lastBodyItem.imageLink,
         ),
       ),

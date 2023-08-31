@@ -682,6 +682,9 @@ class ComponentsTestPage extends StatelessWidget {
                   ComponentBuilder(
                     child: UserTypeSelectionComponent(
                       onUserTypeSelected: (userType) => print(userType),
+                      uiModel: UiUserTypeSelectionModel(
+                        options: [],
+                      ),
                     ),
                   ),
                 ),

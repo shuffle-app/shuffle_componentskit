@@ -4,10 +4,12 @@ class _LastBody extends StatelessWidget {
   final bool bigScreen;
   final VoidCallback? onFinished;
   final String backgroundImage;
+  final bool loading;
 
   const _LastBody({
     Key? key,
     required this.bigScreen,
+    this.loading = false,
     required this.backgroundImage,
     this.onFinished,
   }) : super(key: key);
@@ -65,7 +67,8 @@ class _LastBody extends StatelessWidget {
                   )
                   .paddingSymmetric(
                     horizontal: EdgeInsetsFoundation.horizontal16,
-                  ),
+                  )
+                  .loadingWrap(loading),
               SpacingFoundation.verticalSpace24,
             ],
           ),
