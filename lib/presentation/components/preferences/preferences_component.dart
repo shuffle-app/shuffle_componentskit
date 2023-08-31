@@ -111,7 +111,7 @@ class PreferencesComponent extends StatelessWidget {
                       widgets: preferences.chips,
                     );
                   },
-                ),
+                ).paddingOnly(bottom:20.h),
               ),
             ],
           ).paddingSymmetric(vertical: verticalMargin),
