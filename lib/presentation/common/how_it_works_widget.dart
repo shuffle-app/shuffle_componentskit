@@ -6,6 +6,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class HowItWorksWidget extends StatelessWidget {
   final ContentBaseModel element;
   final Offset? customOffset;
+
   // final
   final VoidCallback? onPop;
 
@@ -13,7 +14,7 @@ class HowItWorksWidget extends StatelessWidget {
 
   _howItWorksDialog(_, textStyle) => UiKitHintDialog(
         title: element.title?[ContentItemType.text]?.properties?.keys.first ?? 'Depending on...',
-        subtitle: element.subtitle?[ContentItemType.text]?.properties?.keys.first ?? 'you get exactly what you need',
+        subtitle: element.body?[ContentItemType.text]?.properties?.keys.first ?? 'you get exactly what you need',
         textStyle: textStyle,
         dismissText: 'OKAY, COOL!',
         onDismiss: () {
@@ -21,17 +22,24 @@ class HowItWorksWidget extends StatelessWidget {
 
           return Navigator.pop(_);
         },
-        hintTiles: element.properties?.entries.map((e) {
-          return UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              link: e.value.imageLink,
-            ),
-            hint: e.key ,
-          );
-        }).toList() ?? [],
+        hintTiles: () {
+          final list = element.properties?.entries.map((e) {
+                return UiKitIconHintCard(
+                  icon: ImageWidget(
+                    height: 74.h,
+                    fit: BoxFit.fitHeight,
+                    link: e.value.imageLink,
+                  ),
+                  hint: e.key,
+                );
+              }).toList() ??
+              [];
 
+          list.sort((a, b) =>
+              (element.properties?[a.hint]?.sortNumber ?? 0).compareTo(element.properties?[b.hint]?.sortNumber ?? 0));
+
+          return list;
+        }(),
       );
 
   @override
@@ -50,12 +58,11 @@ class HowItWorksWidget extends StatelessWidget {
           endAngle: pi * 20 / 180,
           alignment: Alignment.center,
           applyReverseOnEnd: true,
-          startDelay:  Duration(seconds: Random().nextInt(8)+2),
+          startDelay: Duration(seconds: Random().nextInt(8) + 2),
           child: UiKitBlurredQuestionChip(
             label: 'How it\nworks',
             onTap: () => showUiKitFullScreenAlertDialog(context,
-                child: _howItWorksDialog,
-                paddingAll: EdgeInsetsFoundation.all12),
+                child: _howItWorksDialog, paddingAll: EdgeInsetsFoundation.all12),
           ),
         ),
       ),

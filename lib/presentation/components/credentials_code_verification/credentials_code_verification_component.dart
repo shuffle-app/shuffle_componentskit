@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -7,6 +8,7 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
   final TextEditingController codeController;
   final GlobalKey<FormState> formKey;
   final String credentials;
+  final String? errorText;
 
   const CredentialsCodeVerificationComponent({
     super.key,
@@ -14,11 +16,17 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
     required this.formKey,
     required this.credentials,
     this.onSubmit,
+    this.errorText,
   });
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['sms_verification']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -34,7 +42,10 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).viewPadding.top,
+            height: MediaQuery
+                .of(context)
+                .viewPadding
+                .top,
           ),
           Text(
             title,
@@ -68,6 +79,10 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
                       ),
                       TextSpan(
                         text: credentials,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            context.pop();
+                          },
                         style: boldTextTheme?.subHeadline,
                       ),
                     ],
@@ -79,9 +94,10 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
           Expanded(
             child: Center(
               child: UiKitCodeInputField(
-                controller: codeController,
-                codeDigitsCount: codeDigits,
-                onDone: (code) => onSubmit?.call(),
+                  controller: codeController,
+                  codeDigitsCount: codeDigits,
+                  onDone: (code) => onSubmit?.call(),
+                  errorText: errorText
               ),
             ),
           ),

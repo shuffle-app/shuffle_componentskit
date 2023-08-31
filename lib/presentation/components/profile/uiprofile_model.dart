@@ -22,7 +22,18 @@ class UiProfileModel {
         interests: interests,
         onFollow: onFollow,
         matchingInterests: matchingInterests,
-    profileType: ProfileCardType.personal,
+        profileType: ProfileCardType.personal,
+    profileStats: [
+      UiKitStats(
+        title: 'Balance',
+        value: '993 \$', actionButton: SmallOrdinaryButton(text: 'details'.toUpperCase()),
+      ),
+      UiKitStats(
+        title: 'Points',
+        value: '553', actionButton: SmallOrdinaryButton(text: 'spent'.toUpperCase())
+      ),
+
+    ],
       );
 
   UiProfileModel({
