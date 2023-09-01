@@ -136,7 +136,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
                   loading: loading,
                 ),
               ),
-              SpacingFoundation.verticalSpace24,
+              SpacingFoundation.verticalSpace8,
             ],
           ).paddingSymmetric(
             horizontal: horizontalMargin,

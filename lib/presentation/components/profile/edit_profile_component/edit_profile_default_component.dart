@@ -49,42 +49,38 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentEditProfileModel model =
-        ComponentEditProfileModel.fromJson(config['edit_profile']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
-          // wrapSliverBox: false,
-          title: 'Edit Profile',
-          autoImplyLeading: true,
-          centerTitle: true,
-          appBarBody: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircularAvatar(
-                avatarUrl: avatarUrl ?? '',
-                name: nameController.text,
-                height: 48,
-              ),
-              SpacingFoundation.verticalSpace4,
-              InkWell(
-                  onTap: onPhotoChangeRequested,
-                  child: Text(
-                    'Change Photo',
-                    style: textTheme?.caption2Bold,
-                  )),
-            ],
-          ),
-          body: SingleChildScrollView(child: Form(
+        // wrapSliverBox: false,
+        title: 'Edit Profile',
+        autoImplyLeading: true,
+        centerTitle: true,
+        appBarBody: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircularAvatar(
+              avatarUrl: avatarUrl ?? '',
+              name: nameController.text,
+              height: 48,
+            ),
+            SpacingFoundation.verticalSpace4,
+            InkWell(
+                onTap: onPhotoChangeRequested,
+                child: Text(
+                  'Change Photo',
+                  style: textTheme?.caption2Bold,
+                )),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Form(
             key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -136,19 +132,21 @@ class EditProfileDefaultComponent extends StatelessWidget {
               horizontal: horizontalMargin,
               vertical: verticalMargin,
             ),
-          ))),
-
+          ),
+        ),
+      ),
       bottomNavigationBar: AnimatedOpacity(
         duration: const Duration(milliseconds: 200),
         curve: Curves.bounceIn,
         opacity: MediaQuery.of(context).viewInsets.bottom == 0 ? 1 : 0,
         child: context
             .gradientButton(
-                data: BaseUiKitButtonData(
-              text: 'SAVE',
-              onPressed: onProfileEditSubmitted?.call,
-            ))
-            .loadingWrap(isLoading)
+              data: BaseUiKitButtonData(
+                text: 'SAVE',
+                loading: isLoading,
+                onPressed: onProfileEditSubmitted?.call,
+              ),
+            )
             .paddingOnly(
               left: horizontalMargin,
               right: horizontalMargin,
