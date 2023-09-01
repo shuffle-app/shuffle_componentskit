@@ -9,19 +9,25 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class FeedComponent extends StatelessWidget {
   final UiFeedModel feed;
   final PagingController controller;
-  final Function? onMoodPressed;
+  final UiMoodModel? mood;
   final Function? onEventPressed;
   final Function(int id, String type, [String? source])? onListItemPressed;
   final Function? onTagSortPressed;
   final VoidCallback? onHowItWorksPoped;
+  final VoidCallback? onMoodPressed;
+  final VoidCallback? onMoodCheck;
+  final VoidCallback? onMoodCompleted;
   final VoidCallback? onHowItWorksPopedBody;
 
   const FeedComponent(
       {Key? key,
       required this.feed,
       required this.controller,
-      this.onMoodPressed,
+      this.mood,
       this.onEventPressed,
+      this.onMoodPressed,
+      this.onMoodCheck,
+      this.onMoodCompleted,
       this.onTagSortPressed,
       this.onHowItWorksPoped,
       this.onHowItWorksPopedBody,
@@ -34,83 +40,28 @@ class FeedComponent extends StatelessWidget {
       child: GradientableWidget(
           gradient: GradientFoundation.attentionCard,
           active: true,
-          child: CircularProgressIndicator.adaptive(
-              backgroundColor: Colors.white)));
-
-  Widget _howItWorksDialog(context, textStyle) => UiKitHintDialog(
-        title: 'Depending on...',
-        subtitle: 'you get exactly what you need',
-        textStyle: textStyle,
-        dismissText: 'OKAY, COOL!',
-        onDismiss: () {
-          onHowItWorksPoped?.call();
-
-          return Navigator.pop(context);
-        },
-        hintTiles: [
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.map,
-            ),
-            hint: 'your location',
-          ),
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.dart,
-            ),
-            hint: 'your interests',
-          ),
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.sunClouds,
-            ),
-            hint: 'weather around',
-          ),
-          UiKitIconHintCard(
-            icon: ImageWidget(
-              height: 74.h,
-              fit: BoxFit.fitHeight,
-              rasterAsset: GraphicsFoundation.instance.png.smileMood,
-            ),
-            hint: 'and other 14 scales',
-          ),
-        ],
-      );
+          child: CircularProgressIndicator.adaptive(backgroundColor: Colors.white)));
 
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentFeedModel model =
-        ComponentFeedModel.fromJson(config['feed']);
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentFeedModel model = ComponentFeedModel.fromJson(config['feed']);
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
 
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return CustomScrollView(
       slivers: [
         SpacingFoundation.verticalSpace16.wrapSliverBox,
-        if (feed.recommendedEvent != null &&
-            (model.showDailyRecomendation ?? true)) ...[
+        if (feed.recommendedEvent != null && (model.showDailyRecomendation ?? true)) ...[
           SafeArea(
             bottom: false,
             child: UiKitAccentCard(
-              onPressed: onEventPressed == null
-                  ? null
-                  : () => onEventPressed!(feed.recommendedEvent?.id),
+              onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
               title: feed.recommendedEvent!.title ?? '',
-              additionalInfo:
-                  feed.recommendedEvent!.descriptionItems?.first.description ??
-                      '',
+              additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
               accentMessage: 'Don\'t miss it',
               image: ImageWidget(
                 link: feed.recommendedEvent?.media?.first.link,
@@ -127,35 +78,58 @@ class FeedComponent extends StatelessWidget {
             children: [
               Text('How’re you feeling tonight?', style: themeTitleStyle),
               if (feed.showHowItWorksTitle)
-                HowItWorksWidget(
-                    element: model.content.title![ContentItemType.hintDialog]!,
-                    onPop: onHowItWorksPoped),
+                HowItWorksWidget(element: model.content.title![ContentItemType.hintDialog]!, onPop: onHowItWorksPoped),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           SpacingFoundation.verticalSpace16.wrapSliverBox,
-          SingleChildScrollView(
-            primary: false,
-            scrollDirection: Axis.horizontal,
-            child: Wrap(
-              spacing: horizontalMargin,
-              children: [
-                const SizedBox.shrink(),
-                ...feed.moods!
-                    .map(
-                      (e) => UiKitMessageCardWithIcon(
-                        message: e.title,
-                        iconLink: e.logo,
-                        layoutDirection: Axis.vertical,
-                        onPressed: onMoodPressed == null
-                            ? null
-                            : () => onMoodPressed!(e.id),
-                      ),
-                    )
-                    .toList(),
-                const SizedBox.shrink(),
-              ],
+          // SingleChildScrollView(
+          //   primary: false,
+          //   scrollDirection: Axis.horizontal,
+          //   child: Wrap(
+          //     spacing: horizontalMargin,
+          //     children: [
+          //       const SizedBox.shrink(),
+          //       ...feed.moods!
+          //           .map(
+          //             (e) => UiKitMessageCardWithIcon(
+          //               message: e.title,
+          //               iconLink: e.logo,
+          //               layoutDirection: Axis.vertical,
+          //               onPressed: onMoodPressed == null
+          //                   ? null
+          //                   : () => onMoodPressed!(e.id),
+          //             ),
+          //           )
+          //           .toList(),
+          //       const SizedBox.shrink(),
+          //     ],
+          //   ),
+          // ).wrapSliverBox,
+          FingerprintSwitch(
+            isHealthKitEnabled: feed.isHealthKitEnabled,
+            title: Text(
+              'Guess',
+              style: context.uiKitTheme?.boldTextTheme.subHeadline,
             ),
-          ).wrapSliverBox,
+            backgroundImage: ImageWidget(
+              width: double.infinity,
+              rasterAsset: GraphicsFoundation.instance.png.dubaiSilhouette,
+              fit: BoxFit.cover,
+              color: ColorsFoundation.surface2,
+            ),
+            animationPath: GraphicsFoundation.instance.animations.lottie.animationTouchId.path,
+            isCompleted: mood != null,
+            onCompleted: onMoodCompleted,
+            onPressed: onMoodCheck,
+            onCompletedWidget: mood != null
+                ? UiKitMessageCardWithIcon(
+                    message: mood!.title,
+                    iconLink: mood!.logo,
+                    layoutDirection: Axis.vertical,
+                    onPressed: onMoodPressed == null ? null : () => onMoodPressed!(),
+                  )
+                : const SizedBox.shrink(),
+          ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           SpacingFoundation.verticalSpace24.wrapSliverBox,
         ],
         if ((model.showPlaces ?? true)) ...[
@@ -168,8 +142,7 @@ class FeedComponent extends StatelessWidget {
               ),
               if (feed.showHowItWorksBody)
                 HowItWorksWidget(
-                    element: model.content.body![ContentItemType.hintDialog]!,
-                    onPop: onHowItWorksPopedBody),
+                    element: model.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPopedBody),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
@@ -186,36 +159,23 @@ class FeedComponent extends StatelessWidget {
                         height: 17,
                         fit: BoxFit.fitHeight,
                       ),
-                      onPressed: onTagSortPressed == null
-                          ? null
-                          : () => onTagSortPressed!('Random'),
+                      onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
                     ),
                   ),
                   UiKitTitledFilterChip(
-                    selected: feed.activeFilterChips
-                            ?.map((e) => e.title)
-                            .contains('Favorites') ??
-                        false,
+                    selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
                     title: 'Favorites',
-                    onPressed: onTagSortPressed == null
-                        ? null
-                        : () => onTagSortPressed!('Favorites'),
+                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
                     icon: GraphicsFoundation.instance.svg.star.path,
-                  ).paddingSymmetric(
-                      horizontal: SpacingFoundation.horizontalSpacing8),
+                  ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
                   Wrap(
                     spacing: SpacingFoundation.verticalSpacing8,
                     children: feed.filterChips!
                         .map(
                           (e) => UiKitTitledFilterChip(
-                            selected: feed.activeFilterChips
-                                    ?.map((e) => e.title)
-                                    .contains(e.title) ??
-                                false,
+                            selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
                             title: e.title,
-                            onPressed: onTagSortPressed == null
-                                ? null
-                                : () => onTagSortPressed!(e.title),
+                            onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                             icon: e.iconPath,
                           ),
                         )
@@ -236,8 +196,7 @@ class FeedComponent extends StatelessWidget {
                 item as UiUniversalModel;
 
                 return PlacePreview(
-                  onTap: (id) =>
-                      onListItemPressed?.call(id, item.type, item.source),
+                  onTap: (id) => onListItemPressed?.call(id, item.type, item.source),
                   place: UiPlaceModel(
                     id: item.id,
                     title: item.title,

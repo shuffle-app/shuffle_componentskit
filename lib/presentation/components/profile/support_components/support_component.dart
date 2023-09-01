@@ -8,10 +8,14 @@ class SupportComponent extends StatelessWidget {
   final TextEditingController _textController;
   final PositionModel? position;
   final ContentBaseModel content;
+  final ValueChanged<bool> onSupportSubmitted;
+  final bool isSupportActive;
 
   SupportComponent(
       {super.key,
       this.position,
+      this.isSupportActive = false,
+      required this.onSupportSubmitted,
       required this.content,
       TextEditingController? nameController,
       TextEditingController? emailController,
@@ -31,13 +35,13 @@ class SupportComponent extends StatelessWidget {
       title: 'Support',
       body: SizedBox(
         height: remainingHeight,
-        child: Column(
+        child:  Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             UiKitGradientSwitchTile(
               title: 'Enable hint system',
-              onChanged: (v){},
-              switchedOn: false,
+              onChanged: onSupportSubmitted,
+              switchedOn: isSupportActive,
             ),
             SpacingFoundation.verticalSpace24,
             UiKitCardWrapper(
@@ -81,6 +85,7 @@ class SupportComponent extends StatelessWidget {
                     .paddingAll(SpacingFoundation.verticalSpacing16),
               ),
             ),
+            SpacingFoundation.verticalSpace24,
             const Spacer(),
             UiKitCardWrapper(
               color: ColorsFoundation.surface1,

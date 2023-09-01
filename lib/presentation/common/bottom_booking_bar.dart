@@ -48,6 +48,7 @@ class BottomBookingBar extends StatelessWidget {
                         data: BaseUiKitButtonData(
                             onPressed: onShowRoute,
                             icon: ImageWidget(
+                              height:26.sp,
                               svgAsset: svg.route,
                               color: Colors.white,
                             )),
@@ -69,6 +70,7 @@ class BottomBookingBar extends StatelessWidget {
                           data: BaseUiKitButtonData(
                             onPressed: onMagnify,
                             icon: ImageWidget(
+                              height:26.sp,
                               svgAsset: svg.searchPeople,
                               color: Colors.white,
                             ),)

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -63,18 +65,13 @@ class SearchComponent extends StatelessWidget {
     final config = GlobalConfiguration().appConfig.content;
     final model = ComponentSearchModel.fromJson(config['search']);
 
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final title = model.content.title;
     final body = model.content.body;
 
-    print('model.content ${model.content.body?.keys}');
 
-    final chooseCards = body?[ContentItemType.horizontalList]
-        ?.properties
-        ?.entries
-        .toList()
+    final chooseCards = body?[ContentItemType.horizontalList]?.properties?.entries.toList()
       ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
 
     final sortedCards = chooseCards
@@ -92,189 +89,188 @@ class SearchComponent extends StatelessWidget {
             .toList() ??
         [];
 
-    return Column(
+    return Stack(
+      fit: StackFit.expand,
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).viewPadding.top,
-        ),
-        Stack(
-          children: [
-            Text(
-              title?[ContentItemType.text]?.properties?.keys.firstOrNull ??
-                  'You’ll find it',
-              style: theme?.boldTextTheme.title1,
-            ),
-            if (search.showHowItWorks)
-              HowItWorksWidget(
-                customOffset: Offset(0.5.sw,10),
-                  element: model.content.title![ContentItemType.hintDialog]!,
-                  onPop: onHowItWorksPoped),
-          ],
-        ),
-        SpacingFoundation.verticalSpace16,
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onSearchFieldTap,
-          child: IgnorePointer(
-            child: Hero(
-              tag: search.heroSearchTag,
-              child: SizedBox(
-                width: double.infinity,
-                child: UiKitInputFieldRightIcon(
-                  fillColor: ColorsFoundation.surface3,
-                  hintText: 'search'.toUpperCase(),
-                  controller: searchController,
-                  icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.search,
-                    color: Colors.white.withOpacity(0.5),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-        SpacingFoundation.verticalSpace24,
-        Expanded(
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment:
-                  (model.positionModel?.bodyAlignment).mainAxisAlignment,
-              crossAxisAlignment:
-                  (model.positionModel?.bodyAlignment).crossAxisAlignment,
-              children: [
-                if (model.showFree ?? false) ...[
-                  UiKitOverflownActionCard(
-                    horizontalMargin: horizontalMargin,
-                    action: context.smallButton(
-                        data: BaseUiKitButtonData(
-                            onPressed: onFreeCardPressed,
-                            text: 'Check out it')),
-                    title: Stack(
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            style: theme?.boldTextTheme.body,
-                            children: [
-                              const TextSpan(text: 'Selection of the best'),
-                              TextSpan(
-                                text: '\nfree places',
-                                style: theme?.boldTextTheme.subHeadline
-                                    .copyWith(color: Colors.transparent),
-                              )
-                            ],
+        ClipRRect(
+            borderRadius: BorderRadiusFoundation.onlyBottom24,
+            clipper: _CustomBlurClipper(),
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                child: SafeArea(
+                    bottom: false,
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        SizedBox(
+                        width: double.infinity,
+                        // height: 30.h,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                        children: [
+                          Text(
+                            title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'You’ll find it',
+                            style: theme?.boldTextTheme.title1,
                           ),
-                        ),
-                        GradientableWidget(
-                          gradient: GradientFoundation.buttonGradient,
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Selection of the best',
-                                  style: theme?.boldTextTheme.body
-                                      .copyWith(color: Colors.transparent),
+                          if (search.showHowItWorks && title?[ContentItemType.hintDialog] !=null)
+                            HowItWorksWidget(
+                                customOffset: Offset(0.35.sw, 10),
+                                element: title![ContentItemType.hintDialog]!,
+                                onPop: onHowItWorksPoped),
+                        ],
+                      )),
+                      SpacingFoundation.verticalSpace16,
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: onSearchFieldTap,
+                        child: IgnorePointer(
+                          child: Hero(
+                            tag: search.heroSearchTag,
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: UiKitInputFieldRightIcon(
+                                fillColor: ColorsFoundation.surface3,
+                                hintText: 'search'.toUpperCase(),
+                                controller: searchController,
+                                icon: ImageWidget(
+                                  svgAsset: GraphicsFoundation.instance.svg.search,
+                                  color: Colors.white.withOpacity(0.5),
                                 ),
-                                TextSpan(
-                                    text: '\nfree places',
-                                    style: theme?.boldTextTheme.subHeadline)
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    overflownIconLink: GraphicsFoundation.instance.png.map.path,
-                    decorationIcons: _decorationItemsForFreeCards,
-                  ).paddingOnly(right: horizontalMargin),
-                ],
-                SpacingFoundation.verticalSpace24,
-                Text(
-                  body?[ContentItemType.text]?.properties?.keys.firstOrNull ??
-                      'Choose yourself',
-                  style: theme?.boldTextTheme.title1,
-                ).paddingSymmetric(horizontal: horizontalMargin),
+                      )
+                    ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
+        SpacingFoundation.verticalSpace24,
+        SingleChildScrollView(
+          controller: scrollController,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
+            crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
+            children: [
+              if (model.showFree ?? false) ...[
+                UiKitOverflownActionCard(
+                  horizontalMargin: horizontalMargin,
+                  action: context.smallButton(
+                      data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                  title: Stack(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: theme?.boldTextTheme.body,
+                          children: [
+                            const TextSpan(text: 'Selection of the best'),
+                            TextSpan(
+                              text: '\nfree places',
+                              style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.transparent),
+                            )
+                          ],
+                        ),
+                      ),
+                      GradientableWidget(
+                        gradient: GradientFoundation.buttonGradient,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Selection of the best',
+                                style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
+                              ),
+                              TextSpan(text: '\nfree places', style: theme?.boldTextTheme.subHeadline)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  overflownIconLink: GraphicsFoundation.instance.png.map.path,
+                  decorationIcons: _decorationItemsForFreeCards,
+                ).paddingOnly(right: horizontalMargin),
+              ],
+              SpacingFoundation.verticalSpace24,
+              Text(
+                body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'Choose yourself',
+                style: theme?.boldTextTheme.title1,
+              ).paddingSymmetric(horizontal: horizontalMargin),
+              SpacingFoundation.verticalSpace24,
+              SingleChildScrollView(
+                primary: false,
+                scrollDirection: Axis.horizontal,
+                child: Wrap(
+                  spacing: SpacingFoundation.horizontalSpacing12,
+                  children: sortedCards,
+                ),
+              ).paddingOnly(left: horizontalMargin),
+              SpacingFoundation.verticalSpace24,
+              Stack(clipBehavior: Clip.none, children: [
+                Text('Top places rated\nby', style: theme?.boldTextTheme.title1),
+                () {
+                  const MemberPlate widget = MemberPlate();
+
+                  return Positioned(
+                    width: widget.width,
+                    top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
+                    left: SizesFoundation.screenWidth / 5,
+                    child: widget,
+                  );
+                }()
+              ]).paddingSymmetric(horizontal: horizontalMargin),
+              if (search.filterChips != null && search.filterChips!.isNotEmpty) ...[
                 SpacingFoundation.verticalSpace24,
                 SingleChildScrollView(
                   primary: false,
                   scrollDirection: Axis.horizontal,
-                  child: Wrap(
-                    spacing: SpacingFoundation.horizontalSpacing12,
-                    children: sortedCards,
+                  child: Row(
+                    children: [
+                      horizontalMargin.widthBox,
+                      Wrap(
+                        spacing: SpacingFoundation.verticalSpacing8,
+                        children: search.filterChips!
+                            .map(
+                              (e) => UiKitTitledFilterChip(
+                                selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                                title: e.title,
+                                onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                                icon: e.iconPath,
+                              ),
+                            )
+                            .toList(),
+                      )
+                    ],
                   ),
-                ).paddingOnly(left: horizontalMargin),
-                SpacingFoundation.verticalSpace24,
-                Stack(clipBehavior: Clip.none, children: [
-                  Text('Top places rated\nby',
-                      style: theme?.boldTextTheme.title1),
-                  () {
-                    const MemberPlate widget = MemberPlate();
-
-                    return Positioned(
-                      width: widget.width,
-                      top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
-                      left: SizesFoundation.screenWidth / 5,
-                      child: widget,
-                    );
-                  }()
-                ]).paddingSymmetric(horizontal: horizontalMargin),
-                if (search.filterChips != null &&
-                    search.filterChips!.isNotEmpty) ...[
-                  SpacingFoundation.verticalSpace24,
-                  SingleChildScrollView(
-                    primary: false,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        horizontalMargin.widthBox,
-                        Wrap(
-                          spacing: SpacingFoundation.verticalSpacing8,
-                          children: search.filterChips!
-                              .map(
-                                (e) => UiKitTitledFilterChip(
-                                  selected: search.activeFilterChips
-                                          ?.map((e) => e.title)
-                                          .contains(e.title) ??
-                                      false,
-                                  title: e.title,
-                                  onPressed: onTagSortPressed == null
-                                      ? null
-                                      : () => onTagSortPressed!(e.title),
-                                  icon: e.iconPath,
-                                ),
-                              )
-                              .toList(),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-                SpacingFoundation.verticalSpace24,
-                ...search.places
-                    .map((e) => UiKitCompactOrderedRatingCard(
-                            order: search.places.indexOf(e) + 1,
-                            rating: e.rating,
-                            title: e.title,
-                            imageLink: e.media
-                                .firstWhere((element) =>
-                                    element.type == UiKitMediaType.image)
-                                .link,
-                            onPressed: onPlaceTapped == null
-                                ? null
-                                : () => onPlaceTapped!.call(e.id))
-                        .paddingSymmetric(
-                            horizontal: horizontalMargin,
-                            vertical: SpacingFoundation.verticalSpacing12))
-                    .toList(),
-                kBottomNavigationBarHeight.heightBox,
+                ),
               ],
-            ),
-          ),
+              SpacingFoundation.verticalSpace24,
+              ...search.places
+                  .map((e) => UiKitCompactOrderedRatingCard(
+                          order: search.places.indexOf(e) + 1,
+                          rating: e.rating,
+                          title: e.title,
+                          imageLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                          onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
+                      .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
+                  .toList(),
+              kBottomNavigationBarHeight.heightBox,
+            ],
+          ).paddingOnly(top: 118.h),
         ),
-      ],
+      ].reversed.toList(),
     ).paddingSymmetric(
       vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
+  }
+}
+
+class _CustomBlurClipper extends CustomClipper<RRect> {
+  @override
+  RRect getClip(Size size) {
+    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, 110.h),
+        bottomLeft: const Radius.circular(24), bottomRight: const Radius.circular(24));
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<RRect> oldClipper) {
+    return true;
   }
 }

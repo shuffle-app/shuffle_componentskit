@@ -5,6 +5,7 @@ class UiFeedModel {
   final UiEventModel? recommendedEvent;
   final bool showHowItWorksTitle;
   final bool showHowItWorksBody;
+  final bool isHealthKitEnabled;
   final List<UiMoodModel>? moods;
   // final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
@@ -14,6 +15,7 @@ class UiFeedModel {
       {this.filterChips,
       this.activeFilterChips,
       this.showHowItWorksBody = false,
+      this.isHealthKitEnabled = true,
       this.recommendedEvent,
       this.showHowItWorksTitle = false,
       this.moods,
