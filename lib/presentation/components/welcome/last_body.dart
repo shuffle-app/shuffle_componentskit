@@ -63,12 +63,12 @@ class _LastBody extends StatelessWidget {
                     data: BaseUiKitButtonData(
                       text: 'Get started',
                       onPressed: onFinished,
+                      loading: loading,
                     ),
                   )
                   .paddingSymmetric(
                     horizontal: EdgeInsetsFoundation.horizontal16,
-                  )
-                  .loadingWrap(loading),
+                  ),
               SpacingFoundation.verticalSpace24,
             ],
           ),
