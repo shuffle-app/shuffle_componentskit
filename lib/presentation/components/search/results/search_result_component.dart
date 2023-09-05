@@ -9,7 +9,6 @@ class SearchResultComponent extends StatelessWidget {
   final ValueChanged<String>? onFieldSubmitted;
   final TextEditingController searchController;
   final bool autofocus;
-  final ScrollController? scrollController;
 
   const SearchResultComponent({
     super.key,
@@ -18,7 +17,6 @@ class SearchResultComponent extends StatelessWidget {
     required this.searchController,
     this.onFieldSubmitted,
     this.autofocus = true,
-    this.scrollController,
     this.errorText,
   });
 
@@ -36,6 +34,7 @@ class SearchResultComponent extends StatelessWidget {
       centerTitle: true,
       autoImplyLeading: true,
       customToolbarHeight: 150.0,
+      canFoldAppBar: false,
       appBarBody: Hero(
         tag: heroSearchTag,
         child: SizedBox(
