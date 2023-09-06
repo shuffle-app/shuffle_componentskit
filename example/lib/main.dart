@@ -129,6 +129,36 @@ class ComponentsTestPage extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show feed business',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentFeedModel.fromJson(
+                    configuration.appConfig.content['feed_business'],
+                  ),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: FeedBusinessComponent(
+                        controller: PagingController<int, dynamic>(firstPageKey: 1),
+                        feed: UiFeedModel(
+                          recommendedEvent: event,
+                          moods: List.generate(
+                            4,
+                            (index) => UiMoodModel(
+                              id: 1,
+                              title: 'Want to have some fun',
+                              logo: 'assets/images/png/crazy_emoji.png',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show search',
                 onPressed: () => buildComponent(
                   context,
@@ -139,6 +169,116 @@ class ComponentsTestPage extends StatelessWidget {
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchTag',
+                          places: List.generate(
+                            10,
+                            (index) => UiPlaceModel(
+                              id: index + 1,
+                              rating: 4 + (index / 10),
+                              media: [
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                              ],
+                              title: 'lorem ipsum dolor sit amet',
+                              description:
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              baseTags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: false,
+                                ),
+                              ],
+                              tags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Duh',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Metal',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Heavy',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Club',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheaper',
+                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  unique: true,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show search for business',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(configuration.appConfig.content['search']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: SearchBusinessComponent(
+                        searchController: TextEditingController(),
+                        search: UiSearchModel(
+                          heroSearchTag: 'heroSearchBusinessTag',
                           places: List.generate(
                             10,
                             (index) => UiPlaceModel(
