@@ -48,7 +48,7 @@ class BottomBookingBar extends StatelessWidget {
                         data: BaseUiKitButtonData(
                             onPressed: onShowRoute,
                             icon: ImageWidget(
-                              height:26.sp,
+                              height:18.sp,
                               svgAsset: svg.route,
                               color: Colors.white,
                             )),
@@ -60,8 +60,9 @@ class BottomBookingBar extends StatelessWidget {
                           data: BaseUiKitButtonData(
                             text: 'Book it',
                             onPressed: onBook,
+                            loading: isLoading,
+                            // fit: ButtonFit.hugContent
                           ))
-                          .loadingWrap(isLoading),
                     ),
                     SpacingFoundation.horizontalSpace12,
                     if (model.showMagnify ?? true)
@@ -70,7 +71,7 @@ class BottomBookingBar extends StatelessWidget {
                           data: BaseUiKitButtonData(
                             onPressed: onMagnify,
                             icon: ImageWidget(
-                              height:26.sp,
+                              height:18.sp,
                               svgAsset: svg.searchPeople,
                               color: Colors.white,
                             ),)

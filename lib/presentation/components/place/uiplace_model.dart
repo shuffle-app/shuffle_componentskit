@@ -20,6 +20,7 @@ class UiPlaceModel {
   String? website;
   String? phone;
 
+
   UiPlaceModel({
     required this.id,
     this.title,
@@ -48,7 +49,9 @@ class UiPlaceModel {
   ];
 }
 
-String normalizedTi(TimeOfDay time) {
+String normalizedTi(TimeOfDay? time) {
+  if(time == null) return 'nn';
+
   return '${leadingZeros(time.hour)}:${leadingZeros(time.minute)} ${time.period.name}';
 }
 
