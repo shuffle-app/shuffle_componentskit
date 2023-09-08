@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -84,18 +86,20 @@ class PlacePreview extends StatelessWidget {
                                         ? GraphicsFoundation.instance.svg.star
                                         : GraphicsFoundation.instance.svg.starOutline)))),
                   if (status != null && status!.isNotEmpty)
-                    Shimmer(
-                        gradient: GradientFoundation.greyGradient,
-                        child: SizedBox(
-                            width: size.width - horizontalMargin * 2,
-                            height: cellSize?.height ?? 156.h,
-                            child: Center(
-                              child: Text(
-                                '$status\n${DateFormat('dd.MM.yy').format(updatedAt ?? DateTime.now())}',
-                                textAlign: TextAlign.center,
-                                style: theme?.boldTextTheme.body,
-                              ),
-                            )))
+                    ClipRRect(
+                        borderRadius: BorderRadiusFoundation.all24,
+                        child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                            child: SizedBox(
+                                width: size.width - horizontalMargin * 2,
+                                height: cellSize?.height ?? 156.h,
+                                child: Center(
+                                  child: Text(
+                                    '$status\n${DateFormat('dd.MM.yy').format(updatedAt ?? DateTime.now())}',
+                                    textAlign: TextAlign.center,
+                                    style: theme?.boldTextTheme.body,
+                                  ),
+                                ))))
                 ])),
             SpacingFoundation.verticalSpace8,
             Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
