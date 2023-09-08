@@ -18,6 +18,7 @@ class DonationComponent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SpacingFoundation.verticalSpace16,
         Text('Ask people', style: boldTextTheme?.title1),
         SpacingFoundation.verticalSpace16,
         const DonationInfoIndicatorCard(
@@ -30,6 +31,7 @@ class DonationComponent extends StatelessWidget {
         Center(
           child: context.gradientButton(
             data: BaseUiKitButtonData(
+              fit: ButtonFit.fitWidth,
               text: 'Ask for donations',
               onPressed: onAskDonationTap,
             ),

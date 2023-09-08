@@ -65,7 +65,7 @@ class PlacePreview extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Stack(clipBehavior: Clip.none, children: [
                   UiKitPhotoSlider(
-                    media: place.media,
+                    media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')]: place.media,
                     onTap: () => onTap?.call(place.id),
                     width: size.width - horizontalMargin * 2,
                     height: cellSize?.height ?? 156.h,

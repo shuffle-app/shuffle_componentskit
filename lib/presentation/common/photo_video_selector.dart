@@ -113,9 +113,7 @@ class PhotoVideoSelector extends StatelessWidget {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) =>
-                            ReorderableDragStartListener(
-                                index: index,
-                                child: Stack(
+                           Stack(
                                     key: ValueKey(videos[index].link),
                                     alignment: Alignment.topRight,
                                     children: [
@@ -140,7 +138,7 @@ class PhotoVideoSelector extends StatelessWidget {
                                                 height: 6,
                                                 width: 6,
                                               )))
-                                    ])),
+                                    ]),
                         itemCount: videos.length,
                         onReorder: onVideoReorderRequested))
               ]),
