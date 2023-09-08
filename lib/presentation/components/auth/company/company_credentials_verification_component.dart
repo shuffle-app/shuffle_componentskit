@@ -79,7 +79,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).viewPadding.top + (SpacingFoundation.verticalSpacing24 * 2),
+                  height: MediaQuery.of(context).viewPadding.top,
                 ),
                 Text(
                   title,

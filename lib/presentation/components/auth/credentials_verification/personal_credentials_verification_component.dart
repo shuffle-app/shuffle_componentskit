@@ -50,26 +50,27 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
         model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
 
-    return   Stack(
-        fit: StackFit.expand,
-        children: [
-          Positioned(
-            top: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing6,
-            right: SpacingFoundation.horizontalSpacing16,
-            child: ImageWidget(
-              link: decorationLink?.imageLink ?? '',
-              fit: BoxFit.fitWidth,
-              width: 1.sw,
-            ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned(
+          top: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing6,
+          right: SpacingFoundation.horizontalSpacing16,
+          child: ImageWidget(
+            link: decorationLink?.imageLink ?? '',
+            fit: BoxFit.fitWidth,
+            width: 1.sw,
           ),
-    SafeArea(child:
-    Form(
-    key: formKey,
-    child:Column(
+        ),
+        Form(
+          key: formKey,
+          child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-
             children: [
+              SizedBox(
+                height: MediaQuery.of(context).viewPadding.top,
+              ),
               Text(
                 title,
                 style: textTheme?.titleLarge,
@@ -135,14 +136,14 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
                   loading: loading,
                 ),
               ),
-              SpacingFoundation.verticalSpace8,
+              SpacingFoundation.verticalSpace24,
             ],
           ).paddingSymmetric(
             horizontal: horizontalMargin,
             vertical: verticalMargin,
-          ))),
-        ],
-
+          ),
+        ),
+      ],
     );
   }
 }

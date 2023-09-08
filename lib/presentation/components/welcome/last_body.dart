@@ -16,7 +16,8 @@ class _LastBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = context.uiKitTheme?.boldTextTheme;
+    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
+    final regularTextTheme = context.uiKitTheme?.regularTextTheme;
 
     return Stack(
       fit: StackFit.expand,
@@ -41,15 +42,25 @@ class _LastBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SpacingFoundation.verticalSpace24,
-              Text(
-                'This is shuffle',
-                style: textTheme?.title1,
+              RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'This is ',
+                      style: regularTextTheme?.title1,
+                    ),
+                    TextSpan(
+                      text: 'shuffle',
+                      style: boldTextTheme?.title1,
+                    )
+                  ],
+                ),
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32 * 2),
               SpacingFoundation.verticalSpace16,
               Text(
                 'Smart leisure selection for everyone, everywhere.',
-                style: textTheme?.subHeadline,
+                style: boldTextTheme?.subHeadline,
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),
               if (bigScreen) ...[
