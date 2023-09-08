@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PlacePreview extends StatelessWidget {
   final Function? onTap;
@@ -10,6 +12,8 @@ class PlacePreview extends StatelessWidget {
   final bool isFavorite;
   final Size? cellSize;
   final VoidCallback? onFavoriteChanged;
+  final String? status;
+  final DateTime? updatedAt;
 
   const PlacePreview(
       {Key? key,
@@ -18,6 +22,8 @@ class PlacePreview extends StatelessWidget {
       required this.model,
       this.onFavoriteChanged,
       this.cellSize,
+      this.status,
+      this.updatedAt,
       this.showFavoriteBtn = false,
       this.isFavorite = false})
       : super(key: key);
@@ -29,6 +35,8 @@ class PlacePreview extends StatelessWidget {
       required this.model,
       this.onFavoriteChanged,
       this.cellSize,
+      this.updatedAt,
+      this.status,
       this.showFavoriteBtn = false,
       this.isFavorite = false})
       : place = UiPlaceModel(
@@ -42,7 +50,7 @@ class PlacePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final size = cellSize ?? MediaQuery.of(context).size;
+    final size = cellSize ?? MediaQuery.sizeOf(context);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return SizedBox(
@@ -75,9 +83,23 @@ class PlacePreview extends StatelessWidget {
                                     svgAsset: isFavorite
                                         ? GraphicsFoundation.instance.svg.star
                                         : GraphicsFoundation.instance.svg.starOutline)))),
+                  if (status != null && status!.isNotEmpty)
+                    Shimmer(
+                        gradient: GradientFoundation.greyGradient,
+                        child: SizedBox(
+                            width: size.width - horizontalMargin * 2,
+                            height: cellSize?.height ?? 156.h,
+                            child: Center(
+                              child: Text(
+                                '$status\n${DateFormat('dd.MM.yy').format(updatedAt ?? DateTime.now())}',
+                                textAlign: TextAlign.center,
+                                style: theme?.boldTextTheme.body,
+                              ),
+                            )))
                 ])),
             SpacingFoundation.verticalSpace8,
-            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(horizontal: horizontalMargin),
+            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
+                .paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
               baseTags: place.baseTags ?? [],

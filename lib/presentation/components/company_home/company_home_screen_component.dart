@@ -10,6 +10,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   final VoidCallback? onCreatePlace;
   final ValueChanged<int>? onPlaceTapped;
   final List<UiKitStats>? profileStats;
+  final Map<int,String> creationStats;
 
   const CompanyHomeScreenComponent({
     super.key,
@@ -17,6 +18,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     required this.places,
     this.interests,
     this.tag,
+    this.creationStats = const {},
     this.onCreatePlace,
     this.onPlaceTapped,
     this.profileStats,
@@ -38,7 +40,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
           crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).viewPadding.top,
+              height: MediaQuery.viewPaddingOf(context).top,
             ),
             ProfileCard(
               name: name,
@@ -72,15 +74,15 @@ class CompanyHomeScreenComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace24,
             if (places.isEmpty)
-              UiKitTitledActionCard(
-                title: 'Create your place and invite people',
-                actionButton: context.gradientButton(
-                  data: BaseUiKitButtonData(
-                    text: 'Create place'.toUpperCase(),
-                    onPressed: onCreatePlace,
-                  ),
+            UiKitTitledActionCard(
+              title: 'Create your place and invite people',
+              actionButton: context.gradientButton(
+                data: BaseUiKitButtonData(
+                  text: 'Create place'.toUpperCase(),
+                  onPressed: onCreatePlace,
                 ),
               ),
+            ),
             if (places.isNotEmpty)
               ListView.separated(
                 padding: EdgeInsets.zero,
@@ -91,15 +93,9 @@ class CompanyHomeScreenComponent extends StatelessWidget {
 
                   return PlacePreview(
                     onTap: (id) => onPlaceTapped?.call(id),
-                    place: UiPlaceModel(
-                      id: item.id,
-                      title: item.title,
-                      description: item.description,
-                      media: item.media,
-                      tags: item.tags,
-                      baseTags: item.baseTags,
-                    ),
+                    place: item,
                     model: model,
+                    status: creationStats[item.id],
                   );
                 },
                 separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,

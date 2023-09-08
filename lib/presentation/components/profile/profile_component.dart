@@ -55,7 +55,7 @@ class ProfileComponent extends StatelessWidget {
                 style: textTheme?.title1,
               ),
               if (showHowItWorks)
-                HowItWorksWidget(element: model.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPoped),
+                HowItWorksWidget(element: model.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPoped,customOffset: Offset(MediaQuery.sizeOf(context).width/1.5, 35)),
             ],
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           SpacingFoundation.verticalSpace24,
@@ -84,10 +84,10 @@ class ProfileComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           context
               .gradientButton(
-                data: BaseUiKitButtonData(
-                  text: 'fulfill the dream'.toUpperCase(),
-                  onPressed: () => onFulfillDream?.call(),
-                  fit: ButtonFit.fitWidth,
+                  data: BaseUiKitButtonData(
+                    fit: ButtonFit.fitWidth,
+                      text: 'fulfill the dream'.toUpperCase(),
+                      onPressed: () => onFulfillDream?.call(),
                 ),
               )
               .paddingSymmetric(horizontal: horizontalMargin),
