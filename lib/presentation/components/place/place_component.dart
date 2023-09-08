@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -51,6 +51,37 @@ class PlaceComponent extends StatelessWidget {
               baseTags: place.baseTags ?? [],
               uniqueTags: place.tags,
               horizontalMargin: horizontalMargin,
+            ),
+            SpacingFoundation.verticalSpace8,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: () {
+                final AutoSizeGroup g = AutoSizeGroup();
+
+                return [
+                  Expanded(
+                    child: UpcomingEventPlaceActionCard(
+                      value: 'in 2 days',
+                      group:g,
+                      vectorIconAsset: GraphicsFoundation.instance.svg.events,
+                      action: () {
+                        log('calendar was pressed');
+                      },
+                    ),
+                  ),
+                  SpacingFoundation.horizontalSpace8,
+                  Expanded(
+                    child: PointBalancePlaceActionCard(
+                      value: '2 650',
+                      group:g,
+                      vectorIconAsset: GraphicsFoundation.instance.svg.coin,
+                      action: () {
+                        log('balance was pressed');
+                      },
+                    ),
+                  ),
+                ];
+              }(),
             ),
             SpacingFoundation.verticalSpace8,
             GridView.count(

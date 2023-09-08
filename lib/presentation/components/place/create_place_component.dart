@@ -360,6 +360,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           top: false,
                           child: context.gradientButton(
                               data: BaseUiKitButtonData(
+                                fit: ButtonFit.fitWidth,
                                   text: 'save'.toUpperCase(),
                                   onPressed: () {
                                     _placeToEdit.title = _titleController.text;
