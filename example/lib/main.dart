@@ -917,6 +917,42 @@ class ComponentsTestPage extends StatelessWidget {
                   child: DonationComponent(
                     onMapTap: () {},
                     onAskDonationTap: () {},
+                    donationTitle: 'Help me visit Nusr-Et restaurant',
+                    actualSum: 310,
+                    sum: 900,
+                    topDayUsers: List.generate(
+                      7,
+                      (index) => UiDonationUserModel(
+                        position: index + 1,
+                        sum: '3640',
+                        nikcname: '@misswow2022',
+                        name: 'Natalie',
+                        surname: 'White',
+                        isStarEnabled: true,
+                      ),
+                    ),
+                    topMonthUsers: List.generate(
+                      7,
+                      (index) => UiDonationUserModel(
+                        position: index + 1,
+                        sum: '3640',
+                        nikcname: '@misswow2022',
+                        name: 'Natalie',
+                        surname: 'White',
+                        isStarEnabled: true,
+                      ),
+                    ),
+                    topYearUsers: List.generate(
+                      7,
+                      (index) => UiDonationUserModel(
+                        position: index + 1,
+                        sum: '3640',
+                        nikcname: '@misswow2022',
+                        name: 'Natalie',
+                        surname: 'White',
+                        isStarEnabled: true,
+                      ),
+                    ),
                   ),
                 ),
               ),

@@ -1,15 +1,34 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:shuffle_components_kit/presentation/components/donation/ui_donation_user_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+
+part 'donation_tab_menu.dart';
 
 class DonationComponent extends StatelessWidget {
   const DonationComponent({
     super.key,
     this.onMapTap,
     this.onAskDonationTap,
+    this.onNextButtonTap,
+    required this.sum,
+    required this.actualSum,
+    required this.topDayUsers,
+    required this.topYearUsers,
+    required this.donationTitle,
+    required this.topMonthUsers,
   });
+
+  final double sum;
+  final double actualSum;
+  final String donationTitle;
 
   final VoidCallback? onMapTap;
   final VoidCallback? onAskDonationTap;
+  final VoidCallback? onNextButtonTap;
+
+  final List<UiDonationUserModel> topDayUsers;
+  final List<UiDonationUserModel> topMonthUsers;
+  final List<UiDonationUserModel> topYearUsers;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +40,11 @@ class DonationComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         Text('Ask people', style: boldTextTheme?.title1),
         SpacingFoundation.verticalSpace16,
-        const DonationInfoIndicatorCard(
+        DonationInfoIndicatorCard(
           number: '1',
-          title: 'Help me visit Nusr-Et restaurant',
-          sum: 900,
-          actualSum: 310,
+          title: donationTitle,
+          sum: sum,
+          actualSum: actualSum,
         ),
         SpacingFoundation.verticalSpace16,
         Center(
@@ -51,7 +70,12 @@ class DonationComponent extends StatelessWidget {
                 style: boldTextTheme?.subHeadline,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               SpacingFoundation.verticalSpace16,
-              const DonationTabMenu(),
+              _DonationTabMenu(
+                onNextButtonTap: onNextButtonTap,
+                topDayUsers: topDayUsers,
+                topMonthUsers: topMonthUsers,
+                topYearUsers: topYearUsers,
+              ),
               SpacingFoundation.verticalSpace16,
             ],
           ),
