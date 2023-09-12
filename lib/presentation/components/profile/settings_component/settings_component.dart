@@ -4,12 +4,12 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SettingsComponent extends StatelessWidget {
   final ValueChanged<String?> callback;
-  final ValueChanged<String>? onTabSwotched;
+  final ValueChanged<String>? onTabSwitched;
 
   const SettingsComponent({
     Key? key,
     required this.callback,
-    this.onTabSwotched,
+    this.onTabSwitched,
   }) : super(key: key);
 
   @override
@@ -84,7 +84,7 @@ class SettingsComponent extends StatelessWidget {
       if (tabs.isNotEmpty) ...[
         SpacingFoundation.verticalSpace16,
         UiKitCustomTabBar(
-          onTappedTab: (index) => onTabSwotched?.call(tabs.keys.elementAt(index)),
+          onTappedTab: (index) => onTabSwitched?.call(tabs.keys.elementAt(index)),
           tabs: tabs.keys.map((e) => UiKitCustomTab(title: e.toUpperCase())).toList(),
         ),
         SpacingFoundation.verticalSpace12,
