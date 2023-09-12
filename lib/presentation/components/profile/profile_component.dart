@@ -67,7 +67,60 @@ class ProfileComponent extends StatelessWidget {
                   userPoints: recommendedUsers?[index].userPointsBalance ?? 0,
                   sameInterests: recommendedUsers?[index].commonInterests ?? 0,
                   onMessage: () {
-                    SnackBarUtils.show(message: 'in development', context: context);
+                    buildComponent(
+                      context,
+                      ComponentModel.fromJson(GlobalConfiguration().appConfig.content['invite_people_places']),
+                      ComponentBuilder(
+                        child: Builder(
+                          builder: (context) {
+                            var model = UiInviteToFavouritePlacesModel(
+                              date: DateTime.now(),
+                            );
+                            List<String> selected = [];
+
+                            return StatefulBuilder(
+                              builder: (context, state) => InviteToFavouritePlacesComponent(
+                                places: List<UiKitLeadingRadioTile>.generate(
+                                  10,
+                                      (index) => UiKitLeadingRadioTile(
+                                    title: '$index place',
+                                    selected: selected.contains('$index place'),
+                                    onTap: () {
+                                      state(() {
+                                        if (!selected.remove('$index place')) {
+                                          selected.add('$index place');
+                                        }
+                                      });
+                                    },
+                                    avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
+                                    tags: [
+                                      UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                      UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                      UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                      UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                    ],
+                                  ),
+                                ),
+                                uiModel: model,
+                                onInvite: () {},
+                                onDatePressed: () async {
+                                  final newDate = await showUiKitCalendarDialog(context);
+                                  if (newDate != null) {
+                                    state(
+                                          () {
+                                        model = UiInviteToFavouritePlacesModel(
+                                          date: newDate,
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
                   }),
               itemCount: recommendedUsers?.length ?? 0),
           SpacingFoundation.verticalSpace24,

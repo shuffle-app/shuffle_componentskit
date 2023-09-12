@@ -172,7 +172,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         Text(
                           'Logo',
                           style: theme?.regularTextTheme.labelSmall,
-                        ).paddingSymmetric(horizontal: horizontalPadding),
+                        ).paddingOnly(right: horizontalPadding),
                         if (_placeToEdit.logo != null)
                           CircularAvatar(
                               height: kIsWeb? 40 : 40.h,
@@ -217,7 +217,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Text(
-                            '${_placeToEdit.openFrom == null ? 'select time' : '${_placeToEdit.openFrom!.hour}:${_placeToEdit.openFrom!.minute} ${_placeToEdit.openFrom!.period.name}'}  ',
+                            _placeToEdit.openFrom == null ? 'select time' : normalizedTi(_placeToEdit.openFrom),
                             style: theme?.boldTextTheme.body),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
@@ -243,7 +243,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Text(
-                            '${_placeToEdit.openTo == null ? 'select time' : '${_placeToEdit.openTo!.hour}:${_placeToEdit.openTo!.minute} ${_placeToEdit.openTo!.period.name}'}  ',
+                            _placeToEdit.openTo == null ? 'select time' : normalizedTi(_placeToEdit.openTo),
                             style: theme?.boldTextTheme.body),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(

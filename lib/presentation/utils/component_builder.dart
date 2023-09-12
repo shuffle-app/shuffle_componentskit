@@ -19,7 +19,7 @@ buildComponent(BuildContext context, UiBaseModel configuration,
               bottomBar: componentWidgets.bottomBar));
 
     case PageBuilderType.page:
-      return context.push(componentWidgets.child);
+      return context.push(componentWidgets.child,useRootNavigator: componentWidgets.useRootNavigator);
     case PageBuilderType.dialog:
       return kit.showUiKitAlertDialog(
           context, componentWidgets.alertDialogData!);
@@ -30,6 +30,7 @@ class ComponentBuilder {
   final Widget child;
   final Widget? bottomBar;
   final kit.AlertDialogData? alertDialogData;
+  final bool useRootNavigator;
 
-  ComponentBuilder({required this.child, this.bottomBar, this.alertDialogData});
+  ComponentBuilder({required this.child, this.bottomBar, this.alertDialogData,this.useRootNavigator = false});
 }
