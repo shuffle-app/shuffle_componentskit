@@ -103,7 +103,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
                 UiKitInputFieldNoFill(
                   controller: contactPersonController,
                   label: 'Contact Person',
-                  validator: titleValidator,
+                  validator: contactPersonValidator,
                   keyboardType: TextInputType.name,
                 ),
                 SpacingFoundation.verticalSpace16,
@@ -158,7 +158,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
       bottomNavigationBar: AnimatedOpacity(
         duration: const Duration(milliseconds: 200),
         curve: Curves.bounceIn,
-        opacity: MediaQuery.of(context).viewInsets.bottom == 0 ? 1 : 0,
+        opacity: MediaQuery.viewInsetsOf(context).bottom == 0 ? 1 : 0,
         child: context
             .gradientButton(
           data: BaseUiKitButtonData(

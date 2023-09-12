@@ -107,6 +107,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                 data: BaseUiKitButtonData(
                   text: 'Create place',
                   onPressed: onCreatePlace,
+                  fit: ButtonFit.fitWidth
                 ),
               ),
             ],
