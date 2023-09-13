@@ -266,7 +266,10 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
                           blurred: true,
                           small: true,
                           data: BaseUiKitButtonData(
-                            onPressed: () => widget.onDislike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
+                            onPressed: () {
+                              dislikeController.forward(from: 0);
+                              widget.onDislike?.call(widget.shuffle.items[controller.state?.index ?? 0].title);
+                            },
                             icon: ImageWidget(
                               svgAsset: svg.heartBrokenFill,
                               color: Colors.white,
@@ -297,7 +300,10 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
                           blurred: true,
                           small: true,
                           data: BaseUiKitButtonData(
-                            onPressed: () => widget.onLike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
+                            onPressed: () {
+                              likeController.forward(from: 0);
+                              widget.onLike?.call(widget.shuffle.items[controller.state?.index ?? 0].title);
+                            },
                             icon: ImageWidget(
                               svgAsset: svg.heartFill,
                               color: Colors.white,
