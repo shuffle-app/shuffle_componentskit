@@ -23,7 +23,7 @@ class SettingsComponent extends StatelessWidget {
     final bodyAligment = model.positionModel?.bodyAlignment;
 
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties?.keys.toList();
-    List<UiKitCustomTab> tabs = tabBar?.map((e) => UiKitCustomTab(title: e.toUpperCase() ?? '')).toList() ?? [];
+    List<UiKitCustomTab> tabs = tabBar?.map((e) => UiKitCustomTab(title: e.toUpperCase())).toList() ?? [];
 
     final textStyle = context.uiKitTheme?.boldTextTheme;
     const divider = Divider(
@@ -75,26 +75,26 @@ class SettingsComponent extends StatelessWidget {
       children: [
         if (model.content.title != null)
           Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: titleAligment.crossAxisAlignment,
-            mainAxisAlignment: titleAligment.mainAxisAlignment,
-            children: [
-              Text(
-                model.content.title![ContentItemType.text]?.properties?.keys.first ?? 'Settings',
-                style: textStyle?.title1,
-              ),
-              SpacingFoundation.verticalSpace12
-            ]),
-      if (tabs.isNotEmpty) ...[
-        SpacingFoundation.verticalSpace16,
-        UiKitCustomTabBar(
-          selectedTab: selectedContentType?.toUpperCase(),
-          onTappedTab: (index) => onTabSwitched?.call(tabs.keys.elementAt(index)),
-          tabs: tabs.keys.map((e) => UiKitCustomTab(title: e.toUpperCase())).toList(),
-        ),
-        SpacingFoundation.verticalSpace12,
-      ],
-      Theme(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: titleAligment.crossAxisAlignment,
+              mainAxisAlignment: titleAligment.mainAxisAlignment,
+              children: [
+                Text(
+                  model.content.title![ContentItemType.text]?.properties?.keys.first ?? 'Settings',
+                  style: textStyle?.title1,
+                ),
+                SpacingFoundation.verticalSpace12
+              ]),
+        if (tabs.isNotEmpty) ...[
+          SpacingFoundation.verticalSpace16,
+          UiKitCustomTabBar(
+            selectedTab: selectedContentType?.toUpperCase(),
+            onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title),
+            tabs: tabs,
+          ),
+          SpacingFoundation.verticalSpace12,
+        ],
+        Theme(
           data: ThemeData(textButtonTheme: TextButtonThemeData(style: context.uiKitTheme?.textButtonStyle)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
