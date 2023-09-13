@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shuffle_components_kit/presentation/components/donation/ui_donation_user_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 part 'donation_tab_menu.dart';
 

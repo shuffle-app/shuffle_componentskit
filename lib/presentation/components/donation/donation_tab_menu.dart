@@ -1,3 +1,5 @@
+// ignore_for_file: prefer-single-widget-per-file
+
 part of 'donation_component.dart';
 
 class _DonationTabMenu extends StatefulWidget {
@@ -38,6 +40,8 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final group = AutoSizeGroup();
+
     return Column(
       children: [
         UiKitCustomTabBar(
@@ -45,17 +49,17 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
             UiKitCustomTab(
               title: 'DAY',
               height: 24.h,
-              isAutoSizeEnabled: true,
+              group: group,
             ),
             UiKitCustomTab(
               title: 'MONTH',
               height: 24.h,
-              isAutoSizeEnabled: true,
+              group: group,
             ),
             UiKitCustomTab(
               title: 'YEAR',
               height: 24.h,
-              isAutoSizeEnabled: true,
+              group: group,
             ),
           ],
           onTappedTab: (page) => _jumpToPage(page),
@@ -67,63 +71,9 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
             physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
             children: [
-              ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: widget.topDayUsers.length,
-                itemBuilder: (_, index) {
-                  final user = widget.topDayUsers[index];
-
-                  return UiKitDonationCard(
-                    number: user.position,
-                    title: user.nikcname,
-                    subtitle: '${user.name} ${user.surname}',
-                    points: index < 3 ? '${user.sum}00' : null,
-                    sum: user.sum.toString(),
-                    isStarEnabled: user.isStarEnabled,
-                  );
-                },
-                separatorBuilder: (_, __) => SpacingFoundation.verticalSpace24,
-              ),
-              ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: widget.topMonthUsers.length,
-                itemBuilder: (_, index) {
-                  final user = widget.topMonthUsers[index];
-
-                  return UiKitDonationCard(
-                    number: user.position,
-                    title: user.nikcname,
-                    subtitle: '${user.name} ${user.surname}',
-                    points: index < 3 ? '${user.sum}00' : null,
-                    sum: user.sum.toString(),
-                    isStarEnabled: user.isStarEnabled,
-                  );
-                },
-                separatorBuilder: (_, __) => SpacingFoundation.verticalSpace24,
-              ),
-              ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: widget.topYearUsers.length,
-                itemBuilder: (_, index) {
-                  final user = widget.topYearUsers[index];
-
-                  return UiKitDonationCard(
-                    number: user.position,
-                    title: user.nikcname,
-                    subtitle: '${user.name} ${user.surname}',
-                    points: index < 3 ? '${user.sum}00' : null,
-                    sum: user.sum.toString(),
-                    isStarEnabled: user.isStarEnabled,
-                  );
-                },
-                separatorBuilder: (_, __) => SpacingFoundation.verticalSpace24,
-              )
+              _UserListView(users: widget.topDayUsers),
+              _UserListView(users: widget.topMonthUsers),
+              _UserListView(users: widget.topYearUsers),
             ],
           ),
         ),
@@ -137,6 +87,35 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
           ),
         ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       ],
+    );
+  }
+}
+
+class _UserListView extends StatelessWidget {
+  const _UserListView({required this.users});
+
+  final List<UiDonationUserModel> users;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      itemCount: users.length,
+      itemBuilder: (_, index) {
+        final user = users[index];
+
+        return UiKitDonationCard(
+          number: user.position,
+          title: user.nikcname,
+          subtitle: '${user.name} ${user.surname}',
+          points: index < 3 ? '${user.sum}00' : null,
+          sum: user.sum.toString(),
+          isStarEnabled: user.isStarEnabled,
+        );
+      },
+      separatorBuilder: (_, __) => SpacingFoundation.verticalSpace24,
     );
   }
 }
