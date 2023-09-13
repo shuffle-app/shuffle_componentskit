@@ -77,15 +77,20 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
             ],
           ),
         ),
-        SpacingFoundation.verticalSpace16,
-        ConstrainedBox(
-          constraints: BoxConstraints.expand(height: 40.h),
-          child: OrdinaryButtonWithIcon(
-            onPressed: () => widget.onNextButtonTap?.call(),
-            icon: const Icon(CupertinoIcons.chevron_down),
-            text: 'NEXT 7 PEOPLE',
+        if (widget.onNextButtonTap != null)
+          Column(
+            children: [
+              SpacingFoundation.verticalSpace16,
+              ConstrainedBox(
+                constraints: BoxConstraints.expand(height: 40.h),
+                child: OrdinaryButtonWithIcon(
+                  onPressed: () => widget.onNextButtonTap?.call(),
+                  icon: const Icon(CupertinoIcons.chevron_down),
+                  text: 'NEXT 7 PEOPLE',
+                ),
+              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            ],
           ),
-        ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       ],
     );
   }
@@ -108,9 +113,9 @@ class _UserListView extends StatelessWidget {
 
         return UiKitDonationCard(
           number: user.position,
-          title: user.nikcname,
+          title: user.nickname,
           subtitle: '${user.name} ${user.surname}',
-          points: index < 3 ? '${user.sum}00' : null,
+          points: user.points,
           sum: user.sum.toString(),
           isStarEnabled: user.isStarEnabled,
         );

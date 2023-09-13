@@ -918,6 +918,7 @@ class ComponentsTestPage extends StatelessWidget {
                     onMapTap: () {},
                     onAskDonationTap: () {},
                     donationTitle: 'Help me visit Nusr-Et restaurant',
+                    donationNumber: 1,
                     actualSum: 310,
                     sum: 900,
                     topDayUsers: List.generate(
@@ -925,10 +926,11 @@ class ComponentsTestPage extends StatelessWidget {
                       (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
-                        nikcname: '@misswow2022',
+                        nickname: '@misswow2022',
                         name: 'Natalie',
                         surname: 'White',
                         isStarEnabled: true,
+                        points: index < 3 ? '364 000' : null,
                       ),
                     ),
                     topMonthUsers: List.generate(
@@ -936,10 +938,11 @@ class ComponentsTestPage extends StatelessWidget {
                       (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
-                        nikcname: '@misswow2022',
+                        nickname: '@misswow2022',
                         name: 'Natalie',
                         surname: 'White',
                         isStarEnabled: true,
+                        points: index < 3 ? '364 000' : null,
                       ),
                     ),
                     topYearUsers: List.generate(
@@ -947,10 +950,11 @@ class ComponentsTestPage extends StatelessWidget {
                       (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
-                        nikcname: '@misswow2022',
+                        nickname: '@misswow2022',
                         name: 'Natalie',
                         surname: 'White',
                         isStarEnabled: true,
+                        points: index < 3 ? '364 000' : null,
                       ),
                     ),
                   ),

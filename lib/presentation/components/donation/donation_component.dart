@@ -17,11 +17,13 @@ class DonationComponent extends StatelessWidget {
     required this.topYearUsers,
     required this.donationTitle,
     required this.topMonthUsers,
+    required this.donationNumber,
   });
 
   final double sum;
   final double actualSum;
   final String donationTitle;
+  final int donationNumber;
 
   final VoidCallback? onMapTap;
   final VoidCallback? onAskDonationTap;
@@ -42,7 +44,7 @@ class DonationComponent extends StatelessWidget {
         Text('Ask people', style: boldTextTheme?.title1),
         SpacingFoundation.verticalSpace16,
         DonationInfoIndicatorCard(
-          number: '1',
+          number: donationNumber.toString(),
           title: donationTitle,
           sum: sum,
           actualSum: actualSum,
