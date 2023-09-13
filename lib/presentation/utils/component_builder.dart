@@ -7,7 +7,7 @@ buildComponent(BuildContext context, UiBaseModel configuration,
     ComponentBuilder componentWidgets) {
   //TODO romancores: add later flavors
   if (kDebugMode) {
-    SnackBarUtils.show(
+    kit.SnackBarUtils.show(
         message: 'version ${configuration.version}', context: context);
   }
   switch (configuration.pageBuilderType) {
