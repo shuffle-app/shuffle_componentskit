@@ -202,6 +202,7 @@ class _OnboardingComponentState extends State<OnboardingComponent>
                 return context
                     .buttonWithProgress(
                   data: BaseUiKitButtonData(
+                    loading: isLoading,
                     text: 'NEXT >>>',
                     onPressed: isLoading
                         ? null
@@ -225,7 +226,6 @@ class _OnboardingComponentState extends State<OnboardingComponent>
                   progress: _progressAnimationController.value,
                   blurred: true,
                 )
-                    .loadingWrap(isLoading)
                     .paddingSymmetric(horizontal: horizontalMargin);
               },
             ),

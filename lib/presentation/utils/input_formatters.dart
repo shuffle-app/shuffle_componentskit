@@ -8,7 +8,7 @@ final dateInputFormatter = MaskTextInputFormatter(
 );
 
 final americanInputFormatter = MaskTextInputFormatter(
-  mask: '### ### ## ##',
+  mask: '# ### ### ## ##',
   filter: {
     '#': RegExp(r'[0-9]'),
   },

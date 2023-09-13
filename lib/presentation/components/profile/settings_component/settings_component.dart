@@ -5,11 +5,13 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class SettingsComponent extends StatelessWidget {
   final ValueChanged<String?> callback;
   final ValueChanged<String>? onTabSwitched;
+  final String? selectedContentType;
 
   const SettingsComponent({
     Key? key,
     required this.callback,
     this.onTabSwitched,
+    this.selectedContentType,
   }) : super(key: key);
 
   @override
@@ -81,19 +83,19 @@ class SettingsComponent extends StatelessWidget {
                 model.content.title![ContentItemType.text]?.properties?.keys.first ?? 'Settings',
                 style: textStyle?.title1,
               ),
-              SpacingFoundation.verticalSpace16
-            ],
-          ),
-        if (tabs.length >= 2)
-          UiKitCustomTabBar(
-            tabs: tabs,
-            onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title),
-          ),
+              SpacingFoundation.verticalSpace12
+            ]),
+      if (tabs.isNotEmpty) ...[
+        SpacingFoundation.verticalSpace16,
+        UiKitCustomTabBar(
+          selectedTab: selectedContentType?.toUpperCase(),
+          onTappedTab: (index) => onTabSwitched?.call(tabs.keys.elementAt(index)),
+          tabs: tabs.keys.map((e) => UiKitCustomTab(title: e.toUpperCase())).toList(),
+        ),
         SpacingFoundation.verticalSpace12,
-        Theme(
-          data: ThemeData(
-            textButtonTheme: TextButtonThemeData(style: context.uiKitTheme?.textButtonStyle),
-          ),
+      ],
+      Theme(
+          data: ThemeData(textButtonTheme: TextButtonThemeData(style: context.uiKitTheme?.textButtonStyle)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: bodyAligment.crossAxisAlignment,

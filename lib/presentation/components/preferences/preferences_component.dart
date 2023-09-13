@@ -124,8 +124,9 @@ class PreferencesComponent extends StatelessWidget {
                       .button(
                           data: BaseUiKitButtonData(
                               text: 'start to explore'.toUpperCase(),
+                              loading: isLoading,
                               onPressed: onSubmit))
-                      .loadingWrap(isLoading))
+                     )
               .paddingSymmetric(horizontal: horizontalMargin, vertical: 20),
         ));
   }

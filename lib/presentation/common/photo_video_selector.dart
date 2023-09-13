@@ -23,7 +23,7 @@ class PhotoVideoSelector extends StatelessWidget {
       {super.key,
       this.photos = const [],
       this.videos = const [],
-      this.itemsSize = const Size(60, 60),
+      this.itemsSize = const Size(75, 75),
       required this.onPhotoAddRequested,
       required this.onVideoAddRequested,
       required this.onPhotoReorderRequested,
@@ -113,9 +113,8 @@ class PhotoVideoSelector extends StatelessWidget {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) =>
-                            ReorderableDragStartListener(
-                                index: index,
-                                child: Stack(
+                           Stack(
+                                    key: ValueKey(videos[index].link),
                                     alignment: Alignment.topRight,
                                     children: [
                                       ClipPath(
@@ -139,14 +138,14 @@ class PhotoVideoSelector extends StatelessWidget {
                                                 height: 6,
                                                 width: 6,
                                               )))
-                                    ])),
+                                    ]),
                         itemCount: videos.length,
                         onReorder: onVideoReorderRequested))
               ]),
               context
                   .outlinedButton(
                     data: BaseUiKitButtonData(
-                        onPressed: onPhotoAddRequested,
+                        onPressed: onVideoAddRequested,
                         icon: ImageWidget(
                           svgAsset: GraphicsFoundation.instance.svg.videoPlus,
                           color: Colors.white,

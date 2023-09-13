@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:ui';
 import 'dart:developer';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -18,22 +18,23 @@ class ShuffleComponent extends StatefulWidget {
   final VoidCallback? onHowItWorksPoped;
   final List<String> favoriteTitles;
 
-  const ShuffleComponent({Key? key,
-    required this.shuffle,
-    this.onLike,
-    this.favoriteTitles = const [],
-    this.onDislike,
-    this.onHowItWorksPoped,
-    this.onCardTap,
-    this.onEnd,
-    this.onFavorite})
+  const ShuffleComponent(
+      {Key? key,
+      required this.shuffle,
+      this.onLike,
+      this.favoriteTitles = const [],
+      this.onDislike,
+      this.onHowItWorksPoped,
+      this.onCardTap,
+      this.onEnd,
+      this.onFavorite})
       : super(key: key);
 
   @override
   State<ShuffleComponent> createState() => ShuffleComponentState();
 }
 
-class ShuffleComponentState extends State<ShuffleComponent> {
+class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderStateMixin {
   late final ComponentShuffleModel model;
   final ValueNotifier<int> indexNotifier = ValueNotifier<int>(0);
   bool isEnded = false;
@@ -46,17 +47,23 @@ class ShuffleComponentState extends State<ShuffleComponent> {
   String lastAddedKey = '';
   FileInfo? lastFile;
   late Future<FileInfo?> currentFutureMayBeImage =
-  CustomCacheManager.imageInstance.getFileFromCache(_getKey(widget.shuffle.items.first.imageLink ?? ''));
+      CustomCacheManager.imageInstance.getFileFromCache(_getKey(widget.shuffle.items.first.imageLink ?? ''));
+
+  late final dislikeController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 1, milliseconds: 500),
+    value: 0,
+  );
+  late final likeController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 1, milliseconds: 500),
+    value: 0,
+  );
 
   @override
   void initState() {
     backImageKey = UniqueKey();
-    final config =
-        GlobalComponent
-            .of(context)
-            ?.globalConfiguration
-            .appConfig
-            .content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
     unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
 
@@ -87,6 +94,8 @@ class ShuffleComponentState extends State<ShuffleComponent> {
   @override
   void dispose() {
     controller.dispose();
+    likeController.dispose();
+    dislikeController.dispose();
     super.dispose();
   }
 
@@ -100,68 +109,58 @@ class ShuffleComponentState extends State<ShuffleComponent> {
     return Stack(
       children: [
         FutureBuilder(
-            future: currentFutureMayBeImage,
-            builder: (context, snapshot) {
-              Widget? child;
-              if (snapshot.connectionState == ConnectionState.done) {
-                // log('here is snapshot with ${snapshot.data?.file.path}', name: 'ShuffleComponent');
-                if (snapshot.data != null ) {
+          future: currentFutureMayBeImage,
+          builder: (context, snapshot) {
+            Widget? child;
+            if (snapshot.connectionState == ConnectionState.done) {
+              // log('here is snapshot with ${snapshot.data?.file.path}', name: 'ShuffleComponent');
+              if (snapshot.data != null) {
                 // if (snapshot.data != null && lastFile?.file.path != (snapshot.data as FileInfo).file.path) {
-                  // WidgetsBinding.instance.addPostFrameCallback((_) =>
-                  //     setState(() {
-                        lastFile = snapshot.data as FileInfo;
-                      // }));
+                // WidgetsBinding.instance.addPostFrameCallback((_) =>
+                //     setState(() {
+                lastFile = snapshot.data as FileInfo;
+                // }));
 
-
-                  child = ImageWidget(
-                    link: ['bin', 'avif'].contains(lastFile!.file.path
-                        .split('.')
-                        .last)
-                        ? lastAddedKey
-                        : lastFile!.file.path,
-                    fit: BoxFit.cover,
-                    height: 1.sh,
-                    width: 1.sw,
-                  );
-                }
-                else {
-                  log('here is snapshot with null', name: 'ShuffleComponent');
-                  //waiting here the cache image network job to cache our file
-                  Future.delayed(const Duration(seconds: 2), () {
-                    setState(() {
-                      currentFutureMayBeImage = CustomCacheManager.imageInstance.getFileFromCache(lastAddedKey);
-                    });
+                child = ImageWidget(
+                  link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
+                  fit: BoxFit.cover,
+                  height: 1.sh,
+                  width: 1.sw,
+                );
+              } else {
+                log('here is snapshot with null', name: 'ShuffleComponent');
+                //waiting here the cache image network job to cache our file
+                Future.delayed(const Duration(seconds: 2), () {
+                  setState(() {
+                    currentFutureMayBeImage = CustomCacheManager.imageInstance.getFileFromCache(lastAddedKey);
                   });
-                }
+                });
               }
-              if (lastFile != null && child ==null) {
-                child =
-                    ImageWidget(
-                      link: ['bin', 'avif'].contains(lastFile!
-                          .file.path
-                          .split('.')
-                          .last)
-                          ? lastAddedKey
-                          : lastFile!.file.path,
-                      fit: BoxFit.cover,
-                      height: 1.sh,
-                      width: 1.sw,
-                    );
-              }
+            }
+            if (lastFile != null && child == null) {
+              child = ImageWidget(
+                link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
+                fit: BoxFit.cover,
+                height: 1.sh,
+                width: 1.sw,
+              );
+            }
 
-              return AnimatedSwitcher(
-                  key: backImageKey,
-                  switchInCurve: Curves.easeInOut,
-                  duration: animDuration,
-                  child: child ?? const ColoredBox(
+            return AnimatedSwitcher(
+              key: backImageKey,
+              switchInCurve: Curves.easeInOut,
+              duration: animDuration,
+              child: child ??
+                  const ColoredBox(
                     color: UiKitColors.darkNeutral100,
                     child: SizedBox(
                       width: double.infinity,
                       height: double.infinity,
                     ),
-                  ));
-            }),
-
+                  ),
+            );
+          },
+        ),
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
           child: Container(
@@ -177,129 +176,138 @@ class ShuffleComponentState extends State<ShuffleComponent> {
               crossAxisAlignment: bodyAlignment.crossAxisAlignment,
               children: [
                 SizedBox(
-                    width: double.infinity,
-                    // height: 50.h,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      // fit: StackFit.expand,
-                      children: [
-                        Text('Try\nyourself', style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
-                        if (widget.shuffle.showHowItWorks && model.content.title?[ContentItemType.hintDialog] != null)
-                          HowItWorksWidget(
-                              customOffset: Offset(0.35.sw, 25),
-                              element: model.content.title![ContentItemType.hintDialog]!,
-                              onPop: widget.onHowItWorksPoped),
-                      ],
-                    )).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
+                  width: double.infinity,
+                  // height: 50.h,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
+                    // fit: StackFit.expand,
+                    children: [
+                      Text('Try\nyourself', style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
+                      if (widget.shuffle.showHowItWorks && model.content.title?[ContentItemType.hintDialog] != null)
+                        HowItWorksWidget(
+                            customOffset: Offset(0.35.sw, 25),
+                            element: model.content.title![ContentItemType.hintDialog]!,
+                            onPop: widget.onHowItWorksPoped),
+                    ],
+                  ),
+                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
                 SizedBox(
                   height: 1.sh / 1.6,
                   width: 1.sw - 24,
-                  child: Stack(fit: StackFit.passthrough, children: [
-                    AnimatedScale(
-                      scale: isEnded ? 1 : 0.3,
-                      duration: animDuration,
-                      child: isEndedWidget,
-                    ),
-                    if (widget.shuffle.items.isNotEmpty)
-                      UiKitCardSwiper(
-                        onEnd: widget.onEnd,
-                        onSwipe: (previousIndex,
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    children: [
+                      AnimatedScale(
+                        scale: isEnded ? 1 : 0.3,
+                        duration: animDuration,
+                        child: isEndedWidget,
+                      ),
+                      if (widget.shuffle.items.isNotEmpty)
+                        UiKitCardSwiper(
+                          likeController: likeController,
+                          dislikeController: dislikeController,
+                          onEnd: widget.onEnd,
+                          onSwipe: (
+                            previousIndex,
                             currentIndex,
-                            direction,) {
-                          if (currentIndex == null) return true;
-                          indexNotifier.value = currentIndex;
+                            direction,
+                          ) {
+                            if (currentIndex == null) return true;
+                            indexNotifier.value = currentIndex;
 
-                          _getColor(widget.shuffle.items[currentIndex].imageLink ?? '');
+                            _getColor(widget.shuffle.items[currentIndex].imageLink ?? '');
 
-                          switch (direction) {
-                            case CardSwiperDirection.bottom:
-                              return true;
-                            case CardSwiperDirection.top:
-                            // if (widget.onFavorite != null && (model.showFavorite ?? true)) {
-                            //   widget.onFavorite!(widget.shuffle.items[currentIndex].title);
-                            // } else {
-                            //   return false;
-                            // }
-                              return true;
-                            case CardSwiperDirection.none:
-                              return false;
-                            case CardSwiperDirection.left:
-                            // if (widget.onDislike != null) {
-                            //   widget.onDislike!(widget.shuffle.items[currentIndex].title);
-                            // } else {
-                            //   return false;
-                            // }
-                              return true;
-                            case CardSwiperDirection.right:
-                            // if (widget.onLike != null) {
-                            //   widget.onLike!(widget.shuffle.items[currentIndex].title);
-                            // } else {
-                            //   return false;
-                            // }
-                              return true;
-                          }
-                        },
-                        cards: widget.shuffle.items,
-                        controller: controller,
-                      )
-                  ]),
+                            switch (direction) {
+                              case CardSwiperDirection.bottom:
+                                return true;
+                              case CardSwiperDirection.top:
+                                // if (widget.onFavorite != null && (model.showFavorite ?? true)) {
+                                //   widget.onFavorite!(widget.shuffle.items[currentIndex].title);
+                                // } else {
+                                //   return false;
+                                // }
+                                return true;
+                              case CardSwiperDirection.none:
+                                return false;
+                              case CardSwiperDirection.left:
+                                // if (widget.onDislike != null) {
+                                //   widget.onDislike!(widget.shuffle.items[currentIndex].title);
+                                // } else {
+                                //   return false;
+                                // }
+                                return true;
+                              case CardSwiperDirection.right:
+                                // if (widget.onLike != null) {
+                                //   widget.onLike!(widget.shuffle.items[currentIndex].title);
+                                // } else {
+                                //   return false;
+                                // }
+                                return true;
+                            }
+                          },
+                          cards: widget.shuffle.items,
+                          controller: controller,
+                        )
+                    ],
+                  ),
                 ),
                 SpacingFoundation.verticalSpace4,
                 AnimatedOpacity(
-                    opacity: isEnded || widget.shuffle.items.isEmpty ? 0 : 1,
-                    duration: animDuration,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: () {
-                        final svg = GraphicsFoundation.instance.svg;
+                  opacity: isEnded || widget.shuffle.items.isEmpty ? 0 : 1,
+                  duration: animDuration,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: () {
+                      final svg = GraphicsFoundation.instance.svg;
 
-                        return [
+                      return [
+                        context.bouncingButton(
+                          blurred: true,
+                          small: true,
+                          data: BaseUiKitButtonData(
+                            onPressed: () => widget.onDislike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
+                            icon: ImageWidget(
+                              svgAsset: svg.heartBrokenFill,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SpacingFoundation.horizontalSpace24,
+                        if (model.showFavorite ?? true)
                           context.bouncingButton(
                             blurred: true,
-                            small: true,
                             data: BaseUiKitButtonData(
-                                onPressed: () =>
-                                    widget.onDislike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
-                                icon: ImageWidget(
-                                  svgAsset: svg.heartBrokenFill,
+                              onPressed: () => widget.onFavorite?.call(widget.shuffle.items[indexNotifier.value].title),
+                              icon: ValueListenableBuilder(
+                                valueListenable: indexNotifier,
+                                builder: (_, value, __) => ImageWidget(
+                                  svgAsset: widget.shuffle.items.isNotEmpty &&
+                                          widget.favoriteTitles
+                                              .contains(widget.shuffle.items[value % widget.shuffle.items.length].title)
+                                      ? svg.starFill
+                                      : svg.starOutline,
                                   color: Colors.white,
-                                )),
+                                ),
+                              ),
+                            ),
                           ),
-                          SpacingFoundation.horizontalSpace24,
-                          if (model.showFavorite ?? true)
-                            context.bouncingButton(
-                                blurred: true,
-                                data: BaseUiKitButtonData(
-                                  onPressed: () =>
-                                      widget.onFavorite?.call(widget.shuffle.items[indexNotifier.value].title),
-                                  icon: ValueListenableBuilder(
-                                      valueListenable: indexNotifier,
-                                      builder: (_, value, __) =>
-                                          ImageWidget(
-                                            svgAsset: widget.shuffle.items.isNotEmpty &&
-                                                widget.favoriteTitles.contains(
-                                                    widget.shuffle.items[value % widget.shuffle.items.length].title)
-                                                ? svg.starFill
-                                                : svg.starOutline,
-                                            color: Colors.white,
-                                          )),
-                                )),
-                          SpacingFoundation.horizontalSpace24,
-                          context.bouncingButton(
-                            blurred: true,
-                            small: true,
-                            data: BaseUiKitButtonData(
-                                onPressed: () =>
-                                    widget.onLike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
-                                icon: ImageWidget(
-                                  svgAsset: svg.heartFill,
-                                  color: Colors.white,
-                                )),
+                        SpacingFoundation.horizontalSpace24,
+                        context.bouncingButton(
+                          blurred: true,
+                          small: true,
+                          data: BaseUiKitButtonData(
+                            onPressed: () => widget.onLike?.call(widget.shuffle.items[controller.state?.index ?? 0].title),
+                            icon: ImageWidget(
+                              svgAsset: svg.heartFill,
+                              color: Colors.white,
+                            ),
                           ),
-                        ];
-                      }(),
-                    )),
+                        ),
+                      ];
+                    }(),
+                  ),
+                ),
               ],
             ),
           ),
