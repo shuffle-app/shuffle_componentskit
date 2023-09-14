@@ -22,6 +22,9 @@ class SettingsComponent extends StatelessWidget {
     final titleAligment = model.positionModel?.titleAlignment;
     final bodyAligment = model.positionModel?.bodyAlignment;
 
+    final tabBar = model.content.body?[ContentItemType.tabBar]?.properties?.keys.toList();
+    List<UiKitCustomTab> tabs = tabBar?.map((e) => UiKitCustomTab(title: e.toUpperCase())).toList() ?? [];
+
     final textStyle = context.uiKitTheme?.boldTextTheme;
     const divider = Divider(
       height: 1,
@@ -68,58 +71,66 @@ class SettingsComponent extends StatelessWidget {
     }
     redBtnDataList.sort((a, b) => redButtons[a.text]!.sortNumber!.compareTo(redButtons[b.text]!.sortNumber!));
 
-    final tabs = model.content.body?[ContentItemType.tabBar]?.properties ?? {};
-
-    return Column(children: [
-      if (model.content.title != null)
-        Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: titleAligment.crossAxisAlignment,
-            mainAxisAlignment: titleAligment.mainAxisAlignment,
-            children: [
-              Text(
-                model.content.title![ContentItemType.text]?.properties?.keys.first ?? 'Settings',
-                style: textStyle?.title1,
-              ),
-              SpacingFoundation.verticalSpace12
-            ]),
-      if (tabs.isNotEmpty) ...[
-        SpacingFoundation.verticalSpace16,
-        UiKitCustomTabBar(
-          selectedTab: selectedContentType?.toUpperCase(),
-          onTappedTab: (index) => onTabSwitched?.call(tabs.keys.elementAt(index)),
-          tabs: tabs.keys.map((e) => UiKitCustomTab(title: e.toUpperCase())).toList(),
-        ),
-        SpacingFoundation.verticalSpace12,
-      ],
-      Theme(
+    return Column(
+      children: [
+        if (model.content.title != null)
+          Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: titleAligment.crossAxisAlignment,
+              mainAxisAlignment: titleAligment.mainAxisAlignment,
+              children: [
+                Text(
+                  model.content.title![ContentItemType.text]?.properties?.keys.first ?? 'Settings',
+                  style: textStyle?.title1,
+                ),
+                SpacingFoundation.verticalSpace12
+              ]),
+        if (tabs.isNotEmpty) ...[
+          SpacingFoundation.verticalSpace16,
+          UiKitCustomTabBar(
+            selectedTab: selectedContentType?.toUpperCase(),
+            onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title),
+            tabs: tabs,
+          ),
+          SpacingFoundation.verticalSpace12,
+        ],
+        Theme(
           data: ThemeData(textButtonTheme: TextButtonThemeData(style: context.uiKitTheme?.textButtonStyle)),
           child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: bodyAligment.crossAxisAlignment,
-              mainAxisAlignment: bodyAligment.mainAxisAlignment,
-              children: btnDataList
-                  .map(
-                    (e) => [context.button(isTextButton: true, data: e), divider],
-                  )
-                  .expand((element) => element)
-                  .toList())),
-      Theme(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: bodyAligment.crossAxisAlignment,
+            mainAxisAlignment: bodyAligment.mainAxisAlignment,
+            children: btnDataList
+                .map(
+                  (e) => [context.button(isTextButton: true, data: e), divider],
+                )
+                .expand((element) => element)
+                .toList(),
+          ),
+        ),
+        Theme(
           data: ThemeData(
-              textButtonTheme: TextButtonThemeData(
-                  style: context.uiKitTheme?.textButtonStyle
-                      .copyWith(foregroundColor: MaterialStateProperty.resolveWith((states) => UiKitColors.error)))),
+            textButtonTheme: TextButtonThemeData(
+              style: context.uiKitTheme?.textButtonStyle.copyWith(
+                foregroundColor: MaterialStateProperty.resolveWith((states) => UiKitColors.error),
+              ),
+            ),
+          ),
           child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: bodyAligment.crossAxisAlignment,
-              mainAxisAlignment: bodyAligment.mainAxisAlignment,
-              children: [
-                context.button(isTextButton: true, data: redBtnDataList.first),
-                divider,
-                context.button(isTextButton: true, data: redBtnDataList.last),
-              ]))
-    ]).paddingSymmetric(
-        horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0,
-        vertical: model.positionModel?.verticalMargin?.toDouble() ?? 0);
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: bodyAligment.crossAxisAlignment,
+            mainAxisAlignment: bodyAligment.mainAxisAlignment,
+            children: [
+              context.button(isTextButton: true, data: redBtnDataList.first),
+              divider,
+              context.button(isTextButton: true, data: redBtnDataList.last),
+            ],
+          ),
+        ),
+      ],
+    ).paddingSymmetric(
+      horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0,
+      vertical: model.positionModel?.verticalMargin?.toDouble() ?? 0,
+    );
   }
 }
