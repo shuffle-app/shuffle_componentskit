@@ -21,12 +21,12 @@ class DonationComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         Text('Ask people', style: boldTextTheme?.title1),
         SpacingFoundation.verticalSpace16,
-        const DonationInfoIndicatorCard(
-          number: '1',
-          title: 'Help me visit Nusr-Et restaurant',
-          sum: 900,
-          actualSum: 310,
-        ),
+        // const DonationInfoIndicatorCard(
+        //   number: '1',
+        //   title: 'Help me visit Nusr-Et restaurant',
+        //   sum: 900,
+        //   actualSum: 310,
+        // ),
         SpacingFoundation.verticalSpace16,
         Center(
           child: context.gradientButton(
@@ -51,7 +51,7 @@ class DonationComponent extends StatelessWidget {
                 style: boldTextTheme?.subHeadline,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               SpacingFoundation.verticalSpace16,
-              const DonationTabMenu(),
+              // const DonationTabMenu(),
               SpacingFoundation.verticalSpace16,
             ],
           ),

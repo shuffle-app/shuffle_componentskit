@@ -62,21 +62,27 @@ class EditProfileDefaultComponent extends StatelessWidget {
         autoImplyLeading: true,
         centerTitle: true,
         appBarBody: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CircularAvatar(
-              avatarUrl: avatarUrl ?? '',
-              name: nameController.text,
-              height: 48,
-            ),
-            SpacingFoundation.verticalSpace4,
             InkWell(
-                onTap: onPhotoChangeRequested,
-                child: Text(
-                  'Change Photo',
-                  style: textTheme?.caption2Bold,
-                )),
+              onTap: onPhotoChangeRequested,
+              child: Ink(
+                child: CircularAvatar(
+                  avatarUrl: avatarUrl ?? '',
+                  name: nameController.text,
+                  height: 0.15.sw,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: onPhotoChangeRequested,
+              child: Text(
+                'Change Photo',
+                style: textTheme?.caption2Bold,
+              ),
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -89,6 +95,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 UiKitInputFieldNoFill(
                   controller: nameController,
                   label: 'Name',
+                  hintText: 'Name',
                   validator: nameValidator,
                   keyboardType: TextInputType.name,
                 ),
@@ -96,12 +103,14 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 UiKitInputFieldNoFill(
                   controller: nickNameController,
                   label: 'Nickname',
+                  hintText: 'Nickname',
                   validator: nameValidator,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: dateOfBirthController,
                   label: 'Date of birth',
+                  hintText: 'Date of birth',
                   validator: dateOfBirthValidator,
                   inputFormatters: [dateInputFormatter],
                 ),
@@ -110,6 +119,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   prefixText: '+',
                   controller: phoneController,
                   label: 'Phone',
+                  hintText: 'Phone',
                   validator: phoneValidator,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [americanInputFormatter],
@@ -118,6 +128,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 UiKitInputFieldNoFill(
                   controller: emailController,
                   label: 'Email',
+                  hintText: 'Email',
                   validator: emailValidator,
                   keyboardType: TextInputType.emailAddress,
                 ),

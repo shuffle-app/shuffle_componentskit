@@ -73,7 +73,8 @@ class AboutUserComponent extends StatelessWidget {
                           text: 'The more info we get about you, the better ',
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         ),
-                        TextSpan(text: 'your leisure selection', style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
+                        TextSpan(
+                            text: 'your leisure selection', style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
                         TextSpan(
                           text: ' will be.',
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
@@ -172,7 +173,8 @@ class AboutUserComponent extends StatelessWidget {
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing8,
                   children: () {
-                    final rawItems = model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties;
+                    final rawItems =
+                        model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties;
 
                     final items = (rawItems?.entries.map((e) {
                           return UiKitBorderedChipWithIcon(
@@ -187,7 +189,7 @@ class AboutUserComponent extends StatelessWidget {
                         [])
                       ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
 
-                    return items.map((e) => SizedBox(height: 40, child: e)).toList();
+                    return items.map((e) => e).toList();
                   }(),
                 ).paddingOnly(
                   left: EdgeInsetsFoundation.horizontal4,
@@ -204,7 +206,8 @@ class AboutUserComponent extends StatelessWidget {
         if (model.content.body?[ContentItemType.singleSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-            title: model.content.body?[ContentItemType.singleSelect]?.title?.entries.first.value.properties?.keys.first ?? 'Gender',
+            title:
+                model.content.body?[ContentItemType.singleSelect]?.title?.entries.first.value.properties?.keys.first ?? 'Gender',
             hasError: aboutUserModel.errorGenderMessage != null,
             errorText: aboutUserModel.errorGenderMessage,
             child: Row(
@@ -213,7 +216,8 @@ class AboutUserComponent extends StatelessWidget {
               children: [
                 SpacingFoundation.horizontalSpace16,
                 ...() {
-                  final rawItems = model.content.body?[ContentItemType.singleSelect]?.body?[ContentItemType.singleSelect]?.properties;
+                  final rawItems =
+                      model.content.body?[ContentItemType.singleSelect]?.body?[ContentItemType.singleSelect]?.properties;
 
                   final items = (rawItems?.entries
                           .map((e) => UiKitVerticalChip(
