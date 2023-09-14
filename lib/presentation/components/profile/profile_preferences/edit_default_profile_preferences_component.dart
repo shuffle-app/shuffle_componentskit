@@ -29,11 +29,11 @@ class EditDefaultProfilePreferencesComponent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SpacingFoundation.verticalSpace16,
-            UiKitTagSelector(
-              /// здесь стоит подумать что если нет тэгов на выбор
-              tags: preferencesModel.preferences ?? [],
-              onTagsSelected: (tags) => onSelectedPreferencesChanged?.call(tags),
-            ),
+            // UiKitTagSelector(
+            /// здесь стоит подумать что если нет тэгов на выбор
+              // tags: preferencesModel.preferences ?? [],
+              // onTagsSelected: (tags) => onSelectedPreferencesChanged?.call(tags),
+            // ),
           ],
         ).paddingSymmetric(
           horizontal: horizontalMargin,
