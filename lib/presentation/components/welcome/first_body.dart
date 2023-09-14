@@ -108,6 +108,9 @@ class _FirstBody extends StatelessWidget {
             ),
             if (!bigScreen) SpacingFoundation.verticalSpace24,
             if (bigScreen) const Spacer(),
+            Hero(tag: 'welcome',
+            transitionOnUserGestures: true,
+            child:
             AnimatedBuilder(
               animation: animationController,
               builder: (context, child) {
@@ -120,7 +123,7 @@ class _FirstBody extends StatelessWidget {
                   progress: animationController.value,
                 );
               },
-            ),
+            )),
             SpacingFoundation.verticalSpace24,
           ],
         ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)

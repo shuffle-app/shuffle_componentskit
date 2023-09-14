@@ -52,6 +52,8 @@ class FeedComponent extends StatelessWidget {
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
+    final size = MediaQuery.sizeOf(context);
+
     return CustomScrollView(
       slivers: [
         SpacingFoundation.verticalSpace16.wrapSliverBox,
@@ -106,6 +108,7 @@ class FeedComponent extends StatelessWidget {
           //   ),
           // ).wrapSliverBox,
           FingerprintSwitch(
+            height: (size.width - horizontalMargin*2) / 1.7,
             isHealthKitEnabled: feed.isHealthKitEnabled,
             title: Text(
               'Guess',

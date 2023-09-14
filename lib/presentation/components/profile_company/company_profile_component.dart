@@ -54,7 +54,7 @@ class CompanyProfileComponent extends StatelessWidget {
       crossAxisAlignment: bodyAlignment.crossAxisAlignment,
       children: [
         SizedBox(
-          height: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing16,
+          height: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing16,
         ),
         Center(
           child: Text(
