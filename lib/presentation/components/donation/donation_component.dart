@@ -8,9 +8,6 @@ part 'donation_tab_menu.dart';
 class DonationComponent extends StatelessWidget {
   const DonationComponent({
     super.key,
-    this.onMapTap,
-    this.onAskDonationTap,
-    this.onNextButtonTap,
     required this.sum,
     required this.actualSum,
     required this.topDayUsers,
@@ -18,6 +15,10 @@ class DonationComponent extends StatelessWidget {
     required this.donationTitle,
     required this.topMonthUsers,
     required this.donationNumber,
+    required this.onMapTap,
+    required this.onNextButtonTap,
+    required this.onAskDonationTap,
+    required this.onDonationIndicatorTap,
   });
 
   final double sum;
@@ -25,9 +26,10 @@ class DonationComponent extends StatelessWidget {
   final String donationTitle;
   final int donationNumber;
 
-  final VoidCallback? onMapTap;
-  final VoidCallback? onAskDonationTap;
-  final VoidCallback? onNextButtonTap;
+  final VoidCallback onMapTap;
+  final VoidCallback onAskDonationTap;
+  final VoidCallback onNextButtonTap;
+  final VoidCallback onDonationIndicatorTap;
 
   final List<UiDonationUserModel> topDayUsers;
   final List<UiDonationUserModel> topMonthUsers;
@@ -48,6 +50,7 @@ class DonationComponent extends StatelessWidget {
           title: donationTitle,
           sum: sum,
           actualSum: actualSum,
+          onButtonTap: onDonationIndicatorTap,
         ),
         SpacingFoundation.verticalSpace16,
         Center(

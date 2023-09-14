@@ -957,6 +957,8 @@ class ComponentsTestPage extends StatelessWidget {
                         points: index < 3 ? '364 000' : null,
                       ),
                     ),
+                    onNextButtonTap: () {},
+                    onDonationIndicatorTap: () {},
                   ),
                 ),
               ),
