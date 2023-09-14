@@ -35,15 +35,13 @@ class UiPlaceModel {
     required this.tags,
     this.baseTags = const [],
     this.weekdays = const [],
-  }):descriptionItems=[
-    UiDescriptionItemModel(title: 'Website', description: website ?? ''),
-    UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
-    UiDescriptionItemModel(
-        title: 'Location', description: location ?? ''),
-    UiDescriptionItemModel(
-      title: 'Work hours',
-      description:
-      '${openFrom!=null ? normalizedTi(openFrom) : 'nn'} - ${openTo!=null ? normalizedTi(openTo) : 'nn'}',
-    ),
-  ];
+  }) : descriptionItems = [
+          UiDescriptionItemModel(title: 'Website', description: website ?? ''),
+          UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
+          UiDescriptionItemModel(title: 'Location', description: location ?? ''),
+          UiDescriptionItemModel(
+            title: 'Work hours',
+            description: '${openFrom != null ? normalizedTi(openFrom) : 'nn'} - ${openTo != null ? normalizedTi(openTo) : 'nn'}',
+          ),
+        ];
 }
