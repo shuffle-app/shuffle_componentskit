@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -9,11 +10,6 @@ import '../../../domain/location_models/place_geocoding_response.dart';
 
 const apiKey = String.fromEnvironment('googleApiKey');
 
-const webHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET,PUT,PATCH,POST,DELETE',
-  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-};
 
 class GoogleMapsApi {
   static const baseUrl = 'maps.googleapis.com';
@@ -28,8 +24,7 @@ class GoogleMapsApi {
       'latlng': latlng,
       'language': language,
     });
-
-    final _result = await http.get(url, headers: kIsWeb ? webHeaders : {});
+    final _result = await http.get(url, );
     if (_result.statusCode == 200) {
       return PlaceGeocodingResponse.fromJson(json.decode(_result.body));
     }
@@ -45,7 +40,7 @@ class GoogleMapsApi {
       'key': apiKey,
       'place_id': placeId,
     });
-    final _result = await http.get(url, headers: kIsWeb ? webHeaders : {});
+    final _result = await http.get(url);
     if (_result.statusCode == 200) {
       return LocationDetailsResponse.fromJson(json.decode(_result.body));
     }
@@ -61,7 +56,7 @@ class GoogleMapsApi {
       'key': apiKey,
       'input': query,
     });
-    final _result = await http.get(url, headers: kIsWeb ? webHeaders : {});
+    final _result = await http.get(url);
     if (_result.statusCode == 200) {
       return LocationSearchAutocompleteResponse.fromJson(json.decode(_result.body));
     }

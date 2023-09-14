@@ -325,36 +325,31 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               controller: _phoneController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
-                      Row(children: [
-                        Text('Base properties',
-                            style: theme?.regularTextTheme.labelSmall),
-                        const Spacer(),
-                        context.outlinedButton(
-                            data: BaseUiKitButtonData(
-                                onPressed: () {},
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation
-                                      .instance.svg.chevronRight,
-                                  color: Colors.white,
-                                )))
-                      ]).paddingSymmetric(horizontal: horizontalPadding),
-                      UiKitTagsWidget(baseTags: _placeToEdit.baseTags ?? []),
+                      Text('Base properties', style: theme?.regularTextTheme.labelSmall)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace4,
+                      UiKitTagSelector(
+                          onNotFoundTagCallback: (value) => setState(() => _placeToEdit.baseTags = [
+                            ..._placeToEdit.baseTags,
+                            UiKitTag(title: value, iconPath: '')
+                          ]),
+                          tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
+                          onRemoveTagCallback: (value) => setState(
+                                  () => _placeToEdit.baseTags.removeWhere((element) => element.title == value)))
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      // UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                       SpacingFoundation.verticalSpace24,
-                      Row(children: [
-                        Text('Unique properties',
-                            style: theme?.regularTextTheme.labelSmall),
-                        const Spacer(),
-                        context.outlinedButton(
-                            data: BaseUiKitButtonData(
-                                onPressed: () {},
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation
-                                      .instance.svg.chevronRight,
-                                  color: Colors.white,
-                                )))
-                      ]).paddingSymmetric(horizontal: horizontalPadding),
-                      UiKitTagsWidget(
-                          baseTags: [], uniqueTags: _placeToEdit.tags),
+
+                      Text('Unique properties', style: theme?.regularTextTheme.labelSmall)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace4,
+                      UiKitTagSelector(
+                          onNotFoundTagCallback: (value) => setState(() =>
+                          _placeToEdit.tags = [..._placeToEdit.tags, UiKitTag(title: value, iconPath: '')]),
+                          tags: _placeToEdit.tags.map((tag) => tag.title).toList(),
+                          onRemoveTagCallback: (value) =>
+                              setState(() => _placeToEdit.tags.removeWhere((element) => element.title == value)))
+                          .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       SafeArea(
                           top: false,

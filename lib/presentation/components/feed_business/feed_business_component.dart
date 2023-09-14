@@ -102,7 +102,11 @@ class FeedBusinessComponent extends StatelessWidget {
             children: [
               Text('Your niche', style: themeTitleStyle),
               if (feed.showHowItWorksTitle)
-                HowItWorksWidget(element: model.content.title![ContentItemType.hintDialog]!, onPop: onHowItWorksPoped),
+                HowItWorksWidget(
+                  element: model.content.title![ContentItemType.hintDialog]!,
+                  onPop: onHowItWorksPoped,
+                  customOffset: Offset(1.sw / 1.7, 0),
+                ),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           SpacingFoundation.verticalSpace16.wrapSliverBox,
@@ -198,7 +202,7 @@ class FeedBusinessComponent extends StatelessWidget {
                     description: item.description,
                     media: item.media,
                     tags: item.tags,
-                    baseTags: item.baseTags,
+                    baseTags: item.baseTags ?? [],
                   ),
                   model: model,
                 );
