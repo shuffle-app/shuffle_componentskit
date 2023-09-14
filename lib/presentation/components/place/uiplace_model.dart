@@ -9,7 +9,7 @@ class UiPlaceModel {
   List<String> weekdays;
   String description;
   List<UiKitTag> tags;
-  List<UiKitTag>? baseTags;
+  List<UiKitTag> baseTags;
   double? rating;
   String? title;
   String? logo;
@@ -33,19 +33,17 @@ class UiPlaceModel {
     required this.description,
     this.rating,
     required this.tags,
-    this.baseTags,
+    this.baseTags = const [],
     this.weekdays = const [],
-  }) : descriptionItems = [
-          UiDescriptionItemModel(title: 'Website', description: website ?? ''),
-          UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
-          UiDescriptionItemModel(title: 'Location', description: location ?? ''),
-          UiDescriptionItemModel(
-            title: 'Work hours',
-            description: '${openFrom != null ? normalizedTi(openFrom) : 'nn'} - ${openTo != null ? normalizedTi(openTo) : 'nn'}',
-          ),
-        ];
-}
-
-String leadingZeros(int number) {
-  return number.toString().padLeft(2, '0');
+  }):descriptionItems=[
+    UiDescriptionItemModel(title: 'Website', description: website ?? ''),
+    UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
+    UiDescriptionItemModel(
+        title: 'Location', description: location ?? ''),
+    UiDescriptionItemModel(
+      title: 'Work hours',
+      description:
+      '${openFrom!=null ? normalizedTi(openFrom) : 'nn'} - ${openTo!=null ? normalizedTi(openTo) : 'nn'}',
+    ),
+  ];
 }

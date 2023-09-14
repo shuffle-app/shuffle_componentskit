@@ -6,7 +6,6 @@ import 'package:shuffle_uikit/shuffle_uikit.dart' as kit;
 
 buildComponent(BuildContext context, UiBaseModel configuration, ComponentBuilder componentWidgets) {
   //TODO romancores: add later flavors
-
   log(
     'Building ${configuration.pageBuilderType} v${configuration.version}',
     name: 'buildComponent',
@@ -17,6 +16,7 @@ buildComponent(BuildContext context, UiBaseModel configuration, ComponentBuilder
   //     context: context,
   //   );
   // }
+
   switch (configuration.pageBuilderType) {
     case PageBuilderType.modalBottomSheet:
       return kit.showUiKitGeneralFullScreenDialog(

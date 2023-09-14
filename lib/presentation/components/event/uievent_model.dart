@@ -15,8 +15,8 @@ class UiEventModel {
   TimeOfDay? time;
   String? description;
   String? location;
-  List<UiKitTag>? tags;
-  List<UiKitTag>? baseTags;
+  List<UiKitTag> tags;
+  List<UiKitTag> baseTags;
   double? rating;
   bool archived;
   List<String>? weekdays;
@@ -31,8 +31,8 @@ class UiEventModel {
     this.media,
     this.description,
     this.location,
-    this.tags,
-    this.baseTags,
+    this.tags = const [],
+    this.baseTags= const [],
     this.rating,
     this.time,
     this.weekdays,

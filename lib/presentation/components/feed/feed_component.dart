@@ -203,7 +203,7 @@ class FeedComponent extends StatelessWidget {
                     description: item.description,
                     media: item.media,
                     tags: item.tags,
-                    baseTags: item.baseTags,
+                    baseTags: item.baseTags ?? [],
                   ),
                   model: model,
                 );
