@@ -83,10 +83,13 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
               SpacingFoundation.verticalSpace16,
               ConstrainedBox(
                 constraints: BoxConstraints.expand(height: 40.h),
-                child: OrdinaryButtonWithIcon(
-                  onPressed: () => widget.onNextButtonTap?.call(),
-                  icon: const Icon(CupertinoIcons.chevron_down),
-                  text: 'NEXT 7 PEOPLE',
+                child: context.button(
+                  data: BaseUiKitButtonData(
+                    onPressed: () => widget.onNextButtonTap?.call(),
+                    fit: ButtonFit.fitWidth,
+                    icon: const Icon(CupertinoIcons.chevron_down),
+                    text: 'NEXT 7 PEOPLE',
+                  ),
                 ),
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             ],
@@ -113,11 +116,10 @@ class _UserListView extends StatelessWidget {
 
         return UiKitDonationCard(
           number: user.position,
-          title: user.nickname,
-          subtitle: '${user.name} ${user.surname}',
+          title: user.username,
+          subtitle: user.name,
           points: user.points,
           sum: user.sum.toString(),
-          isStarEnabled: user.isStarEnabled,
         );
       },
       separatorBuilder: (_, __) => SpacingFoundation.verticalSpace24,

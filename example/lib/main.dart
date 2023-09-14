@@ -926,11 +926,10 @@ class ComponentsTestPage extends StatelessWidget {
                       (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
-                        nickname: '@misswow2022',
-                        name: 'Natalie',
-                        surname: 'White',
-                        isStarEnabled: true,
+                        username: '@misswow2022',
+                        name: 'Natalie White',
                         points: index < 3 ? '364 000' : null,
+                        userType: UserTileType.influencer,
                       ),
                     ),
                     topMonthUsers: List.generate(
@@ -938,11 +937,10 @@ class ComponentsTestPage extends StatelessWidget {
                       (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
-                        nickname: '@misswow2022',
+                        username: '@misswow2022',
                         name: 'Natalie',
-                        surname: 'White',
-                        isStarEnabled: true,
                         points: index < 3 ? '364 000' : null,
+                        userType: UserTileType.premium,
                       ),
                     ),
                     topYearUsers: List.generate(
@@ -950,11 +948,10 @@ class ComponentsTestPage extends StatelessWidget {
                       (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
-                        nickname: '@misswow2022',
-                        name: 'Natalie',
-                        surname: 'White',
-                        isStarEnabled: true,
+                        username: '@misswow2022',
+                        name: 'Natalie White',
                         points: index < 3 ? '364 000' : null,
+                        userType: UserTileType.pro,
                       ),
                     ),
                     onNextButtonTap: () {},
