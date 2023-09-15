@@ -69,17 +69,18 @@ class _LastBody extends StatelessWidget {
                 SpacingFoundation.verticalSpace12,
               ],
               if (!bigScreen) SpacingFoundation.verticalSpace16,
-              context
-                  .button(
+              Hero(
+                  tag: 'welcome',
+                  transitionOnUserGestures: true,
+                  child: context.button(
                     data: BaseUiKitButtonData(
                       text: 'Get started',
                       onPressed: onFinished,
                       loading: loading,
                     ),
-                  )
-                  .paddingSymmetric(
-                    horizontal: EdgeInsetsFoundation.horizontal16,
-                  ),
+                  )).paddingSymmetric(
+                horizontal: EdgeInsetsFoundation.horizontal16,
+              ),
               SpacingFoundation.verticalSpace24,
             ],
           ),

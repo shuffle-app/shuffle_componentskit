@@ -12,6 +12,7 @@ class UiEventModel {
   bool? favorite;
   bool isRecurrent;
   DateTime? date;
+  DateTime? dateTo;
   TimeOfDay? time;
   String? description;
   String? location;
@@ -28,25 +29,27 @@ class UiEventModel {
     this.favorite,
     this.owner,
     this.date,
+    this.dateTo,
     this.media,
     this.description,
     this.location,
     this.tags = const [],
-    this.baseTags= const [],
+    this.baseTags = const [],
     this.rating,
     this.time,
     this.weekdays,
     this.isRecurrent = false,
     this.archived = false,
   }) : descriptionItems = [
-    if (date != null)
-      UiDescriptionItemModel(
-          title: 'Don’t miss it',
-          description: DateFormat('dd/MM').format(date)),
-    if (location != null)
-      UiDescriptionItemModel(
-        title: "Place",
-        description: location,
-      ),
-  ];
+          if (date != null)
+            UiDescriptionItemModel(
+                title: 'Don’t miss it',
+                description:
+                    '${(time != null ? '${normalizedTi(time)} ' : '')}${DateFormat('dd/MM').format(date)}${dateTo != null ? ' - ${DateFormat('dd/MM/yy').format(dateTo)}' : ''}'),
+          if (location != null)
+            UiDescriptionItemModel(
+              title: "Place",
+              description: location,
+            ),
+        ];
 }
