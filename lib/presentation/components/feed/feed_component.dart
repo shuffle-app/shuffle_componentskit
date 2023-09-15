@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:shuffle_components_kit/presentation/common/how_it_works_widget.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -44,8 +41,7 @@ class FeedComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentFeedModel model = ComponentFeedModel.fromJson(config['feed']);
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
@@ -108,7 +104,7 @@ class FeedComponent extends StatelessWidget {
           //   ),
           // ).wrapSliverBox,
           FingerprintSwitch(
-            height: (size.width - horizontalMargin*2) / 1.7,
+            height: (size.width - horizontalMargin * 2) * 0.54,
             isHealthKitEnabled: feed.isHealthKitEnabled,
             title: Text(
               'Guess',
@@ -144,8 +140,7 @@ class FeedComponent extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
               if (feed.showHowItWorksBody)
-                HowItWorksWidget(
-                    element: model.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPopedBody),
+                HowItWorksWidget(element: model.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPopedBody),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
