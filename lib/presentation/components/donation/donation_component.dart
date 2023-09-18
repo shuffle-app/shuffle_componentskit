@@ -16,9 +16,9 @@ class DonationComponent extends StatelessWidget {
     required this.topMonthUsers,
     required this.donationNumber,
     required this.onMapTap,
-    required this.onNextButtonTap,
     required this.onAskDonationTap,
     required this.onDonationIndicatorTap,
+    this.onNextButtonTap,
   });
 
   final double sum;
@@ -28,8 +28,8 @@ class DonationComponent extends StatelessWidget {
 
   final VoidCallback onMapTap;
   final VoidCallback onAskDonationTap;
-  final VoidCallback onNextButtonTap;
   final VoidCallback onDonationIndicatorTap;
+  final VoidCallback? onNextButtonTap;
 
   final List<UiDonationUserModel> topDayUsers;
   final List<UiDonationUserModel> topMonthUsers;
