@@ -954,7 +954,6 @@ class ComponentsTestPage extends StatelessWidget {
                         userType: UserTileType.pro,
                       ),
                     ),
-                    onNextButtonTap: () {},
                     onDonationIndicatorTap: () {},
                   ),
                 ),
