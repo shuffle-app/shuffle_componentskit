@@ -26,98 +26,96 @@ class PlaceComponent extends StatelessWidget {
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
-    return RepaintBoundary(
-      child: Column(
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: titleAlignment.mainAxisAlignment,
-            crossAxisAlignment: titleAlignment.crossAxisAlignment,
-            children: [
-              TitleWithAvatar(
-                title: place.title,
-                avatarUrl: place.logo,
-                horizontalMargin: horizontalMargin,
-              ),
-            ],
-          ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-            crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-            children: [
-              UiKitMediaSliderWithTags(
-                rating: place.rating,
-                media: place.media,
-                description: place.description,
-                baseTags: place.baseTags ?? [],
-                uniqueTags: place.tags,
-                horizontalMargin: horizontalMargin,
-              ),
-              SpacingFoundation.verticalSpace8,
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: () {
-                  final AutoSizeGroup g = AutoSizeGroup();
+    return Column(
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: titleAlignment.mainAxisAlignment,
+          crossAxisAlignment: titleAlignment.crossAxisAlignment,
+          children: [
+            TitleWithAvatar(
+              title: place.title,
+              avatarUrl: place.logo,
+              horizontalMargin: horizontalMargin,
+            ),
+          ],
+        ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+          children: [
+            UiKitMediaSliderWithTags(
+              rating: place.rating,
+              media: place.media,
+              description: place.description,
+              baseTags: place.baseTags ?? [],
+              uniqueTags: place.tags,
+              horizontalMargin: horizontalMargin,
+            ),
+            SpacingFoundation.verticalSpace8,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: () {
+                final AutoSizeGroup g = AutoSizeGroup();
 
-                  return [
-                    Expanded(
-                      child: UpcomingEventPlaceActionCard(
-                        value: 'in 2 days',
-                        group: g,
-                        vectorIconAsset: GraphicsFoundation.instance.svg.events,
-                        action: () {
-                          log('calendar was pressed');
-                        },
-                      ),
+                return [
+                  Expanded(
+                    child: UpcomingEventPlaceActionCard(
+                      value: 'in 2 days',
+                      group: g,
+                      vectorIconAsset: GraphicsFoundation.instance.svg.events,
+                      action: () {
+                        log('calendar was pressed');
+                      },
                     ),
-                    SpacingFoundation.horizontalSpace8,
-                    Expanded(
-                      child: PointBalancePlaceActionCard(
-                        value: '2 650',
-                        group: g,
-                        vectorIconAsset: GraphicsFoundation.instance.svg.coin,
-                        action: () {
-                          log('balance was pressed');
-                        },
-                      ),
+                  ),
+                  SpacingFoundation.horizontalSpace8,
+                  Expanded(
+                    child: PointBalancePlaceActionCard(
+                      value: '2 650',
+                      group: g,
+                      vectorIconAsset: GraphicsFoundation.instance.svg.coin,
+                      action: () {
+                        log('balance was pressed');
+                      },
                     ),
-                  ];
-                }(),
-              ),
-              SpacingFoundation.verticalSpace8,
-              GridView.count(
-                padding: EdgeInsets.zero,
-                primary: false,
-                shrinkWrap: true,
-                crossAxisCount: 2,
-                crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
-                childAspectRatio: 2,
-                children: place.descriptionItems!
-                    .map((e) => GestureDetector(
-                        onTap: () {
-                          if (e.description.startsWith('http')) {
-                            launchUrlString(e.description);
-                          } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
-                            log('launching $e.description', name: 'PlaceComponent');
-                            launchUrlString('tel:${e.description}');
-                          }
-                        },
-                        child: UiKitTitledDescriptionGridWidget(
-                          title: e.title,
-                          description: e.description,
-                          spacing: SpacingFoundation.horizontalSpacing8,
-                        )))
-                    .toList(),
-              ).paddingSymmetric(horizontal: horizontalMargin),
-              SpacingFoundation.verticalSpace8,
-            ],
-          ),
-        ],
-        // ),
-      ).paddingSymmetric(
-        vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
-      ),
+                  ),
+                ];
+              }(),
+            ),
+            SpacingFoundation.verticalSpace8,
+            GridView.count(
+              padding: EdgeInsets.zero,
+              primary: false,
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
+              childAspectRatio: 2,
+              children: place.descriptionItems!
+                  .map((e) => GestureDetector(
+                      onTap: () {
+                        if (e.description.startsWith('http')) {
+                          launchUrlString(e.description);
+                        } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                          log('launching $e.description', name: 'PlaceComponent');
+                          launchUrlString('tel:${e.description}');
+                        }
+                      },
+                      child: UiKitTitledDescriptionGridWidget(
+                        title: e.title,
+                        description: e.description,
+                        spacing: SpacingFoundation.horizontalSpacing8,
+                      )))
+                  .toList(),
+            ).paddingSymmetric(horizontal: horizontalMargin),
+            SpacingFoundation.verticalSpace8,
+          ],
+        ),
+      ],
+      // ),
+    ).paddingSymmetric(
+      vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
     );
   }
 }
