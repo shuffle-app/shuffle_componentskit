@@ -4,10 +4,10 @@ part of 'donation_component.dart';
 
 class _DonationTabMenu extends StatefulWidget {
   const _DonationTabMenu({
-    required this.onNextButtonTap,
     required this.topDayUsers,
     required this.topMonthUsers,
     required this.topYearUsers,
+    this.onNextButtonTap,
   });
 
   final VoidCallback? onNextButtonTap;
