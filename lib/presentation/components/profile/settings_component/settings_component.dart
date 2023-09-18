@@ -89,7 +89,7 @@ class SettingsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
             selectedTab: selectedContentType?.toUpperCase(),
-            onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title),
+            onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title.toLowerCase()),
             tabs: tabs,
           ),
           SpacingFoundation.verticalSpace12,

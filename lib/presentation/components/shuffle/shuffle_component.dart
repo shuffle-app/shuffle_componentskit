@@ -38,7 +38,6 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
   late final ComponentShuffleModel model;
   final ValueNotifier<int> indexNotifier = ValueNotifier<int>(0);
   bool isEnded = false;
-  late final Key backImageKey;
   Widget isEndedWidget = UiKitLastSwiperCard.fixed();
 
   // Color _backgroundColor = Colors.black12;
@@ -62,7 +61,6 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
 
   @override
   void initState() {
-    backImageKey = UniqueKey();
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
     unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
@@ -122,6 +120,7 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
                 // }));
 
                 child = ImageWidget(
+                  key: UniqueKey(),
                   link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
                   fit: BoxFit.cover,
                   height: 1.sh,
@@ -139,6 +138,7 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
             }
             if (lastFile != null && child == null) {
               child = ImageWidget(
+                key: UniqueKey(),
                 link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
                 fit: BoxFit.cover,
                 height: 1.sh,
@@ -147,7 +147,6 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
             }
 
             return AnimatedSwitcher(
-              key: backImageKey,
               switchInCurve: Curves.easeInOut,
               duration: animDuration,
               child: child ??
@@ -162,10 +161,13 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
           },
         ),
         BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+          filter: ImageFilter.blur(
+            sigmaX: 100,
+            sigmaY: 100,
+          ),
           child: Container(
-            height: double.infinity,
-            width: double.infinity,
+            width: 1.sw,
+            height: 1.sh,
             color: Colors.black.withOpacity(0.35),
           ),
         ),
@@ -177,7 +179,6 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
               children: [
                 SizedBox(
                   width: double.infinity,
-                  // height: 50.h,
                   child: Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.center,
