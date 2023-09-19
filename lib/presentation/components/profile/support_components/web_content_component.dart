@@ -11,6 +11,8 @@ class WebContentComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('here is the url: $url');
+
     return FutureBuilder(
         future: get(Uri.parse(url)),
         builder: (context, snapshot) {
