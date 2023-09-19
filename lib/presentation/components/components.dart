@@ -11,6 +11,7 @@ export 'donation/ui_donation_user_model.dart';
 export 'event/create_event_component.dart';
 export 'event/event_component.dart';
 export 'event/uievent_model.dart';
+export 'event/my_events_component.dart';
 export 'feed/feed_component.dart';
 export 'feed/uifeed_model.dart';
 export 'feed_business/feed_business_component.dart';
