@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -127,6 +128,12 @@ class ComponentsTestPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SpacingFoundation.verticalSpace16,
+            MyEventsComponent(
+              title: 'My events',
+              onTap: () {},
+              events: List.generate(7, (_) => event),
+            ),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
