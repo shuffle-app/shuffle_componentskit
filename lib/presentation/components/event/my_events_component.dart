@@ -13,7 +13,7 @@ class MyEventsComponent extends StatelessWidget {
   });
 
   final String title;
-  final VoidCallback onTap;
+  final Function(UiEventModel) onTap;
   final List<UiEventModel> events;
 
   @override
@@ -55,10 +55,10 @@ class MyEventsComponent extends StatelessWidget {
                       : const SizedBox.shrink(),
                   trailing: context.smallButton(
                     data: BaseUiKitButtonData(
-                      onPressed: onTap,
+                      onPressed: onTap(event),
                       icon: Icon(
                         CupertinoIcons.right_chevron,
-                        color: Colors.white,
+                        color: theme?.colorScheme.inversePrimary,
                         size: 20.w,
                       ),
                     ),

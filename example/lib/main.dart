@@ -129,12 +129,6 @@ class ComponentsTestPage extends StatelessWidget {
         child: Column(
           children: [
             SpacingFoundation.verticalSpace16,
-            MyEventsComponent(
-              title: 'My events',
-              onTap: () {},
-              events: List.generate(7, (_) => event),
-            ),
-            SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
                 text: 'show feed business',
