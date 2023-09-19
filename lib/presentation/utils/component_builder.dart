@@ -20,7 +20,13 @@ buildComponent(BuildContext context, UiBaseModel configuration, ComponentBuilder
   switch (configuration.pageBuilderType) {
     case PageBuilderType.modalBottomSheet:
       return kit.showUiKitGeneralFullScreenDialog(
-          context, kit.GeneralDialogData(child: componentWidgets.child, bottomBar: componentWidgets.bottomBar));
+        context,
+        kit.GeneralDialogData(
+          child: componentWidgets.child,
+          bottomBar: componentWidgets.bottomBar,
+          useRootNavigator: componentWidgets.useRootNavigator,
+        ),
+      );
 
     case PageBuilderType.page:
       return context.push(componentWidgets.child, useRootNavigator: componentWidgets.useRootNavigator);
