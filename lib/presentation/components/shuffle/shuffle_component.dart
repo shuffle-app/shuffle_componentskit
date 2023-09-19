@@ -61,7 +61,8 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
 
   @override
   void initState() {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     model = ComponentShuffleModel.fromJson(config['shuffle']);
     unawaited(_getColor(widget.shuffle.items.first.imageLink ?? ''));
 
@@ -121,7 +122,9 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
 
                 child = ImageWidget(
                   key: UniqueKey(),
-                  link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
+                  link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last)
+                      ? lastAddedKey
+                      : lastFile!.file.path,
                   fit: BoxFit.cover,
                   height: 1.sh,
                   width: 1.sw,
@@ -139,7 +142,8 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
             if (lastFile != null && child == null) {
               child = ImageWidget(
                 key: UniqueKey(),
-                link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
+                link:
+                    ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
                 fit: BoxFit.cover,
                 height: 1.sh,
                 width: 1.sw,
@@ -160,17 +164,18 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
             );
           },
         ),
-        BackdropFilter(
+        RepaintBoundary(
+            child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 100,
             sigmaY: 100,
           ),
-          child: Container(
+          child: SizedBox(
             width: 1.sw,
             height: 1.sh,
-            color: Colors.black.withOpacity(0.35),
+            child: ColoredBox(color: Colors.black.withOpacity(0.35)),
           ),
-        ),
+        )),
         SafeArea(
           child: Center(
             child: Column(
@@ -268,7 +273,7 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
                           small: true,
                           data: BaseUiKitButtonData(
                             onPressed: () {
-                              dislikeController.forward(from: 0);
+                              dislikeController.forward(from: 0.3);
                               widget.onDislike?.call(widget.shuffle.items[controller.state?.index ?? 0].title);
                             },
                             icon: ImageWidget(
@@ -302,7 +307,7 @@ class ShuffleComponentState extends State<ShuffleComponent> with TickerProviderS
                           small: true,
                           data: BaseUiKitButtonData(
                             onPressed: () {
-                              likeController.forward(from: 0);
+                              likeController.forward(from: 0.3);
                               widget.onLike?.call(widget.shuffle.items[controller.state?.index ?? 0].title);
                             },
                             icon: ImageWidget(
