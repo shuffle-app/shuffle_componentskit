@@ -36,6 +36,8 @@ class ShuffleComponent extends StatelessWidget {
 
   final animDuration = const Duration(milliseconds: 250);
 
+  bool get isEnded => indexNotifier.value < 0;
+
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
@@ -48,73 +50,30 @@ class ShuffleComponent extends StatelessWidget {
         SizedBox(
           height: 1.sh,
           width: 1.sw,
-          child: ValueListenableBuilder(
-            valueListenable: backgroundImageNotifier,
-            builder: (context, value, child) {
+          child: AnimatedBuilder(
+            animation: backgroundImageNotifier,
+            builder: (context, child) {
+              final value = backgroundImageNotifier.value;
               print(value);
 
-              return ImageWidget(
-                link: value,
-                fit: BoxFit.cover,
-                lowerQuality: true,
-                height: 1.sh,
-                width: 1.sw,
+              return AnimatedSwitcher(
+                duration: animDuration,
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: child,
+                ),
+                child: ImageWidget(
+                  key: ValueKey(value),
+                  link: value,
+                  fit: BoxFit.cover,
+                  lowerQuality: true,
+                  height: 1.sh,
+                  width: 1.sw,
+                ),
               );
             },
           ),
         ),
-        // FutureBuilder(
-        //   future: currentFutureMayBeImage,
-        //   builder: (context, snapshot) {
-        //     Widget? child;
-        //     if (snapshot.connectionState == ConnectionState.done) {
-        //       // log('here is snapshot with ${snapshot.data?.file.path}', name: 'ShuffleComponent');
-        //       if (snapshot.data != null) {
-        //         // if (snapshot.data != null && lastFile?.file.path != (snapshot.data as FileInfo).file.path) {
-        //         // WidgetsBinding.instance.addPostFrameCallback((_) =>
-        //         //     setState(() {
-        //         lastFile = snapshot.data as FileInfo;
-        //         // }));
-        //
-        //         child = ImageWidget(
-        //           link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
-        //           fit: BoxFit.cover,
-        //           height: 1.sh,
-        //           width: 1.sw,
-        //         );
-        //       } else {
-        //         log('here is snapshot with null', name: 'ShuffleComponent');
-        //         //waiting here the cache image network job to cache our file
-        //         Future.delayed(const Duration(seconds: 2), () {
-        //           setState(() {
-        //             currentFutureMayBeImage = CustomCacheManager.imageInstance.getFileFromCache(lastAddedKey);
-        //           });
-        //         });
-        //       }
-        //     }
-        //     if (lastFile != null && child == null) {
-        //       child = ImageWidget(
-        //         link: ['bin', 'avif'].contains(lastFile!.file.path.split('.').last) ? lastAddedKey : lastFile!.file.path,
-        //         fit: BoxFit.cover,
-        //         height: 1.sh,
-        //         width: 1.sw,
-        //       );
-        //     }
-        //
-        //     return AnimatedSwitcher(
-        //       switchInCurve: Curves.easeInOut,
-        //       duration: animDuration,
-        //       child: child ??
-        //           const ColoredBox(
-        //             color: UiKitColors.darkNeutral100,
-        //             child: SizedBox(
-        //               width: double.infinity,
-        //               height: double.infinity,
-        //             ),
-        //           ),
-        //     );
-        //   },
-        // ),
         BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 100,
@@ -155,22 +114,21 @@ class ShuffleComponent extends StatelessWidget {
                     fit: StackFit.passthrough,
                     children: [
                       ValueListenableBuilder(
-                        valueListenable: indexNotifier,
-                        builder: (context, value, child) {
-                          final isEnded = value < 0;
+                          valueListenable: indexNotifier,
+                          builder: (context, value, child) {
+                            final ended = value < 0;
 
-                          return AnimatedScale(
-                            scale: isEnded ? 1 : 0,
-                            duration: animDuration,
-                            child: isEnded
-                                ? Shimmer(
-                                    gradient: GradientFoundation.greyGradient,
-                                    child: UiKitLastSwiperCard.fixed(),
-                                  )
-                                : const SizedBox(),
-                          );
-                        },
-                      ),
+                            return AnimatedScale(
+                              scale: ended ? 1 : 0,
+                              duration: animDuration,
+                              child: ended
+                                  ? Shimmer(
+                                      gradient: GradientFoundation.greyGradient,
+                                      child: UiKitLastSwiperCard.fixed(),
+                                    )
+                                  : const SizedBox(),
+                            );
+                          }),
                       if (shuffle.items.isNotEmpty)
                         UiKitCardSwiper(
                           likeController: shuffle.likeController,
@@ -218,68 +176,62 @@ class ShuffleComponent extends StatelessWidget {
                   ),
                 ),
                 SpacingFoundation.verticalSpace4,
-                AnimatedOpacity(
-                  opacity: shuffle.items.isEmpty ? 0 : 1,
-                  duration: animDuration,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: () {
-                      final svg = GraphicsFoundation.instance.svg;
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: () {
+                    final svg = GraphicsFoundation.instance.svg;
 
-                      return [
+                    return [
+                      context.bouncingButton(
+                        blurred: true,
+                        small: true,
+                        data: BaseUiKitButtonData(
+                          onPressed: () {
+                            shuffle.dislikeController.forward(from: 0);
+                            onDislike?.call();
+                          },
+                          icon: ImageWidget(
+                            svgAsset: svg.heartBrokenFill,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SpacingFoundation.horizontalSpace24,
+                      if (configModel.showFavorite ?? true)
                         context.bouncingButton(
                           blurred: true,
-                          small: true,
                           data: BaseUiKitButtonData(
-                            onPressed: () {
-                              shuffle.dislikeController.forward(from: 0);
-                              onDislike?.call();
-                            },
-                            icon: ImageWidget(
-                              svgAsset: svg.heartBrokenFill,
-                              color: Colors.white,
+                            onPressed: () => onFavorite?.call(shuffle.items[indexNotifier.value].title),
+                            icon: ValueListenableBuilder(
+                              valueListenable: indexNotifier,
+                              builder: (_, value, __) {
+                                return ImageWidget(
+                                  svgAsset: shuffle.items.isNotEmpty &&
+                                          favoriteTitles.contains(shuffle.items[value % shuffle.items.length].title)
+                                      ? svg.starFill
+                                      : svg.starOutline,
+                                  color: Colors.white,
+                                );
+                              },
                             ),
                           ),
                         ),
-                        SpacingFoundation.horizontalSpace24,
-                        if (configModel.showFavorite ?? true)
-                          context.bouncingButton(
-                            blurred: true,
-                            data: BaseUiKitButtonData(
-                              onPressed: () => onFavorite?.call(shuffle.items[indexNotifier.value].title),
-                              icon: ValueListenableBuilder(
-                                valueListenable: indexNotifier,
-                                builder: (_, value, __) {
-                                  print(value);
-
-                                  return ImageWidget(
-                                    svgAsset: shuffle.items.isNotEmpty &&
-                                            favoriteTitles.contains(shuffle.items[value % shuffle.items.length].title)
-                                        ? svg.starFill
-                                        : svg.starOutline,
-                                    color: Colors.white,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        SpacingFoundation.horizontalSpace24,
-                        context.bouncingButton(
-                          blurred: true,
-                          small: true,
-                          data: BaseUiKitButtonData(
-                            onPressed: () {
-                              shuffle.likeController.forward(from: 0);
-                            },
-                            icon: ImageWidget(
-                              svgAsset: svg.heartFill,
-                              color: Colors.white,
-                            ),
+                      SpacingFoundation.horizontalSpace24,
+                      context.bouncingButton(
+                        blurred: true,
+                        small: true,
+                        data: BaseUiKitButtonData(
+                          onPressed: () {
+                            shuffle.likeController.forward(from: 0);
+                          },
+                          icon: ImageWidget(
+                            svgAsset: svg.heartFill,
+                            color: Colors.white,
                           ),
                         ),
-                      ];
-                    }(),
-                  ),
+                      ),
+                    ];
+                  }(),
                 ),
               ],
             ),
