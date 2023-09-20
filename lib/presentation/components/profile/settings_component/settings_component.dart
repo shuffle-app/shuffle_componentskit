@@ -3,15 +3,19 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SettingsComponent extends StatelessWidget {
-  final ValueChanged<String?> callback;
   final ValueChanged<String>? onTabSwitched;
   final String? selectedContentType;
+  final List<UiKitCustomTab>? tabs;
+  final List<BaseUiKitButtonData> btnDataList;
+  final List<BaseUiKitButtonData> redBtnDataList;
 
   const SettingsComponent({
     Key? key,
-    required this.callback,
     this.onTabSwitched,
     this.selectedContentType,
+    this.tabs,
+    required this.btnDataList,
+    required this.redBtnDataList,
   }) : super(key: key);
 
   @override
@@ -22,54 +26,12 @@ class SettingsComponent extends StatelessWidget {
     final titleAligment = model.positionModel?.titleAlignment;
     final bodyAligment = model.positionModel?.bodyAlignment;
 
-    final tabBar = model.content.body?[ContentItemType.tabBar]?.properties?.keys.toList();
-    List<UiKitCustomTab> tabs = tabBar?.map((e) => UiKitCustomTab(title: e.toUpperCase())).toList() ?? [];
-
     final textStyle = context.uiKitTheme?.boldTextTheme;
     const divider = Divider(
       height: 1,
       thickness: 1,
       color: ColorsFoundation.darkNeutral400,
     );
-    const double iconWidht = 20.0;
-
-    final Map<String, PropertiesBaseModel> buttons = Map.of(model.content.body?[ContentItemType.button]?.properties ?? {})
-        .map((key, value) => MapEntry(key.toUpperCase(), value))
-      ..removeWhere((key, value) => value.color != null);
-
-    final Map<String, PropertiesBaseModel> redButtons = Map.of(model.content.body?[ContentItemType.button]?.properties ?? {})
-        .map((key, value) => MapEntry(key.toUpperCase(), value))
-      ..removeWhere((key, value) => value.color == null);
-
-    final List<BaseUiKitButtonData> btnDataList = [];
-
-    for (var i in buttons.entries) {
-      btnDataList.add(BaseUiKitButtonData(
-          icon: ImageWidget(
-            link: i.value.imageLink,
-            color: Colors.white,
-            width: iconWidht,
-            fit: BoxFit.fitWidth,
-          ),
-          text: i.key,
-          onPressed: () => callback.call(i.value.value)));
-    }
-    btnDataList.sort((a, b) => buttons[a.text]!.sortNumber!.compareTo(buttons[b.text]!.sortNumber!));
-
-    final List<BaseUiKitButtonData> redBtnDataList = [];
-
-    for (var i in redButtons.entries) {
-      redBtnDataList.add(BaseUiKitButtonData(
-          icon: ImageWidget(
-            link: i.value.imageLink,
-            color: i.value.color ?? Colors.red,
-            width: iconWidht,
-            fit: BoxFit.fitWidth,
-          ),
-          text: i.key,
-          onPressed: () => callback.call(i.value.value)));
-    }
-    redBtnDataList.sort((a, b) => redButtons[a.text]!.sortNumber!.compareTo(redButtons[b.text]!.sortNumber!));
 
     return Column(
       children: [
@@ -85,12 +47,12 @@ class SettingsComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.verticalSpace12
               ]),
-        if (tabs.isNotEmpty) ...[
+        if (tabs != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
             selectedTab: selectedContentType?.toUpperCase(),
-            onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title.toLowerCase()),
-            tabs: tabs,
+            onTappedTab: (index) => onTabSwitched?.call(tabs!.elementAt(index).title.toLowerCase()),
+            tabs: tabs!,
           ),
           SpacingFoundation.verticalSpace12,
         ],

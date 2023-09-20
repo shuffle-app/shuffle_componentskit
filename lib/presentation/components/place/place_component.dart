@@ -25,6 +25,7 @@ class PlaceComponent extends StatelessWidget {
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return Column(
       children: [
@@ -114,8 +115,6 @@ class PlaceComponent extends StatelessWidget {
         ),
       ],
       // ),
-    ).paddingSymmetric(
-      vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
-    );
+    ).paddingSymmetric(vertical: verticalMargin);
   }
 }
