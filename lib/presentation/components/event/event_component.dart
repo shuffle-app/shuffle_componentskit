@@ -106,7 +106,7 @@ class EventComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace14,
             if (event.description != null) ...[
-              DescriptionWidget(description: event.description!),
+              RepaintBoundary(child: DescriptionWidget(description: event.description!)),
               SpacingFoundation.verticalSpace16
             ],
             SpacingFoundation.verticalSpace16,

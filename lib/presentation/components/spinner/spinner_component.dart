@@ -103,6 +103,8 @@ class SpinnerComponent extends StatelessWidget {
                                 // availableHeight: 0.56.sh,
                                 title: item.title,
                                 date: item.date,
+                                time: item.time,
+                                dateTo: item.dateTo,
                                 favourite: favoriteValue.data as bool? ??
                                     item.favorite,
                                 photoLink: item.media

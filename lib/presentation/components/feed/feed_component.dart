@@ -41,7 +41,8 @@ class FeedComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentFeedModel model = ComponentFeedModel.fromJson(config['feed']);
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
@@ -140,7 +141,8 @@ class FeedComponent extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
               if (feed.showHowItWorksBody)
-                HowItWorksWidget(element: model.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPopedBody),
+                HowItWorksWidget(
+                    element: model.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPopedBody),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
@@ -150,16 +152,25 @@ class FeedComponent extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  context.gradientButton(
-                    data: BaseUiKitButtonData(
-                      icon: ImageWidget(
-                        svgAsset: GraphicsFoundation.instance.svg.dice,
-                        height: 17,
-                        fit: BoxFit.fitHeight,
+                  RollingDiceButton(onPressed: (value) {
+                    final Set<String> list = {};
+                    for (int i in value) {
+                      list.add(feed.filterChips![i].title);
+                    }
+
+                      onTagSortPressed?.call('Random',list);
+
+                  }, length: feed.filterChips?.length ?? 0
+                      // context.gradientButton(
+                      //   data: BaseUiKitButtonData(
+                      //     icon: ImageWidget(
+                      //       svgAsset: GraphicsFoundation.instance.svg.dice,
+                      //       height: 17,
+                      //       fit: BoxFit.fitHeight,
+                      //     ),
+                      //     onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
+                      //   ),
                       ),
-                      onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
-                    ),
-                  ),
                   UiKitTitledFilterChip(
                     selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
                     title: 'Favorites',
@@ -213,6 +224,7 @@ class FeedComponent extends StatelessWidget {
             pagingController: controller,
           ),
           SpacingFoundation.verticalSpace24.wrapSliverBox,
+          for(var i in List.generate(4, (index) => null))
           kBottomNavigationBarHeight.heightBox.wrapSliverBox,
         ],
       ],
