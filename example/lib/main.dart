@@ -10,8 +10,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -71,8 +70,25 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class ComponentsTestPage extends StatelessWidget {
+class ComponentsTestPage extends StatefulWidget {
   ComponentsTestPage({Key? key}) : super(key: key);
+
+  @override
+  State<ComponentsTestPage> createState() => _ComponentsTestPageState();
+}
+
+class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProviderStateMixin {
+  late final likeController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 1, milliseconds: 500),
+    value: 0,
+  );
+
+  late final dislikeController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 1, milliseconds: 500),
+    value: 0,
+  );
 
   final GlobalConfiguration configuration = GlobalConfiguration();
 
@@ -649,57 +665,69 @@ class ComponentsTestPage extends StatelessWidget {
                         ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
-                data: BaseUiKitButtonData(
-                    text: 'show shuffle',
-                    onPressed: () => buildComponent(
-                        context,
-                        ComponentShuffleModel.fromJson(configuration.appConfig.content['shuffle']),
-                        ComponentBuilder(
-                            child: Scaffold(
-                                body: ShuffleComponent(
-                          shuffle: UiShuffleModel(
-                              items: List.generate(
+              data: BaseUiKitButtonData(
+                text: 'show shuffle',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentShuffleModel.fromJson(configuration.appConfig.content['shuffle']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: ShuffleComponent(
+                        configModel: ComponentShuffleModel.fromJson(configuration.appConfig.content['shuffle']),
+                        shuffle: UiShuffleModel(
+                          likeController: likeController,
+                          dislikeController: dislikeController,
+                          items: List.generate(
                             4,
                             (index) => UiKitSwiperCard(
-                                title: 'Dance Again',
-                                subtitle: 'Unique place for unique people',
-                                imageLink: index == 0
-                                    ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
-                                    : index == 1
-                                        ? 'https://www.trutravels.com/blog/finns-beach-club.png'
-                                        : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
-                                tags: [
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: Assets.images.svg.cocktail.path,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: Assets.images.svg.cocktail.path,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: Assets.images.svg.cocktail.path,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: Assets.images.svg.cocktail.path,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: Assets.images.svg.cocktail.path,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                ]),
-                          )),
-                        )))))),
+                              title: 'Dance Again',
+                              subtitle: 'Unique place for unique people',
+                              imageLink: index == 0
+                                  ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
+                                  : index == 1
+                                      ? 'https://www.trutravels.com/blog/finns-beach-club.png'
+                                      : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
+                              tags: [
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: Assets.images.svg.cocktail.path,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: Assets.images.svg.cocktail.path,
+                                  customSpace: SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: Assets.images.svg.cocktail.path,
+                                  customSpace: SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: Assets.images.svg.cocktail.path,
+                                  customSpace: SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: Assets.images.svg.cocktail.path,
+                                  customSpace: SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        indexNotifier: ValueNotifier<int>(0),
+                        backgroundImageNotifier: ValueNotifier<String>(''),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -779,8 +807,7 @@ class ComponentsTestPage extends StatelessWidget {
                                   mood: UiMoodModel(
                                     descriptionItems: [
                                       const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
-                                      const UiDescriptionItemModel(
-                                          active: true, title: 'Burned today', description: '432'),
+                                      const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
                                     ],
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
@@ -798,9 +825,9 @@ class ComponentsTestPage extends StatelessWidget {
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -811,9 +838,9 @@ class ComponentsTestPage extends StatelessWidget {
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
