@@ -11,31 +11,25 @@ class EventComponent extends StatelessWidget {
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
 
-  const EventComponent(
-      {Key? key,
-      required this.event,
-      this.isEligibleForEdit = false,
-      this.onEditPressed})
+  const EventComponent({Key? key, required this.event, this.isEligibleForEdit = false, this.onEditPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
             version: '0',
             pageBuilderType: PageBuilderType.page,
             positionModel:
-                PositionModel(bodyAlignment: Alignment.topLeft, version: '',horizontalMargin: 16,verticalMargin:10))
+                PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final titleAlignment = model.positionModel?.titleAlignment;
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return Column(
       children: [
@@ -47,8 +41,7 @@ class EventComponent extends StatelessWidget {
             children: [
               if (event.title != null) ...[
                 Stack(
-                    alignment: titleAlignment.crossAxisAlignment ==
-                            CrossAxisAlignment.center
+                    alignment: titleAlignment.crossAxisAlignment == CrossAxisAlignment.center
                         ? Alignment.center
                         : AlignmentDirectional.topStart,
                     children: [
@@ -64,8 +57,7 @@ class EventComponent extends StatelessWidget {
                             right: 0,
                             child: IconButton(
                               icon: ImageWidget(
-                                  svgAsset:
-                                      GraphicsFoundation.instance.svg.pencil,
+                                  svgAsset: GraphicsFoundation.instance.svg.pencil,
                                   color: Colors.white,
                                   height: 20.h,
                                   fit: BoxFit.fitHeight),
@@ -113,31 +105,24 @@ class EventComponent extends StatelessWidget {
             if (event.descriptionItems != null)
               ...event.descriptionItems!
                   .map((e) => GestureDetector(
-                          onTap: () {
-                            if (e.description.startsWith('http')) {
-                              launchUrlString(e.description);
-                            } else if (e.description
-                                .replaceAll(RegExp(r'[0-9]'), '')
-                                .replaceAll('+', '')
-                                .trim()
-                                .isEmpty) {
-                              launchUrlString('tel:${e.description}');
-                            }
-                          },
-                          child: TitledAccentInfo(
-                            title: e.title,
-                            info: e.description,
-                          ))
-                      .paddingSymmetric(
-                          vertical: SpacingFoundation.verticalSpacing4))
+                      onTap: () {
+                        if (e.description.startsWith('http')) {
+                          launchUrlString(e.description);
+                        } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                          launchUrlString('tel:${e.description}');
+                        }
+                      },
+                      child: TitledAccentInfo(
+                        title: e.title,
+                        info: e.description,
+                        showFullInfo: true,
+                      )).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4))
                   .toList(),
             SpacingFoundation.verticalSpace16,
           ],
         ),
       ],
       // ),
-    ).paddingSymmetric(
-        vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
-        horizontal: horizontalMargin);
+    ).paddingSymmetric(vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(), horizontal: horizontalMargin);
   }
 }
