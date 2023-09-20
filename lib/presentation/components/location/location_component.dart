@@ -104,10 +104,10 @@ class _LocationComponentState extends State<LocationComponent> {
       widget.onLocationChanged.call(
         address: suggestion.title,
         latitude:
-            placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lat ??
+            placeDetails?.locationDetails?.geometry?.location?.lat ??
                 0,
         longitude:
-            placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lng ??
+            placeDetails?.locationDetails?.geometry?.location?.lng ??
                 0,
       );
 
@@ -134,6 +134,18 @@ class _LocationComponentState extends State<LocationComponent> {
           0,
         ),
       );
+
+      final marker = Marker(
+        markerId: const MarkerId('1'),
+        position: LatLng(
+          placeDetails?.locationDetails?.geometry?.location?.lat?? 0,
+          placeDetails?.locationDetails?.geometry?.location?.lng?? 0,
+        ),
+      );
+      setState(() {
+        mapMarkers.clear();
+        mapMarkers = {marker};
+      });
     }
   }
 

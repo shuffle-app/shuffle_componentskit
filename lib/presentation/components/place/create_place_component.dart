@@ -13,12 +13,11 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
 
-  const CreatePlaceComponent(
-      {super.key,
-      this.placeToEdit,
-      this.getLocation,
-      this.onPlaceDeleted,
-      required this.onPlaceCreated});
+  const CreatePlaceComponent({super.key,
+    this.placeToEdit,
+    this.getLocation,
+    this.onPlaceDeleted,
+    required this.onPlaceCreated});
 
   @override
   State<CreatePlaceComponent> createState() => _CreatePlaceComponentState();
@@ -29,9 +28,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _phoneController = TextEditingController();
   late final TextEditingController _websiteController = TextEditingController();
   late final TextEditingController _locationController =
-      TextEditingController();
+  TextEditingController();
   late final TextEditingController _descriptionController =
-      TextEditingController();
+  TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiPlaceModel _placeToEdit;
@@ -61,7 +60,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / (kIsWeb ? 390: 0.9.sw) >
+    if (_descriptionController.text.length * 5.8.w / (kIsWeb ? 390 : 0.9.sw) >
         descriptionHeightConstraint / 50.h) {
       setState(() {
         descriptionHeightConstraint += 35.h;
@@ -101,7 +100,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   _onVideoAddRequested() async {
     final videoFile =
-        await ImagePicker().pickVideo(source: ImageSource.gallery);
+    await ImagePicker().pickVideo(source: ImageSource.gallery);
     if (videoFile != null) {
       setState(() {
         _videos.add(UiKitMediaVideo(link: videoFile.path));
@@ -130,11 +129,15 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ??
             GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
-            version: '1', pageBuilderType: PageBuilderType.page)
+        version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
     final horizontalPadding =
         model.positionModel?.horizontalMargin?.toDouble() ?? 0;
@@ -147,24 +150,24 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         autoImplyLeading: true,
         appBarTrailing: widget.placeToEdit != null
             ? IconButton(
-                icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.trash,
-                    color: Colors.white,
-                    height: 20.h,
-                    fit: BoxFit.fitHeight),
-                onPressed: widget.onPlaceDeleted)
+            icon: ImageWidget(
+                svgAsset: GraphicsFoundation.instance.svg.trash,
+                color: Colors.white,
+                height: 20.h,
+                fit: BoxFit.fitHeight),
+            onPressed: widget.onPlaceDeleted)
             : null,
         body: SingleChildScrollView(
             child: Form(
                 key: _formKey,
                 child: Column(
                     mainAxisAlignment:
-                        (model.positionModel?.bodyAlignment).mainAxisAlignment,
+                    (model.positionModel?.bodyAlignment).mainAxisAlignment,
                     crossAxisAlignment:
-                        (model.positionModel?.bodyAlignment).crossAxisAlignment,
+                    (model.positionModel?.bodyAlignment).crossAxisAlignment,
                     children: [
                       UiKitInputFieldNoFill(
-                              label: 'Title', controller: _titleController)
+                          label: 'Title', controller: _titleController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
 
@@ -175,7 +178,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         ).paddingOnly(right: horizontalPadding),
                         if (_placeToEdit.logo != null)
                           CircularAvatar(
-                              height: kIsWeb? 40 : 40.h,
+                              height: kIsWeb ? 40 : 40.h,
                               avatarUrl: _placeToEdit.logo!),
                         const Spacer(),
                         context.outlinedButton(
@@ -183,7 +186,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               onPressed: _onLogoAddRequested,
                               icon: ImageWidget(
                                 svgAsset:
-                                    GraphicsFoundation.instance.svg.cameraPlus,
+                                GraphicsFoundation.instance.svg.cameraPlus,
                                 color: Colors.white,
                                 height: 18,
                                 width: 18,
@@ -223,7 +226,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           data: BaseUiKitButtonData(
                               onPressed: () async {
                                 final maybeDate =
-                                    await showUiKitTimeDialog(context);
+                                await showUiKitTimeDialog(context);
                                 if (maybeDate != null) {
                                   setState(() {
                                     _placeToEdit.openFrom = maybeDate;
@@ -232,7 +235,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               },
                               icon: ImageWidget(
                                 svgAsset:
-                                    GraphicsFoundation.instance.svg.calendar,
+                                GraphicsFoundation.instance.svg.calendar,
                                 color: Colors.white,
                               )),
                         ),
@@ -249,7 +252,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           data: BaseUiKitButtonData(
                               onPressed: () async {
                                 final maybeDate =
-                                    await showUiKitTimeDialog(context);
+                                await showUiKitTimeDialog(context);
                                 if (maybeDate != null) {
                                   setState(() {
                                     _placeToEdit.openTo = maybeDate;
@@ -258,7 +261,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               },
                               icon: ImageWidget(
                                 svgAsset:
-                                    GraphicsFoundation.instance.svg.calendar,
+                                GraphicsFoundation.instance.svg.calendar,
                                 color: Colors.white,
                               )),
                         ),
@@ -273,14 +276,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             _placeToEdit.weekdays.isEmpty
                                 ? 'select days '
                                 : _placeToEdit.weekdays.length == 7
-                                    ? 'Daily '
-                                    : _placeToEdit.weekdays.join(', '),
+                                ? 'Daily '
+                                : _placeToEdit.weekdays.join(', '),
                             style: theme?.boldTextTheme.body)),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
                               onPressed: () async {
                                 final maybeDaysOfWeek =
-                                    await showUiKitWeekdaySelector(context);
+                                await showUiKitWeekdaySelector(context);
                                 if (maybeDaysOfWeek != null) {
                                   setState(() {
                                     _placeToEdit.weekdays = maybeDaysOfWeek;
@@ -289,7 +292,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               },
                               icon: ImageWidget(
                                 svgAsset:
-                                    GraphicsFoundation.instance.svg.calendar,
+                                GraphicsFoundation.instance.svg.calendar,
                                 color: Colors.white,
                               )),
                         ),
@@ -304,38 +307,41 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           },
                           child: IgnorePointer(
                               child: UiKitInputFieldNoFill(
-                                      label: 'Address',
-                                      controller: _locationController,
-                                      icon: ImageWidget(
-                                          svgAsset: GraphicsFoundation
-                                              .instance.svg.location,
-                                          color: Colors.white))
+                                  label: 'Address',
+                                  controller: _locationController,
+                                  icon: ImageWidget(
+                                      svgAsset: GraphicsFoundation
+                                          .instance.svg.location,
+                                      color: Colors.white))
                                   .paddingSymmetric(
-                                      horizontal: horizontalPadding))),
+                                  horizontal: horizontalPadding))),
                       SpacingFoundation.verticalSpace24,
                       UiKitInputFieldNoFill(
-                              keyboardType: TextInputType.url,
-                              label: 'Website',
-                              controller: _websiteController)
+                          keyboardType: TextInputType.url,
+                          label: 'Website',
+                          controller: _websiteController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       UiKitInputFieldNoFill(
-                              keyboardType: TextInputType.phone,
-                              label: 'Phone',
-                              controller: _phoneController)
+                          keyboardType: TextInputType.phone,
+                          label: 'Phone',
+                          controller: _phoneController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       Text('Base properties', style: theme?.regularTextTheme.labelSmall)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                          onNotFoundTagCallback: (value) => setState(() => _placeToEdit.baseTags = [
-                            ..._placeToEdit.baseTags,
-                            UiKitTag(title: value, iconPath: '')
-                          ]),
+                          onNotFoundTagCallback: (value) =>
+                              setState(() =>
+                              _placeToEdit.baseTags = [
+                                ..._placeToEdit.baseTags,
+                                UiKitTag(title: value, iconPath: '')
+                              ]),
                           tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
-                          onRemoveTagCallback: (value) => setState(
-                                  () => _placeToEdit.baseTags.removeWhere((element) => element.title == value)))
+                          onRemoveTagCallback: (value) =>
+                              setState(
+                                      () => _placeToEdit.baseTags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                       SpacingFoundation.verticalSpace24,
@@ -344,8 +350,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                          onNotFoundTagCallback: (value) => setState(() =>
-                          _placeToEdit.tags = [..._placeToEdit.tags, UiKitTag(title: value, iconPath: '')]),
+                          onNotFoundTagCallback: (value) =>
+                              setState(() =>
+                              _placeToEdit.tags = [..._placeToEdit.tags, UiKitTag(title: value, iconPath: '')]),
                           tags: _placeToEdit.tags.map((tag) => tag.title).toList(),
                           onRemoveTagCallback: (value) =>
                               setState(() => _placeToEdit.tags.removeWhere((element) => element.title == value)))
@@ -355,7 +362,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           top: false,
                           child: context.gradientButton(
                               data: BaseUiKitButtonData(
-                                fit: ButtonFit.fitWidth,
+                                  fit: ButtonFit.fitWidth,
                                   text: 'save'.toUpperCase(),
                                   onPressed: () {
                                     _placeToEdit.title = _titleController.text;

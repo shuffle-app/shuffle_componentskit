@@ -14,6 +14,7 @@ class UiEventModel {
   DateTime? date;
   DateTime? dateTo;
   TimeOfDay? time;
+  TimeOfDay? timeTo;
   String? description;
   String? location;
   List<UiKitTag> tags;
@@ -37,6 +38,7 @@ class UiEventModel {
     this.baseTags = const [],
     this.rating,
     this.time,
+    this.timeTo,
     this.weekdays,
     this.isRecurrent = false,
     this.archived = false,
