@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -935,9 +934,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
-            SpacingFoundation.verticalSpace24,
+            SpacingFoundation.verticalSpace16,
             OrdinaryButton(
-              text: 'Donation Bottom Sheet',
+              text: 'show Donation Bottom Sheet',
               onPressed: () => showUiKitGeneralFullScreenDialog(
                 context,
                 GeneralDialogData(
@@ -987,7 +986,25 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
-            SpacingFoundation.verticalSpace24,
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show complaint bottom sheet',
+              onPressed: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 0.3.sh,
+                  useRootNavigator: false,
+                  child: ComplaintFormComponent(
+                    onSend: () {},
+                    nameController: TextEditingController(),
+                    emailController: TextEditingController(),
+                    issueController: TextEditingController(),
+                    formKey: GlobalKey<FormState>(),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
           ],
         ),
       ),
