@@ -93,8 +93,8 @@ class FeedBusinessComponent extends StatelessWidget {
                       )
                       .toList() ??
                   [],
-            ),
-          ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+            ).paddingSymmetric(horizontal: horizontalMargin),
+          ).wrapSliverBox,
           SpacingFoundation.verticalSpace24.wrapSliverBox,
         ],
         if (feed.moods != null && (model.showFeelings ?? true)) ...[
@@ -117,6 +117,7 @@ class FeedBusinessComponent extends StatelessWidget {
               padding: EdgeInsets.zero,
               shrinkWrap: true,
               itemBuilder: (context, index) {
+                if(index==0) return SizedBox.shrink();
                 final niche = nicheTitles?.elementAt(index);
 
                 return UiKitMessageCardWithIcon(
@@ -127,9 +128,10 @@ class FeedBusinessComponent extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace12,
-              itemCount: nicheTitles?.length ?? 0,
+              itemCount: nicheTitles?.length ?? 0 + 1,
             ),
-          ).paddingOnly(left: horizontalMargin).wrapSliverBox,
+          ).wrapSliverBox,
+          // ).paddingOnly(left: horizontalMargin).wrapSliverBox,
           SpacingFoundation.verticalSpace24.wrapSliverBox,
         ],
         if ((model.showPlaces ?? true)) ...[
