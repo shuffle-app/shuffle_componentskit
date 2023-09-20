@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -1101,83 +1100,4 @@ class ComponentsTestPage extends StatelessWidget {
     //   const UiDescriptionItemModel(title: 'test 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
     // ]
   );
-}
-
-class ComplaintFormComponent extends StatelessWidget {
-  const ComplaintFormComponent({
-    super.key,
-    required this.onSend,
-    this.nameValidator,
-    this.emailValidator,
-    this.issueValidator,
-    required this.nameController,
-    required this.emailController,
-    required this.issueController,
-    required this.formKey,
-  });
-
-  final TextEditingController nameController;
-  final TextEditingController emailController;
-  final TextEditingController issueController;
-  final GlobalKey<FormState> formKey;
-  final VoidCallback onSend;
-
-  final String? Function(String?)? nameValidator;
-  final String? Function(String?)? emailValidator;
-  final String? Function(String?)? issueValidator;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.uiKitTheme;
-
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          SpacingFoundation.verticalSpace12,
-          Text('Describe your claim', style: theme?.boldTextTheme.title2),
-          SpacingFoundation.verticalSpace16,
-          SpacingFoundation.verticalSpace16,
-          UiKitInputFieldNoIcon(
-            controller: nameController,
-            validator: nameValidator,
-            hintText: 'YOUR NAME',
-            fillColor: theme?.colorScheme.surface3,
-          ),
-          SpacingFoundation.verticalSpace16,
-          UiKitInputFieldNoIcon(
-            controller: emailController,
-            validator: emailValidator,
-            hintText: 'YOUR EMAIL',
-            fillColor: theme?.colorScheme.surface3,
-          ),
-          SpacingFoundation.verticalSpace16,
-          UiKitInputFieldNoIcon(
-            controller: issueController,
-            validator: issueValidator,
-            hintText: 'DESCRIBE YOUR ISSUE',
-            fillColor: theme?.colorScheme.surface3,
-            minLines: 3,
-            borderRadius: BorderRadiusFoundation.all24,
-          ),
-          SpacingFoundation.verticalSpace16,
-          context.gradientButton(
-            data: BaseUiKitButtonData(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  onSend.call();
-                  if (context.canPop()) {
-                    context.pop();
-                  }
-                }
-              },
-              text: 'send',
-              fit: ButtonFit.fitWidth,
-            ),
-          ),
-          SpacingFoundation.verticalSpace16,
-        ],
-      ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-    );
-  }
 }
