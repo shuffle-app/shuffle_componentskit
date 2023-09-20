@@ -4,6 +4,7 @@ export 'about_user/about_user_component.dart';
 export 'about_user/ui_about_user_model.dart';
 export 'auth/auth_components.dart';
 export 'company_home/company_home_screen_component.dart';
+export 'complaint/complaint_form_component.dart';
 export 'profile_company/company_profile_edit/company_profile_edit_component.dart';
 export 'credentials_code_verification/credentials_code_verification_component.dart';
 export 'donation/donation_component.dart';
