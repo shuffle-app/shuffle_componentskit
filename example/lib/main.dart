@@ -154,7 +154,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                   ComponentBuilder(
                     child: Scaffold(
-                      body: FeedBusinessComponent(
+                      body: FeedComponent(
+                        showBusinessContent: true,
                         controller: PagingController<int, dynamic>(firstPageKey: 1),
                         feed: UiFeedModel(
                           recommendedEvent: event,
@@ -778,6 +779,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 // ),
                                 body: SingleChildScrollView(
                                     child: FeedComponent(
+                                        showBusinessContent: false,
                                         controller: PagingController(firstPageKey: 1),
                                         feed: UiFeedModel(
                                           // mixedItems: List.generate(4, (index) => item),
