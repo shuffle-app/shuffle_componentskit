@@ -13,10 +13,12 @@ class SearchComponent extends StatelessWidget {
   final VoidCallback? onHowItWorksPoped;
   final Function? onPlaceTapped;
   final Function? onTagSortPressed;
+  final bool showBusinessContent;
 
   SearchComponent({
     super.key,
     required this.searchController,
+    required this.showBusinessContent,
     this.scrollController,
     required this.search,
     this.onPlaceTapped,
@@ -63,13 +65,13 @@ class SearchComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final config = GlobalConfiguration().appConfig.content;
-    final model = ComponentSearchModel.fromJson(config['search']);
+    final source = showBusinessContent ? 'search_business' : 'search';
+    final model = ComponentSearchModel.fromJson(config[source]);
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final title = model.content.title;
     final body = model.content.body;
-
 
     final chooseCards = body?[ContentItemType.horizontalList]?.properties?.entries.toList()
       ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
@@ -100,24 +102,24 @@ class SearchComponent extends StatelessWidget {
                 child: SafeArea(
                     bottom: false,
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
-                        SizedBox(
-                        width: double.infinity,
-                        // height: 30.h,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                        children: [
-                          Text(
-                            title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'You’ll find it',
-                            style: theme?.boldTextTheme.title1,
-                          ),
-                          if (search.showHowItWorks && title?[ContentItemType.hintDialog] !=null)
-                            HowItWorksWidget(
-                                customOffset: Offset(0.35.sw, 10),
-                                element: title![ContentItemType.hintDialog]!,
-                                onPop: onHowItWorksPoped),
-                        ],
-                      )),
+                      SizedBox(
+                          width: double.infinity,
+                          // height: 30.h,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            alignment: Alignment.center,
+                            children: [
+                              Text(
+                                title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'You’ll find it',
+                                style: theme?.boldTextTheme.title1,
+                              ),
+                              if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
+                                HowItWorksWidget(
+                                    customOffset: Offset(0.35.sw, 10),
+                                    element: title![ContentItemType.hintDialog]!,
+                                    onPop: onHowItWorksPoped),
+                            ],
+                          )),
                       SpacingFoundation.verticalSpace16,
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
@@ -152,8 +154,7 @@ class SearchComponent extends StatelessWidget {
               if (model.showFree ?? false) ...[
                 UiKitOverflownActionCard(
                   horizontalMargin: horizontalMargin,
-                  action: context.smallButton(
-                      data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                  action: context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
                   title: Stack(
                     children: [
                       RichText(

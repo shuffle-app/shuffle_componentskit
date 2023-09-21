@@ -154,7 +154,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                   ComponentBuilder(
                     child: Scaffold(
-                      body: FeedBusinessComponent(
+                      body: FeedComponent(
+                        showBusinessContent: true,
                         controller: PagingController<int, dynamic>(firstPageKey: 1),
                         feed: UiFeedModel(
                           recommendedEvent: event,
@@ -183,6 +184,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ComponentBuilder(
                     child: Scaffold(
                       body: SearchComponent(
+                        showBusinessContent: false,
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchTag',
@@ -292,7 +294,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ComponentModel.fromJson(configuration.appConfig.content['search']),
                   ComponentBuilder(
                     child: Scaffold(
-                      body: SearchBusinessComponent(
+                      body: SearchComponent(
+                        showBusinessContent: true,
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchBusinessTag',
@@ -778,6 +781,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 // ),
                                 body: SingleChildScrollView(
                                     child: FeedComponent(
+                                        showBusinessContent: false,
                                         controller: PagingController(firstPageKey: 1),
                                         feed: UiFeedModel(
                                           // mixedItems: List.generate(4, (index) => item),
