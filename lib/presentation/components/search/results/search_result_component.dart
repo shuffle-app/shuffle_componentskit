@@ -33,7 +33,7 @@ class SearchResultComponent extends StatelessWidget {
       wrapSliverBox: false,
       centerTitle: true,
       autoImplyLeading: true,
-      customToolbarHeight: 150.0,
+      customToolbarHeight: 160.0,
       canFoldAppBar: false,
       appBarBody: Hero(
         tag: heroSearchTag,
@@ -44,13 +44,12 @@ class SearchResultComponent extends StatelessWidget {
             fillColor: ColorsFoundation.surface3,
             hintText: 'search'.toUpperCase(),
             controller: searchController,
-            errorText: errorText,
             icon: searchController.text.isEmpty
                 ? ImageWidget(svgAsset: GraphicsFoundation.instance.svg.search, color: Colors.white.withOpacity(0.5))
                 : null,
             onPressed: () {
               searchController.clear();
-              context.pop();
+              // context.pop();
             },
             onFieldSubmitted: onFieldSubmitted,
           ),

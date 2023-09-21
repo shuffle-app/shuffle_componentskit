@@ -157,7 +157,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                   ComponentBuilder(
                     child: Scaffold(
-                      body: FeedBusinessComponent(
+                      body: FeedComponent(
+                        showBusinessContent: true,
                         controller: PagingController<int, dynamic>(firstPageKey: 1),
                         feed: UiFeedModel(
                           recommendedEvent: event,
@@ -186,6 +187,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ComponentBuilder(
                     child: Scaffold(
                       body: SearchComponent(
+                        showBusinessContent: false,
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchTag',
@@ -295,7 +297,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ComponentModel.fromJson(configuration.appConfig.content['search']),
                   ComponentBuilder(
                     child: Scaffold(
-                      body: SearchBusinessComponent(
+                      body: SearchComponent(
+                        showBusinessContent: true,
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchBusinessTag',
@@ -767,37 +770,33 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             //                             events: List.generate(5, (index) => event)))))))),
             // SpacingFoundation.verticalSpace16,
             context.button(
-              data: BaseUiKitButtonData(
-                text: 'show feed',
-                onPressed: () => buildComponent(
-                  context,
-                  ComponentFeedModel.fromJson(configuration.appConfig.content['feed']),
-                  ComponentBuilder(
-                    child: Scaffold(
-                      // appBar: AppBar(
-                      //   backgroundColor: Colors.transparent,
-                      //   toolbarHeight: 0,
-                      //   bottomOpacity: 0,
-                      //   toolbarOpacity: 0,
-                      // ),
-                      body: SingleChildScrollView(
-                        child: FeedComponent(
-                          controller: PagingController(firstPageKey: 1),
-                          feed: UiFeedModel(
-                            // mixedItems: List.generate(4, (index) => item),
-                            recommendedEvent: event,
-                            moods: List.generate(
-                                4,
-                                (index) => UiMoodModel(
-                                    id: 1, title: 'Want to have some fun', logo: 'assets/images/png/crazy_emoji.png')),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                data: BaseUiKitButtonData(
+                    text: 'show feed',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentFeedModel.fromJson(configuration.appConfig.content['feed']),
+                        ComponentBuilder(
+                            child: Scaffold(
+                                // appBar: AppBar(
+                                //   backgroundColor: Colors.transparent,
+                                //   toolbarHeight: 0,
+                                //   bottomOpacity: 0,
+                                //   toolbarOpacity: 0,
+                                // ),
+                                body: SingleChildScrollView(
+                                    child: FeedComponent(
+                                        showBusinessContent: false,
+                                        controller: PagingController(firstPageKey: 1),
+                                        feed: UiFeedModel(
+                                          // mixedItems: List.generate(4, (index) => item),
+                                          recommendedEvent: event,
+                                          moods: List.generate(
+                                              4,
+                                              (index) => UiMoodModel(
+                                                  id: 1,
+                                                  title: 'Want to have some fun',
+                                                  logo: 'assets/images/png/crazy_emoji.png')),
+                                        )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
