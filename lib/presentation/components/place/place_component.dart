@@ -14,13 +14,14 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
             pageBuilderType: PageBuilderType.page,
-            positionModel:
-                PositionModel(version: '', horizontalMargin: 16, verticalMargin: 10, bodyAlignment: Alignment.centerLeft))
+            positionModel: PositionModel(
+                version: '', horizontalMargin: 16, verticalMargin: 10, bodyAlignment: Alignment.centerLeft))
         : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -50,8 +51,10 @@ class PlaceComponent extends StatelessWidget {
               rating: place.rating,
               media: place.media,
               description: place.description,
-              baseTags: place.baseTags ?? [],
+              baseTags: place.baseTags,
               uniqueTags: place.tags,
+              openFrom: place.openFrom,
+              openTo: place.openTo,
               horizontalMargin: horizontalMargin,
             ),
             SpacingFoundation.verticalSpace8,

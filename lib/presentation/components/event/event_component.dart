@@ -95,6 +95,8 @@ class EventComponent extends StatelessWidget {
               rating: event.rating,
               baseTags: event.baseTags ?? [],
               uniqueTags: event.tags ?? [],
+              openFrom: event.time,
+              openTo: event.timeTo,
             ),
             SpacingFoundation.verticalSpace14,
             if (event.description != null) ...[
