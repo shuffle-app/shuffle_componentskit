@@ -89,6 +89,7 @@ class SettingsComponent extends StatelessWidget {
             ],
           ),
         ),
+        kBottomNavigationBarHeight.heightBox
       ],
     ).paddingSymmetric(
       horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0,

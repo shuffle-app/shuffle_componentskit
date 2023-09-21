@@ -7,16 +7,27 @@ class WebViewScreen extends StatelessWidget {
   final String title;
   final String url;
   final bool showWebView;
+  final NavigationDelegate? navigationDelegate;
+  final bool useLightTheme;
 
-  const WebViewScreen({super.key, required this.title, required this.url, this.showWebView = false});
+  const WebViewScreen(
+      {super.key,
+      required this.title,
+      required this.url,
+      this.showWebView = false,
+      this.navigationDelegate,
+      this.useLightTheme = false});
 
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(UiKitColors.surface);
+      ..setBackgroundColor(Colors.transparent);
     if (showWebView) {
       controller.loadRequest(Uri.parse(url));
+    }
+    if (navigationDelegate != null) {
+      controller.setNavigationDelegate(navigationDelegate!);
     }
 
     return Scaffold(
@@ -26,12 +37,12 @@ class WebViewScreen extends StatelessWidget {
           title: title,
           centerTitle: true,
           body: showWebView
-              ? WebViewWidget(controller: controller)
+              ? Stack(children: [const Center(child: LoadingWidget()), WebViewWidget(controller: controller)])
               : SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: WebContentComponent(
-                url: url,
-              ))),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: WebContentComponent(
+                    url: url,
+                  ))),
     );
   }
 }

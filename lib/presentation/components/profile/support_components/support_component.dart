@@ -90,7 +90,7 @@ class SupportComponent extends StatelessWidget {
             UiKitCardWrapper(
               color: ColorsFoundation.surface1,
               child: Form(
-                key: GlobalKey<FormState>(),
+                // key: GlobalKey<FormState>(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

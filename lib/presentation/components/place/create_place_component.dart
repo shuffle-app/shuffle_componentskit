@@ -304,6 +304,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             //     message: 'in development', context: context);
 
                             _locationController.text = await widget.getLocation?.call() ?? '';
+                            _placeToEdit.location = _locationController.text;
                           },
                           child: IgnorePointer(
                               child: UiKitInputFieldNoFill(

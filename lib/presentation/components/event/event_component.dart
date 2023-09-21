@@ -10,8 +10,10 @@ class EventComponent extends StatelessWidget {
   final UiEventModel event;
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
+  final ComplaintFormComponent? complaintFormComponent;
 
-  const EventComponent({Key? key, required this.event, this.isEligibleForEdit = false, this.onEditPressed})
+  const EventComponent(
+      {Key? key, required this.event, this.isEligibleForEdit = false, this.onEditPressed, this.complaintFormComponent})
       : super(key: key);
 
   @override
@@ -83,12 +85,37 @@ class EventComponent extends StatelessWidget {
             if (event.media != null) ...[
               Align(
                   alignment: Alignment.center,
-                  child: UiKitPhotoSlider(
-                    media: event.media ?? [],
-                    onTap: null,
-                    width: 1.sw - horizontalMargin * 2,
-                    height: 156.h,
-                  )),
+                  child: Stack(clipBehavior: Clip.none, children: [
+                    UiKitPhotoSlider(
+                      media: event.media ?? [],
+                      onTap: null,
+                      width: 1.sw - horizontalMargin * 2,
+                      height: 156.h,
+                    ),
+                    if (complaintFormComponent != null)
+                      Positioned(
+                          bottom: -10.h,
+                          right: -10.w,
+                          child: Transform.scale(
+                              scale: 0.5.sp,
+                              child: context.smallOutlinedButton(
+                                  color: UiKitColors.darkNeutral800.withOpacity(0.5),
+                                  data: BaseUiKitButtonData(
+                                    onPressed: () {
+                                      showUiKitGeneralFullScreenDialog(
+                                          context,
+                                          GeneralDialogData(
+                                              topPadding: 0.3.sh, useRootNavigator: false, child:  complaintFormComponent!));
+                                    },
+                                    icon: Transform.scale(
+                                        scale: 1.5.sp,
+                                        child: ImageWidget(
+                                          // height: 20,
+                                          svgAsset: GraphicsFoundation.instance.svg.alertCircle,
+                                        )),
+                                  ),
+                                  blurred: true))),
+                  ])),
               SpacingFoundation.verticalSpace14
             ],
             UiKitTagsWidget(
