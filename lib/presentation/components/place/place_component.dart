@@ -14,13 +14,14 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
             pageBuilderType: PageBuilderType.page,
-            positionModel:
-                PositionModel(version: '', horizontalMargin: 16, verticalMargin: 10, bodyAlignment: Alignment.centerLeft))
+            positionModel: PositionModel(
+                version: '', horizontalMargin: 16, verticalMargin: 10, bodyAlignment: Alignment.centerLeft))
         : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -92,7 +93,7 @@ class PlaceComponent extends StatelessWidget {
               shrinkWrap: true,
               crossAxisCount: 2,
               crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
-              childAspectRatio: 2,
+              childAspectRatio: 1.8,
               children: place.descriptionItems!
                   .map((e) => GestureDetector(
                       onTap: () {
@@ -107,6 +108,7 @@ class PlaceComponent extends StatelessWidget {
                         title: e.title,
                         description: e.description,
                         spacing: SpacingFoundation.horizontalSpacing8,
+                        showFullInfo: true,
                       )))
                   .toList(),
             ).paddingSymmetric(horizontal: horizontalMargin),
