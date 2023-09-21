@@ -63,10 +63,14 @@ class ComplaintFormComponent extends StatelessWidget {
             data: BaseUiKitButtonData(
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  onSend.call();
-                  if (context.canPop()) {
+                  print('validated');
+
+                  // if (context.canPop()) {
                     context.pop();
-                  }
+                  // }
+                  onSend();
+                } else {
+                  print('not validated');
                 }
               },
               text: 'send',
@@ -74,6 +78,7 @@ class ComplaintFormComponent extends StatelessWidget {
             ),
           ),
           SpacingFoundation.verticalSpace16,
+          MediaQuery.viewInsetsOf(context).bottom.heightBox
         ],
       ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
     );

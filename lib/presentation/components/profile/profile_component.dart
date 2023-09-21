@@ -79,6 +79,7 @@ class ProfileComponent extends StatelessWidget {
                     context,
                     ComponentModel.fromJson(GlobalConfiguration().appConfig.content['invite_people_places']),
                     ComponentBuilder(
+                      useRootNavigator: true,
                       child: Builder(
                         builder: (context) {
                           var model = UiInviteToFavouritePlacesModel(
