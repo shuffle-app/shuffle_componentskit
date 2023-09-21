@@ -265,16 +265,19 @@ class FeedComponent extends StatelessWidget {
                   ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
                   Wrap(
                     spacing: SpacingFoundation.verticalSpacing8,
-                    children: feed.filterChips!
-                        .map(
-                          (e) => UiKitTitledFilterChip(
-                            selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
-                            title: e.title,
-                            onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                            icon: e.iconPath,
-                          ),
-                        )
-                        .toList(),
+                    children: feed.filterChips!.map(
+                      (e) {
+                        double padding = 0;
+                        if (e == feed.filterChips?.last) padding = horizontalMargin;
+
+                        return UiKitTitledFilterChip(
+                          selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                          title: e.title,
+                          onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                          icon: e.iconPath,
+                        ).paddingOnly(right: padding);
+                      },
+                    ).toList(),
                   ),
                 ],
               ).paddingOnly(left: horizontalMargin),
@@ -285,8 +288,8 @@ class FeedComponent extends StatelessWidget {
             shrinkWrapFirstPageIndicators: true,
             builderDelegate: PagedChildBuilderDelegate(
               animateTransitions: true,
-              firstPageProgressIndicatorBuilder: (c) => progressIndicator,
-              newPageProgressIndicatorBuilder: (c) => progressIndicator,
+              firstPageProgressIndicatorBuilder: (c) => Center(child: progressIndicator),
+              newPageProgressIndicatorBuilder: (c) => Center(child: progressIndicator),
               itemBuilder: (_, item, index) {
                 item as UiUniversalModel;
 

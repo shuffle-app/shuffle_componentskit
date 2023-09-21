@@ -184,6 +184,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ComponentBuilder(
                     child: Scaffold(
                       body: SearchComponent(
+                        showBusinessContent: false,
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchTag',
@@ -293,7 +294,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ComponentModel.fromJson(configuration.appConfig.content['search']),
                   ComponentBuilder(
                     child: Scaffold(
-                      body: SearchBusinessComponent(
+                      body: SearchComponent(
+                        showBusinessContent: true,
                         searchController: TextEditingController(),
                         search: UiSearchModel(
                           heroSearchTag: 'heroSearchBusinessTag',

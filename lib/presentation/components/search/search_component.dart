@@ -13,10 +13,12 @@ class SearchComponent extends StatelessWidget {
   final VoidCallback? onHowItWorksPoped;
   final Function? onPlaceTapped;
   final Function? onTagSortPressed;
+  final bool showBusinessContent;
 
   SearchComponent({
     super.key,
     required this.searchController,
+    required this.showBusinessContent,
     this.scrollController,
     required this.search,
     this.onPlaceTapped,
@@ -63,7 +65,8 @@ class SearchComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final config = GlobalConfiguration().appConfig.content;
-    final model = ComponentSearchModel.fromJson(config['search']);
+    final source = showBusinessContent ? 'search_business' : 'search';
+    final model = ComponentSearchModel.fromJson(config[source]);
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
