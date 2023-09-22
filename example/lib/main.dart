@@ -10,7 +10,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -127,6 +128,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       tags: tags,
       location: 'Burj Khalifa 122nd Floor',
       date: DateTime.now(),
+      time: TimeOfDay.now(),
+      timeTo: const TimeOfDay(hour: 15, minute: 59),
+
       //   UiDescriptionItemModel(
       //     title: 'Open now',
       //     description: '9:30 am - 10:30 pm',
@@ -811,7 +815,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   mood: UiMoodModel(
                                     descriptionItems: [
                                       const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
-                                      const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
+                                      const UiDescriptionItemModel(
+                                          active: true, title: 'Burned today', description: '432'),
                                     ],
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
@@ -829,9 +834,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model:
-                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
-                                        BookingElementModel(version: '0')))))),
+                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -842,9 +847,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model:
-                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
-                                        BookingElementModel(version: '0')))))),
+                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(

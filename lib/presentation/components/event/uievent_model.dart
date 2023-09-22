@@ -45,9 +45,10 @@ class UiEventModel {
   }) : descriptionItems = [
           if (date != null)
             UiDescriptionItemModel(
-                title: 'Don’t miss it',
-                description:
-                    '${(time != null ? '${normalizedTi(time)} ' : '')}${DateFormat('dd/MM').format(date)}${dateTo != null ? ' - ${DateFormat('dd/MM/yy').format(dateTo)}' : ''}'),
+              title: 'Don’t miss it',
+              description:
+                  '${(time != null ? '${normalizedTi(time)} ' : 'nn')}${timeTo != null ? ' - ${normalizedTi(timeTo)}, ' : 'nn,'}${DateFormat('dd/MM').format(date)}${dateTo != null ? ' - ${DateFormat('dd/MM/yy').format(dateTo)}' : ''}',
+            ),
           if (location != null)
             UiDescriptionItemModel(
               title: "Place",
