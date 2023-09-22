@@ -47,7 +47,7 @@ class UiEventModel {
             UiDescriptionItemModel(
               title: 'Don’t miss it',
               description:
-                  '${(time != null ? '${normalizedTi(time)} ' : 'nn')}${timeTo != null ? ' - ${normalizedTi(timeTo)}, ' : 'nn,'}${DateFormat('dd/MM').format(date)}${dateTo != null ? ' - ${DateFormat('dd/MM/yy').format(dateTo)}' : ''}',
+                  '${(time != null ? '${normalizedTi(time)} ' : 'nn')}${timeTo != null ? ' - ${normalizedTi(timeTo)}, ' : 'nn,'}${DateFormat('MMM dd').format(date)}${dateTo != null ? ' - ${DateFormat('MMM dd, yyyy').format(dateTo)}' : ''}',
             ),
           if (location != null)
             UiDescriptionItemModel(
