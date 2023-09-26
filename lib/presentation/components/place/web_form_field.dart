@@ -1,18 +1,16 @@
 part of 'create_web_place_component.dart';
 
-class WebTextFormField extends StatelessWidget {
-  const WebTextFormField({
+class WebFormField extends StatelessWidget {
+  const WebFormField({
     super.key,
     required this.title,
-    required this.controller,
+    required this.child,
     this.isRequired = false,
-    this.validator,
   });
 
   final String title;
   final bool isRequired;
-  final TextEditingController controller;
-  final String? Function(String?)? validator;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +30,14 @@ class WebTextFormField extends StatelessWidget {
             if (isRequired)
               Text(
                 '*',
-                style: theme?.boldTextTheme.title2.copyWith(color: theme.colorScheme.error),
+                style: theme?.boldTextTheme.title2.copyWith(
+                  color: theme.colorScheme.error,
+                ),
               ),
           ],
         ),
         SpacingFoundation.verticalSpace12,
-        UiKitInputFieldNoIcon(
-          controller: TextEditingController(),
-          hintText: 'DESCRIBE YOUR ISSUE',
-          fillColor: theme?.colorScheme.surface3,
-          borderRadius: BorderRadiusFoundation.all12,
-        ),
+        child,
       ],
     );
   }
