@@ -878,6 +878,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ComponentBuilder(
                     child: AboutCompanyComponent(
                       uiModel: UiAboutCompanyModel(),
+                      nameController: TextEditingController(),
+                      positionController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
                     ),
                   ),
                 ),
@@ -916,8 +919,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     child: CompanyCredentialsVerificationComponent(
                       uiModel: UiCompanyCredentialsVerificationModel(),
                       credentialsController: TextEditingController(),
-                      nameController: TextEditingController(),
-                      positionController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
                     ),
                   ),

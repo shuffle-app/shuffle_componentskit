@@ -8,28 +8,21 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
   final VoidCallback? onSubmitted;
   final ValueChanged<int>? onTabChanged;
   final ValueChanged<CountryModel>? onCountryChanged;
-  final TextEditingController nameController;
-  final TextEditingController positionController;
   final TextEditingController credentialsController;
   final GlobalKey<FormState> formKey;
   final bool? loading;
-  final String? Function(String?)? companyNameValidator;
-  final String? Function(String?)? companyPositionValidator;
+
   final String? Function(String?)? companyCredentialsValidator;
 
   const CompanyCredentialsVerificationComponent({
     super.key,
     required this.uiModel,
     required this.formKey,
-    required this.nameController,
-    required this.positionController,
     required this.credentialsController,
     this.loading,
     this.onSubmitted,
     this.onTabChanged,
     this.onCountryChanged,
-    this.companyNameValidator,
-    this.companyPositionValidator,
     this.companyCredentialsValidator,
   });
 
@@ -37,7 +30,8 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final regTextTheme = context.uiKitTheme?.regularTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_credentials_verification']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -46,7 +40,8 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     final decorationLink = model.content.properties?.values.first;
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
     final countrySelectorTitle =
-        model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+        model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
+            '';
 
     final captionTexts = Map<String, PropertiesBaseModel>.of(model.content.properties ?? {});
 
@@ -103,28 +98,6 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                   onSelected: (country) => onCountryChanged?.call(country),
                   title: countrySelectorTitle,
                 ),
-                SpacingFoundation.verticalSpace16,
-                UiKitCardWrapper(
-                  color: ColorsFoundation.surface1,
-                  borderRadius: BorderRadiusFoundation.max,
-                  child: UiKitInputFieldNoIcon(
-                    controller: nameController,
-                    hintText: 'Your Name'.toUpperCase(),
-                    fillColor: ColorsFoundation.surface3,
-                    validator: companyNameValidator,
-                  ).paddingAll(EdgeInsetsFoundation.all4),
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitCardWrapper(
-                  color: ColorsFoundation.surface1,
-                  borderRadius: BorderRadiusFoundation.max,
-                  child: UiKitInputFieldNoIcon(
-                    controller: positionController,
-                    hintText: 'Your Position'.toUpperCase(),
-                    fillColor: ColorsFoundation.surface3,
-                    validator: companyPositionValidator,
-                  ).paddingAll(EdgeInsetsFoundation.all4),
-                ),
                 if (uiModel.selectedRegistrationType == RegistrationType.phone) ...[
                   SpacingFoundation.verticalSpace16,
                   UiKitCardWrapper(
@@ -159,13 +132,15 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                         text: list.first.key,
                         style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
+                          ..onTap = () =>
+                              context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
                     TextSpan(text: ' and ', style: regTextTheme?.caption4),
                     TextSpan(
                         text: list.last.key,
                         style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
+                          ..onTap =
+                              () => context.push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
                   ]),
                 ),
                 SpacingFoundation.verticalSpace16,
