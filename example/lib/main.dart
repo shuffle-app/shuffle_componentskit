@@ -128,8 +128,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       tags: tags,
       location: 'Burj Khalifa 122nd Floor',
       date: DateTime.now(),
+      dateTo: DateTime(2023, 09, 30),
       time: TimeOfDay.now(),
       timeTo: const TimeOfDay(hour: 15, minute: 59),
+      weekdays: ['Monday', 'Friday'],
 
       //   UiDescriptionItemModel(
       //     title: 'Open now',
