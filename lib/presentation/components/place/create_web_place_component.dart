@@ -10,6 +10,7 @@ part 'web_form_field.dart';
 class CreateWebPlaceComponent extends StatefulWidget {
   final UiPlaceModel? placeToEdit;
   final VoidCallback? onPlaceDeleted;
+  final VoidCallback? onShowResult;
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
 
@@ -19,6 +20,7 @@ class CreateWebPlaceComponent extends StatefulWidget {
     this.getLocation,
     this.onPlaceDeleted,
     required this.onPlaceCreated,
+    this.onShowResult,
   });
 
   @override
@@ -31,6 +33,11 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
   late final TextEditingController _websiteController = TextEditingController();
   late final TextEditingController _locationController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _personNameController = TextEditingController();
+  final TextEditingController _personPhoneController = TextEditingController();
+  final TextEditingController _personPositionController = TextEditingController();
+  final TextEditingController _personEmailController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiPlaceModel _placeToEdit;
@@ -138,198 +145,234 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
         horizontal: EdgeInsetsFoundation.horizontal32,
         vertical: EdgeInsetsFoundation.vertical24,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Create place', style: theme?.boldTextTheme.title2),
-          SpacingFoundation.verticalSpace24,
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    WebFormField(
-                      title: 'Place type',
-                      isRequired: true,
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        hintText: 'Enter name',
-                        fillColor: theme?.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Create place', style: theme?.boldTextTheme.title2),
+            SpacingFoundation.verticalSpace24,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      WebFormField(
+                        title: 'Place type',
+                        isRequired: true,
+                        child: UiKitSuggestionField(
+                          options: ['bobo', 'bebe'],
+                          hintText: 'Enter place type',
+                          fillColor: theme?.colorScheme.surface3,
+                          borderRadius: BorderRadiusFoundation.all12,
+                        ),
                       ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    WebFormField(
-                      title: 'Base properties',
-                      isRequired: true,
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        hintText: 'Enter name',
-                        fillColor: theme?.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Base properties',
+                        isRequired: true,
+                        child: UiKitSuggestionField(
+                          options: ['bobo', 'bebe'],
+                          hintText: 'Enter properties',
+                          borderRadius: BorderRadiusFoundation.all12,
+                          fillColor: theme?.colorScheme.surface3,
+                        ),
                       ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    WebFormField(
-                      title: 'Unique properties',
-                      isRequired: true,
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        hintText: 'Enter name',
-                        fillColor: theme?.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Unique properties',
+                        isRequired: true,
+                        child: UiKitSuggestionField(
+                          options: ['bobo', 'bebe'],
+                          hintText: 'Enter properties',
+                          borderRadius: BorderRadiusFoundation.all12,
+                          fillColor: theme?.colorScheme.surface3,
+                        ),
                       ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    WebFormField(
-                      title: 'Logo (upload files)',
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        hintText: 'Enter name',
-                        fillColor: theme?.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Logo (upload files)',
+                        child: PhotoVideoSelector(
+                          onPhotoAddRequested: _onPhotoAddRequested,
+                          onVideoAddRequested: _onVideoAddRequested,
+                          onPhotoReorderRequested: _onPhotoReorderRequested,
+                          onVideoReorderRequested: _onPhotoReorderRequested,
+                          onPhotoDeleted: _onPhotoDeleted,
+                          onVideoDeleted: _onVideoDeleted,
+                          webVersion: true,
+                        ),
                       ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                  ],
+                      SpacingFoundation.verticalSpace24,
+                    ],
+                  ),
                 ),
-              ),
-              SpacingFoundation.horizontalSpace24,
-              SizedBox(
-                width: 1,
-                height: 1500.h,
-                child: ColoredBox(color: theme!.colorScheme.darkNeutral900),
-              ),
-              SpacingFoundation.horizontalSpace24,
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    WebFormField(
-                      title: 'Name',
-                      isRequired: true,
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        hintText: 'Enter name',
-                        fillColor: theme.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
-                      ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    WebFormField(
-                      title: 'Opening hours',
-                      isRequired: true,
-                      child: UiKitTitledDescriptionWithDivider(
-                        direction: Axis.horizontal,
-                        title: '',
-                        description: [
-                          TimeOfDay.now().format(context),
-                          const TimeOfDay(hour: 17, minute: 49).format(context),
-                        ],
-                      ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    WebFormField(
-                      title: 'Description',
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        minLines: 4,
-                        hintText: 'Enter name',
-                        fillColor: theme.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
-                      ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    WebFormField(
-                      title: 'Address',
-                      isRequired: true,
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        hintText: 'Enter address',
-                        fillColor: theme.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
-                      ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    WebFormField(
-                      title: 'Website',
-                      child: UiKitInputFieldNoIcon(
-                        controller: TextEditingController(),
-                        hintText: 'Enter website',
-                        fillColor: theme.colorScheme.surface3,
-                        borderRadius: BorderRadiusFoundation.all12,
-                      ),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    SizedBox(
-                      height: 1,
-                      width: double.infinity,
-                      child: ColoredBox(color: theme.colorScheme.darkNeutral900),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Contact Person', style: theme.boldTextTheme.title2),
-                        SpacingFoundation.verticalSpace24,
-                        WebFormField(
-                          title: 'Name',
-                          child: UiKitInputFieldNoIcon(
-                            controller: TextEditingController(),
-                            hintText: 'Enter name',
-                            fillColor: theme.colorScheme.surface3,
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
+                SpacingFoundation.horizontalSpace24,
+                SizedBox(
+                  width: 1,
+                  height: 1500.h,
+                  child: ColoredBox(color: theme!.colorScheme.darkNeutral900),
+                ),
+                SpacingFoundation.horizontalSpace24,
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      WebFormField(
+                        title: 'Name',
+                        isRequired: true,
+                        child: UiKitInputFieldNoIcon(
+                          controller: _titleController,
+                          hintText: 'Enter name',
+                          fillColor: theme.colorScheme.surface3,
+                          borderRadius: BorderRadiusFoundation.all12,
                         ),
-                        SpacingFoundation.verticalSpace24,
-                        WebFormField(
-                          title: 'Position',
-                          child: UiKitInputFieldNoIcon(
-                            controller: TextEditingController(),
-                            hintText: 'Enter position',
-                            fillColor: theme.colorScheme.surface3,
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                        ),
-                        SpacingFoundation.verticalSpace24,
-                        WebFormField(
-                          title: 'Phone',
-                          child: UiKitInputFieldNoIcon(
-                            controller: TextEditingController(),
-                            hintText: 'Enter phone',
-                            fillColor: theme.colorScheme.surface3,
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                        ),
-                        SpacingFoundation.verticalSpace24,
-                        WebFormField(
-                          title: 'Email',
-                          child: UiKitInputFieldNoIcon(
-                            controller: TextEditingController(),
-                            hintText: 'Enter email',
-                            fillColor: theme.colorScheme.surface3,
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                        ),
-                        SpacingFoundation.verticalSpace24,
-                        Wrap(
-                          children: [
-                            context.gradientButton(
-                              data: BaseUiKitButtonData(text: 'save', onPressed: () {}, fit: ButtonFit.fitWidth),
-                            ),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Opening hours',
+                        isRequired: true,
+                        child: UiKitTitledDescriptionWithDivider(
+                          direction: Axis.horizontal,
+                          title: '',
+                          description: [
+                            TimeOfDay.now().format(context),
+                            const TimeOfDay(hour: 17, minute: 49).format(context),
                           ],
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Description',
+                        child: UiKitInputFieldNoIcon(
+                          controller: _descriptionController,
+                          minLines: 4,
+                          hintText: 'Enter name',
+                          fillColor: theme.colorScheme.surface3,
+                          borderRadius: BorderRadiusFoundation.all12,
+                        ),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Address',
+                        isRequired: true,
+                        child: UiKitInputFieldNoIcon(
+                          controller: _addressController,
+                          hintText: 'Enter address',
+                          fillColor: theme.colorScheme.surface3,
+                          borderRadius: BorderRadiusFoundation.all12,
+                        ),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Phone',
+                        child: UiKitInputFieldNoIcon(
+                          controller: _phoneController,
+                          hintText: 'Enter phone',
+                          fillColor: theme.colorScheme.surface3,
+                          borderRadius: BorderRadiusFoundation.all12,
+                        ),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Website',
+                        child: UiKitInputFieldNoIcon(
+                          controller: _websiteController,
+                          hintText: 'Enter website',
+                          fillColor: theme.colorScheme.surface3,
+                          borderRadius: BorderRadiusFoundation.all12,
+                        ),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      SizedBox(
+                        height: 1,
+                        width: double.infinity,
+                        child: ColoredBox(color: theme.colorScheme.darkNeutral900),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Contact Person', style: theme.boldTextTheme.title2),
+                          SpacingFoundation.verticalSpace24,
+                          WebFormField(
+                            title: 'Name',
+                            child: UiKitInputFieldNoIcon(
+                              controller: _personNameController,
+                              hintText: 'Enter name',
+                              fillColor: theme.colorScheme.surface3,
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ),
+                          ),
+                          SpacingFoundation.verticalSpace24,
+                          WebFormField(
+                            title: 'Position',
+                            child: UiKitInputFieldNoIcon(
+                              controller: _personPositionController,
+                              hintText: 'Enter position',
+                              fillColor: theme.colorScheme.surface3,
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ),
+                          ),
+                          SpacingFoundation.verticalSpace24,
+                          WebFormField(
+                            title: 'Phone',
+                            child: UiKitInputFieldNoIcon(
+                              controller: _personPhoneController,
+                              hintText: 'Enter phone',
+                              fillColor: theme.colorScheme.surface3,
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ),
+                          ),
+                          SpacingFoundation.verticalSpace24,
+                          WebFormField(
+                            title: 'Email',
+                            child: UiKitInputFieldNoIcon(
+                              controller: _personEmailController,
+                              hintText: 'Enter email',
+                              fillColor: theme.colorScheme.surface3,
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ),
+                          ),
+                          SpacingFoundation.verticalSpace24,
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: widget.onShowResult != null ? 0.3.sw : 0.15.sw),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: context.gradientButton(
+                                    data: BaseUiKitButtonData(
+                                      text: 'save',
+                                      onPressed: () => widget.onPlaceCreated,
+                                    ),
+                                  ),
+                                ),
+                                if (widget.onShowResult != null) ...[
+                                  SpacingFoundation.horizontalSpace24,
+                                  Expanded(
+                                    child: context.outlinedButton(
+                                      data: BaseUiKitButtonData(
+                                        text: 'show result',
+                                        onPressed: () {},
+                                      ),
+                                      isGradientEnabled: true,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
