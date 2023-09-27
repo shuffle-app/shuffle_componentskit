@@ -10,8 +10,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -147,6 +146,48 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show chats',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel(
+                    version: '1.0.0',
+                    pageBuilderType: PageBuilderType.page,
+                    positionModel: PositionModel(
+                      version: '1.0.0',
+                      horizontalMargin: 16,
+                      verticalMargin: 16,
+                    ),
+                  ),
+                  ComponentBuilder(
+                    child: AllChatsComponent(
+                      controller: PagingController<int, ChatItemUiModel>(firstPageKey: 1)
+                        ..appendPage(
+                          List<ChatItemUiModel>.generate(
+                            10,
+                            (index) => ChatItemUiModel(
+                              id: index,
+                              userType: UserTileType.ordinary,
+                              username: 'Araratjan $index',
+                              nickname: '@arajan',
+                              avatarUrl: '',
+                              lastMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                              lastMessageTime: DateTime.now().subtract(Duration(hours: 6 * index)),
+                              unreadMessageCount: index % 2 == 0 ? index : null,
+                            ),
+                          ),
+                          2,
+                        ),
+                      onChatSelected: (index) {
+                        print(index);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -815,8 +856,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   mood: UiMoodModel(
                                     descriptionItems: [
                                       const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
-                                      const UiDescriptionItemModel(
-                                          active: true, title: 'Burned today', description: '432'),
+                                      const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
                                     ],
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
@@ -834,9 +874,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -847,9 +887,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
