@@ -158,6 +158,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     ),
                     ComponentBuilder(
                       child: ChatComponent(
+                        scrollController: ScrollController(),
                         messageController: TextEditingController(),
                         pagingController: PagingController<int, ChatMessageUiModel>(
                           firstPageKey: 1,
