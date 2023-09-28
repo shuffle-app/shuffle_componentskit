@@ -151,17 +151,81 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
-                text: 'show chats',
+                text: 'show chat screen',
+                onPressed: () {
+                  buildComponent(
+                    context,
+                    ComponentModel.fromJson(
+                      configuration.appConfig.content['chat_page'],
+                    ),
+                    ComponentBuilder(
+                      child: ChatComponent(
+                        scrollController: ScrollController(),
+                        messageController: TextEditingController(),
+                        pagingController: PagingController<int, ChatMessageUiModel>(
+                          firstPageKey: 1,
+                        )..appendLastPage(
+                            [
+                              ChatMessageUiModel(
+                                messageType: MessageType.message,
+                                senderIsMe: false,
+                                timeSent: DateTime.now(),
+                                message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                              ),
+                              ChatMessageUiModel(
+                                messageType: MessageType.message,
+                                senderIsMe: true,
+                                timeSent: DateTime.now(),
+                                message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                              ),
+                              ChatMessageUiModel(
+                                messageType: MessageType.invitation,
+                                senderIsMe: true,
+                                timeSent: DateTime.now(),
+                                message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                invitationData: ChatMessageInvitationData(
+                                  username: '@araratjan',
+                                  placeId: 1,
+                                  placeName: 'Burj Khalifa 122nd Floor',
+                                  placeImagePath: GraphicsFoundation.instance.png.place.path,
+                                  invitedPeopleAvatarPaths: [
+                                    GraphicsFoundation.instance.png.inviteMock1.path,
+                                    GraphicsFoundation.instance.png.inviteMock2.path,
+                                    GraphicsFoundation.instance.png.inviteMock3.path,
+                                    GraphicsFoundation.instance.png.inviteMock4.path,
+                                  ],
+                                  tags: [
+                                    UiKitTag(
+                                      title: 'Cheap',
+                                      iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                    ),
+                                    UiKitTag(
+                                      title: 'Cheap',
+                                      iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                    ),
+                                    UiKitTag(
+                                      title: 'Cheap',
+                                      iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show chats screen',
                 onPressed: () => buildComponent(
                   context,
-                  ComponentModel(
-                    version: '1.0.0',
-                    pageBuilderType: PageBuilderType.page,
-                    positionModel: PositionModel(
-                      version: '1.0.0',
-                      horizontalMargin: 16,
-                      verticalMargin: 16,
-                    ),
+                  ComponentModel.fromJson(
+                    configuration.appConfig.content['chats'],
                   ),
                   ComponentBuilder(
                     child: AllChatsComponent(
