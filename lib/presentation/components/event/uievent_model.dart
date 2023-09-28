@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -46,12 +45,11 @@ class UiEventModel {
           if (date != null)
             UiDescriptionItemModel(
               title: 'Don’t miss it',
-              description:
-                  '${(time != null ? normalizedTi(time, showDateName: false) : 'nn ')}${timeTo != null ? '- ${normalizedTi(timeTo, showDateName: false)}, ' : 'nn, '}${DateFormat('MMM dd').format(date)}${dateTo != null ? ' - ${DateFormat('MMM dd, yyyy').format(dateTo)}' : ''}',
+              description: formatDate(date, dateTo, time, timeTo, weekdays),
             ),
           if (location != null)
             UiDescriptionItemModel(
-              title: "Place",
+              title: 'Place',
               description: location,
             ),
         ];
