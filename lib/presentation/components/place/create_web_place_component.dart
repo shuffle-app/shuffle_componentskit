@@ -69,7 +69,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
   }
 
   _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / (kIsWeb ? 390 : 0.9.sw) > descriptionHeightConstraint / 50.h) {
+    if (_descriptionController.text.length * 5.8.w / 0.6.sw > descriptionHeightConstraint / 50.h) {
       setState(() {
         descriptionHeightConstraint += 35.h;
       });
@@ -176,20 +176,34 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       WebFormField(
                         title: 'Base properties',
                         isRequired: true,
-                        child: UiKitSuggestionField(
-                          options: widget.onSuggest,
+                        child: UiKitTagSelector(
                           borderRadius: BorderRadiusFoundation.all12,
-                          fillColor: theme?.colorScheme.surface1,
+                          onNotFoundTagCallback: (value) {
+                            setState(() {
+                              _placeToEdit.baseTags = [..._placeToEdit.baseTags, UiKitTag(title: value, iconPath: '')];
+                            });
+                          },
+                          tags: _placeToEdit.baseTags.map((e) => e.title).toList(),
+                          onRemoveTagCallback: (value) {
+                            _placeToEdit.baseTags.removeWhere((e) => e.title == value);
+                          },
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: 'Unique properties',
                         isRequired: true,
-                        child: UiKitSuggestionField(
-                          options: widget.onSuggest,
+                        child: UiKitTagSelector(
                           borderRadius: BorderRadiusFoundation.all12,
-                          fillColor: theme?.colorScheme.surface1,
+                          onNotFoundTagCallback: (value) {
+                            setState(() {
+                              _placeToEdit.tags = [..._placeToEdit.baseTags, UiKitTag(title: value, iconPath: '')];
+                            });
+                          },
+                          tags: _placeToEdit.tags.map((e) => e.title).toList(),
+                          onRemoveTagCallback: (value) {
+                            _placeToEdit.tags.removeWhere((e) => e.title == value);
+                          },
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -197,6 +211,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         positionModel: model.positionModel,
                         videos: _videos,
                         photos: _photos,
+                        logo: _placeToEdit.logo,
                         onPhotoAddRequested: _onPhotoAddRequested,
                         onVideoAddRequested: _onVideoAddRequested,
                         onPhotoReorderRequested: _onPhotoReorderRequested,
@@ -234,34 +249,68 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       WebFormField(
                         title: 'Opening hours',
                         isRequired: true,
-                        child: UiKitTitledDescriptionWithDivider(
-                          description: _placeToEdit.weekdays,
-                          direction: Axis.horizontal,
-                          onTrailingTap: widget.onTimeEditTap,
-                          title: '',
-                        ),
+                        child: Row(children: [
+                          Expanded(
+                              flex: 3,
+                              child: UiKitTitledDescriptionWithDivider(
+                                description: [
+                                  '${normalizedTi(_placeToEdit.openFrom)} - ${normalizedTi(_placeToEdit.openTo)}',
+                                  _placeToEdit.weekdays.join(', ') ?? 'no weekdays selected'
+                                ],
+                                direction: Axis.horizontal,
+                                // onTrailingTap: widget.onTimeEditTap,
+                                title: '',
+                              )),
+                          context.smallOutlinedButton(
+                            data: BaseUiKitButtonData(
+                                icon:
+                                    ImageWidget(svgAsset: GraphicsFoundation.instance.svg.pencil, color: Colors.white),
+                                onPressed: () async {
+                                  await showUiKitTimeFromToDialog(context, (from, to) {
+                                    setState(() {
+                                      _placeToEdit.openTo = to;
+                                      _placeToEdit.openFrom = from;
+                                    });
+                                  });
+
+                                  final weekdays = await showUiKitWeekdaySelector(context) ?? [];
+                                  setState(() {
+                                    _placeToEdit.weekdays = weekdays;
+                                  });
+                                }),
+                          )
+                        ]),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: 'Description',
-                        child: UiKitInputFieldNoIcon(
-                          controller: _descriptionController,
-                          minLines: 4,
-                          hintText: 'Enter name',
-                          fillColor: theme.colorScheme.surface1,
-                          borderRadius: BorderRadiusFoundation.all12,
-                        ),
+                        child: SizedBox(
+                            height: descriptionHeightConstraint,
+                            child: UiKitInputFieldNoIcon(
+                              controller: _descriptionController,
+                              minLines: 4,
+                              expands: true,
+                              hintText: 'Enter name',
+                              fillColor: theme.colorScheme.surface1,
+                              borderRadius: BorderRadiusFoundation.all12,
+                            )),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: 'Address',
                         isRequired: true,
-                        child: UiKitInputFieldNoIcon(
-                          controller: _addressController,
-                          hintText: 'Enter address',
-                          fillColor: theme.colorScheme.surface1,
-                          borderRadius: BorderRadiusFoundation.all12,
-                        ),
+                        child: InkWell(
+                            onTap: () async {
+                              _addressController.text = await widget.getLocation?.call() ?? '';
+                              _placeToEdit.location = _addressController.text;
+                            },
+                            child: IgnorePointer(
+                                child: UiKitInputFieldNoIcon(
+                              controller: _addressController,
+                              hintText: 'Enter address',
+                              fillColor: theme.colorScheme.surface1,
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ))),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(

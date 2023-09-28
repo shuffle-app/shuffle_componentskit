@@ -7,7 +7,7 @@ class UiEventModel {
   final int id;
   String? title;
   UiOwnerModel? owner;
-  List<BaseUiKitMedia>? media;
+  List<BaseUiKitMedia> media;
   bool? favorite;
   bool isRecurrent;
   DateTime? date;
@@ -30,7 +30,7 @@ class UiEventModel {
     this.owner,
     this.date,
     this.dateTo,
-    this.media,
+    this.media = const [],
     this.description,
     this.location,
     this.tags = const [],
