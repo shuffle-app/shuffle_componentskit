@@ -166,7 +166,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         child: UiKitSuggestionField(
                           options: ['bobo', 'bebe'],
                           hintText: 'Enter place type',
-                          fillColor: theme?.colorScheme.surface3,
+                          fillColor: theme?.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
@@ -177,8 +177,8 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         child: UiKitSuggestionField(
                           options: ['bobo', 'bebe'],
                           hintText: 'Enter properties',
+                          fillColor: theme?.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
-                          fillColor: theme?.colorScheme.surface3,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -188,22 +188,21 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         child: UiKitSuggestionField(
                           options: ['bobo', 'bebe'],
                           hintText: 'Enter properties',
+                          fillColor: theme?.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
-                          fillColor: theme?.colorScheme.surface3,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: 'Logo (upload files)',
-                        child: PhotoVideoSelector(
-                          onPhotoAddRequested: _onPhotoAddRequested,
-                          onVideoAddRequested: _onVideoAddRequested,
-                          onPhotoReorderRequested: _onPhotoReorderRequested,
-                          onVideoReorderRequested: _onPhotoReorderRequested,
-                          onPhotoDeleted: _onPhotoDeleted,
-                          onVideoDeleted: _onVideoDeleted,
-                          webVersion: true,
-                        ),
+                      WebPhotoVideoSelector(
+                        onPhotoAddRequested: _onPhotoAddRequested,
+                        onVideoAddRequested: _onVideoAddRequested,
+                        onPhotoReorderRequested: _onPhotoReorderRequested,
+                        onVideoReorderRequested: _onPhotoReorderRequested,
+                        onPhotoDeleted: _onPhotoDeleted,
+                        onVideoDeleted: _onVideoDeleted,
+                        onLogoAddRequested: () {},
+                        onLogoReorderRequested: (int oldIndex, int newIndex) {},
+                        onLogoDeleted: (int index) {},
                       ),
                       SpacingFoundation.verticalSpace24,
                     ],
@@ -226,7 +225,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         child: UiKitInputFieldNoIcon(
                           controller: _titleController,
                           hintText: 'Enter name',
-                          fillColor: theme.colorScheme.surface3,
+                          fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
@@ -250,7 +249,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           controller: _descriptionController,
                           minLines: 4,
                           hintText: 'Enter name',
-                          fillColor: theme.colorScheme.surface3,
+                          fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
@@ -261,7 +260,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         child: UiKitInputFieldNoIcon(
                           controller: _addressController,
                           hintText: 'Enter address',
-                          fillColor: theme.colorScheme.surface3,
+                          fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
@@ -271,7 +270,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         child: UiKitInputFieldNoIcon(
                           controller: _phoneController,
                           hintText: 'Enter phone',
-                          fillColor: theme.colorScheme.surface3,
+                          fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
@@ -281,7 +280,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         child: UiKitInputFieldNoIcon(
                           controller: _websiteController,
                           hintText: 'Enter website',
-                          fillColor: theme.colorScheme.surface3,
+                          fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
@@ -302,7 +301,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             child: UiKitInputFieldNoIcon(
                               controller: _personNameController,
                               hintText: 'Enter name',
-                              fillColor: theme.colorScheme.surface3,
+                              fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
@@ -312,7 +311,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             child: UiKitInputFieldNoIcon(
                               controller: _personPositionController,
                               hintText: 'Enter position',
-                              fillColor: theme.colorScheme.surface3,
+                              fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
@@ -322,7 +321,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             child: UiKitInputFieldNoIcon(
                               controller: _personPhoneController,
                               hintText: 'Enter phone',
-                              fillColor: theme.colorScheme.surface3,
+                              fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
@@ -332,7 +331,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             child: UiKitInputFieldNoIcon(
                               controller: _personEmailController,
                               hintText: 'Enter email',
-                              fillColor: theme.colorScheme.surface3,
+                              fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),

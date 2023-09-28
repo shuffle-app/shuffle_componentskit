@@ -16,7 +16,6 @@ class PhotoVideoSelector extends StatelessWidget {
   final GlobalKey<ReorderableListState> listVideosKey = GlobalKey<ReorderableListState>();
   final Function(int index) onPhotoDeleted;
   final Function(int index) onVideoDeleted;
-  final bool webVersion;
 
   PhotoVideoSelector({
     super.key,
@@ -30,7 +29,6 @@ class PhotoVideoSelector extends StatelessWidget {
     required this.onPhotoDeleted,
     required this.onVideoDeleted,
     this.positionModel,
-    this.webVersion = false,
   });
 
   @override
@@ -78,31 +76,18 @@ class PhotoVideoSelector extends StatelessWidget {
                         itemCount: photos.length,
                         onReorder: onPhotoReorderRequested))
               ]),
-              !webVersion
-                  ? context
-                      .outlinedButton(
-                        data: BaseUiKitButtonData(
-                            onPressed: onPhotoAddRequested,
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.cameraPlus,
-                              color: Colors.white,
-                              height: 18,
-                              width: 18,
-                            )),
-                      )
-                      .paddingSymmetric(horizontal: horizontalPadding)
-                  : context
-                      .badgeButtonNoValue(
-                        data: BaseUiKitButtonData(
-                          onPressed: onPhotoAddRequested,
-                          icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
-                            height: 18,
-                            width: 18,
-                          ),
-                        ),
-                      )
-                      .paddingSymmetric(horizontal: horizontalPadding)
+              context
+                  .outlinedButton(
+                    data: BaseUiKitButtonData(
+                        onPressed: onPhotoAddRequested,
+                        icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.cameraPlus,
+                          color: Colors.white,
+                          height: 18,
+                          width: 18,
+                        )),
+                  )
+                  .paddingSymmetric(horizontal: horizontalPadding)
             ])),
         SizedBox(
             height: itemsSize.height * 1.2,
@@ -139,30 +124,18 @@ class PhotoVideoSelector extends StatelessWidget {
                         itemCount: videos.length,
                         onReorder: onVideoReorderRequested))
               ]),
-              !webVersion
-                  ? context
-                      .outlinedButton(
-                        data: BaseUiKitButtonData(
-                            onPressed: onVideoAddRequested,
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.videoPlus,
-                              color: Colors.white,
-                              height: 18,
-                              width: 18,
-                            )),
-                      )
-                      .paddingSymmetric(horizontal: horizontalPadding)
-                  : context
-                      .badgeButtonNoValue(
-                        data: BaseUiKitButtonData(
-                            onPressed: onVideoAddRequested,
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
-                              height: 18,
-                              width: 18,
-                            )),
-                      )
-                      .paddingSymmetric(horizontal: horizontalPadding)
+              context
+                  .outlinedButton(
+                    data: BaseUiKitButtonData(
+                        onPressed: onVideoAddRequested,
+                        icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.videoPlus,
+                          color: Colors.white,
+                          height: 18,
+                          width: 18,
+                        )),
+                  )
+                  .paddingSymmetric(horizontal: horizontalPadding)
             ])),
       ],
     );
