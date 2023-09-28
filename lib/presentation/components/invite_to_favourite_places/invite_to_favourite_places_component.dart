@@ -87,7 +87,7 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
                 icon: ImageWidget(
                   link: GraphicsFoundation.instance.svg.calendar.path,
                   color: Colors.white,
-                ).paddingAll(EdgeInsetsFoundation.all6),
+                ),
               ),
             ),
             SpacingFoundation.horizontalSpace12,

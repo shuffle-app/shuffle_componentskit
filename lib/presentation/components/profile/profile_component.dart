@@ -85,7 +85,7 @@ class ProfileComponent extends StatelessWidget {
                           var model = UiInviteToFavouritePlacesModel(
                             date: DateTime.now(),
                           );
-                          List<String> selected = [];
+                          String? selected;
 
                           return StatefulBuilder(
                             builder: (context, state) => InviteToFavouritePlacesComponent(
@@ -93,12 +93,13 @@ class ProfileComponent extends StatelessWidget {
                                 10,
                                 (index) => UiKitLeadingRadioTile(
                                   title: '$index place',
-                                  selected: selected.contains('$index place'),
+                                  selected: selected == '$index place',
                                   onTap: () {
                                     state(() {
-                                      if (!selected.remove('$index place')) {
-                                        selected.add('$index place');
-                                      }
+                                      selected = '$index place';
+                                      // if (!selected.remove('$index place')) {
+                                      //   selected.add('$index place');
+                                      // }
                                     });
                                   },
                                   avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
