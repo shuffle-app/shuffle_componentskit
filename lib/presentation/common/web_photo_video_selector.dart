@@ -11,14 +11,12 @@ class WebPhotoVideoSelector extends StatelessWidget {
   final VoidCallback onLogoAddRequested;
   final VoidCallback onPhotoAddRequested;
   final VoidCallback onVideoAddRequested;
-  final ReorderCallback onLogoReorderRequested;
   final ReorderCallback onPhotoReorderRequested;
   final ReorderCallback onVideoReorderRequested;
   final PositionModel? positionModel;
   final GlobalKey<ReorderableListState> listPhotosKey = GlobalKey<ReorderableListState>();
   final GlobalKey<ReorderableListState> listLogosKey = GlobalKey<ReorderableListState>();
   final GlobalKey<ReorderableListState> listVideosKey = GlobalKey<ReorderableListState>();
-  final Function(int index) onLogoDeleted;
   final Function(int index) onPhotoDeleted;
   final Function(int index) onVideoDeleted;
 
@@ -31,10 +29,8 @@ class WebPhotoVideoSelector extends StatelessWidget {
     required this.onLogoAddRequested,
     required this.onPhotoAddRequested,
     required this.onVideoAddRequested,
-    required this.onLogoReorderRequested,
     required this.onPhotoReorderRequested,
     required this.onVideoReorderRequested,
-    required this.onLogoDeleted,
     required this.onPhotoDeleted,
     required this.onVideoDeleted,
     this.positionModel,

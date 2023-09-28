@@ -8,18 +8,22 @@ import '../../../shuffle_components_kit.dart';
 part 'web_form_field.dart';
 
 class CreateWebPlaceComponent extends StatefulWidget {
+  final Future Function(UiPlaceModel) onPlaceCreated;
   final UiPlaceModel? placeToEdit;
   final VoidCallback? onPlaceDeleted;
   final VoidCallback? onShowResult;
-  final Future Function(UiPlaceModel) onPlaceCreated;
+  final VoidCallback? onTimeEditTap;
   final Future<String?> Function()? getLocation;
+  final Future<List<String>> Function(String)? onSuggest;
 
   const CreateWebPlaceComponent({
     super.key,
+    required this.onPlaceCreated,
     this.placeToEdit,
     this.getLocation,
     this.onPlaceDeleted,
-    required this.onPlaceCreated,
+    this.onTimeEditTap,
+    this.onSuggest,
     this.onShowResult,
   });
 
@@ -136,7 +140,6 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
-    final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
 
@@ -164,10 +167,9 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         title: 'Place type',
                         isRequired: true,
                         child: UiKitSuggestionField(
-                          options: ['bobo', 'bebe'],
-                          hintText: 'Enter place type',
-                          fillColor: theme?.colorScheme.surface1,
+                          options: widget.onSuggest,
                           borderRadius: BorderRadiusFoundation.all12,
+                          fillColor: theme?.colorScheme.surface1,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -175,10 +177,9 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         title: 'Base properties',
                         isRequired: true,
                         child: UiKitSuggestionField(
-                          options: ['bobo', 'bebe'],
-                          hintText: 'Enter properties',
-                          fillColor: theme?.colorScheme.surface1,
+                          options: widget.onSuggest,
                           borderRadius: BorderRadiusFoundation.all12,
+                          fillColor: theme?.colorScheme.surface1,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -186,23 +187,23 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         title: 'Unique properties',
                         isRequired: true,
                         child: UiKitSuggestionField(
-                          options: ['bobo', 'bebe'],
-                          hintText: 'Enter properties',
-                          fillColor: theme?.colorScheme.surface1,
+                          options: widget.onSuggest,
                           borderRadius: BorderRadiusFoundation.all12,
+                          fillColor: theme?.colorScheme.surface1,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebPhotoVideoSelector(
+                        positionModel: model.positionModel,
+                        videos: _videos,
+                        photos: _photos,
                         onPhotoAddRequested: _onPhotoAddRequested,
                         onVideoAddRequested: _onVideoAddRequested,
                         onPhotoReorderRequested: _onPhotoReorderRequested,
-                        onVideoReorderRequested: _onPhotoReorderRequested,
+                        onVideoReorderRequested: _onVideoReorderRequested,
                         onPhotoDeleted: _onPhotoDeleted,
                         onVideoDeleted: _onVideoDeleted,
-                        onLogoAddRequested: () {},
-                        onLogoReorderRequested: (int oldIndex, int newIndex) {},
-                        onLogoDeleted: (int index) {},
+                        onLogoAddRequested: _onLogoAddRequested,
                       ),
                       SpacingFoundation.verticalSpace24,
                     ],
@@ -234,12 +235,10 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         title: 'Opening hours',
                         isRequired: true,
                         child: UiKitTitledDescriptionWithDivider(
+                          description: _placeToEdit.weekdays,
                           direction: Axis.horizontal,
+                          onTrailingTap: widget.onTimeEditTap,
                           title: '',
-                          description: [
-                            TimeOfDay.now().format(context),
-                            const TimeOfDay(hour: 17, minute: 49).format(context),
-                          ],
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -344,7 +343,14 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                   child: context.gradientButton(
                                     data: BaseUiKitButtonData(
                                       text: 'save',
-                                      onPressed: () => widget.onPlaceCreated,
+                                      onPressed: () {
+                                        _placeToEdit.title = _titleController.text;
+                                        _placeToEdit.website = _websiteController.text;
+                                        _placeToEdit.phone = _phoneController.text;
+                                        _placeToEdit.description = _descriptionController.text;
+                                        _placeToEdit.media = [..._photos, ..._videos];
+                                        widget.onPlaceCreated.call(_placeToEdit);
+                                      },
                                     ),
                                   ),
                                 ),
@@ -354,7 +360,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                     child: context.outlinedButton(
                                       data: BaseUiKitButtonData(
                                         text: 'show result',
-                                        onPressed: () {},
+                                        onPressed: widget.onShowResult,
                                       ),
                                       isGradientEnabled: true,
                                     ),
