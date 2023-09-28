@@ -10,6 +10,7 @@ class ChatComponent extends StatelessWidget {
   final ValueChanged<int>? onPlaceTap;
   final ValueChanged<int>? onAcceptInvitationTap;
   final ValueChanged<int>? onDenyInvitationTap;
+  final VoidCallback? onMessageSent;
 
   const ChatComponent({
     Key? key,
@@ -19,6 +20,7 @@ class ChatComponent extends StatelessWidget {
     this.onPlaceTap,
     this.onAcceptInvitationTap,
     this.onDenyInvitationTap,
+    this.onMessageSent,
   }) : super(key: key);
 
   @override
@@ -77,13 +79,16 @@ class ChatComponent extends StatelessWidget {
               fillColor: context.uiKitTheme?.colorScheme.surface3,
               controller: messageController,
               hintText: 'TYPE HERE',
-              icon: GradientableWidget(
-                gradient: GradientFoundation.defaultRadialGradient,
-                child: ImageWidget(
-                  svgAsset: GraphicsFoundation.instance.svg.send,
+              icon: GestureDetector(
+                onTap: onMessageSent,
+                child: GradientableWidget(
+                  gradient: GradientFoundation.defaultRadialGradient,
+                  child: ImageWidget(
+                    svgAsset: GraphicsFoundation.instance.svg.send,
 
-                  /// color has to be provided to make GradientableWidget work
-                  color: Colors.white,
+                    /// color has to be provided to make GradientableWidget work
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ).paddingOnly(
