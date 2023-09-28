@@ -41,24 +41,24 @@ class UiPlaceModel {
           UiDescriptionItemModel(title: 'Location', description: location ?? ''),
           UiDescriptionItemModel(
             title: 'Work hours',
-            description: '${openFrom != null ? normalizedTi(openFrom) : 'nn'} - ${openTo != null ? normalizedTi(openTo) : 'nn'}',
+            description: formatDate(null, null, openFrom, openTo, weekdays),
           ),
         ];
 
   String? validateCreation() {
-    if(title == null || title!.isEmpty) {
+    if (title == null || title!.isEmpty) {
       return 'Title is required';
-    } else if(description == null || description!.isEmpty) {
+    } else if (description == null || description!.isEmpty) {
       return 'Description is required';
-    } else if(media.isEmpty) {
+    } else if (media.isEmpty) {
       return 'Photos are required';
-    } else if(logo==null || logo!.isEmpty) {
+    } else if (logo == null || logo!.isEmpty) {
       return 'Logo is required';
-    } else if(website == null || website!.isEmpty) {
+    } else if (website == null || website!.isEmpty) {
       return 'Website is required';
-    } else if(phone == null || phone!.isEmpty) {
+    } else if (phone == null || phone!.isEmpty) {
       return 'Phone is required';
-    } else if(location == null || location!.isEmpty) {
+    } else if (location == null || location!.isEmpty) {
       return 'Location is required';
     }
   }
