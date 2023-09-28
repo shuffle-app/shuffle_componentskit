@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class WebPhotoVideoSelector extends StatelessWidget {
   final Size itemsSize;
-  final List<BaseUiKitMedia> logos;
+  final String? logo;
   final List<BaseUiKitMedia> photos;
   final List<BaseUiKitMedia> videos;
   final VoidCallback onLogoAddRequested;
@@ -22,7 +22,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
 
   WebPhotoVideoSelector({
     super.key,
-    this.logos = const [],
+    this.logo,
     this.photos = const [],
     this.videos = const [],
     this.itemsSize = const Size(75, 75),
@@ -68,41 +68,35 @@ class WebPhotoVideoSelector extends StatelessWidget {
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-                ReorderableListView.builder(
-                  key: listLogosKey,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) => Stack(
-                    key: ValueKey(photos[index].link),
+                if(logo!=null)
+                 Stack(
                     alignment: Alignment.topRight,
                     children: [
                       ClipPath(
                         clipper: ShapeBorderClipper(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8),
                         ),
-                        child: photos[index].widget(itemsSize),
+                        child: ImageWidget(link: logo,),
                       ).paddingAll(4),
-                      context.outlinedButton(
-                        hideBorder: true,
-                        data: BaseUiKitButtonData(
-                          onPressed: () => onPhotoDeleted.call(index),
-                          icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.x,
-                            color: Colors.white,
-                            height: 8,
-                            width: 8,
-                          ),
-                        ),
-                      ),
+                      // context.outlinedButton(
+                      //   hideBorder: true,
+                      //   data: BaseUiKitButtonData(
+                      //     onPressed: () => onPhotoDeleted.call(index),
+                      //     icon: ImageWidget(
+                      //       svgAsset: GraphicsFoundation.instance.svg.x,
+                      //       color: Colors.white,
+                      //       height: 8,
+                      //       width: 8,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
-                  ),
-                  itemCount: photos.length,
-                  onReorder: onPhotoReorderRequested,
+                  // ),
                 ),
                 context
                     .badgeButtonNoValue(
                       data: BaseUiKitButtonData(
-                        onPressed: onPhotoAddRequested,
+                        onPressed: onLogoAddRequested,
                         icon: DecoratedBox(
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
@@ -256,18 +250,18 @@ class WebPhotoVideoSelector extends StatelessWidget {
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) => Stack(
-                    key: ValueKey(photos[index].link),
+                    key: ValueKey(videos[index].link),
                     alignment: Alignment.topRight,
                     children: [
                       ClipPath(
                         clipper: ShapeBorderClipper(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
-                        child: photos[index].widget(itemsSize),
+                        child: videos[index].widget(itemsSize),
                       ).paddingAll(4),
                       context.outlinedButton(
                         hideBorder: true,
                         data: BaseUiKitButtonData(
-                          onPressed: () => onPhotoDeleted.call(index),
+                          onPressed: () => onVideoDeleted.call(index),
                           icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.x,
                             color: Colors.white,
@@ -278,13 +272,13 @@ class WebPhotoVideoSelector extends StatelessWidget {
                       )
                     ],
                   ),
-                  itemCount: photos.length,
-                  onReorder: onPhotoReorderRequested,
+                  itemCount: videos.length,
+                  onReorder: onVideoReorderRequested,
                 ),
                 context
                     .badgeButtonNoValue(
                       data: BaseUiKitButtonData(
-                        onPressed: onPhotoAddRequested,
+                        onPressed: onVideoAddRequested,
                         icon: DecoratedBox(
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,

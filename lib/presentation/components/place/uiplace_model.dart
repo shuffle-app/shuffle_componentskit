@@ -48,7 +48,7 @@ class UiPlaceModel {
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
       return 'Title is required';
-    } else if (description == null || description!.isEmpty) {
+    } else if (description.isEmpty) {
       return 'Description is required';
     } else if (media.isEmpty) {
       return 'Photos are required';
@@ -61,5 +61,6 @@ class UiPlaceModel {
     } else if (location == null || location!.isEmpty) {
       return 'Location is required';
     }
+    return null;
   }
 }
