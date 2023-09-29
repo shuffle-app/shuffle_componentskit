@@ -1,4 +1,5 @@
-part of 'create_web_place_component.dart';
+import 'package:flutter/material.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class WebFormField extends StatelessWidget {
   const WebFormField({

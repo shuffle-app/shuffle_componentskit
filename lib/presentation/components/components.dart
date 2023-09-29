@@ -10,6 +10,7 @@ export 'donation/donation_component.dart';
 export 'donation/ui_donation_user_model.dart';
 export 'event/create_event_component.dart';
 export 'event/event_component.dart';
+export 'event/create_web_event_component.dart';
 export 'event/my_events_component.dart';
 export 'event/uievent_model.dart';
 export 'feed/feed_component.dart';
