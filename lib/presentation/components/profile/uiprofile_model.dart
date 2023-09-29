@@ -1,6 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class UiProfileModel {
   final String? nickname;
@@ -10,6 +10,8 @@ class UiProfileModel {
   final String? userCredo;
   final int? followers;
   final VoidCallback? onFollow;
+  final bool showSupportShuffle;
+  final ValueChanged<int>? onDonate;
   final List<String>? interests;
   final List<String>? favorites;
   final List<String>? matchingInterests;
@@ -27,21 +29,31 @@ class UiProfileModel {
       onFollow: onFollow,
       matchingInterests: matchingInterests,
       profileType: ProfileCardType.personal,
+      showSupportShuffle: showSupportShuffle,
+      onDonate: onDonate,
       profileStats: [
         UiKitStats(
           title: 'Balance',
-          value: '993 \$', actionButton: SmallOrdinaryButton(text: 'details'.toUpperCase(), group: g,),
+          value: '993 \$',
+          actionButton: SmallOrdinaryButton(
+            text: 'details'.toUpperCase(),
+            group: g,
+          ),
         ),
         UiKitStats(
             title: 'Points',
-            value: '553', actionButton: SmallOrdinaryButton(text: 'spent'.toUpperCase(), group: g,)
-        ),
-
+            value: '553',
+            actionButton: SmallOrdinaryButton(
+              text: 'spent'.toUpperCase(),
+              group: g,
+            )),
       ],
     );
   }
 
   UiProfileModel({
+    this.onDonate,
+    this.showSupportShuffle = false,
     this.onFollow,
     this.matchingInterests,
     this.nickname,
@@ -53,4 +65,35 @@ class UiProfileModel {
     this.interests,
     this.followers,
   });
+
+  /// write [copyWith] method
+
+  UiProfileModel copyWith({
+    String? nickname,
+    String? name,
+    String? description,
+    String? avatarUrl,
+    String? userCredo,
+    int? followers,
+    VoidCallback? onFollow,
+    bool? showSupportShuffle,
+    ValueChanged<int>? onDonate,
+    List<String>? interests,
+    List<String>? favorites,
+    List<String>? matchingInterests,
+  }) =>
+      UiProfileModel(
+        nickname: nickname ?? this.nickname,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        avatarUrl: avatarUrl ?? this.avatarUrl,
+        userCredo: userCredo ?? this.userCredo,
+        followers: followers ?? this.followers,
+        onFollow: onFollow ?? this.onFollow,
+        showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
+        onDonate: onDonate ?? this.onDonate,
+        interests: interests ?? this.interests,
+        favorites: favorites ?? this.favorites,
+        matchingInterests: matchingInterests ?? this.matchingInterests,
+      );
 }
