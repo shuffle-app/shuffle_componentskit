@@ -66,62 +66,43 @@ class WebPhotoVideoSelector extends StatelessWidget {
               ),
             ),
             child: Stack(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.centerRight,
               children: [
-                if(logo!=null)
-                 Stack(
+                if (logo != null)
+                  Stack(
                     alignment: Alignment.topRight,
                     children: [
                       ClipPath(
                         clipper: ShapeBorderClipper(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8),
                         ),
-                        child: ImageWidget(link: logo,),
+                        child: ImageWidget(link: logo),
                       ).paddingAll(4),
-                      // context.outlinedButton(
-                      //   hideBorder: true,
-                      //   data: BaseUiKitButtonData(
-                      //     onPressed: () => onPhotoDeleted.call(index),
-                      //     icon: ImageWidget(
-                      //       svgAsset: GraphicsFoundation.instance.svg.x,
-                      //       color: Colors.white,
-                      //       height: 8,
-                      //       width: 8,
-                      //     ),
-                      //   ),
-                      // ),
                     ],
-                  // ),
-                ),
-                context
-                    .badgeButtonNoValue(
-                      data: BaseUiKitButtonData(
-                        onPressed: onLogoAddRequested,
-                        icon: DecoratedBox(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            border: Border.fromBorderSide(
-                              BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
-                            ),
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                          child: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
-                            height: 18,
-                            width: 18,
-                          ).paddingAll(EdgeInsetsFoundation.all12),
-                        ),
-                      ),
-                    )
-                    .paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                Positioned(
-                  right: EdgeInsetsFoundation.vertical16,
-                  child: Text(
-                    'or drag files here',
-                    style: theme.boldTextTheme.caption1Medium.copyWith(
-                      color: theme.colorScheme.darkNeutral900,
-                    ),
                   ),
+                Positioned(
+                  left: 0,
+                  child: context
+                      .badgeButtonNoValue(
+                        data: BaseUiKitButtonData(
+                          onPressed: onLogoAddRequested,
+                          icon: DecoratedBox(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              border: Border.fromBorderSide(
+                                BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                              ),
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ),
+                            child: ImageWidget(
+                              svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                              height: 18,
+                              width: 18,
+                            ).paddingAll(EdgeInsetsFoundation.all12),
+                          ),
+                        ),
+                      )
+                      .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                 ),
               ],
             ),
@@ -157,7 +138,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
               ),
             ),
             child: Stack(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.centerRight,
               children: [
                 ReorderableListView.builder(
                   key: listPhotosKey,
@@ -189,36 +170,40 @@ class WebPhotoVideoSelector extends StatelessWidget {
                   itemCount: photos.length,
                   onReorder: onPhotoReorderRequested,
                 ),
-                context
-                    .badgeButtonNoValue(
-                      data: BaseUiKitButtonData(
-                        onPressed: onPhotoAddRequested,
-                        icon: DecoratedBox(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            border: Border.fromBorderSide(
-                              BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
-                            ),
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                          child: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
-                            height: 18,
-                            width: 18,
-                          ).paddingAll(EdgeInsetsFoundation.all12),
-                        ),
-                      ),
-                    )
-                    .paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 Positioned(
-                  right: EdgeInsetsFoundation.vertical16,
-                  child: Text(
-                    'or drag files here',
-                    style: theme.boldTextTheme.caption1Medium.copyWith(
-                      color: theme.colorScheme.darkNeutral900,
+                  left: 0,
+                  child: context
+                      .badgeButtonNoValue(
+                        data: BaseUiKitButtonData(
+                          onPressed: onPhotoAddRequested,
+                          icon: DecoratedBox(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              border: Border.fromBorderSide(
+                                BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                              ),
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ),
+                            child: ImageWidget(
+                              svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                              height: 18,
+                              width: 18,
+                            ).paddingAll(EdgeInsetsFoundation.all12),
+                          ),
+                        ),
+                      )
+                      .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                ),
+                if (photos.isEmpty)
+                  Positioned(
+                    right: EdgeInsetsFoundation.vertical16,
+                    child: Text(
+                      'or drag files here',
+                      style: theme.boldTextTheme.caption1Medium.copyWith(
+                        color: theme.colorScheme.darkNeutral900,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -243,7 +228,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
               ),
             ),
             child: Stack(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.centerRight,
               children: [
                 ReorderableListView.builder(
                   key: listVideosKey,
@@ -275,36 +260,40 @@ class WebPhotoVideoSelector extends StatelessWidget {
                   itemCount: videos.length,
                   onReorder: onVideoReorderRequested,
                 ),
-                context
-                    .badgeButtonNoValue(
-                      data: BaseUiKitButtonData(
-                        onPressed: onVideoAddRequested,
-                        icon: DecoratedBox(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            border: Border.fromBorderSide(
-                              BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
-                            ),
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                          child: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
-                            height: 18,
-                            width: 18,
-                          ).paddingAll(EdgeInsetsFoundation.all12),
-                        ),
-                      ),
-                    )
-                    .paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 Positioned(
-                  right: EdgeInsetsFoundation.vertical16,
-                  child: Text(
-                    'or drag files here',
-                    style: theme.boldTextTheme.caption1Medium.copyWith(
-                      color: theme.colorScheme.darkNeutral900,
+                  left: 0,
+                  child: context
+                      .badgeButtonNoValue(
+                        data: BaseUiKitButtonData(
+                          onPressed: onVideoAddRequested,
+                          icon: DecoratedBox(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              border: Border.fromBorderSide(
+                                BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                              ),
+                              borderRadius: BorderRadiusFoundation.all12,
+                            ),
+                            child: ImageWidget(
+                              svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                              height: 18,
+                              width: 18,
+                            ).paddingAll(EdgeInsetsFoundation.all12),
+                          ),
+                        ),
+                      )
+                      .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                ),
+                if (videos.isEmpty)
+                  Positioned(
+                    right: EdgeInsetsFoundation.vertical16,
+                    child: Text(
+                      'or drag files here',
+                      style: theme.boldTextTheme.caption1Medium.copyWith(
+                        color: theme.colorScheme.darkNeutral900,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
