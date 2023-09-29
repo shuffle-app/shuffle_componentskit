@@ -315,6 +315,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                               controller: _addressController,
                               hintText: 'Tap to set address',
                               fillColor: theme.colorScheme.surface1,
+                              borderRadius: BorderRadiusFoundation.all12,
                               icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
                             ),
                           ),
