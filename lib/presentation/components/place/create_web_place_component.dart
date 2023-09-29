@@ -255,7 +255,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                               child: UiKitTitledDescriptionWithDivider(
                                 description: [
                                   '${normalizedTi(_placeToEdit.openFrom)} - ${normalizedTi(_placeToEdit.openTo)}',
-                                  _placeToEdit.weekdays.join(', ') ?? 'no weekdays selected'
+                                  _placeToEdit.weekdays.join(', ')
                                 ],
                                 direction: Axis.horizontal,
                                 // onTrailingTap: widget.onTimeEditTap,
@@ -263,8 +263,10 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                               )),
                           context.smallOutlinedButton(
                             data: BaseUiKitButtonData(
-                                icon:
-                                    ImageWidget(svgAsset: GraphicsFoundation.instance.svg.pencil, color: Colors.white),
+                                icon: ImageWidget(
+                                  svgAsset: GraphicsFoundation.instance.svg.clock,
+                                  color: Colors.white,
+                                ),
                                 onPressed: () async {
                                   await showUiKitTimeFromToDialog(context, (from, to) {
                                     setState(() {
@@ -285,32 +287,38 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       WebFormField(
                         title: 'Description',
                         child: SizedBox(
-                            height: descriptionHeightConstraint,
-                            child: UiKitInputFieldNoIcon(
-                              controller: _descriptionController,
-                              minLines: 4,
-                              expands: true,
-                              hintText: 'Enter name',
-                              fillColor: theme.colorScheme.surface1,
-                              borderRadius: BorderRadiusFoundation.all12,
-                            )),
+                          height: descriptionHeightConstraint,
+                          child: UiKitInputFieldNoIcon(
+                            controller: _descriptionController,
+                            minLines: 4,
+                            expands: true,
+                            hintText: 'Enter description',
+                            fillColor: theme.colorScheme.surface1,
+                            borderRadius: BorderRadiusFoundation.all12,
+                          ),
+                        ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: 'Address',
                         isRequired: true,
                         child: InkWell(
-                            onTap: () async {
-                              _addressController.text = await widget.getLocation?.call() ?? '';
-                              _placeToEdit.location = _addressController.text;
-                            },
-                            child: IgnorePointer(
-                                child: UiKitInputFieldNoIcon(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          onTap: () async {
+                            _addressController.text = await widget.getLocation?.call() ?? '';
+                            _placeToEdit.location = _addressController.text;
+                          },
+                          child: IgnorePointer(
+                            child: UiKitInputFieldRightIcon(
                               controller: _addressController,
-                              hintText: 'Enter address',
+                              hintText: 'Tap to set address',
                               fillColor: theme.colorScheme.surface1,
-                              borderRadius: BorderRadiusFoundation.all12,
-                            ))),
+                              icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
+                            ),
+                          ),
+                        ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
