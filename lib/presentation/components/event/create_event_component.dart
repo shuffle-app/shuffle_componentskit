@@ -198,17 +198,17 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         Text('Time', style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Text(
-                            '${_eventToEdit.time == null ? 'select time' : '${_eventToEdit.time!.hour}:${_eventToEdit.time!.minute} ${_eventToEdit.time!.period.name}'}  ',
+                            '${_eventToEdit.time == null ? 'select time' : '${normalizedTi(_eventToEdit.time,showDateName: false)}'} ${_eventToEdit.timeTo == null ? '' : '- ${normalizedTi(_eventToEdit.timeTo,showDateName: false)} '}',
                             style: theme?.boldTextTheme.body),
                         context.outlinedButton(
                             data: BaseUiKitButtonData(
                                 onPressed: () async {
-                                  final maybeTime = await showUiKitTimeDialog(context);
-                                  if (maybeTime != null) {
+                                   await showUiKitTimeFromToDialog(context,(from,to){
                                     setState(() {
-                                      _eventToEdit.time = maybeTime;
+                                      _eventToEdit.time = from;
+                                      _eventToEdit.timeTo = to;
                                     });
-                                  }
+                                  });
                                 },
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.clock,
@@ -217,14 +217,14 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                       ]).paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       Row(children: [
-                        Text(_eventToEdit.isRecurrent ? 'Days of week' : 'Date',
+                        Text(_eventToEdit.isRecurrent ? 'Days of week' : 'Dates',
                             style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Expanded(
                             child: Text(
                                 _eventToEdit.isRecurrent
-                                    ? _eventToEdit.weekdays?.join(', ') ?? 'select days '
-                                    : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)}  ',
+                                    ? _eventToEdit.weekdays.join(', ')
+                                    : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)} ${_eventToEdit.dateTo == null ? '' : '- ${DateFormat('MM/dd').format(_eventToEdit.dateTo!) }'}',
                                 style: theme?.boldTextTheme.body)),
                         context.outlinedButton(
                             data: BaseUiKitButtonData(
@@ -238,12 +238,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                         }
                                       }
                                     : () async {
-                                        final maybeDate = await showUiKitCalendarDialog(context);
-                                        if (maybeDate != null) {
-                                          setState(() {
-                                            _eventToEdit.date = maybeDate;
-                                          });
-                                        }
+                                         await showUiKitCalendarFromToDialog(context, (from, to) => {
+                                           setState(() {
+                                             _eventToEdit.date = from;
+                                             _eventToEdit.dateTo = to;
+                                           })
+                                         });
+
                                       },
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.calendar,
@@ -256,6 +257,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           child: context.gradientButton(
                               data: BaseUiKitButtonData(
                                   text: 'save'.toUpperCase(),
+                                  fit: ButtonFit.fitWidth,
                                   onPressed: () {
                                     _eventToEdit.title = _titleController.text;
                                     _eventToEdit.description = _descriptionController.text;

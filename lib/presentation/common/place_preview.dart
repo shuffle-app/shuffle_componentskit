@@ -45,7 +45,7 @@ class PlacePreview extends StatelessWidget {
             id: event.id,
             title: event.title ?? '',
             description: event.description ?? '',
-            media: event.media!,
+            media: event.media,
             tags: event.tags ?? [],
             baseTags: event.baseTags ?? []);
 
@@ -72,9 +72,9 @@ class PlacePreview extends StatelessWidget {
                   ),
                   if (showFavoriteBtn)
                     Positioned(
-                        bottom: -20.h,
+                        top: -5.h,
                         right: -5.w,
-                        child: context.button(
+                        child: context.smallButton(
                             blurred: true,
                             data: BaseUiKitButtonData(
                                 onPressed: onFavoriteChanged,
