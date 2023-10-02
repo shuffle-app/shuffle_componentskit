@@ -151,6 +151,88 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show pro subscription',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                    configuration.appConfig.content['pro_account_info'],
+                  ),
+                  ComponentBuilder(
+                    child: AccountSubscriptionComponent(
+                      configModel: ComponentModel.fromJson(
+                        configuration.appConfig.content['pro_account_info'],
+                      ),
+                      title: 'Pro account',
+                      uiModel: UiSubscriptionModel(
+                        userType: UserTileType.pro,
+                        userName: 'userName',
+                        userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+                        nickname: 'nickname',
+                        offers: [
+                          SubscriptionOfferModel(
+                            currency: '\$',
+                            savings: 2,
+                            price: 4.49,
+                            name: 'Annually',
+                            periodName: 'month',
+                          ),
+                          SubscriptionOfferModel(
+                            currency: '\$',
+                            price: 4.99,
+                            name: 'Monthly',
+                            periodName: 'month',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show premium subscription',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                    configuration.appConfig.content['premium_account_info'],
+                  ),
+                  ComponentBuilder(
+                    child: AccountSubscriptionComponent(
+                      configModel: ComponentModel.fromJson(
+                        configuration.appConfig.content['premium_account_info'],
+                      ),
+                      title: 'Premium account',
+                      uiModel: UiSubscriptionModel(
+                        userType: UserTileType.premium,
+                        userName: 'userName',
+                        userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+                        nickname: 'nickname',
+                        offers: [
+                          SubscriptionOfferModel(
+                            currency: '\$',
+                            savings: 2,
+                            price: 4.90,
+                            name: 'Annually',
+                            periodName: 'month',
+                          ),
+                          SubscriptionOfferModel(
+                            currency: '\$',
+                            price: 5,
+                            name: 'Monthly',
+                            periodName: 'month',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show chat screen',
                 onPressed: () {
                   buildComponent(

@@ -53,4 +53,6 @@ export 'shuffle/shuffle_component.dart';
 export 'shuffle/uishuffle_model.dart';
 export 'spinner/spinner_component.dart';
 export 'spinner/uispinner_model.dart';
+export 'subscriptions/account_subscription_component.dart';
+export 'subscriptions/ui_subscription_model.dart';
 export 'welcome/welcome_component.dart';
