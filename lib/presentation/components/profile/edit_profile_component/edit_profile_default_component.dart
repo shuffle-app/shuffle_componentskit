@@ -8,6 +8,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final GlobalKey? formKey;
   final VoidCallback? onPreferencesChangeRequested;
   final VoidCallback? onPhotoChangeRequested;
+  final VoidCallback? onPremiumAccountRequested;
+  final VoidCallback? onProAccountRequested;
   final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
@@ -30,6 +32,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
     Key? key,
     required this.selectedPreferences,
     this.onProfileEditSubmitted,
+    this.onPremiumAccountRequested,
+    this.onProAccountRequested,
     this.formKey,
     this.onPhotoChangeRequested,
     this.onPreferencesChanged,
@@ -94,6 +98,38 @@ class EditProfileDefaultComponent extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                SpacingFoundation.verticalSpace16,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: context.smallButton(
+                        blurred: false,
+                        data: BaseUiKitButtonData(
+                          fit: ButtonFit.fitWidth,
+                          text: 'PREMIUM',
+                          icon: ImageWidget(
+                            svgAsset: GraphicsFoundation.instance.svg.star2,
+                            color: Colors.black,
+                          ),
+                          onPressed: onPremiumAccountRequested,
+                        ),
+                      ),
+                    ),
+                    SpacingFoundation.horizontalSpace16,
+                    Expanded(
+                      child: context.smallButton(
+                        blurred: false,
+                        data: BaseUiKitButtonData(
+                          fit: ButtonFit.fitWidth,
+                          text: 'PRO',
+                          onPressed: onProAccountRequested,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: nameController,
                   label: 'Name',

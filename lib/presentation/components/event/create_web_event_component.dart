@@ -1,48 +1,43 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
-
-
-class CreateWebPlaceComponent extends StatefulWidget {
-  final Future Function(UiPlaceModel) onPlaceCreated;
-  final UiPlaceModel? placeToEdit;
-  final VoidCallback? onPlaceDeleted;
+class CreateWebEventComponent extends StatefulWidget {
+  final Future Function(UiEventModel) onEventCreated;
+  final UiEventModel? eventToEdit;
+  final VoidCallback? onEventDeleted;
   final VoidCallback? onShowResult;
-  final Future<String?> Function()? getLocation;
   final Future<List<String>> Function(String)? onSuggest;
 
-  const CreateWebPlaceComponent({
+  const CreateWebEventComponent({
     super.key,
-    required this.onPlaceCreated,
-    this.placeToEdit,
-    this.getLocation,
-    this.onPlaceDeleted,
+    required this.onEventCreated,
+    this.eventToEdit,
+    this.onEventDeleted,
     this.onSuggest,
     this.onShowResult,
   });
 
   @override
-  State<CreateWebPlaceComponent> createState() => _CreateWebPlaceComponentState();
+  State<CreateWebEventComponent> createState() => _CreateWebEventComponentState();
 }
 
-class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
+class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _phoneController = TextEditingController();
   late final TextEditingController _websiteController = TextEditingController();
-  late final TextEditingController _locationController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();
   final TextEditingController _personPositionController = TextEditingController();
   final TextEditingController _personEmailController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
-  late UiPlaceModel _placeToEdit;
+  late UiEventModel _eventToEdit;
 
   double descriptionHeightConstraint = 50.h;
   final List<BaseUiKitMedia> _videos = [];
@@ -51,18 +46,17 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
   @override
   void initState() {
     super.initState();
-    _titleController.text = widget.placeToEdit?.title ?? '';
-    _descriptionController.text = widget.placeToEdit?.description ?? '';
-    _locationController.text = widget.placeToEdit?.location ?? '';
-    _placeToEdit = widget.placeToEdit ??
-        UiPlaceModel(
+    _titleController.text = widget.eventToEdit?.title ?? '';
+    _descriptionController.text = widget.eventToEdit?.description ?? '';
+    _eventToEdit = widget.eventToEdit ??
+        UiEventModel(
           id: -1,
           media: [],
           tags: [],
           description: '',
         );
-    _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
-    _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
+    _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+    _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
   }
 
@@ -91,15 +85,6 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
     if (files.isNotEmpty) {
       setState(() {
         _photos.addAll(files.map((file) => UiKitMediaPhoto(link: file.path)));
-      });
-    }
-  }
-
-  _onLogoAddRequested() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (file != null) {
-      setState(() {
-        _placeToEdit.logo = file.path;
       });
     }
   }
@@ -151,7 +136,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create place', style: theme?.boldTextTheme.title2),
+            Text('Create event', style: theme?.boldTextTheme.title2),
             SpacingFoundation.verticalSpace24,
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -162,7 +147,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                   child: Column(
                     children: [
                       WebFormField(
-                        title: 'Place type',
+                        title: 'Event type',
                         isRequired: true,
                         child: UiKitSuggestionField(
                           options: widget.onSuggest,
@@ -178,12 +163,12 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
-                              _placeToEdit.baseTags = [..._placeToEdit.baseTags, UiKitTag(title: value, iconPath: '')];
+                              _eventToEdit.baseTags = [..._eventToEdit.baseTags, UiKitTag(title: value, iconPath: '')];
                             });
                           },
-                          tags: _placeToEdit.baseTags.map((e) => e.title).toList(),
+                          tags: _eventToEdit.baseTags.map((e) => e.title).toList(),
                           onRemoveTagCallback: (value) {
-                            _placeToEdit.baseTags.removeWhere((e) => e.title == value);
+                            _eventToEdit.baseTags.removeWhere((e) => e.title == value);
                           },
                         ),
                       ),
@@ -195,12 +180,12 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
-                              _placeToEdit.tags = [..._placeToEdit.tags, UiKitTag(title: value, iconPath: '')];
+                              _eventToEdit.tags = [..._eventToEdit.tags, UiKitTag(title: value, iconPath: '')];
                             });
                           },
-                          tags: _placeToEdit.tags.map((e) => e.title).toList(),
+                          tags: _eventToEdit.tags.map((e) => e.title).toList(),
                           onRemoveTagCallback: (value) {
-                            _placeToEdit.tags.removeWhere((e) => e.title == value);
+                            _eventToEdit.tags.removeWhere((e) => e.title == value);
                           },
                         ),
                       ),
@@ -209,14 +194,12 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         positionModel: model.positionModel,
                         videos: _videos,
                         photos: _photos,
-                        logo: _placeToEdit.logo,
                         onPhotoAddRequested: _onPhotoAddRequested,
                         onVideoAddRequested: _onVideoAddRequested,
                         onPhotoReorderRequested: _onPhotoReorderRequested,
                         onVideoReorderRequested: _onVideoReorderRequested,
                         onPhotoDeleted: _onPhotoDeleted,
                         onVideoDeleted: _onVideoDeleted,
-                        onLogoAddRequested: _onLogoAddRequested,
                       ),
                       SpacingFoundation.verticalSpace24,
                     ],
@@ -244,6 +227,24 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
+                      Row(children: [
+                        Text(
+                          'Is recurrent',
+                          style: theme.boldTextTheme.body.copyWith(
+                            color: theme.colorScheme.darkNeutral900,
+                          ),
+                        ),
+                        SpacingFoundation.horizontalSpace16,
+                        UiKitGradientSwitch(
+                          switchedOn: _eventToEdit.isRecurrent,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _eventToEdit.isRecurrent = value ?? false;
+                            });
+                          },
+                        )
+                      ]),
+                      SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: 'Opening hours',
                         isRequired: true,
@@ -252,33 +253,46 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                               flex: 3,
                               child: UiKitTitledDescriptionWithDivider(
                                 description: [
-                                  '${normalizedTi(_placeToEdit.openFrom)} - ${normalizedTi(_placeToEdit.openTo)}',
-                                  _placeToEdit.weekdays.join(', ')
+                                  '${normalizedTi(_eventToEdit.time)} - ${normalizedTi(_eventToEdit.timeTo)}',
+                                  if (_eventToEdit.isRecurrent)
+                                    _eventToEdit.weekdays.join(', ')
+                                  else
+                                    '${_eventToEdit.date == null ? '' : DateFormat('MMM dd').format(_eventToEdit.date!)} - ${_eventToEdit.dateTo == null ? '' : DateFormat('MMM dd').format(_eventToEdit.dateTo!)}'
                                 ],
                                 direction: Axis.horizontal,
                                 // onTrailingTap: widget.onTimeEditTap,
                                 title: '',
                               )),
-                          context.smallOutlinedButton(
-                            data: BaseUiKitButtonData(
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.clock,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () async {
-                                  await showUiKitTimeFromToDialog(context, (from, to) {
-                                    setState(() {
-                                      _placeToEdit.openTo = to;
-                                      _placeToEdit.openFrom = from;
-                                    });
-                                  });
-
-                                  final weekdays = await showUiKitWeekdaySelector(context) ?? [];
-                                  setState(() {
-                                    _placeToEdit.weekdays = weekdays;
-                                  });
-                                }),
-                          )
+                          Transform.scale(
+                              scale: 0.6,
+                              child: context.smallOutlinedButton(
+                                data: BaseUiKitButtonData(
+                                    icon: ImageWidget(
+                                      svgAsset: GraphicsFoundation.instance.svg.clock,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () async {
+                                      await showUiKitTimeFromToDialog(context, (from, to) {
+                                        setState(() {
+                                          _eventToEdit.time = to;
+                                          _eventToEdit.timeTo = from;
+                                        });
+                                      });
+                                      if (_eventToEdit.isRecurrent) {
+                                        final weekdays = await showUiKitWeekdaySelector(context) ?? [];
+                                        setState(() {
+                                          _eventToEdit.weekdays = weekdays;
+                                        });
+                                      } else {
+                                        await showUiKitCalendarFromToDialog(context, (from, to) {
+                                          setState(() {
+                                            _eventToEdit.date = to;
+                                            _eventToEdit.dateTo = from;
+                                          });
+                                        });
+                                      }
+                                    }),
+                              ))
                         ]),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -296,49 +310,49 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           ),
                         ),
                       ),
-                      SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: 'Address',
-                        isRequired: true,
-                        child: InkWell(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          onTap: () async {
-                            _addressController.text = await widget.getLocation?.call() ?? '';
-                            _placeToEdit.location = _addressController.text;
-                          },
-                          child: IgnorePointer(
-                            child: UiKitInputFieldRightIcon(
-                              controller: _addressController,
-                              hintText: 'Tap to set address',
-                              fillColor: theme.colorScheme.surface1,
-                              borderRadius: BorderRadiusFoundation.all12,
-                              icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: 'Phone',
-                        child: UiKitInputFieldNoIcon(
-                          controller: _phoneController,
-                          hintText: 'Enter phone',
-                          fillColor: theme.colorScheme.surface1,
-                          borderRadius: BorderRadiusFoundation.all12,
-                        ),
-                      ),
-                      SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: 'Website',
-                        child: UiKitInputFieldNoIcon(
-                          controller: _websiteController,
-                          hintText: 'Enter website',
-                          fillColor: theme.colorScheme.surface1,
-                          borderRadius: BorderRadiusFoundation.all12,
-                        ),
-                      ),
+                      // SpacingFoundation.verticalSpace24,
+                      // WebFormField(
+                      //   title: 'Address',
+                      //   isRequired: true,
+                      //   child: InkWell(
+                      //     splashColor: Colors.transparent,
+                      //     highlightColor: Colors.transparent,
+                      //     hoverColor: Colors.transparent,
+                      //     onTap: () async {
+                      //       _addressController.text = await widget.getLocation?.call() ?? '';
+                      //       _eventToEdit.location = _addressController.text;
+                      //     },
+                      //     child: IgnorePointer(
+                      //       child: UiKitInputFieldRightIcon(
+                      //         controller: _addressController,
+                      //         hintText: 'Tap to set address',
+                      //         fillColor: theme.colorScheme.surface1,
+                      //         borderRadius: BorderRadiusFoundation.all12,
+                      //         icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SpacingFoundation.verticalSpace24,
+                      // WebFormField(
+                      //   title: 'Phone',
+                      //   child: UiKitInputFieldNoIcon(
+                      //     controller: _phoneController,
+                      //     hintText: 'Enter phone',
+                      //     fillColor: theme.colorScheme.surface1,
+                      //     borderRadius: BorderRadiusFoundation.all12,
+                      //   ),
+                      // ),
+                      // SpacingFoundation.verticalSpace24,
+                      // WebFormField(
+                      //   title: 'Website',
+                      //   child: UiKitInputFieldNoIcon(
+                      //     controller: _websiteController,
+                      //     hintText: 'Enter website',
+                      //     fillColor: theme.colorScheme.surface1,
+                      //     borderRadius: BorderRadiusFoundation.all12,
+                      //   ),
+                      // ),
                       SpacingFoundation.verticalSpace24,
                       SizedBox(
                         height: 1,
@@ -400,12 +414,12 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                     data: BaseUiKitButtonData(
                                       text: 'save',
                                       onPressed: () {
-                                        _placeToEdit.title = _titleController.text;
-                                        _placeToEdit.website = _websiteController.text;
-                                        _placeToEdit.phone = _phoneController.text;
-                                        _placeToEdit.description = _descriptionController.text;
-                                        _placeToEdit.media = [..._photos, ..._videos];
-                                        widget.onPlaceCreated.call(_placeToEdit);
+                                        _eventToEdit.title = _titleController.text;
+                                        // _eventToEdit.website = _websiteController.text;
+                                        // _eventToEdit.phone = _phoneController.text;
+                                        _eventToEdit.description = _descriptionController.text;
+                                        _eventToEdit.media = [..._photos, ..._videos];
+                                        widget.onEventCreated.call(_eventToEdit);
                                       },
                                     ),
                                   ),

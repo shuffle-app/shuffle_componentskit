@@ -8,7 +8,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
   final String? logo;
   final List<BaseUiKitMedia> photos;
   final List<BaseUiKitMedia> videos;
-  final VoidCallback onLogoAddRequested;
+  final VoidCallback? onLogoAddRequested;
   final VoidCallback onPhotoAddRequested;
   final VoidCallback onVideoAddRequested;
   final ReorderCallback onPhotoReorderRequested;
@@ -26,7 +26,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
     this.photos = const [],
     this.videos = const [],
     this.itemsSize = const Size(75, 75),
-    required this.onLogoAddRequested,
+     this.onLogoAddRequested,
     required this.onPhotoAddRequested,
     required this.onVideoAddRequested,
     required this.onPhotoReorderRequested,
@@ -46,6 +46,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
       mainAxisAlignment: (positionModel?.bodyAlignment).mainAxisAlignment,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if(onLogoAddRequested!=null)...[
         SpacingFoundation.verticalSpace16,
         Text(
           'Logo (upload Files)',
@@ -53,6 +54,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
             color: theme.colorScheme.darkNeutral900,
           ),
         ).paddingSymmetric(horizontal: horizontalPadding),
+
         SpacingFoundation.verticalSpace16,
         SizedBox(
           height: itemsSize.height * 1.2,
@@ -107,19 +109,19 @@ class WebPhotoVideoSelector extends StatelessWidget {
               ],
             ),
           ),
-        ),
+        ),],
         SpacingFoundation.verticalSpace16,
         Row(
           children: [
             Text(
               'Photo (upload Files)',
-              style: theme.boldTextTheme.body.copyWith(
+              style: theme?.boldTextTheme.body.copyWith(
                 color: theme.colorScheme.darkNeutral900,
               ),
             ).paddingSymmetric(horizontal: horizontalPadding),
             Text(
               '*',
-              style: theme.boldTextTheme.title2.copyWith(
+              style: theme?.boldTextTheme.title2.copyWith(
                 color: theme.colorScheme.error,
               ),
             ),
@@ -131,10 +133,10 @@ class WebPhotoVideoSelector extends StatelessWidget {
           width: double.infinity,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface1,
+              color: theme?.colorScheme.surface1,
               borderRadius: BorderRadiusFoundation.all12,
               border: Border.fromBorderSide(
-                BorderSide(width: 1, color: theme.colorScheme.surface5),
+                BorderSide(width: 1, color: theme?.colorScheme.surface5 ?? Colors.black),
               ),
             ),
             child: Stack(
@@ -199,7 +201,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
                     right: EdgeInsetsFoundation.vertical16,
                     child: Text(
                       'or drag files here',
-                      style: theme.boldTextTheme.caption1Medium.copyWith(
+                      style: theme?.boldTextTheme.caption1Medium.copyWith(
                         color: theme.colorScheme.darkNeutral900,
                       ),
                     ),
@@ -211,7 +213,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         Text(
           'Video (upload Files)',
-          style: theme.boldTextTheme.body.copyWith(
+          style: theme?.boldTextTheme.body.copyWith(
             color: theme.colorScheme.darkNeutral900,
           ),
         ).paddingSymmetric(horizontal: horizontalPadding),
@@ -221,10 +223,10 @@ class WebPhotoVideoSelector extends StatelessWidget {
           width: double.infinity,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface1,
+              color: theme?.colorScheme.surface1,
               borderRadius: BorderRadiusFoundation.all12,
               border: Border.fromBorderSide(
-                BorderSide(width: 1, color: theme.colorScheme.surface5),
+                BorderSide(width: 1, color: theme?.colorScheme.surface5 ?? Colors.black),
               ),
             ),
             child: Stack(
@@ -289,7 +291,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
                     right: EdgeInsetsFoundation.vertical16,
                     child: Text(
                       'or drag files here',
-                      style: theme.boldTextTheme.caption1Medium.copyWith(
+                      style: theme?.boldTextTheme.caption1Medium.copyWith(
                         color: theme.colorScheme.darkNeutral900,
                       ),
                     ),

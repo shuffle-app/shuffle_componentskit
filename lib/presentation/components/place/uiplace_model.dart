@@ -39,10 +39,11 @@ class UiPlaceModel {
           UiDescriptionItemModel(title: 'Website', description: website ?? ''),
           UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
           UiDescriptionItemModel(title: 'Location', description: location ?? ''),
-          UiDescriptionItemModel(
-            title: 'Work hours',
-            description: formatDate(null, null, openFrom, openTo, weekdays),
-          ),
+          if (formatDate(null, null, openFrom, openTo, weekdays) != null)
+            UiDescriptionItemModel(
+              title: 'Work hours',
+              description: formatDate(null, null, openFrom, openTo, weekdays)!,
+            ),
         ];
 
   String? validateCreation() {

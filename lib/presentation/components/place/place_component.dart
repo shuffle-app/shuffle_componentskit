@@ -4,15 +4,26 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class PlaceComponent extends StatelessWidget {
   final UiPlaceModel place;
+  final bool isCreateEventAvaliable;
+  final VoidCallback? onEventCreate;
+  final List<UiEventModel>? events;
   final ComplaintFormComponent? complaintFormComponent;
 
-  const PlaceComponent({Key? key, required this.place, this.complaintFormComponent}) : super(key: key);
+  const PlaceComponent(
+      {Key? key,
+      required this.place,
+      this.complaintFormComponent,
+      this.isCreateEventAvaliable = false,
+      this.onEventCreate,
+      this.events})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +42,7 @@ class PlaceComponent extends StatelessWidget {
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     final AutoSizeGroup gridGroup = AutoSizeGroup();
+    final theme = context.uiKitTheme;
 
     return Column(
       children: [
@@ -85,36 +97,97 @@ class PlaceComponent extends StatelessWidget {
                             blurred: true))),
             ]),
             SpacingFoundation.verticalSpace8,
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: () {
-                final AutoSizeGroup g = AutoSizeGroup();
+            if (isCreateEventAvaliable)
+              UiKitCardWrapper(
+                  child:
+                      Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text('Upcoming event', style: theme?.boldTextTheme.subHeadline),
+                if (events != null && events!.isNotEmpty) ...[
+                  SpacingFoundation.verticalSpace8,
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: events!.length,
+                      itemBuilder: (context, index) {
+                        final event = events![index];
 
-                return [
-                  Expanded(
-                    child: UpcomingEventPlaceActionCard(
-                      value: 'in 2 days',
-                      group: g,
-                      rasterIconAsset: GraphicsFoundation.instance.png.events,
-                      action: () {
-                        log('calendar was pressed');
+                        return ListTile(
+                          isThreeLine: true,
+                          contentPadding: EdgeInsets.zero,
+                          leading: BorderedUserCircleAvatar(
+                            imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                            size: 40.w,
+                          ),
+                          title: Text(
+                            event.title ?? '',
+                            style: theme?.boldTextTheme.caption1Bold,
+                          ),
+                          subtitle: event.date != null
+                              ? Text(
+                                  DateFormat('MMMM d').format(event.date!),
+                                  style: theme?.boldTextTheme.caption1Medium.copyWith(
+                                    color: theme.colorScheme.darkNeutral500,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          trailing: context.smallButton(
+                            data: BaseUiKitButtonData(
+                              onPressed: () {
+                                buildComponent(context, ComponentPlaceModel.fromJson(config['event']),
+                                    ComponentBuilder(child: EventComponent(event: event)));
+                              },
+                              icon: Icon(
+                                CupertinoIcons.right_chevron,
+                                color: theme?.colorScheme.inversePrimary,
+                                size: 20.w,
+                              ),
+                            ),
+                          ),
+                        );
                       },
+                      separatorBuilder: (_, __) => SpacingFoundation.verticalSpace4,
                     ),
                   ),
-                  SpacingFoundation.horizontalSpace8,
-                  Expanded(
-                    child: PointBalancePlaceActionCard(
-                      value: '2 650',
-                      group: g,
-                      rasterIconAsset: GraphicsFoundation.instance.png.coin,
-                      action: () {
-                        log('balance was pressed');
-                      },
+                ],
+                SpacingFoundation.verticalSpace8,
+                context.gradientButton(
+                    data: BaseUiKitButtonData(text: 'Create Event', onPressed: onEventCreate, fit: ButtonFit.fitWidth))
+              ]).paddingSymmetric(
+                horizontal: horizontalMargin,
+                vertical: SpacingFoundation.verticalSpacing8,
+              )).paddingSymmetric(
+                horizontal: horizontalMargin,
+              )
+            else
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: () {
+                  final AutoSizeGroup g = AutoSizeGroup();
+
+                  return [
+                    Expanded(
+                      child: UpcomingEventPlaceActionCard(
+                        value: 'in 2 days',
+                        group: g,
+                        rasterIconAsset: GraphicsFoundation.instance.png.events,
+                        action: () {
+                          log('calendar was pressed');
+                        },
+                      ),
                     ),
-                  ),
-                ];
-              }(),
-            ),
+                    SpacingFoundation.horizontalSpace8,
+                    Expanded(
+                      child: PointBalancePlaceActionCard(
+                        value: '2 650',
+                        group: g,
+                        rasterIconAsset: GraphicsFoundation.instance.png.coin,
+                        action: () {
+                          log('balance was pressed');
+                        },
+                      ),
+                    ),
+                  ];
+                }(),
+              ),
             SpacingFoundation.verticalSpace8,
             GridView.count(
               padding: EdgeInsets.zero,

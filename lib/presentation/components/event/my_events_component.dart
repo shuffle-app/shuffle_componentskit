@@ -38,7 +38,7 @@ class MyEventsComponent extends StatelessWidget {
                   isThreeLine: true,
                   contentPadding: EdgeInsets.zero,
                   leading: BorderedUserCircleAvatar(
-                    imageUrl: event.media?.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                    imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
                     size: 40.w,
                   ),
                   title: Text(
