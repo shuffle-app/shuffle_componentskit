@@ -148,7 +148,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 GestureDetector(
                   onTap: () => showUiKitCalendarDialog(context).then((d) {
                     if (d != null) {
-                      dateOfBirthController.text = '${d.day < 10 ? '0${d.day}' : d.day}.${d.month}.${d.year}';
+                      dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
                     }
                   }),
                   child: AbsorbPointer(
