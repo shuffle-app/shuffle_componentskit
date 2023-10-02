@@ -53,7 +53,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -65,6 +66,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
         title: 'Edit Profile',
         autoImplyLeading: true,
         centerTitle: true,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         appBarBody: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -143,12 +145,21 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   validator: nameValidator,
                 ),
                 SpacingFoundation.verticalSpace16,
-                UiKitInputFieldNoFill(
-                  controller: dateOfBirthController,
-                  label: 'Date of birth',
-                  hintText: 'Date of birth',
-                  validator: dateOfBirthValidator,
-                  inputFormatters: [dateInputFormatter],
+                GestureDetector(
+                  onTap: () => showUiKitCalendarDialog(context).then((d) {
+                    if (d != null) {
+                      dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
+                    }
+                  }),
+                  child: AbsorbPointer(
+                    child: UiKitInputFieldNoFill(
+                      controller: dateOfBirthController,
+                      label: 'Date of birth',
+                      hintText: 'Date of birth',
+                      validator: dateOfBirthValidator,
+                      inputFormatters: [dateInputFormatter],
+                    ),
+                  ),
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
