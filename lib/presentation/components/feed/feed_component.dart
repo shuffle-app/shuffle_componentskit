@@ -150,26 +150,6 @@ class FeedComponent extends StatelessWidget {
                   [],
             ),
           ).wrapSliverBox,
-          // Flexible(
-          //   child: ListView.separated(
-          //     scrollDirection: Axis.horizontal,
-          //     padding: EdgeInsets.zero,
-          //     shrinkWrap: true,
-          //     itemBuilder: (context, index) {
-          //       if (index == 0) return SizedBox.shrink();
-          //       final niche = nicheTitles?.elementAt(index);
-          //
-          //       return UiKitMessageCardWithIcon(
-          //         message: niche ?? '',
-          //         iconLink: nicheData?[niche]?.imageLink,
-          //         layoutDirection: Axis.vertical,
-          //         type: MessageCardType.wide,
-          //       );
-          //     },
-          //     separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace12,
-          //     itemCount: nicheTitles?.length ?? 1,
-          //   ).wrapSliverBox,
-          // ),
           SpacingFoundation.verticalSpace24.wrapSliverBox,
         ],
         if (!showBusinessContent) ...[
@@ -183,7 +163,7 @@ class FeedComponent extends StatelessWidget {
                 additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
                 accentMessage: 'Don\'t miss it',
                 image: ImageWidget(
-                  link: feed.recommendedEvent?.media?.first.link,
+                  link: feed.recommendedEvent?.media.firstOrNull?.link,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   errorWidget: const UiKitBigPhotoErrorWidget(),
@@ -269,15 +249,6 @@ class FeedComponent extends StatelessWidget {
                         onTagSortPressed?.call('Random', list);
                       },
                       length: feed.filterChips?.length ?? 0
-                    // context.gradientButton(
-                    //   data: BaseUiKitButtonData(
-                    //     icon: ImageWidget(
-                    //       svgAsset: GraphicsFoundation.instance.svg.dice,
-                    //       height: 17,
-                    //       fit: BoxFit.fitHeight,
-                    //     ),
-                    //     onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Random'),
-                    //   ),
                   ),
                   UiKitTitledFilterChip(
                     selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
@@ -310,26 +281,8 @@ class FeedComponent extends StatelessWidget {
             shrinkWrapFirstPageIndicators: true,
             builderDelegate: PagedChildBuilderDelegate(
               animateTransitions: true,
-              firstPageProgressIndicatorBuilder: (c) =>
-                  Center(
-                  //     child: Shimmer(
-                  //       gradient: GradientFoundation.greyGradient,
-                  //       child: SizedBox(
-                  //         height: 156.h,
-                  //         width: double.infinity,
-                        ),
-                  //     )),
-              newPageProgressIndicatorBuilder: (c) =>
-                  Center(
-                      // child: Shimmer(
-                      //   gradient: GradientFoundation.greyGradient,
-                      //   child: SizedBox(
-                      //     height: 156.h,
-                      //     width: double.infinity,
-                        ),
-                      // )),
-              // firstPageProgressIndicatorBuilder: (c) => Center(child: progressIndicator),
-              // newPageProgressIndicatorBuilder: (c) => Center(child: progressIndicator),
+              firstPageProgressIndicatorBuilder: (c) => const SizedBox.shrink(),
+              newPageProgressIndicatorBuilder: (c) => const SizedBox.shrink(),
               itemBuilder: (_, item, index) {
                 item as UiUniversalModel;
 
@@ -349,7 +302,6 @@ class FeedComponent extends StatelessWidget {
             ),
             itemExtent: 200.h,
             separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
-            // itemCount: feed.mixedItems!.length + 1,
             pagingController: controller,
           ),
           SpacingFoundation.verticalSpace24.wrapSliverBox,
