@@ -41,7 +41,7 @@ class UiPlaceModel {
           UiDescriptionItemModel(title: 'Location', description: location ?? ''),
           UiDescriptionItemModel(
             title: 'Work hours',
-            description: formatDate(null, null, openFrom, openTo, weekdays),
+            description: formatDate(null, null, openFrom, openTo, weekdays) ?? '',
           ),
         ];
 

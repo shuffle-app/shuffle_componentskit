@@ -45,7 +45,7 @@ class UiEventModel {
           if (date != null)
             UiDescriptionItemModel(
               title: 'Don’t miss it',
-              description: formatDate(date, dateTo, time, timeTo, weekdays),
+              description: formatDate(date, dateTo, time, timeTo, weekdays) ?? '',
             ),
           if (location != null)
             UiDescriptionItemModel(
