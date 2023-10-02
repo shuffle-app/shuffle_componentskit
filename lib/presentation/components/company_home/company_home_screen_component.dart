@@ -33,6 +33,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

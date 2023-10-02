@@ -50,7 +50,7 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
             ),
           ],
         ).paddingSymmetric(
-          horizontal: EdgeInsetsFoundation.horizontal16,
+          horizontal: horizontalMargin,
           vertical: verticalMargin,
         ),
         SpacingFoundation.verticalSpace16,

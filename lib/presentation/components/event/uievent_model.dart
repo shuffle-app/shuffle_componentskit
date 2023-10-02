@@ -20,7 +20,7 @@ class UiEventModel {
   List<UiKitTag> baseTags;
   double? rating;
   bool archived;
-  List<String>? weekdays;
+  List<String> weekdays;
   List<UiDescriptionItemModel>? descriptionItems;
 
   UiEventModel({
@@ -38,14 +38,14 @@ class UiEventModel {
     this.rating,
     this.time,
     this.timeTo,
-    this.weekdays,
+    this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
   }) : descriptionItems = [
-          if (date != null)
+          if (formatDate(date, dateTo, time, timeTo, weekdays)  != null)
             UiDescriptionItemModel(
               title: 'Don’t miss it',
-              description: formatDate(date, dateTo, time, timeTo, weekdays) ?? '',
+              description: formatDate(date, dateTo, time, timeTo, weekdays)!,
             ),
           if (location != null)
             UiDescriptionItemModel(
@@ -53,4 +53,15 @@ class UiEventModel {
               description: location,
             ),
         ];
+
+  String? validateCreation(){
+    if (title == null || title!.isEmpty) {
+      return 'Title is required';
+    } else if ( description==null || description!.isEmpty) {
+      return 'Description is required';
+    } else if (media.isEmpty) {
+      return 'Photos are required';
+    }
+    return null;
+  }
 }
