@@ -165,6 +165,14 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       title: 'Pro account',
                       uiModel: UiSubscriptionModel(
                         userType: UserTileType.pro,
+                        subscriptionFeatures: [
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                        ],
                         userName: 'userName',
                         userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
                         nickname: 'nickname',
@@ -205,6 +213,14 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       ),
                       title: 'Premium account',
                       uiModel: UiSubscriptionModel(
+                        subscriptionFeatures: [
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                        ],
                         userType: UserTileType.premium,
                         userName: 'userName',
                         userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,

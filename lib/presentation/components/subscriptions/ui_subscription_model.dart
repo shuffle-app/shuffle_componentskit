@@ -6,10 +6,12 @@ class UiSubscriptionModel {
   final String userAvatarUrl;
   final String nickname;
   final List<SubscriptionOfferModel> offers;
+  final List<String> subscriptionFeatures;
   final UserTileType userType;
 
   UiSubscriptionModel({
     required this.userName,
+    required this.subscriptionFeatures,
     required this.userAvatarUrl,
     required this.nickname,
     required this.offers,
