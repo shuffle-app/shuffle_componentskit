@@ -71,13 +71,14 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
           ),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
+            gradient: GradientFoundation.shunyGreyGradient,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: widget.configModel.content.body?[ContentItemType.verticalList]?.properties?.keys.map(
+              children: widget.uiModel.subscriptionFeatures.map(
                     (e) {
                       double padding = 0;
-                      if (e != widget.configModel.content.body?[ContentItemType.verticalList]?.properties?.keys.last) {
+                      if (e != widget.uiModel.subscriptionFeatures.last) {
                         padding = EdgeInsetsFoundation.vertical16;
                       }
 
@@ -88,7 +89,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                           GradientableWidget(
                             gradient: GradientFoundation.buttonGradient,
                             child: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.influencerAccountMark,
+                              svgAsset: GraphicsFoundation.instance.svg.gradientStar,
                               color: Colors.white,
                               width: 0.0625.sw,
                               height: 0.0625.sw,
@@ -109,7 +110,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                   [],
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
-          SpacingFoundation.verticalSpace16,
+          SpacingFoundation.verticalSpace24,
           context.gradientButton(
             data: BaseUiKitButtonData(
               fit: ButtonFit.fitWidth,
@@ -117,6 +118,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),
+          SpacingFoundation.verticalSpace24,
         ],
       ).paddingSymmetric(
         vertical: verticalMargin,
