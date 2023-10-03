@@ -111,6 +111,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
                           icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.star2,
                             color: Colors.black,
+                            height: 18,
+                            fit: BoxFit.fitHeight,
                           ),
                           onPressed: onPremiumAccountRequested,
                         ),
@@ -146,7 +148,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.verticalSpace16,
                 GestureDetector(
-                  onTap: () => showUiKitCalendarDialog(context).then((d) {
+                  onTap: () => showUiKitCalendarDialog(context,firstDate: DateTime(1960, 1, 1)).then((d) {
                     if (d != null) {
                       dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
                     }
