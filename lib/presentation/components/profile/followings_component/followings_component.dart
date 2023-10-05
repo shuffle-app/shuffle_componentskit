@@ -6,8 +6,8 @@ class FollowingsComponent extends StatelessWidget {
   final PositionModel? screenParams;
   final List<UiOwnerModel>? followings;
   final List<UiOwnerModel>? followers;
-  final onMessage;
-  final onFollow;
+  final VoidCallback? onMessage;
+  final VoidCallback? onFollow;
 
   const FollowingsComponent({super.key, this.screenParams, this.followings, this.followers, this.onMessage, this.onFollow});
 

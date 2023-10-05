@@ -30,8 +30,8 @@ class CreateWebEventComponent extends StatefulWidget {
 
 class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
-  late final TextEditingController _phoneController = TextEditingController();
-  late final TextEditingController _websiteController = TextEditingController();
+  // late final TextEditingController _phoneController = TextEditingController();
+  // late final TextEditingController _websiteController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();

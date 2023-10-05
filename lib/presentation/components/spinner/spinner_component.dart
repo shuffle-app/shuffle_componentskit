@@ -10,7 +10,7 @@ class SpinnerComponent extends StatelessWidget {
   final PagingController<int, UiEventModel> itemsController;
   final Function? onEventTap;
   final Function? onFavoriteTap;
-  final favoriteStream;
+  final Function? favoriteStream;
 
   const SpinnerComponent({Key? key,
     required this.spinner,
@@ -96,7 +96,7 @@ class SpinnerComponent extends StatelessWidget {
                       }
 
                       return StreamBuilder(
-                          stream: favoriteStream(item.id),
+                          stream: favoriteStream?.call(item.id),
                           builder: (_, favoriteValue) =>
                               UiKitSpinnerCard(
                                 availableHeight: size.maxHeight,
