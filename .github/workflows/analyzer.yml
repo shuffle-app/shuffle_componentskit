@@ -15,6 +15,7 @@ jobs:
       - name: Setup project
         run: |
           flutter pub get
+          dart pub upgrade
           flutter pub run build_runner build --delete-conflicting-outputs
       - name: Analyze project
         run: |
