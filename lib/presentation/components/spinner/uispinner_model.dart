@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class UiSpinnerModel {
   final String title;

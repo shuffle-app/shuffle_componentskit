@@ -106,8 +106,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                         ],
                       ).paddingOnly(bottom: padding);
                     },
-                  ).toList() ??
-                  [],
+                  ).toList(),
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
           SpacingFoundation.verticalSpace24,

@@ -6,6 +6,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
+//ignore_for_file: use_build_context_synchronously
+
 class CreateWebEventComponent extends StatefulWidget {
   final Future Function(UiEventModel) onEventCreated;
   final UiEventModel? eventToEdit;
@@ -28,8 +30,8 @@ class CreateWebEventComponent extends StatefulWidget {
 
 class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
-  late final TextEditingController _phoneController = TextEditingController();
-  late final TextEditingController _websiteController = TextEditingController();
+  // late final TextEditingController _phoneController = TextEditingController();
+  // late final TextEditingController _websiteController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();

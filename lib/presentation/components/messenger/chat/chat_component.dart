@@ -3,6 +3,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+//ignore_for_file: no-empty-block
+
 class ChatComponent extends StatelessWidget {
   final TextEditingController messageController;
   final PagingController<int, ChatMessageUiModel> pagingController;
