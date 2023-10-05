@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class EditProfileDefaultComponent extends StatelessWidget {
+class EditProfileDefaultComponent extends StatefulWidget {
   final List<String> selectedPreferences;
   final VoidCallback? onProfileEditSubmitted;
   final GlobalKey? formKey;
@@ -26,6 +26,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   final TextEditingController dateOfBirthController;
   final TextEditingController phoneController;
+  final bool beInSearch;
   final bool isLoading;
 
   const EditProfileDefaultComponent({
@@ -47,9 +48,29 @@ class EditProfileDefaultComponent extends StatelessWidget {
     required this.emailController,
     required this.dateOfBirthController,
     required this.phoneController,
+    required this.beInSearch,
     this.onPreferencesChangeRequested,
     this.isLoading = false,
   }) : super(key: key);
+
+  @override
+  State<EditProfileDefaultComponent> createState() => _EditProfileDefaultComponentState();
+}
+
+class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponent> {
+  late bool _beInSearch;
+
+  @override
+  void initState() {
+    super.initState();
+    _beInSearch = widget.beInSearch;
+  }
+
+  @override
+  void didUpdateWidget(covariant EditProfileDefaultComponent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _beInSearch = widget.beInSearch;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,17 +94,17 @@ class EditProfileDefaultComponent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: onPhotoChangeRequested,
+              onTap: widget.onPhotoChangeRequested,
               child: Ink(
                 child: CircularAvatar(
-                  avatarUrl: avatarUrl ?? '',
-                  name: nameController.text,
+                  avatarUrl: widget.avatarUrl ?? '',
+                  name: widget.nameController.text,
                   height: 0.15.sw,
                 ),
               ),
             ),
             InkWell(
-              onTap: onPhotoChangeRequested,
+              onTap: widget.onPhotoChangeRequested,
               child: Text(
                 'Change Photo',
                 style: textTheme?.caption2Bold,
@@ -93,7 +114,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Form(
-            key: formKey,
+            key: widget.formKey,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,7 +135,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                             height: 18,
                             fit: BoxFit.fitHeight,
                           ),
-                          onPressed: onPremiumAccountRequested,
+                          onPressed: widget.onPremiumAccountRequested,
                         ),
                       ),
                     ),
@@ -125,40 +146,60 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         data: BaseUiKitButtonData(
                           fit: ButtonFit.fitWidth,
                           text: 'PRO',
-                          onPressed: onProAccountRequested,
+                          onPressed: widget.onProAccountRequested,
                         ),
                       ),
                     ),
                   ],
                 ),
                 SpacingFoundation.verticalSpace16,
+                Row(
+                  children: [
+                    Text(
+                      'Be in search',
+                      style: context.uiKitTheme?.regularTextTheme.labelSmall,
+                    ),
+                    SpacingFoundation.horizontalSpace16,
+                    ImageWidget(
+                      svgAsset: GraphicsFoundation.instance.svg.info,
+                      width: 16.w,
+                      color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                    ),
+                    const Spacer(),
+                    UiKitGradientSwitch(
+                      switchedOn: _beInSearch,
+                      onChanged: (value) => setState(() => _beInSearch = value),
+                    )
+                  ],
+                ),
+                SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
-                  controller: nameController,
+                  controller: widget.nameController,
                   label: 'Name',
                   hintText: 'Name',
-                  validator: nameValidator,
+                  validator: widget.nameValidator,
                   keyboardType: TextInputType.name,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
-                  controller: nickNameController,
+                  controller: widget.nickNameController,
                   label: 'Nickname',
                   hintText: 'Nickname',
-                  validator: nameValidator,
+                  validator: widget.nameValidator,
                 ),
                 SpacingFoundation.verticalSpace16,
                 GestureDetector(
-                  onTap: () => showUiKitCalendarDialog(context,firstDate: DateTime(1960, 1, 1)).then((d) {
+                  onTap: () => showUiKitCalendarDialog(context, firstDate: DateTime(1960, 1, 1)).then((d) {
                     if (d != null) {
-                      dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
+                      widget.dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
                     }
                   }),
                   child: AbsorbPointer(
                     child: UiKitInputFieldNoFill(
-                      controller: dateOfBirthController,
+                      controller: widget.dateOfBirthController,
                       label: 'Date of birth',
                       hintText: 'Date of birth',
-                      validator: dateOfBirthValidator,
+                      validator: widget.dateOfBirthValidator,
                       inputFormatters: [dateInputFormatter],
                     ),
                   ),
@@ -166,25 +207,25 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   prefixText: '+',
-                  controller: phoneController,
+                  controller: widget.phoneController,
                   label: 'Phone',
                   hintText: 'Phone',
-                  validator: phoneValidator,
+                  validator: widget.phoneValidator,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [americanInputFormatter],
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
-                  controller: emailController,
+                  controller: widget.emailController,
                   label: 'Email',
                   hintText: 'Email',
-                  validator: emailValidator,
+                  validator: widget.emailValidator,
                   keyboardType: TextInputType.emailAddress,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitTitledSelectionTile(
-                  onSelectionChanged: onPreferencesChangeRequested,
-                  selectedItems: selectedPreferences,
+                  onSelectionChanged: widget.onPreferencesChangeRequested,
+                  selectedItems: widget.selectedPreferences,
                   title: 'Preferences',
                 ),
               ],
@@ -203,8 +244,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
             .gradientButton(
               data: BaseUiKitButtonData(
                 text: 'SAVE',
-                loading: isLoading,
-                onPressed: onProfileEditSubmitted?.call,
+                loading: widget.isLoading,
+                onPressed: widget.onProfileEditSubmitted?.call,
               ),
             )
             .paddingOnly(
