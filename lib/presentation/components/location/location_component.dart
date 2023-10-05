@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'google_maps_api.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -228,7 +227,9 @@ class _LocationComponentState extends State<LocationComponent> {
       decodeCoordinates(coordinates);
     }
 
-  void onKnownLocationConfirmed(KnownLocation location) {}
+  void onKnownLocationConfirmed(KnownLocation location) {
+    log('KnownLocation is $location', name: 'LocationComponent');
+  }
 
   @override
   void dispose() {

@@ -167,7 +167,7 @@ class PlaceComponent extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: () {
-                  final AutoSizeGroup g = AutoSizeGroup();
+                  final AutoSizeGroup group = AutoSizeGroup();
 
                   final tempSorted = List.from(events ?? [])..sort((a, b) => a.date!.compareTo(b.date));
 
@@ -179,7 +179,7 @@ class PlaceComponent extends StatelessWidget {
                     Expanded(
                       child: UpcomingEventPlaceActionCard(
                         value: 'in $daysToEvent days',
-                        group: g,
+                        group: group,
                         rasterIconAsset: GraphicsFoundation.instance.png.events,
                         action: () {
                           if (closestEvent != null) {
@@ -197,7 +197,7 @@ class PlaceComponent extends StatelessWidget {
                     Expanded(
                       child: PointBalancePlaceActionCard(
                         value: '2 650',
-                        group: g,
+                        group: group,
                         rasterIconAsset: GraphicsFoundation.instance.png.coin,
                         action: () {
                           log('balance was pressed');

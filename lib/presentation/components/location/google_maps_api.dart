@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../domain/location_models/location_details_response.dart';
@@ -24,9 +21,9 @@ class GoogleMapsApi {
       'latlng': latlng,
       'language': language,
     });
-    final _result = await http.get(url, );
-    if (_result.statusCode == 200) {
-      return PlaceGeocodingResponse.fromJson(json.decode(_result.body));
+    final result = await http.get(url, );
+    if (result.statusCode == 200) {
+      return PlaceGeocodingResponse.fromJson(json.decode(result.body));
     }
 
     return null;
@@ -40,9 +37,9 @@ class GoogleMapsApi {
       'key': apiKey,
       'place_id': placeId,
     });
-    final _result = await http.get(url);
-    if (_result.statusCode == 200) {
-      return LocationDetailsResponse.fromJson(json.decode(_result.body));
+    final result = await http.get(url);
+    if (result.statusCode == 200) {
+      return LocationDetailsResponse.fromJson(json.decode(result.body));
     }
 
     return null;
@@ -56,9 +53,9 @@ class GoogleMapsApi {
       'key': apiKey,
       'input': query,
     });
-    final _result = await http.get(url);
-    if (_result.statusCode == 200) {
-      return LocationSearchAutocompleteResponse.fromJson(json.decode(_result.body));
+    final result = await http.get(url);
+    if (result.statusCode == 200) {
+      return LocationSearchAutocompleteResponse.fromJson(json.decode(result.body));
     }
 
     return null;

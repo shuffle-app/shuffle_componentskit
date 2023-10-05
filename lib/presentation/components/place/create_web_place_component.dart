@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
-
+//ignore_for_file: use_build_context_synchronously
 
 class CreateWebPlaceComponent extends StatefulWidget {
   final Future Function(UiPlaceModel) onPlaceCreated;

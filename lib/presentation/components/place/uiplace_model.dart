@@ -62,6 +62,7 @@ class UiPlaceModel {
     } else if (location == null || location!.isEmpty) {
       return 'Location is required';
     }
+
     return null;
   }
 }

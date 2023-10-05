@@ -17,7 +17,7 @@ class UiProfileModel {
   final List<String>? matchingInterests;
 
   ProfileCard get cardWidget {
-    AutoSizeGroup g = AutoSizeGroup();
+    AutoSizeGroup group = AutoSizeGroup();
 
     return ProfileCard(
       nickname: nickname,
@@ -37,7 +37,7 @@ class UiProfileModel {
           value: '993 \$',
           actionButton: SmallOrdinaryButton(
             text: 'details'.toUpperCase(),
-            group: g,
+            group: group,
           ),
         ),
         UiKitStats(
@@ -45,7 +45,7 @@ class UiProfileModel {
             value: '553',
             actionButton: SmallOrdinaryButton(
               text: 'spent'.toUpperCase(),
-              group: g,
+              group: group,
             )),
       ],
     );

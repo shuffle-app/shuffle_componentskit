@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
-import '../../common/photo_video_selector.dart';
 
 class CreatePlaceComponent extends StatefulWidget {
   final UiPlaceModel? placeToEdit;

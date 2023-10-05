@@ -3,6 +3,8 @@ import 'package:shuffle_components_kit/domain/config_models/profile/component_pr
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+//ignore_for_file: no-empty-block
+
 class ProfileComponent extends StatelessWidget {
   final UiProfileModel profile;
   final VoidCallback? onHowItWorksPoped;
