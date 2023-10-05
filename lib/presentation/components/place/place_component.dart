@@ -15,6 +15,7 @@ class PlaceComponent extends StatelessWidget {
   final VoidCallback? onEventCreate;
   final List<UiEventModel>? events;
   final ComplaintFormComponent? complaintFormComponent;
+  final ValueChanged<UiEventModel>? onEventTap;
 
   const PlaceComponent(
       {Key? key,
@@ -22,6 +23,7 @@ class PlaceComponent extends StatelessWidget {
       this.complaintFormComponent,
       this.isCreateEventAvaliable = false,
       this.onEventCreate,
+      this.onEventTap,
       this.events})
       : super(key: key);
 
@@ -132,8 +134,12 @@ class PlaceComponent extends StatelessWidget {
                           trailing: context.smallButton(
                             data: BaseUiKitButtonData(
                               onPressed: () {
-                                buildComponent(context, ComponentPlaceModel.fromJson(config['event']),
-                                    ComponentBuilder(child: EventComponent(event: event)));
+                                if (onEventTap != null) {
+                                  onEventTap?.call(event);
+                                } else {
+                                  buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                      ComponentBuilder(child: EventComponent(event: event)));
+                                }
                               },
                               icon: Icon(
                                 CupertinoIcons.right_chevron,
@@ -163,14 +169,27 @@ class PlaceComponent extends StatelessWidget {
                 children: () {
                   final AutoSizeGroup group = AutoSizeGroup();
 
+                  final tempSorted = List.from(events ?? [])..sort((a, b) => a.date!.compareTo(b.date));
+
+                  final closestEvent = tempSorted.firstOrNull;
+
+                  final daysToEvent = closestEvent?.date?.difference(DateTime.now())?.inDays ?? 2;
+
                   return [
                     Expanded(
                       child: UpcomingEventPlaceActionCard(
-                        value: 'in 2 days',
+                        value: 'in $daysToEvent days',
                         group: group,
                         rasterIconAsset: GraphicsFoundation.instance.png.events,
                         action: () {
-                          log('calendar was pressed');
+                          if (closestEvent != null) {
+                            if (onEventTap != null) {
+                              onEventTap?.call(closestEvent);
+                            } else {
+                              buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                  ComponentBuilder(child: EventComponent(event: closestEvent)));
+                            }
+                          }
                         },
                       ),
                     ),
@@ -199,11 +218,13 @@ class PlaceComponent extends StatelessWidget {
               children: place.descriptionItems!
                   .map((e) => GestureDetector(
                       onTap: () {
-                        if (e.description.startsWith('http')) {
-                          launchUrlString(e.description);
-                        } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
-                          log('launching $e.description', name: 'PlaceComponent');
-                          launchUrlString('tel:${e.description}');
+                        final url = e.descriptionUrl ?? e.description;
+
+                        if (url.startsWith('http')) {
+                          launchUrlString(url);
+                        } else if (url.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                          log('launching $url', name: 'PlaceComponent');
+                          launchUrlString('tel:${url}');
                         }
                       },
                       child: UiKitTitledDescriptionGridWidget(

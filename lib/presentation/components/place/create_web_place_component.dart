@@ -165,7 +165,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         title: 'Place type',
                         isRequired: true,
                         child: UiKitSuggestionField(
-                          options: widget.onSuggest,
+                          options: widget.onSuggest ?? (q)=>Future.value([]),
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,
                         ),

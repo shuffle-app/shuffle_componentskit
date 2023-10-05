@@ -36,7 +36,7 @@ class UiPlaceModel {
     this.baseTags = const [],
     this.weekdays = const [],
   }) : descriptionItems = [
-          UiDescriptionItemModel(title: 'Website', description: website ?? ''),
+          UiDescriptionItemModel(title: 'Website', description: title ?? '', descriptionUrl: website ?? ''),
           UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
           UiDescriptionItemModel(title: 'Location', description: location ?? ''),
           if (formatDate(null, null, openFrom, openTo, weekdays) != null)
