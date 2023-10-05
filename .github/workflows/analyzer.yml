@@ -15,7 +15,7 @@ jobs:
       - name: Setup project
         run: |
           flutter pub upgrade
-          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter pub run build_runner build --delete-conflicting-outputs --build-filter="lib/**"
       - name: Analyze project
         run: |
           flutter analyze
