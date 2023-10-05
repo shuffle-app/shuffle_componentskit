@@ -10,6 +10,7 @@ class EditProfileDefaultComponent extends StatefulWidget {
   final VoidCallback? onPhotoChangeRequested;
   final VoidCallback? onPremiumAccountRequested;
   final VoidCallback? onProAccountRequested;
+  final ValueChanged<bool> onBeInSearchChanged;
   final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
@@ -33,6 +34,7 @@ class EditProfileDefaultComponent extends StatefulWidget {
     Key? key,
     required this.selectedPreferences,
     this.onProfileEditSubmitted,
+    required this.onBeInSearchChanged,
     this.onPremiumAccountRequested,
     this.onProAccountRequested,
     this.formKey,
@@ -58,6 +60,7 @@ class EditProfileDefaultComponent extends StatefulWidget {
 }
 
 class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponent> {
+  // TODO(rel1nce): remove variable below because of ValueChangedCallback + DidUpdateWidget Function
   late bool _beInSearch;
 
   @override
@@ -160,15 +163,31 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
                       style: context.uiKitTheme?.regularTextTheme.labelSmall,
                     ),
                     SpacingFoundation.horizontalSpace16,
-                    ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.info,
-                      width: 16.w,
-                      color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                    GestureDetector(
+                      // TODO(rel1nce): currently it doesn't work
+                      onTap: () => showUiKitPopover<void>(
+                        context,
+                        title: Text(
+                          'Allow yourself to be added to the companions search, so you can be found and invited somewhere. Or you could do it',
+                          style: context.uiKitTheme?.regularTextTheme.body.copyWith(
+                            color: context.uiKitTheme?.colorScheme.primary,
+                          ),
+                        ),
+                        buttonText: '',
+                      ),
+                      child: ImageWidget(
+                        svgAsset: GraphicsFoundation.instance.svg.info,
+                        width: 16.w,
+                        color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                      ),
                     ),
                     const Spacer(),
                     UiKitGradientSwitch(
                       switchedOn: _beInSearch,
-                      onChanged: (value) => setState(() => _beInSearch = value),
+                      onChanged: (value) {
+                        setState(() => _beInSearch = value);
+                        widget.onBeInSearchChanged.call(_beInSearch);
+                      },
                     )
                   ],
                 ),
