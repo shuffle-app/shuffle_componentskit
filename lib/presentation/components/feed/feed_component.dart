@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -140,7 +139,7 @@ class FeedComponent extends StatelessWidget {
                   if (e == nicheTitles.first) padding = horizontalMargin;
 
                   return UiKitMessageCardWithIcon(
-                    message: e ?? '',
+                    message: e ,
                     iconLink: nicheData?[e]?.imageLink,
                     layoutDirection: Axis.vertical,
                     type: MessageCardType.wide,
@@ -305,7 +304,7 @@ class FeedComponent extends StatelessWidget {
             pagingController: controller,
           ),
           SpacingFoundation.verticalSpace24.wrapSliverBox,
-          for (var i in List.generate(4, (index) => null)) kBottomNavigationBarHeight.heightBox.wrapSliverBox,
+          kBottomNavigationBarHeight.heightBox.wrapSliverBox,
         ],
       ],
     ).paddingSymmetric(

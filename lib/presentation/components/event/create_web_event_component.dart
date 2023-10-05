@@ -6,6 +6,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
+//ignore_for_file: use_build_context_synchronously
+
 class CreateWebEventComponent extends StatefulWidget {
   final Future Function(UiEventModel) onEventCreated;
   final UiEventModel? eventToEdit;

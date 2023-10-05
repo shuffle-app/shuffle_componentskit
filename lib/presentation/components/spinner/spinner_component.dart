@@ -108,7 +108,7 @@ class SpinnerComponent extends StatelessWidget {
                                 favourite: favoriteValue.data as bool? ??
                                     item.favorite,
                                 photoLink: item.media
-                                    ?.firstWhere((element) =>
+                                    .firstWhere((element) =>
                                 element.type == UiKitMediaType.image)
                                     .link,
                                 ownerTileTitle: item.owner?.name,

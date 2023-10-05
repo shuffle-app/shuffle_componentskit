@@ -161,13 +161,13 @@ class PlaceComponent extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: () {
-                  final AutoSizeGroup g = AutoSizeGroup();
+                  final AutoSizeGroup group = AutoSizeGroup();
 
                   return [
                     Expanded(
                       child: UpcomingEventPlaceActionCard(
                         value: 'in 2 days',
-                        group: g,
+                        group: group,
                         rasterIconAsset: GraphicsFoundation.instance.png.events,
                         action: () {
                           log('calendar was pressed');
@@ -178,7 +178,7 @@ class PlaceComponent extends StatelessWidget {
                     Expanded(
                       child: PointBalancePlaceActionCard(
                         value: '2 650',
-                        group: g,
+                        group: group,
                         rasterIconAsset: GraphicsFoundation.instance.png.coin,
                         action: () {
                           log('balance was pressed');

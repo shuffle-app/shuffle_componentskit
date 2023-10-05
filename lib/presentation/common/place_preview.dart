@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:shimmer/shimmer.dart';
 
 class PlacePreview extends StatelessWidget {
   final Function? onTap;
@@ -46,8 +45,8 @@ class PlacePreview extends StatelessWidget {
             title: event.title ?? '',
             description: event.description ?? '',
             media: event.media,
-            tags: event.tags ?? [],
-            baseTags: event.baseTags ?? []);
+            tags: event.tags ,
+            baseTags: event.baseTags );
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +105,7 @@ class PlacePreview extends StatelessWidget {
                 .paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
-              baseTags: place.baseTags ?? [],
+              baseTags: place.baseTags ,
               uniqueTags: place.tags,
             ).paddingSymmetric(horizontal: horizontalMargin)
           ],

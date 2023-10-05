@@ -228,7 +228,9 @@ class _LocationComponentState extends State<LocationComponent> {
       decodeCoordinates(coordinates);
     }
 
-  void onKnownLocationConfirmed(KnownLocation location) {}
+  void onKnownLocationConfirmed(KnownLocation location) {
+    log('KnownLocation is $location', name: 'LocationComponent');
+  }
 
   @override
   void dispose() {

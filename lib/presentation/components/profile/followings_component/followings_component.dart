@@ -15,7 +15,7 @@ class FollowingsComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final bodyAlignment = screenParams?.bodyAlignment;
 
-    bool _followings = true;
+    bool showFollowings = true;
 
     return BlurredAppBarPage(
         autoImplyLeading: true,
@@ -35,11 +35,11 @@ class FollowingsComponent extends StatelessWidget {
                               onTappedTab: (index) {
                                 if (index == 0) {
                                   setState(() {
-                                    _followings = true;
+                                    showFollowings = true;
                                   });
                                 } else if (index == 1) {
                                   setState(() {
-                                    _followings = false;
+                                    showFollowings = false;
                                   });
                                 }
                               },
@@ -50,7 +50,7 @@ class FollowingsComponent extends StatelessWidget {
                             ),
                             SpacingFoundation.verticalSpace24,
                           ],
-                          if (_followings)
+                          if (showFollowings)
                             ...(followings
                                     ?.map((e) => e
                                         .buildMenuItem(onMessageTap: onMessage, onFollowTap: onFollow)
