@@ -55,6 +55,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _videos.addAll(_placeToEdit.media
         .where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
+    _websiteController.text = widget.placeToEdit?.website?? '';
+    _phoneController.text = widget.placeToEdit?.phone?? '';
   }
 
   _checkDescriptionHeightConstraint() {
