@@ -9,12 +9,13 @@ export 'credentials_code_verification/credentials_code_verification_component.da
 export 'donation/donation_component.dart';
 export 'donation/ui_donation_user_model.dart';
 export 'event/create_event_component.dart';
-export 'event/event_component.dart';
 export 'event/create_web_event_component.dart';
+export 'event/event_component.dart';
 export 'event/my_events_component.dart';
 export 'event/uievent_model.dart';
 export 'feed/feed_component.dart';
 export 'feed/uifeed_model.dart';
+export 'invite/invite_component.dart';
 export 'invite_to_favourite_places/invite_to_favourite_places_component.dart';
 export 'invite_to_favourite_places/ui_invite_to_favourite_places_model.dart';
 export 'location/location_component.dart';
