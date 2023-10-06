@@ -32,7 +32,6 @@ class EditProfileDefaultComponent extends StatelessWidget {
   const EditProfileDefaultComponent({
     Key? key,
     this.onProfileEditSubmitted,
-    required this.onBeInSearchChanged,
     this.onPremiumAccountRequested,
     this.onProAccountRequested,
     this.formKey,
@@ -46,6 +45,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.onPreferencesChangeRequested,
     this.onActivityTileTap,
     this.isLoading = false,
+    required this.onBeInSearchChanged,
     required this.selectedPreferences,
     required this.nameController,
     required this.nickNameController,
