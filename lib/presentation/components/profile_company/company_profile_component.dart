@@ -24,9 +24,8 @@ class CompanyProfileComponent extends StatelessWidget {
         .content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_profile']);
     final title = model.content.title?[ContentItemType.text]?.properties?.keys.first;
-    final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
-    final iconWidth = 20.0;
+    const iconWidth = 20.0;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final buttons = model.content.body?[ContentItemType.button]?.properties;
     final buttonTypes = buttons?.values.map((e) => e.type).toList() ?? [];

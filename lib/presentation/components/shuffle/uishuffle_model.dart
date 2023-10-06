@@ -2,11 +2,13 @@ import 'package:flutter/widgets.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiShuffleModel {
+  final AnimationController dislikeController;
+  final AnimationController likeController;
+
   List<UiKitSwiperCard> items;
   bool showHowItWorks;
 
-  final AnimationController dislikeController;
-  final AnimationController likeController;
+
 
   UiShuffleModel({
     required this.items,

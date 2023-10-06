@@ -62,6 +62,7 @@ class UiEventModel {
     } else if (media.isEmpty) {
       return 'Photos are required';
     }
+
     return null;
   }
 }

@@ -4,12 +4,14 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class EditProfileDefaultComponent extends StatelessWidget {
   final List<String> selectedPreferences;
+  final UiKitMenuItem<String> activityItem;
   final VoidCallback? onProfileEditSubmitted;
   final GlobalKey? formKey;
   final VoidCallback? onPreferencesChangeRequested;
   final VoidCallback? onPhotoChangeRequested;
   final VoidCallback? onPremiumAccountRequested;
   final VoidCallback? onProAccountRequested;
+  final VoidCallback? onActivityTileTap;
   final ValueChanged<bool> onBeInSearchChanged;
   final String? avatarUrl;
 
@@ -20,11 +22,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final String? Function(String?)? dateOfBirthValidator;
 
   final TextEditingController nameController;
-
   final TextEditingController nickNameController;
-
   final TextEditingController emailController;
-
   final TextEditingController dateOfBirthController;
   final TextEditingController phoneController;
   final bool beInSearch;
@@ -32,7 +31,6 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   const EditProfileDefaultComponent({
     Key? key,
-    required this.selectedPreferences,
     this.onProfileEditSubmitted,
     required this.onBeInSearchChanged,
     this.onPremiumAccountRequested,
@@ -45,14 +43,17 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.avatarUrl,
     this.phoneValidator,
     this.dateOfBirthValidator,
+    this.onPreferencesChangeRequested,
+    this.onActivityTileTap,
+    this.isLoading = false,
+    required this.selectedPreferences,
     required this.nameController,
     required this.nickNameController,
     required this.emailController,
     required this.dateOfBirthController,
     required this.phoneController,
     required this.beInSearch,
-    this.onPreferencesChangeRequested,
-    this.isLoading = false,
+    required this.activityItem,
   }) : super(key: key);
 
   @override
@@ -220,6 +221,19 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   hintText: 'Email',
                   validator: emailValidator,
                   keyboardType: TextInputType.emailAddress,
+                ),
+                SpacingFoundation.verticalSpace16,
+                Text(
+                  'Activity type',
+                  style: context.uiKitTheme?.regularTextTheme.labelSmall,
+                ),
+                SpacingFoundation.verticalSpace4,
+                UiKitMenuItemTile.custom(
+                  paddingSymmetric: EdgeInsets.zero,
+                  onTap: onActivityTileTap,
+                  item: activityItem,
+                  autoPopUp: false,
+                  showSeparator: false,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitTitledSelectionTile(
