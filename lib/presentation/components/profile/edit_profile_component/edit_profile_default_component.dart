@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class EditProfileDefaultComponent extends StatefulWidget {
+class EditProfileDefaultComponent extends StatelessWidget {
   final List<String> selectedPreferences;
   final VoidCallback? onProfileEditSubmitted;
   final GlobalKey? formKey;
@@ -56,26 +56,6 @@ class EditProfileDefaultComponent extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<EditProfileDefaultComponent> createState() => _EditProfileDefaultComponentState();
-}
-
-class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponent> {
-  // TODO(rel1nce): remove variable below because of ValueChangedCallback + DidUpdateWidget Function
-  late bool _beInSearch;
-
-  @override
-  void initState() {
-    super.initState();
-    _beInSearch = widget.beInSearch;
-  }
-
-  @override
-  void didUpdateWidget(covariant EditProfileDefaultComponent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _beInSearch = widget.beInSearch;
-  }
-
-  @override
   Widget build(BuildContext context) {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
@@ -83,6 +63,7 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
+    final theme = context.uiKitTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -97,17 +78,17 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: widget.onPhotoChangeRequested,
+              onTap: onPhotoChangeRequested,
               child: Ink(
                 child: CircularAvatar(
-                  avatarUrl: widget.avatarUrl ?? '',
-                  name: widget.nameController.text,
+                  avatarUrl: avatarUrl ?? '',
+                  name: nameController.text,
                   height: 0.15.sw,
                 ),
               ),
             ),
             InkWell(
-              onTap: widget.onPhotoChangeRequested,
+              onTap: onPhotoChangeRequested,
               child: Text(
                 'Change Photo',
                 style: textTheme?.caption2Bold,
@@ -117,7 +98,7 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
         ),
         body: SingleChildScrollView(
           child: Form(
-            key: widget.formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -138,7 +119,7 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
                             height: 18,
                             fit: BoxFit.fitHeight,
                           ),
-                          onPressed: widget.onPremiumAccountRequested,
+                          onPressed: onPremiumAccountRequested,
                         ),
                       ),
                     ),
@@ -149,7 +130,7 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
                         data: BaseUiKitButtonData(
                           fit: ButtonFit.fitWidth,
                           text: 'PRO',
-                          onPressed: widget.onProAccountRequested,
+                          onPressed: onProAccountRequested,
                         ),
                       ),
                     ),
@@ -160,65 +141,64 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
                   children: [
                     Text(
                       'Be in search',
-                      style: context.uiKitTheme?.regularTextTheme.labelSmall,
+                      style: theme?.regularTextTheme.labelSmall,
                     ),
                     SpacingFoundation.horizontalSpace16,
-                    GestureDetector(
-                      // TODO(rel1nce): currently it doesn't work
-                      onTap: () => showUiKitPopover<void>(
-                        context,
-                        title: Text(
-                          'Allow yourself to be added to the companions search, so you can be found and invited somewhere. Or you could do it',
-                          style: context.uiKitTheme?.regularTextTheme.body.copyWith(
-                            color: context.uiKitTheme?.colorScheme.primary,
+                    Builder(
+                      builder: (context) => GestureDetector(
+                        onTap: () => showUiKitPopover(
+                          context,
+                          title: Text(
+                            'Allow yourself to be added to the companions search, so you can be found and invited somewhere. Or you could do it',
+                            style: theme?.regularTextTheme.body.copyWith(
+                              color: theme.colorScheme.primary,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
+                          buttonText: 'Ok',
                         ),
-                        buttonText: '',
-                      ),
-                      child: ImageWidget(
-                        svgAsset: GraphicsFoundation.instance.svg.info,
-                        width: 16.w,
-                        color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                        child: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.info,
+                          width: 16.w,
+                          color: theme?.colorScheme.darkNeutral900,
+                        ),
                       ),
                     ),
                     const Spacer(),
                     UiKitGradientSwitch(
-                      switchedOn: _beInSearch,
-                      onChanged: (value) {
-                        setState(() => _beInSearch = value);
-                        widget.onBeInSearchChanged.call(_beInSearch);
-                      },
+                      switchedOn: beInSearch,
+                      onChanged: (value) => onBeInSearchChanged.call(value),
                     )
                   ],
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
-                  controller: widget.nameController,
+                  controller: nameController,
                   label: 'Name',
                   hintText: 'Name',
-                  validator: widget.nameValidator,
+                  validator: nameValidator,
                   keyboardType: TextInputType.name,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
-                  controller: widget.nickNameController,
+                  controller: nickNameController,
                   label: 'Nickname',
                   hintText: 'Nickname',
-                  validator: widget.nameValidator,
+                  validator: nameValidator,
                 ),
                 SpacingFoundation.verticalSpace16,
                 GestureDetector(
                   onTap: () => showUiKitCalendarDialog(context, firstDate: DateTime(1960, 1, 1)).then((d) {
                     if (d != null) {
-                      widget.dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
+                      dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
                     }
                   }),
                   child: AbsorbPointer(
                     child: UiKitInputFieldNoFill(
-                      controller: widget.dateOfBirthController,
+                      controller: dateOfBirthController,
                       label: 'Date of birth',
                       hintText: 'Date of birth',
-                      validator: widget.dateOfBirthValidator,
+                      validator: dateOfBirthValidator,
                       inputFormatters: [dateInputFormatter],
                     ),
                   ),
@@ -226,25 +206,25 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   prefixText: '+',
-                  controller: widget.phoneController,
+                  controller: phoneController,
                   label: 'Phone',
                   hintText: 'Phone',
-                  validator: widget.phoneValidator,
+                  validator: phoneValidator,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [americanInputFormatter],
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
-                  controller: widget.emailController,
+                  controller: emailController,
                   label: 'Email',
                   hintText: 'Email',
-                  validator: widget.emailValidator,
+                  validator: emailValidator,
                   keyboardType: TextInputType.emailAddress,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitTitledSelectionTile(
-                  onSelectionChanged: widget.onPreferencesChangeRequested,
-                  selectedItems: widget.selectedPreferences,
+                  onSelectionChanged: onPreferencesChangeRequested,
+                  selectedItems: selectedPreferences,
                   title: 'Preferences',
                 ),
               ],
@@ -263,8 +243,8 @@ class _EditProfileDefaultComponentState extends State<EditProfileDefaultComponen
             .gradientButton(
               data: BaseUiKitButtonData(
                 text: 'SAVE',
-                loading: widget.isLoading,
-                onPressed: widget.onProfileEditSubmitted?.call,
+                loading: isLoading,
+                onPressed: onProfileEditSubmitted?.call,
               ),
             )
             .paddingOnly(
