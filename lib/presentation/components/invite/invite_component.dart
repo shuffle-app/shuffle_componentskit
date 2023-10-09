@@ -47,31 +47,50 @@ class _InviteComponentState extends State<InviteComponent> {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SpacingFoundation.verticalSpace16,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Invite people', style: boldTextTheme?.subHeadline),
-            context.gradientButton(
-              data: BaseUiKitButtonData(
-                onPressed: () {},
-                text: 'invite',
+            SpacingFoundation.verticalSpace16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Invite people', style: boldTextTheme?.subHeadline),
+                context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    onPressed: () {},
+                    text: 'invite',
+                  ),
+                ),
+              ],
+            ),
+            SpacingFoundation.verticalSpace16,
+            SizedBox(
+              height: 0.55.sh,
+              child: ListView.separated(
+                itemCount: widget.initialList.length,
+                itemBuilder: (_, index) => UiKitUserTileWithCheckbox(
+                  subtitle: 'Some  Subtitle Subtitle Subtitle Subtitle',
+                  isSelected: false,
+                  date: DateTime.now(),
+                  title: 'Some Name',
+                  onTap: () {},
+                  rating: 4,
+                  avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
+                  handShake: true,
+                ),
+                separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
               ),
             ),
           ],
         ),
-        ListView.separated(
-          itemCount: widget.initialList.length,
-          itemBuilder: (_, index) => UiKitUserTileWithCheckbox(
-            title: 'Some Name',
-            onTap: () {},
-            rating: 4,
-            avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
-          ),
-          separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
-        ),
+        UiKitUserTileWithOption(
+          title: 'Some title',
+          subtitle: 'Some titleSome titleSome titleSome title',
+          onOptionTap: () {},
+          options: [],
+          avatarLink: GraphicsFoundation.instance.png.mockAvatar.path,
+        )
       ],
     ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16);
   }
