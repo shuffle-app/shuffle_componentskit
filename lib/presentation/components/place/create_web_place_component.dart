@@ -33,13 +33,13 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _phoneController = TextEditingController();
   late final TextEditingController _websiteController = TextEditingController();
-  late final TextEditingController _locationController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();
   final TextEditingController _personPositionController = TextEditingController();
   final TextEditingController _personEmailController = TextEditingController();
+  final TextEditingController _placeTypeController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiPlaceModel _placeToEdit;
@@ -52,8 +52,9 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
   void initState() {
     super.initState();
     _titleController.text = widget.placeToEdit?.title ?? '';
+    _placeTypeController.text = widget.placeToEdit?.placeType ?? '';
     _descriptionController.text = widget.placeToEdit?.description ?? '';
-    _locationController.text = widget.placeToEdit?.location ?? '';
+    _addressController.text = widget.placeToEdit?.location ?? '';
     _placeToEdit = widget.placeToEdit ??
         UiPlaceModel(
           id: -1,
@@ -64,6 +65,8 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
     _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
+    _websiteController.text = widget.placeToEdit?.website ?? '';
+    _phoneController.text = widget.placeToEdit?.phone ?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -151,7 +154,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create place', style: theme?.boldTextTheme.title2),
+            Text('${widget.placeToEdit != null ? 'Update' : 'Create'} place', style: theme?.boldTextTheme.title2),
             SpacingFoundation.verticalSpace24,
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -164,11 +167,22 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       WebFormField(
                         title: 'Place type',
                         isRequired: true,
-                        child: UiKitSuggestionField(
-                          options: widget.onSuggest ?? (q)=>Future.value([]),
-                          borderRadius: BorderRadiusFoundation.all12,
+                        child: UiKitInputFieldNoIcon(
+                          controller: _placeTypeController,
+                          hintText: 'Enter place type',
                           fillColor: theme?.colorScheme.surface1,
+                          borderRadius: BorderRadiusFoundation.all12,
                         ),
+
+                        //TODO return when we will get a backend categories method
+                        // child: UiKitSuggestionField(
+                        //   initialValue: widget.placeToEdit?.placeType == null
+                        //       ? null
+                        //       : TextEditingValue(text: widget.placeToEdit?.placeType ?? ''),
+                        //   options: widget.onSuggest ?? (q) => Future.value([]),
+                        //   borderRadius: BorderRadiusFoundation.all12,
+                        //   fillColor: theme?.colorScheme.surface1,
+                        // ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
@@ -233,6 +247,19 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                   flex: 3,
                   child: Column(
                     children: [
+                      if (_placeToEdit.status != null) ...[
+                        WebFormField(
+                            title: 'Published',
+                            isRequired: true,
+                            child: UiKitGradientSwitch(
+                                switchedOn: _placeToEdit.status == 'published',
+                                onChanged: (value) {
+                                  setState(() {
+                                    _placeToEdit.status = value ? 'published' : 'unpublished';
+                                  });
+                                })),
+                        SpacingFoundation.verticalSpace24,
+                      ],
                       WebFormField(
                         title: 'Name',
                         isRequired: true,
