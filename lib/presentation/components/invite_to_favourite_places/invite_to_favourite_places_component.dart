@@ -25,7 +25,6 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
     final ComponentModel model = ComponentModel.fromJson(config['invite_people_places'] ?? {});
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

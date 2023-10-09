@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingComponent extends StatefulWidget {
   late final List<OnBoardingPageItem> items;
@@ -77,11 +78,12 @@ class _OnboardingComponentState extends State<OnboardingComponent>
     return duration;
   }
 
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      _progressAnimationController.forward(from: 0);
+      unawaited( _progressAnimationController.forward(from: 0));
       await Future.delayed(_firstItemFadeInDuration);
       setState(() {
         _textOpacity = 1;
@@ -92,19 +94,13 @@ class _OnboardingComponentState extends State<OnboardingComponent>
     });
   }
 
-  @override
-  void dispose() {
-    _progressAnimationController.removeListener(_animationListener);
-    _progressAnimationController.dispose();
-    super.dispose();
-  }
 
   void _animationListener() async {
     final value = _progressAnimationController.value;
 
     if (value >= currentItemProgressPortion) {
       if (currentIndex != widget.items.length - 1 && _textOpacity != 0) {
-        _switchToNextPage();
+        unawaited( _switchToNextPage());
       }
     }
     if (value == 1.0) {
@@ -131,6 +127,14 @@ class _OnboardingComponentState extends State<OnboardingComponent>
     await Future.delayed(widget.transitionDuration * 2);
     if (!mounted) return;
     setState(() => _imageOpacity = 1);
+  }
+
+
+  @override
+  void dispose() {
+    _progressAnimationController.removeListener(_animationListener);
+    _progressAnimationController.dispose();
+    super.dispose();
   }
 
 
@@ -208,7 +212,7 @@ class _OnboardingComponentState extends State<OnboardingComponent>
                         ? null
                         : () {
                       if (currentIndex != widget.items.length - 1) {
-                        _switchToNextPage();
+                        unawaited( _switchToNextPage());
                         _progressAnimationController.forward(
                             from: currentItemProgressPortion);
                       } else {

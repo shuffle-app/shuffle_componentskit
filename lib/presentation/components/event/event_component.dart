@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -82,12 +81,12 @@ class EventComponent extends StatelessWidget {
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
           crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
-            if (event.media != null) ...[
+
               Align(
                   alignment: Alignment.center,
                   child: Stack(clipBehavior: Clip.none, children: [
                     UiKitPhotoSlider(
-                      media: event.media ?? [],
+                      media: event.media ,
                       onTap: null,
                       width: 1.sw - horizontalMargin * 2,
                       height: 156.h,
@@ -117,11 +116,11 @@ class EventComponent extends StatelessWidget {
                                   blurred: true))),
                   ])),
               SpacingFoundation.verticalSpace14
-            ],
+            ,
             UiKitTagsWidget(
               rating: event.rating,
-              baseTags: event.baseTags ?? [],
-              uniqueTags: event.tags ?? [],
+              baseTags: event.baseTags,
+              uniqueTags: event.tags,
             ),
             SpacingFoundation.verticalSpace14,
             if (event.description != null) ...[

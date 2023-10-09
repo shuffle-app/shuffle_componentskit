@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
-import '../../common/photo_video_selector.dart';
 
 class CreateEventComponent extends StatefulWidget {
   final UiEventModel? eventToEdit;
@@ -35,8 +34,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _titleController.text = widget.eventToEdit?.title ?? '';
     _descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
-    _photos.addAll(_eventToEdit.media?.where((element) => element.type == UiKitMediaType.image) ?? []);
-    _videos.addAll(_eventToEdit.media?.where((element) => element.type == UiKitMediaType.video) ?? []);
+    _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image) );
+    _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video) );
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
   }
 
@@ -198,7 +197,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         Text('Time', style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Text(
-                            '${_eventToEdit.time == null ? 'select time' : '${normalizedTi(_eventToEdit.time,showDateName: false)}'} ${_eventToEdit.timeTo == null ? '' : '- ${normalizedTi(_eventToEdit.timeTo,showDateName: false)} '}',
+                            '${_eventToEdit.time == null ? 'select time' : normalizedTi(_eventToEdit.time,showDateName: false)} ${_eventToEdit.timeTo == null ? '' : '- ${normalizedTi(_eventToEdit.timeTo,showDateName: false)} '}',
                             style: theme?.boldTextTheme.body),
                         context.outlinedButton(
                             data: BaseUiKitButtonData(

@@ -54,7 +54,6 @@ class ShuffleComponent extends StatelessWidget {
             animation: backgroundImageNotifier,
             builder: (context, child) {
               final value = backgroundImageNotifier.value;
-              print(value);
 
               return AnimatedSwitcher(
                 duration: animDuration,

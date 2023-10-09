@@ -71,9 +71,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
             ),
             selectedOption: selectedOption,
             onChanged: (value) {
-              print('selectedOption.title: ${selectedOption.title}');
               setState(() => selectedOption = value);
-              print('selectedOption.title: ${selectedOption.title}');
             },
           ),
         ),
@@ -84,7 +82,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
             child: context.button(
               data: BaseUiKitButtonData(
                 text: 'NEXT',
-                onPressed: () => widget.onUserTypeSelected?.call(selectedOption?.title.toLowerCase() ?? ''),
+                onPressed: () => widget.onUserTypeSelected?.call(selectedOption.title.toLowerCase() ),
               ),
             ),
           ),

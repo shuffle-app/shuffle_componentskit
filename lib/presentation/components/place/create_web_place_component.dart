@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
-
+//ignore_for_file: use_build_context_synchronously
 
 class CreateWebPlaceComponent extends StatefulWidget {
   final Future Function(UiPlaceModel) onPlaceCreated;
@@ -165,7 +165,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         title: 'Place type',
                         isRequired: true,
                         child: UiKitSuggestionField(
-                          options: widget.onSuggest,
+                          options: widget.onSuggest ?? (q)=>Future.value([]),
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,
                         ),
