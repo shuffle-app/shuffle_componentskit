@@ -29,21 +29,24 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
             pageBuilderType: PageBuilderType.page,
             positionModel: PositionModel(
-                version: '', horizontalMargin: 16, verticalMargin: 10, bodyAlignment: Alignment.centerLeft))
+              version: '',
+              horizontalMargin: 16,
+              verticalMargin: 10,
+              bodyAlignment: Alignment.centerLeft,
+            ),
+          )
         : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
-    final AutoSizeGroup gridGroup = AutoSizeGroup();
     final theme = context.uiKitTheme;
 
     return Column(
@@ -101,8 +104,7 @@ class PlaceComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace8,
             if (isCreateEventAvaliable)
               UiKitCardWrapper(
-                  child:
-                      Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('Upcoming event', style: theme?.boldTextTheme.subHeadline),
                 if (events != null && events!.isNotEmpty) ...[
                   SpacingFoundation.verticalSpace8,
@@ -208,13 +210,9 @@ class PlaceComponent extends StatelessWidget {
                 }(),
               ),
             SpacingFoundation.verticalSpace8,
-            GridView.count(
-              padding: EdgeInsets.zero,
-              primary: false,
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
-              childAspectRatio: 2,
+            Wrap(
+              spacing: SpacingFoundation.horizontalSpacing8,
+              runSpacing: SpacingFoundation.verticalSpacing8,
               children: place.descriptionItems!
                   .map((e) => GestureDetector(
                       onTap: () {
@@ -229,12 +227,11 @@ class PlaceComponent extends StatelessWidget {
                       },
                       child: UiKitTitledDescriptionGridWidget(
                         title: e.title,
-                        group: gridGroup,
                         description: e.description,
                         spacing: SpacingFoundation.horizontalSpacing8,
                       )))
                   .toList(),
-            ).paddingSymmetric(horizontal: horizontalMargin),
+            ),
             SpacingFoundation.verticalSpace8,
           ],
         ),
