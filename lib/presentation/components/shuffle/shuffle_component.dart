@@ -130,6 +130,7 @@ class ShuffleComponent extends StatelessWidget {
                           }),
                       if (shuffle.items.isNotEmpty)
                         UiKitCardSwiper(
+                          size: Size(1.sw - 24, 1.sh / 1.6),
                           likeController: shuffle.likeController,
                           dislikeController: shuffle.dislikeController,
                           onEnd: onEnd,
