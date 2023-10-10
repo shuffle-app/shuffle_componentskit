@@ -12,6 +12,9 @@ class UiPlaceModel {
   List<UiKitTag> baseTags;
   double? rating;
   String? title;
+  String? source;
+  String? placeType;
+  String? status;
   String? logo;
   List<UiDescriptionItemModel>? descriptionItems;
   TimeOfDay? openFrom;
@@ -30,8 +33,11 @@ class UiPlaceModel {
     this.logo,
     this.phone,
     this.website,
+    this.source,
     required this.description,
     this.rating,
+    this.status,
+    this.placeType,
     required this.tags,
     this.baseTags = const [],
     this.weekdays = const [],
