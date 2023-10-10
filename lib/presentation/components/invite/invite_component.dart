@@ -9,10 +9,9 @@ class InviteComponent extends StatefulWidget {
     required this.scrollController,
     required this.guests,
     required this.onLoadMore,
-    required this.onUserTap,
     required this.currentInvitedUser,
     required this.onRemoveUserOptionTap,
-    required this.onInviteGuestChanged,
+    required this.onInviteGuestsChanged,
     this.date,
   })  : onDateChanged = null,
         onAddWishTap = null,
@@ -25,26 +24,23 @@ class InviteComponent extends StatefulWidget {
     required this.onLoadMore,
     required this.date,
     required this.wishController,
-    required this.onUserTap,
     required this.onAddWishTap,
-    required this.onInviteGuestChanged,
-    this.currentInvitedUser,
+    required this.onInviteGuestsChanged,
     this.onDateChanged,
-    this.onRemoveUserOptionTap,
-  });
+  })  : currentInvitedUser = null,
+        onRemoveUserOptionTap = null;
 
   final ScrollController scrollController;
   final List<UiInvitePersonModel> guests;
   final VoidCallback onLoadMore;
-  final VoidCallback onUserTap;
-  final Function(List<UiInvitePersonModel> guests) onInviteGuestChanged;
+  final Function(List<UiInvitePersonModel> guests) onInviteGuestsChanged;
 
-  final TextEditingController? wishController;
   final DateTime? date;
+  final TextEditingController? wishController;
+  final UiInvitePersonModel? currentInvitedUser;
   final VoidCallback? onRemoveUserOptionTap;
   final void Function(String value)? onAddWishTap;
   final ValueChanged<DateTime>? onDateChanged;
-  final UiInvitePersonModel? currentInvitedUser;
 
   @override
   State<InviteComponent> createState() => _InviteComponentState();
@@ -65,7 +61,6 @@ class _InviteComponentState extends State<InviteComponent> {
   void _scrollListener() {
     if (widget.scrollController.offset >= widget.scrollController.position.maxScrollExtent &&
         !widget.scrollController.position.outOfRange) {
-      print('Its working');
       widget.onLoadMore.call();
     }
   }
@@ -101,25 +96,27 @@ class _InviteComponentState extends State<InviteComponent> {
               data: BaseUiKitButtonData(
                 text: 'Invite',
                 onPressed: () {
-                  widget.onInviteGuestChanged(_guests);
-                  showUiKitAlertDialog(
-                    context,
-                    AlertDialogData(
-                      defaultButtonText: 'okay, cool!',
-                      defaultButtonSmall: false,
-                      defaultButtonOutlined: false,
-                      title: Text(
-                        'You sent an invitation to ${_guests.where((e) => e.isSelected)} people',
-                        style: boldTextTheme?.title2.copyWith(color: theme?.colorScheme.primary),
-                        textAlign: TextAlign.center,
+                  final invitedGuestLength = _guests.where((e) => e.isSelected).length;
+                  if (invitedGuestLength > 0) {
+                    showUiKitAlertDialog(
+                      context,
+                      AlertDialogData(
+                        defaultButtonText: 'okay, cool!',
+                        defaultButtonSmall: false,
+                        title: Text(
+                          'You sent an invitation to $invitedGuestLength people',
+                          style: boldTextTheme?.title2.copyWith(color: theme?.colorScheme.primary),
+                          textAlign: TextAlign.center,
+                        ),
+                        content: Text(
+                          'Invitations can be viewed in private messages',
+                          style: boldTextTheme?.body.copyWith(color: theme?.colorScheme.primary),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      content: Text(
-                        'Invitations can be viewed in private messages',
-                        style: boldTextTheme?.body.copyWith(color: theme?.colorScheme.primary),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
+                    );
+                  }
+                  widget.onInviteGuestsChanged(_guests);
                 },
               ),
             ),
@@ -143,7 +140,7 @@ class _InviteComponentState extends State<InviteComponent> {
               return UiKitUserTileWithCheckbox(
                 title: guest.name,
                 subtitle: guest.description,
-                isSelected: true,
+                isSelected: guest.isSelected,
                 date: guest.date,
                 rating: guest.rating,
                 avatarLink: guest.avatarLink,
@@ -159,6 +156,7 @@ class _InviteComponentState extends State<InviteComponent> {
         SpacingFoundation.verticalSpace16,
         widget.currentInvitedUser != null
             ? UiKitUserTileWithOption(
+                date: widget.currentInvitedUser!.date,
                 title: widget.currentInvitedUser!.name,
                 subtitle: widget.currentInvitedUser!.description,
                 onOptionTap: widget.onRemoveUserOptionTap!,
@@ -166,6 +164,7 @@ class _InviteComponentState extends State<InviteComponent> {
                   UiKitPopUpMenuButtonOption(
                     title: 'Delete from list',
                     value: 'Delete from list',
+                    textColor: ColorsFoundation.error,
                     onTap: widget.onRemoveUserOptionTap,
                   )
                 ],
