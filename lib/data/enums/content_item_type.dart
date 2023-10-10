@@ -47,4 +47,6 @@ enum ContentItemType {
   additionalMultiSelect,
   @JsonValue('hint_dialog')
   hintDialog,
+  @JsonValue('advertisement')
+  advertisement,
 }
