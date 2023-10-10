@@ -16,6 +16,7 @@ export 'event/uievent_model.dart';
 export 'feed/feed_component.dart';
 export 'feed/uifeed_model.dart';
 export 'invite/invite_component.dart';
+export 'invite/ui_invite_person_model.dart';
 export 'invite_to_favourite_places/invite_to_favourite_places_component.dart';
 export 'invite_to_favourite_places/ui_invite_to_favourite_places_model.dart';
 export 'location/location_component.dart';

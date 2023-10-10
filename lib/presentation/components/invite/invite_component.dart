@@ -4,55 +4,69 @@ import 'package:shuffle_components_kit/presentation/components/invite/ui_invite_
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class InviteComponent extends StatefulWidget {
+  const InviteComponent.invitedUser({
+    super.key,
+    required this.scrollController,
+    required this.guests,
+    required this.onLoadMore,
+    required this.onUserTap,
+    required this.currentInvitedUser,
+    required this.onRemoveUserOptionTap,
+    required this.onInviteGuestChanged,
+    this.date,
+  })  : onDateChanged = null,
+        onAddWishTap = null,
+        wishController = null;
+
   const InviteComponent({
     super.key,
     required this.scrollController,
     required this.guests,
-    required this.onPagination,
-    required this.onInviteTap,
+    required this.onLoadMore,
     required this.date,
     required this.wishController,
+    required this.onUserTap,
+    required this.onAddWishTap,
+    required this.onInviteGuestChanged,
     this.currentInvitedUser,
     this.onDateChanged,
-    this.onRemoveUserOption,
-    required this.onAddWishTap,
-  }) : assert(
-          currentInvitedUser != null && onRemoveUserOption == null,
-          'onRemoveUserOption must be provided.',
-        );
+    this.onRemoveUserOptionTap,
+  });
 
   final ScrollController scrollController;
-  final TextEditingController wishController;
-  final DateTime date;
-  final UiInvitePersonModel? currentInvitedUser;
-  final VoidCallback onInviteTap;
-  final VoidCallback? onRemoveUserOption;
-  final void Function(String value) onAddWishTap;
   final List<UiInvitePersonModel> guests;
-  final List<UiInvitePersonModel> Function(int lastElementIndex) onPagination;
+  final VoidCallback onLoadMore;
+  final VoidCallback onUserTap;
+  final Function(List<UiInvitePersonModel> guests) onInviteGuestChanged;
+
+  final TextEditingController? wishController;
+  final DateTime? date;
+  final VoidCallback? onRemoveUserOptionTap;
+  final void Function(String value)? onAddWishTap;
   final ValueChanged<DateTime>? onDateChanged;
+  final UiInvitePersonModel? currentInvitedUser;
 
   @override
   State<InviteComponent> createState() => _InviteComponentState();
 }
 
 class _InviteComponentState extends State<InviteComponent> {
-  late DateTime _date;
-  int _currentTile = 0;
+  late DateTime? _date;
+  late final List<UiInvitePersonModel> _guests;
 
   @override
   void initState() {
     super.initState();
-    widget.onPagination.call(_currentTile);
     widget.scrollController.addListener(_scrollListener);
+    _guests = widget.guests;
     _date = widget.date;
   }
 
   void _scrollListener() {
     if (widget.scrollController.offset >= widget.scrollController.position.maxScrollExtent &&
         !widget.scrollController.position.outOfRange) {
-      setState(() => _currentTile += 5);
-      widget.onPagination.call(_currentTile);
+      print('Its working');
+      widget.onLoadMore.call();
     }
   }
 
@@ -60,6 +74,7 @@ class _InviteComponentState extends State<InviteComponent> {
   void didUpdateWidget(covariant InviteComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
     _date = widget.date;
+    _guests = widget.guests;
   }
 
   @override
@@ -86,7 +101,7 @@ class _InviteComponentState extends State<InviteComponent> {
               data: BaseUiKitButtonData(
                 text: 'Invite',
                 onPressed: () {
-                  widget.onInviteTap.call();
+                  widget.onInviteGuestChanged(_guests);
                   showUiKitAlertDialog(
                     context,
                     AlertDialogData(
@@ -94,7 +109,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       defaultButtonSmall: false,
                       defaultButtonOutlined: false,
                       title: Text(
-                        'You sent an invitation to 2 people',
+                        'You sent an invitation to ${_guests.where((e) => e.isSelected)} people',
                         style: boldTextTheme?.title2.copyWith(color: theme?.colorScheme.primary),
                         textAlign: TextAlign.center,
                       ),
@@ -116,13 +131,14 @@ class _InviteComponentState extends State<InviteComponent> {
           borderRadius: BorderRadius.zero,
           color: ColorsFoundation.surface1,
           child: ListView.separated(
+            controller: widget.scrollController,
             padding: EdgeInsets.symmetric(
               horizontal: EdgeInsetsFoundation.horizontal16,
               vertical: EdgeInsetsFoundation.vertical8,
             ),
-            itemCount: widget.guests.length,
+            itemCount: _guests.length,
             itemBuilder: (_, index) {
-              final guest = widget.guests[index];
+              final guest = _guests[index];
 
               return UiKitUserTileWithCheckbox(
                 title: guest.name,
@@ -132,7 +148,9 @@ class _InviteComponentState extends State<InviteComponent> {
                 rating: guest.rating,
                 avatarLink: guest.avatarLink,
                 handShake: guest.handShakeStatus,
-                onTap: () {},
+                onTap: (isInvited) {
+                  setState(() => guest.isSelected = isInvited);
+                },
               );
             },
             separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
@@ -143,8 +161,14 @@ class _InviteComponentState extends State<InviteComponent> {
             ? UiKitUserTileWithOption(
                 title: widget.currentInvitedUser!.name,
                 subtitle: widget.currentInvitedUser!.description,
-                onOptionTap: widget.onRemoveUserOption!,
-                options: [],
+                onOptionTap: widget.onRemoveUserOptionTap!,
+                options: [
+                  UiKitPopUpMenuButtonOption(
+                    title: 'Delete from list',
+                    value: 'Delete from list',
+                    onTap: widget.onRemoveUserOptionTap,
+                  )
+                ],
                 avatarLink: widget.currentInvitedUser!.avatarLink,
               )
             : Column(
@@ -161,13 +185,14 @@ class _InviteComponentState extends State<InviteComponent> {
                       context.smallOutlinedButton(
                         blurred: false,
                         data: BaseUiKitButtonData(
-                          onPressed: () =>
-                              showUiKitCalendarDialog(context, firstDate: DateTime(1960, 1, 1)).then((date) {
-                            if (date != null) {
-                              setState(() => _date = date);
-                              widget.onDateChanged?.call(_date);
-                            }
-                          }),
+                          onPressed: () => showUiKitCalendarDialog(context, firstDate: DateTime(1960, 1, 1)).then(
+                            (date) {
+                              if (date != null) {
+                                setState(() => _date = date);
+                                widget.onDateChanged?.call(_date!);
+                              }
+                            },
+                          ),
                           icon: ImageWidget(
                             link: GraphicsFoundation.instance.svg.calendar.path,
                             color: Colors.white,
@@ -176,7 +201,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       ),
                       SpacingFoundation.horizontalSpace12,
                       Text(
-                        DateFormat('MMMM dd').format(_date),
+                        DateFormat('MMMM dd').format(_date!),
                         style: regularTextTheme?.body,
                       ),
                     ],
@@ -195,14 +220,14 @@ class _InviteComponentState extends State<InviteComponent> {
                       context.gradientButton(
                         data: BaseUiKitButtonData(
                           onPressed: () {
-                            if (widget.wishController.text.isEmpty) {
+                            if (widget.wishController!.text.isEmpty) {
                               SnackBarUtils.show(
                                 context: context,
                                 message: 'Please fill out your wishes',
                                 type: AppSnackBarType.warning,
                               );
                             } else {
-                              widget.onAddWishTap.call(widget.wishController.text);
+                              widget.onAddWishTap?.call(widget.wishController!.text);
                             }
                           },
                           icon: ImageWidget(

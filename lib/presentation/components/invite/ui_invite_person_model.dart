@@ -6,9 +6,11 @@ class UiInvitePersonModel extends UiInviteToFavouritePlacesModel {
   final String avatarLink;
   final int rating;
   final bool handShakeStatus;
+  bool isSelected;
 
   UiInvitePersonModel({
     super.date,
+    this.isSelected = false,
     required this.name,
     required this.rating,
     required this.handShakeStatus,
