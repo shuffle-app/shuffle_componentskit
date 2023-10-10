@@ -7,11 +7,11 @@ class InviteComponent extends StatefulWidget {
   const InviteComponent.invitedUser({
     super.key,
     required this.scrollController,
-    required this.guests,
+    required this.persons,
     required this.onLoadMore,
     required this.currentInvitedUser,
     required this.onRemoveUserOptionTap,
-    required this.onInviteGuestsChanged,
+    required this.onInvitePersonsChanged,
     this.date,
   })  : onDateChanged = null,
         onAddWishTap = null,
@@ -20,20 +20,20 @@ class InviteComponent extends StatefulWidget {
   const InviteComponent({
     super.key,
     required this.scrollController,
-    required this.guests,
+    required this.persons,
     required this.onLoadMore,
     required this.date,
     required this.wishController,
     required this.onAddWishTap,
-    required this.onInviteGuestsChanged,
+    required this.onInvitePersonsChanged,
     this.onDateChanged,
   })  : currentInvitedUser = null,
         onRemoveUserOptionTap = null;
 
   final ScrollController scrollController;
-  final List<UiInvitePersonModel> guests;
+  final List<UiInvitePersonModel> persons;
   final VoidCallback onLoadMore;
-  final Function(List<UiInvitePersonModel> guests) onInviteGuestsChanged;
+  final Function(List<UiInvitePersonModel> persons) onInvitePersonsChanged;
 
   final DateTime? date;
   final TextEditingController? wishController;
@@ -48,13 +48,13 @@ class InviteComponent extends StatefulWidget {
 
 class _InviteComponentState extends State<InviteComponent> {
   late DateTime? _date;
-  late final List<UiInvitePersonModel> _guests;
+  late final List<UiInvitePersonModel> _persons;
 
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(_scrollListener);
-    _guests = widget.guests;
+    _persons = widget.persons;
     _date = widget.date;
   }
 
@@ -68,8 +68,8 @@ class _InviteComponentState extends State<InviteComponent> {
   @override
   void didUpdateWidget(covariant InviteComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _persons = widget.persons;
     _date = widget.date;
-    _guests = widget.guests;
   }
 
   @override
@@ -96,15 +96,15 @@ class _InviteComponentState extends State<InviteComponent> {
               data: BaseUiKitButtonData(
                 text: 'Invite',
                 onPressed: () {
-                  final invitedGuestLength = _guests.where((e) => e.isSelected).length;
-                  if (invitedGuestLength > 0) {
+                  final invitedPersonsLength = _persons.where((e) => e.isSelected).length;
+                  if (invitedPersonsLength > 0) {
                     showUiKitAlertDialog(
                       context,
                       AlertDialogData(
                         defaultButtonText: 'okay, cool!',
                         defaultButtonSmall: false,
                         title: Text(
-                          'You sent an invitation to $invitedGuestLength people',
+                          'You sent an invitation to $invitedPersonsLength people',
                           style: boldTextTheme?.title2.copyWith(color: theme?.colorScheme.primary),
                           textAlign: TextAlign.center,
                         ),
@@ -116,7 +116,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       ),
                     );
                   }
-                  widget.onInviteGuestsChanged(_guests);
+                  widget.onInvitePersonsChanged(_persons);
                 },
               ),
             ),
@@ -133,21 +133,19 @@ class _InviteComponentState extends State<InviteComponent> {
               horizontal: EdgeInsetsFoundation.horizontal16,
               vertical: EdgeInsetsFoundation.vertical8,
             ),
-            itemCount: _guests.length,
+            itemCount: _persons.length,
             itemBuilder: (_, index) {
-              final guest = _guests[index];
+              final person = _persons[index];
 
               return UiKitUserTileWithCheckbox(
-                title: guest.name,
-                subtitle: guest.description,
-                isSelected: guest.isSelected,
-                date: guest.date,
-                rating: guest.rating,
-                avatarLink: guest.avatarLink,
-                handShake: guest.handShakeStatus,
-                onTap: (isInvited) {
-                  setState(() => guest.isSelected = isInvited);
-                },
+                title: person.name,
+                subtitle: person.description,
+                isSelected: person.isSelected,
+                date: person.date,
+                rating: person.rating,
+                avatarLink: person.avatarLink,
+                handShake: person.handShakeStatus,
+                onTap: (isInvited) => setState(() => person.isSelected = isInvited),
               );
             },
             separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
@@ -238,7 +236,6 @@ class _InviteComponentState extends State<InviteComponent> {
                   ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 ],
               ),
-        SpacingFoundation.verticalSpace16,
       ],
     );
   }
