@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shuffle_components_kit/presentation/components/invite/ui_invite_person_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class InviteComponent extends StatefulWidget {
@@ -10,16 +11,25 @@ class InviteComponent extends StatefulWidget {
     required this.onPagination,
     required this.onInviteTap,
     required this.date,
-    this.isUserInvited = false,
+    required this.wishController,
+    this.currentInvitedUser,
     this.onDateChanged,
-  });
+    this.onRemoveUserOption,
+    required this.onAddWishTap,
+  }) : assert(
+          currentInvitedUser != null && onRemoveUserOption == null,
+          'onRemoveUserOption must be provided.',
+        );
 
   final ScrollController scrollController;
+  final TextEditingController wishController;
   final DateTime date;
-  final bool isUserInvited;
+  final UiInvitePersonModel? currentInvitedUser;
   final VoidCallback onInviteTap;
-  final List<MyCustomModel> guests;
-  final List<MyCustomModel> Function(int lastElementIndex) onPagination;
+  final VoidCallback? onRemoveUserOption;
+  final void Function(String value) onAddWishTap;
+  final List<UiInvitePersonModel> guests;
+  final List<UiInvitePersonModel> Function(int lastElementIndex) onPagination;
   final ValueChanged<DateTime>? onDateChanged;
 
   @override
@@ -27,7 +37,6 @@ class InviteComponent extends StatefulWidget {
 }
 
 class _InviteComponentState extends State<InviteComponent> {
-  final int _itemsPerPage = 5;
   late DateTime _date;
   int _currentTile = 0;
 
@@ -112,27 +121,31 @@ class _InviteComponentState extends State<InviteComponent> {
               vertical: EdgeInsetsFoundation.vertical8,
             ),
             itemCount: widget.guests.length,
-            itemBuilder: (_, index) => UiKitUserTileWithCheckbox(
-              subtitle: 'Some  Subtitle Subtitle Subtitle Subtitle',
-              isSelected: false,
-              date: DateTime.now(),
-              title: 'Some Name',
-              onTap: () {},
-              rating: 4,
-              avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
-              handShake: true,
-            ),
+            itemBuilder: (_, index) {
+              final guest = widget.guests[index];
+
+              return UiKitUserTileWithCheckbox(
+                title: guest.name,
+                subtitle: guest.description,
+                isSelected: true,
+                date: guest.date,
+                rating: guest.rating,
+                avatarLink: guest.avatarLink,
+                handShake: guest.handShakeStatus,
+                onTap: () {},
+              );
+            },
             separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
           ),
         ),
         SpacingFoundation.verticalSpace16,
-        widget.isUserInvited
+        widget.currentInvitedUser != null
             ? UiKitUserTileWithOption(
-                title: 'Some title',
-                subtitle: 'Some titleSome titleSome titleSome title',
-                onOptionTap: () {},
+                title: widget.currentInvitedUser!.name,
+                subtitle: widget.currentInvitedUser!.description,
+                onOptionTap: widget.onRemoveUserOption!,
                 options: [],
-                avatarLink: GraphicsFoundation.instance.png.mockAvatar.path,
+                avatarLink: widget.currentInvitedUser!.avatarLink,
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +194,17 @@ class _InviteComponentState extends State<InviteComponent> {
                       SpacingFoundation.horizontalSpace16,
                       context.gradientButton(
                         data: BaseUiKitButtonData(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (widget.wishController.text.isEmpty) {
+                              SnackBarUtils.show(
+                                context: context,
+                                message: 'Please fill out your wishes',
+                                type: AppSnackBarType.warning,
+                              );
+                            } else {
+                              widget.onAddWishTap.call(widget.wishController.text);
+                            }
+                          },
                           icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.plus,
                           ),
@@ -196,21 +219,3 @@ class _InviteComponentState extends State<InviteComponent> {
     );
   }
 }
-
-class MyCustomModel {
-  MyCustomModel({
-    required this.name,
-    required this.surname,
-  });
-
-  String name;
-  String surname;
-}
-
-// UiKitUserTileWithOption(
-//   title: 'Some title',
-//   subtitle: 'Some titleSome titleSome titleSome title',
-//   onOptionTap: () {},
-//   options: [],
-//   avatarLink: GraphicsFoundation.instance.png.mockAvatar.path,
-// )
