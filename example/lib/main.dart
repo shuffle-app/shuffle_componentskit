@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                   ? GlobalComponent(globalConfiguration: configuration, child: ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
-                          .load(version: '1.0.1')
+                          .load(version: '1.0.2')
                           .then((_) => Future.delayed(const Duration(seconds: 1)))
                           .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
                       return const Scaffold(body: Center(child: LoadingWidget()));

@@ -3,7 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
-class UiEventModel {
+class UiEventModel extends Advertisable {
   final int id;
   String? title;
   UiOwnerModel? owner;
@@ -41,8 +41,9 @@ class UiEventModel {
     this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
-  }) : descriptionItems = [
-          if (formatDate(date, dateTo, time, timeTo, weekdays)  != null)
+    bool? isAdvertisement,
+  })  : descriptionItems = [
+          if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
             UiDescriptionItemModel(
               title: 'Don’t miss it',
               description: formatDate(date, dateTo, time, timeTo, weekdays)!,
@@ -52,12 +53,34 @@ class UiEventModel {
               title: 'Place',
               description: location,
             ),
-        ];
+        ],
+        super(isAdvertisement: isAdvertisement ?? false);
 
-  String? validateCreation(){
+  UiEventModel.advertisement({
+    this.id = -1,
+    this.title,
+    this.favorite,
+    this.owner,
+    this.date,
+    this.dateTo,
+    this.media = const [],
+    this.description,
+    this.location,
+    this.tags = const [],
+    this.baseTags = const [],
+    this.rating,
+    this.time,
+    this.timeTo,
+    this.weekdays = const [],
+    this.isRecurrent = false,
+    this.archived = false,
+    this.descriptionItems = const [],
+  }) : super(isAdvertisement: true);
+
+  String? validateCreation() {
     if (title == null || title!.isEmpty) {
       return 'Title is required';
-    } else if ( description==null || description!.isEmpty) {
+    } else if (description == null || description!.isEmpty) {
       return 'Description is required';
     } else if (media.isEmpty) {
       return 'Photos are required';
