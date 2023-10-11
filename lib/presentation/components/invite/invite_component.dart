@@ -10,7 +10,6 @@ class InviteComponent extends StatefulWidget {
     required this.persons,
     required this.onLoadMore,
     required this.onInvitePersonsChanged,
-    this.date,
     this.invitedUser,
     this.onRemoveUserOptionTap,
     this.onAddWishTap,
@@ -25,7 +24,6 @@ class InviteComponent extends StatefulWidget {
   final VoidCallback onLoadMore;
   final Function(List<UiInvitePersonModel> persons) onInvitePersonsChanged;
 
-  final DateTime? date;
   final UiInvitePersonModel? invitedUser;
   final VoidCallback? onRemoveUserOptionTap;
   final void Function(String value)? onAddWishTap;
@@ -37,14 +35,13 @@ class InviteComponent extends StatefulWidget {
 
 class _InviteComponentState extends State<InviteComponent> {
   late final TextEditingController _wishController;
-  late DateTime? _date;
+  DateTime? _date;
 
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(_scrollListener);
     _wishController = TextEditingController();
-    _date = widget.date;
   }
 
   void _scrollListener() {
