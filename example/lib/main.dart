@@ -10,7 +10,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -148,6 +149,36 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show invite Bottom Sheet',
+              onPressed: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 10,
+                  useRootNavigator: false,
+                  child: InviteComponent(
+                    scrollController: ScrollController(),
+                    persons: List.generate(
+                      15,
+                      (_) => UiInvitePersonModel(
+                        date: DateTime.now(),
+                        name: 'Marry Williams',
+                        rating: 4,
+                        handshake: true,
+                        avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
+                        description: 'Any cheerful person can invite me',
+                      ),
+                    ),
+                    onLoadMore: () {},
+                    changeDate: () async {
+                      return DateTime.now();
+                    },
+                    onInvitePersonsChanged: (List<UiInvitePersonModel> persons) {},
+                  ),
+                ),
+              ),
+            ),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -1020,7 +1051,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   mood: UiMoodModel(
                                     descriptionItems: [
                                       const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
-                                      const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
+                                      const UiDescriptionItemModel(
+                                          active: true, title: 'Burned today', description: '432'),
                                     ],
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
@@ -1038,9 +1070,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model:
-                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
-                                        BookingElementModel(version: '0')))))),
+                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1051,9 +1083,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model:
-                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
-                                        BookingElementModel(version: '0')))))),
+                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
