@@ -14,9 +14,9 @@ class InviteComponent extends StatefulWidget {
     this.invitedUser,
     this.onRemoveUserOptionTap,
     this.onAddWishTap,
-    this.onDateChanged,
+    this.changeDate,
   }) : assert(
-          invitedUser != null ? onRemoveUserOptionTap != null : date != null && onDateChanged != null,
+          invitedUser != null ? onRemoveUserOptionTap != null : changeDate != null,
           'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
         );
 
@@ -29,7 +29,7 @@ class InviteComponent extends StatefulWidget {
   final UiInvitePersonModel? invitedUser;
   final VoidCallback? onRemoveUserOptionTap;
   final void Function(String value)? onAddWishTap;
-  final ValueChanged<DateTime>? onDateChanged;
+  final Future<DateTime?> Function()? changeDate;
 
   @override
   State<InviteComponent> createState() => _InviteComponentState();
@@ -37,12 +37,14 @@ class InviteComponent extends StatefulWidget {
 
 class _InviteComponentState extends State<InviteComponent> {
   late final TextEditingController _wishController;
+  late DateTime? _date;
 
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(_scrollListener);
     _wishController = TextEditingController();
+    _date = widget.date;
   }
 
   void _scrollListener() {
@@ -163,13 +165,11 @@ class _InviteComponentState extends State<InviteComponent> {
                       context.smallOutlinedButton(
                         blurred: false,
                         data: BaseUiKitButtonData(
-                          onPressed: () => showUiKitCalendarDialog(context).then(
-                            (date) {
-                              if (date != null) {
-                                widget.onDateChanged?.call(date);
-                              }
-                            },
-                          ),
+                          onPressed: () => widget.changeDate?.call().then((selectedDate) {
+                            if (selectedDate != null) {
+                              setState(() => _date = selectedDate);
+                            }
+                          }),
                           icon: ImageWidget(
                             link: GraphicsFoundation.instance.svg.calendar.path,
                             color: Colors.white,
@@ -177,13 +177,18 @@ class _InviteComponentState extends State<InviteComponent> {
                         ),
                       ),
                       SpacingFoundation.horizontalSpace12,
-                      Text(
-                        DateFormat('MMMM dd').format(widget.date!),
-                        style: regularTextTheme?.body,
-                      ),
+                      _date != null
+                          ? Text(
+                              DateFormat('MMMM dd').format(_date!),
+                              style: regularTextTheme?.body,
+                            )
+                          : Text(
+                              'No date selected',
+                              style: regularTextTheme?.body,
+                            ),
                     ],
                   ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                  SpacingFoundation.verticalSpace16,
+                  SpacingFoundation.verticalSpace8,
                   Row(
                     children: [
                       Expanded(
@@ -197,7 +202,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       context.gradientButton(
                         data: BaseUiKitButtonData(
                           onPressed: () {
-                            if (_wishController.text.isEmpty) {
+                            if (_wishController.text.isEmpty || _date == null) {
                               SnackBarUtils.show(
                                 context: context,
                                 message: 'Please fill out your wishes',

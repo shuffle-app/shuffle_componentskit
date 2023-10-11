@@ -155,6 +155,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
               onPressed: () => showUiKitGeneralFullScreenDialog(
                 context,
                 GeneralDialogData(
+                  topPadding: 10,
                   useRootNavigator: false,
                   child: InviteComponent(
                     scrollController: ScrollController(),
@@ -170,8 +171,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       ),
                     ),
                     onLoadMore: () {},
-                    onDateChanged: (_) {},
-                    date: DateTime.now(),
+                    changeDate: () async {
+                      return DateTime.now();
+                    },
                     onInvitePersonsChanged: (List<UiInvitePersonModel> persons) {},
                   ),
                 ),
