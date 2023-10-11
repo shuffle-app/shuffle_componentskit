@@ -156,7 +156,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 context,
                 GeneralDialogData(
                   useRootNavigator: false,
-                  child: InviteComponent.invitedUser(
+                  child: InviteComponent(
                     scrollController: ScrollController(),
                     persons: List.generate(
                       15,
@@ -170,16 +170,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       ),
                     ),
                     onLoadMore: () {},
+                    onDateChanged: (_) {},
                     date: DateTime.now(),
-                    currentInvitedUser: UiInvitePersonModel(
-                      date: DateTime.now(),
-                      name: 'My Name',
-                      rating: 6,
-                      handShakeStatus: true,
-                      avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
-                      description: 'Some Description',
-                    ),
-                    onRemoveUserOptionTap: () {},
                     onInvitePersonsChanged: (List<UiInvitePersonModel> persons) {},
                   ),
                 ),
