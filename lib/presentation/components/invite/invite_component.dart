@@ -62,8 +62,8 @@ class _InviteComponentState extends State<InviteComponent> {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
-    final regularTextTheme = context.uiKitTheme?.regularTextTheme;
+    final boldTextTheme = theme?.boldTextTheme;
+    final regularTextTheme = theme?.regularTextTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +125,7 @@ class _InviteComponentState extends State<InviteComponent> {
                 date: person.date,
                 rating: person.rating,
                 avatarLink: person.avatarLink,
-                handShake: person.handShakeStatus,
+                handShake: person.handshake,
                 onTap: (isInvited) => setState(() => person.isSelected = isInvited),
               );
             },

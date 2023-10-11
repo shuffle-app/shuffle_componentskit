@@ -164,7 +164,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         date: DateTime.now(),
                         name: 'Marry Williams',
                         rating: 4,
-                        handShakeStatus: true,
+                        handshake: true,
                         avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
                         description: 'Any cheerful person can invite me',
                       ),

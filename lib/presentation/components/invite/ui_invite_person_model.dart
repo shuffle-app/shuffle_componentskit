@@ -5,7 +5,7 @@ class UiInvitePersonModel extends UiInviteToFavouritePlacesModel {
   final String description;
   final String avatarLink;
   final int rating;
-  final bool handShakeStatus;
+  final bool handshake;
   bool isSelected;
 
   UiInvitePersonModel({
@@ -13,7 +13,7 @@ class UiInvitePersonModel extends UiInviteToFavouritePlacesModel {
     this.isSelected = false,
     required this.name,
     required this.rating,
-    required this.handShakeStatus,
+    required this.handshake,
     required this.avatarLink,
     required this.description,
   });
