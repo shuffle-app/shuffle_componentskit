@@ -8,9 +8,13 @@ class ComponentEditProfileModel extends UiBaseModel {
   @JsonKey(name: 'user_profile_type')
   final String? userProfileType;
 
+  @JsonKey(name: 'content')
+  final ContentBaseModel content;
+
   ComponentEditProfileModel({
     this.userProfileType,
     required super.version,
+    this.content = const ContentBaseModel(),
     required super.pageBuilderType,
     super.positionModel,
   });

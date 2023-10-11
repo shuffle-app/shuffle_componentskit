@@ -12,6 +12,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final VoidCallback? onPremiumAccountRequested;
   final VoidCallback? onProAccountRequested;
   final VoidCallback? onActivityTileTap;
+  final ValueChanged<bool> onBeInSearchChanged;
   final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
@@ -25,6 +26,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController dateOfBirthController;
   final TextEditingController phoneController;
+  final bool beInSearch;
   final bool isLoading;
 
   const EditProfileDefaultComponent({
@@ -43,12 +45,14 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.onPreferencesChangeRequested,
     this.onActivityTileTap,
     this.isLoading = false,
+    required this.onBeInSearchChanged,
     required this.selectedPreferences,
     required this.nameController,
     required this.nickNameController,
     required this.emailController,
     required this.dateOfBirthController,
     required this.phoneController,
+    required this.beInSearch,
     required this.activityItem,
   }) : super(key: key);
 
@@ -57,9 +61,12 @@ class EditProfileDefaultComponent extends StatelessWidget {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
+    final hintTitle =
+        model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
+    final theme = context.uiKitTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -130,6 +137,41 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         ),
                       ),
                     ),
+                  ],
+                ),
+                SpacingFoundation.verticalSpace16,
+                Row(
+                  children: [
+                    Text(
+                      'Be in search',
+                      style: theme?.regularTextTheme.labelSmall,
+                    ),
+                    SpacingFoundation.horizontalSpace16,
+                    Builder(
+                      builder: (context) => GestureDetector(
+                        onTap: () => showUiKitPopover(
+                          context,
+                          title: Text(
+                            hintTitle,
+                            style: theme?.regularTextTheme.body.copyWith(
+                              color: theme.colorScheme.primary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          buttonText: 'Ok',
+                        ),
+                        child: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.info,
+                          width: 16.w,
+                          color: theme?.colorScheme.darkNeutral900,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    UiKitGradientSwitch(
+                      switchedOn: beInSearch,
+                      onChanged: (value) => onBeInSearchChanged.call(value),
+                    )
                   ],
                 ),
                 SpacingFoundation.verticalSpace16,

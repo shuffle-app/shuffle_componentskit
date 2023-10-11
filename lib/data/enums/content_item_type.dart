@@ -49,4 +49,6 @@ enum ContentItemType {
   hintDialog,
   @JsonValue('advertisement')
   advertisement,
+  @JsonValue('popover')
+  popover,
 }
