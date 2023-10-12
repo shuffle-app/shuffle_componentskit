@@ -62,4 +62,5 @@ const _$ContentItemTypeEnumMap = {
   ContentItemType.additionalMultiSelect: 'additional_multi_select',
   ContentItemType.hintDialog: 'hint_dialog',
   ContentItemType.advertisement: 'advertisement',
+  ContentItemType.popover: 'popover',
 };
