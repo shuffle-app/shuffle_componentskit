@@ -75,23 +75,27 @@ class SpinnerComponent extends StatelessWidget {
 
                           return Align(
                             alignment: Alignment.topCenter,
-                            child: context
-                                .advertisementBanner(
-                                  data: BaseUiKitAdvertisementBannerData(
-                                    availableWidth: 0.75.sw,
-                                    customHeight: size.maxHeight * 0.76,
-                                    imageLink: advertisement?.value.imageLink ?? '',
-                                    title: advertisement?.key ?? '',
-                                    onPressed: onAdvertisementTap,
-                                    size: AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
-                                  ),
-                                )
-                                .paddingOnly(
-                                    top: EdgeInsetsFoundation.vertical24,
-                                    left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
-                                    right: itemsController.itemList?.length == index + 1
-                                        ? SpacingFoundation.horizontalSpacing16
-                                        : 0),
+                            child: Column(
+                              children: [
+                                SpacingFoundation.verticalSpace8,
+                                context
+                                    .advertisementBanner(
+                                      data: BaseUiKitAdvertisementBannerData(
+                                        availableWidth: 0.75.sw,
+                                        customHeight: size.maxHeight * 0.76,
+                                        imageLink: advertisement?.value.imageLink ?? '',
+                                        title: advertisement?.key ?? '',
+                                        onPressed: onAdvertisementTap,
+                                        size: AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
+                                      ),
+                                    )
+                                    .paddingOnly(
+                                        left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
+                                        right: itemsController.itemList?.length == index + 1
+                                            ? SpacingFoundation.horizontalSpacing16
+                                            : 0),
+                              ],
+                            ),
                           );
                         }
 

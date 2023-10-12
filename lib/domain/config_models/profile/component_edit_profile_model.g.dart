@@ -11,6 +11,9 @@ ComponentEditProfileModel _$ComponentEditProfileModelFromJson(
     ComponentEditProfileModel(
       userProfileType: json['user_profile_type'] as String?,
       version: json['version'] as String? ?? '0',
+      content: json['content'] == null
+          ? const ContentBaseModel()
+          : ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -26,6 +29,7 @@ Map<String, dynamic> _$ComponentEditProfileModelToJson(
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
       'user_profile_type': instance.userProfileType,
+      'content': instance.content,
     };
 
 const _$PageBuilderTypeEnumMap = {
