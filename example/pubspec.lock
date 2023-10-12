@@ -216,6 +216,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  duration:
+    dependency: transitive
+    description:
+      name: duration
+      sha256: "0548a12d235dab185c677ef660995f23fdc06a02a2b984aa23805f6a03d82815"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.13"
   dynamic_color:
     dependency: transitive
     description:
@@ -313,8 +321,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: main
-      resolved-ref: "7c27b0e4b16464799ccb0b92f0b7aa503260653d"
+      ref: e4391ca40994c91acc563477c7959fbdeff50004
+      resolved-ref: e4391ca40994c91acc563477c7959fbdeff50004
       url: "https://github.com/shuffle-app/shuffle_swiper.git"
     source: git
     version: "6.0.0"
@@ -493,10 +501,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.5"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:

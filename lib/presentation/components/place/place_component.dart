@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ class PlaceComponent extends StatelessWidget {
   final UiPlaceModel place;
   final bool isCreateEventAvaliable;
   final VoidCallback? onEventCreate;
-  final List<UiEventModel>? events;
+  final FutureOr<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
 
@@ -29,7 +31,8 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -103,112 +106,115 @@ class PlaceComponent extends StatelessWidget {
             ]),
             SpacingFoundation.verticalSpace8,
             if (isCreateEventAvaliable)
-              UiKitCardWrapper(
-                  child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('Upcoming event', style: theme?.boldTextTheme.subHeadline),
-                if (events != null && events!.isNotEmpty) ...[
-                  SpacingFoundation.verticalSpace8,
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: events!.length,
-                      itemBuilder: (context, index) {
-                        final event = events![index];
-
-                        return ListTile(
-                          isThreeLine: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: BorderedUserCircleAvatar(
-                            imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                            size: 40.w,
-                          ),
-                          title: Text(
-                            event.title ?? '',
-                            style: theme?.boldTextTheme.caption1Bold,
-                          ),
-                          subtitle: event.date != null
-                              ? Text(
-                                  DateFormat('MMMM d').format(event.date!),
-                                  style: theme?.boldTextTheme.caption1Medium.copyWith(
-                                    color: theme.colorScheme.darkNeutral500,
+              FutureBuilder(
+                  future: Future.value(events ?? []),
+                  builder: (context, snapshot) => UiKitCardWrapper(
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                            Text('Upcoming event', style: theme?.boldTextTheme.subHeadline),
+                            if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
+                              SpacingFoundation.verticalSpace8,
+                              for (var event in snapshot.data!)
+                                ListTile(
+                                  isThreeLine: true,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: BorderedUserCircleAvatar(
+                                    imageUrl:
+                                        event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                                    size: 40.w,
                                   ),
-                                )
-                              : const SizedBox.shrink(),
-                          trailing: context.smallButton(
-                            data: BaseUiKitButtonData(
-                              onPressed: () {
-                                if (onEventTap != null) {
-                                  onEventTap?.call(event);
-                                } else {
-                                  buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                      ComponentBuilder(child: EventComponent(event: event)));
-                                }
-                              },
-                              icon: Icon(
-                                CupertinoIcons.right_chevron,
-                                color: theme?.colorScheme.inversePrimary,
-                                size: 20.w,
+                                  title: Text(
+                                    event.title ?? '',
+                                    style: theme?.boldTextTheme.caption1Bold,
+                                  ),
+                                  subtitle: event.date != null
+                                      ? Text(
+                                          DateFormat('MMMM d').format(event.date!),
+                                          style: theme?.boldTextTheme.caption1Medium.copyWith(
+                                            color: theme.colorScheme.darkNeutral500,
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                  trailing: context
+                                      .smallButton(
+                                        data: BaseUiKitButtonData(
+                                          onPressed: () {
+                                            if (onEventTap != null) {
+                                              onEventTap?.call(event);
+                                            } else {
+                                              buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                                  ComponentBuilder(child: EventComponent(event: event)));
+                                            }
+                                          },
+                                          icon: Icon(
+                                            CupertinoIcons.right_chevron,
+                                            color: theme?.colorScheme.inversePrimary,
+                                            size: 20.w,
+                                          ),
+                                        ),
+                                      )
+                                      .paddingOnly(top: SpacingFoundation.verticalSpacing4),
+                                ),
+                            ],
+                            SpacingFoundation.verticalSpace4,
+                            context.gradientButton(
+                                data: BaseUiKitButtonData(
+                                    text: 'Create Event', onPressed: onEventCreate, fit: ButtonFit.fitWidth))
+                          ]).paddingSymmetric(
+                        horizontal: SpacingFoundation.horizontalSpacing16,
+                        vertical: SpacingFoundation.verticalSpacing8,
+                      )).paddingSymmetric(
+                        horizontal: horizontalMargin,
+                      ))
+            else
+              FutureBuilder(
+                  future: Future.value(events ?? []),
+                  builder: (context, snapshot) => Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: () {
+                          final AutoSizeGroup group = AutoSizeGroup();
+
+                          final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
+
+                          final closestEvent = tempSorted.firstOrNull;
+
+                          final Duration daysToEvent =
+                              closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
+
+                          return [
+                            Expanded(
+                              child: UpcomingEventPlaceActionCard(
+                                value: 'in ${printDuration(daysToEvent, tersity: DurationTersity.day)}',
+                                group: group,
+                                rasterIconAsset: GraphicsFoundation.instance.png.events,
+                                action: () {
+                                  if (closestEvent != null) {
+                                    if (onEventTap != null) {
+                                      onEventTap?.call(closestEvent);
+                                    } else {
+                                      buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                          ComponentBuilder(child: EventComponent(event: closestEvent)));
+                                    }
+                                  }
+                                },
                               ),
                             ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (_, __) => SpacingFoundation.verticalSpace4,
-                    ),
-                  ),
-                ],
-                SpacingFoundation.verticalSpace8,
-                context.gradientButton(
-                    data: BaseUiKitButtonData(text: 'Create Event', onPressed: onEventCreate, fit: ButtonFit.fitWidth))
-              ]).paddingSymmetric(
-                horizontal: horizontalMargin,
-                vertical: SpacingFoundation.verticalSpacing8,
-              )).paddingSymmetric(
-                horizontal: horizontalMargin,
-              )
-            else
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: () {
-                  final AutoSizeGroup group = AutoSizeGroup();
-
-                  final tempSorted = List.from(events ?? [])..sort((a, b) => a.date!.compareTo(b.date));
-
-                  final closestEvent = tempSorted.firstOrNull;
-
-                  final daysToEvent = closestEvent?.date?.difference(DateTime.now())?.inDays ?? 2;
-
-                  return [
-                    Expanded(
-                      child: UpcomingEventPlaceActionCard(
-                        value: 'in $daysToEvent days',
-                        group: group,
-                        rasterIconAsset: GraphicsFoundation.instance.png.events,
-                        action: () {
-                          if (closestEvent != null) {
-                            if (onEventTap != null) {
-                              onEventTap?.call(closestEvent);
-                            } else {
-                              buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                  ComponentBuilder(child: EventComponent(event: closestEvent)));
-                            }
-                          }
-                        },
-                      ),
-                    ),
-                    SpacingFoundation.horizontalSpace8,
-                    Expanded(
-                      child: PointBalancePlaceActionCard(
-                        value: '2 650',
-                        group: group,
-                        rasterIconAsset: GraphicsFoundation.instance.png.coin,
-                        action: () {
-                          log('balance was pressed');
-                        },
-                      ),
-                    ),
-                  ];
-                }(),
-              ),
+                            SpacingFoundation.horizontalSpace8,
+                            Expanded(
+                              child: PointBalancePlaceActionCard(
+                                value: '2 650',
+                                group: group,
+                                rasterIconAsset: GraphicsFoundation.instance.png.coin,
+                                action: () {
+                                  log('balance was pressed');
+                                },
+                              ),
+                            ),
+                          ];
+                        }(),
+                      )),
             SpacingFoundation.verticalSpace8,
             Wrap(
               spacing: SpacingFoundation.horizontalSpacing8,
