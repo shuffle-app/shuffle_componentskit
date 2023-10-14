@@ -83,7 +83,7 @@ class SpinnerComponent extends StatelessWidget {
                                       data: BaseUiKitAdvertisementBannerData(
                                         availableWidth: 0.75.sw,
                                         customHeight: size.maxHeight * 0.76,
-                                        imageLink: advertisement?.value.imageLink ?? '',
+                                        imageLink: item.randomBannerPicture(),
                                         title: advertisement?.key ?? '',
                                         onPressed: onAdvertisementTap,
                                         size: AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
