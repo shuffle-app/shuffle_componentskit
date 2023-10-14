@@ -24,13 +24,14 @@ dependencies:
   json_serializable: ^6.6.1
 
   #configuration libs
-  http: ^0.13.5
+  http: ^1.1.0
   path_provider: ^2.0.15
 
   #ui_helpers
   palette_generator: ^0.3.3+2
   mask_text_input_formatter: ^2.4.0
   infinite_scroll_pagination: ^4.0.0-dev.1
+  duration: ^3.0.13
   bubble_lens:
 #    path: ../bubble_lens
     git:
@@ -41,11 +42,15 @@ dependencies:
   intl: any
   image_picker: ^1.0.1
 
+dependency_overrides:
+  watcher: ^1.1.0
+  analyzer: ^5.13.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  dart_code_metrics: ^5.7.3
+#  dart_code_metrics: ^5.7.3
   build_runner: ^2.3.3
 
 flutter:

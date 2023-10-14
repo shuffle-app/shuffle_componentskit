@@ -3,18 +3,18 @@ import 'package:shuffle_components_kit/presentation/components/invite_to_favouri
 class UiInvitePersonModel extends UiInviteToFavouritePlacesModel {
   final String name;
   final String description;
-  final String avatarLink;
-  final int rating;
-  final bool handshake;
+  final String? avatarLink;
+  final int? rating;
+  final bool? handshake;
   bool isSelected;
 
   UiInvitePersonModel({
     super.date,
     this.isSelected = false,
     required this.name,
-    required this.rating,
-    required this.handshake,
-    required this.avatarLink,
+     this.rating,
+     this.handshake,
+     this.avatarLink,
     required this.description,
   });
 }

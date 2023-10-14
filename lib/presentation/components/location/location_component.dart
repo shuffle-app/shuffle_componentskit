@@ -198,6 +198,7 @@ class _LocationComponentState extends State<LocationComponent> {
     if (placeFromCoordinates?.results?.isEmpty ?? true) {
       return;
     }
+    debugPrint('decodeCoordinates resulted with: ${placeFromCoordinates?.results?.map((e) => e.formattedAddress)}');
     final place = placeFromCoordinates?.results?.first;
     final newSuggestion = LocationSuggestion(
       title: place?.formattedAddress ?? '',
