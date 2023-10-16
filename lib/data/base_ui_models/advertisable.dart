@@ -4,12 +4,13 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 abstract class Advertisable {
   final bool isAdvertisement;
+  late final String bannerPicture = _randomBannerPicture;
 
   Advertisable({
     required this.isAdvertisement,
   });
 
-  String randomBannerPicture() {
+  String get _randomBannerPicture {
     // range from 1 to 5
     final randomNumber = Random().nextInt(4) + 1;
     if (randomNumber == 1) {
