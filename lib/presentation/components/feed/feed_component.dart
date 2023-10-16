@@ -274,7 +274,7 @@ class FeedComponent extends StatelessWidget {
                         data: BaseUiKitAdvertisementBannerData(
                           availableWidth: 1.sw - (horizontalMargin * 2),
                           onPressed: onAdvertisementPressed,
-                          imageLink: item.randomBannerPicture(),
+                          imageLink: item.bannerPicture,
                           title: advertisement.key,
                           size: AdvertisementBannerSize.values.byName(advertisement.value.value ?? 'small'),
                         ),
