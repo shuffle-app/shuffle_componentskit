@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/config_models/profile/component_profile_model.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -28,8 +30,7 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -116,7 +117,14 @@ class ProfileComponent extends StatelessWidget {
                               uiModel: model,
                               onInvite: () {},
                               onDatePressed: () async {
-                                final newDate = await showUiKitCalendarDialog(context);
+                                final newDate = await showUiKitCalendarDialog(
+                                  context,
+                                  selectableDayPredicate: (day) {
+                                    log(day.toIso8601String(), name: 'ProfileComponent');
+
+                                    return day.isAfter(DateTime.now().subtract(const Duration(days: 1)));
+                                  },
+                                );
                                 if (newDate != null) {
                                   state(
                                     () {

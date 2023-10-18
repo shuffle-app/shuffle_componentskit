@@ -58,11 +58,9 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
-    final hintTitle =
-        model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    final hintTitle = model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
@@ -148,24 +146,26 @@ class EditProfileDefaultComponent extends StatelessWidget {
                     ),
                     SpacingFoundation.horizontalSpace16,
                     Builder(
-                      builder: (context) => GestureDetector(
-                        onTap: () => showUiKitPopover(
-                          context,
-                          title: Text(
-                            hintTitle,
-                            style: theme?.regularTextTheme.body.copyWith(
-                              color: theme.colorScheme.primary,
+                      builder: (context) {
+                        return GestureDetector(
+                          onTap: () => showUiKitPopover(
+                            context,
+                            showButton: false,
+                            title: Text(
+                              hintTitle,
+                              style: theme?.regularTextTheme.body.copyWith(
+                                color: theme.colorScheme.primary,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                          buttonText: 'Ok',
-                        ),
-                        child: ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.info,
-                          width: 16.w,
-                          color: theme?.colorScheme.darkNeutral900,
-                        ),
-                      ),
+                          child: ImageWidget(
+                            svgAsset: GraphicsFoundation.instance.svg.info,
+                            width: 16.w,
+                            color: theme?.colorScheme.darkNeutral900,
+                          ),
+                        );
+                      },
                     ),
                     const Spacer(),
                     UiKitGradientSwitch(

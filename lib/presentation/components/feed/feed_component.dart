@@ -18,6 +18,7 @@ class FeedComponent extends StatelessWidget {
   final VoidCallback? onHowItWorksPopedBody;
   final VoidCallback? onAdvertisementPressed;
   final bool showBusinessContent;
+  final bool preserveScrollPosition;
 
   const FeedComponent({
     Key? key,
@@ -25,6 +26,7 @@ class FeedComponent extends StatelessWidget {
     required this.controller,
     required this.showBusinessContent,
     this.mood,
+    this.preserveScrollPosition = false,
     this.onEventPressed,
     this.onMoodPressed,
     this.onMoodCheck,
@@ -302,6 +304,7 @@ class FeedComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace24.wrapSliverBox,
           kBottomNavigationBarHeight.heightBox.wrapSliverBox,
+          if (preserveScrollPosition) SizedBox(height: 1.sh).wrapSliverBox,
         ],
       ],
     ).paddingSymmetric(
