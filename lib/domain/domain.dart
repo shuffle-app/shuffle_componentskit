@@ -1,3 +1,4 @@
+export 'config_models/auth/component_preferences_model.dart';
 export 'config_models/auth/credential_verification/company_credential_verification_model.dart';
 export 'config_models/auth/credential_verification/personal_credential_verification_model.dart';
 export 'config_models/auth/sms_verification/sms_verification_model.dart';
