@@ -5,14 +5,12 @@ class UiMoodModel {
   final String title;
   final String logo;
   final List<UiDescriptionItemModel>? descriptionItems;
-  final List<UiPlaceModel>? places;
 
   UiMoodModel(
       {required this.id,
       required this.title,
       required this.logo,
-      this.descriptionItems,
-      this.places});
+      this.descriptionItems});
 
   UiMoodModel copyWith({
     int? id,
@@ -26,6 +24,5 @@ class UiMoodModel {
         title: title ?? this.title,
         logo: logo ?? this.logo,
         descriptionItems: descriptionItems ?? this.descriptionItems,
-        places: places ?? this.places,
       );
 }
