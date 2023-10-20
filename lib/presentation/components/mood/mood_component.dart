@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:shimmer/shimmer.dart';
 
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
