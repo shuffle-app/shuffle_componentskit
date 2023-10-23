@@ -6,6 +6,9 @@ part 'component_mood_model.g.dart';
 @JsonSerializable()
 class ComponentMoodModel extends UiBaseModel {
 
+  @JsonKey(name: 'content')
+  final ContentBaseModel content;
+
   @JsonKey(name: 'show_stats')
   final bool? showStats;
 
@@ -16,6 +19,7 @@ class ComponentMoodModel extends UiBaseModel {
       {this.showPlaces,
         this.showStats,
         required super.pageBuilderType,
+        required this.content,
         super.positionModel,
         required super.version,}):super();
 

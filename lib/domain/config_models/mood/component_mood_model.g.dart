@@ -12,6 +12,8 @@ ComponentMoodModel _$ComponentMoodModelFromJson(Map<String, dynamic> json) =>
       showStats: json['show_stats'] as bool?,
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
+      content:
+          ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       positionModel: json['position_model'] == null
           ? null
           : PositionModel.fromJson(
@@ -24,6 +26,7 @@ Map<String, dynamic> _$ComponentMoodModelToJson(ComponentMoodModel instance) =>
       'version': instance.version,
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
+      'content': instance.content,
       'show_stats': instance.showStats,
       'show_places': instance.showPlaces,
     };
