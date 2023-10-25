@@ -13,12 +13,14 @@ class CreateWebEventComponent extends StatefulWidget {
   final UiEventModel? eventToEdit;
   final VoidCallback? onEventDeleted;
   final VoidCallback? onShowResult;
+  final Future<String?> Function()? getLocation;
   final Future<List<String>> Function(String)? onSuggest;
 
   const CreateWebEventComponent({
     super.key,
     required this.onEventCreated,
     this.eventToEdit,
+    this.getLocation,
     this.onEventDeleted,
     this.onSuggest,
     this.onShowResult,
@@ -30,8 +32,8 @@ class CreateWebEventComponent extends StatefulWidget {
 
 class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
-  // late final TextEditingController _phoneController = TextEditingController();
-  // late final TextEditingController _websiteController = TextEditingController();
+  late final TextEditingController _addressController =
+  TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();
@@ -57,6 +59,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
           tags: [],
           description: '',
         );
+    _addressController.text = widget.eventToEdit?.location?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
@@ -312,29 +315,28 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           ),
                         ),
                       ),
-                      // SpacingFoundation.verticalSpace24,
-                      // WebFormField(
-                      //   title: 'Address',
-                      //   isRequired: true,
-                      //   child: InkWell(
-                      //     splashColor: Colors.transparent,
-                      //     highlightColor: Colors.transparent,
-                      //     hoverColor: Colors.transparent,
-                      //     onTap: () async {
-                      //       _addressController.text = await widget.getLocation?.call() ?? '';
-                      //       _eventToEdit.location = _addressController.text;
-                      //     },
-                      //     child: IgnorePointer(
-                      //       child: UiKitInputFieldRightIcon(
-                      //         controller: _addressController,
-                      //         hintText: 'Tap to set address',
-                      //         fillColor: theme.colorScheme.surface1,
-                      //         borderRadius: BorderRadiusFoundation.all12,
-                      //         icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        title: 'Address',
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          onTap: () async {
+                            _addressController.text = await widget.getLocation?.call() ?? '';
+                            _eventToEdit.location = _addressController.text;
+                          },
+                          child: IgnorePointer(
+                            child: UiKitInputFieldRightIcon(
+                              controller: _addressController,
+                              hintText: 'Tap to set address',
+                              fillColor: theme.colorScheme.surface1,
+                              borderRadius: BorderRadiusFoundation.all12,
+                              icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
+                            ),
+                          ),
+                        ),
+                      ),
                       // SpacingFoundation.verticalSpace24,
                       // WebFormField(
                       //   title: 'Phone',
