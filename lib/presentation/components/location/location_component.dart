@@ -14,7 +14,7 @@ class LocationComponent extends StatefulWidget {
   final VoidCallback? onNewPlaceTap;
   final Future<List<KnownLocation>?> Function(LatLng coordinates)? onPlacesCheck;
   final CameraPosition? initialPosition;
-  final void Function(String placeName)? onConfirmPlaceTap;
+  final void Function(KnownLocation location)? onConfirmPlaceTap;
   final Future<LatLng?> Function()? onDetermineLocation;
 
   const LocationComponent({
@@ -137,7 +137,9 @@ class _LocationComponentState extends State<LocationComponent> {
         placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
       );
 
-      await widget.onPlacesCheck?.call(placeCoordinates);
+      await widget.onPlacesCheck?.call(placeCoordinates).then(
+            (places) => setState(() => _suggestionPlaces = places),
+          );
 
       final placeFromCoordinates = await GoogleMapsApi.fetchPlaceFromCoordinates(
         latlng: '${placeCoordinates.latitude}, ${placeCoordinates.longitude}',
@@ -246,10 +248,6 @@ class _LocationComponentState extends State<LocationComponent> {
         }));
   }
 
-  void onKnownLocationConfirmed(KnownLocation location) {
-    log('KnownLocation is $location', name: 'LocationComponent');
-  }
-
   @override
   void dispose() {
     searchTextController.removeListener(_onSearchListener);
@@ -291,10 +289,7 @@ class _LocationComponentState extends State<LocationComponent> {
         searchController: searchTextController,
         locationPickerSearchOverlayController: locationPickerSearchOverlayController,
         locationDetailsSheetController: locationDetailsSheetController,
-        onKnownLocationConfirmed: (location) {
-          onKnownLocationConfirmed(location);
-          widget.onKnownLocationConfirmed?.call(location);
-        },
+        onKnownLocationConfirmed: widget.onKnownLocationConfirmed,
         onCurrentLocationTapped: onCurrentLocationTapped,
         onLocationConfirmed: widget.onLocationConfirmed,
       ),
