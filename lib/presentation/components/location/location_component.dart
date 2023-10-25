@@ -9,24 +9,24 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationComponent extends StatefulWidget {
   final VoidCallback onLocationConfirmed;
-  final VoidCallback onNewPlaceTap;
   final void Function({String address, double latitude, double longitude}) onLocationChanged;
-  final ValueChanged<KnownLocation> onKnownLocationConfirmed;
-  final Future<List<String>?> Function(LatLng coordinates) onPlacesCheck;
+  final ValueChanged<KnownLocation>? onKnownLocationConfirmed;
+  final VoidCallback? onNewPlaceTap;
+  final Future<List<KnownLocation>?> Function(LatLng coordinates)? onPlacesCheck;
   final CameraPosition? initialPosition;
   final void Function(String placeName)? onConfirmPlaceTap;
   final Future<LatLng?> Function()? onDetermineLocation;
 
   const LocationComponent({
     super.key,
-    required this.onNewPlaceTap,
-    required this.onPlacesCheck,
     required this.onLocationChanged,
     required this.onLocationConfirmed,
-    required this.onKnownLocationConfirmed,
+    this.onPlacesCheck,
+    this.onNewPlaceTap,
     this.initialPosition,
     this.onConfirmPlaceTap,
     this.onDetermineLocation,
+    this.onKnownLocationConfirmed,
   });
 
   @override
@@ -39,8 +39,8 @@ class _LocationComponentState extends State<LocationComponent> {
   final List<LocationSuggestion> locationSuggestions = [];
   late final GoogleMapController mapsController;
   Set<Marker> mapMarkers = {};
-  List<String>? _suggestionPlaces = [];
-  bool _newPlace = true;
+  List<KnownLocation>? _suggestionPlaces = [];
+  bool _newPlaceTapped = true;
   final LocationPickerSearchOverlayController locationPickerSearchOverlayController =
       LocationPickerSearchOverlayController();
   Timer? _debounceTimer;
@@ -131,10 +131,32 @@ class _LocationComponentState extends State<LocationComponent> {
           placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
         ),
       );
+
+      final placeCoordinates = LatLng(
+        placeDetails?.locationDetails?.geometry?.location?.lat ?? 0,
+        placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
+      );
+
+      await widget.onPlacesCheck?.call(placeCoordinates);
+
+      final placeFromCoordinates = await GoogleMapsApi.fetchPlaceFromCoordinates(
+        latlng: '${placeCoordinates.latitude}, ${placeCoordinates.longitude}',
+      );
+
       setState(() {
         mapMarkers.clear();
         mapMarkers = {marker};
+        _newPlaceTapped = true;
       });
+
+      locationDetailsSheetController.updateKnownLocations(
+        placeFromCoordinates?.results
+                ?.map(
+                  (place) => KnownLocation(title: place.formattedAddress ?? ''),
+                )
+                .toList() ??
+            [],
+      );
     }
   }
 
@@ -218,8 +240,8 @@ class _LocationComponentState extends State<LocationComponent> {
       mapMarkers = {marker};
     });
     decodeCoordinates(coordinates);
-    widget.onPlacesCheck.call(coordinates).then((places) => setState(() {
-          _newPlace = true;
+    widget.onPlacesCheck?.call(coordinates).then((places) => setState(() {
+          _newPlaceTapped = true;
           _suggestionPlaces = places;
         }));
   }
@@ -239,11 +261,11 @@ class _LocationComponentState extends State<LocationComponent> {
     return Theme(
       data: UiKitThemeFoundation.defaultTheme,
       child: UiKitLocationPicker(
-        newPlace: _newPlace,
+        newPlace: _newPlaceTapped,
         suggestionPlaces: _suggestionPlaces,
         onNewPlaceTap: (value) {
-          widget.onNewPlaceTap.call();
-          setState(() => _newPlace = value);
+          widget.onNewPlaceTap?.call();
+          setState(() => _newPlaceTapped = value);
         },
         onConfirmPlaceTap: widget.onConfirmPlaceTap,
         onMapCreated: (controller) {
@@ -270,10 +292,8 @@ class _LocationComponentState extends State<LocationComponent> {
         locationPickerSearchOverlayController: locationPickerSearchOverlayController,
         locationDetailsSheetController: locationDetailsSheetController,
         onKnownLocationConfirmed: (location) {
-          locationDetailsSheetController.updateSheetState(LocationDetailsSheetState.hidden);
-          locationDetailsSheetController.updateSheetState(LocationDetailsSheetState.visible);
           onKnownLocationConfirmed(location);
-          widget.onKnownLocationConfirmed(location);
+          widget.onKnownLocationConfirmed?.call(location);
         },
         onCurrentLocationTapped: onCurrentLocationTapped,
         onLocationConfirmed: widget.onLocationConfirmed,
