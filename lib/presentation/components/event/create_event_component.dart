@@ -10,8 +10,10 @@ class CreateEventComponent extends StatefulWidget {
   final UiEventModel? eventToEdit;
   final VoidCallback? onEventDeleted;
   final Future Function(UiEventModel) onEventCreated;
+  final Future<String?> Function()? getLocation;
 
-  const CreateEventComponent({super.key, this.eventToEdit, this.onEventDeleted, required this.onEventCreated});
+  const CreateEventComponent(
+      {super.key, this.eventToEdit, this.getLocation, this.onEventDeleted, required this.onEventCreated});
 
   @override
   State<CreateEventComponent> createState() => _CreateEventComponentState();
@@ -20,6 +22,7 @@ class CreateEventComponent extends StatefulWidget {
 class _CreateEventComponentState extends State<CreateEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -34,8 +37,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _titleController.text = widget.eventToEdit?.title ?? '';
     _descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
-    _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image) );
-    _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video) );
+    _locationController.text = widget.eventToEdit?.location ?? '';
+    _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+    _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
   }
 
@@ -98,7 +102,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -112,12 +120,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         autoImplyLeading: true,
         appBarTrailing: widget.eventToEdit != null
             ? IconButton(
-                icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.trash,
-                    color: Colors.white,
-                    height: 20.h,
-                    fit: BoxFit.fitHeight),
-                onPressed: widget.onEventDeleted)
+            icon: ImageWidget(
+                svgAsset: GraphicsFoundation.instance.svg.trash,
+                color: Colors.white,
+                height: 20.h,
+                fit: BoxFit.fitHeight),
+            onPressed: widget.onEventDeleted)
             : null,
         body: SingleChildScrollView(
             child: Form(
@@ -154,13 +162,16 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                              onNotFoundTagCallback: (value) => setState(() => _eventToEdit.baseTags = [
-                                    ..._eventToEdit.baseTags,
-                                    UiKitTag(title: value, iconPath: '')
-                                  ]),
-                              tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-                              onRemoveTagCallback: (value) => setState(
-                                  () => _eventToEdit.baseTags.removeWhere((element) => element.title == value)))
+                          onNotFoundTagCallback: (value) =>
+                              setState(() =>
+                              _eventToEdit.baseTags = [
+                                ..._eventToEdit.baseTags,
+                                UiKitTag(title: value, iconPath: '')
+                              ]),
+                          tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                          onRemoveTagCallback: (value) =>
+                              setState(
+                                      () => _eventToEdit.baseTags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                       SpacingFoundation.verticalSpace24,
@@ -169,11 +180,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                              onNotFoundTagCallback: (value) => setState(() =>
-                                  _eventToEdit.tags = [..._eventToEdit.tags, UiKitTag(title: value, iconPath: '')]),
-                              tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-                              onRemoveTagCallback: (value) =>
-                                  setState(() => _eventToEdit.tags.removeWhere((element) => element.title == value)))
+                          onNotFoundTagCallback: (value) =>
+                              setState(() =>
+                              _eventToEdit.tags = [..._eventToEdit.tags, UiKitTag(title: value, iconPath: '')]),
+                          tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
+                          onRemoveTagCallback: (value) =>
+                              setState(() => _eventToEdit.tags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(
                       //     baseTags: [], uniqueTags: _eventToEdit.tags ?? []),
@@ -197,12 +209,15 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         Text('Time', style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Text(
-                            '${_eventToEdit.time == null ? 'select time' : normalizedTi(_eventToEdit.time,showDateName: false)} ${_eventToEdit.timeTo == null ? '' : '- ${normalizedTi(_eventToEdit.timeTo,showDateName: false)} '}',
+                            '${_eventToEdit.time == null ? 'select time' : normalizedTi(
+                                _eventToEdit.time, showDateName: false)} ${_eventToEdit.timeTo == null
+                                ? ''
+                                : '- ${normalizedTi(_eventToEdit.timeTo, showDateName: false)} '}',
                             style: theme?.boldTextTheme.body),
                         context.outlinedButton(
                             data: BaseUiKitButtonData(
                                 onPressed: () async {
-                                   await showUiKitTimeFromToDialog(context,(from,to){
+                                  await showUiKitTimeFromToDialog(context, (from, to) {
                                     setState(() {
                                       _eventToEdit.time = from;
                                       _eventToEdit.timeTo = to;
@@ -223,33 +238,54 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                             child: Text(
                                 _eventToEdit.isRecurrent
                                     ? _eventToEdit.weekdays.join(', ')
-                                    : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(_eventToEdit.date!)} ${_eventToEdit.dateTo == null ? '' : '- ${DateFormat('MM/dd').format(_eventToEdit.dateTo!) }'}',
+                                    : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(
+                                    _eventToEdit.date!)} ${_eventToEdit.dateTo == null ? '' : '- ${DateFormat('MM/dd')
+                                    .format(_eventToEdit.dateTo!) }'}',
                                 style: theme?.boldTextTheme.body)),
                         context.outlinedButton(
                             data: BaseUiKitButtonData(
                                 onPressed: _eventToEdit.isRecurrent
                                     ? () async {
-                                        final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
-                                        if (maybeDaysOfWeek != null) {
-                                          setState(() {
-                                            _eventToEdit.weekdays = maybeDaysOfWeek;
-                                          });
-                                        }
-                                      }
+                                  final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
+                                  if (maybeDaysOfWeek != null) {
+                                    setState(() {
+                                      _eventToEdit.weekdays = maybeDaysOfWeek;
+                                    });
+                                  }
+                                }
                                     : () async {
-                                         await showUiKitCalendarFromToDialog(context, (from, to) => {
-                                           setState(() {
-                                             _eventToEdit.date = from;
-                                             _eventToEdit.dateTo = to;
-                                           })
-                                         });
-
-                                      },
+                                  await showUiKitCalendarFromToDialog(context, (from, to) =>
+                                  {
+                                    setState(() {
+                                      _eventToEdit.date = from;
+                                      _eventToEdit.dateTo = to;
+                                    })
+                                  });
+                                },
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.calendar,
                                   color: Colors.white,
                                 ))),
                       ]).paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      InkWell(
+                          onTap: () async {
+                            // SnackBarUtils.show(
+                            //     message: 'in development', context: context);
+
+                            _locationController.text = await widget.getLocation?.call() ?? '';
+                            _eventToEdit.location = _locationController.text;
+                          },
+                          child: IgnorePointer(
+                              child: UiKitInputFieldNoFill(
+                                  label: 'Address',
+                                  controller: _locationController,
+                                  icon: ImageWidget(
+                                      svgAsset: GraphicsFoundation
+                                          .instance.svg.location,
+                                      color: Colors.white))
+                                  .paddingSymmetric(
+                                  horizontal: horizontalPadding))),
                       SpacingFoundation.verticalSpace24,
                       SafeArea(
                           top: false,
