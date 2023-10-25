@@ -133,9 +133,10 @@ class _LocationComponentState extends State<LocationComponent> {
         placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
       );
 
-      await widget.onPlacesCheck?.call(placeCoordinates).then(
-            (places) => setState(() => _suggestionPlaces = places),
-          );
+      await widget.onPlacesCheck
+          ?.call(placeCoordinates)
+          .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
+
 
       final placeFromCoordinates = await GoogleMapsApi.fetchPlaceFromCoordinates(
         latlng: '${placeCoordinates.latitude}, ${placeCoordinates.longitude}',
@@ -147,14 +148,14 @@ class _LocationComponentState extends State<LocationComponent> {
         _newPlaceTapped = true;
       });
 
-      locationDetailsSheetController.updateKnownLocations(
-        placeFromCoordinates?.results
-                ?.map(
-                  (place) => KnownLocation(title: place.formattedAddress ?? ''),
-                )
-                .toList() ??
-            [],
-      );
+
+
+      setState(() => _suggestionPlaces = placeFromCoordinates?.results
+          ?.map(
+            (place) => KnownLocation(title: place.formattedAddress ?? ''),
+      )
+          .toList() ??
+          []);
     }
   }
 
@@ -205,14 +206,18 @@ class _LocationComponentState extends State<LocationComponent> {
     }
     debugPrint('decodeCoordinates resulted with: ${placeFromCoordinates?.results?.map((e) => e.formattedAddress)}');
     final place = placeFromCoordinates?.results?.first;
-    locationDetailsSheetController.updateKnownLocations(
-      placeFromCoordinates?.results
-              ?.map(
-                (place) => KnownLocation(title: place.formattedAddress ?? ''),
-              )
-              .toList() ??
-          [],
-    );
+    await widget.onPlacesCheck
+        ?.call(latLng)
+        .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
+
+
+    setState(() => _suggestionPlaces = placeFromCoordinates?.results
+            ?.map(
+              (place) => KnownLocation(title: place.formattedAddress ?? ''),
+            )
+            .toList() ??
+        []);
+
     final newSuggestion = LocationSuggestion(
       title: place?.formattedAddress ?? '',
       subtitle: place?.formattedAddress ?? '',
