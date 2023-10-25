@@ -11,10 +11,8 @@ class LocationComponent extends StatefulWidget {
   final VoidCallback onLocationConfirmed;
   final void Function({String address, double latitude, double longitude}) onLocationChanged;
   final ValueChanged<KnownLocation>? onKnownLocationConfirmed;
-  final VoidCallback? onNewPlaceTap;
   final Future<List<KnownLocation>?> Function(LatLng coordinates)? onPlacesCheck;
   final CameraPosition? initialPosition;
-  final void Function(KnownLocation location)? onConfirmPlaceTap;
   final Future<LatLng?> Function()? onDetermineLocation;
 
   const LocationComponent({
@@ -22,9 +20,7 @@ class LocationComponent extends StatefulWidget {
     required this.onLocationChanged,
     required this.onLocationConfirmed,
     this.onPlacesCheck,
-    this.onNewPlaceTap,
     this.initialPosition,
-    this.onConfirmPlaceTap,
     this.onDetermineLocation,
     this.onKnownLocationConfirmed,
   });
@@ -259,13 +255,10 @@ class _LocationComponentState extends State<LocationComponent> {
     return Theme(
       data: UiKitThemeFoundation.defaultTheme,
       child: UiKitLocationPicker(
+        onLocationChanged: widget.onLocationChanged,
         newPlace: _newPlaceTapped,
         suggestionPlaces: _suggestionPlaces,
-        onNewPlaceTap: (value) {
-          widget.onNewPlaceTap?.call();
-          setState(() => _newPlaceTapped = value);
-        },
-        onConfirmPlaceTap: widget.onConfirmPlaceTap,
+        onNewPlaceTap: (value) => setState(() => _newPlaceTapped = value),
         onMapCreated: (controller) {
           setState(() => mapsController = controller);
         },
