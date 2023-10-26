@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +15,7 @@ class FeedComponent extends StatelessWidget {
   final VoidCallback? onHowItWorksPoped;
   final VoidCallback? onMoodPressed;
   final VoidCallback? onMoodCheck;
-  final VoidCallback? onMoodCompleted;
+  final AsyncCallback? onMoodCompleted;
   final VoidCallback? onHowItWorksPopedBody;
   final VoidCallback? onAdvertisementPressed;
   final bool showBusinessContent;

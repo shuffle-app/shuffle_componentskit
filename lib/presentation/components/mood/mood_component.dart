@@ -7,8 +7,10 @@ class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
   final Future<List<UiUniversalModel>>? Function(String name) onTabChanged;
   final Function? onPlacePressed;
+  final Function(String level)? onLevelActivated;
 
-  const MoodComponent({Key? key, required this.mood, this.onPlacePressed, required this.onTabChanged})
+  const MoodComponent(
+      {Key? key, required this.mood, this.onPlacePressed, required this.onTabChanged, this.onLevelActivated})
       : super(key: key);
 
   @override
@@ -30,7 +32,7 @@ class MoodComponent extends StatelessWidget {
     final listOfTabs = List<MapEntry<String, PropertiesBaseModel>>.of(tabBarContent?.properties?.entries ?? []);
     listOfTabs.sort((a, b) => (a.value.sortNumber ?? 0).compareTo((b.value.sortNumber ?? 0)));
 
-    String selectedLevel = listOfTabs.firstOrNull?.key ?? '';
+    String selectedLevel = mood.activatedLevel ?? listOfTabs.firstOrNull?.key ?? '';
 
     final AutoSizeGroup tabBarGroup = AutoSizeGroup();
 
@@ -100,39 +102,54 @@ class MoodComponent extends StatelessWidget {
           StatefulBuilder(builder: (context, setState) {
             return Column(
               children: [
-                UiKitCustomTabBar(
-                  onTappedTab: (index) {
-                    setState(() {
-                      selectedLevel = listOfTabs[index].key;
-                    });
-                  },
-                  tabs: listOfTabs
-                      .map((entry) => UiKitCustomTab(
-                            title: entry.key.toUpperCase(),
-                            group: tabBarGroup,
-                          ))
-                      .toList(),
-                ),
+                if (mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!))
+                  UiKitCustomTabBar(
+                    onTappedTab: (index) {
+                      setState(() {
+                        selectedLevel = listOfTabs[index].value.value ?? '';
+                      });
+                    },
+                    tabs: listOfTabs
+                        .map((entry) => UiKitCustomTab(
+                              title: entry.key.toUpperCase(),
+                              group: tabBarGroup,
+                            ))
+                        .toList(),
+                  )
+                else
+                  Center(
+                    child: Text(
+                      mood.activatedLevel!,
+                      style: theme?.boldTextTheme.title1,
+                    ),
+                  ),
                 SpacingFoundation.verticalSpace16,
                 FutureBuilder(
                     future: onTabChanged.call(selectedLevel),
                     builder: (context, AsyncSnapshot<List<UiUniversalModel>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Column(
-                          children: snapshot.data?.map((item) {
-                            return PlacePreview(
-                              onTap: onPlacePressed,
-                              place: UiPlaceModel(
-                                id: item.id,
-                                title: item.title,
-                                description: item.description,
-                                media: item.media,
-                                tags: item.tags,
-                                baseTags: item.baseTags ?? [],
-                              ),
-                              model: model,
-                            ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12);
-                          }).toList() ?? [],
+                          children: snapshot.data?.indexed.map((value) {
+                                final (index, item) = value;
+                                return PlacePreview(
+                                  onTap: onPlacePressed,
+                                  shouldVisitAt:
+                                      //TODO get from DTO
+                                      index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                  place: UiPlaceModel(
+                                    id: item.id,
+                                    title: item.title,
+                                    description: item.description,
+                                    media: item.media,
+                                    weekdays: item.weekdays ?? [],
+                                    website: item.website,
+                                    tags: item.tags,
+                                    baseTags: item.baseTags ?? [],
+                                  ),
+                                  model: model,
+                                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12);
+                              }).toList() ??
+                              [],
                         );
                       } else {
                         return SizedBox(
@@ -145,11 +162,15 @@ class MoodComponent extends StatelessWidget {
             );
           }),
           SpacingFoundation.verticalSpace24,
-          context.gradientButton(
-              data: BaseUiKitButtonData(
-            text: 'Get reward',
-            fit: ButtonFit.fitWidth,
-          ))
+          SlidableButton(
+              slidableChild: context.gradientButton(
+                  data: BaseUiKitButtonData(text: 'Go!', onPressed: () {}, fit: ButtonFit.hugContent)),
+              onCompletedChild: context.gradientButton(
+                  data: BaseUiKitButtonData(
+                text: 'Get reward',
+                onPressed: () => onLevelActivated?.call(selectedLevel),
+                fit: ButtonFit.fitWidth,
+              )))
           // ...?mood.places
           //     ?.map((e) => PlacePreview(
           //           onTap: onPlacePressed,
