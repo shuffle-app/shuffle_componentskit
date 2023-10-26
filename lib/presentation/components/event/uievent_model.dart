@@ -16,6 +16,7 @@ class UiEventModel extends Advertisable {
   TimeOfDay? timeTo;
   String? description;
   String? location;
+  String? eventType;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
   double? rating;
@@ -28,6 +29,7 @@ class UiEventModel extends Advertisable {
     this.title,
     this.favorite,
     this.owner,
+    this.eventType,
     this.date,
     this.dateTo,
     this.media = const [],

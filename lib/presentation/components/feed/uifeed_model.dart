@@ -32,7 +32,10 @@ class UiUniversalModel extends Advertisable {
   final String description;
   final List<UiKitTag> tags;
   final List<UiKitTag>? baseTags;
+  final List<String>? weekdays;
   final String? title;
+  final String? website;
+  final String? location;
 
   UiUniversalModel({
     required this.id,
@@ -41,6 +44,9 @@ class UiUniversalModel extends Advertisable {
     required this.description,
     required this.tags,
     this.baseTags,
+    this.website,
+    this.weekdays,
+    this.location,
     this.source,
     this.title,
   }) : super(isAdvertisement: false);
@@ -52,6 +58,9 @@ class UiUniversalModel extends Advertisable {
     this.description = '',
     this.tags = const [],
     this.baseTags,
+    this.website,
+    this.weekdays,
+    this.location,
     this.source,
     this.title,
   }) : super(isAdvertisement: true);

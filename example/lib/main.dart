@@ -33,6 +33,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final GlobalConfiguration configuration = GlobalConfiguration();
   ThemeData? _theme;
+  Locale? _locale;
 
   @override
   void initState() {
@@ -47,8 +48,10 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return UiKitTheme(
             onThemeUpdated: (theme) => setState(() => _theme = theme),
+            onLocaleUpdated: (locale) => setState(() => _locale = locale),
             child: WidgetsFactory(
                 child: MaterialApp(
+                  locale: _locale,
               title: 'Shuffle Demo',
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorKey,
