@@ -32,7 +32,7 @@ class MoodComponent extends StatelessWidget {
     final listOfTabs = List<MapEntry<String, PropertiesBaseModel>>.of(tabBarContent?.properties?.entries ?? []);
     listOfTabs.sort((a, b) => (a.value.sortNumber ?? 0).compareTo((b.value.sortNumber ?? 0)));
 
-    String selectedLevel = mood.activatedLevel ?? listOfTabs.firstOrNull?.key ?? '';
+    String selectedLevel = mood.activatedLevel ?? listOfTabs.firstOrNull?.value.value ?? '';
 
     final AutoSizeGroup tabBarGroup = AutoSizeGroup();
 
@@ -163,6 +163,7 @@ class MoodComponent extends StatelessWidget {
           }),
           SpacingFoundation.verticalSpace24,
           SlidableButton(
+            isCompleted: mood.activatedLevel!=null,
               slidableChild: context.gradientButton(
                   data: BaseUiKitButtonData(text: 'Go!', onPressed: () {}, fit: ButtonFit.hugContent)),
               onCompletedChild: context.gradientButton(
@@ -170,14 +171,8 @@ class MoodComponent extends StatelessWidget {
                 text: 'Get reward',
                 onPressed: () => onLevelActivated?.call(selectedLevel),
                 fit: ButtonFit.fitWidth,
-              )))
-          // ...?mood.places
-          //     ?.map((e) => PlacePreview(
-          //           onTap: onPlacePressed,
-          //           place: e,
-          //           model: model,
-          //         ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
-          //     .toList(),
+              ))),
+         SpacingFoundation.verticalSpace24,
         ],
       ],
     ).paddingSymmetric(
