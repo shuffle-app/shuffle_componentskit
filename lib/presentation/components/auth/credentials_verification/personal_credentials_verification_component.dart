@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -12,6 +13,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final String? Function(String?)? credentialsValidator;
   final bool? loading;
+  final List<LocaleModel>? availableLocales;
 
   const PersonalCredentialsVerificationComponent({
     super.key,
@@ -20,6 +22,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
     this.loading,
     this.onSubmit,
     this.onTabChanged,
+    this.availableLocales,
     this.onCountrySelected,
     this.credentialsValidator,
     required this.credentialsController,
@@ -29,7 +32,8 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final regTextTheme = context.uiKitTheme?.regularTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['personal_credentials_verification']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -47,7 +51,8 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
     // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
     // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
     final countrySelectorTitle =
-        model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+        model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
+            '';
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
 
     return Stack(
@@ -88,6 +93,17 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.verticalSpace16,
               ],
+              if (availableLocales != null && availableLocales!.isNotEmpty)
+                StatefulBuilder(builder: (context,setState) =>
+                UiKitLocaleSelector(
+                    selectedLocale: availableLocales!
+                        .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                    availableLocales: availableLocales!,
+                    onLocaleChanged: (LocaleModel value) {
+                      context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
+                      setState(() {});
+                    })),
+              SpacingFoundation.verticalSpace16,
               UiKitCountrySelector(
                 selectedCountry: uiModel.selectedCountry,
                 title: countrySelectorTitle,
@@ -119,13 +135,15 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
                       text: list.first.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
+                        ..onTap = () =>
+                            context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
                   TextSpan(text: ' and ', style: regTextTheme?.caption4),
                   TextSpan(
                       text: list.last.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
+                        ..onTap =
+                            () => context.push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
                 ]),
               ),
               SpacingFoundation.verticalSpace16,
