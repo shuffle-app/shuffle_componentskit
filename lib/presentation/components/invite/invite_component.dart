@@ -12,6 +12,7 @@ class InviteComponent extends StatefulWidget {
     this.invitedUser,
     this.onRemoveUserOptionTap,
     this.onAddWishTap,
+    this.onInviteTap,
     this.changeDate,
   }) : assert(
           invitedUser != null ? onRemoveUserOptionTap != null : changeDate != null,
@@ -26,6 +27,7 @@ class InviteComponent extends StatefulWidget {
   final VoidCallback? onRemoveUserOptionTap;
   final void Function(String value, DateTime date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
+  final ValueChanged<List<UiInvitePersonModel>>? onInviteTap;
 
   @override
   State<InviteComponent> createState() => _InviteComponentState();
@@ -76,6 +78,7 @@ class _InviteComponentState extends State<InviteComponent> {
                     ? null
                     : () {
                         final invitedPersons = widget.persons.where((e) => e.isSelected);
+                        widget.onInviteTap?.call(invitedPersons.toList());
                         showUiKitAlertDialog(
                           context,
                           AlertDialogData(
