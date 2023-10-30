@@ -1,4 +1,6 @@
 class HangoutRecommendation {
+  final int userId;
+
   final String? userAvatar;
 
   final String? userNickname;
@@ -10,6 +12,7 @@ class HangoutRecommendation {
   final int? commonInterests;
 
   HangoutRecommendation({
+    required this.userId,
     this.userAvatar,
     this.userNickname,
     this.userName,
