@@ -77,18 +77,19 @@ class SearchComponent extends StatelessWidget {
       ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
 
     final sortedCards = chooseCards
-            ?.map(
-              (e) => UiKitTitledCardWithBackground(
-                title: e.key,
-                backgroundImageLink: e.value.imageLink ?? '',
-                backgroundColor: e.value.color ?? Colors.white,
-                onPressed: () {
-                  onSearchFieldTap?.call();
-                  searchController.text = e.key;
-                },
-              ),
-            )
-            .toList() ??
+        ?.map(
+          (e) =>
+          UiKitTitledCardWithBackground(
+            title: e.key,
+            backgroundImageLink: e.value.imageLink ?? '',
+            backgroundColor: e.value.color ?? Colors.white,
+            onPressed: () {
+              onSearchFieldTap?.call();
+              searchController.text = e.key;
+            },
+          ),
+    )
+        .toList() ??
         [];
 
     return Stack(
@@ -143,119 +144,127 @@ class SearchComponent extends StatelessWidget {
                         ),
                       )
                     ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
-        SpacingFoundation.verticalSpace24,
-        SingleChildScrollView(
+        // SpacingFoundation.verticalSpace24,
+        ListView(
+          clipBehavior: Clip.none,
+          primary: true,
+          padding: EdgeInsets.zero,
           controller: scrollController,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
-            crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
-            children: [
-              if (model.showFree ?? false) ...[
-                UiKitOverflownActionCard(
-                  horizontalMargin: horizontalMargin,
-                  action: context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
-                  title: Stack(
-                    children: [
-                      RichText(
+          // child: Column(
+          //   mainAxisSize: MainAxisSize.min,
+          //   mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
+          //   crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
+          children: [
+            if (model.showFree ?? false) ...[
+              UiKitOverflownActionCard(
+                horizontalMargin: horizontalMargin,
+                action: context.smallButton(
+                    data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                title: Stack(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: theme?.boldTextTheme.body,
+                        children: [
+                          const TextSpan(text: 'Selection of the best'),
+                          TextSpan(
+                            text: '\nfree places',
+                            style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.transparent),
+                          )
+                        ],
+                      ),
+                    ),
+                    GradientableWidget(
+                      gradient: GradientFoundation.buttonGradient,
+                      child: RichText(
                         text: TextSpan(
-                          style: theme?.boldTextTheme.body,
                           children: [
-                            const TextSpan(text: 'Selection of the best'),
                             TextSpan(
-                              text: '\nfree places',
-                              style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.transparent),
-                            )
+                              text: 'Selection of the best',
+                              style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
+                            ),
+                            TextSpan(text: '\nfree places', style: theme?.boldTextTheme.subHeadline)
                           ],
                         ),
                       ),
-                      GradientableWidget(
-                        gradient: GradientFoundation.buttonGradient,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Selection of the best',
-                                style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
-                              ),
-                              TextSpan(text: '\nfree places', style: theme?.boldTextTheme.subHeadline)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  overflownIconLink: GraphicsFoundation.instance.png.map.path,
-                  decorationIcons: _decorationItemsForFreeCards,
-                ).paddingOnly(right: horizontalMargin),
-              ],
-              SpacingFoundation.verticalSpace24,
-              Text(
-                body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'Choose yourself',
-                style: theme?.boldTextTheme.title1,
-              ).paddingSymmetric(horizontal: horizontalMargin),
+                    ),
+                  ],
+                ),
+                overflownIconLink: GraphicsFoundation.instance.png.map.path,
+                decorationIcons: _decorationItemsForFreeCards,
+              ).paddingOnly(right: horizontalMargin),
+            ],
+            SpacingFoundation.verticalSpace24,
+            Text(
+              body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'Choose yourself',
+              style: theme?.boldTextTheme.title1,
+            ).paddingSymmetric(horizontal: horizontalMargin),
+            SpacingFoundation.verticalSpace24,
+            SingleChildScrollView(
+              primary: false,
+              scrollDirection: Axis.horizontal,
+              child: Wrap(
+                spacing: SpacingFoundation.horizontalSpacing12,
+                children: sortedCards,
+              ),
+            ).paddingOnly(left: horizontalMargin),
+            SpacingFoundation.verticalSpace24,
+            Stack(clipBehavior: Clip.none, children: [
+              Text('Top places rated\nby', style: theme?.boldTextTheme.title1),
+                  () {
+                const MemberPlate widget = MemberPlate();
+
+                return Positioned(
+                  width: widget.width,
+                  top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
+                  left: SizesFoundation.screenWidth / 5,
+                  child: widget,
+                );
+              }()
+            ]).paddingSymmetric(horizontal: horizontalMargin),
+            if (search.filterChips != null && search.filterChips!.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
               SingleChildScrollView(
                 primary: false,
                 scrollDirection: Axis.horizontal,
-                child: Wrap(
-                  spacing: SpacingFoundation.horizontalSpacing12,
-                  children: sortedCards,
-                ),
-              ).paddingOnly(left: horizontalMargin),
-              SpacingFoundation.verticalSpace24,
-              Stack(clipBehavior: Clip.none, children: [
-                Text('Top places rated\nby', style: theme?.boldTextTheme.title1),
-                () {
-                  const MemberPlate widget = MemberPlate();
-
-                  return Positioned(
-                    width: widget.width,
-                    top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
-                    left: SizesFoundation.screenWidth / 5,
-                    child: widget,
-                  );
-                }()
-              ]).paddingSymmetric(horizontal: horizontalMargin),
-              if (search.filterChips != null && search.filterChips!.isNotEmpty) ...[
-                SpacingFoundation.verticalSpace24,
-                SingleChildScrollView(
-                  primary: false,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      horizontalMargin.widthBox,
-                      Wrap(
-                        spacing: SpacingFoundation.verticalSpacing8,
-                        children: search.filterChips!
-                            .map(
-                              (e) => UiKitTitledFilterChip(
-                                selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
-                                title: e.title,
-                                onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                                icon: e.iconPath,
-                              ),
-                            )
-                            .toList(),
+                child: Row(
+                  children: [
+                    horizontalMargin.widthBox,
+                    Wrap(
+                      spacing: SpacingFoundation.verticalSpacing8,
+                      children: search.filterChips!
+                          .map(
+                            (e) =>
+                            UiKitTitledFilterChip(
+                              selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                              title: e.title,
+                              onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                              icon: e.iconPath,
+                            ),
                       )
-                    ],
-                  ),
+                          .toList(),
+                    )
+                  ],
                 ),
-              ],
-              SpacingFoundation.verticalSpace24,
-              ...search.places
-                  .map((e) => UiKitCompactOrderedRatingCard(
-                          order: search.places.indexOf(e) + 1,
-                          rating: e.rating,
-                          title: e.title,
-                          imageLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                          onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
-                      .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
-                  .toList(),
-              kBottomNavigationBarHeight.heightBox,
+              ),
             ],
-          ).paddingOnly(top: 118.h),
-        ),
+            SpacingFoundation.verticalSpace24,
+            ...search.places
+                .map((e) =>
+                UiKitCompactOrderedRatingCard(
+                    order: search.places.indexOf(e) + 1,
+                    rating: e.rating,
+                    title: e.title,
+                    imageLink: e.media
+                        .firstWhere((element) => element.type == UiKitMediaType.image)
+                        .link,
+                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
+                    .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
+                .toList(),
+            kBottomNavigationBarHeight.heightBox,
+          ],
+        ).paddingOnly(top: 118.h),
+        // ),
       ].reversed.toList(),
     ).paddingSymmetric(
       vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
