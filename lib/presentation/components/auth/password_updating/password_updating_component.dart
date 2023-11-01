@@ -3,43 +3,88 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class PasswordUpdatingComponent extends StatelessWidget {
+class PasswordUpdatingComponent extends StatefulWidget {
+  const PasswordUpdatingComponent({
+    super.key,
+    required this.formKey,
+    required this.userEmail,
+    required this.codeController,
+    required this.passwordController,
+    required this.onPasswordChanged,
+    this.passwordFieldEnabled = true,
+    this.onCodeSubmit,
+    this.passwordValidator,
+    this.codeErrorText,
+    this.passwordErrorText,
+  });
+
+  final GlobalKey<FormState> formKey;
+  final String userEmail;
   final TextEditingController codeController;
   final TextEditingController passwordController;
   final ValueChanged<String> onPasswordChanged;
-  final GlobalKey<FormState> formKey;
-  final String credentials;
+  final bool passwordFieldEnabled;
 
-  final ValueChanged<String>? onSubmit;
+  final ValueChanged<String>? onCodeSubmit;
   final String? Function(String?)? passwordValidator;
   final String? codeErrorText;
   final String? passwordErrorText;
 
-  const PasswordUpdatingComponent({
-    super.key,
-    required this.formKey,
-    required this.credentials,
-    required this.codeController,
-    required this.onPasswordChanged,
-    required this.passwordController,
-    this.onSubmit,
-    this.codeErrorText,
-    this.passwordValidator,
-    this.passwordErrorText,
-  });
+  @override
+  State<PasswordUpdatingComponent> createState() => _PasswordUpdatingComponentState();
+}
+
+class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+  late final FocusNode _passwordFocus;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+      value: 1.0,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+    _passwordFocus = FocusNode()
+      ..addListener(() {
+        if (_passwordFocus.hasFocus) {
+          _hideCodeInput();
+        } else {
+          _showCodeInput();
+        }
+      });
+  }
+
+  void _hideCodeInput() {
+    _controller.reverse();
+  }
+
+  void _showCodeInput() {
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _passwordFocus.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentModel model = ComponentModel.fromJson(config['sms_verification']);
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final globalContent = GlobalComponent.of(context)?.globalConfiguration.appConfig.content;
+    final config = globalContent ?? GlobalConfiguration().appConfig.content;
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final codeDigits = config['additional_settings']?['code_digits'] ?? 4;
 
     return Form(
-      key: formKey,
+      key: widget.formKey,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -65,11 +110,8 @@ class PasswordUpdatingComponent extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: credentials,
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            context.pop();
-                          },
+                        text: widget.userEmail,
+                        recognizer: TapGestureRecognizer()..onTap = () => context.pop(),
                         style: boldTextTheme?.subHeadline,
                       ),
                     ],
@@ -85,24 +127,30 @@ class PasswordUpdatingComponent extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      UiKitCodeInputField(
-                        controller: codeController,
-                        codeDigitsCount: codeDigits,
-                        onDone: (code) {
-                          onSubmit?.call(code);
-                          primaryFocus?.nextFocus();
-                        },
-                        autofocus: false,
-                        errorText: codeErrorText,
+                      SizeTransition(
+                        sizeFactor: _animation,
+                        axisAlignment: 1,
+                        child: Column(
+                          children: [
+                            UiKitCodeInputField(
+                              controller: widget.codeController,
+                              codeDigitsCount: codeDigits,
+                              onDone: (code) => widget.onCodeSubmit?.call(code),
+                              errorText: widget.codeErrorText,
+                            ),
+                            SpacingFoundation.verticalSpace24,
+                          ],
+                        ),
                       ),
-                      SpacingFoundation.verticalSpace24,
-                      SpacingFoundation.verticalSpace8,
                       UiKitTitledTextField(
                         title: 'Enter new password',
-                        controller: passwordController,
+                        controller: widget.passwordController,
                         hintText: 'password'.toUpperCase(),
-                        validator: passwordValidator,
-                        errorText: passwordErrorText,
+                        validator: widget.passwordValidator,
+                        errorText: widget.passwordErrorText,
+                        focusNode: _passwordFocus,
+                        enabled: widget.passwordFieldEnabled,
+                        validationLetters: 'Letters, numbers, ! “ @ # \$ % & symbols, 8 characters',
                       ),
                     ],
                   ),
@@ -110,8 +158,8 @@ class PasswordUpdatingComponent extends StatelessWidget {
                 context.button(
                   data: BaseUiKitButtonData(
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        onPasswordChanged.call(passwordController.text);
+                      if (widget.formKey.currentState!.validate()) {
+                        widget.onPasswordChanged.call(widget.passwordController.text);
                       }
                     },
                     text: 'next',
@@ -123,8 +171,8 @@ class PasswordUpdatingComponent extends StatelessWidget {
           ),
         ],
       ).paddingSymmetric(
-        horizontal: horizontalMargin,
-        vertical: verticalMargin,
+        horizontal: EdgeInsetsFoundation.horizontal16,
+        vertical: EdgeInsetsFoundation.vertical16,
       ),
     );
   }
