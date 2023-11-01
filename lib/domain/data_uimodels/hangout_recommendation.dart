@@ -28,6 +28,7 @@ class HangoutRecommendation {
     int? commonInterests,
   }) {
     return HangoutRecommendation(
+      userId: userId,
       userAvatar: userAvatar ?? this.userAvatar,
       userNickname: userNickname ?? this.userNickname,
       userName: userName ?? this.userName,
