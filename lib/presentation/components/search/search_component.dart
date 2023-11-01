@@ -131,7 +131,7 @@ class SearchComponent extends StatelessWidget {
                               width: double.infinity,
                               child: UiKitInputFieldRightIcon(
                                 fillColor: ColorsFoundation.surface3,
-                                hintText: 'search'.toUpperCase(),
+                                hintText: S.of(context).Search.toUpperCase(),
                                 controller: searchController,
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.search,
@@ -154,16 +154,17 @@ class SearchComponent extends StatelessWidget {
               if (model.showFree ?? false) ...[
                 UiKitOverflownActionCard(
                   horizontalMargin: horizontalMargin,
-                  action: context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                  action: context.smallButton(
+                      data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
                   title: Stack(
                     children: [
                       RichText(
                         text: TextSpan(
                           style: theme?.boldTextTheme.body,
                           children: [
-                            const TextSpan(text: 'Selection of the best'),
+                            TextSpan(text: S.of(context).SelectionOfTheBest),
                             TextSpan(
-                              text: '\nfree places',
+                              text: S.of(context).FreePlaces,
                               style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.transparent),
                             )
                           ],
@@ -175,10 +176,10 @@ class SearchComponent extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: 'Selection of the best',
+                                text: S.of(context).SelectionOfTheBest,
                                 style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
                               ),
-                              TextSpan(text: '\nfree places', style: theme?.boldTextTheme.subHeadline)
+                              TextSpan(text: S.of(context).FreePlaces, style: theme?.boldTextTheme.subHeadline)
                             ],
                           ),
                         ),
@@ -205,7 +206,7 @@ class SearchComponent extends StatelessWidget {
               ).paddingOnly(left: horizontalMargin),
               SpacingFoundation.verticalSpace24,
               Stack(clipBehavior: Clip.none, children: [
-                Text('Top places rated\nby', style: theme?.boldTextTheme.title1),
+                Text(S.of(context).TopPlacesRatedBy, style: theme?.boldTextTheme.title1),
                 () {
                   const MemberPlate widget = MemberPlate();
 

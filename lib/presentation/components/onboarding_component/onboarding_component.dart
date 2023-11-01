@@ -10,44 +10,34 @@ class OnboardingComponent extends StatefulWidget {
   final VoidCallback? onFinished;
 
   OnboardingComponent({super.key, this.onFinished}) {
-    model = ComponentModel.fromJson(
-        GlobalConfiguration().appConfig.content['onboarding']);
+    model = ComponentModel.fromJson(GlobalConfiguration().appConfig.content['onboarding']);
     final rawItems = model.content.body?.entries
         .firstWhere((element) => element.key == ContentItemType.onboardingCard)
         .value
         .properties;
     items = rawItems?.entries
-        .map((e) =>
-        OnBoardingPageItem(
-            imageLink: e.value.imageLink!,
-            title: e.key,
-            autoSwitchDuration: e.value.duration!))
-        .toList() ??
+            .map((e) =>
+                OnBoardingPageItem(imageLink: e.value.imageLink!, title: e.key, autoSwitchDuration: e.value.duration!))
+            .toList() ??
         [];
-    items.sort((a, b) =>
-        (rawItems?[a.title]?.sortNumber ?? 0)
-            .compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+    items.sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
   }
 
   Duration get transitionDuration =>
-      model.content.properties?['general']?.duration ??
-          const Duration(milliseconds: 500);
+      model.content.properties?['general']?.duration ?? const Duration(milliseconds: 500);
 
   @override
   State<OnboardingComponent> createState() => _OnboardingComponentState();
 }
 
-class _OnboardingComponentState extends State<OnboardingComponent>
-    with SingleTickerProviderStateMixin {
+class _OnboardingComponentState extends State<OnboardingComponent> with SingleTickerProviderStateMixin {
   bool isLoading = false;
 
-  late final AnimationController _progressAnimationController =
-  AnimationController(
+  late final AnimationController _progressAnimationController = AnimationController(
     vsync: this,
     duration: overallDuration,
     value: 0,
-  )
-    ..addListener(_animationListener);
+  )..addListener(_animationListener);
 
   final _firstItemFadeInDuration = const Duration(milliseconds: 500);
 
@@ -57,13 +47,11 @@ class _OnboardingComponentState extends State<OnboardingComponent>
 
   int currentIndex = 0;
 
-  double get currentItemProgressPortion => currentIndex >=widget.items.length ? widget.items.length-1 :
-      ((widget.items
-          .elementAt(currentIndex)
-          .autoSwitchDuration
-          .inMilliseconds +
-          (widget.transitionDuration * 3).inMilliseconds) /
-          overallDuration.inMilliseconds) *
+  double get currentItemProgressPortion => currentIndex >= widget.items.length
+      ? widget.items.length - 1
+      : ((widget.items.elementAt(currentIndex).autoSwitchDuration.inMilliseconds +
+                  (widget.transitionDuration * 3).inMilliseconds) /
+              overallDuration.inMilliseconds) *
           (currentIndex + 1);
 
   double get divisionWidth => 1 / widget.items.length;
@@ -78,29 +66,26 @@ class _OnboardingComponentState extends State<OnboardingComponent>
     return duration;
   }
 
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      unawaited( _progressAnimationController.forward(from: 0));
+      unawaited(_progressAnimationController.forward(from: 0));
       await Future.delayed(_firstItemFadeInDuration);
       setState(() {
         _textOpacity = 1;
         _logoOpacity = 1;
       });
-      Future.delayed(_firstItemFadeInDuration * 2,
-              () => setState(() => _imageOpacity = 1));
+      Future.delayed(_firstItemFadeInDuration * 2, () => setState(() => _imageOpacity = 1));
     });
   }
-
 
   void _animationListener() async {
     final value = _progressAnimationController.value;
 
     if (value >= currentItemProgressPortion) {
       if (currentIndex != widget.items.length - 1 && _textOpacity != 0) {
-        unawaited( _switchToNextPage());
+        unawaited(_switchToNextPage());
       }
     }
     if (value == 1.0) {
@@ -129,7 +114,6 @@ class _OnboardingComponentState extends State<OnboardingComponent>
     setState(() => _imageOpacity = 1);
   }
 
-
   @override
   void dispose() {
     _progressAnimationController.removeListener(_animationListener);
@@ -137,11 +121,9 @@ class _OnboardingComponentState extends State<OnboardingComponent>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final horizontalMargin =
-        widget.model.positionModel?.horizontalMargin?.toDouble() ?? 0;
+    final horizontalMargin = widget.model.positionModel?.horizontalMargin?.toDouble() ?? 0;
     final bodyAlignment = widget.model.positionModel?.bodyAlignment;
 
     return Stack(
@@ -156,9 +138,9 @@ class _OnboardingComponentState extends State<OnboardingComponent>
               duration: widget.transitionDuration,
               child: ImageWidget(
                 key: UniqueKey(),
-                link: currentIndex >= widget.items.length ? widget.items.last.imageLink :widget.items
-                    .elementAt(currentIndex)
-                    .imageLink,
+                link: currentIndex >= widget.items.length
+                    ? widget.items.last.imageLink
+                    : widget.items.elementAt(currentIndex).imageLink,
                 width: 1.sw,
                 fit: BoxFit.fitWidth,
               ),
@@ -171,10 +153,7 @@ class _OnboardingComponentState extends State<OnboardingComponent>
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
           children: [
             SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .viewPadding
-                  .top +
+              height: MediaQuery.of(context).viewPadding.top +
                   (widget.model.positionModel?.verticalMargin?.toDouble() ?? 0),
             ),
             SpacingFoundation.verticalSpace24,
@@ -192,9 +171,9 @@ class _OnboardingComponentState extends State<OnboardingComponent>
               opacity: _textOpacity,
               child: Text(
                 key: UniqueKey(),
-                currentIndex >= widget.items.length ? widget.items.last.title :widget.items
-                    .elementAt(currentIndex)
-                    .title,
+                currentIndex >= widget.items.length
+                    ? widget.items.last.title
+                    : widget.items.elementAt(currentIndex).title,
                 style: context.uiKitTheme?.boldTextTheme.titleLarge,
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),
@@ -205,31 +184,30 @@ class _OnboardingComponentState extends State<OnboardingComponent>
               builder: (context, value) {
                 return context
                     .buttonWithProgress(
-                  data: BaseUiKitButtonData(
-                    loading: isLoading,
-                    text: 'NEXT >>>',
-                    onPressed: isLoading
-                        ? null
-                        : () {
-                      if (currentIndex != widget.items.length - 1) {
-                        unawaited( _switchToNextPage());
-                        _progressAnimationController.forward(
-                            from: currentItemProgressPortion);
-                      } else {
-                        widget.onFinished?.call();
-                        setState(() {
-                          isLoading = true;
-                        });
-                      }
-                      // _progressAnimationController.forward(from: 0);
-                      // setState(() {
-                      //   currentIndex = 0;
-                      // });
-                    },
-                  ),
-                  progress: _progressAnimationController.value,
-                  blurred: true,
-                )
+                      data: BaseUiKitButtonData(
+                        loading: isLoading,
+                        text: S.of(context).NextWithChevrons.toUpperCase(),
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                if (currentIndex != widget.items.length - 1) {
+                                  unawaited(_switchToNextPage());
+                                  _progressAnimationController.forward(from: currentItemProgressPortion);
+                                } else {
+                                  widget.onFinished?.call();
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                }
+                                // _progressAnimationController.forward(from: 0);
+                                // setState(() {
+                                //   currentIndex = 0;
+                                // });
+                              },
+                      ),
+                      progress: _progressAnimationController.value,
+                      blurred: true,
+                    )
                     .paddingSymmetric(horizontal: horizontalMargin);
               },
             ),

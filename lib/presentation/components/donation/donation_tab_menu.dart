@@ -47,17 +47,17 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
         UiKitCustomTabBar(
           tabs: [
             UiKitCustomTab(
-              title: 'DAY',
+              title: S.of(context).Day.toUpperCase(),
               height: 24.h,
               group: group,
             ),
             UiKitCustomTab(
-              title: 'MONTH',
+              title: S.of(context).Month.toUpperCase(),
               height: 24.h,
               group: group,
             ),
             UiKitCustomTab(
-              title: 'YEAR',
+              title: S.of(context).Year.toUpperCase(),
               height: 24.h,
               group: group,
             ),
@@ -88,7 +88,7 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
                     onPressed: () => widget.onNextButtonTap?.call(),
                     fit: ButtonFit.fitWidth,
                     icon: const Icon(CupertinoIcons.chevron_down),
-                    text: 'NEXT 7 PEOPLE',
+                    text: S.of(context).NextNPeople(7).toUpperCase(),
                   ),
                 ),
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),

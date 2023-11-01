@@ -94,15 +94,15 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
               ],
               if (availableLocales != null && availableLocales!.isNotEmpty)
-                StatefulBuilder(builder: (context,setState) =>
-                UiKitLocaleSelector(
-                    selectedLocale: availableLocales!
-                        .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
-                    availableLocales: availableLocales!,
-                    onLocaleChanged: (LocaleModel value) {
-                      context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
-                      setState(() {});
-                    })),
+                StatefulBuilder(
+                    builder: (context, setState) => UiKitLocaleSelector(
+                        selectedLocale: availableLocales!
+                            .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                        availableLocales: availableLocales!,
+                        onLocaleChanged: (LocaleModel value) {
+                          context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
+                          setState(() {});
+                        })),
               SpacingFoundation.verticalSpace16,
               UiKitCountrySelector(
                 selectedCountry: uiModel.selectedCountry,
@@ -130,14 +130,14 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace16,
               RichText(
                 text: TextSpan(children: [
-                  TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                  TextSpan(text: '${S.of(context).ByContinuingYouAcceptThe} ', style: regTextTheme?.caption4),
                   TextSpan(
                       text: list.first.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () =>
                             context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
-                  TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                  TextSpan(text: ' ${S.of(context).And.toLowerCase()} ', style: regTextTheme?.caption4),
                   TextSpan(
                       text: list.last.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
@@ -149,7 +149,7 @@ class PersonalCredentialsVerificationComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace16,
               context.button(
                 data: BaseUiKitButtonData(
-                  text: 'GET CODE',
+                  text: S.of(context).GetCode.toUpperCase(),
                   onPressed: onSubmit,
                   loading: loading,
                 ),

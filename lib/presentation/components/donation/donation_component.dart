@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:shuffle_components_kit/presentation/components/donation/ui_donation_user_model.dart';
-import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 part 'donation_tab_menu.dart';
 
@@ -43,7 +43,7 @@ class DonationComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SpacingFoundation.verticalSpace16,
-        Text('Ask people', style: boldTextTheme?.title1),
+        Text(S.of(context).AskPeople, style: boldTextTheme?.title1),
         SpacingFoundation.verticalSpace16,
         DonationInfoIndicatorCard(
           number: donationNumber.toString(),
@@ -57,13 +57,13 @@ class DonationComponent extends StatelessWidget {
           child: context.gradientButton(
             data: BaseUiKitButtonData(
               fit: ButtonFit.fitWidth,
-              text: 'Ask for donations',
+              text: S.of(context).AskForDonations,
               onPressed: onAskDonationTap,
             ),
           ),
         ),
         SpacingFoundation.verticalSpace16,
-        Text('Support people around you', style: boldTextTheme?.title1),
+        Text(S.of(context).SupportPeopleAroundYou, style: boldTextTheme?.title1),
         SpacingFoundation.verticalSpace16,
         UiKitCardWrapper(
           child: Column(
@@ -71,7 +71,7 @@ class DonationComponent extends StatelessWidget {
               DonationMapPreview(onTap: onMapTap),
               SpacingFoundation.verticalSpace16,
               Text(
-                'Top 3 donators receive x100 points',
+                S.of(context).TopNDonatorsReceiveXPoints(3, 100),
                 textAlign: TextAlign.center,
                 style: boldTextTheme?.subHeadline,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),

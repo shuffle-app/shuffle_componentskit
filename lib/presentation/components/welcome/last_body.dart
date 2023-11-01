@@ -47,11 +47,11 @@ class _LastBody extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: 'This is ',
+                      text: S.of(context).ThisIs,
                       style: regularTextTheme?.title1,
                     ),
                     TextSpan(
-                      text: 'shuffle',
+                      text: S.of(context).Shuffle.toLowerCase(),
                       style: boldTextTheme?.title1,
                     )
                   ],
@@ -59,7 +59,7 @@ class _LastBody extends StatelessWidget {
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32 * 2),
               SpacingFoundation.verticalSpace16,
               Text(
-                'Smart leisure selection for everyone, everywhere.',
+                S.of(context).SmartLeisureSelection,
                 style: boldTextTheme?.subHeadline,
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),
@@ -70,11 +70,11 @@ class _LastBody extends StatelessWidget {
               ],
               if (!bigScreen) SpacingFoundation.verticalSpace16,
               Hero(
-                  tag: 'welcome',
+                  tag: S.of(context).Welcome.toLowerCase(),
                   transitionOnUserGestures: true,
                   child: context.button(
                     data: BaseUiKitButtonData(
-                      text: 'Get started',
+                      text: S.of(context).GetStarted,
                       onPressed: onFinished,
                       loading: loading,
                     ),

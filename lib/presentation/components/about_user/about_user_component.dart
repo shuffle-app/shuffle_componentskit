@@ -62,7 +62,7 @@ class AboutUserComponent extends StatelessWidget {
                 return [
                   if (contentTypeList.first == ContentItemType.text)
                     Text(
-                      contents.first.properties?.keys.first ?? 'Now let\'s get to know each other',
+                      contents.first.properties?.keys.first ?? S.of(context).NowLetsGetToKnowEachOther,
                       style: theme?.boldTextTheme.title1,
                     ),
                   SpacingFoundation.verticalSpace16,
@@ -71,14 +71,14 @@ class AboutUserComponent extends StatelessWidget {
                         text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'The more info we get about you, the better ',
+                          text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         ),
                         TextSpan(
-                            text: 'your leisure selection',
+                            text: S.of(context).YourLeisureSelection.toLowerCase(),
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
                         TextSpan(
-                          text: ' will be.',
+                          text: ' ${S.of(context).WillBe}',
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         )
                       ],
@@ -90,12 +90,12 @@ class AboutUserComponent extends StatelessWidget {
                           text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'The more info we get about you, the better ',
+                            text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           ),
-                          TextSpan(text: 'your leisure selection', style: subHeadline),
+                          TextSpan(text: S.of(context).YourLeisureSelection.toLowerCase(), style: subHeadline),
                           TextSpan(
-                            text: ' will be.',
+                            text: ' ${S.of(context).WillBe}',
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           )
                         ],
@@ -116,7 +116,7 @@ class AboutUserComponent extends StatelessWidget {
                 children: [
                   UiKitInputFieldNoIcon(
                     controller: nameController,
-                    hintText: 'NAME',
+                    hintText: S.of(context).Name.toUpperCase(),
                     validator: inputFieldValidator,
                     fillColor: ColorsFoundation.surface3,
                     // onChanged: (value) => onNameChanged?.call(value),
@@ -124,7 +124,7 @@ class AboutUserComponent extends StatelessWidget {
                   SpacingFoundation.verticalSpace16,
                   UiKitInputFieldNoIcon(
                     controller: nickNameController,
-                    hintText: 'NICKNAME',
+                    hintText: S.of(context).Nickname.toLowerCase(),
                     validator: inputFieldValidator,
                     fillColor: ColorsFoundation.surface3,
                     // onChanged: (value) => onNickNameChanged?.call(value),
@@ -138,13 +138,13 @@ class AboutUserComponent extends StatelessWidget {
               color: Colors.black,
               title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys
                       .first ??
-                  'Describe yourself',
+                  S.of(context).DescribeYourself,
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
               child: UiKitMenu<String>(
                 title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys
                         .first ??
-                    'Describe yourself',
+                    S.of(context).DescribeYourself,
                 selectedItem: aboutUserModel.selectedPersonType,
                 items: () {
                   final rawItems = model
@@ -171,7 +171,7 @@ class AboutUserComponent extends StatelessWidget {
           UiKitTitledSection(
               title:
                   model.content.body?[ContentItemType.multiSelect]?.title?.entries.first.value.properties?.keys.first ??
-                      'Select your religions',
+                      S.of(context).SelectYourReligions,
               hasError: aboutUserModel.errorReligionMessage != null,
               errorText: aboutUserModel.errorReligionMessage,
               child: SingleChildScrollView(
@@ -207,7 +207,7 @@ class AboutUserComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         UiKitHorizontalWheelNumberSelector(
           values: List<int>.generate(70, (index) => index + 16),
-          title: 'Your age',
+          title: S.of(context).YourAge,
           initialValue: aboutUserModel.selectedAge == null ? null : aboutUserModel.selectedAge! - 16,
           onValueChanged: (age) => onAgeChanged?.call(age),
         ),
@@ -216,7 +216,7 @@ class AboutUserComponent extends StatelessWidget {
           UiKitTitledSection(
             title:
                 model.content.body?[ContentItemType.singleSelect]?.title?.entries.first.value.properties?.keys.first ??
-                    'Gender',
+                    S.of(context).Gender,
             hasError: aboutUserModel.errorGenderMessage != null,
             errorText: aboutUserModel.errorGenderMessage,
             child: Row(
@@ -255,7 +255,7 @@ class AboutUserComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         context.button(
             data: BaseUiKitButtonData(
-          text: 'CONFIRM',
+          text: S.of(context).Confirm.toUpperCase(),
           onPressed: onSubmitUserData,
         )),
         SpacingFoundation.verticalSpace24,
