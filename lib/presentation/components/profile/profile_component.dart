@@ -10,6 +10,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class ProfileComponent extends StatelessWidget {
   final UiProfileModel profile;
   final VoidCallback? onHowItWorksPoped;
+  final ValueChanged<InvitationData?>? onInvite;
   final bool showHowItWorks;
   final List<HangoutRecommendation>? recommendedUsers;
   final List<UiEventModel>? events;
@@ -23,6 +24,7 @@ class ProfileComponent extends StatelessWidget {
     this.showHowItWorks = false,
     this.onHowItWorksPoped,
     this.onFulfillDream,
+    this.onInvite,
     this.events,
     this.onEventTap,
   }) : super(key: key);
@@ -71,12 +73,15 @@ class ProfileComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           SpacingFoundation.verticalSpace24,
           UiKitHorizontalScroll3D(
-            itemBuilder: (BuildContext context, int index) => UiKitFindSomeoneCard(
-                avatarUrl: recommendedUsers?[index].userAvatar ?? GraphicsFoundation.instance.png.mockUserAvatar.path,
-                userNickName: recommendedUsers?[index].userNickname ?? '',
-                userName: recommendedUsers?[index].userName ?? '',
-                userPoints: recommendedUsers?[index].userPointsBalance ?? 0,
-                sameInterests: recommendedUsers?[index].commonInterests ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              final user = recommendedUsers?[index];
+
+              return UiKitFindSomeoneCard(
+                avatarUrl: user?.userAvatar ?? GraphicsFoundation.instance.png.mockUserAvatar.path,
+                userNickName: user?.userNickname ?? '',
+                userName: user?.userName ?? '',
+                userPoints: user?.userPointsBalance ?? 0,
+                sameInterests: user?.commonInterests ?? 0,
                 onMessage: () {
                   buildComponent(
                     context,
@@ -115,7 +120,26 @@ class ProfileComponent extends StatelessWidget {
                                 ),
                               ),
                               uiModel: model,
-                              onInvite: () {},
+                              onInvite: onInvite == null || selected == null
+                                  ? null
+                                  : () {
+                                      Navigator.of(context, rootNavigator: true).pop();
+
+                                      onInvite?.call(
+                                        InvitationData(
+                                          user: user,
+                                          placeId: 0,
+                                          placePhotoUrl: GraphicsFoundation.instance.png.place.path,
+                                          placeName: selected ?? '',
+                                          placeTags: [
+                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                          ],
+                                        ),
+                                      );
+                                    },
                               onDatePressed: () async {
                                 final newDate = await showUiKitCalendarDialog(
                                   context,
@@ -141,7 +165,9 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ),
                   );
-                }),
+                },
+              );
+            },
             itemCount: recommendedUsers?.length ?? 3,
           ),
           SpacingFoundation.verticalSpace24,
