@@ -184,14 +184,17 @@ class ProfileComponent extends StatelessWidget {
             ],
           ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace16,
+          GradientableWidget(
+              gradient: GradientFoundation.attentionCard,
+              child:
           context
-              .gradientButton(
+              .outlinedButton(
                 data: BaseUiKitButtonData(
                   fit: ButtonFit.fitWidth,
                   text: 'fulfill the dream'.toUpperCase(),
                   onPressed: () => onFulfillDream?.call(),
                 ),
-              )
+              ))
               .paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace24,
           kBottomNavigationBarHeight.heightBox,

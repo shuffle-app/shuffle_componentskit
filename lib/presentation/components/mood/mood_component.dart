@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -8,9 +10,15 @@ class MoodComponent extends StatelessWidget {
   final Future<List<UiUniversalModel>>? Function(String name) onTabChanged;
   final Function? onPlacePressed;
   final Function(String level)? onLevelActivated;
+  final VoidCallback? onLevelComplited;
 
   const MoodComponent(
-      {Key? key, required this.mood, this.onPlacePressed, required this.onTabChanged, this.onLevelActivated})
+      {Key? key,
+      required this.mood,
+      this.onPlacePressed,
+      required this.onTabChanged,
+      this.onLevelComplited,
+      this.onLevelActivated})
       : super(key: key);
 
   @override
@@ -102,28 +110,24 @@ class MoodComponent extends StatelessWidget {
           StatefulBuilder(builder: (context, setState) {
             return Column(
               children: [
-                if (mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!))
-                  UiKitCustomTabBar(
-                    onTappedTab: (index) {
-                      setState(() {
-                        selectedLevel = listOfTabs[index].value.value ?? '';
-                      });
-                    },
-                    tabs: listOfTabs
-                        .map((entry) => UiKitCustomTab(
-                              title: entry.key.toUpperCase(),
-                              group: tabBarGroup,
-                            ))
-                        .toList(),
-                  )
-                else
-                  Center(
-                    child: Text(
-                      mood.activatedLevel!,
-                      style: theme?.boldTextTheme.title1,
-                    ),
-                  ),
-                SpacingFoundation.verticalSpace16,
+                IgnorePointer(
+                    ignoring: !(mood.activatedLevel == null ||
+                        !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!)),
+                    child: UiKitCustomTabBar(
+                      onTappedTab: (index) {
+                        setState(() {
+                          selectedLevel = listOfTabs[index].value.value ?? '';
+                        });
+                      },
+                      tabs: listOfTabs
+                          .map((entry) => UiKitCustomTab(
+                        height:20.h,
+                                title: entry.key.toUpperCase(),
+                                group: tabBarGroup,
+                              ))
+                          .toList(),
+                    )),
+                SpacingFoundation.verticalSpace8,
                 FutureBuilder(
                     future: onTabChanged.call(selectedLevel),
                     builder: (context, AsyncSnapshot<List<UiUniversalModel>> snapshot) {
@@ -159,20 +163,24 @@ class MoodComponent extends StatelessWidget {
                       }
                     })
               ],
-            );
+            ).paddingSymmetric(horizontal: horizontalMargin);
           }),
           SpacingFoundation.verticalSpace24,
           SlidableButton(
-            isCompleted: mood.activatedLevel!=null,
+              isCompleted: mood.activatedLevel != null,
+              customBorder: mood.activatedLevel == null || onLevelComplited != null
+                  ? null
+                  : const Border.fromBorderSide(BorderSide(color: UiKitColors.gradientGreyLight2, width: 2)),
               slidableChild: context.gradientButton(
                   data: BaseUiKitButtonData(text: 'Go!', onPressed: () {}, fit: ButtonFit.hugContent)),
+              onCompleted: () => onLevelActivated?.call(selectedLevel),
               onCompletedChild: context.gradientButton(
                   data: BaseUiKitButtonData(
                 text: 'Get reward',
-                onPressed: () => onLevelActivated?.call(selectedLevel),
+                onPressed: onLevelComplited == null ? null : () => onLevelComplited?.call(),
                 fit: ButtonFit.fitWidth,
-              ))),
-         SpacingFoundation.verticalSpace24,
+              ))).paddingSymmetric(horizontal: horizontalMargin),
+          SpacingFoundation.verticalSpace24,
         ],
       ],
     ).paddingSymmetric(

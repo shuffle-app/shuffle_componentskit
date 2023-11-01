@@ -188,7 +188,7 @@ class AboutUserComponent extends StatelessWidget {
                               link: e.value.imageLink,
                             ),
                             title: e.key,
-                            isSelected: aboutUserModel.selectedReligions?.contains(e.key) ?? false,
+                            isSelected: aboutUserModel.selectedReligions?.contains(e.value.value) ?? false,
                             onPressed: () => onReligionSelected?.call(e.value.value ?? ''),
                           );
                         }).toList() ??
