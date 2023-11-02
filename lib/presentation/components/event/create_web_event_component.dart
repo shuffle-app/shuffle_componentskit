@@ -32,8 +32,7 @@ class CreateWebEventComponent extends StatefulWidget {
 
 class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
-  late final TextEditingController _addressController =
-  TextEditingController();
+  late final TextEditingController _addressController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();
@@ -59,7 +58,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
           tags: [],
           description: '',
         );
-    _addressController.text = widget.eventToEdit?.location?? '';
+    _addressController.text = widget.eventToEdit?.location ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
@@ -141,7 +140,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create event', style: theme?.boldTextTheme.title2),
+            Text(S.of(context).CreateEvent, style: theme?.boldTextTheme.title2),
             SpacingFoundation.verticalSpace24,
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -152,17 +151,17 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                   child: Column(
                     children: [
                       WebFormField(
-                        title: 'Event type',
+                        title: S.of(context).EventType,
                         isRequired: true,
                         child: UiKitSuggestionField(
-                          options: widget.onSuggest ?? (q)=>Future.value([]),
+                          options: widget.onSuggest ?? (q) => Future.value([]),
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Base properties',
+                        title: S.of(context).BaseProperties,
                         isRequired: true,
                         child: UiKitTagSelector(
                           borderRadius: BorderRadiusFoundation.all12,
@@ -179,7 +178,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Unique properties',
+                        title: S.of(context).UniqueProperties,
                         isRequired: true,
                         child: UiKitTagSelector(
                           borderRadius: BorderRadiusFoundation.all12,
@@ -222,11 +221,11 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                   child: Column(
                     children: [
                       WebFormField(
-                        title: 'Name',
+                        title: S.of(context).Name,
                         isRequired: true,
                         child: UiKitInputFieldNoIcon(
                           controller: _titleController,
-                          hintText: 'Enter name',
+                          hintText: S.of(context).EnterInputType(S.of(context).Name.toLowerCase()),
                           fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
@@ -234,7 +233,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       SpacingFoundation.verticalSpace24,
                       Row(children: [
                         Text(
-                          'Is recurrent',
+                          S.of(context).IsRecurrent,
                           style: theme.boldTextTheme.body.copyWith(
                             color: theme.colorScheme.darkNeutral900,
                           ),
@@ -251,7 +250,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ]),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Opening hours',
+                        title: S.of(context).OpeningHours,
                         isRequired: true,
                         child: Row(children: [
                           Expanded(
@@ -302,14 +301,14 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Description',
+                        title: S.of(context).Description,
                         child: SizedBox(
                           height: descriptionHeightConstraint,
                           child: UiKitInputFieldNoIcon(
                             controller: _descriptionController,
                             minLines: 4,
                             expands: true,
-                            hintText: 'Enter description',
+                            hintText: S.of(context).EnterInputType(S.of(context).Description.toLowerCase()),
                             fillColor: theme.colorScheme.surface1,
                             borderRadius: BorderRadiusFoundation.all12,
                           ),
@@ -317,7 +316,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Address',
+                        title: S.of(context).Address,
                         child: InkWell(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
@@ -329,7 +328,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           child: IgnorePointer(
                             child: UiKitInputFieldRightIcon(
                               controller: _addressController,
-                              hintText: 'Tap to set address',
+                              hintText: S.of(context).TapToSetAddress,
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                               icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
@@ -367,43 +366,43 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Contact Person', style: theme.boldTextTheme.title2),
+                          Text(S.of(context).ContactPerson, style: theme.boldTextTheme.title2),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Name',
+                            title: S.of(context).Name,
                             child: UiKitInputFieldNoIcon(
                               controller: _personNameController,
-                              hintText: 'Enter name',
+                              hintText: S.of(context).EnterInputType(S.of(context).Name.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Position',
+                            title: S.of(context).Position,
                             child: UiKitInputFieldNoIcon(
                               controller: _personPositionController,
-                              hintText: 'Enter position',
+                              hintText: S.of(context).EnterInputType(S.of(context).Position.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Phone',
+                            title: S.of(context).Phone,
                             child: UiKitInputFieldNoIcon(
                               controller: _personPhoneController,
-                              hintText: 'Enter phone',
+                              hintText: S.of(context).EnterInputType(S.of(context).Phone.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Email',
+                            title: S.of(context).Email,
                             child: UiKitInputFieldNoIcon(
                               controller: _personEmailController,
-                              hintText: 'Enter email',
+                              hintText: S.of(context).EnterInputType(S.of(context).Email.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
@@ -416,7 +415,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                 Expanded(
                                   child: context.gradientButton(
                                     data: BaseUiKitButtonData(
-                                      text: 'save',
+                                      text: S.of(context).Save,
                                       onPressed: () {
                                         _eventToEdit.title = _titleController.text;
                                         // _eventToEdit.website = _websiteController.text;
@@ -433,7 +432,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                   Expanded(
                                     child: context.outlinedButton(
                                       data: BaseUiKitButtonData(
-                                        text: 'show result',
+                                        text: S.of(context).ShowResult.toLowerCase(),
                                         onPressed: widget.onShowResult,
                                       ),
                                       isGradientEnabled: true,

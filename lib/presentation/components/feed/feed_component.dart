@@ -49,7 +49,8 @@ class FeedComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentFeedModel feedLeisureModel = ComponentFeedModel.fromJson(config['feed']);
     final ComponentFeedModel feedBusinessModel = ComponentFeedModel.fromJson(config['feed_business']);
     MapEntry<String, PropertiesBaseModel>? advertisement;
@@ -59,10 +60,10 @@ class FeedComponent extends StatelessWidget {
 
     final nicheTitles = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties?.keys.toList();
     final nicheData = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties;
-    final upcomingGlobals =
-        feedBusinessModel.content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
-    final upcomingGlobalsTitle =
-        feedBusinessModel.content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.text]?.properties?.keys.first;
+    final upcomingGlobals = feedBusinessModel
+        .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
+    final upcomingGlobalsTitle = feedBusinessModel
+        .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.text]?.properties?.keys.first;
     nicheTitles?.sort((a, b) {
       final aSortNumber = nicheData?[a]?.sortNumber ?? 0;
       final bSortNumber = nicheData?[b]?.sortNumber ?? 0;
@@ -104,7 +105,8 @@ class FeedComponent extends StatelessWidget {
                               iconPath: GraphicsFoundation.instance.svg.label.path,
                             ),
                           ],
-                        ).paddingOnly(right: e == upcomingGlobals.keys.last ? 0 : SpacingFoundation.horizontalSpacing12),
+                        ).paddingOnly(
+                            right: e == upcomingGlobals.keys.last ? 0 : SpacingFoundation.horizontalSpacing12),
                       )
                       .toList() ??
                   [],
@@ -114,7 +116,7 @@ class FeedComponent extends StatelessWidget {
           if (feed.moods != null && (feedBusinessModel.showFeelings ?? true)) ...[
             Stack(
               children: [
-                Text('Your niche', style: themeTitleStyle),
+                Text(S.of(context).YourNiche, style: themeTitleStyle),
                 if (feed.showHowItWorksTitle)
                   HowItWorksWidget(
                     element: feedBusinessModel.content.title![ContentItemType.hintDialog]!,
@@ -156,7 +158,7 @@ class FeedComponent extends StatelessWidget {
                 onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
                 title: feed.recommendedEvent!.title ?? '',
                 additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
-                accentMessage: 'Don\'t miss it',
+                accentMessage: S.of(context).DontMissIt,
                 image: ImageWidget(
                   link: feed.recommendedEvent?.media.firstOrNull?.link,
                   fit: BoxFit.cover,
@@ -170,7 +172,7 @@ class FeedComponent extends StatelessWidget {
           if (feed.moods != null && (feedLeisureModel.showFeelings ?? true)) ...[
             Stack(
               children: [
-                Text('How’re you feeling tonight?', style: themeTitleStyle),
+                Text(S.of(context).HowAreYouFeelingTonight, style: themeTitleStyle),
                 if (feed.showHowItWorksTitle)
                   HowItWorksWidget(
                       element: feedLeisureModel.content.title![ContentItemType.hintDialog]!, onPop: onHowItWorksPoped),
@@ -181,7 +183,7 @@ class FeedComponent extends StatelessWidget {
               height: (size.width - horizontalMargin * 2) * 0.54,
               isHealthKitEnabled: feed.isHealthKitEnabled,
               title: Text(
-                'Guess',
+                S.of(context).Guess,
                 style: context.uiKitTheme?.boldTextTheme.subHeadline,
               ),
               backgroundImage: ImageWidget(
@@ -210,7 +212,7 @@ class FeedComponent extends StatelessWidget {
           Stack(
             children: [
               Text(
-                'You better check this out',
+                S.of(context).YouBetterCheckThisOut,
                 style: themeTitleStyle,
                 textAlign: TextAlign.left,
               ),
@@ -237,9 +239,9 @@ class FeedComponent extends StatelessWidget {
                       },
                       length: feed.filterChips?.length ?? 0),
                   UiKitTitledFilterChip(
-                    selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
-                    title: 'Favorites',
-                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                    selected: feed.activeFilterChips?.map((e) => e.title).contains(S.of(context).Favorites) ?? false,
+                    title: S.of(context).Favorites,
+                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(S.of(context).Favorites),
                     icon: GraphicsFoundation.instance.svg.star.path,
                   ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
                   Wrap(
@@ -279,7 +281,9 @@ class FeedComponent extends StatelessWidget {
                           onPressed: onAdvertisementPressed,
                           imageLink: item.bannerPicture,
                           title: advertisement.key,
-                          size: AdvertisementBannerSize.values.byName(advertisement.value.value ?? 'small'),
+                          size: AdvertisementBannerSize.values.byName(
+                            advertisement.value.value ?? S.of(context).Small.toLowerCase(),
+                          ),
                         ),
                       )
                       .paddingSymmetric(horizontal: horizontalMargin);

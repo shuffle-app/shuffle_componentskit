@@ -30,7 +30,8 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -59,7 +60,7 @@ class ProfileComponent extends StatelessWidget {
           Stack(
             children: [
               Text(
-                'Find someone to hang out with',
+                S.of(context).FindSomeoneToHangOutWith,
                 style: textTheme?.title1,
               ),
               if (showHowItWorks)
@@ -95,11 +96,11 @@ class ProfileComponent extends StatelessWidget {
                               places: List<UiKitLeadingRadioTile>.generate(
                                 10,
                                 (index) => UiKitLeadingRadioTile(
-                                  title: '$index place',
-                                  selected: selected == '$index place',
+                                  title: S.of(context).NPlace(index),
+                                  selected: selected == S.of(context).NPlace(index),
                                   onTap: () {
                                     state(() {
-                                      selected = '$index place';
+                                      selected = S.of(context).NPlace(index);
                                       // if (!selected.remove('$index place')) {
                                       //   selected.add('$index place');
                                       // }
@@ -107,10 +108,18 @@ class ProfileComponent extends StatelessWidget {
                                   },
                                   avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
                                   tags: [
-                                    UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                    UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                    UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                    UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                    UiKitTag(
+                                        title: S.of(context).Title,
+                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                    UiKitTag(
+                                        title: S.of(context).Title,
+                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                    UiKitTag(
+                                        title: S.of(context).Title,
+                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                    UiKitTag(
+                                        title: S.of(context).Title,
+                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
                                   ],
                                 ),
                               ),
@@ -145,13 +154,14 @@ class ProfileComponent extends StatelessWidget {
             itemCount: recommendedUsers?.length ?? 3,
           ),
           SpacingFoundation.verticalSpace24,
-          if (events != null) MyEventsComponent(title: 'My Events', onTap: onEventTap ?? (_) {}, events: events!),
+          if (events != null)
+            MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
           SpacingFoundation.verticalSpace24,
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(
-                'Ask or support',
+                S.of(context).AskOrSupport,
                 style: textTheme?.title1,
                 textAlign: TextAlign.left,
               ),
@@ -162,7 +172,7 @@ class ProfileComponent extends StatelessWidget {
               .gradientButton(
                 data: BaseUiKitButtonData(
                   fit: ButtonFit.fitWidth,
-                  text: 'fulfill the dream'.toUpperCase(),
+                  text: S.of(context).FulfillTheDream.toUpperCase(),
                   onPressed: () => onFulfillDream?.call(),
                 ),
               )

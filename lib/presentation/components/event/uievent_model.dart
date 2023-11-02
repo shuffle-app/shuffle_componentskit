@@ -47,12 +47,12 @@ class UiEventModel extends Advertisable {
   })  : descriptionItems = [
           if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
             UiDescriptionItemModel(
-              title: 'Don’t miss it',
+              title: S.current.DontMissIt,
               description: formatDate(date, dateTo, time, timeTo, weekdays)!,
             ),
           if (location != null)
             UiDescriptionItemModel(
-              title: 'Place',
+              title: S.current.Place,
               description: location,
             ),
         ],
@@ -81,11 +81,11 @@ class UiEventModel extends Advertisable {
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
-      return 'Title is required';
+      return S.current.XIsRequired(S.current.Title);
     } else if (description == null || description!.isEmpty) {
-      return 'Description is required';
+      return S.current.XIsRequired(S.current.Description);
     } else if (media.isEmpty) {
-      return 'Photos are required';
+      return S.current.XIsRequired(S.current.Photos);
     }
 
     return null;

@@ -165,11 +165,11 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                   child: Column(
                     children: [
                       WebFormField(
-                        title: 'Place type',
+                        title: S.of(context).PlaceType,
                         isRequired: true,
                         child: UiKitInputFieldNoIcon(
                           controller: _placeTypeController,
-                          hintText: 'Enter place type',
+                          hintText: S.of(context).EnterInputType(S.of(context).PlaceType.toLowerCase()),
                           fillColor: theme?.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
@@ -186,7 +186,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Base properties',
+                        title: S.of(context).BaseProperties,
                         isRequired: true,
                         child: UiKitTagSelector(
                           borderRadius: BorderRadiusFoundation.all12,
@@ -203,7 +203,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Unique properties',
+                        title: S.of(context).UniqueProperties,
                         isRequired: true,
                         child: UiKitTagSelector(
                           borderRadius: BorderRadiusFoundation.all12,
@@ -261,18 +261,18 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         SpacingFoundation.verticalSpace24,
                       ],
                       WebFormField(
-                        title: 'Name',
+                        title: S.of(context).Name,
                         isRequired: true,
                         child: UiKitInputFieldNoIcon(
                           controller: _titleController,
-                          hintText: 'Enter name',
+                          hintText: S.of(context).EnterInputType(S.of(context).Time.toLowerCase()),
                           fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Opening hours',
+                        title: S.of(context).OpeningHours,
                         isRequired: true,
                         child: Row(children: [
                           Expanded(
@@ -310,14 +310,14 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Description',
+                        title: S.of(context).Description,
                         child: SizedBox(
                           height: descriptionHeightConstraint,
                           child: UiKitInputFieldNoIcon(
                             controller: _descriptionController,
                             minLines: 4,
                             expands: true,
-                            hintText: 'Enter description',
+                            hintText: S.of(context).EnterInputType(S.of(context).Description.toLowerCase()),
                             fillColor: theme.colorScheme.surface1,
                             borderRadius: BorderRadiusFoundation.all12,
                           ),
@@ -325,7 +325,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Address',
+                        title: S.of(context).Address,
                         isRequired: true,
                         child: InkWell(
                           splashColor: Colors.transparent,
@@ -338,7 +338,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           child: IgnorePointer(
                             child: UiKitInputFieldRightIcon(
                               controller: _addressController,
-                              hintText: 'Tap to set address',
+                              hintText: S.of(context).TapToSetAddress,
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                               icon: Icon(Icons.location_on, color: theme.colorScheme.inversePrimary, size: 18),
@@ -348,20 +348,20 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Phone',
+                        title: S.of(context).Phone,
                         child: UiKitInputFieldNoIcon(
                           controller: _phoneController,
-                          hintText: 'Enter phone',
+                          hintText: S.of(context).EnterInputType(S.of(context).Phone.toLowerCase()),
                           fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        title: 'Website',
+                        title: S.of(context).Website,
                         child: UiKitInputFieldNoIcon(
                           controller: _websiteController,
-                          hintText: 'Enter website',
+                          hintText: S.of(context).EnterInputType(S.of(context).Website.toLowerCase()),
                           fillColor: theme.colorScheme.surface1,
                           borderRadius: BorderRadiusFoundation.all12,
                         ),
@@ -376,43 +376,43 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Contact Person', style: theme.boldTextTheme.title2),
+                          Text(S.of(context).ContactPerson, style: theme.boldTextTheme.title2),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Name',
+                            title: S.of(context).Name,
                             child: UiKitInputFieldNoIcon(
                               controller: _personNameController,
-                              hintText: 'Enter name',
+                              hintText: S.of(context).EnterInputType(S.of(context).Time.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Position',
+                            title: S.of(context).Position,
                             child: UiKitInputFieldNoIcon(
                               controller: _personPositionController,
-                              hintText: 'Enter position',
+                              hintText: S.of(context).EnterInputType(S.of(context).Position.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Phone',
+                            title: S.of(context).Phone,
                             child: UiKitInputFieldNoIcon(
                               controller: _personPhoneController,
-                              hintText: 'Enter phone',
+                              hintText: S.of(context).EnterInputType(S.of(context).Phone.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
                           ),
                           SpacingFoundation.verticalSpace24,
                           WebFormField(
-                            title: 'Email',
+                            title: S.of(context).Email,
                             child: UiKitInputFieldNoIcon(
                               controller: _personEmailController,
-                              hintText: 'Enter email',
+                              hintText: S.of(context).EnterInputType(S.of(context).Email.toLowerCase()),
                               fillColor: theme.colorScheme.surface1,
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
@@ -425,7 +425,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                 Expanded(
                                   child: context.gradientButton(
                                     data: BaseUiKitButtonData(
-                                      text: 'save',
+                                      text: S.of(context).Save,
                                       onPressed: () {
                                         _placeToEdit.title = _titleController.text;
                                         _placeToEdit.website = _websiteController.text;
@@ -442,7 +442,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                   Expanded(
                                     child: context.outlinedButton(
                                       data: BaseUiKitButtonData(
-                                        text: 'show result',
+                                        text: S.of(context).ShowResult.toLowerCase(),
                                         onPressed: widget.onShowResult,
                                       ),
                                       isGradientEnabled: true,

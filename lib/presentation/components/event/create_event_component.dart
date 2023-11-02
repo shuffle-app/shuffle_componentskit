@@ -102,11 +102,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent
-            .of(context)
-            ?.globalConfiguration
-            .appConfig
-            .content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -115,17 +111,17 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     final theme = context.uiKitTheme;
 
     return BlurredAppBarPage(
-        title: 'Event',
+        title: S.of(context).Event,
         centerTitle: true,
         autoImplyLeading: true,
         appBarTrailing: widget.eventToEdit != null
             ? IconButton(
-            icon: ImageWidget(
-                svgAsset: GraphicsFoundation.instance.svg.trash,
-                color: Colors.white,
-                height: 20.h,
-                fit: BoxFit.fitHeight),
-            onPressed: widget.onEventDeleted)
+                icon: ImageWidget(
+                    svgAsset: GraphicsFoundation.instance.svg.trash,
+                    color: Colors.white,
+                    height: 20.h,
+                    fit: BoxFit.fitHeight),
+                onPressed: widget.onEventDeleted)
             : null,
         body: SingleChildScrollView(
             child: Form(
@@ -134,7 +130,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
                     crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
                     children: [
-                      UiKitInputFieldNoFill(label: 'Title', controller: _titleController)
+                      UiKitInputFieldNoFill(label: S.of(context).Title, controller: _titleController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       PhotoVideoSelector(
@@ -152,40 +148,36 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                       ConstrainedBox(
                           constraints: BoxConstraints(maxHeight: descriptionHeightConstraint),
                           child: UiKitInputFieldNoFill(
-                            label: 'Description',
+                            label: S.of(context).Description,
                             controller: _descriptionController,
                             expands: true,
                           )).paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
 
-                      Text('Base properties', style: theme?.regularTextTheme.labelSmall)
+                      Text(S.of(context).BaseProperties, style: theme?.regularTextTheme.labelSmall)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                          onNotFoundTagCallback: (value) =>
-                              setState(() =>
-                              _eventToEdit.baseTags = [
-                                ..._eventToEdit.baseTags,
-                                UiKitTag(title: value, iconPath: '')
-                              ]),
-                          tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-                          onRemoveTagCallback: (value) =>
-                              setState(
-                                      () => _eventToEdit.baseTags.removeWhere((element) => element.title == value)))
+                              onNotFoundTagCallback: (value) => setState(() => _eventToEdit.baseTags = [
+                                    ..._eventToEdit.baseTags,
+                                    UiKitTag(title: value, iconPath: '')
+                                  ]),
+                              tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                              onRemoveTagCallback: (value) => setState(
+                                  () => _eventToEdit.baseTags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                       SpacingFoundation.verticalSpace24,
 
-                      Text('Unique properties', style: theme?.regularTextTheme.labelSmall)
+                      Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                          onNotFoundTagCallback: (value) =>
-                              setState(() =>
-                              _eventToEdit.tags = [..._eventToEdit.tags, UiKitTag(title: value, iconPath: '')]),
-                          tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-                          onRemoveTagCallback: (value) =>
-                              setState(() => _eventToEdit.tags.removeWhere((element) => element.title == value)))
+                              onNotFoundTagCallback: (value) => setState(() =>
+                                  _eventToEdit.tags = [..._eventToEdit.tags, UiKitTag(title: value, iconPath: '')]),
+                              tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
+                              onRemoveTagCallback: (value) =>
+                                  setState(() => _eventToEdit.tags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(
                       //     baseTags: [], uniqueTags: _eventToEdit.tags ?? []),
@@ -206,14 +198,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           }).paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       Row(children: [
-                        Text('Time', style: theme?.regularTextTheme.labelSmall),
+                        Text(S.of(context).Time, style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Text(
-                            '${_eventToEdit.time == null ? 'select time' : normalizedTi(
-                                _eventToEdit.time, showDateName: false)} ${_eventToEdit.timeTo == null
-                                ? ''
-                                : '- ${normalizedTi(_eventToEdit.timeTo, showDateName: false)} '}',
-                            style: theme?.boldTextTheme.body),
+                          '${_eventToEdit.time == null ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase() : normalizedTi(_eventToEdit.time, showDateName: false)} ${_eventToEdit.timeTo == null ? '' : '- ${normalizedTi(_eventToEdit.timeTo, showDateName: false)} '}',
+                          style: theme?.boldTextTheme.body,
+                        ),
                         context.outlinedButton(
                             data: BaseUiKitButtonData(
                                 onPressed: () async {
@@ -231,37 +221,36 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                       ]).paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       Row(children: [
-                        Text(_eventToEdit.isRecurrent ? 'Days of week' : 'Dates',
+                        Text(_eventToEdit.isRecurrent ? S.of(context).DaysOfWeek : S.of(context).Dates,
                             style: theme?.regularTextTheme.labelSmall),
                         const Spacer(),
                         Expanded(
                             child: Text(
                                 _eventToEdit.isRecurrent
                                     ? _eventToEdit.weekdays.join(', ')
-                                    : '${_eventToEdit.date == null ? 'select day' : DateFormat('MM/dd').format(
-                                    _eventToEdit.date!)} ${_eventToEdit.dateTo == null ? '' : '- ${DateFormat('MM/dd')
-                                    .format(_eventToEdit.dateTo!) }'}',
+                                    : '${_eventToEdit.date == null ? S.of(context).SelectType(S.of(context).Day.toLowerCase()) : DateFormat('MM/dd').format(_eventToEdit.date!)} ${_eventToEdit.dateTo == null ? '' : '- ${DateFormat('MM/dd').format(_eventToEdit.dateTo!)}'}',
                                 style: theme?.boldTextTheme.body)),
                         context.outlinedButton(
                             data: BaseUiKitButtonData(
                                 onPressed: _eventToEdit.isRecurrent
                                     ? () async {
-                                  final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
-                                  if (maybeDaysOfWeek != null) {
-                                    setState(() {
-                                      _eventToEdit.weekdays = maybeDaysOfWeek;
-                                    });
-                                  }
-                                }
+                                        final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
+                                        if (maybeDaysOfWeek != null) {
+                                          setState(() {
+                                            _eventToEdit.weekdays = maybeDaysOfWeek;
+                                          });
+                                        }
+                                      }
                                     : () async {
-                                  await showUiKitCalendarFromToDialog(context, (from, to) =>
-                                  {
-                                    setState(() {
-                                      _eventToEdit.date = from;
-                                      _eventToEdit.dateTo = to;
-                                    })
-                                  });
-                                },
+                                        await showUiKitCalendarFromToDialog(
+                                            context,
+                                            (from, to) => {
+                                                  setState(() {
+                                                    _eventToEdit.date = from;
+                                                    _eventToEdit.dateTo = to;
+                                                  })
+                                                });
+                                      },
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.calendar,
                                   color: Colors.white,
@@ -278,20 +267,17 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           },
                           child: IgnorePointer(
                               child: UiKitInputFieldNoFill(
-                                  label: 'Address',
-                                  controller: _locationController,
-                                  icon: ImageWidget(
-                                      svgAsset: GraphicsFoundation
-                                          .instance.svg.location,
-                                      color: Colors.white))
-                                  .paddingSymmetric(
-                                  horizontal: horizontalPadding))),
+                                      label: S.of(context).Address,
+                                      controller: _locationController,
+                                      icon: ImageWidget(
+                                          svgAsset: GraphicsFoundation.instance.svg.location, color: Colors.white))
+                                  .paddingSymmetric(horizontal: horizontalPadding))),
                       SpacingFoundation.verticalSpace24,
                       SafeArea(
                           top: false,
                           child: context.gradientButton(
                               data: BaseUiKitButtonData(
-                                  text: 'save'.toUpperCase(),
+                                  text: S.of(context).Save.toUpperCase(),
                                   fit: ButtonFit.fitWidth,
                                   onPressed: () {
                                     _eventToEdit.title = _titleController.text;
