@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/socials_login_model.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -13,6 +16,7 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final String? Function(String?)? credentialsValidator;
   final String? Function(String?)? passwordValidator;
+  final ValueChanged<SocialsLoginModel>? onSocialsLogin;
   final bool? loading;
   final List<LocaleModel>? availableLocales;
 
@@ -26,6 +30,7 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
     this.onCountrySelected,
     this.credentialsValidator,
     this.passwordValidator,
+    this.onSocialsLogin,
     required this.credentialsController,
     required this.passwordController,
   });
@@ -89,11 +94,17 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       passwordHint = model.content.properties?['password_hint']?.value ?? '';
       final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
       socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
-      socials = socialsData?.entries.map<ShortLogInButton>((element) {
+      final clientType = Platform.isIOS ? 'iOS' : 'Android';
+      socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
             return ShortLogInButton(
               iconPath: element.value.imageLink ?? '',
               title: element.key,
-              onTap: () {},
+              onTap: () => widget.onSocialsLogin?.call(
+                SocialsLoginModel(
+                  provider: element.value.type!,
+                  clientType: clientType,
+                ),
+              ),
             );
           }).toList() ??
           [];
