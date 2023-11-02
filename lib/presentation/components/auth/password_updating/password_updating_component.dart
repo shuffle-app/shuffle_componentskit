@@ -11,6 +11,7 @@ class PasswordUpdatingComponent extends StatefulWidget {
     required this.codeController,
     required this.passwordController,
     required this.onPasswordChanged,
+    required this.loading,
     this.passwordFieldEnabled = true,
     this.onCodeSubmit,
     this.passwordValidator,
@@ -24,6 +25,7 @@ class PasswordUpdatingComponent extends StatefulWidget {
   final TextEditingController passwordController;
   final ValueChanged<String> onPasswordChanged;
   final bool passwordFieldEnabled;
+  final bool loading;
 
   final ValueChanged<String>? onCodeSubmit;
   final String? Function(String?)? passwordValidator;
@@ -157,6 +159,7 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                 ),
                 context.button(
                   data: BaseUiKitButtonData(
+                    loading: widget.loading,
                     onPressed: () {
                       if (widget.formKey.currentState!.validate()) {
                         widget.onPasswordChanged.call(widget.passwordController.text);
@@ -166,6 +169,7 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                     fit: ButtonFit.fitWidth,
                   ),
                 ),
+                SpacingFoundation.verticalSpace4,
               ],
             ),
           ),
