@@ -63,6 +63,8 @@ class PlacePreview extends StatelessWidget {
     final size = cellSize ?? MediaQuery.sizeOf(context);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
+    final double calculatedOpacity = (shouldVisitAt?.isAtSameDay ?? true) ? 1 : 0.2;
+
     return SizedBox(
         width: double.infinity,
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
@@ -78,7 +80,7 @@ class PlacePreview extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
                     Opacity(
-                        opacity: shouldVisitAt?.isAtSameDay ?? true ? 1 : 0.4,
+                        opacity: calculatedOpacity,
                         child: UiKitPhotoSlider(
                           media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
                           onTap: () => onTap?.call(place.id),
@@ -112,17 +114,17 @@ class PlacePreview extends StatelessWidget {
                                   onPressed: () {
                                     log('check in');
                                   },
-                                  text: 'check in'.toUpperCase()))),
+                                  text: 'check-in'.toUpperCase()))),
                     if (shouldVisitAt != null && !shouldVisitAt!.isAtSameDay)
                       Positioned(
-                          bottom: -20.h,
+                          bottom: -15.h,
                           child: UiKitCardWrapper(
-                            color: theme?.colorScheme.surface2.withOpacity(0.7),
+                            color: theme?.colorScheme.surface2.withOpacity(0.35),
                             child: Center(
                               child: Text('Visit first to open next', style: theme?.boldTextTheme.body),
                             ).paddingSymmetric(
-                                horizontal: SpacingFoundation.horizontalSpacing16,
-                                vertical: SpacingFoundation.verticalSpacing8),
+                                horizontal: SpacingFoundation.horizontalSpacing20,
+                                vertical: SpacingFoundation.verticalSpacing12),
                           )),
                     if (status != null && status!.isNotEmpty)
                       ClipRRect(
@@ -140,18 +142,16 @@ class PlacePreview extends StatelessWidget {
                                     ),
                                   ))))
                   ])),
-              SpacingFoundation.verticalSpace8,
-              Opacity(
-                  opacity: shouldVisitAt?.isAtSameDay ?? true ? 1 : 0.4,
-                  child: Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
-                      .paddingSymmetric(horizontal: horizontalMargin)),
-              SpacingFoundation.verticalSpace4,
-              Opacity(
-                  opacity: shouldVisitAt?.isAtSameDay ?? true ? 1 : 0.4,
-                  child: UiKitTagsWidget(
-                    baseTags: place.baseTags,
-                    uniqueTags: place.tags,
-                  )).paddingSymmetric(horizontal: horizontalMargin)
+              if (calculatedOpacity == 1) ...[
+                SpacingFoundation.verticalSpace8,
+                Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
+                    .paddingSymmetric(horizontal: horizontalMargin),
+                SpacingFoundation.verticalSpace4,
+                UiKitTagsWidget(
+                  baseTags: place.baseTags,
+                  uniqueTags: place.tags,
+                ).paddingSymmetric(horizontal: horizontalMargin)
+              ]
             ],
           ),
         ]));
