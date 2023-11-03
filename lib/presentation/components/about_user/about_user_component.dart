@@ -71,14 +71,14 @@ class AboutUserComponent extends StatelessWidget {
                         text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
+                          text: S.of(context).TheMoreInfoWeGetTheBetter,
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         ),
                         TextSpan(
                             text: S.of(context).YourLeisureSelection.toLowerCase(),
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
                         TextSpan(
-                          text: ' ${S.of(context).WillBe}',
+                          text: S.of(context).WillBe,
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         )
                       ],
@@ -90,12 +90,12 @@ class AboutUserComponent extends StatelessWidget {
                           text: TextSpan(
                         children: [
                           TextSpan(
-                            text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
+                            text: S.of(context).TheMoreInfoWeGetTheBetter,
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           ),
                           TextSpan(text: S.of(context).YourLeisureSelection.toLowerCase(), style: subHeadline),
                           TextSpan(
-                            text: ' ${S.of(context).WillBe}',
+                            text: S.of(context).WillBe,
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           )
                         ],

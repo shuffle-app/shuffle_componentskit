@@ -48,7 +48,7 @@ class _FirstBody extends StatelessWidget {
                         style: textTheme?.caption1Medium,
                       ),
                       TextSpan(
-                        text: '${S.of(context).Shuffle.toLowerCase()} ',
+                        text: S.of(context).ShuffleWithRightWhitespace.toLowerCase(),
                         style: textTheme?.caption1Bold,
                       ),
                       TextSpan(

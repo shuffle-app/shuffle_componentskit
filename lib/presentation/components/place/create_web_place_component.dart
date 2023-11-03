@@ -154,7 +154,12 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${widget.placeToEdit != null ? 'Update' : 'Create'} place', style: theme?.boldTextTheme.title2),
+            Text(
+              S.of(context).EditingTypePlace(
+                    widget.placeToEdit != null ? S.of(context).Update : S.of(context).Create,
+                  ),
+              style: theme?.boldTextTheme.title2,
+            ),
             SpacingFoundation.verticalSpace24,
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -249,7 +254,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                     children: [
                       if (_placeToEdit.status != null) ...[
                         WebFormField(
-                            title: 'Published',
+                            title: S.of(context).Published,
                             isRequired: true,
                             child: UiKitGradientSwitch(
                                 switchedOn: _placeToEdit.status == 'published',

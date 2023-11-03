@@ -127,14 +127,14 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
                 RichText(
                   text: TextSpan(children: [
-                    TextSpan(text: '${S.of(context).ByContinuingYouAcceptThe} ', style: regTextTheme?.caption4),
+                    TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
                     TextSpan(
                         text: list.first.key,
                         style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () =>
                               context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
-                    TextSpan(text: ' ${S.of(context).And.toLowerCase()} ', style: regTextTheme?.caption4),
+                    TextSpan(text: S.of(context).AndWithWhitespaces.toLowerCase(), style: regTextTheme?.caption4),
                     TextSpan(
                         text: list.last.key,
                         style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
