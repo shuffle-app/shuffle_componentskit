@@ -37,79 +37,63 @@ class _FAQComponentState extends State<FAQComponent> {
     final itemsToShow = _controller.text.isEmpty
         ? widget.faqData.keys.toList()
         : widget.faqData.keys
-        .where((element) =>
-        element.toLowerCase().contains(_controller.text.toLowerCase()))
-        .toList();
+            .where((element) => element.toLowerCase().contains(_controller.text.toLowerCase()))
+            .toList();
 
-    return Scaffold(body: BlurredAppBarPage(
-        title: 'FAQ',
-        autoImplyLeading: true,
-        appBarBody: SizedBox(
-            width: double.infinity,
-            child: UiKitInputFieldRightIcon(
-                hintText: 'search'.toUpperCase(),
-                controller: _controller,
-                icon: ImageWidget(
-                    svgAsset:
-                    GraphicsFoundation.instance.svg.search,
-                    color: Colors.white.withOpacity(0.5)))),
-        customToolbarHeight: 150.0,
-        centerTitle: true,
-        body: ListView.separated(
-            padding: EdgeInsets.symmetric(
-                vertical:
-                widget.positionModel?.verticalMargin?.toDouble() ?? 0,
-                horizontal:
-                widget.positionModel?.horizontalMargin?.toDouble() ??
-                    0),
-            itemBuilder: (context, index) {
+    return Scaffold(
+        body: BlurredAppBarPage(
+            title: S.of(context).Faq.toUpperCase(),
+            autoImplyLeading: true,
+            appBarBody: SizedBox(
+                width: double.infinity,
+                child: UiKitInputFieldRightIcon(
+                    hintText: S.of(context).Search.toUpperCase(),
+                    controller: _controller,
+                    icon: ImageWidget(
+                        svgAsset: GraphicsFoundation.instance.svg.search, color: Colors.white.withOpacity(0.5)))),
+            customToolbarHeight: 150.0,
+            centerTitle: true,
+            body: ListView.separated(
+                padding: EdgeInsets.symmetric(
+                    vertical: widget.positionModel?.verticalMargin?.toDouble() ?? 0,
+                    horizontal: widget.positionModel?.horizontalMargin?.toDouble() ?? 0),
+                itemBuilder: (context, index) {
+                  if (itemsToShow.isEmpty) {
+                    return Text(
+                      S.of(context).NothingFound.toUpperCase(),
+                      style: theme?.boldTextTheme.caption1Bold,
+                    );
+                  }
 
-              if (itemsToShow.isEmpty) {
-                return Text(
-                  'nothing found'.toUpperCase(),
-                  style: theme?.boldTextTheme.caption1Bold,
-                );
-              }
-
-              return Theme(
-                  data: ThemeData(textButtonTheme: TextButtonThemeData(style:
-                  context.uiKitTheme?.textButtonStyle.copyWith(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.zero),
-                      textStyle: MaterialStateTextStyle.resolveWith((states) {
-                        return context.uiKitTheme!.regularTextTheme.body;
-                      })))),
-                  child: context.button(
-                      reversed: true,
-                      isTextButton: true,
-                      data: BaseUiKitButtonData(
-                          onPressed: () =>
-                              showUiKitGeneralFullScreenDialog(
+                  return Theme(
+                      data: ThemeData(
+                          textButtonTheme: TextButtonThemeData(
+                              style: context.uiKitTheme?.textButtonStyle.copyWith(
+                                  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                                  textStyle: MaterialStateTextStyle.resolveWith((states) {
+                                    return context.uiKitTheme!.regularTextTheme.body;
+                                  })))),
+                      child: context.button(
+                          reversed: true,
+                          isTextButton: true,
+                          data: BaseUiKitButtonData(
+                              onPressed: () => showUiKitGeneralFullScreenDialog(
                                   context,
                                   GeneralDialogData(
-                                    child: WebContentComponent(
-                                        url: widget
-                                            .faqData[itemsToShow[index]]!).paddingSymmetric(vertical:
-                                    widget.positionModel?.verticalMargin
-                                        ?.toDouble() ?? 0,
-                                        horizontal:
-                                        widget.positionModel?.horizontalMargin
-                                            ?.toDouble() ??
-                                            0))),
-                      text: itemsToShow[index],
-                      icon: ImageWidget(
-                          svgAsset:
-                          GraphicsFoundation.instance.svg.chevronRight,
-                          color: Colors.white)))
-              );
-            },
-            separatorBuilder: (_, index) =>
-            // index == 0
-            //     ? SpacingFoundation.verticalSpace24
-            //     :
-            const Divider(color: UiKitColors.darkNeutral600)
-                .paddingSymmetric(
-                vertical: SpacingFoundation.verticalSpacing16),
-            itemCount: itemsToShow.isEmpty ? 1 : itemsToShow.length )));
+                                      child: WebContentComponent(url: widget.faqData[itemsToShow[index]]!)
+                                          .paddingSymmetric(
+                                              vertical: widget.positionModel?.verticalMargin?.toDouble() ?? 0,
+                                              horizontal: widget.positionModel?.horizontalMargin?.toDouble() ?? 0))),
+                              text: itemsToShow[index],
+                              icon: ImageWidget(
+                                  svgAsset: GraphicsFoundation.instance.svg.chevronRight, color: Colors.white))));
+                },
+                separatorBuilder: (_, index) =>
+                    // index == 0
+                    //     ? SpacingFoundation.verticalSpace24
+                    //     :
+                    const Divider(color: UiKitColors.darkNeutral600)
+                        .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
+                itemCount: itemsToShow.isEmpty ? 1 : itemsToShow.length)));
   }
 }

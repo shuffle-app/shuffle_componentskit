@@ -42,31 +42,31 @@ class UiPlaceModel {
     this.baseTags = const [],
     this.weekdays = const [],
   }) : descriptionItems = [
-          UiDescriptionItemModel(title: 'Website', description: title ?? '', descriptionUrl: website ?? ''),
-          UiDescriptionItemModel(title: 'Phone', description: phone ?? ''),
-          UiDescriptionItemModel(title: 'Location', description: location ?? ''),
+          UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website ?? ''),
+          UiDescriptionItemModel(title: S.current.Phone, description: phone ?? ''),
+          UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
           if (formatDate(null, null, openFrom, openTo, weekdays) != null)
             UiDescriptionItemModel(
-              title: 'Work hours',
+              title: S.current.WorkHours,
               description: formatDate(null, null, openFrom, openTo, weekdays)!,
             ),
         ];
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
-      return 'Title is required';
+      return S.current.XIsRequired(S.current.Title);
     } else if (description.isEmpty) {
-      return 'Description is required';
+      return S.current.XIsRequired(S.current.Description);
     } else if (media.isEmpty) {
-      return 'Photos are required';
+      return S.current.XIsRequired(S.current.Photos);
     } else if (logo == null || logo!.isEmpty) {
-      return 'Logo is required';
+      return S.current.XIsRequired(S.current.Logo);
     } else if (website == null || website!.isEmpty) {
-      return 'Website is required';
+      return S.current.XIsRequired(S.current.Website);
     } else if (phone == null || phone!.isEmpty) {
-      return 'Phone is required';
+      return S.current.XIsRequired(S.current.Phone);
     } else if (location == null || location!.isEmpty) {
-      return 'Location is required';
+      return S.current.XIsRequired(S.current.Location);
     }
 
     return null;

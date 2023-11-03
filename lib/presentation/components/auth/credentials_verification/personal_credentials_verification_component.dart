@@ -85,7 +85,8 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
-          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
+              '';
       tabBar = model.content.body?[ContentItemType.tabBar]?.properties?.keys.toList();
       if (tabBar?.isNotEmpty ?? false) {
         if (_selectedTab == null) setState(() => _selectedTab = tabBar?.first);
@@ -232,7 +233,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             borderRadius: BorderRadiusFoundation.max,
                             child: UiKitInputFieldNoIcon(
                               enabled: true,
-                              hintText: 'EMAIL',
+                              hintText: S.of(context).Email.toUpperCase(),
                               controller: widget.credentialsController,
                               fillColor: ColorsFoundation.surface3,
                               validator: widget.credentialsValidator,
@@ -295,20 +296,23 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           child: tabController.index >= 1
                               ? RichText(
                                   text: TextSpan(children: [
-                                    TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                                    TextSpan(
+                                        text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
                                     TextSpan(
                                         text: privacyCaptions.first.key,
                                         style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () => context.push(WebViewScreen(
-                                              title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                                    TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                                              title: privacyCaptions.first.key,
+                                              url: privacyCaptions.first.value.value ?? ''))),
+                                    TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
                                     TextSpan(
                                         text: privacyCaptions.last.key,
                                         style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () => context.push(WebViewScreen(
-                                              title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                                              title: privacyCaptions.last.key,
+                                              url: privacyCaptions.last.value.value ?? '')))
                                   ]),
                                 )
                               : SpacingFoundation.none,
@@ -337,26 +341,28 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           children: [
                             RichText(
                               text: TextSpan(children: [
-                                TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                                TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
                                 TextSpan(
                                     text: privacyCaptions.first.key,
                                     style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () => context.push(WebViewScreen(
-                                          title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                                TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                                          title: privacyCaptions.first.key,
+                                          url: privacyCaptions.first.value.value ?? ''))),
+                                TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
                                 TextSpan(
                                     text: privacyCaptions.last.key,
                                     style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () => context.push(WebViewScreen(
-                                          title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                                          title: privacyCaptions.last.key,
+                                          url: privacyCaptions.last.value.value ?? '')))
                               ]),
                             ),
                             SpacingFoundation.verticalSpace16,
                             context.button(
                               data: BaseUiKitButtonData(
-                                text: 'NEXT',
+                                text: S.of(context).Next.toUpperCase(),
                                 onPressed: widget.onSubmit,
                                 loading: widget.loading,
                                 fit: ButtonFit.fitWidth,

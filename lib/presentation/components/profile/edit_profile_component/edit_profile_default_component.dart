@@ -58,9 +58,11 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
-    final hintTitle = model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    final hintTitle =
+        model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
@@ -69,7 +71,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     return Scaffold(
       body: BlurredAppBarPage(
         // wrapSliverBox: false,
-        title: 'Edit Profile',
+        title: S.of(context).EditProfile,
         autoImplyLeading: true,
         centerTitle: true,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -91,7 +93,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
             InkWell(
               onTap: onPhotoChangeRequested,
               child: Text(
-                'Change Photo',
+                S.of(context).ChangePhoto,
                 style: textTheme?.caption2Bold,
               ),
             ),
@@ -113,7 +115,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         blurred: false,
                         data: BaseUiKitButtonData(
                           fit: ButtonFit.fitWidth,
-                          text: 'PREMIUM',
+                          text: S.of(context).Premium.toUpperCase(),
                           icon: ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.star2,
                             color: Colors.black,
@@ -130,7 +132,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         blurred: false,
                         data: BaseUiKitButtonData(
                           fit: ButtonFit.fitWidth,
-                          text: 'PRO',
+                          text: S.of(context).Pro.toUpperCase(),
                           onPressed: onProAccountRequested,
                         ),
                       ),
@@ -141,7 +143,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Be in search',
+                      S.of(context).BeInSearch,
                       style: theme?.regularTextTheme.labelSmall,
                     ),
                     SpacingFoundation.horizontalSpace16,
@@ -177,16 +179,16 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: nameController,
-                  label: 'Name',
-                  hintText: 'Name',
+                  label: S.of(context).Name,
+                  hintText: S.of(context).Name,
                   validator: nameValidator,
                   keyboardType: TextInputType.name,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: nickNameController,
-                  label: 'Nickname',
-                  hintText: 'Nickname',
+                  label: S.of(context).Nickname,
+                  hintText: S.of(context).Nickname,
                   validator: nameValidator,
                 ),
                 SpacingFoundation.verticalSpace16,
@@ -199,8 +201,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   child: AbsorbPointer(
                     child: UiKitInputFieldNoFill(
                       controller: dateOfBirthController,
-                      label: 'Date of birth',
-                      hintText: 'Date of birth',
+                      label: S.of(context).DateOfBirth,
+                      hintText: S.of(context).DateOfBirth,
                       validator: dateOfBirthValidator,
                       inputFormatters: [dateInputFormatter],
                     ),
@@ -210,8 +212,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 UiKitInputFieldNoFill(
                   prefixText: '+',
                   controller: phoneController,
-                  label: 'Phone',
-                  hintText: 'Phone',
+                  label: S.of(context).Phone,
+                  hintText: S.of(context).Phone,
                   validator: phoneValidator,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [americanInputFormatter],
@@ -219,14 +221,14 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: emailController,
-                  label: 'Email',
-                  hintText: 'Email',
+                  label: S.of(context).Email,
+                  hintText: S.of(context).Email,
                   validator: emailValidator,
                   keyboardType: TextInputType.emailAddress,
                 ),
                 SpacingFoundation.verticalSpace16,
                 Text(
-                  'Activity type',
+                  S.of(context).ActivityType,
                   style: context.uiKitTheme?.regularTextTheme.labelSmall,
                 ),
                 SpacingFoundation.verticalSpace4,
@@ -241,7 +243,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                 UiKitTitledSelectionTile(
                   onSelectionChanged: onPreferencesChangeRequested,
                   selectedItems: selectedPreferences,
-                  title: 'Preferences',
+                  title: S.of(context).Preferences,
                 ),
               ],
             ).paddingSymmetric(
@@ -258,7 +260,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
         child: context
             .gradientButton(
               data: BaseUiKitButtonData(
-                text: 'SAVE',
+                text: S.of(context).Save.toUpperCase(),
                 loading: isLoading,
                 onPressed: onProfileEditSubmitted?.call,
               ),

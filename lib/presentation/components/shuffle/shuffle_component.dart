@@ -97,7 +97,7 @@ class ShuffleComponent extends StatelessWidget {
                     alignment: Alignment.center,
                     // fit: StackFit.expand,
                     children: [
-                      Text('Try\nyourself', style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
+                      Text(S.of(context).TryYourself, style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
                       if (shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null)
                         HowItWorksWidget(
                             customOffset: Offset(0.35.sw, 25),

@@ -9,7 +9,14 @@ class FollowingsComponent extends StatelessWidget {
   final VoidCallback? onMessage;
   final VoidCallback? onFollow;
 
-  const FollowingsComponent({super.key, this.screenParams, this.followings, this.followers, this.onMessage, this.onFollow});
+  const FollowingsComponent({
+    super.key,
+    this.screenParams,
+    this.followings,
+    this.followers,
+    this.onMessage,
+    this.onFollow,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +27,11 @@ class FollowingsComponent extends StatelessWidget {
     return BlurredAppBarPage(
         autoImplyLeading: true,
         centerTitle: true,
-        title: 'Followings',
+        title: S.of(context).Followings,
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-                horizontal: screenParams?.horizontalMargin?.toDouble() ?? 0, vertical: screenParams?.verticalMargin?.toDouble() ?? 0),
+                horizontal: screenParams?.horizontalMargin?.toDouble() ?? 0,
+                vertical: screenParams?.verticalMargin?.toDouble() ?? 0),
             child: StatefulBuilder(
                 builder: (context, setState) => Column(
                         crossAxisAlignment: bodyAlignment.crossAxisAlignment,
@@ -44,8 +52,8 @@ class FollowingsComponent extends StatelessWidget {
                                 }
                               },
                               tabs: [
-                                UiKitCustomTab(title: 'Followings'.toUpperCase()),
-                                UiKitCustomTab(title: 'Followers'.toUpperCase()),
+                                UiKitCustomTab(title: S.of(context).Followings.toUpperCase()),
+                                UiKitCustomTab(title: S.of(context).Followers.toUpperCase()),
                               ],
                             ),
                             SpacingFoundation.verticalSpace24,
@@ -57,7 +65,8 @@ class FollowingsComponent extends StatelessWidget {
                                         .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
                                     .toList() ??
                                 [
-                                  Text('nothing found'.toUpperCase(), style: context.uiKitTheme?.boldTextTheme.caption1Bold),
+                                  Text(S.of(context).NothingFound.toUpperCase(),
+                                      style: context.uiKitTheme?.boldTextTheme.caption1Bold),
                                 ])
                           else
                             ...(followers
@@ -66,7 +75,8 @@ class FollowingsComponent extends StatelessWidget {
                                         .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
                                     .toList() ??
                                 [
-                                  Text('nothing found'.toUpperCase(), style: context.uiKitTheme?.boldTextTheme.caption1Bold),
+                                  Text(S.of(context).NothingFound.toUpperCase(),
+                                      style: context.uiKitTheme?.boldTextTheme.caption1Bold),
                                 ]),
                         ]))));
   }

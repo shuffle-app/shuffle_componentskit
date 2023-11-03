@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/data/data.dart';
-import 'package:shuffle_components_kit/presentation/presentation.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PhotoVideoSelector extends StatelessWidget {
@@ -47,7 +46,7 @@ class PhotoVideoSelector extends StatelessWidget {
             child: Stack(alignment: Alignment.centerRight, children: [
               Row(children: [
                 Text(
-                  'Photo',
+                  S.of(context).Photo,
                   style: theme?.regularTextTheme.labelSmall,
                 ).paddingSymmetric(horizontal: horizontalPadding),
                 Expanded(
@@ -95,7 +94,7 @@ class PhotoVideoSelector extends StatelessWidget {
             child: Stack(alignment: Alignment.centerRight, children: [
               Row(children: [
                 Text(
-                  'Video',
+                  S.of(context).Video,
                   style: theme?.regularTextTheme.labelSmall,
                 ).paddingSymmetric(horizontal: horizontalPadding),
                 Expanded(

@@ -13,10 +13,11 @@ class HowItWorksWidget extends StatelessWidget {
   const HowItWorksWidget({super.key, required this.element, this.onPop, this.customOffset});
 
   _howItWorksDialog(_, textStyle) => UiKitHintDialog(
-        title: element.title?[ContentItemType.text]?.properties?.keys.first ?? 'Depending on...',
-        subtitle: element.body?[ContentItemType.text]?.properties?.keys.first ?? 'you get exactly what you need',
+        title: element.title?[ContentItemType.text]?.properties?.keys.first ?? S.current.DependingOn,
+        subtitle: element.body?[ContentItemType.text]?.properties?.keys.first ??
+            S.current.YouGetExactlyWhatYouNeed.toLowerCase(),
         textStyle: textStyle,
-        dismissText: 'OKAY, COOL!',
+        dismissText: S.current.OkayCool.toUpperCase(),
         onDismiss: () {
           onPop?.call();
 
@@ -60,7 +61,7 @@ class HowItWorksWidget extends StatelessWidget {
           applyReverseOnEnd: true,
           startDelay: Duration(seconds: Random().nextInt(8) + 2),
           child: UiKitBlurredQuestionChip(
-            label: 'How it\nworks',
+            label: S.of(context).HowItWorks,
             onTap: () => showUiKitFullScreenAlertDialog(context,
                 child: _howItWorksDialog, paddingAll: EdgeInsetsFoundation.all12),
           ),

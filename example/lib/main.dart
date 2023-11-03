@@ -6,6 +6,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -51,7 +52,14 @@ class _MyAppState extends State<MyApp> {
             onLocaleUpdated: (locale) => setState(() => _locale = locale),
             child: WidgetsFactory(
                 child: MaterialApp(
-                  locale: _locale,
+              locale: _locale,
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
               title: 'Shuffle Demo',
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorKey,
@@ -161,7 +169,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   topPadding: 10,
                   useRootNavigator: false,
                   child: InviteComponent(
-                    scrollController: ScrollController(),
                     persons: List.generate(
                       15,
                       (_) => UiInvitePersonModel(
@@ -171,6 +178,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         handshake: true,
                         avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
                         description: 'Any cheerful person can invite me',
+                        id: 0,
                       ),
                     ),
                     onLoadMore: () {},
@@ -1032,9 +1040,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                           moods: List.generate(
                                               4,
                                               (index) => UiMoodModel(
-                                                  id: 1,
-                                                  title: 'Want to have some fun',
-                                                  logo: 'assets/images/png/crazy_emoji.png')),
+                                                    id: 1,
+                                                    title: 'Want to have some fun',
+                                                    logo: 'assets/images/png/crazy_emoji.png',
+                                                  )),
                                         )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -1060,8 +1069,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
                                     id: 1,
-                                    places: List.generate(4, (index) => place),
                                   ),
+                                  onTabChanged: (String name) {},
                                 ))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -1178,6 +1187,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       uiModel: UiPersonalCredentialsVerificationModel(),
                       credentialsController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
+                      passwordController: TextEditingController(),
                     ),
                   ),
                 ),

@@ -49,9 +49,10 @@ class UiAboutCompanyModel {
       selectedMenuItem: selectedMenuItem,
       selectedAudiences: selectedAudiences,
       selectedAgeRanges: selectedAgeRanges,
-      errorSelectedMenuItem: selectedMenuItem == null ? 'Please select a niche' : null,
-      errorSelectedAudiences: (selectedAudiences?.isEmpty ?? true) ? 'Please select at least one target audience' : null,
-      errorSelectedAgeRanges: (selectedAgeRanges?.isEmpty ?? true) ? 'Please select at least one age range' : null,
+      errorSelectedMenuItem: selectedMenuItem == null ? S.current.PleaseSelectANiche : null,
+      errorSelectedAudiences:
+          (selectedAudiences?.isEmpty ?? true) ? S.current.PleaseSelectAtLeastOneTargetAudience : null,
+      errorSelectedAgeRanges: (selectedAgeRanges?.isEmpty ?? true) ? S.current.PleaseSelectAtLeastOneAgeRange : null,
     );
   }
 }

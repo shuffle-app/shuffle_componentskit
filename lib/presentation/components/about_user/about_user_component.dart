@@ -36,7 +36,8 @@ class AboutUserComponent extends StatelessWidget {
     if (aboutUserModel.selectedAge == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
     }
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -61,7 +62,7 @@ class AboutUserComponent extends StatelessWidget {
                 return [
                   if (contentTypeList.first == ContentItemType.text)
                     Text(
-                      contents.first.properties?.keys.first ?? 'Now let\'s get to know each other',
+                      contents.first.properties?.keys.first ?? S.of(context).NowLetsGetToKnowEachOther,
                       style: theme?.boldTextTheme.title1,
                     ),
                   SpacingFoundation.verticalSpace16,
@@ -70,13 +71,14 @@ class AboutUserComponent extends StatelessWidget {
                         text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'The more info we get about you, the better ',
+                          text: S.of(context).TheMoreInfoWeGetTheBetter,
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         ),
                         TextSpan(
-                            text: 'your leisure selection', style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
+                            text: S.of(context).YourLeisureSelection.toLowerCase(),
+                            style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
                         TextSpan(
-                          text: ' will be.',
+                          text: S.of(context).WillBe,
                           style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
                         )
                       ],
@@ -88,12 +90,12 @@ class AboutUserComponent extends StatelessWidget {
                           text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'The more info we get about you, the better ',
+                            text: S.of(context).TheMoreInfoWeGetTheBetter,
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           ),
-                          TextSpan(text: 'your leisure selection', style: subHeadline),
+                          TextSpan(text: S.of(context).YourLeisureSelection.toLowerCase(), style: subHeadline),
                           TextSpan(
-                            text: ' will be.',
+                            text: S.of(context).WillBe,
                             style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
                           )
                         ],
@@ -115,7 +117,7 @@ class AboutUserComponent extends StatelessWidget {
                 children: [
                   UiKitInputFieldNoIcon(
                     controller: nameController,
-                    hintText: 'NAME',
+                    hintText: S.of(context).Name.toUpperCase(),
                     validator: inputFieldValidator,
                     fillColor: ColorsFoundation.surface3,
                     // onChanged: (value) => onNameChanged?.call(value),
@@ -123,7 +125,7 @@ class AboutUserComponent extends StatelessWidget {
                   SpacingFoundation.verticalSpace16,
                   UiKitInputFieldNoIcon(
                     controller: nickNameController,
-                    hintText: 'NICKNAME',
+                    hintText: S.of(context).Nickname.toLowerCase(),
                     validator: inputFieldValidator,
                     fillColor: ColorsFoundation.surface3,
                     // onChanged: (value) => onNickNameChanged?.call(value),
@@ -135,17 +137,19 @@ class AboutUserComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
               color: Colors.black,
-              title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
-                  'Describe yourself',
+              title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys
+                      .first ??
+                  S.of(context).DescribeYourself,
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
               child: UiKitMenu<String>(
-                title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
-                    'Describe yourself',
+                title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys
+                        .first ??
+                    S.of(context).DescribeYourself,
                 selectedItem: aboutUserModel.selectedPersonType,
                 items: () {
-                  final rawItems =
-                      model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
+                  final rawItems = model
+                      .content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
 
                   return (rawItems?.entries
                           .map<UiKitMenuItem<String>>(
@@ -157,7 +161,8 @@ class AboutUserComponent extends StatelessWidget {
                           )
                           .toList() ??
                       [])
-                    ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+                    ..sort((a, b) =>
+                        (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
                 }(),
                 onSelected: (personType) => onPersonTypeChanged?.call(personType),
               )),
@@ -165,8 +170,9 @@ class AboutUserComponent extends StatelessWidget {
         if (model.content.body?[ContentItemType.multiSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-              title: model.content.body?[ContentItemType.multiSelect]?.title?.entries.first.value.properties?.keys.first ??
-                  'Select your religions',
+              title:
+                  model.content.body?[ContentItemType.multiSelect]?.title?.entries.first.value.properties?.keys.first ??
+                      S.of(context).SelectYourReligions,
               hasError: aboutUserModel.errorReligionMessage != null,
               errorText: aboutUserModel.errorReligionMessage,
               child: SingleChildScrollView(
@@ -174,8 +180,8 @@ class AboutUserComponent extends StatelessWidget {
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing8,
                   children: () {
-                    final rawItems =
-                        model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties;
+                    final rawItems = model
+                        .content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties;
 
                     final items = (rawItems?.entries.map((e) {
                           return UiKitBorderedChipWithIcon(
@@ -188,7 +194,8 @@ class AboutUserComponent extends StatelessWidget {
                           );
                         }).toList() ??
                         [])
-                      ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+                      ..sort((a, b) =>
+                          (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
 
                     return items.map((e) => e).toList();
                   }(),
@@ -201,7 +208,7 @@ class AboutUserComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         UiKitHorizontalWheelNumberSelector(
           values: List<int>.generate(70, (index) => index + 16),
-          title: 'Your age',
+          title: S.of(context).YourAge,
           initialValue: aboutUserModel.selectedAge == null ? null : aboutUserModel.selectedAge! - 16,
           onValueChanged: (age) => onAgeChanged?.call(age),
         ),
@@ -209,7 +216,8 @@ class AboutUserComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
             title:
-                model.content.body?[ContentItemType.singleSelect]?.title?.entries.first.value.properties?.keys.first ?? 'Gender',
+                model.content.body?[ContentItemType.singleSelect]?.title?.entries.first.value.properties?.keys.first ??
+                    S.of(context).Gender,
             hasError: aboutUserModel.errorGenderMessage != null,
             errorText: aboutUserModel.errorGenderMessage,
             child: Row(
@@ -218,8 +226,8 @@ class AboutUserComponent extends StatelessWidget {
               children: [
                 SpacingFoundation.horizontalSpace16,
                 ...() {
-                  final rawItems =
-                      model.content.body?[ContentItemType.singleSelect]?.body?[ContentItemType.singleSelect]?.properties;
+                  final rawItems = model
+                      .content.body?[ContentItemType.singleSelect]?.body?[ContentItemType.singleSelect]?.properties;
 
                   final items = (rawItems?.entries
                           .map((e) => UiKitVerticalChip(
@@ -231,7 +239,8 @@ class AboutUserComponent extends StatelessWidget {
                               ))
                           .toList() ??
                       [])
-                    ..sort((a, b) => (rawItems?[a.caption]?.sortNumber ?? 0).compareTo((rawItems?[b.caption]?.sortNumber ?? 0)));
+                    ..sort((a, b) =>
+                        (rawItems?[a.caption]?.sortNumber ?? 0).compareTo((rawItems?[b.caption]?.sortNumber ?? 0)));
 
                   return items
                       .map((e) => Expanded(
@@ -247,7 +256,7 @@ class AboutUserComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         context.button(
             data: BaseUiKitButtonData(
-          text: 'CONFIRM',
+          text: S.of(context).Confirm.toUpperCase(),
           onPressed: onSubmitUserData,
         )),
         SpacingFoundation.verticalSpace24,

@@ -23,7 +23,8 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
 
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['user_type_selection']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -81,7 +82,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
             width: 1.sw,
             child: context.button(
               data: BaseUiKitButtonData(
-                text: 'NEXT',
+                text: S.of(context).Next.toUpperCase(),
                 onPressed: () => widget.onUserTypeSelected?.call(selectedOption.title.toLowerCase()),
               ),
             ),
