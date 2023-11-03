@@ -59,8 +59,8 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     captionTexts.remove('auth_type');
     captionTexts.remove('password_hint');
 
-    final list = captionTexts.entries.toList();
-    list.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
+    final privacyCaptions = captionTexts.entries.toList();
+    privacyCaptions.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
 
     final authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
     final passwordHint = model.content.properties?['password_hint']?.value ?? '';
@@ -193,26 +193,26 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                         SpacingFoundation.verticalSpace16,
                         RichText(
                           text: TextSpan(children: [
-                            TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                            TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
                             TextSpan(
-                                text: list.first.key,
+                                text: privacyCaptions.first.key,
                                 style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => context
-                                      .push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
-                            TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                                  ..onTap = () => context.push(WebViewScreen(
+                                      title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
+                            TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
                             TextSpan(
-                                text: list.last.key,
+                                text: privacyCaptions.last.key,
                                 style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => context
-                                      .push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
+                                  ..onTap = () => context.push(WebViewScreen(
+                                      title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
                           ]),
                         ),
                         SpacingFoundation.verticalSpace16,
                         context.button(
                           data: BaseUiKitButtonData(
-                            text: 'NEXT'.toUpperCase(),
+                            text: S.of(context).Next.toUpperCase(),
                             onPressed: onSubmitted,
                             loading: loading,
                           ),
