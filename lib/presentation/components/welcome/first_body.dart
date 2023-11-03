@@ -116,7 +116,7 @@ class _FirstBody extends StatelessWidget {
                 builder: (context, child) {
                   return context.buttonWithProgress(
                     data: BaseUiKitButtonData(
-                      text: S.of(context).NextWithChevrons,
+                      text: S.of(context).NextWithChevrons.toUpperCase(),
                       onPressed: () => onNextPressed?.call(),
                     ),
                     blurred: false,
