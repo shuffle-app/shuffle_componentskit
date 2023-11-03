@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
-import 'package:shuffle_components_kit/domain/data_uimodels/socials_login_model.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -316,52 +316,54 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   ],
                 ),
               ),
-              AnimatedSwitcher(
-                reverseDuration: const Duration(milliseconds: 250),
-                duration: const Duration(milliseconds: 125),
-                transitionBuilder: (child, animation) => SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 1),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: FadeTransition(
-                    opacity: animation,
-                    child: child,
+              KeyboardVisibilityBuilder(
+                builder: (context, visible) => AnimatedSwitcher(
+                  reverseDuration: const Duration(milliseconds: 250),
+                  duration: const Duration(milliseconds: 125),
+                  transitionBuilder: (child, animation) => SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 1),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
                   ),
-                ),
-                child: tabController.index < 1
-                    ? Column(
-                        children: [
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
-                              TextSpan(
-                                  text: privacyCaptions.first.key,
-                                  style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.push(WebViewScreen(
-                                        title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                              TextSpan(text: ' and ', style: regTextTheme?.caption4),
-                              TextSpan(
-                                  text: privacyCaptions.last.key,
-                                  style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.push(WebViewScreen(
-                                        title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
-                            ]),
-                          ),
-                          SpacingFoundation.verticalSpace16,
-                          context.button(
-                            data: BaseUiKitButtonData(
-                              text: 'NEXT',
-                              onPressed: widget.onSubmit,
-                              loading: widget.loading,
-                              fit: ButtonFit.fitWidth,
+                  child: tabController.index < 1 && !visible
+                      ? Column(
+                          children: [
+                            RichText(
+                              text: TextSpan(children: [
+                                TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                                TextSpan(
+                                    text: privacyCaptions.first.key,
+                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => context.push(WebViewScreen(
+                                          title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
+                                TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                                TextSpan(
+                                    text: privacyCaptions.last.key,
+                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => context.push(WebViewScreen(
+                                          title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                              ]),
                             ),
-                          ),
-                        ],
-                      )
-                    : SpacingFoundation.none,
+                            SpacingFoundation.verticalSpace16,
+                            context.button(
+                              data: BaseUiKitButtonData(
+                                text: 'NEXT',
+                                onPressed: widget.onSubmit,
+                                loading: widget.loading,
+                                fit: ButtonFit.fitWidth,
+                              ),
+                            ),
+                          ],
+                        )
+                      : SpacingFoundation.none,
+                ),
               ),
               SpacingFoundation.verticalSpace4,
             ],
