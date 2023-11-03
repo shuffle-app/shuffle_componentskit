@@ -32,7 +32,7 @@ class _FirstBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing24,
+              height: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing24,
             ),
             Align(
               alignment: Alignment.topCenter,

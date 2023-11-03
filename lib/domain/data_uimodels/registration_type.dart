@@ -13,3 +13,14 @@ class RegistrationTypeData {
     required this.type,
   });
 }
+
+RegistrationType indentifyRegistrationType(String value) {
+  switch (value) {
+    case 'phone':
+      return RegistrationType.phone;
+    case 'email':
+      return RegistrationType.email;
+    default:
+      return RegistrationType.another;
+  }
+}

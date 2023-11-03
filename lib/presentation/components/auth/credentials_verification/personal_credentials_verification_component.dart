@@ -50,7 +50,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   late final String subtitle;
   late final String decorationLink;
   late final String countrySelectorTitle;
-  late final String? authType;
+  late final RegistrationType? authType;
   late final String passwordHint;
   late final List<ShortLogInButton> socials;
   late final List<String>? tabBar;
@@ -85,12 +85,13 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
-          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
+              '';
       tabBar = model.content.body?[ContentItemType.tabBar]?.properties?.keys.toList();
       if (tabBar?.isNotEmpty ?? false) {
         if (_selectedTab == null) setState(() => _selectedTab = tabBar?.first);
       }
-      authType = model.content.properties?['auth_type']?.value ?? '';
+      authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
       passwordHint = model.content.properties?['password_hint']?.value ?? '';
       final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
       socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
@@ -108,13 +109,14 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
             );
           }).toList() ??
           [];
-      isSmallScreen = MediaQuery.of(context).size.width <= 375;
+      isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
       tabController.addListener(_tabListener);
       setState(() => inited = true);
     });
   }
 
   void _tabListener() {
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       _selectedTab = tabBar?.elementAt(tabController.index);
     });
@@ -139,7 +141,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       fit: StackFit.expand,
       children: [
         Positioned(
-          top: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing6,
+          top: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing6,
           right: SpacingFoundation.horizontalSpacing16,
           child: ImageWidget(
             link: decorationLink,
@@ -154,7 +156,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).viewPadding.top,
+                height: MediaQuery.viewPaddingOf(context).top,
               ),
               Text(
                 title,
@@ -169,36 +171,54 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                 if (visibility) return SpacingFoundation.verticalSpace16;
                 return Spacer(flex: isSmallScreen ? 2 : 1);
               }),
-              // const Spacer(flex: 1),
-              if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty)
-                StatefulBuilder(
-                    builder: (context, setState) => UiKitCardWrapper(
-                          color: colorScheme?.surface1,
-                          borderRadius: BorderRadiusFoundation.max,
-                          child: UiKitLocaleSelector(
-                              selectedLocale: widget.availableLocales!
-                                  .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
-                              availableLocales: widget.availableLocales!,
-                              onLocaleChanged: (LocaleModel value) {
-                                context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
-                                setState(() {});
-                              }).paddingAll(EdgeInsetsFoundation.all4),
-                        )),
-              SpacingFoundation.verticalSpace16,
-              if (tabBar != null) ...[
-                UiKitCustomTabBar(
-                  tabController: tabController,
-                  selectedTab: _selectedTab,
-                  tabs: tabBar!.map<UiKitCustomTab>((key) => UiKitCustomTab.small(title: key.toUpperCase())).toList(),
-                  onTappedTab: (tabIndex) {
-                    setState(() {
-                      _selectedTab = tabBar!.elementAt(tabIndex);
-                      // tabController.animateTo(tabIndex);
-                    });
-                  },
-                ),
-                SpacingFoundation.verticalSpace16,
-              ],
+              KeyboardVisibilityBuilder(builder: (context, visibility) {
+                return AnimatedSwitcher(
+                    reverseDuration: const Duration(milliseconds: 250),
+                    duration: const Duration(milliseconds: 125),
+                    transitionBuilder: (child, animation) => FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        ),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // const Spacer(flex: 1),
+                          if (widget.availableLocales != null &&
+                              widget.availableLocales!.isNotEmpty &&
+                              !visibility) ...[
+                            UiKitCardWrapper(
+                              color: colorScheme?.surface1,
+                              borderRadius: BorderRadiusFoundation.max,
+                              child: UiKitLocaleSelector(
+                                  selectedLocale: widget.availableLocales!
+                                      .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                                  availableLocales: widget.availableLocales!,
+                                  onLocaleChanged: (LocaleModel value) {
+                                    context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
+                                    setState(() {});
+                                  }).paddingAll(EdgeInsetsFoundation.all4),
+                            ),
+                            SpacingFoundation.verticalSpace16
+                          ],
+                          if (tabBar != null && !visibility) ...[
+                            UiKitCustomTabBar(
+                              tabController: tabController,
+                              selectedTab: _selectedTab,
+                              tabs: tabBar!
+                                  .map<UiKitCustomTab>((key) => UiKitCustomTab.small(title: key.toUpperCase()))
+                                  .toList(),
+                              onTappedTab: (tabIndex) {
+                                setState(() {
+                                  _selectedTab = tabBar!.elementAt(tabIndex);
+                                  // tabController.animateTo(tabIndex);
+                                });
+                              },
+                            ),
+                            SpacingFoundation.verticalSpace16,
+                          ],
+                        ]));
+              }),
               Expanded(
                 flex: isSmallScreen ? 7 : 2,
                 child: TabBarView(
@@ -206,7 +226,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   children: [
                     Column(
                       children: [
-                        if (authType == 'phone') ...[
+                        if (authType == RegistrationType.phone) ...[
                           UiKitCountrySelector(
                             selectedCountry: widget.uiModel.selectedCountry,
                             title: countrySelectorTitle,
@@ -226,45 +246,39 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           ),
                           SpacingFoundation.verticalSpace16,
                         ],
-                        if (authType == 'email') ...[
-                          UiKitCardWrapper(
-                            color: ColorsFoundation.surface1,
-                            borderRadius: BorderRadiusFoundation.max,
-                            child: UiKitInputFieldNoIcon(
-                              enabled: true,
-                              hintText: 'EMAIL',
-                              controller: widget.credentialsController,
-                              fillColor: ColorsFoundation.surface3,
-                              validator: widget.credentialsValidator,
-                            ).paddingAll(EdgeInsetsFoundation.all4),
+                        if (authType == RegistrationType.email) ...[
+                          UiKitWrappedInputField.uiKitInputFieldNoIcon(
+                            enabled: true,
+                            hintText: 'EMAIL',
+                            controller: widget.credentialsController,
+                            fillColor: ColorsFoundation.surface3,
+                            validator: widget.credentialsValidator,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
                           ),
                           SpacingFoundation.verticalSpace16,
-                          UiKitCardWrapper(
-                            color: ColorsFoundation.surface1,
-                            borderRadius: BorderRadiusFoundation.max,
-                            child: UiKitInputFieldRightIcon(
-                              obscureText: obscurePassword,
-                              enabled: true,
-                              hintText: 'PASSWORD',
-                              controller: widget.passwordController,
-                              fillColor: ColorsFoundation.surface3,
-                              validator: widget.passwordValidator,
-                              icon: GestureDetector(
-                                onTap: () => setState(() => obscurePassword = !obscurePassword),
-                                child: obscurePassword
-                                    ? ImageWidget(
-                                        svgAsset: GraphicsFoundation.instance.svg.view,
-                                        color: colorScheme?.darkNeutral900,
-                                      )
-                                    : GradientableWidget(
-                                        gradient: GradientFoundation.defaultRadialGradient,
-                                        child: ImageWidget(
-                                          svgAsset: GraphicsFoundation.instance.svg.eyeOff,
-                                          color: Colors.white,
-                                        ),
+                          UiKitWrappedInputField.uiKitInputFieldRightIcon(
+                            obscureText: obscurePassword,
+                            enabled: true,
+                            hintText: 'PASSWORD',
+                            controller: widget.passwordController,
+                            fillColor: ColorsFoundation.surface3,
+                            validator: widget.passwordValidator,
+                            icon: GestureDetector(
+                              onTap: () => setState(() => obscurePassword = !obscurePassword),
+                              child: obscurePassword
+                                  ? ImageWidget(
+                                      svgAsset: GraphicsFoundation.instance.svg.view,
+                                      color: colorScheme?.darkNeutral900,
+                                    )
+                                  : GradientableWidget(
+                                      gradient: GradientFoundation.defaultRadialGradient,
+                                      child: ImageWidget(
+                                        svgAsset: GraphicsFoundation.instance.svg.eyeOff,
+                                        color: Colors.white,
                                       ),
-                              ),
-                            ).paddingAll(EdgeInsetsFoundation.all4),
+                                    ),
+                            ),
                           ),
                           SpacingFoundation.verticalSpace2,
                           Text(
@@ -288,40 +302,33 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           itemCount: socials.length,
                         ),
                         if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
-                          reverseDuration: const Duration(milliseconds: 125),
-                          transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-                          child: tabController.index >= 1
-                              ? RichText(
-                                  text: TextSpan(children: [
-                                    TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
-                                    TextSpan(
-                                        text: privacyCaptions.first.key,
-                                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () => context.push(WebViewScreen(
-                                              title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                                    TextSpan(text: ' and ', style: regTextTheme?.caption4),
-                                    TextSpan(
-                                        text: privacyCaptions.last.key,
-                                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () => context.push(WebViewScreen(
-                                              title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
-                                  ]),
-                                )
-                              : SpacingFoundation.none,
-                        ),
                       ],
                     ),
                   ],
                 ),
               ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                  TextSpan(
+                      text: privacyCaptions.first.key,
+                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => context.push(WebViewScreen(
+                            title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
+                  TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                  TextSpan(
+                      text: privacyCaptions.last.key,
+                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => context.push(WebViewScreen(
+                            title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                ]),
+              ),
               KeyboardVisibilityBuilder(
                 builder: (context, visible) => AnimatedSwitcher(
-                  reverseDuration: const Duration(milliseconds: 250),
-                  duration: const Duration(milliseconds: 125),
+                  reverseDuration: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   transitionBuilder: (child, animation) => SlideTransition(
                     position: Tween<Offset>(
                       begin: const Offset(0, 1),
@@ -335,24 +342,6 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   child: tabController.index < 1 && !visible
                       ? Column(
                           children: [
-                            RichText(
-                              text: TextSpan(children: [
-                                TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
-                                TextSpan(
-                                    text: privacyCaptions.first.key,
-                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.push(WebViewScreen(
-                                          title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                                TextSpan(text: ' and ', style: regTextTheme?.caption4),
-                                TextSpan(
-                                    text: privacyCaptions.last.key,
-                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.push(WebViewScreen(
-                                          title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
-                              ]),
-                            ),
                             SpacingFoundation.verticalSpace16,
                             context.button(
                               data: BaseUiKitButtonData(
@@ -364,7 +353,9 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             ),
                           ],
                         )
-                      : SpacingFoundation.none,
+                      : !visible
+                          ? (16.h * 3).heightBox
+                          : SpacingFoundation.none,
                 ),
               ),
               SpacingFoundation.verticalSpace4,

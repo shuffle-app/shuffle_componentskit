@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -11,6 +13,10 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
   final TextEditingController credentialsController;
   final GlobalKey<FormState> formKey;
   final bool? loading;
+  final TextEditingController passwordController;
+  final String? Function(String?)? passwordValidator;
+  final String? Function(String?)? credentialsValidator;
+  final List<LocaleModel>? availableLocales;
 
   final String? Function(String?)? companyCredentialsValidator;
 
@@ -19,6 +25,10 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     required this.uiModel,
     required this.formKey,
     required this.credentialsController,
+    required this.passwordController,
+    this.passwordValidator,
+    this.credentialsValidator,
+    this.availableLocales,
     this.loading,
     this.onSubmitted,
     this.onTabChanged,
@@ -46,9 +56,17 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     final captionTexts = Map<String, PropertiesBaseModel>.of(model.content.properties ?? {});
 
     captionTexts.remove('image');
+    captionTexts.remove('auth_type');
+    captionTexts.remove('password_hint');
 
     final list = captionTexts.entries.toList();
     list.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
+
+    final authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
+    final passwordHint = model.content.properties?['password_hint']?.value ?? '';
+
+    final colorScheme = context.uiKitTheme?.colorScheme;
+    bool obscurePassword = true;
 
     return Form(
       key: formKey,
@@ -58,106 +76,154 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
           Positioned(
             width: 1.sw,
             right: SpacingFoundation.horizontalSpacing16,
-            top: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing6,
+            top: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing6,
             child: ImageWidget(
               link: decorationLink?.imageLink ?? '',
               fit: BoxFit.fitWidth,
               width: 1.sw,
             ),
           ),
-          Positioned(
-            width: 1.sw,
-            height: 1.sh,
-            bottom: SpacingFoundation.zero,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).viewPadding.top,
-                ),
-                Text(
-                  title,
-                  style: boldTextTheme?.titleLarge,
-                ),
-                SpacingFoundation.verticalSpace16,
-                Text(
-                  subtitle,
-                  style: boldTextTheme?.subHeadline,
-                ),
-                const Spacer(),
-                if (tabBar != null) ...[
-                  UiKitCustomTabBar(
-                    tabs: tabBar.keys.map<UiKitCustomTab>((key) => UiKitCustomTab(title: key)).toList(),
-                    onTappedTab: (tabIndex) => onTabChanged?.call(tabIndex),
-                  ),
-                  SpacingFoundation.verticalSpace16,
-                ],
-                UiKitCountrySelector(
-                  selectedCountry: uiModel.selectedCountry,
-                  onSelected: (country) => onCountryChanged?.call(country),
-                  title: countrySelectorTitle,
-                ),
-                if (uiModel.selectedRegistrationType == RegistrationType.phone) ...[
-                  SpacingFoundation.verticalSpace16,
-                  UiKitCardWrapper(
-                    color: ColorsFoundation.surface1,
-                    borderRadius: BorderRadiusFoundation.max,
-                    child: UiKitPhoneNumberInput(
-                      controller: credentialsController,
-                      enabled: true,
-                      fillColor: ColorsFoundation.surface3,
-                      countryCode: uiModel.selectedCountry?.countryPhoneCode ?? '',
-                      validator: companyCredentialsValidator,
-                    ).paddingAll(EdgeInsetsFoundation.all4),
-                  ),
-                ],
-                if (uiModel.selectedRegistrationType == RegistrationType.email) ...[
-                  SpacingFoundation.verticalSpace16,
-                  UiKitCardWrapper(
-                    color: ColorsFoundation.surface1,
-                    borderRadius: BorderRadiusFoundation.max,
-                    child: UiKitInputFieldNoIcon(
-                      fillColor: ColorsFoundation.surface3,
-                      controller: credentialsController,
-                      hintText: 'Johndoe@gmail.com',
-                    ).paddingAll(EdgeInsetsFoundation.all4),
-                  ),
-                ],
-                SpacingFoundation.verticalSpace16,
-                RichText(
-                  text: TextSpan(children: [
-                    TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
-                    TextSpan(
-                        text: list.first.key,
-                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () =>
-                              context.push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
-                    TextSpan(text: ' and ', style: regTextTheme?.caption4),
-                    TextSpan(
-                        text: list.last.key,
-                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap =
-                              () => context.push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
-                  ]),
-                ),
-                SpacingFoundation.verticalSpace16,
-                context.button(
-                  data: BaseUiKitButtonData(
-                    text: 'get code'.toUpperCase(),
-                    onPressed: onSubmitted,
-                    loading: loading,
-                  ),
-                ),
-                SpacingFoundation.verticalSpace8,
-              ],
-            ).paddingSymmetric(
-              horizontal: horizontalMargin,
-              vertical: verticalMargin,
-            ),
-          ),
+          KeyboardVisibilityBuilder(
+              builder: (context, visible) => Positioned(
+                    width: 1.sw,
+                    height: 1.sh - MediaQuery.viewInsetsOf(context).bottom,
+                    bottom: SpacingFoundation.zero,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.viewPaddingOf(context).top,
+                        ),
+                        Text(
+                          title,
+                          style: boldTextTheme?.titleLarge,
+                        ),
+                        SpacingFoundation.verticalSpace16,
+                        Text(
+                          subtitle,
+                          style: boldTextTheme?.subHeadline,
+                        ),
+                        const Spacer(),
+                        if (availableLocales != null && availableLocales!.isNotEmpty)
+                          StatefulBuilder(
+                              builder: (context, setState) => UiKitCardWrapper(
+                                    color: colorScheme?.surface1,
+                                    borderRadius: BorderRadiusFoundation.max,
+                                    child: UiKitLocaleSelector(
+                                        selectedLocale: availableLocales!.firstWhere(
+                                            (element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                                        availableLocales: availableLocales!,
+                                        onLocaleChanged: (LocaleModel value) {
+                                          context
+                                              .findAncestorWidgetOfExactType<UiKitTheme>()
+                                              ?.onLocaleUpdated(value.locale);
+                                          setState(() {});
+                                        }).paddingAll(EdgeInsetsFoundation.all4),
+                                  )),
+                        if (tabBar != null) ...[
+                          UiKitCustomTabBar(
+                            tabs: tabBar.keys.map<UiKitCustomTab>((key) => UiKitCustomTab(title: key)).toList(),
+                            onTappedTab: (tabIndex) => onTabChanged?.call(tabIndex),
+                          ),
+                          SpacingFoundation.verticalSpace16,
+                        ],
+                        if (authType == RegistrationType.phone) ...[
+                          UiKitCountrySelector(
+                            selectedCountry: uiModel.selectedCountry,
+                            onSelected: (country) => onCountryChanged?.call(country),
+                            title: countrySelectorTitle,
+                          ),
+                          SpacingFoundation.verticalSpace16,
+                          UiKitCardWrapper(
+                            color: ColorsFoundation.surface1,
+                            borderRadius: BorderRadiusFoundation.max,
+                            child: UiKitPhoneNumberInput(
+                              controller: credentialsController,
+                              enabled: true,
+                              fillColor: ColorsFoundation.surface3,
+                              countryCode: uiModel.selectedCountry?.countryPhoneCode ?? '',
+                              validator: companyCredentialsValidator,
+                            ).paddingAll(EdgeInsetsFoundation.all4),
+                          ),
+                        ],
+                        if (authType == RegistrationType.email) ...[
+                          SpacingFoundation.verticalSpace16,
+                          UiKitWrappedInputField.uiKitInputFieldNoIcon(
+                            enabled: true,
+                            hintText: 'EMAIL',
+                            controller: credentialsController,
+                            fillColor: ColorsFoundation.surface3,
+                            validator: credentialsValidator,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                          ),
+                          SpacingFoundation.verticalSpace16,
+                          StatefulBuilder(
+                              builder: (context, setState) => UiKitWrappedInputField.uiKitInputFieldRightIcon(
+                                    obscureText: obscurePassword,
+                                    enabled: true,
+                                    hintText: 'PASSWORD',
+                                    controller: passwordController,
+                                    fillColor: ColorsFoundation.surface3,
+                                    validator: passwordValidator,
+                                    icon: GestureDetector(
+                                      onTap: () => setState(() => obscurePassword = !obscurePassword),
+                                      child: obscurePassword
+                                          ? ImageWidget(
+                                              svgAsset: GraphicsFoundation.instance.svg.view,
+                                              color: colorScheme?.darkNeutral900,
+                                            )
+                                          : GradientableWidget(
+                                              gradient: GradientFoundation.defaultRadialGradient,
+                                              child: ImageWidget(
+                                                svgAsset: GraphicsFoundation.instance.svg.eyeOff,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                    ),
+                                  )),
+                          SpacingFoundation.verticalSpace2,
+                          Text(
+                            passwordHint,
+                            style: regTextTheme?.caption4,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                        SpacingFoundation.verticalSpace16,
+                        RichText(
+                          text: TextSpan(children: [
+                            TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                            TextSpan(
+                                text: list.first.key,
+                                style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => context
+                                      .push(WebViewScreen(title: list.first.key, url: list.first.value.value ?? ''))),
+                            TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                            TextSpan(
+                                text: list.last.key,
+                                style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => context
+                                      .push(WebViewScreen(title: list.last.key, url: list.last.value.value ?? '')))
+                          ]),
+                        ),
+                        SpacingFoundation.verticalSpace16,
+                        context.button(
+                          data: BaseUiKitButtonData(
+                            text: 'NEXT'.toUpperCase(),
+                            onPressed: onSubmitted,
+                            loading: loading,
+                          ),
+                        ),
+                        SpacingFoundation.verticalSpace8,
+                      ],
+                    ).paddingSymmetric(
+                      horizontal: horizontalMargin,
+                      vertical: verticalMargin,
+                    ),
+                  )),
         ],
       ),
     );
