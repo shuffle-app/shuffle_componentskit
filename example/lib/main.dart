@@ -416,7 +416,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               id: 1,
                               title: 'Want to have some fun',
                               logo: 'assets/images/png/crazy_emoji.png',
-                              places: [],
                             ),
                           ),
                         ),
@@ -1041,10 +1040,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                           moods: List.generate(
                                               4,
                                               (index) => UiMoodModel(
-                                                  id: 1,
-                                                  title: 'Want to have some fun',
-                                                  logo: 'assets/images/png/crazy_emoji.png',
-                                                  places: [])),
+                                                    id: 1,
+                                                    title: 'Want to have some fun',
+                                                    logo: 'assets/images/png/crazy_emoji.png',
+                                                  )),
                                         )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -1070,7 +1069,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
                                     id: 1,
-                                    places: List.generate(4, (index) => place),
                                   ),
                                   onTabChanged: (String name) {},
                                 ))))))),
@@ -1189,6 +1187,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       uiModel: UiPersonalCredentialsVerificationModel(),
                       credentialsController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
+                      passwordController: TextEditingController(),
                     ),
                   ),
                 ),
