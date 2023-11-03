@@ -77,19 +77,18 @@ class SearchComponent extends StatelessWidget {
       ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
 
     final sortedCards = chooseCards
-        ?.map(
-          (e) =>
-          UiKitTitledCardWithBackground(
-            title: e.key,
-            backgroundImageLink: e.value.imageLink ?? '',
-            backgroundColor: e.value.color ?? Colors.white,
-            onPressed: () {
-              onSearchFieldTap?.call();
-              searchController.text = e.key;
-            },
-          ),
-    )
-        .toList() ??
+            ?.map(
+              (e) => UiKitTitledCardWithBackground(
+                title: e.key,
+                backgroundImageLink: e.value.imageLink ?? '',
+                backgroundColor: e.value.color ?? Colors.white,
+                onPressed: () {
+                  onSearchFieldTap?.call();
+                  searchController.text = e.key;
+                },
+              ),
+            )
+            .toList() ??
         [];
 
     return Stack(
@@ -111,7 +110,7 @@ class SearchComponent extends StatelessWidget {
                             alignment: Alignment.center,
                             children: [
                               Text(
-                                title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'You’ll find it',
+                                title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).YoullFindIt,
                                 style: theme?.boldTextTheme.title1,
                               ),
                               if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
@@ -132,7 +131,7 @@ class SearchComponent extends StatelessWidget {
                               width: double.infinity,
                               child: UiKitInputFieldRightIcon(
                                 fillColor: ColorsFoundation.surface3,
-                                hintText: 'search'.toUpperCase(),
+                                hintText: S.of(context).Search.toUpperCase(),
                                 controller: searchController,
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.search,
@@ -158,17 +157,17 @@ class SearchComponent extends StatelessWidget {
             if (model.showFree ?? false) ...[
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
-                action: context.smallButton(
-                    data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                action:
+                    context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
                 title: Stack(
                   children: [
                     RichText(
                       text: TextSpan(
                         style: theme?.boldTextTheme.body,
                         children: [
-                          const TextSpan(text: 'Selection of the best'),
+                          TextSpan(text: S.of(context).SelectionOfTheBest),
                           TextSpan(
-                            text: '\nfree places',
+                            text: S.of(context).FreePlaces,
                             style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.transparent),
                           )
                         ],
@@ -180,10 +179,10 @@ class SearchComponent extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Selection of the best',
+                              text: S.of(context).SelectionOfTheBest,
                               style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
                             ),
-                            TextSpan(text: '\nfree places', style: theme?.boldTextTheme.subHeadline)
+                            TextSpan(text: S.of(context).FreePlaces, style: theme?.boldTextTheme.subHeadline)
                           ],
                         ),
                       ),
@@ -210,8 +209,8 @@ class SearchComponent extends StatelessWidget {
             ).paddingOnly(left: horizontalMargin),
             SpacingFoundation.verticalSpace24,
             Stack(clipBehavior: Clip.none, children: [
-              Text('Top places rated\nby', style: theme?.boldTextTheme.title1),
-                  () {
+              Text(S.of(context).TopPlacesRatedBy, style: theme?.boldTextTheme.title1),
+              () {
                 const MemberPlate widget = MemberPlate();
 
                 return Positioned(
@@ -234,14 +233,13 @@ class SearchComponent extends StatelessWidget {
                       spacing: SpacingFoundation.verticalSpacing8,
                       children: search.filterChips!
                           .map(
-                            (e) =>
-                            UiKitTitledFilterChip(
+                            (e) => UiKitTitledFilterChip(
                               selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
                               title: e.title,
                               onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                               icon: e.iconPath,
                             ),
-                      )
+                          )
                           .toList(),
                     )
                   ],
@@ -250,15 +248,12 @@ class SearchComponent extends StatelessWidget {
             ],
             SpacingFoundation.verticalSpace24,
             ...search.places
-                .map((e) =>
-                UiKitCompactOrderedRatingCard(
-                    order: search.places.indexOf(e) + 1,
-                    rating: e.rating,
-                    title: e.title,
-                    imageLink: e.media
-                        .firstWhere((element) => element.type == UiKitMediaType.image)
-                        .link,
-                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
+                .map((e) => UiKitCompactOrderedRatingCard(
+                        order: search.places.indexOf(e) + 1,
+                        rating: e.rating,
+                        title: e.title,
+                        imageLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                        onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
                     .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
                 .toList(),
             kBottomNavigationBarHeight.heightBox,

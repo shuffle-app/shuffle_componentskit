@@ -10,7 +10,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   final VoidCallback? onCreatePlace;
   final ValueChanged<int>? onPlaceTapped;
   final List<UiKitStats>? profileStats;
-  final Map<int,String> creationStats;
+  final Map<int, String> creationStats;
 
   const CompanyHomeScreenComponent({
     super.key,
@@ -27,12 +27,12 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_home']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final bodyAlignment = model.positionModel?.bodyAlignment;
-
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -54,7 +54,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'shuffle',
+                      S.of(context).Shuffle,
                       style: textTheme?.caption1Bold.copyWith(color: Colors.black),
                     ),
                     ImageWidget(
@@ -69,21 +69,21 @@ class CompanyHomeScreenComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace24,
             Text(
-              'Places',
+              S.of(context).Places,
               style: textTheme?.title1,
               textAlign: TextAlign.left,
             ),
             SpacingFoundation.verticalSpace24,
             if (places.isEmpty)
-            UiKitTitledActionCard(
-              title: 'Create your place and invite people',
-              actionButton: context.gradientButton(
-                data: BaseUiKitButtonData(
-                  text: 'Create place'.toUpperCase(),
-                  onPressed: onCreatePlace,
+              UiKitTitledActionCard(
+                title: S.of(context).CreateYourPlaceAndInvitePeople,
+                actionButton: context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    text: S.of(context).CreatePlace.toUpperCase(),
+                    onPressed: onCreatePlace,
+                  ),
                 ),
               ),
-            ),
             if (places.isNotEmpty)
               ListView.separated(
                 padding: EdgeInsets.zero,
@@ -106,10 +106,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace24,
               context.gradientButton(
                 data: BaseUiKitButtonData(
-                  text: 'Create place',
-                  onPressed: onCreatePlace,
-                  fit: ButtonFit.fitWidth
-                ),
+                    text: S.of(context).CreatePlace, onPressed: onCreatePlace, fit: ButtonFit.fitWidth),
               ),
             ],
             SpacingFoundation.verticalSpace24,

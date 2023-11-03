@@ -33,27 +33,27 @@ class ComplaintFormComponent extends StatelessWidget {
       child: Column(
         children: [
           SpacingFoundation.verticalSpace12,
-          Text('Describe your claim', style: theme?.boldTextTheme.title2),
+          Text(S.of(context).DescribeYourClaim, style: theme?.boldTextTheme.title2),
           SpacingFoundation.verticalSpace16,
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoIcon(
             controller: nameController,
             validator: nameValidator,
-            hintText: 'YOUR NAME',
+            hintText: S.of(context).YourName.toUpperCase(),
             fillColor: theme?.colorScheme.surface3,
           ),
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoIcon(
             controller: emailController,
             validator: emailValidator,
-            hintText: 'YOUR EMAIL',
+            hintText: S.of(context).YourEmail.toUpperCase(),
             fillColor: theme?.colorScheme.surface3,
           ),
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoIcon(
             controller: issueController,
             validator: issueValidator,
-            hintText: 'DESCRIBE YOUR ISSUE',
+            hintText: S.of(context).DescribeYourIssue.toUpperCase(),
             fillColor: theme?.colorScheme.surface3,
             minLines: 3,
             borderRadius: BorderRadiusFoundation.all24,
@@ -63,11 +63,11 @@ class ComplaintFormComponent extends StatelessWidget {
             data: BaseUiKitButtonData(
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                    context.pop();
+                  context.pop();
                   onSend();
                 }
               },
-              text: 'send',
+              text: S.of(context).Send.toLowerCase(),
               fit: ButtonFit.fitWidth,
             ),
           ),

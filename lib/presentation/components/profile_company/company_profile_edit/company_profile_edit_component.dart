@@ -30,34 +30,35 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final TextEditingController phoneController;
   final bool isLoading;
 
-  const CompanyProfileEditComponent(
-      {Key? key,
-        required this.selectedAudience,
-        required this.selectedAgeRanges,
-        required this.selectedNiche,
-        this.onProfileEditSubmitted,
-        this.onNicheChangeRequested,
-        this.formKey,
-        this.onPhotoChangeRequested,
-        this.onPreferencesChanged,
-        this.titleValidator,
-        this.emailValidator,
-        this.avatarUrl,
-        this.phoneValidator,
-        this.contactPersonValidator,
-        required this.contactPersonController,
-        required this.titleController,
-        required this.emailController,
-        required this.positionController,
-        required this.phoneController,
-        this.onAgeRangesChangeRequested,
-        this.onAudienceChangeRequested,
-        this.isLoading = false})
-      : super(key: key);
+  const CompanyProfileEditComponent({
+    Key? key,
+    required this.selectedAudience,
+    required this.selectedAgeRanges,
+    required this.selectedNiche,
+    this.onProfileEditSubmitted,
+    this.onNicheChangeRequested,
+    this.formKey,
+    this.onPhotoChangeRequested,
+    this.onPreferencesChanged,
+    this.titleValidator,
+    this.emailValidator,
+    this.avatarUrl,
+    this.phoneValidator,
+    this.contactPersonValidator,
+    required this.contactPersonController,
+    required this.titleController,
+    required this.emailController,
+    required this.positionController,
+    required this.phoneController,
+    this.onAgeRangesChangeRequested,
+    this.onAudienceChangeRequested,
+    this.isLoading = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -66,7 +67,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
     return Scaffold(
       body: BlurredAppBarPage(
         // wrapSliverBox: false,
-        title: 'Edit Profile',
+        title: S.of(context).EditProfile,
         autoImplyLeading: true,
         centerTitle: true,
         appBarBody: Column(
@@ -80,11 +81,12 @@ class CompanyProfileEditComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace4,
             InkWell(
-                onTap: onPhotoChangeRequested,
-                child: Text(
-                  'Change Photo',
-                  style: textTheme?.caption2Bold,
-                )),
+              onTap: onPhotoChangeRequested,
+              child: Text(
+                S.of(context).ChangePhoto,
+                style: textTheme?.caption2Bold,
+              ),
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -96,20 +98,20 @@ class CompanyProfileEditComponent extends StatelessWidget {
               children: [
                 UiKitInputFieldNoFill(
                   controller: titleController,
-                  label: 'Title',
+                  label: S.of(context).Title,
                   validator: titleValidator,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: contactPersonController,
-                  label: 'Contact Person',
+                  label: S.of(context).ContactPerson,
                   validator: contactPersonValidator,
                   keyboardType: TextInputType.name,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: positionController,
-                  label: 'Position',
+                  label: S.of(context).Position,
                   validator: contactPersonValidator,
                   inputFormatters: [dateInputFormatter],
                 ),
@@ -117,7 +119,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
                 UiKitInputFieldNoFill(
                   prefixText: '+',
                   controller: phoneController,
-                  label: 'Phone',
+                  label: S.of(context).Phone,
                   validator: phoneValidator,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [americanInputFormatter],
@@ -125,7 +127,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoFill(
                   controller: emailController,
-                  label: 'Email',
+                  label: S.of(context).Email,
                   validator: emailValidator,
                   keyboardType: TextInputType.emailAddress,
                 ),
@@ -133,19 +135,19 @@ class CompanyProfileEditComponent extends StatelessWidget {
                 UiKitTitledSelectionTile(
                   onSelectionChanged: onNicheChangeRequested,
                   selectedItems: [selectedNiche],
-                  title: 'Your niche',
+                  title: S.of(context).YourNiche,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitTitledSelectionTile(
                   onSelectionChanged: onAudienceChangeRequested,
                   selectedItems: selectedAudience,
-                  title: 'Your audience',
+                  title: S.of(context).YourAudience,
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitTitledSelectionTile(
                   onSelectionChanged: onAgeRangesChangeRequested,
                   selectedItems: selectedAgeRanges,
-                  title: 'Your audience age',
+                  title: S.of(context).YourAudienceAge,
                 ),
               ],
             ).paddingSymmetric(
@@ -161,19 +163,18 @@ class CompanyProfileEditComponent extends StatelessWidget {
         opacity: MediaQuery.viewInsetsOf(context).bottom == 0 ? 1 : 0,
         child: context
             .gradientButton(
-          data: BaseUiKitButtonData(
-            text: 'SAVE',
-            loading: isLoading,
-            onPressed: onProfileEditSubmitted?.call,
-          ),
-        )
+              data: BaseUiKitButtonData(
+                text: S.of(context).Save.toUpperCase(),
+                loading: isLoading,
+                onPressed: onProfileEditSubmitted?.call,
+              ),
+            )
             .paddingOnly(
-          left: horizontalMargin,
-          right: horizontalMargin,
-          bottom: EdgeInsetsFoundation.vertical24,
-        ),
+              left: horizontalMargin,
+              right: horizontalMargin,
+              bottom: EdgeInsetsFoundation.vertical24,
+            ),
       ),
     );
   }
 }
-

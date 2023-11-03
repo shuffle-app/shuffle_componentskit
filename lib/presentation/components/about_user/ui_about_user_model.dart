@@ -9,17 +9,17 @@ class UiAboutUserModel {
   String? errorGenderMessage;
   String? errorReligionMessage;
 
-
   bool get checkFields {
-    if (selectedPersonType != null && selectedGender != null &&
-        selectedAge != null && selectedReligions != null &&
+    if (selectedPersonType != null &&
+        selectedGender != null &&
+        selectedAge != null &&
+        selectedReligions != null &&
         selectedReligions!.isNotEmpty) {
       return true;
     }
 
     return false;
   }
-
 
   UiAboutUserModel({
     this.selectedPersonType,
@@ -30,7 +30,6 @@ class UiAboutUserModel {
     this.errorGenderMessage,
     this.errorPersonTypeMessage,
   });
-
 
   UiAboutUserModel copyWith({
     UiKitMenuItem<String>? selectedPersonType,
@@ -45,23 +44,15 @@ class UiAboutUserModel {
         selectedAge: selectedAge ?? this.selectedAge,
       );
 
-  UiAboutUserModel withErrors() =>
-      UiAboutUserModel(
+  UiAboutUserModel withErrors() => UiAboutUserModel(
         selectedPersonType: selectedPersonType,
         selectedReligions: selectedReligions,
         selectedGender: selectedGender,
         selectedAge: selectedAge,
       )
-        .. errorPersonTypeMessage =
-        selectedPersonType != null
+        ..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType
+        ..errorGenderMessage = selectedGender != null ? null : S.current.PleaseSelectGender
+        ..errorReligionMessage = (selectedReligions != null && selectedReligions!.isNotEmpty)
             ? null
-            : 'Please select one type'
-        ..
-        errorGenderMessage =
-        selectedGender != null ? null : 'Please select a gender'
-        ..
-        errorReligionMessage =
-        (selectedReligions != null && selectedReligions!.isNotEmpty) ? null : 'Please select at least 1 religion';
-
-
+            : S.current.PleaseSelectAtLeastNReligion(1);
 }

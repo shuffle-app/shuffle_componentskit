@@ -113,7 +113,7 @@ class PlaceComponent extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            Text('Upcoming event', style: theme?.boldTextTheme.subHeadline),
+                            Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
                             if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
                               SpacingFoundation.verticalSpace8,
                               for (var event in snapshot.data!)
@@ -160,8 +160,12 @@ class PlaceComponent extends StatelessWidget {
                             ],
                             SpacingFoundation.verticalSpace4,
                             context.gradientButton(
-                                data: BaseUiKitButtonData(
-                                    text: 'Create Event', onPressed: onEventCreate, fit: ButtonFit.fitWidth))
+                              data: BaseUiKitButtonData(
+                                text: S.of(context).CreateEvent,
+                                onPressed: onEventCreate,
+                                fit: ButtonFit.fitWidth,
+                              ),
+                            )
                           ]).paddingSymmetric(
                         horizontal: SpacingFoundation.horizontalSpacing16,
                         vertical: SpacingFoundation.verticalSpacing8,

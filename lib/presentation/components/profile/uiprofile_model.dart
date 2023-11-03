@@ -33,20 +33,21 @@ class UiProfileModel {
       onDonate: onDonate,
       profileStats: [
         UiKitStats(
-          title: 'Balance',
+          title: S.current.Balance,
           value: '993 \$',
           actionButton: SmallOrdinaryButton(
-            text: 'details'.toUpperCase(),
+            text: S.current.Details.toUpperCase(),
             group: group,
           ),
         ),
         UiKitStats(
-            title: 'Points',
-            value: '553',
-            actionButton: SmallOrdinaryButton(
-              text: 'spent'.toUpperCase(),
-              group: group,
-            )),
+          title: S.current.Points,
+          value: '553',
+          actionButton: SmallOrdinaryButton(
+            text: S.current.Spent.toUpperCase(),
+            group: group,
+          ),
+        ),
       ],
     );
   }

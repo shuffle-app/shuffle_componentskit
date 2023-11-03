@@ -249,7 +249,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                         if (authType == RegistrationType.email) ...[
                           UiKitWrappedInputField.uiKitInputFieldNoIcon(
                             enabled: true,
-                            hintText: 'EMAIL',
+                            hintText: S.of(context).Email.toUpperCase(),
                             controller: widget.credentialsController,
                             fillColor: ColorsFoundation.surface3,
                             validator: widget.credentialsValidator,
@@ -309,20 +309,23 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
               ),
               RichText(
                 text: TextSpan(children: [
-                  TextSpan(text: 'By continuing you accept the ', style: regTextTheme?.caption4),
+                  TextSpan(
+                                        text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
                   TextSpan(
                       text: privacyCaptions.first.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => context.push(WebViewScreen(
-                            title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                  TextSpan(text: ' and ', style: regTextTheme?.caption4),
+                            title: privacyCaptions.first.key,
+                                              url: privacyCaptions.first.value.value ?? ''))),
+                  TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
                   TextSpan(
                       text: privacyCaptions.last.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => context.push(WebViewScreen(
-                            title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                            title: privacyCaptions.last.key,
+                                              url: privacyCaptions.last.value.value ?? '')))
                 ]),
               ),
               KeyboardVisibilityBuilder(
@@ -345,7 +348,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             SpacingFoundation.verticalSpace16,
                             context.button(
                               data: BaseUiKitButtonData(
-                                text: 'NEXT',
+                                text: S.of(context).Next.toUpperCase(),
                                 onPressed: widget.onSubmit,
                                 loading: widget.loading,
                                 fit: ButtonFit.fitWidth,

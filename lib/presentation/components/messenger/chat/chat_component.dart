@@ -80,7 +80,7 @@ class ChatComponent extends StatelessWidget {
             child: UiKitInputFieldRightIcon(
               fillColor: context.uiKitTheme?.colorScheme.surface3,
               controller: messageController,
-              hintText: 'TYPE HERE',
+              hintText: S.of(context).TypeHere,
               icon: GestureDetector(
                 onTap: onMessageSent,
                 child: GradientableWidget(

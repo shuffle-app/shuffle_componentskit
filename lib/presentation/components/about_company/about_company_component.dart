@@ -88,14 +88,14 @@ class AboutCompanyComponent extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'The more info we get, the better ',
+                        text: S.of(context).TheMoreInfoWeGetTheBetter,
                         style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(1)),
                       ),
                       TextSpan(
-                          text: 'your traffic',
+                          text: S.of(context).YourTraffic.toLowerCase(),
                           style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(0))),
                       TextSpan(
-                        text: ' will be.',
+                        text: S.of(context).WillBe.toLowerCase(),
                         style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(1)),
                       ),
                     ],
@@ -108,14 +108,14 @@ class AboutCompanyComponent extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'The more info we get, the better ',
+                          text: S.of(context).TheMoreInfoWeGetTheBetter,
                           style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(0)),
                         ),
                         TextSpan(
-                            text: 'your traffic',
+                            text: S.of(context).YourTraffic.toLowerCase(),
                             style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(1))),
                         TextSpan(
-                          text: ' will be.',
+                          text: S.of(context).WillBe.toLowerCase(),
                           style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(0)),
                         ),
                       ],
@@ -131,7 +131,7 @@ class AboutCompanyComponent extends StatelessWidget {
               borderRadius: BorderRadiusFoundation.max,
               child: UiKitInputFieldNoIcon(
                 controller: nameController,
-                hintText: 'Your Name'.toUpperCase(),
+                hintText: S.of(context).YourName.toUpperCase(),
                 fillColor: ColorsFoundation.surface3,
                 validator: nameValidator,
               ).paddingAll(EdgeInsetsFoundation.all4),
@@ -142,7 +142,7 @@ class AboutCompanyComponent extends StatelessWidget {
               borderRadius: BorderRadiusFoundation.max,
               child: UiKitInputFieldNoIcon(
                 controller: positionController,
-                hintText: 'Your Position'.toUpperCase(),
+                hintText: S.of(context).YourPosition.toUpperCase(),
                 fillColor: ColorsFoundation.surface3,
                 validator: positionValidator,
               ).paddingAll(EdgeInsetsFoundation.all4),
@@ -214,7 +214,7 @@ class AboutCompanyComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
-                text: 'confirm'.toUpperCase(),
+                text: S.of(context).Confirm.toUpperCase(),
                 onPressed: onFinished,
               ),
             ),

@@ -76,44 +76,51 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: widget.uiModel.subscriptionFeatures.map(
-                    (e) {
-                      double padding = 0;
-                      if (e != widget.uiModel.subscriptionFeatures.last) {
-                        padding = EdgeInsetsFoundation.vertical16;
-                      }
+                (e) {
+                  double padding = 0;
+                  if (e != widget.uiModel.subscriptionFeatures.last) {
+                    padding = EdgeInsetsFoundation.vertical16;
+                  }
 
-                      return Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GradientableWidget(
-                            gradient: GradientFoundation.buttonGradient,
-                            child: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.gradientStar,
-                              color: Colors.white,
-                              width: 0.0625.sw,
-                              height: 0.0625.sw,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SpacingFoundation.horizontalSpace8,
-                          Expanded(
-                            child: Text(
-                              e,
-                              style: regularTextTheme?.body,
-                            ),
-                          ),
-                        ],
-                      ).paddingOnly(bottom: padding);
-                    },
-                  ).toList(),
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GradientableWidget(
+                        gradient: GradientFoundation.buttonGradient,
+                        child: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                          color: Colors.white,
+                          width: 0.0625.sw,
+                          height: 0.0625.sw,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SpacingFoundation.horizontalSpace8,
+                      Expanded(
+                        child: Text(
+                          e,
+                          style: regularTextTheme?.body,
+                        ),
+                      ),
+                    ],
+                  ).paddingOnly(bottom: padding);
+                },
+              ).toList(),
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
           SpacingFoundation.verticalSpace24,
           context.gradientButton(
             data: BaseUiKitButtonData(
               fit: ButtonFit.fitWidth,
-              text: 'UPGRADE${_selectedOffer == null ? '' : ' FOR ${_selectedOffer!.formattedPriceNoPeriod}'}',
+              text: S
+                  .of(context)
+                  .UpgradeForNmoney(
+                    _selectedOffer == null
+                        ? ''
+                        : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
+                  )
+                  .toUpperCase(),
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),

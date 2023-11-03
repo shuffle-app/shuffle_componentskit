@@ -21,7 +21,8 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['invite_people_places'] ?? {});
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -36,14 +37,14 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Invite to favourite places',
+                S.of(context).InviteToFavouritePlaces,
                 style: boldTextTheme?.subHeadline,
               ),
             ),
             SpacingFoundation.horizontalSpace16,
             context.smallGradientButton(
               data: BaseUiKitButtonData(
-                text: 'Invite',
+                text: S.of(context).Invite,
                 onPressed: onInvite,
               ),
             ),
@@ -69,7 +70,7 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         Text(
-          'Select date',
+          S.of(context).SelectDate,
           style: boldTextTheme?.subHeadline,
           textAlign: TextAlign.start,
         ).paddingSymmetric(

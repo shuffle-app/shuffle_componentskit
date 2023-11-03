@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shuffle_components_kit/presentation/components/invite/ui_invite_person_model.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class InviteComponent extends StatefulWidget {
@@ -70,10 +70,10 @@ class _InviteComponentState extends State<InviteComponent> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Invite people', style: boldTextTheme?.subHeadline),
+            Text(S.of(context).InvitePeople, style: boldTextTheme?.subHeadline),
             context.smallGradientButton(
               data: BaseUiKitButtonData(
-                text: 'Invite',
+                text: S.of(context).Invite,
                 onPressed: widget.persons.where((e) => e.isSelected).isEmpty
                     ? null
                     : () {
@@ -82,15 +82,15 @@ class _InviteComponentState extends State<InviteComponent> {
                         showUiKitAlertDialog(
                           context,
                           AlertDialogData(
-                            defaultButtonText: 'okay, cool!',
+                            defaultButtonText: S.of(context).OkayCool.toLowerCase(),
                             defaultButtonSmall: false,
                             title: Text(
-                              'You sent an invitation to ${invitedPersons.length} people',
+                              S.of(context).YouSentInvitationToNPeople(invitedPersons.length),
                               style: boldTextTheme?.title2.copyWith(color: theme?.colorScheme.primary),
                               textAlign: TextAlign.center,
                             ),
                             content: Text(
-                              'Invitations can be viewed in private messages',
+                              S.of(context).InvitationsCanBeViewedInPrivateMessages,
                               style: boldTextTheme?.body.copyWith(color: theme?.colorScheme.primary),
                               textAlign: TextAlign.center,
                             ),
@@ -140,7 +140,7 @@ class _InviteComponentState extends State<InviteComponent> {
                 onOptionTap: widget.onRemoveUserOptionTap!,
                 options: [
                   UiKitPopUpMenuButtonOption(
-                    title: 'Delete from list',
+                    title: S.of(context).DeleteFromList,
                     value: 'Delete from list',
                     textColor: ColorsFoundation.error,
                     onTap: widget.onRemoveUserOptionTap,
@@ -152,7 +152,7 @@ class _InviteComponentState extends State<InviteComponent> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Add yourself to list',
+                    S.of(context).AddYourselfToList,
                     style: boldTextTheme?.subHeadline,
                   ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                   SpacingFoundation.verticalSpace4,
@@ -180,7 +180,7 @@ class _InviteComponentState extends State<InviteComponent> {
                               style: regularTextTheme?.body,
                             )
                           : Text(
-                              'No date selected',
+                              S.of(context).NoDateSelected,
                               style: regularTextTheme?.body,
                             ),
                     ],
@@ -197,7 +197,7 @@ class _InviteComponentState extends State<InviteComponent> {
                           maxLines: 3,
                           minLines: 1,
                           controller: _wishController,
-                          hintText: 'describe your wishes'.toUpperCase(),
+                          hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,
                         ),
                       ),
@@ -208,13 +208,13 @@ class _InviteComponentState extends State<InviteComponent> {
                             if (_wishController.text.isEmpty) {
                               SnackBarUtils.show(
                                 context: context,
-                                message: 'Please fill out your wishes',
+                                message: S.of(context).PleaseFillOutYourWishes,
                                 type: AppSnackBarType.warning,
                               );
                             } else if (_date == null) {
                               SnackBarUtils.show(
                                 context: context,
-                                message: 'Please fill out date',
+                                message: S.of(context).PleaseFillOutDate,
                                 type: AppSnackBarType.warning,
                               );
                             } else {

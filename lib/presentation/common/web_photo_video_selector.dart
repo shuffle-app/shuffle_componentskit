@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/data/data.dart';
-import 'package:shuffle_components_kit/presentation/presentation.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class WebPhotoVideoSelector extends StatelessWidget {
@@ -26,7 +25,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
     this.photos = const [],
     this.videos = const [],
     this.itemsSize = const Size(75, 75),
-     this.onLogoAddRequested,
+    this.onLogoAddRequested,
     required this.onPhotoAddRequested,
     required this.onVideoAddRequested,
     required this.onPhotoReorderRequested,
@@ -46,75 +45,75 @@ class WebPhotoVideoSelector extends StatelessWidget {
       mainAxisAlignment: (positionModel?.bodyAlignment).mainAxisAlignment,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if(onLogoAddRequested!=null)...[
-        SpacingFoundation.verticalSpace16,
-        Text(
-          'Logo (upload Files)',
-          style: theme?.boldTextTheme.body.copyWith(
-            color: theme.colorScheme.darkNeutral900,
-          ),
-        ).paddingSymmetric(horizontal: horizontalPadding),
-
-        SpacingFoundation.verticalSpace16,
-        SizedBox(
-          height: itemsSize.height * 1.2,
-          width: double.infinity,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: theme?.colorScheme.surface1,
-              borderRadius: BorderRadiusFoundation.all12,
-              border: Border.fromBorderSide(
-                BorderSide(width: 1, color: theme!.colorScheme.surface5),
+        if (onLogoAddRequested != null) ...[
+          SpacingFoundation.verticalSpace16,
+          Text(
+            S.of(context).LogoUploadFiles,
+            style: theme?.boldTextTheme.body.copyWith(
+              color: theme.colorScheme.darkNeutral900,
+            ),
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace16,
+          SizedBox(
+            height: itemsSize.height * 1.2,
+            width: double.infinity,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: theme?.colorScheme.surface1,
+                borderRadius: BorderRadiusFoundation.all12,
+                border: Border.fromBorderSide(
+                  BorderSide(width: 1, color: theme!.colorScheme.surface5),
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.centerRight,
+                children: [
+                  if (logo != null)
+                    Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        ClipPath(
+                          clipper: ShapeBorderClipper(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8),
+                          ),
+                          child: ImageWidget(link: logo),
+                        ).paddingAll(4),
+                      ],
+                    ),
+                  Positioned(
+                    left: 0,
+                    child: context
+                        .badgeButtonNoValue(
+                          data: BaseUiKitButtonData(
+                            onPressed: onLogoAddRequested,
+                            icon: DecoratedBox(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                border: Border.fromBorderSide(
+                                  BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                                ),
+                                borderRadius: BorderRadiusFoundation.all12,
+                              ),
+                              child: ImageWidget(
+                                svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                                height: 18,
+                                width: 18,
+                              ).paddingAll(EdgeInsetsFoundation.all12),
+                            ),
+                          ),
+                        )
+                        .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                  ),
+                ],
               ),
             ),
-            child: Stack(
-              alignment: Alignment.centerRight,
-              children: [
-                if (logo != null)
-                  Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      ClipPath(
-                        clipper: ShapeBorderClipper(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8),
-                        ),
-                        child: ImageWidget(link: logo),
-                      ).paddingAll(4),
-                    ],
-                  ),
-                Positioned(
-                  left: 0,
-                  child: context
-                      .badgeButtonNoValue(
-                        data: BaseUiKitButtonData(
-                          onPressed: onLogoAddRequested,
-                          icon: DecoratedBox(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              border: Border.fromBorderSide(
-                                BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
-                              ),
-                              borderRadius: BorderRadiusFoundation.all12,
-                            ),
-                            child: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
-                              height: 18,
-                              width: 18,
-                            ).paddingAll(EdgeInsetsFoundation.all12),
-                          ),
-                        ),
-                      )
-                      .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
-                ),
-              ],
-            ),
           ),
-        ),],
+        ],
         SpacingFoundation.verticalSpace16,
         Row(
           children: [
             Text(
-              'Photo (upload Files)',
+              S.of(context).PhotoUploadFiles,
               style: theme?.boldTextTheme.body.copyWith(
                 color: theme.colorScheme.darkNeutral900,
               ),
@@ -200,7 +199,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
                   Positioned(
                     right: EdgeInsetsFoundation.vertical16,
                     child: Text(
-                      'or drag files here',
+                      S.of(context).OrDragFilesHere.toLowerCase(),
                       style: theme?.boldTextTheme.caption1Medium.copyWith(
                         color: theme.colorScheme.darkNeutral900,
                       ),
@@ -212,7 +211,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         Text(
-          'Video (upload Files)',
+          S.of(context).VideoUploadFiles,
           style: theme?.boldTextTheme.body.copyWith(
             color: theme.colorScheme.darkNeutral900,
           ),
@@ -290,7 +289,7 @@ class WebPhotoVideoSelector extends StatelessWidget {
                   Positioned(
                     right: EdgeInsetsFoundation.vertical16,
                     child: Text(
-                      'or drag files here',
+                      S.of(context).OrDragFilesHere.toLowerCase(),
                       style: theme?.boldTextTheme.caption1Medium.copyWith(
                         color: theme.colorScheme.darkNeutral900,
                       ),

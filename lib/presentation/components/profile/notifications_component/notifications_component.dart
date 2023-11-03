@@ -8,8 +8,13 @@ class NotificationsComponent extends StatelessWidget {
   final List<UiKitGradientSwitchTile>? params;
   final bool hasNotifications;
 
-  const NotificationsComponent(
-      {super.key, this.screenParams, this.hasNotifications = false, required this.seeAllNotificationsCallback, this.params});
+  const NotificationsComponent({
+    super.key,
+    this.screenParams,
+    this.hasNotifications = false,
+    required this.seeAllNotificationsCallback,
+    this.params,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class NotificationsComponent extends StatelessWidget {
 
     return BlurredAppBarPage(
       physics: const NeverScrollableScrollPhysics(),
-      title: 'Notifications',
+      title: S.of(context).Notifications,
       autoImplyLeading: true,
       centerTitle: true,
       body: Column(
@@ -26,11 +31,11 @@ class NotificationsComponent extends StatelessWidget {
         children: [
           if (hasNotifications)
             UiKitDecoratedActionCard(
-              title: 'Notifications',
+              title: S.of(context).Notifications,
               action: context.smallButton(
                 data: BaseUiKitButtonData(
                   onPressed: seeAllNotificationsCallback,
-                  text: 'SEE ALL',
+                  text: S.of(context).SeeAll.toUpperCase(),
                 ),
               ),
               decorationIcons: [

@@ -44,15 +44,15 @@ class _FirstBody extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'What is \n',
+                        text: S.of(context).WhatIs,
                         style: textTheme?.caption1Medium,
                       ),
                       TextSpan(
-                        text: 'shuffle ',
+                        text: S.of(context).ShuffleWithRightWhitespace.toLowerCase(),
                         style: textTheme?.caption1Bold,
                       ),
                       TextSpan(
-                        text: 'for',
+                        text: S.of(context).For.toLowerCase(),
                         style: textTheme?.caption1Medium,
                       ),
                     ],
@@ -66,7 +66,7 @@ class _FirstBody extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: UiKitIconedBlurMessageCard(
                 message: Text(
-                  'Through a non-\naggregator system \nespecially for you',
+                  S.of(context).ThroughANonAggregatorSystem,
                   style: textTheme?.caption1Bold,
                 ),
                 iconLink: GraphicsFoundation.instance.svg.whiteStarTransparentCenter.path,
@@ -77,7 +77,7 @@ class _FirstBody extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: UiKitIconedBlurMessageCard(
                 message: Text(
-                  'With your\npreferences',
+                  S.of(context).WithYourPreferences,
                   style: textTheme?.caption1Bold,
                 ),
                 iconLink: GraphicsFoundation.instance.svg.whiteStarTransparentCenter.path,
@@ -89,7 +89,7 @@ class _FirstBody extends StatelessWidget {
               child: UiKitIconedBlurMessageCard(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 message: Text(
-                  'Don\'t be alone',
+                  S.of(context).DontBeAlone,
                   style: textTheme?.caption1Bold,
                 ),
                 iconLink: GraphicsFoundation.instance.svg.whiteStarTransparentCenter.path,
@@ -100,7 +100,7 @@ class _FirstBody extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: UiKitIconedBlurMessageCard(
                 message: Text(
-                  'Lovely-touch amazing\ninteraction',
+                  S.of(context).LovelyTouchAmazingInteraction,
                   style: textTheme?.caption1Bold,
                 ),
                 iconLink: GraphicsFoundation.instance.svg.whiteStarTransparentCenter.path,
@@ -108,22 +108,23 @@ class _FirstBody extends StatelessWidget {
             ),
             if (!bigScreen) SpacingFoundation.verticalSpace24,
             if (bigScreen) const Spacer(),
-            Hero(tag: 'welcome',
-            transitionOnUserGestures: true,
-            child:
-            AnimatedBuilder(
-              animation: animationController,
-              builder: (context, child) {
-                return context.buttonWithProgress(
-                  data: BaseUiKitButtonData(
-                    text: 'NEXT >>>',
-                    onPressed: () => onNextPressed?.call(),
-                  ),
-                  blurred: false,
-                  progress: animationController.value,
-                );
-              },
-            )),
+            Hero(
+              tag: 'welcome',
+              transitionOnUserGestures: true,
+              child: AnimatedBuilder(
+                animation: animationController,
+                builder: (context, child) {
+                  return context.buttonWithProgress(
+                    data: BaseUiKitButtonData(
+                      text: S.of(context).NextWithChevrons.toUpperCase(),
+                      onPressed: () => onNextPressed?.call(),
+                    ),
+                    blurred: false,
+                    progress: animationController.value,
+                  );
+                },
+              ),
+            ),
             SpacingFoundation.verticalSpace24,
           ],
         ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)

@@ -69,7 +69,7 @@ class EventComponent extends StatelessWidget {
               ],
               if (event.archived) ...[
                 UiKitBadgeOutlined.text(
-                  text: 'Archived',
+                  text: S.of(context).Archived,
                 ),
                 SpacingFoundation.verticalSpace4,
               ],
@@ -81,42 +81,42 @@ class EventComponent extends StatelessWidget {
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
           crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
-
-              Align(
-                  alignment: Alignment.center,
-                  child: Stack(clipBehavior: Clip.none, children: [
-                    UiKitPhotoSlider(
-                      media: event.media ,
-                      onTap: null,
-                      width: 1.sw - horizontalMargin * 2,
-                      height: 156.h,
-                    ),
-                    if (complaintFormComponent != null)
-                      Positioned(
-                          bottom: -10.h,
-                          right: -10.w,
-                          child: Transform.scale(
-                              scale: 0.5.sp,
-                              child: context.smallOutlinedButton(
-                                  color: UiKitColors.darkNeutral800.withOpacity(0.5),
-                                  data: BaseUiKitButtonData(
-                                    onPressed: () {
-                                      showUiKitGeneralFullScreenDialog(
-                                          context,
-                                          GeneralDialogData(
-                                              topPadding: 0.3.sh, useRootNavigator: false, child:  complaintFormComponent!));
-                                    },
-                                    icon: Transform.scale(
-                                        scale: 1.5.sp,
-                                        child: ImageWidget(
-                                          // height: 20,
-                                          svgAsset: GraphicsFoundation.instance.svg.alertCircle,
-                                        )),
-                                  ),
-                                  blurred: true))),
-                  ])),
-              SpacingFoundation.verticalSpace14
-            ,
+            Align(
+                alignment: Alignment.center,
+                child: Stack(clipBehavior: Clip.none, children: [
+                  UiKitPhotoSlider(
+                    media: event.media,
+                    onTap: null,
+                    width: 1.sw - horizontalMargin * 2,
+                    height: 156.h,
+                  ),
+                  if (complaintFormComponent != null)
+                    Positioned(
+                        bottom: -10.h,
+                        right: -10.w,
+                        child: Transform.scale(
+                            scale: 0.5.sp,
+                            child: context.smallOutlinedButton(
+                                color: UiKitColors.darkNeutral800.withOpacity(0.5),
+                                data: BaseUiKitButtonData(
+                                  onPressed: () {
+                                    showUiKitGeneralFullScreenDialog(
+                                        context,
+                                        GeneralDialogData(
+                                            topPadding: 0.3.sh,
+                                            useRootNavigator: false,
+                                            child: complaintFormComponent!));
+                                  },
+                                  icon: Transform.scale(
+                                      scale: 1.5.sp,
+                                      child: ImageWidget(
+                                        // height: 20,
+                                        svgAsset: GraphicsFoundation.instance.svg.alertCircle,
+                                      )),
+                                ),
+                                blurred: true))),
+                ])),
+            SpacingFoundation.verticalSpace14,
             UiKitTagsWidget(
               rating: event.rating,
               baseTags: event.baseTags,

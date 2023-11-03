@@ -27,19 +27,20 @@ class SupportComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final toolBarHeight = context.uiKitTheme?.customAppBapTheme.toolbarHeight ?? 90.0;
-    final remainingHeight = 1.sh - toolBarHeight - EdgeInsetsFoundation.vertical16 - SpacingFoundation.verticalSpacing24;
+    final remainingHeight =
+        1.sh - toolBarHeight - EdgeInsetsFoundation.vertical16 - SpacingFoundation.verticalSpacing24;
 
     return BlurredAppBarPage(
       centerTitle: true,
       autoImplyLeading: true,
-      title: 'Support',
+      title: S.of(context).Support,
       body: SizedBox(
         height: remainingHeight,
-        child:  Column(
+        child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             UiKitGradientSwitchTile(
-              title: 'Enable hint system',
+              title: S.of(context).EnableHintSystem,
               onChanged: onSupportSubmitted,
               switchedOn: isSupportActive,
             ),
@@ -67,7 +68,7 @@ class SupportComponent extends StatelessWidget {
                             ),
                           ),
                         ),
-                        text: 'FAQ',
+                        text: S.of(context).Faq.toUpperCase(),
                         icon: DecoratedBox(
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
@@ -96,7 +97,7 @@ class SupportComponent extends StatelessWidget {
                   children: [
                     UiKitInputFieldNoIcon(
                       controller: _nameController,
-                      hintText: 'your NAME'.toUpperCase(),
+                      hintText: S.of(context).YourName.toUpperCase(),
                       // validator: inputFieldValidator,
                       fillColor: ColorsFoundation.surface3,
                       // onChanged: (value) => onNameChanged?.call(value),
@@ -104,8 +105,7 @@ class SupportComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace16,
                     UiKitInputFieldNoIcon(
                       controller: _emailController,
-                      hintText: 'your EMAIL'.toUpperCase(),
-
+                      hintText: S.of(context).YourEmail.toUpperCase(),
                       // validator: inputFieldValidator,
                       fillColor: ColorsFoundation.surface3,
                       // onChanged: (value) => onNickNameChanged?.call(value),
@@ -115,8 +115,7 @@ class SupportComponent extends StatelessWidget {
                       borderRadius: BorderRadiusFoundation.all24,
                       controller: _textController,
                       minLines: 3,
-                      hintText: 'describe your issue'.toUpperCase(),
-
+                      hintText: S.of(context).DescribeYourIssue.toUpperCase(),
                       // validator: inputFieldValidator,
                       fillColor: ColorsFoundation.surface3,
                       // onChanged: (value) => onNickNameChanged?.call(value),
@@ -130,8 +129,11 @@ class SupportComponent extends StatelessWidget {
               width: double.infinity,
               child: context.gradientButton(
                 data: BaseUiKitButtonData(
-                  text: 'send',
-                  onPressed: () => SnackBarUtils.show(message: 'will be implemented soon', context: context),
+                  text: S.of(context).Send.toLowerCase(),
+                  onPressed: () => SnackBarUtils.show(
+                    message: S.of(context).WillBeImplementedSoon.toLowerCase(),
+                    context: context,
+                  ),
                 ),
               ),
             )

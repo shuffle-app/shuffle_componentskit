@@ -82,7 +82,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
             width: 1.sw,
             child: context.button(
               data: BaseUiKitButtonData(
-                text: 'NEXT',
+                text: S.of(context).Next.toUpperCase(),
                 onPressed: () => widget.onUserTypeSelected?.call(selectedOption.title.toLowerCase()),
               ),
             ),

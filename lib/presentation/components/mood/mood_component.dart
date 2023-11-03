@@ -57,7 +57,7 @@ class MoodComponent extends StatelessWidget {
           children: [
             Flexible(
               child: UiKitGradientAttentionCard(
-                message: titleContent?.properties?.keys.firstOrNull ?? 'Then check this out',
+                message: titleContent?.properties?.keys.firstOrNull ?? S.of(context).ThenCheckThisOut,
                 textColor: Colors.black,
                 width: cardWidth,
               ),
@@ -101,7 +101,8 @@ class MoodComponent extends StatelessWidget {
         if (model.showPlaces ?? true && tabBarContent != null) ...[
           SpacingFoundation.verticalSpace24,
           Text(
-            tabBarContent?.body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'We have places just for you',
+            tabBarContent?.body?[ContentItemType.text]?.properties?.keys.firstOrNull ??
+                S.of(context).WeHavePlacesJustForYou,
             style: theme?.boldTextTheme.title1,
           ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace4,
@@ -119,7 +120,7 @@ class MoodComponent extends StatelessWidget {
                       },
                       tabs: listOfTabs
                           .map((entry) => UiKitCustomTab(
-                        height:20.h,
+                                height: 20.h,
                                 title: entry.key.toUpperCase(),
                                 group: tabBarGroup,
                               ))
@@ -170,11 +171,11 @@ class MoodComponent extends StatelessWidget {
                   ? null
                   : const Border.fromBorderSide(BorderSide(color: UiKitColors.gradientGreyLight2, width: 2)),
               slidableChild: context.gradientButton(
-                  data: BaseUiKitButtonData(text: 'Go!', onPressed: () {}, fit: ButtonFit.hugContent)),
+                  data: BaseUiKitButtonData(text: S.of(context).Go, onPressed: () {}, fit: ButtonFit.hugContent)),
               onCompleted: () => onLevelActivated?.call(selectedLevel),
               onCompletedChild: context.gradientButton(
                   data: BaseUiKitButtonData(
-                text: 'Get reward',
+                text: S.of(context).GetReward,
                 onPressed: onLevelComplited == null ? null : () => onLevelComplited?.call(),
                 fit: ButtonFit.fitWidth,
               ))).paddingSymmetric(horizontal: horizontalMargin),

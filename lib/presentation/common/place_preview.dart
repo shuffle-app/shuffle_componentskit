@@ -69,7 +69,7 @@ class PlacePreview extends StatelessWidget {
         width: double.infinity,
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
           if (shouldVisitAt != null)
-            Text(shouldVisitAt!.isAtSameDay ? 'Today' : DateFormat('MMM dd, yyyy').format(shouldVisitAt!),
+            Text(shouldVisitAt!.isAtSameDay ? S.of(context).Today : DateFormat('MMM dd, yyyy').format(shouldVisitAt!),
                     style: theme?.boldTextTheme.title2)
                 .paddingOnly(top: SpacingFoundation.verticalSpacing6, bottom: SpacingFoundation.verticalSpacing24),
           Column(
@@ -114,14 +114,14 @@ class PlacePreview extends StatelessWidget {
                                   onPressed: () {
                                     log('check in');
                                   },
-                                  text: 'check-in'.toUpperCase()))),
+                                  text: S.of(context).CheckIn.toUpperCase()))),
                     if (shouldVisitAt != null && !shouldVisitAt!.isAtSameDay)
                       Positioned(
                           bottom: -15.h,
                           child: UiKitCardWrapper(
                             color: theme?.colorScheme.surface2.withOpacity(0.35),
                             child: Center(
-                              child: Text('Visit first to open next', style: theme?.boldTextTheme.body),
+                              child: Text(S.of(context).VisitFirstToOpenNext, style: theme?.boldTextTheme.body),
                             ).paddingSymmetric(
                                 horizontal: SpacingFoundation.horizontalSpacing20,
                                 vertical: SpacingFoundation.verticalSpacing12),
