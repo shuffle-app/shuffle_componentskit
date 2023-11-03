@@ -165,8 +165,10 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                 subtitle,
                 style: textTheme?.subHeadline,
               ),
-              // if (isSmallScreen) SpacingFoundation.verticalSpace16,
-              Spacer(flex: isSmallScreen ? 2 : 1),
+              KeyboardVisibilityBuilder(builder: (context, visibility) {
+                if (visibility) return SpacingFoundation.verticalSpace16;
+                return Spacer(flex: isSmallScreen ? 2 : 1);
+              }),
               // const Spacer(flex: 1),
               if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty)
                 StatefulBuilder(
