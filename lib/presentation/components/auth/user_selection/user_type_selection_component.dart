@@ -87,7 +87,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
               ),
             ),
           ),
-        ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        ).paddingOnly(bottom: EdgeInsetsFoundation.vertical4),
       ],
     ).paddingSymmetric(
       horizontal: horizontalMargin,

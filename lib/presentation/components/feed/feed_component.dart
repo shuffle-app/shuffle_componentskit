@@ -309,7 +309,7 @@ class FeedComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace24.wrapSliverBox,
           kBottomNavigationBarHeight.heightBox.wrapSliverBox,
-          if (preserveScrollPosition) SizedBox(height: 1.sh).wrapSliverBox,
+          if (preserveScrollPosition) SizedBox(height: 2.sh).wrapSliverBox,
         ],
       ],
     ).paddingSymmetric(

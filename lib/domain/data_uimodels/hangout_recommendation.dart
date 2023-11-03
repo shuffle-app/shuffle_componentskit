@@ -26,8 +26,10 @@ class HangoutRecommendation {
     String? userName,
     int? userPointsBalance,
     int? commonInterests,
+    int? userId,
   }) {
     return HangoutRecommendation(
+      userId: userId ?? this.userId,
       userAvatar: userAvatar ?? this.userAvatar,
       userNickname: userNickname ?? this.userNickname,
       userName: userName ?? this.userName,

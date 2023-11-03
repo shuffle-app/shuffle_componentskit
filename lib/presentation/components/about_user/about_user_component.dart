@@ -107,6 +107,7 @@ class AboutUserComponent extends StatelessWidget {
               }()),
         UiKitCardWrapper(
           color: ColorsFoundation.surface1,
+          borderRadius: BorderRadiusFoundation.all24r,
           child: Form(
               key: formKey,
               child: Column(
@@ -188,7 +189,7 @@ class AboutUserComponent extends StatelessWidget {
                               link: e.value.imageLink,
                             ),
                             title: e.key,
-                            isSelected: aboutUserModel.selectedReligions?.contains(e.key) ?? false,
+                            isSelected: aboutUserModel.selectedReligions?.contains(e.key.toLowerCase()) ?? false,
                             onPressed: () => onReligionSelected?.call(e.value.value ?? ''),
                           );
                         }).toList() ??
