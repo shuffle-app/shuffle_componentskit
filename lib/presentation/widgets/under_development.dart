@@ -16,7 +16,7 @@ class UnderDevelopment extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         SizedBox(
-          width: MediaQuery.of(context).size.width / 2,
+          width: MediaQuery.sizeOf(context).width / 2,
           child: Center(
             child: LottieAnimation(
               lottiePath: GraphicsFoundation.instance.animations.lottie.shuffleLoader1.path,

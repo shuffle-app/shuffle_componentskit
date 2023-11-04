@@ -45,7 +45,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).viewPadding.top + SpacingFoundation.verticalSpacing16,
+              height: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing16,
             ),
             // if (contentTypeList.first == ContentItemType.text)
             Text(

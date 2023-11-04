@@ -45,7 +45,7 @@ class HowItWorksWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.sizeOf(context);
     // final model
 
     // final
