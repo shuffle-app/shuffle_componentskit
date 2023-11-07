@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -13,6 +14,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final VoidCallback? onProAccountRequested;
   final VoidCallback? onActivityTileTap;
   final ValueChanged<bool> onBeInSearchChanged;
+  final List<LocaleModel>? availableLocales;
   final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
@@ -44,6 +46,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.dateOfBirthValidator,
     this.onPreferencesChangeRequested,
     this.onActivityTileTap,
+    this.availableLocales,
     this.isLoading = false,
     required this.onBeInSearchChanged,
     required this.selectedPreferences,
@@ -177,6 +180,23 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   ],
                 ),
                 SpacingFoundation.verticalSpace16,
+                if (availableLocales != null && availableLocales!.isNotEmpty) ...[
+                  UiKitCardWrapper(
+                    color: theme?.colorScheme.surface1,
+                    borderRadius: BorderRadiusFoundation.max,
+                    child: UiKitLocaleSelector(
+                      selectedLocale: availableLocales!.firstWhere(
+                        (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
+                      ),
+                      availableLocales: availableLocales!,
+                      onLocaleChanged: (localeModel) =>
+                          context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
+                                localeModel.locale,
+                              ),
+                    ),
+                  ),
+                  SpacingFoundation.verticalSpace16,
+                ],
                 UiKitInputFieldNoFill(
                   controller: nameController,
                   label: S.of(context).Name,

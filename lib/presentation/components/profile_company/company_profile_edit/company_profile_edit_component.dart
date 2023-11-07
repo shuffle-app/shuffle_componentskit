@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
@@ -15,6 +16,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final String selectedNiche;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
+  final List<LocaleModel>? availableLocales;
   final String? Function(String?)? titleValidator;
   final String? Function(String?)? emailValidator;
   final String? Function(String?)? phoneValidator;
@@ -44,6 +46,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
     this.emailValidator,
     this.avatarUrl,
     this.phoneValidator,
+    this.availableLocales,
     this.contactPersonValidator,
     required this.contactPersonController,
     required this.titleController,
@@ -96,6 +99,23 @@ class CompanyProfileEditComponent extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (availableLocales != null && availableLocales!.isNotEmpty) ...[
+                  UiKitCardWrapper(
+                    color: context.uiKitTheme?.colorScheme.surface1,
+                    borderRadius: BorderRadiusFoundation.max,
+                    child: UiKitLocaleSelector(
+                      selectedLocale: availableLocales!.firstWhere(
+                        (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
+                      ),
+                      availableLocales: availableLocales!,
+                      onLocaleChanged: (localeModel) =>
+                          context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
+                                localeModel.locale,
+                              ),
+                    ),
+                  ),
+                  SpacingFoundation.verticalSpace16,
+                ],
                 UiKitInputFieldNoFill(
                   controller: titleController,
                   label: S.of(context).Title,
