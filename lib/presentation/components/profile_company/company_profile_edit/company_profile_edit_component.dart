@@ -107,7 +107,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
                   SpacingFoundation.verticalSpace16,
                   Row(
                     children: [
-                      Text('White theme', style: context.uiKitTheme?.regularTextTheme.labelSmall),
+                      Text(S.of(context).WhiteTheme, style: context.uiKitTheme?.regularTextTheme.labelSmall),
                       SpacingFoundation.horizontalSpace16,
                       const Spacer(),
                       UiKitGradientSwitch(

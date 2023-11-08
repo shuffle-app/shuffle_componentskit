@@ -187,7 +187,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   SpacingFoundation.verticalSpace16,
                   Row(
                     children: [
-                      Text('White theme', style: theme?.regularTextTheme.labelSmall),
+                      Text(S.of(context).WhiteTheme, style: theme?.regularTextTheme.labelSmall),
                       SpacingFoundation.horizontalSpace16,
                       const Spacer(),
                       UiKitGradientSwitch(
