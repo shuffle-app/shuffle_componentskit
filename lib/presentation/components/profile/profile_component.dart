@@ -67,9 +67,10 @@ class ProfileComponent extends StatelessWidget {
               ),
               if (showHowItWorks)
                 HowItWorksWidget(
-                    element: model.content.body![ContentItemType.hintDialog]!,
-                    onPop: onHowItWorksPoped,
-                    customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35)),
+                  element: model.content.body![ContentItemType.hintDialog]!,
+                  onPop: onHowItWorksPoped,
+                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
+                ),
             ],
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           SpacingFoundation.verticalSpace24,
@@ -141,10 +142,18 @@ class ProfileComponent extends StatelessWidget {
                                           placePhotoUrl: GraphicsFoundation.instance.png.place.path,
                                           placeName: selected ?? '',
                                           placeTags: [
-                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(
+                                                title: 'title',
+                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(
+                                                title: 'title',
+                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(
+                                                title: 'title',
+                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(
+                                                title: 'title',
+                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
                                           ],
                                         ),
                                       );
@@ -183,29 +192,39 @@ class ProfileComponent extends StatelessWidget {
           if (events != null)
             MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
           SpacingFoundation.verticalSpace24,
-          Row(
-            mainAxisSize: MainAxisSize.max,
+          Stack(
             children: [
-              Text(
-                S.of(context).AskOrSupport,
-                style: textTheme?.title1,
-                textAlign: TextAlign.left,
+              Row(
+                children: [
+                  Text(
+                    S.of(context).AskOrSupport,
+                    style: textTheme?.title1,
+                  ).paddingSymmetric(horizontal: horizontalMargin),
+                ],
               ),
+              if (showHowItWorks)
+                HowItWorksWidget(
+                  element: model.content.subtitle![ContentItemType.hintDialog]!,
+                  onPop: onHowItWorksPoped,
+                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.33, 8),
+                ),
             ],
+          ),
+          SpacingFoundation.verticalSpace16,
+          Text(
+            S.of(context).AcceptDonations,
+            style: context.uiKitTheme?.boldTextTheme.caption1Medium,
           ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace16,
           GradientableWidget(
               gradient: GradientFoundation.attentionCard,
-              child:
-          context
-              .outlinedButton(
+              child: context.outlinedButton(
                 data: BaseUiKitButtonData(
                   fit: ButtonFit.fitWidth,
                   text: S.of(context).FulfillTheDream.toUpperCase(),
                   onPressed: () => onFulfillDream?.call(),
                 ),
-              ))
-              .paddingSymmetric(horizontal: horizontalMargin),
+              )).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace24,
           kBottomNavigationBarHeight.heightBox,
           // const UnderDevelopment(),
