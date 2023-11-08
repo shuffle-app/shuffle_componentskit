@@ -12,6 +12,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final VoidCallback? onAgeRangesChangeRequested;
   final VoidCallback? onPhotoChangeRequested;
   final VoidCallback? onNicheChangeRequested;
+  final ValueChanged<bool>? onIsLightThemeChanged;
   final String? avatarUrl;
   final String selectedNiche;
 
@@ -31,6 +32,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final TextEditingController positionController;
   final TextEditingController phoneController;
   final bool isLoading;
+  final bool isLightTheme;
 
   const CompanyProfileEditComponent({
     Key? key,
@@ -55,7 +57,9 @@ class CompanyProfileEditComponent extends StatelessWidget {
     required this.phoneController,
     this.onAgeRangesChangeRequested,
     this.onAudienceChangeRequested,
+    this.onIsLightThemeChanged,
     this.isLoading = false,
+    this.isLightTheme = false,
   }) : super(key: key);
 
   @override
@@ -99,6 +103,20 @@ class CompanyProfileEditComponent extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (onIsLightThemeChanged != null) ...[
+                  SpacingFoundation.verticalSpace16,
+                  Row(
+                    children: [
+                      Text('White theme', style: context.uiKitTheme?.regularTextTheme.labelSmall),
+                      SpacingFoundation.horizontalSpace16,
+                      const Spacer(),
+                      UiKitGradientSwitch(
+                        switchedOn: isLightTheme,
+                        onChanged: (value) => onIsLightThemeChanged!.call(value),
+                      )
+                    ],
+                  ),
+                ],
                 if (availableLocales != null && availableLocales!.isNotEmpty) ...[
                   UiKitCardWrapper(
                     color: context.uiKitTheme?.colorScheme.surface1,
