@@ -7,6 +7,8 @@ ThemeData themeMatcher(String themeString) {
       return UiKitThemeFoundation.defaultTheme;
     case 'fallbackTheme':
       return UiKitThemeFoundation.fallbackTheme;
+    case 'lightTheme':
+      return UiKitThemeFoundation.lightTheme;
     default:
       return ThemeData();
   }
