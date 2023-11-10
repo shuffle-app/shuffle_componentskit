@@ -11,6 +11,7 @@ class AboutUserComponent extends StatelessWidget {
   final ValueChanged<int?>? onAgeChanged;
   final String? Function(String?)? inputFieldValidator;
   final ValueChanged<String>? onGenderChanged;
+  final ValueChanged<String>? onTypeOfContentChanged;
 
   final TextEditingController nameController;
   final TextEditingController nickNameController;
@@ -29,6 +30,7 @@ class AboutUserComponent extends StatelessWidget {
     this.formKey,
     this.onGenderChanged,
     this.onSubmitUserData,
+    this.onTypeOfContentChanged,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,8 @@ class AboutUserComponent extends StatelessWidget {
     final theme = context.uiKitTheme;
     final subHeadline = theme?.boldTextTheme.subHeadline;
     final titleAlignment = model.positionModel?.titleAlignment;
+    final configSubtitle = model.content.subtitle?[ContentItemType.singleSelect];
+    final contentTitle = configSubtitle?.title?[ContentItemType.text]?.properties?.keys.first;
 
     final AutoSizeGroup genderGroup = AutoSizeGroup();
 
@@ -125,7 +129,7 @@ class AboutUserComponent extends StatelessWidget {
                   SpacingFoundation.verticalSpace16,
                   UiKitInputFieldNoIcon(
                     controller: nickNameController,
-                    hintText: S.of(context).Nickname.toLowerCase(),
+                    hintText: S.of(context).Nickname.toUpperCase(),
                     validator: inputFieldValidator,
                     fillColor: ColorsFoundation.surface3,
                     // onChanged: (value) => onNickNameChanged?.call(value),
@@ -167,6 +171,24 @@ class AboutUserComponent extends StatelessWidget {
                 onSelected: (personType) => onPersonTypeChanged?.call(personType),
               )),
         ],
+        if (model.content.subtitle?[ContentItemType.singleSelect] != null) ...[
+          SpacingFoundation.verticalSpace16,
+          UiKitTitledSection(
+            title: contentTitle!,
+            child: UiKitCustomTabBar(
+              tabs: configSubtitle!.body![ContentItemType.singleSelect]!.properties!.entries
+                  .map((property) => UiKitCustomTab(title: property.key))
+                  .toList(),
+              onTappedTab: (index) {
+                onTypeOfContentChanged?.call(
+                  configSubtitle.body![ContentItemType.singleSelect]!.properties!.entries
+                      .firstWhere((element) => element.value.sortNumber == index + 1)
+                      .key,
+                );
+              },
+            ),
+          ),
+        ],
         if (model.content.body?[ContentItemType.multiSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
@@ -183,16 +205,18 @@ class AboutUserComponent extends StatelessWidget {
                     final rawItems = model
                         .content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties;
 
-                    final items = (rawItems?.entries.map((e) {
-                          return UiKitBorderedChipWithIcon(
-                            icon: ImageWidget(
-                              link: e.value.imageLink,
-                            ),
-                            title: e.key,
-                            isSelected: aboutUserModel.selectedReligions?.contains(e.key.toLowerCase()) ?? false,
-                            onPressed: () => onReligionSelected?.call(e.value.value ?? ''),
-                          );
-                        }).toList() ??
+                    final items = (rawItems?.entries.map(
+                          (e) {
+                            return UiKitBorderedChipWithIcon(
+                              icon: ImageWidget(
+                                link: e.value.imageLink,
+                              ),
+                              title: e.key,
+                              isSelected: aboutUserModel.selectedReligions?.contains(e.key.toLowerCase()) ?? false,
+                              onPressed: () => onReligionSelected?.call(e.value.value ?? ''),
+                            );
+                          },
+                        ).toList() ??
                         [])
                       ..sort((a, b) =>
                           (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
