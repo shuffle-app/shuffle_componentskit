@@ -15,6 +15,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final VoidCallback? onActivityTileTap;
   final ValueChanged<bool> onBeInSearchChanged;
   final List<LocaleModel>? availableLocales;
+  final ValueChanged<bool>? onIsLightThemeChanged;
   final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
@@ -28,6 +29,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController dateOfBirthController;
   final TextEditingController phoneController;
+  final bool isLightTheme;
   final bool beInSearch;
   final bool isLoading;
 
@@ -48,6 +50,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.onActivityTileTap,
     this.availableLocales,
     this.isLoading = false,
+    this.isLightTheme = false,
+    this.onIsLightThemeChanged,
     required this.onBeInSearchChanged,
     required this.selectedPreferences,
     required this.nameController,
@@ -176,9 +180,23 @@ class EditProfileDefaultComponent extends StatelessWidget {
                     UiKitGradientSwitch(
                       switchedOn: beInSearch,
                       onChanged: (value) => onBeInSearchChanged.call(value),
-                    )
+                    ),
                   ],
                 ),
+                if (onIsLightThemeChanged != null) ...[
+                  SpacingFoundation.verticalSpace16,
+                  Row(
+                    children: [
+                      Text(S.of(context).WhiteTheme, style: theme?.regularTextTheme.labelSmall),
+                      SpacingFoundation.horizontalSpace16,
+                      const Spacer(),
+                      UiKitGradientSwitch(
+                        switchedOn: isLightTheme,
+                        onChanged: (value) => onIsLightThemeChanged!.call(value),
+                      )
+                    ],
+                  ),
+                ],
                 SpacingFoundation.verticalSpace16,
                 if (availableLocales != null && availableLocales!.isNotEmpty) ...[
                   UiKitCardWrapper(
