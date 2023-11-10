@@ -48,6 +48,9 @@ class AboutUserComponent extends StatelessWidget {
     final titleAlignment = model.positionModel?.titleAlignment;
     final configSubtitle = model.content.subtitle?[ContentItemType.singleSelect];
     final contentTitle = configSubtitle?.title?[ContentItemType.text]?.properties?.keys.first;
+    configSubtitle?.body?[ContentItemType.singleSelect]?.properties?.entries.toList().sort(
+          (a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0,
+        );
 
     final AutoSizeGroup genderGroup = AutoSizeGroup();
 
@@ -183,7 +186,8 @@ class AboutUserComponent extends StatelessWidget {
                 onTypeOfContentChanged?.call(
                   configSubtitle.body![ContentItemType.singleSelect]!.properties!.entries
                       .firstWhere((element) => element.value.sortNumber == index + 1)
-                      .key,
+                      .key
+                      .toLowerCase(),
                 );
               },
             ),
