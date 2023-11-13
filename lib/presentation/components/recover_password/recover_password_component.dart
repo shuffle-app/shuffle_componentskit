@@ -14,7 +14,7 @@ class RecoverPasswordDialogComponent extends StatelessWidget {
     final verticalMargin = (restorePasswordConfig.positionModel?.verticalMargin ?? 0).toDouble();
 
     return Dialog(
-      child: Column().paddingSymmetric(horizontal: horizontalMargin, vertical: verticalMargin),
+      child: const Column().paddingSymmetric(horizontal: horizontalMargin, vertical: verticalMargin),
     );
   }
 }
