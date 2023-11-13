@@ -19,7 +19,7 @@ class ForgotPasswordDialogComponent extends StatelessWidget {
     return SafeArea(
       child: Dialog(
         insetPadding: EdgeInsets.zero,
-        child: Column(
+        child: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // Text(
