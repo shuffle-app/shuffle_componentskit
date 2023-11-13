@@ -34,7 +34,7 @@ class ShuffleComponent extends StatelessWidget {
     this.onFavorite,
   }) : super(key: key);
 
-  final animDuration = const Duration(milliseconds: 250);
+  final animDuration = const Duration(milliseconds: 350);
 
   bool get isEnded => indexNotifier.value < 0;
 
@@ -45,30 +45,33 @@ class ShuffleComponent extends StatelessWidget {
 
     return Stack(
       children: [
-        ValueListenableBuilder(
-          valueListenable: backgroundImageNotifier,
-          builder: (_, link, __) {
-            return AnimatedSwitcher(
-              duration: animDuration,
-              transitionBuilder: (child, animation) => FadeTransition(
-                opacity: animation,
-                child: child,
-              ),
-              child: SizedBox(
-                height: 1.sh,
-                width: 1.sw,
-                child: Opacity(
-                  opacity: 0.3,
-                  child: ImageWidget(
-                    key: ValueKey(link),
-                    link: link,
-                    fit: BoxFit.cover,
-                    lowerQuality: true,
-                  ),
+        SizedBox(
+          height: 1.sh,
+          width: 1.sw,
+          child: AnimatedBuilder(
+            animation: backgroundImageNotifier,
+            builder: (context, child) {
+              final value = backgroundImageNotifier.value;
+
+              return AnimatedSwitcher(
+                duration: animDuration,
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: child,
                 ),
-              ),
-            );
-          },
+                child: value.isNotEmpty
+                    ? ImageWidget(
+                        key: ValueKey(value),
+                        link: value,
+                        fit: BoxFit.cover,
+                        lowerQuality: true,
+                        height: 1.sh,
+                        width: 1.sw,
+                      )
+                    : ColoredBox(color: theme!.colorScheme.primary),
+              );
+            },
+          ),
         ),
         SafeArea(
           child: BackdropFilter(
@@ -83,7 +86,6 @@ class ShuffleComponent extends StatelessWidget {
                     child: Stack(
                       clipBehavior: Clip.none,
                       alignment: Alignment.center,
-                      // fit: StackFit.expand,
                       children: [
                         Text(S.of(context).TryYourself,
                             style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
