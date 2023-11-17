@@ -8,9 +8,13 @@ class PreferencesComponent extends StatelessWidget {
   final Function onSelect;
   final bool isLoading;
 
-  const PreferencesComponent(
-      {Key? key, this.onSubmit, required this.preferences, this.isLoading = false, required this.onSelect})
-      : super(key: key);
+  const PreferencesComponent({
+    Key? key,
+    this.onSubmit,
+    required this.preferences,
+    this.isLoading = false,
+    required this.onSelect,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class PreferencesComponent extends StatelessWidget {
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               S.of(context).TellUsMoreAboutYourself('\n'),
@@ -70,8 +74,8 @@ class PreferencesComponent extends StatelessWidget {
                 )),
               )
             ]).paddingSymmetric(horizontal: horizontalMargin),
-            if (model.showBubbleSearch ?? true) SpacingFoundation.verticalSpace16,
-            if (model.showBubbleSearch ?? true)
+            if (model.showBubbleSearch ?? true) ...[
+              SpacingFoundation.verticalSpace16,
               SizedBox(
                   width: double.infinity,
                   child: UiKitInputFieldRightIcon(
@@ -87,7 +91,7 @@ class PreferencesComponent extends StatelessWidget {
                       if (preferences.searchController.text.isNotEmpty) preferences.searchController.clear();
                     },
                   )).paddingSymmetric(horizontal: horizontalMargin),
-            // SpacingFoundation.verticalSpace24,
+            ],
             Expanded(
               child: LayoutBuilder(
                 builder: (context, size) {
@@ -97,7 +101,7 @@ class PreferencesComponent extends StatelessWidget {
                     widgets: preferences.chips,
                   );
                 },
-              ).paddingOnly(bottom: 20.h),
+              ).paddingOnly(bottom: 40.h),
             ),
           ],
         ).paddingSymmetric(vertical: verticalMargin),
