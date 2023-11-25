@@ -68,7 +68,7 @@ class _FAQComponentState extends State<FAQComponent> {
                   return Theme(
                       data: ThemeData(
                           textButtonTheme: TextButtonThemeData(
-                              style: context.uiKitTheme?.textButtonStyle.copyWith(
+                              style: context.uiKitTheme?.textButtonStyle().copyWith(
                                   padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
                                   textStyle: MaterialStateTextStyle.resolveWith((states) {
                                     return context.uiKitTheme!.regularTextTheme.body;

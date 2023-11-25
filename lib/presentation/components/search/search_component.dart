@@ -130,12 +130,12 @@ class SearchComponent extends StatelessWidget {
                             child: SizedBox(
                               width: double.infinity,
                               child: UiKitInputFieldRightIcon(
-                                fillColor: ColorsFoundation.surface3,
+                                fillColor: theme?.colorScheme.surface3,
                                 hintText: S.of(context).Search.toUpperCase(),
                                 controller: searchController,
                                 icon: ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.search,
-                                  color: Colors.white.withOpacity(0.5),
+                                  color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                                 ),
                               ),
                             ),

@@ -22,6 +22,7 @@ class SettingsComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final config = GlobalConfiguration().appConfig.content['profile_settings'];
     final model = ComponentModel.fromJson(config);
+    final uiKitTheme = context.uiKitTheme;
 
     final titleAligment = model.positionModel?.titleAlignment;
     final bodyAligment = model.positionModel?.bodyAlignment;
@@ -57,7 +58,9 @@ class SettingsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace12,
         ],
         Theme(
-          data: ThemeData(textButtonTheme: TextButtonThemeData(style: context.uiKitTheme?.textButtonStyle)),
+          data: ThemeData(
+              textButtonTheme:
+                  TextButtonThemeData(style: uiKitTheme!.textButtonStyle(uiKitTheme!.colorScheme.inversePrimary))),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: bodyAligment.crossAxisAlignment,
@@ -73,9 +76,7 @@ class SettingsComponent extends StatelessWidget {
         Theme(
           data: ThemeData(
             textButtonTheme: TextButtonThemeData(
-              style: context.uiKitTheme?.textButtonStyle.copyWith(
-                foregroundColor: MaterialStateProperty.resolveWith((states) => UiKitColors.error),
-              ),
+              style: context.uiKitTheme?.textButtonStyle(UiKitColors.error),
             ),
           ),
           child: Column(
