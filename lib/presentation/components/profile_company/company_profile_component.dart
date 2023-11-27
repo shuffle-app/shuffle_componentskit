@@ -17,11 +17,8 @@ class CompanyProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent
-        .of(context)
-        ?.globalConfiguration
-        .appConfig
-        .content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_profile']);
     final title = model.content.title?[ContentItemType.text]?.properties?.keys.first;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -31,17 +28,14 @@ class CompanyProfileComponent extends StatelessWidget {
     final buttonTypes = buttons?.values.map((e) => e.type).toList() ?? [];
     List<UiKitCustomTab> tabs = [];
     for (var i in buttonTypes) {
-      if (tabs
-          .indexWhere((element) => element.title == (i?.toUpperCase() ?? ''))
-          .isNegative) {
+      if (tabs.indexWhere((element) => element.title == (i?.toUpperCase() ?? '')).isNegative) {
         tabs.add(UiKitCustomTab(title: i?.toUpperCase() ?? ''));
       }
     }
     final sortedButtons = buttons?.entries
         .where((element) => element.value.type?.toUpperCase() == (uiModel?.selectedTab ?? tabs.first.title))
         .map<BaseUiKitButtonData>(
-          (value) =>
-          BaseUiKitButtonData(
+          (value) => BaseUiKitButtonData(
             text: value.key,
             icon: ImageWidget(
               link: value.value.imageLink,
@@ -50,19 +44,18 @@ class CompanyProfileComponent extends StatelessWidget {
             ),
             onPressed: () => onProfileItemChosen(value.value.value),
           ),
-    )
+        )
         .toList();
     sortedButtons?.sort(
-          (a, b) => buttons![a.text]!.sortNumber!.compareTo(buttons[b.text]!.sortNumber!),
+      (a, b) => buttons![a.text]!.sortNumber!.compareTo(buttons[b.text]!.sortNumber!),
     );
 
-    return SingleChildScrollView(child: Column(
+    return SingleChildScrollView(
+        child: Column(
       crossAxisAlignment: bodyAlignment.crossAxisAlignment,
       children: [
         SizedBox(
-          height: MediaQuery
-              .viewPaddingOf(context)
-              .top + SpacingFoundation.verticalSpacing16,
+          height: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing16,
         ),
         Center(
           child: Text(
@@ -74,48 +67,36 @@ class CompanyProfileComponent extends StatelessWidget {
         if (tabs.length >= 2)
           UiKitCustomTabBar(
             tabs: tabs,
-            onTappedTab: (index) =>
-                onTabSwitched?.call(tabs
-                    .elementAt(index)
-                    .title),
+            onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title),
           ),
         ...sortedButtons
-            ?.map(
-              (e) =>
-          [
-            SpacingFoundation.verticalSpace4,
-            Theme(
-              data: ThemeData(
-                textButtonTheme: TextButtonThemeData(
-                  style: context.uiKitTheme?.textButtonStyle.copyWith(
-                    foregroundColor: MaterialStateProperty.resolveWith(
-                          (states) {
-                        if (buttons?[e.text]?.color == null) {
-                          return buttons?[e.text]?.color ?? Colors.white;
-                        }
-
-                        return ColorsFoundation.error;
-                      },
+                ?.map(
+                  (e) => [
+                    SpacingFoundation.verticalSpace4,
+                    Theme(
+                      data: ThemeData(
+                        textButtonTheme: TextButtonThemeData(
+                          style: context.uiKitTheme?.textButtonStyle((buttons?[e.text]?.color == null)
+                              ? (buttons?[e.text]?.color ?? context.uiKitTheme!.colorScheme.inversePrimary)
+                              : ColorsFoundation.error),
+                        ),
+                      ),
+                      child: context.button(
+                        isTextButton: true,
+                        data: e,
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              child: context.button(
-                isTextButton: true,
-                data: e,
-              ),
-            ),
-            SpacingFoundation.verticalSpace4,
-            if (e != sortedButtons.last)
-              const Divider(
-                height: 1,
-                thickness: 1,
-                color: ColorsFoundation.darkNeutral400,
-              ),
-          ],
-        )
-            .expand((element) => element)
-            .toList() ??
+                    SpacingFoundation.verticalSpace4,
+                    if (e != sortedButtons.last)
+                      const Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: ColorsFoundation.darkNeutral400,
+                      ),
+                  ],
+                )
+                .expand((element) => element)
+                .toList() ??
             [],
       ],
     ).paddingSymmetric(horizontal: horizontalMargin));

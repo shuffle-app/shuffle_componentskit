@@ -49,7 +49,7 @@ class SupportComponent extends StatelessWidget {
               child: Theme(
                 data: ThemeData(
                   textButtonTheme: TextButtonThemeData(
-                    style: context.uiKitTheme?.textButtonStyle,
+                    style: context.uiKitTheme?.textButtonStyle(context.uiKitTheme!.colorScheme.inversePrimary),
                   ),
                 ),
                 child: context
