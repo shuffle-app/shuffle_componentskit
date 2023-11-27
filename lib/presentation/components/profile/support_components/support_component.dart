@@ -27,8 +27,7 @@ class SupportComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final toolBarHeight = context.uiKitTheme?.customAppBapTheme.toolbarHeight ?? 90.0;
-    final remainingHeight =
-        1.sh - toolBarHeight - EdgeInsetsFoundation.vertical16 - SpacingFoundation.verticalSpacing24;
+    final remainingHeight = 1.sh - toolBarHeight - EdgeInsetsFoundation.vertical16 - SpacingFoundation.verticalSpacing24;
 
     return BlurredAppBarPage(
       centerTitle: true,
@@ -76,8 +75,8 @@ class SupportComponent extends StatelessWidget {
                               BorderSide(width: 2, color: Colors.white),
                             ),
                           ),
-                          child: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.chevronRight,
+                          child: const ImageWidget(
+                            iconData: ShuffleUiKitIcons.chevronright,
                             color: Colors.white,
                           ).paddingAll(SpacingFoundation.verticalSpacing12),
                         ),

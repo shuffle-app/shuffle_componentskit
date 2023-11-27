@@ -12,8 +12,7 @@ class CreateEventComponent extends StatefulWidget {
   final Future Function(UiEventModel) onEventCreated;
   final Future<String?> Function()? getLocation;
 
-  const CreateEventComponent(
-      {super.key, this.eventToEdit, this.getLocation, this.onEventDeleted, required this.onEventCreated});
+  const CreateEventComponent({super.key, this.eventToEdit, this.getLocation, this.onEventDeleted, required this.onEventCreated});
 
   @override
   State<CreateEventComponent> createState() => _CreateEventComponentState();
@@ -101,8 +100,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -116,11 +114,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         autoImplyLeading: true,
         appBarTrailing: widget.eventToEdit != null
             ? IconButton(
-                icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.trash,
-                    color: Colors.white,
-                    height: 20.h,
-                    fit: BoxFit.fitHeight),
+                icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
                 onPressed: widget.onEventDeleted)
             : null,
         body: SingleChildScrollView(
@@ -160,11 +154,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                       UiKitTagSelector(
                               onNotFoundTagCallback: (value) => setState(() => _eventToEdit.baseTags = [
                                     ..._eventToEdit.baseTags,
-                                    UiKitTag(title: value, iconPath: '')
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
                                   ]),
                               tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-                              onRemoveTagCallback: (value) => setState(
-                                  () => _eventToEdit.baseTags.removeWhere((element) => element.title == value)))
+                              onRemoveTagCallback: (value) =>
+                                  setState(() => _eventToEdit.baseTags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                       SpacingFoundation.verticalSpace24,
@@ -173,8 +167,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                              onNotFoundTagCallback: (value) => setState(() =>
-                                  _eventToEdit.tags = [..._eventToEdit.tags, UiKitTag(title: value, iconPath: '')]),
+                              onNotFoundTagCallback: (value) => setState(() => _eventToEdit.tags = [
+                                    ..._eventToEdit.tags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ]),
                               tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
                               onRemoveTagCallback: (value) =>
                                   setState(() => _eventToEdit.tags.removeWhere((element) => element.title == value)))
@@ -214,8 +210,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                     });
                                   });
                                 },
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.clock,
+                                icon: const ImageWidget(
+                                  iconData: ShuffleUiKitIcons.clock,
                                   color: Colors.white,
                                 ))),
                       ]).paddingSymmetric(horizontal: horizontalPadding),
@@ -251,8 +247,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                                   })
                                                 });
                                       },
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.calendar,
+                                icon: const ImageWidget(
+                                  iconData: ShuffleUiKitIcons.calendar,
                                   color: Colors.white,
                                 ))),
                       ]).paddingSymmetric(horizontal: horizontalPadding),
@@ -269,8 +265,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                               child: UiKitInputFieldNoFill(
                                       label: S.of(context).Address,
                                       controller: _locationController,
-                                      icon: ImageWidget(
-                                          svgAsset: GraphicsFoundation.instance.svg.location, color: Colors.white))
+                                      icon: const ImageWidget(iconData: ShuffleUiKitIcons.location, color: Colors.white))
                                   .paddingSymmetric(horizontal: horizontalPadding))),
                       SpacingFoundation.verticalSpace24,
                       SafeArea(

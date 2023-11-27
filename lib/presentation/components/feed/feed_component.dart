@@ -49,8 +49,7 @@ class FeedComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentFeedModel feedLeisureModel = ComponentFeedModel.fromJson(config['feed']);
     final ComponentFeedModel feedBusinessModel = ComponentFeedModel.fromJson(config['feed_business']);
     MapEntry<String, PropertiesBaseModel>? advertisement;
@@ -60,10 +59,10 @@ class FeedComponent extends StatelessWidget {
 
     final nicheTitles = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties?.keys.toList();
     final nicheData = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties;
-    final upcomingGlobals = feedBusinessModel
-        .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
-    final upcomingGlobalsTitle = feedBusinessModel
-        .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.text]?.properties?.keys.first;
+    final upcomingGlobals =
+        feedBusinessModel.content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
+    final upcomingGlobalsTitle =
+        feedBusinessModel.content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.text]?.properties?.keys.first;
     nicheTitles?.sort((a, b) {
       final aSortNumber = nicheData?[a]?.sortNumber ?? 0;
       final bSortNumber = nicheData?[b]?.sortNumber ?? 0;
@@ -96,17 +95,16 @@ class FeedComponent extends StatelessWidget {
                         (e) => UiKitImageWithDescriptionCard(
                           title: e,
                           imageUrl: upcomingGlobals[e]?.imageLink ?? '',
-                          subtitleIcon: GraphicsFoundation.instance.svg.clock.path,
+                          subtitleIcon: ShuffleUiKitIcons.clock,
                           subtitle: DateFormat('MMM dd, HH:mm a')
                               .format(DateTime.tryParse(upcomingGlobals[e]?.value ?? '') ?? DateTime.now()),
                           tags: [
                             UiKitTag(
                               title: upcomingGlobals[e]?.type ?? '',
-                              iconPath: GraphicsFoundation.instance.svg.label.path,
+                              icon: ShuffleUiKitIcons.label,
                             ),
                           ],
-                        ).paddingOnly(
-                            right: e == upcomingGlobals.keys.last ? 0 : SpacingFoundation.horizontalSpacing12),
+                        ).paddingOnly(right: e == upcomingGlobals.keys.last ? 0 : SpacingFoundation.horizontalSpacing12),
                       )
                       .toList() ??
                   [],
@@ -242,7 +240,7 @@ class FeedComponent extends StatelessWidget {
                     selected: feed.activeFilterChips?.map((e) => e.title).contains(S.of(context).Favorites) ?? false,
                     title: S.of(context).Favorites,
                     onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(S.of(context).Favorites),
-                    icon: GraphicsFoundation.instance.svg.star.path,
+                    icon: ShuffleUiKitIcons.star,
                   ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
                   Wrap(
                     spacing: SpacingFoundation.verticalSpacing8,
@@ -255,7 +253,7 @@ class FeedComponent extends StatelessWidget {
                           selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
                           title: e.title,
                           onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                          icon: e.iconPath,
+                          icon: e.icon,
                         ).paddingOnly(right: padding);
                       },
                     ).toList(),

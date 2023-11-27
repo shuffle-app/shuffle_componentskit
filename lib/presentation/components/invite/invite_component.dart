@@ -167,8 +167,8 @@ class _InviteComponentState extends State<InviteComponent> {
                               setState(() => _date = selectedDate);
                             }
                           }),
-                          icon: ImageWidget(
-                            link: GraphicsFoundation.instance.svg.calendar.path,
+                          icon: const ImageWidget(
+                            iconData: ShuffleUiKitIcons.calendar,
                             color: Colors.white,
                           ),
                         ),
@@ -221,8 +221,8 @@ class _InviteComponentState extends State<InviteComponent> {
                               widget.onAddWishTap?.call(_wishController.text, _date!);
                             }
                           },
-                          icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.plus,
+                          icon: const ImageWidget(
+                            iconData: ShuffleUiKitIcons.plus,
                           ),
                         ),
                       ),

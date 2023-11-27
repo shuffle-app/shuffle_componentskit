@@ -11,8 +11,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
 
-  const CreatePlaceComponent(
-      {super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
+  const CreatePlaceComponent({super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
 
   @override
   State<CreatePlaceComponent> createState() => _CreatePlaceComponentState();
@@ -119,8 +118,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -134,11 +132,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         autoImplyLeading: true,
         appBarTrailing: widget.placeToEdit != null
             ? IconButton(
-                icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.trash,
-                    color: Colors.white,
-                    height: 20.h,
-                    fit: BoxFit.fitHeight),
+                icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
                 onPressed: widget.onPlaceDeleted)
             : null,
         body: SingleChildScrollView(
@@ -157,14 +151,13 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           S.of(context).Logo,
                           style: theme?.regularTextTheme.labelSmall,
                         ).paddingOnly(right: horizontalPadding),
-                        if (_placeToEdit.logo != null)
-                          CircularAvatar(height: kIsWeb ? 40 : 40.h, avatarUrl: _placeToEdit.logo!),
+                        if (_placeToEdit.logo != null) CircularAvatar(height: kIsWeb ? 40 : 40.h, avatarUrl: _placeToEdit.logo!),
                         const Spacer(),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
                               onPressed: _onLogoAddRequested,
-                              icon: ImageWidget(
-                                svgAsset: GraphicsFoundation.instance.svg.cameraPlus,
+                              icon: const ImageWidget(
+                                iconData: ShuffleUiKitIcons.cameraplus,
                                 color: Colors.white,
                                 height: 18,
                                 width: 18,
@@ -203,18 +196,19 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         ),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
-                              onPressed: () async {
-                                final maybeDate = await showUiKitTimeDialog(context);
-                                if (maybeDate != null) {
-                                  setState(() {
-                                    _placeToEdit.openFrom = maybeDate;
-                                  });
-                                }
-                              },
-                              icon: ImageWidget(
-                                svgAsset: GraphicsFoundation.instance.svg.calendar,
-                                color: Colors.white,
-                              )),
+                            onPressed: () async {
+                              final maybeDate = await showUiKitTimeDialog(context);
+                              if (maybeDate != null) {
+                                setState(() {
+                                  _placeToEdit.openFrom = maybeDate;
+                                });
+                              }
+                            },
+                            icon: const ImageWidget(
+                              iconData: ShuffleUiKitIcons.calendar,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ]).paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
@@ -237,8 +231,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                 });
                               }
                             },
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.calendar,
+                            icon: const ImageWidget(
+                              iconData: ShuffleUiKitIcons.calendar,
                               color: Colors.white,
                             ),
                           ),
@@ -268,8 +262,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                 });
                               }
                             },
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.calendar,
+                            icon: const ImageWidget(
+                              iconData: ShuffleUiKitIcons.calendar,
                               color: Colors.white,
                             ),
                           ),
@@ -288,8 +282,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           child: UiKitInputFieldNoFill(
                             label: S.of(context).Address,
                             controller: _locationController,
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.location,
+                            icon: const ImageWidget(
+                              iconData: ShuffleUiKitIcons.location,
                               color: Colors.white,
                             ),
                           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -297,15 +291,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       UiKitInputFieldNoFill(
-                              keyboardType: TextInputType.url,
-                              label: S.of(context).Website,
-                              controller: _websiteController)
+                              keyboardType: TextInputType.url, label: S.of(context).Website, controller: _websiteController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       UiKitInputFieldNoFill(
-                              keyboardType: TextInputType.phone,
-                              label: S.of(context).Phone,
-                              controller: _phoneController)
+                              keyboardType: TextInputType.phone, label: S.of(context).Phone, controller: _phoneController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       Text(S.of(context).BaseProperties, style: theme?.regularTextTheme.labelSmall)
@@ -314,11 +304,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       UiKitTagSelector(
                               onNotFoundTagCallback: (value) => setState(() => _placeToEdit.baseTags = [
                                     ..._placeToEdit.baseTags,
-                                    UiKitTag(title: value, iconPath: '')
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
                                   ]),
                               tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
-                              onRemoveTagCallback: (value) => setState(
-                                  () => _placeToEdit.baseTags.removeWhere((element) => element.title == value)))
+                              onRemoveTagCallback: (value) =>
+                                  setState(() => _placeToEdit.baseTags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                       SpacingFoundation.verticalSpace24,
@@ -327,8 +317,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace4,
                       UiKitTagSelector(
-                              onNotFoundTagCallback: (value) => setState(() =>
-                                  _placeToEdit.tags = [..._placeToEdit.tags, UiKitTag(title: value, iconPath: '')]),
+                              onNotFoundTagCallback: (value) => setState(() => _placeToEdit.tags = [
+                                    ..._placeToEdit.tags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ]),
                               tags: _placeToEdit.tags.map((tag) => tag.title).toList(),
                               onRemoveTagCallback: (value) =>
                                   setState(() => _placeToEdit.tags.removeWhere((element) => element.title == value)))

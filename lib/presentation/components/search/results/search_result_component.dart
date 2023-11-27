@@ -45,7 +45,7 @@ class SearchResultComponent extends StatelessWidget {
             hintText: S.of(context).Search.toUpperCase(),
             controller: searchController,
             icon: searchController.text.isEmpty
-                ? ImageWidget(svgAsset: GraphicsFoundation.instance.svg.search, color: Colors.white.withOpacity(0.5))
+                ? ImageWidget(iconData: ShuffleUiKitIcons.search, color: Colors.white.withOpacity(0.5))
                 : null,
             onPressed: () {
               searchController.clear();

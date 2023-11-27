@@ -94,8 +94,8 @@ class WebPhotoVideoSelector extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadiusFoundation.all12,
                               ),
-                              child: ImageWidget(
-                                svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                              child: const ImageWidget(
+                                iconData: ShuffleUiKitIcons.gradientPlus,
                                 height: 18,
                                 width: 18,
                               ).paddingAll(EdgeInsetsFoundation.all12),
@@ -150,16 +150,15 @@ class WebPhotoVideoSelector extends StatelessWidget {
                     alignment: Alignment.topRight,
                     children: [
                       ClipPath(
-                        clipper: ShapeBorderClipper(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
+                        clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
                         child: photos[index].widget(itemsSize),
                       ).paddingAll(4),
                       context.outlinedButton(
                         hideBorder: true,
                         data: BaseUiKitButtonData(
                           onPressed: () => onPhotoDeleted.call(index),
-                          icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.x,
+                          icon: const ImageWidget(
+                            iconData: ShuffleUiKitIcons.x,
                             color: Colors.white,
                             height: 8,
                             width: 8,
@@ -185,8 +184,8 @@ class WebPhotoVideoSelector extends StatelessWidget {
                               ),
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
-                            child: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                            child: const ImageWidget(
+                              iconData: ShuffleUiKitIcons.gradientPlus,
                               height: 18,
                               width: 18,
                             ).paddingAll(EdgeInsetsFoundation.all12),
@@ -240,16 +239,15 @@ class WebPhotoVideoSelector extends StatelessWidget {
                     alignment: Alignment.topRight,
                     children: [
                       ClipPath(
-                        clipper: ShapeBorderClipper(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
+                        clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
                         child: videos[index].widget(itemsSize),
                       ).paddingAll(4),
                       context.outlinedButton(
                         hideBorder: true,
                         data: BaseUiKitButtonData(
                           onPressed: () => onVideoDeleted.call(index),
-                          icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.x,
+                          icon: const ImageWidget(
+                            iconData: ShuffleUiKitIcons.x,
                             color: Colors.white,
                             height: 8,
                             width: 8,
@@ -275,8 +273,8 @@ class WebPhotoVideoSelector extends StatelessWidget {
                               ),
                               borderRadius: BorderRadiusFoundation.all12,
                             ),
-                            child: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                            child: const ImageWidget(
+                              iconData: ShuffleUiKitIcons.gradientPlus,
                               height: 18,
                               width: 18,
                             ).paddingAll(EdgeInsetsFoundation.all12),

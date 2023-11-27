@@ -89,7 +89,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                       GradientableWidget(
                         gradient: GradientFoundation.buttonGradient,
                         child: ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                          iconData: ShuffleUiKitIcons.gradientStar,
                           color: Colors.white,
                           width: 0.0625.sw,
                           height: 0.0625.sw,
@@ -116,9 +116,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               text: S
                   .of(context)
                   .UpgradeForNmoney(
-                    _selectedOffer == null
-                        ? ''
-                        : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
+                    _selectedOffer == null ? '' : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
                   )
                   .toUpperCase(),
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),

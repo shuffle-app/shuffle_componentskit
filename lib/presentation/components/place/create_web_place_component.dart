@@ -136,8 +136,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -197,7 +196,10 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
-                              _placeToEdit.baseTags = [..._placeToEdit.baseTags, UiKitTag(title: value, iconPath: '')];
+                              _placeToEdit.baseTags = [
+                                ..._placeToEdit.baseTags,
+                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                              ];
                             });
                           },
                           tags: _placeToEdit.baseTags.map((e) => e.title).toList(),
@@ -214,7 +216,10 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
-                              _placeToEdit.tags = [..._placeToEdit.tags, UiKitTag(title: value, iconPath: '')];
+                              _placeToEdit.tags = [
+                                ..._placeToEdit.tags,
+                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                              ];
                             });
                           },
                           tags: _placeToEdit.tags.map((e) => e.title).toList(),
@@ -279,39 +284,41 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       WebFormField(
                         title: S.of(context).OpeningHours,
                         isRequired: true,
-                        child: Row(children: [
-                          Expanded(
-                              flex: 3,
-                              child: UiKitTitledDescriptionWithDivider(
-                                description: [
-                                  '${normalizedTi(_placeToEdit.openFrom)} - ${normalizedTi(_placeToEdit.openTo)}',
-                                  _placeToEdit.weekdays.join(', ')
-                                ],
-                                direction: Axis.horizontal,
-                                // onTrailingTap: widget.onTimeEditTap,
-                                title: '',
-                              )),
-                          context.smallOutlinedButton(
-                            data: BaseUiKitButtonData(
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.clock,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () async {
-                                  await showUiKitTimeFromToDialog(context, (from, to) {
-                                    setState(() {
-                                      _placeToEdit.openTo = to;
-                                      _placeToEdit.openFrom = from;
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 3,
+                                child: UiKitTitledDescriptionWithDivider(
+                                  description: [
+                                    '${normalizedTi(_placeToEdit.openFrom)} - ${normalizedTi(_placeToEdit.openTo)}',
+                                    _placeToEdit.weekdays.join(', ')
+                                  ],
+                                  direction: Axis.horizontal,
+                                  // onTrailingTap: widget.onTimeEditTap,
+                                  title: '',
+                                )),
+                            context.smallOutlinedButton(
+                              data: BaseUiKitButtonData(
+                                  icon: const ImageWidget(
+                                    iconData: ShuffleUiKitIcons.clock,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () async {
+                                    await showUiKitTimeFromToDialog(context, (from, to) {
+                                      setState(() {
+                                        _placeToEdit.openTo = to;
+                                        _placeToEdit.openFrom = from;
+                                      });
                                     });
-                                  });
 
-                                  final weekdays = await showUiKitWeekdaySelector(context) ?? [];
-                                  setState(() {
-                                    _placeToEdit.weekdays = weekdays;
-                                  });
-                                }),
-                          )
-                        ]),
+                                    final weekdays = await showUiKitWeekdaySelector(context) ?? [];
+                                    setState(() {
+                                      _placeToEdit.weekdays = weekdays;
+                                    });
+                                  }),
+                            )
+                          ],
+                        ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(

@@ -18,19 +18,19 @@ class PlacePreview extends StatelessWidget {
   final DateTime? updatedAt;
   final DateTime? shouldVisitAt;
 
-  const PlacePreview(
-      {Key? key,
-      required this.onTap,
-      required this.place,
-      required this.model,
-      this.onFavoriteChanged,
-      this.cellSize,
-      this.status,
-      this.shouldVisitAt,
-      this.updatedAt,
-      this.showFavoriteBtn = false,
-      this.isFavorite = false})
-      : super(key: key);
+  const PlacePreview({
+    Key? key,
+    required this.onTap,
+    required this.place,
+    required this.model,
+    this.onFavoriteChanged,
+    this.cellSize,
+    this.status,
+    this.shouldVisitAt,
+    this.updatedAt,
+    this.showFavoriteBtn = false,
+    this.isFavorite = false,
+  }) : super(key: key);
 
   PlacePreview.eventPreview(
       {super.key,
@@ -66,8 +66,11 @@ class PlacePreview extends StatelessWidget {
     final double calculatedOpacity = (shouldVisitAt?.isAtSameDay ?? true) ? 1 : 0.2;
 
     return SizedBox(
-        width: double.infinity,
-        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
           if (shouldVisitAt != null)
             Text(shouldVisitAt!.isAtSameDay ? S.of(context).Today : DateFormat('MMM dd, yyyy').format(shouldVisitAt!),
                     style: theme?.boldTextTheme.title2)
@@ -77,31 +80,37 @@ class PlacePreview extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Align(
+                alignment: Alignment.center,
+                child: Stack(
+                  clipBehavior: Clip.none,
                   alignment: Alignment.center,
-                  child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+                  children: [
                     Opacity(
-                        opacity: calculatedOpacity,
-                        child: UiKitPhotoSlider(
-                          media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
-                          onTap: () => onTap?.call(place.id),
-                          width: size.width - horizontalMargin * 2,
-                          height: cellSize?.height ?? 156.h,
-                        )),
+                      opacity: calculatedOpacity,
+                      child: UiKitPhotoSlider(
+                        media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
+                        onTap: () => onTap?.call(place.id),
+                        width: size.width - horizontalMargin * 2,
+                        height: cellSize?.height ?? 156.h,
+                      ),
+                    ),
                     if (showFavoriteBtn)
                       Positioned(
-                          top: -5.h,
-                          right: -5.w,
-                          child: context.smallButton(
-                              blurred: true,
-                              data: BaseUiKitButtonData(
-                                  onPressed: onFavoriteChanged,
-                                  icon: ImageWidget(
-                                      height: isFavorite ? 15.w : null,
-                                      fit: isFavorite ? BoxFit.fitWidth : null,
-                                      color: Colors.white,
-                                      svgAsset: isFavorite
-                                          ? GraphicsFoundation.instance.svg.star
-                                          : GraphicsFoundation.instance.svg.starOutline))))
+                        top: -5.h,
+                        right: -5.w,
+                        child: context.smallButton(
+                          blurred: true,
+                          data: BaseUiKitButtonData(
+                            onPressed: onFavoriteChanged,
+                            icon: ImageWidget(
+                              height: isFavorite ? 15.w : null,
+                              fit: isFavorite ? BoxFit.fitWidth : null,
+                              color: Colors.white,
+                              iconData: isFavorite ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
+                            ),
+                          ),
+                        ),
+                      )
                     else if (shouldVisitAt?.isAtSameDay ?? false)
                       Positioned(
                           top: -10.h,
@@ -117,35 +126,39 @@ class PlacePreview extends StatelessWidget {
                                   text: S.of(context).CheckIn.toUpperCase()))),
                     if (shouldVisitAt != null && !shouldVisitAt!.isAtSameDay)
                       Positioned(
-                          bottom: -15.h,
-                          child: UiKitCardWrapper(
-                            color: theme?.colorScheme.surface2.withOpacity(0.35),
-                            child: Center(
-                              child: Text(S.of(context).VisitFirstToOpenNext, style: theme?.boldTextTheme.body),
-                            ).paddingSymmetric(
-                                horizontal: SpacingFoundation.horizontalSpacing20,
-                                vertical: SpacingFoundation.verticalSpacing12),
-                          )),
+                        bottom: -15.h,
+                        child: UiKitCardWrapper(
+                          color: theme?.colorScheme.surface2.withOpacity(0.35),
+                          child: Center(
+                            child: Text(S.of(context).VisitFirstToOpenNext, style: theme?.boldTextTheme.body),
+                          ).paddingSymmetric(
+                              horizontal: SpacingFoundation.horizontalSpacing20, vertical: SpacingFoundation.verticalSpacing12),
+                        ),
+                      ),
                     if (status != null && status!.isNotEmpty)
                       ClipRRect(
-                          borderRadius: BorderRadiusFoundation.all24,
-                          child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                              child: SizedBox(
-                                  width: size.width - horizontalMargin * 2,
-                                  height: cellSize?.height ?? 156.h,
-                                  child: Center(
-                                    child: Text(
-                                      '$status\n${DateFormat('dd.MM.yy').format(updatedAt ?? DateTime.now())}',
-                                      textAlign: TextAlign.center,
-                                      style: theme?.boldTextTheme.body,
-                                    ),
-                                  ))))
-                  ])),
+                        borderRadius: BorderRadiusFoundation.all24,
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                          child: SizedBox(
+                            width: size.width - horizontalMargin * 2,
+                            height: cellSize?.height ?? 156.h,
+                            child: Center(
+                              child: Text(
+                                '$status\n${DateFormat('dd.MM.yy').format(updatedAt ?? DateTime.now())}',
+                                textAlign: TextAlign.center,
+                                style: theme?.boldTextTheme.body,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
               if (calculatedOpacity == 1) ...[
                 SpacingFoundation.verticalSpace8,
-                Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
-                    .paddingSymmetric(horizontal: horizontalMargin),
+                Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(horizontal: horizontalMargin),
                 SpacingFoundation.verticalSpace4,
                 UiKitTagsWidget(
                   baseTags: place.baseTags,
@@ -154,6 +167,8 @@ class PlacePreview extends StatelessWidget {
               ]
             ],
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }

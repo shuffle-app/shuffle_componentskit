@@ -23,8 +23,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
 
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['user_type_selection']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -64,11 +63,11 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
           child: UiKitSwitchWithCustomBackground(
             firstOption: CustomBackgroundSwitchOption(
               title: widget.uiModel.options.first.title,
-              imageLink: widget.uiModel.options.first.imageLink,
+              icon: widget.uiModel.options.first.icon,
             ),
             secondOption: CustomBackgroundSwitchOption(
               title: widget.uiModel.options.last.title,
-              imageLink: widget.uiModel.options.last.imageLink,
+              icon: widget.uiModel.options.last.icon,
             ),
             selectedOption: selectedOption,
             onChanged: (value) {

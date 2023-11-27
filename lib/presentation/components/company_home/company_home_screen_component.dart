@@ -27,8 +27,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_home']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -57,8 +56,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                       S.of(context).Shuffle,
                       style: textTheme?.caption1Bold.copyWith(color: Colors.black),
                     ),
-                    ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.memeberGradientStar,
+                    const ImageWidget(
+                      iconData: ShuffleUiKitIcons.memeberGradientStar,
                     ),
                   ],
                 ),
@@ -105,8 +104,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
             if (places.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
               context.gradientButton(
-                data: BaseUiKitButtonData(
-                    text: S.of(context).CreatePlace, onPressed: onCreatePlace, fit: ButtonFit.fitWidth),
+                data: BaseUiKitButtonData(text: S.of(context).CreatePlace, onPressed: onCreatePlace, fit: ButtonFit.fitWidth),
               ),
             ],
             SpacingFoundation.verticalSpace24,

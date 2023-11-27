@@ -122,8 +122,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -167,7 +166,10 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
-                              _eventToEdit.baseTags = [..._eventToEdit.baseTags, UiKitTag(title: value, iconPath: '')];
+                              _eventToEdit.baseTags = [
+                                ..._eventToEdit.baseTags,
+                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                              ];
                             });
                           },
                           tags: _eventToEdit.baseTags.map((e) => e.title).toList(),
@@ -184,7 +186,10 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
-                              _eventToEdit.tags = [..._eventToEdit.tags, UiKitTag(title: value, iconPath: '')];
+                              _eventToEdit.tags = [
+                                ..._eventToEdit.tags,
+                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                              ];
                             });
                           },
                           tags: _eventToEdit.tags.map((e) => e.title).toList(),
@@ -271,8 +276,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                               scale: 0.6,
                               child: context.smallOutlinedButton(
                                 data: BaseUiKitButtonData(
-                                    icon: ImageWidget(
-                                      svgAsset: GraphicsFoundation.instance.svg.clock,
+                                    icon: const ImageWidget(
+                                      iconData: ShuffleUiKitIcons.clock,
                                       color: Colors.white,
                                     ),
                                     onPressed: () async {
