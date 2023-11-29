@@ -63,11 +63,11 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
           child: UiKitSwitchWithCustomBackground(
             firstOption: CustomBackgroundSwitchOption(
               title: widget.uiModel.options.first.title,
-              icon: widget.uiModel.options.first.icon,
+              iconLink: widget.uiModel.options.first.iconLink,
             ),
             secondOption: CustomBackgroundSwitchOption(
               title: widget.uiModel.options.last.title,
-              icon: widget.uiModel.options.last.icon,
+              iconLink: widget.uiModel.options.last.iconLink,
             ),
             selectedOption: selectedOption,
             onChanged: (value) {

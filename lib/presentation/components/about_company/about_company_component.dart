@@ -146,6 +146,8 @@ class AboutCompanyComponent extends StatelessWidget {
               hasError: uiModel.errorSelectedMenuItem != null,
               title: nicheTitle,
               child: UiKitMenu<String>(
+                tilesColor: Colors.transparent,
+                useCustomTiles: false,
                 onSelected: (item) => onNicheChanged?.call(item),
                 title: nicheTitle,
                 selectedItem: uiModel.selectedMenuItem,
@@ -155,7 +157,7 @@ class AboutCompanyComponent extends StatelessWidget {
                       return UiKitMenuItem<String>(
                         title: e.toUpperCase(),
                         value: item?.value,
-                        icon: GraphicsFoundation.instance.iconFromString(item?.imageLink ?? ''),
+                        iconLink: item?.imageLink ?? '',
                         type: item?.type,
                       );
                     }).toList() ??

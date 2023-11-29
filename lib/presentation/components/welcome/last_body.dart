@@ -29,7 +29,7 @@ class _LastBody extends StatelessWidget {
         Positioned(
           bottom: 0.3.sh,
           child: ImageWidget(
-            iconData: ShuffleUiKitIcons.bigCuttedLogo,
+            link: GraphicsFoundation.instance.svg.bigCuttedLogo.path,
             width: 1.sw,
             fit: BoxFit.fitWidth,
           ),

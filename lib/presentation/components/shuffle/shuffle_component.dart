@@ -75,7 +75,7 @@ class ShuffleComponent extends StatelessWidget {
         ),
         SafeArea(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+            filter: ImageFilter.blur(sigmaY: 50, sigmaX: 50),
             child: Center(
               child: Column(
                 mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -202,6 +202,7 @@ class ShuffleComponent extends StatelessWidget {
                                               favoriteTitles.contains(shuffle.items[value % shuffle.items.length].title)
                                           ? ShuffleUiKitIcons.starfill
                                           : ShuffleUiKitIcons.staroutline,
+                                      height: 20.h,
                                       color: Colors.white,
                                     );
                                   },

@@ -148,6 +148,8 @@ class AboutUserComponent extends StatelessWidget {
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
               child: UiKitMenu<String>(
+                tilesColor: Colors.transparent,
+                useCustomTiles: false,
                 title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                     S.of(context).DescribeYourself,
                 selectedItem: aboutUserModel.selectedPersonType,
@@ -160,7 +162,7 @@ class AboutUserComponent extends StatelessWidget {
                             (e) => UiKitMenuItem<String>(
                               title: e.key,
                               value: e.value.value,
-                              icon: GraphicsFoundation.instance.iconFromString(e.value.imageLink ?? ''),
+                              iconLink: e.value.imageLink ?? '',
                             ),
                           )
                           .toList() ??

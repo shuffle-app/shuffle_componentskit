@@ -134,7 +134,7 @@ class SearchComponent extends StatelessWidget {
                                 hintText: S.of(context).Search.toUpperCase(),
                                 controller: searchController,
                                 icon: ImageWidget(
-                                  iconData: ShuffleUiKitIcons.search,
+                                  svgAsset: GraphicsFoundation.instance.svg.search,
                                   color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                                 ),
                               ),
@@ -188,7 +188,7 @@ class SearchComponent extends StatelessWidget {
                     ),
                   ],
                 ),
-                overflownIcon: ShuffleUiKitIcons.map,
+                overflownIconLink: GraphicsFoundation.instance.svg.map.path,
                 decorationIcons: _decorationItemsForFreeCards,
               ).paddingOnly(right: horizontalMargin),
             ],

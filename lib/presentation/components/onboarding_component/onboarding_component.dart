@@ -155,8 +155,8 @@ class _OnboardingComponentState extends State<OnboardingComponent> with SingleTi
             AnimatedOpacity(
               duration: widget.transitionDuration,
               opacity: _logoOpacity,
-              child: const ImageWidget(
-                iconData: ShuffleUiKitIcons.shuffleWhite,
+              child: ImageWidget(
+                link: GraphicsFoundation.instance.svg.shuffleWhite.path,
                 fit: BoxFit.fitWidth,
               ).paddingSymmetric(horizontal: 1.sw * 0.215625),
             ),

@@ -121,10 +121,9 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         data: BaseUiKitButtonData(
                           fit: ButtonFit.fitWidth,
                           text: S.of(context).Premium.toUpperCase(),
-                          icon: const ImageWidget(
+                          icon: ImageWidget(
                             iconData: ShuffleUiKitIcons.star2,
                             color: Colors.black,
-                            height: 18,
                             fit: BoxFit.fitHeight,
                           ),
                           onPressed: onPremiumAccountRequested,
