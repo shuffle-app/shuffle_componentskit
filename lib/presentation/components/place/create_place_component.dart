@@ -156,11 +156,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
                               onPressed: _onLogoAddRequested,
-                              icon: const ImageWidget(
+                              icon: ImageWidget(
                                 iconData: ShuffleUiKitIcons.cameraplus,
                                 color: Colors.white,
-                                height: 18,
-                                width: 18,
+                                height: 16.h,
+                                width: 16.h,
                               )),
                         )
                       ]).paddingSymmetric(horizontal: horizontalPadding),
@@ -204,9 +204,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                 });
                               }
                             },
-                            icon: const ImageWidget(
+                            icon: ImageWidget(
                               iconData: ShuffleUiKitIcons.calendar,
                               color: Colors.white,
+                              height: 16.h,
+                              width: 16.h,
                             ),
                           ),
                         ),
@@ -231,9 +233,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                 });
                               }
                             },
-                            icon: const ImageWidget(
+                            icon: ImageWidget(
                               iconData: ShuffleUiKitIcons.calendar,
                               color: Colors.white,
+                              height: 16.h,
+                              width: 16.h,
                             ),
                           ),
                         ),
@@ -262,9 +266,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                 });
                               }
                             },
-                            icon: const ImageWidget(
+                            icon: ImageWidget(
                               iconData: ShuffleUiKitIcons.calendar,
                               color: Colors.white,
+                              height: 16.h,
+                              width: 16.h,
                             ),
                           ),
                         ),
@@ -282,9 +288,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           child: UiKitInputFieldNoFill(
                             label: S.of(context).Address,
                             controller: _locationController,
-                            icon: const ImageWidget(
+                            icon: ImageWidget(
                               iconData: ShuffleUiKitIcons.location,
                               color: Colors.white,
+                              height: 16.h,
+                              width: 16.h,
                             ),
                           ).paddingSymmetric(horizontal: horizontalPadding),
                         ),

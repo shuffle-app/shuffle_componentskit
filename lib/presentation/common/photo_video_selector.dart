@@ -90,11 +90,11 @@ class PhotoVideoSelector extends StatelessWidget {
                   .outlinedButton(
                     data: BaseUiKitButtonData(
                       onPressed: onPhotoAddRequested,
-                      icon: const ImageWidget(
+                      icon: ImageWidget(
                         iconData: ShuffleUiKitIcons.cameraplus,
                         color: Colors.white,
-                        height: 18,
-                        width: 18,
+                        height: 16.h,
+                        width: 16.h,
                       ),
                     ),
                   )
@@ -141,11 +141,11 @@ class PhotoVideoSelector extends StatelessWidget {
                   .outlinedButton(
                     data: BaseUiKitButtonData(
                         onPressed: onVideoAddRequested,
-                        icon: const ImageWidget(
+                        icon: ImageWidget(
                           iconData: ShuffleUiKitIcons.videoplus,
                           color: Colors.white,
-                          height: 18,
-                          width: 18,
+                          height: 16.h,
+                          width: 16.h,
                         )),
                   )
                   .paddingSymmetric(horizontal: horizontalPadding)
