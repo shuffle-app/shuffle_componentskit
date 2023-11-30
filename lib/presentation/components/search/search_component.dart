@@ -84,7 +84,7 @@ class SearchComponent extends StatelessWidget {
                 backgroundColor: e.value.color ?? Colors.white,
                 onPressed: () {
                   onSearchFieldTap?.call();
-                  searchController.text = e.key;
+                  searchController.text = e.value.value ?? '';
                 },
               ),
             )

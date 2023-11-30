@@ -57,13 +57,12 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
 
     captionTexts.remove('image');
     captionTexts.remove('auth_type');
-    captionTexts.remove('password_hint');
 
     final privacyCaptions = captionTexts.entries.toList();
     privacyCaptions.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
 
     final authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
-    final passwordHint = model.content.properties?['password_hint']?.value ?? '';
+    final passwordHint = model.content.body?[ContentItemType.passwordHint]?.properties?.keys.firstOrNull ?? '';
 
     final colorScheme = context.uiKitTheme?.colorScheme;
     bool obscurePassword = true;

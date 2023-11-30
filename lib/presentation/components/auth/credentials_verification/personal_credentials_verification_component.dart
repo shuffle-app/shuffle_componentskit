@@ -77,7 +77,6 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
 
       captionTexts.remove('image');
       captionTexts.remove('auth_type');
-      captionTexts.remove('password_hint');
 
       privacyCaptions = captionTexts.entries.toList();
       privacyCaptions.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
@@ -92,7 +91,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
         if (_selectedTab == null) setState(() => _selectedTab = tabBar?.first);
       }
       authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
-      passwordHint = model.content.properties?['password_hint']?.value ?? '';
+      passwordHint = model.content.body?[ContentItemType.passwordHint]?.properties?.keys.firstOrNull ?? '';
       final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
       socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
       final clientType = Platform.isIOS ? 'iOS' : 'Android';
@@ -260,7 +259,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           UiKitWrappedInputField.uiKitInputFieldRightIcon(
                             obscureText: obscurePassword,
                             enabled: true,
-                            hintText: 'PASSWORD',
+                            hintText: S.of(context).Password.toUpperCase(),
                             controller: widget.passwordController,
                             fillColor: ColorsFoundation.surface3,
                             validator: widget.passwordValidator,

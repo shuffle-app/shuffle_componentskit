@@ -259,11 +259,11 @@ class AboutUserComponent extends StatelessWidget {
 
                   final items = (rawItems?.entries
                           .map((e) => UiKitVerticalChip(
-                                selected: aboutUserModel.selectedGender == e.key,
+                                selected: aboutUserModel.selectedGender == e.value.value,
                                 caption: e.key,
                                 sign: ImageWidget(link: e.value.imageLink),
                                 autoSizeGroup: genderGroup,
-                                onTap: () => onGenderChanged?.call(e.key),
+                                onTap: () => onGenderChanged?.call(e.value.value?? ''),
                               ))
                           .toList() ??
                       [])

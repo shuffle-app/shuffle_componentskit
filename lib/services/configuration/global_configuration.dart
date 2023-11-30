@@ -17,6 +17,9 @@ class GlobalConfiguration {
   final Completer _completer = Completer();
   ConfigurationModel appConfig = ConfigurationModel(updated: DateTime.now(), content: {}, theme: 'default');
 
+  // static ValueNotifier<ConfigurationModel> appConfig =
+  //     ValueNotifier<ConfigurationModel>(ConfigurationModel(updated: DateTime.now(), content: {}, theme: 'default'));
+
   bool get isLoaded => _completer.isCompleted;
 
   factory GlobalConfiguration([String? configUrl, String? languageCode, int? timeout]) {
@@ -35,7 +38,7 @@ class GlobalConfiguration {
 
   GlobalConfiguration._internal();
 
-  Future<GlobalConfiguration> load({String version = '1.0.0', String? userId,bool forceUpdate = false}) async {
+  Future<GlobalConfiguration> load({String version = '1.0.0', String? userId, bool forceUpdate = false}) async {
     File? cache = kIsWeb ? null : await _loadFromDocument();
     late final String cacheAsString;
     late ConfigurationModel model;
@@ -64,8 +67,11 @@ class GlobalConfiguration {
     if (userId != null) {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
-    Map<String, dynamic> configAsMap = (await _getFromUrl('http://${_configUrl}/api/v1/settings/config/$version',
-        queryParameters: _languageCode != null ? {'lang': _languageCode!} : null,
+    Map<String, dynamic> configAsMap = (await _getFromUrl(
+        true
+            ? 'https://n8n.tools.horum.co/webhook/configs-shuffle'
+            : 'http://${_configUrl}/api/v1/settings/config/$version',
+        queryParameters: _languageCode != null ? {'lang': _languageCode!, 'version': version} : null,
         headers: ConfigConstants.configHeaders))['config'];
     // print('got configAsMap $configAsMap');
     final model = ConfigurationModel(updated: DateTime.now(), content: configAsMap, theme: configAsMap['theme_name']);
@@ -92,21 +98,28 @@ class GlobalConfiguration {
 
   Future<Map<String, dynamic>> _getFromUrl(String url,
       {Map<String, String>? queryParameters, Map<String, String>? headers}) async {
-    String finalUrl = url;
-    if (queryParameters != null) {
-      queryParameters.forEach((k, v) {
-        finalUrl += !finalUrl.endsWith('?') ? '?$k=$v' : '&$k=$v';
-      });
-    }
+    // String finalUrl = url;
+    // if (queryParameters != null) {
+    //   queryParameters.forEach((k, v) {
+    //     finalUrl += !finalUrl.endsWith('?') ? '?$k=$v' : '&$k=$v';
+    //   });
+    // }
     headers ??= <String, String>{};
     Map<String, String>? usableHeader = Map.from(headers);
     usableHeader.putIfAbsent('Accept', () => 'application/json');
+    log('url: $url', name: 'GlobalConfiguration|loadFromUrl');
+    log('final queryParameters: $queryParameters', name: 'GlobalConfiguration|loadFromUrl');
+    var encodedUri = Uri.parse(url);
 
-    var encodedUri = Uri.encodeFull(finalUrl);
+    if (queryParameters != null) {
+      encodedUri = encodedUri.replace(queryParameters: queryParameters);
+    }
+    // var encodedUri = Uri.encodeFull(finalUrl);
     log('finalUrl for fetching config: $encodedUri', name: 'GlobalConfiguration|loadFromUrl');
-    var response = await http.get(Uri.parse(encodedUri), headers: usableHeader);
+    var response = await http.get(encodedUri, headers: usableHeader);
+    // var response = await http.get(Uri.parse(encodedUri), headers: usableHeader);
     if (response.statusCode != 200) {
-      throw Exception('HTTP request failed, statusCode: ${response.statusCode}, $finalUrl');
+      throw Exception('HTTP request failed, statusCode: ${response.statusCode}, ${encodedUri..toString()}');
     }
 
     return json.decode(response.body);

@@ -63,4 +63,6 @@ const _$ContentItemTypeEnumMap = {
   ContentItemType.hintDialog: 'hint_dialog',
   ContentItemType.advertisement: 'advertisement',
   ContentItemType.popover: 'popover',
+  ContentItemType.authType: 'auth_type',
+  ContentItemType.passwordHint: 'password_hint',
 };

@@ -196,10 +196,11 @@ class ProfileComponent extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  Flexible(child:
                   Text(
                     S.of(context).AskOrSupport,
                     style: textTheme?.title1,
-                  ).paddingSymmetric(horizontal: horizontalMargin),
+                  )).paddingSymmetric(horizontal: horizontalMargin),
                 ],
               ),
               if (showHowItWorks)

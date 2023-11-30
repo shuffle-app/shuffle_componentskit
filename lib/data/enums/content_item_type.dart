@@ -51,4 +51,8 @@ enum ContentItemType {
   advertisement,
   @JsonValue('popover')
   popover,
+  @JsonValue('auth_type')
+  authType,
+  @JsonValue('password_hint')
+  passwordHint,
 }
