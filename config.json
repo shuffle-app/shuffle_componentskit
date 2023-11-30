@@ -265,63 +265,48 @@
             "properties": {
               "Self-care": {
                 "color": "#D808FA",
-                "value": "self-care",
                 "imageLink": "assets/images/png/search_category_self_care.png",
-                "sortNumber": 10
+                "sortNumber": 9
               },
               "Fine dining": {
                 "color": "#D808FA",
-                "value": "fine-dining",
                 "imageLink": "assets/images/png/search_category_food.png",
-                "sortNumber": 7
+                "sortNumber": 6
               },
               "Bliss and chill": {
                 "color": "#FA4C34",
-                "value": "bliss-and-chill",
                 "imageLink": "assets/images/png/search_category_chill.png",
-                "sortNumber": 8
+                "sortNumber": 7
               },
               "Sporty movements": {
                 "color": "#FAE634",
-                "value": "sporty-movements",
                 "imageLink": "assets/images/png/search_category_sport.png",
-                "sortNumber": 9
+                "sortNumber": 8
               },
               "Parties and dancing": {
                 "color": "#D808FA",
-                "value": "parties-and-dancing",
                 "imageLink": "assets/images/png/search_category_party.png",
-                "sortNumber": 4
-              },
-              "Age of Enlightenment": {
-                "color": "#FAE634",
-                "value": "age-of-enlightenment",
-                "imageLink": "assets/images/png/search_category_zadrot.png",
-                "sortNumber": 6
+                "sortNumber": 3
               },
               "Extremes and thrills": {
                 "color": "#FA4C34",
-                "value": "extremes-and-thrills",
                 "imageLink": "assets/images/png/search_category_extreme.png",
-                "sortNumber": 5
+                "sortNumber": 4
               },
               "Thirst for adventure": {
                 "color": "#FAE634",
-                "value": "thirst-for-adventure",
                 "imageLink": "assets/images/png/search_category_adventure.png",
-                "sortNumber": 3
+                "sortNumber": 2
               },
-              "New Year's and Christmas": {
-                "color": "#FA4C34",
-                "value": "new-years-and-christmas",
-                "imageLink": "assets/images/png/NY-decor-1.png",
-                "sortNumber": 1
+              "Age of Enlightenment ": {
+                "color": "#FAE634",
+                "imageLink": "assets/images/png/search_category_zadrot.png",
+                "sortNumber": 5
               },
               "Happiness for children and family": {
                 "color": "#FA4C34",
-                "value": "happiness-for-children-and-family",
                 "imageLink": "assets/images/png/search_category_family.png",
-                "sortNumber": 2
+                "sortNumber": 1
               }
             }
           }
@@ -453,19 +438,19 @@
             },
             "properties": {
               "donate\nothers\n": {
-                "imageLink": "assets/images/svg/handshake_3.svg",
+                "imageLink": "handshake_3",
                 "sortNumber": 4
               },
               "write & make video": {
-                "imageLink": "assets/images/svg/film.svg",
+                "imageLink": "film",
                 "sortNumber": 2
               },
               "post a dream request": {
-                "imageLink": "assets/images/svg/donat.svg",
+                "imageLink": "donat",
                 "sortNumber": 1
               },
               "be convincing & honest": {
-                "imageLink": "assets/images/svg/hands.svg",
+                "imageLink": "hands",
                 "sortNumber": 3
               }
             }
@@ -725,17 +710,14 @@
               "single_select": {
                 "properties": {
                   "Male": {
-                    "value": "male",
                     "imageLink": "assets/images/png/Male.png",
                     "sortNumber": 1
                   },
                   "Other": {
-                    "value": "other",
                     "imageLink": "assets/images/png/Other-gender.png",
                     "sortNumber": 3
                   },
                   "Female": {
-                    "value": "female",
                     "imageLink": "assets/images/png/Female.png",
                     "sortNumber": 2
                   }
@@ -828,11 +810,9 @@
               "single_select": {
                 "properties": {
                   "Leisure": {
-                    "value": "leisure",
                     "sortNumber": 1
                   },
                   "Business": {
-                    "value": "business",
                     "sortNumber": 2
                   }
                 }
@@ -960,18 +940,10 @@
             "body": {
               "multi_select": {
                 "properties": {
-                  "Luxury": {
-                    "value": "luxury"
-                  },
-                  "Tourists": {
-                    "value": "tourists"
-                  },
-                  "Middle class": {
-                    "value": "middle-class"
-                  },
-                  "Family friendly": {
-                    "value": "family-friendly"
-                  }
+                  "Luxury": {},
+                  "Tourists": {},
+                  "Middle class": {},
+                  "Family friendly": {}
                 }
               }
             },
@@ -1295,56 +1267,56 @@
                 "type": "leisure",
                 "color": "#FF453A",
                 "value": "exit",
-                "imageLink": "assets/images/svg/logout.svg",
+                "imageLink": "logout",
                 "sortNumber": 8
               },
               "WALLET": {
                 "type": "leisure",
                 "value": "wallet",
-                "imageLink": "assets/images/svg/wallet.svg",
+                "imageLink": "wallet",
                 "sortNumber": 2
               },
               "ARCHIVE": {
                 "type": "leisure",
                 "value": "archive",
-                "imageLink": "assets/images/svg/archive.svg",
+                "imageLink": "archive",
                 "sortNumber": 4
               },
               "SUPPORT": {
                 "type": "leisure",
                 "value": "support",
-                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "imageLink": "lifebuoy",
                 "sortNumber": 7
               },
               "EDIT PROFILE": {
                 "type": "leisure",
                 "value": "edit_profile",
-                "imageLink": "assets/images/svg/building.svg",
+                "imageLink": "building",
                 "sortNumber": 1
               },
               "ADD PROMOTION": {
                 "type": "leisure",
                 "value": "promotion",
-                "imageLink": "assets/images/svg/label.svg",
+                "imageLink": "label",
                 "sortNumber": 3
               },
               "DELETE COMPANY": {
                 "type": "leisure",
                 "color": "#FF453A",
                 "value": "delete",
-                "imageLink": "assets/images/svg/profile-delete.svg",
+                "imageLink": "profile-delete",
                 "sortNumber": 9
               },
               "PRIVACY POLICY": {
                 "type": "leisure",
                 "value": "privacy",
-                "imageLink": "assets/images/svg/warning.svg",
+                "imageLink": "warning",
                 "sortNumber": 5
               },
               "TERMS OF SERVICE": {
                 "type": "leisure",
                 "value": "terms",
-                "imageLink": "assets/images/svg/flag.svg",
+                "imageLink": "flag",
                 "sortNumber": 6
               }
             }
@@ -1417,43 +1389,36 @@
             "properties": {
               "Networking": {
                 "color": "#D808FA",
-                "value": "networking",
                 "imageLink": "assets/images/png/search_business_networking.png",
                 "sortNumber": 6
               },
               "Business clubs": {
                 "color": "#FA4C34",
-                "value": "business-clubs",
                 "imageLink": "assets/images/png/search_business_clubs.png",
                 "sortNumber": 1
               },
               "Business games": {
                 "color": "#FA4C34",
-                "value": "business-games",
                 "imageLink": "assets/images/png/search_business_games.png",
                 "sortNumber": 4
               },
               "Pitch sessions": {
                 "color": "#D808FA",
-                "value": "pitch-sessions",
                 "imageLink": "assets/images/png/search_business_speech.png",
                 "sortNumber": 3
               },
               "Seminars and trainings": {
                 "color": "#FA4C34",
-                "value": "seminars-and-trainings",
                 "imageLink": "assets/images/png/search_business_training.png",
                 "sortNumber": 7
               },
               "Digital & IT conferences": {
                 "color": "#FAE634",
-                "value": "digital-and-it-conferences",
                 "imageLink": "assets/images/png/search_business_conferences.png",
                 "sortNumber": 2
               },
               "Forums (industry exhibitions)": {
                 "color": "#FAE634",
-                "value": "forums-industry-exhibitions",
                 "imageLink": "assets/images/png/search_business_exhibition.png",
                 "sortNumber": 5
               }
@@ -1558,53 +1523,53 @@
               "EXIT": {
                 "color": "#FF453A",
                 "value": "exit",
-                "imageLink": "assets/images/svg/logout.svg",
+                "imageLink": "logout",
                 "sortNumber": 1
               },
               "SUPPORT": {
                 "value": "support",
-                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "imageLink": "lifebuoy",
                 "sortNumber": 8
               },
               "LOCATION": {
                 "value": "location",
-                "imageLink": "assets/images/svg/location.svg",
+                "imageLink": "location",
                 "sortNumber": 2
               },
               "FAVORITES": {
                 "value": "favorites",
-                "imageLink": "assets/images/svg/star-outline.svg",
+                "imageLink": "star-outline",
                 "sortNumber": 3
               },
               "followings": {
                 "value": "followings",
-                "imageLink": "assets/images/svg/heart-fill.svg",
+                "imageLink": "heart-fill",
                 "sortNumber": 4
               },
               "EDIT PROFILE": {
                 "value": "edit_profile",
-                "imageLink": "assets/images/svg/profile_outline.svg",
+                "imageLink": "profile_outline",
                 "sortNumber": 1
               },
               "notifications": {
                 "value": "notifications",
-                "imageLink": "assets/images/svg/bell.svg",
+                "imageLink": "bell",
                 "sortNumber": 5
               },
               "DELETE ACCOUNT": {
                 "color": "#FF453A",
                 "value": "delete",
-                "imageLink": "assets/images/svg/profile-delete.svg",
+                "imageLink": "profile-delete",
                 "sortNumber": 2
               },
               "PRIVACY POLICY": {
                 "value": "privacy",
-                "imageLink": "assets/images/svg/warning.svg",
+                "imageLink": "warning",
                 "sortNumber": 6
               },
               "TERMS OF SERVICE": {
                 "value": "terms",
-                "imageLink": "assets/images/svg/flag.svg",
+                "imageLink": "flag",
                 "sortNumber": 7
               }
             }
@@ -1755,37 +1720,37 @@
             "properties": {
               "La Citytel": {
                 "tags": {
-                  "Closed": "assets/images/svg/clock.svg",
-                  "Restaurant": "assets/images/svg/cutlery.svg"
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
                 },
                 "imageLink": "assets/images/png/invite_mock_4.png"
               },
               "La Vue Citytel": {
                 "tags": {
-                  "Closed": "assets/images/svg/clock.svg",
-                  "Restaurant": "assets/images/svg/cutlery.svg"
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
                 },
                 "imageLink": "assets/images/png/invite_mock_2.png"
               },
               "La Citytel Group": {
                 "tags": {
-                  "Closed": "assets/images/svg/clock.svg",
-                  "Restaurant": "assets/images/svg/cutlery.svg"
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
                 },
                 "imageLink": "assets/images/png/invite_mock_4.png"
               },
               "Vue Citytel Group": {
                 "tags": {
-                  "Closed": "assets/images/svg/clock.svg",
-                  "Restaurant": "assets/images/svg/cutlery.svg"
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
                 },
                 "imageLink": "assets/images/png/invite_mock_3.png"
               },
               "La Vue Citytel Group": {
                 "tags": {
-                  "Club": "assets/images/svg/club.svg",
-                  "Closed": "assets/images/svg/clock.svg",
-                  "Restaurant": "assets/images/svg/cutlery.svg"
+                  "Club": "club",
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
                 },
                 "imageLink": "assets/images/png/invite_mock_1.png"
               }
@@ -1851,11 +1816,6 @@
     "company_credentials_verification": {
       "content": {
         "body": {
-          "password_hint": {
-            "properties": {
-              "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
-            }
-          },
           "country_selector": {
             "title": {
               "text": {
@@ -1887,6 +1847,9 @@
           "auth_type": {
             "value": "email"
           },
+          "password_hint": {
+            "value": "Letters, numbers, ! “ @ # $ % & symbols, 8 characters"
+          },
           "Privacy Policy": {
             "value": "https://azarties.com/privacy",
             "sortNumber": 2
@@ -1916,27 +1879,22 @@
               "account": {}
             }
           },
-          "password_hint": {
-            "properties": {
-              "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
-            }
-          },
           "vertical_list": {
             "properties": {
-              "continue with apple": {
-                "type": "Apple",
-                "imageLink": "assets/images/svg/apple_logo.svg",
-                "sortNumber": 3
-              },
               "continue with google": {
                 "type": "Google",
                 "value": "working",
-                "imageLink": "assets/images/svg/google_logo.svg",
+                "imageLink": "google_logo",
                 "sortNumber": 1
+              },
+              "continue with apple id": {
+                "type": "Apple",
+                "imageLink": "apple_logo",
+                "sortNumber": 3
               },
               "continue with facebook": {
                 "type": "Facebook",
-                "imageLink": "assets/images/svg/facebook_logo.svg",
+                "imageLink": "facebook_logo",
                 "sortNumber": 2
               }
             }
@@ -1971,6 +1929,9 @@
           },
           "auth_type": {
             "value": "email"
+          },
+          "password_hint": {
+            "value": "Letters, numbers, ! “ @ # $ % & symbols, 8 characters"
           },
           "Privacy Policy": {
             "value": "https://azarties.com/privacy",
