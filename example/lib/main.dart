@@ -2,17 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -66,7 +65,7 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: ComponentsTestPage())
+                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.2')
@@ -83,7 +82,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class ComponentsTestPage extends StatefulWidget {
-  ComponentsTestPage({Key? key}) : super(key: key);
+  const ComponentsTestPage({Key? key}) : super(key: key);
 
   @override
   State<ComponentsTestPage> createState() => _ComponentsTestPageState();
@@ -337,15 +336,15 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   tags: [
                                     UiKitTag(
                                       title: 'Cheap',
-                                      iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                      icon: ShuffleUiKitIcons.cutlery,
                                     ),
                                     UiKitTag(
                                       title: 'Cheap',
-                                      iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                      icon: ShuffleUiKitIcons.cutlery,
                                     ),
                                     UiKitTag(
                                       title: 'Cheap',
-                                      iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                      icon: ShuffleUiKitIcons.cutlery,
                                     ),
                                   ],
                                 ),
@@ -386,9 +385,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           ),
                           2,
                         ),
-                      onChatSelected: (index) {
-                        print(index);
-                      },
+                      onChatSelected: (index) {},
                     ),
                   ),
                 ),
@@ -456,74 +453,74 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               baseTags: [
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                               ],
                               tags: [
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Duh',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Metal',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Heavy',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Club',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Cheaper',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                               ],
@@ -567,74 +564,74 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               baseTags: [
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: false,
                                 ),
                               ],
                               tags: [
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Cheap',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Duh',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Metal',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Heavy',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Club',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                                 UiKitTag(
                                   title: 'Cheaper',
-                                  iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                                  icon: ShuffleUiKitIcons.cutlery,
                                   unique: true,
                                 ),
                               ],
@@ -662,10 +659,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           title: 'title',
                           avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
                           tags: [
-                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                            UiKitTag(title: 'title', iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
                           ],
                         ),
                       ),
@@ -750,74 +747,74 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           baseTags: [
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: false,
                             ),
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: false,
                             ),
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: false,
                             ),
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: false,
                             ),
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: false,
                             ),
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: false,
                             ),
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: false,
                             ),
                           ],
                           tags: [
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: true,
                             ),
                             UiKitTag(
                               title: 'Cheap',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: true,
                             ),
                             UiKitTag(
                               title: 'Duh',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: true,
                             ),
                             UiKitTag(
                               title: 'Metal',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: true,
                             ),
                             UiKitTag(
                               title: 'Heavy',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: true,
                             ),
                             UiKitTag(
                               title: 'Club',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: true,
                             ),
                             UiKitTag(
                               title: 'Cheaper',
-                              iconPath: GraphicsFoundation.instance.svg.cutlery.path,
+                              icon: ShuffleUiKitIcons.cutlery,
                               unique: true,
                             ),
                           ],
@@ -942,31 +939,31 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                       ? 'https://www.trutravels.com/blog/finns-beach-club.png'
                                       : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
                               tags: [
-                                UiKitTagWidget(
+                                const UiKitTagWidget(
                                   title: 'Club',
-                                  icon: Assets.images.svg.cocktail.path,
+                                  icon: ShuffleUiKitIcons.cocktail,
                                 ),
                                 UiKitTagWidget(
                                   title: 'Club',
-                                  icon: Assets.images.svg.cocktail.path,
+                                  icon: ShuffleUiKitIcons.cocktail,
                                   customSpace: SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
                                 UiKitTagWidget(
                                   title: 'Club',
-                                  icon: Assets.images.svg.cocktail.path,
+                                  icon: ShuffleUiKitIcons.cocktail,
                                   customSpace: SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
                                 UiKitTagWidget(
                                   title: 'Club',
-                                  icon: Assets.images.svg.cocktail.path,
+                                  icon: ShuffleUiKitIcons.cocktail,
                                   customSpace: SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
                                 UiKitTagWidget(
                                   title: 'Club',
-                                  icon: Assets.images.svg.cocktail.path,
+                                  icon: ShuffleUiKitIcons.cocktail,
                                   customSpace: SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
@@ -1047,31 +1044,38 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                         )))))))),
             SpacingFoundation.verticalSpace16,
             context.button(
-                data: BaseUiKitButtonData(
-                    text: 'show mood',
-                    onPressed: () => buildComponent(
-                        context,
-                        ComponentMoodModel.fromJson(configuration.appConfig.content['mood']),
-                        ComponentBuilder(
-                            child: Scaffold(
-                                appBar: const CustomAppBar(
-                                  title: 'Feeling',
-                                  centerTitle: true,
-                                ),
-                                body: SingleChildScrollView(
-                                    child: MoodComponent(
-                                  mood: UiMoodModel(
-                                    descriptionItems: [
-                                      const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
-                                      const UiDescriptionItemModel(
-                                          active: true, title: 'Burned today', description: '432'),
-                                    ],
-                                    title: 'need to cool down a bit?',
-                                    logo: 'assets/images/png/crazy_emoji.png',
-                                    id: 1,
-                                  ),
-                                  onTabChanged: (String name) {},
-                                ))))))),
+              data: BaseUiKitButtonData(
+                text: 'show mood',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentMoodModel.fromJson(configuration.appConfig.content['mood']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      appBar: const CustomAppBar(
+                        title: 'Feeling',
+                        centerTitle: true,
+                      ),
+                      body: SingleChildScrollView(
+                        child: MoodComponent(
+                          mood: UiMoodModel(
+                            descriptionItems: [
+                              const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
+                              const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
+                            ],
+                            title: 'need to cool down a bit?',
+                            logo: 'assets/images/png/crazy_emoji.png',
+                            id: 1,
+                          ),
+                          onTabChanged: (String name) {
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1082,9 +1086,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1095,9 +1099,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -1107,7 +1111,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   UserTypeSelectionModel.fromJson(configuration.appConfig.content['user_type_selection']),
                   ComponentBuilder(
                     child: UserTypeSelectionComponent(
-                      onUserTypeSelected: (userType) => print(userType),
+                      onUserTypeSelected: (userType) {},
                       uiModel: UiUserTypeSelectionModel(
                         options: [],
                       ),
@@ -1165,6 +1169,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                   ComponentBuilder(
                     child: CompanyCredentialsVerificationComponent(
+                      passwordController: TextEditingController(),
                       uiModel: UiCompanyCredentialsVerificationModel(),
                       credentialsController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
@@ -1271,22 +1276,22 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
   }
 
   final List<UiKitTag> tags = [
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-    UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+    UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
   ];
 
   final UiUniversalModel item = UiUniversalModel(
@@ -1315,22 +1320,22 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
           'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
           'Nulla facilisi',
       tags: [
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'uniqueCheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-        UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
       ],
       type: '');
 
@@ -1361,22 +1366,22 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
         'Nulla facilisi',
     rating: 4.8,
     tags: [
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      UiKitTag(title: 'uniqueCheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: false),
-      UiKitTag(title: 'Cheap', iconPath: 'assets/images/svg/cocktail.svg', unique: true),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+      UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
     ],
 
     // descriptionItems: [

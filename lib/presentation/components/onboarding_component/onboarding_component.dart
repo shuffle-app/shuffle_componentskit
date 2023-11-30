@@ -11,20 +11,16 @@ class OnboardingComponent extends StatefulWidget {
 
   OnboardingComponent({super.key, this.onFinished}) {
     model = ComponentModel.fromJson(GlobalConfiguration().appConfig.content['onboarding']);
-    final rawItems = model.content.body?.entries
-        .firstWhere((element) => element.key == ContentItemType.onboardingCard)
-        .value
-        .properties;
+    final rawItems =
+        model.content.body?.entries.firstWhere((element) => element.key == ContentItemType.onboardingCard).value.properties;
     items = rawItems?.entries
-            .map((e) =>
-                OnBoardingPageItem(imageLink: e.value.imageLink!, title: e.key, autoSwitchDuration: e.value.duration!))
+            .map((e) => OnBoardingPageItem(imageLink: e.value.imageLink!, title: e.key, autoSwitchDuration: e.value.duration!))
             .toList() ??
         [];
     items.sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
   }
 
-  Duration get transitionDuration =>
-      model.content.properties?['general']?.duration ?? const Duration(milliseconds: 500);
+  Duration get transitionDuration => model.content.properties?['general']?.duration ?? const Duration(milliseconds: 500);
 
   @override
   State<OnboardingComponent> createState() => _OnboardingComponentState();
@@ -153,15 +149,14 @@ class _OnboardingComponentState extends State<OnboardingComponent> with SingleTi
           mainAxisAlignment: bodyAlignment.mainAxisAlignment,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).viewPadding.top +
-                  (widget.model.positionModel?.verticalMargin?.toDouble() ?? 0),
+              height: MediaQuery.of(context).viewPadding.top + (widget.model.positionModel?.verticalMargin?.toDouble() ?? 0),
             ),
             SpacingFoundation.verticalSpace24,
             AnimatedOpacity(
               duration: widget.transitionDuration,
               opacity: _logoOpacity,
               child: ImageWidget(
-                svgAsset: GraphicsFoundation.instance.svg.shuffleWhite,
+                link: GraphicsFoundation.instance.svg.shuffleWhite.path,
                 fit: BoxFit.fitWidth,
               ).paddingSymmetric(horizontal: 1.sw * 0.215625),
             ),
@@ -171,9 +166,7 @@ class _OnboardingComponentState extends State<OnboardingComponent> with SingleTi
               opacity: _textOpacity,
               child: Text(
                 key: UniqueKey(),
-                currentIndex >= widget.items.length
-                    ? widget.items.last.title
-                    : widget.items.elementAt(currentIndex).title,
+                currentIndex >= widget.items.length ? widget.items.last.title : widget.items.elementAt(currentIndex).title,
                 style: context.uiKitTheme?.boldTextTheme.titleLarge,
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),

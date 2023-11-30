@@ -20,8 +20,7 @@ class PreferencesComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final subHeadline = context.uiKitTheme?.boldTextTheme.subHeadline;
 
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPreferencesModel model = ComponentPreferencesModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -83,7 +82,7 @@ class PreferencesComponent extends StatelessWidget {
                     controller: preferences.searchController,
                     icon: preferences.searchController.text.isEmpty
                         ? ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.search,
+                            iconData: ShuffleUiKitIcons.search,
                             color: Colors.white.withOpacity(0.5),
                           )
                         : null,

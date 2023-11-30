@@ -32,8 +32,7 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -114,18 +113,10 @@ class ProfileComponent extends StatelessWidget {
                                   },
                                   avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
                                   tags: [
-                                    UiKitTag(
-                                        title: S.of(context).Title,
-                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                    UiKitTag(
-                                        title: S.of(context).Title,
-                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                    UiKitTag(
-                                        title: S.of(context).Title,
-                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                    UiKitTag(
-                                        title: S.of(context).Title,
-                                        iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                    UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
+                                    UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
+                                    UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
+                                    UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
                                   ],
                                 ),
                               ),
@@ -142,18 +133,10 @@ class ProfileComponent extends StatelessWidget {
                                           placePhotoUrl: GraphicsFoundation.instance.png.place.path,
                                           placeName: selected ?? '',
                                           placeTags: [
-                                            UiKitTag(
-                                                title: 'title',
-                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                            UiKitTag(
-                                                title: 'title',
-                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                            UiKitTag(
-                                                title: 'title',
-                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
-                                            UiKitTag(
-                                                title: 'title',
-                                                iconPath: GraphicsFoundation.instance.svg.cocktail.path),
+                                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+                                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+                                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+                                            UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
                                           ],
                                         ),
                                       );
@@ -189,8 +172,7 @@ class ProfileComponent extends StatelessWidget {
             itemCount: recommendedUsers?.length ?? 3,
           ),
           SpacingFoundation.verticalSpace24,
-          if (events != null)
-            MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
+          if (events != null) MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
           SpacingFoundation.verticalSpace24,
           Stack(
             children: [

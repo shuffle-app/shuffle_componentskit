@@ -157,8 +157,7 @@ class SearchComponent extends StatelessWidget {
             if (model.showFree ?? false) ...[
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
-                action:
-                    context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                action: context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
                 title: Stack(
                   children: [
                     RichText(
@@ -189,7 +188,7 @@ class SearchComponent extends StatelessWidget {
                     ),
                   ],
                 ),
-                overflownIconLink: GraphicsFoundation.instance.png.map.path,
+                overflownIconLink: GraphicsFoundation.instance.svg.map.path,
                 decorationIcons: _decorationItemsForFreeCards,
               ).paddingOnly(right: horizontalMargin),
             ],
@@ -237,7 +236,7 @@ class SearchComponent extends StatelessWidget {
                               selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
                               title: e.title,
                               onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                              icon: e.iconPath,
+                              icon: e.icon,
                             ),
                           )
                           .toList(),

@@ -1,9 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class EventComponent extends StatelessWidget {
   final UiEventModel event;
@@ -17,14 +17,12 @@ class EventComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
             version: '0',
             pageBuilderType: PageBuilderType.page,
-            positionModel:
-                PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
+            positionModel: PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
@@ -36,45 +34,45 @@ class EventComponent extends StatelessWidget {
       children: [
         SpacingFoundation.verticalSpace8,
         Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: titleAlignment.mainAxisAlignment,
-            crossAxisAlignment: titleAlignment.crossAxisAlignment,
-            children: [
-              if (event.title != null) ...[
-                Stack(
-                    alignment: titleAlignment.crossAxisAlignment == CrossAxisAlignment.center
-                        ? Alignment.center
-                        : AlignmentDirectional.topStart,
-                    children: [
-                      AutoSizeText(
-                        event.title!,
-                        minFontSize: 18.w,
-                        stepGranularity: 1.w,
-                        style: theme?.boldTextTheme.title2,
-                        textAlign: titleAlignment.textAlign,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: titleAlignment.mainAxisAlignment,
+          crossAxisAlignment: titleAlignment.crossAxisAlignment,
+          children: [
+            if (event.title != null) ...[
+              Stack(
+                alignment: titleAlignment.crossAxisAlignment == CrossAxisAlignment.center
+                    ? Alignment.center
+                    : AlignmentDirectional.topStart,
+                children: [
+                  AutoSizeText(
+                    event.title!,
+                    minFontSize: 18.w,
+                    stepGranularity: 1.w,
+                    style: theme?.boldTextTheme.title2,
+                    textAlign: titleAlignment.textAlign,
+                  ),
+                  if (isEligibleForEdit)
+                    Positioned(
+                      right: 0,
+                      child: IconButton(
+                        icon: ImageWidget(
+                            iconData: ShuffleUiKitIcons.pencil, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                        onPressed: () => onEditPressed?.call(),
                       ),
-                      if (isEligibleForEdit)
-                        Positioned(
-                            right: 0,
-                            child: IconButton(
-                              icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.pencil,
-                                  color: Colors.white,
-                                  height: 20.h,
-                                  fit: BoxFit.fitHeight),
-                              onPressed: () => onEditPressed?.call(),
-                            ))
-                    ]),
-                SpacingFoundation.verticalSpace8,
-              ],
-              if (event.archived) ...[
-                UiKitBadgeOutlined.text(
-                  text: S.of(context).Archived,
-                ),
-                SpacingFoundation.verticalSpace4,
-              ],
-              if (event.owner != null) event.owner!.buildUserTile(context)
-            ]),
+                    )
+                ],
+              ),
+              SpacingFoundation.verticalSpace8,
+            ],
+            if (event.archived) ...[
+              UiKitBadgeOutlined.text(
+                text: S.of(context).Archived,
+              ),
+              SpacingFoundation.verticalSpace4,
+            ],
+            if (event.owner != null) event.owner!.buildUserTile(context)
+          ],
+        ),
         SpacingFoundation.verticalSpace16,
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -82,8 +80,10 @@ class EventComponent extends StatelessWidget {
           crossAxisAlignment: bodyAlignment.crossAxisAlignment,
           children: [
             Align(
-                alignment: Alignment.center,
-                child: Stack(clipBehavior: Clip.none, children: [
+              alignment: Alignment.center,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
                   UiKitPhotoSlider(
                     media: event.media,
                     onTap: null,
@@ -92,30 +92,39 @@ class EventComponent extends StatelessWidget {
                   ),
                   if (complaintFormComponent != null)
                     Positioned(
-                        bottom: -10.h,
-                        right: -10.w,
-                        child: Transform.scale(
-                            scale: 0.5.sp,
-                            child: context.smallOutlinedButton(
-                                color: UiKitColors.darkNeutral800.withOpacity(0.5),
-                                data: BaseUiKitButtonData(
-                                  onPressed: () {
-                                    showUiKitGeneralFullScreenDialog(
-                                        context,
-                                        GeneralDialogData(
-                                            topPadding: 0.3.sh,
-                                            useRootNavigator: false,
-                                            child: complaintFormComponent!));
-                                  },
-                                  icon: Transform.scale(
-                                      scale: 1.5.sp,
-                                      child: ImageWidget(
-                                        // height: 20,
-                                        svgAsset: GraphicsFoundation.instance.svg.alertCircle,
-                                      )),
+                      bottom: -10.h,
+                      right: -10.w,
+                      child: Transform.scale(
+                        scale: 0.5.sp,
+                        child: context.smallOutlinedButton(
+                          color: UiKitColors.darkNeutral800.withOpacity(0.5),
+                          data: BaseUiKitButtonData(
+                            onPressed: () {
+                              showUiKitGeneralFullScreenDialog(
+                                context,
+                                GeneralDialogData(
+                                  topPadding: 0.3.sh,
+                                  useRootNavigator: false,
+                                  child: complaintFormComponent!,
                                 ),
-                                blurred: true))),
-                ])),
+                              );
+                            },
+                            icon: Transform.scale(
+                              scale: 1.5.sp,
+                              child: ImageWidget(
+                                // height: 20,
+                                iconData: ShuffleUiKitIcons.alertcircle,
+                                color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                              ),
+                            ),
+                          ),
+                          blurred: true,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
             SpacingFoundation.verticalSpace14,
             UiKitTagsWidget(
               rating: event.rating,

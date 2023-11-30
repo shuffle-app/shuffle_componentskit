@@ -26,12 +26,16 @@ class UiOwnerModel {
         ),
       );
 
-  Widget buildMenuItem(
-          {VoidCallback? onMessageTap, VoidCallback? onFollowTap, VoidCallback? onUnFollowTap, VoidCallback? onBlockTap}) =>
+  Widget buildMenuItem({
+    VoidCallback? onMessageTap,
+    VoidCallback? onFollowTap,
+    VoidCallback? onUnFollowTap,
+    VoidCallback? onBlockTap,
+  }) =>
       UiKitPopUpMenuTile(
         title: name,
-        titleIcon: ImageWidget(
-          svgAsset: GraphicsFoundation.instance.svg.memeberGradientStar,
+        titleIcon: const ImageWidget(
+          iconData: ShuffleUiKitIcons.memeberGradientStar,
         ),
         subtitle: username,
         leading: BorderedUserCircleAvatar(

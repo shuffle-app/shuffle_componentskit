@@ -84,8 +84,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
-          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
-              '';
+          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
       tabBar = model.content.body?[ContentItemType.tabBar]?.properties?.keys.toList();
       if (tabBar?.isNotEmpty ?? false) {
         if (_selectedTab == null) setState(() => _selectedTab = tabBar?.first);
@@ -97,7 +96,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       final clientType = Platform.isIOS ? 'iOS' : 'Android';
       socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
             return ShortLogInButton(
-              iconPath: element.value.imageLink ?? '',
+              icon: GraphicsFoundation.instance.iconFromString(element.value.imageLink ?? ''),
               title: element.key,
               onTap: () => widget.onSocialsLogin?.call(
                 SocialsLoginModel(
@@ -178,45 +177,38 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           opacity: animation,
                           child: child,
                         ),
-                    child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // const Spacer(flex: 1),
-                          if (widget.availableLocales != null &&
-                              widget.availableLocales!.isNotEmpty &&
-                              !visibility) ...[
-                            UiKitCardWrapper(
-                              color: colorScheme?.surface1,
-                              borderRadius: BorderRadiusFoundation.max,
-                              child: UiKitLocaleSelector(
-                                  selectedLocale: widget.availableLocales!
-                                      .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
-                                  availableLocales: widget.availableLocales!,
-                                  onLocaleChanged: (LocaleModel value) {
-                                    context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
-                                    setState(() {});
-                                  }).paddingAll(EdgeInsetsFoundation.all4),
-                            ),
-                            SpacingFoundation.verticalSpace16
-                          ],
-                          if (tabBar != null && !visibility) ...[
-                            UiKitCustomTabBar(
-                              tabController: tabController,
-                              selectedTab: _selectedTab,
-                              tabs: tabBar!
-                                  .map<UiKitCustomTab>((key) => UiKitCustomTab.small(title: key.toUpperCase()))
-                                  .toList(),
-                              onTappedTab: (tabIndex) {
-                                setState(() {
-                                  _selectedTab = tabBar!.elementAt(tabIndex);
-                                  // tabController.animateTo(tabIndex);
-                                });
-                              },
-                            ),
-                            SpacingFoundation.verticalSpace16,
-                          ],
-                        ]));
+                    child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                      // const Spacer(flex: 1),
+                      if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty && !visibility) ...[
+                        UiKitCardWrapper(
+                          color: colorScheme?.surface1,
+                          borderRadius: BorderRadiusFoundation.max,
+                          child: UiKitLocaleSelector(
+                              selectedLocale: widget.availableLocales!
+                                  .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                              availableLocales: widget.availableLocales!,
+                              onLocaleChanged: (LocaleModel value) {
+                                context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
+                                setState(() {});
+                              }).paddingAll(EdgeInsetsFoundation.all4),
+                        ),
+                        SpacingFoundation.verticalSpace16
+                      ],
+                      if (tabBar != null && !visibility) ...[
+                        UiKitCustomTabBar(
+                          tabController: tabController,
+                          selectedTab: _selectedTab,
+                          tabs: tabBar!.map<UiKitCustomTab>((key) => UiKitCustomTab.small(title: key.toUpperCase())).toList(),
+                          onTappedTab: (tabIndex) {
+                            setState(() {
+                              _selectedTab = tabBar!.elementAt(tabIndex);
+                              // tabController.animateTo(tabIndex);
+                            });
+                          },
+                        ),
+                        SpacingFoundation.verticalSpace16,
+                      ],
+                    ]));
               }),
               Expanded(
                 flex: isSmallScreen ? 7 : 2,
@@ -267,13 +259,13 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                               onTap: () => setState(() => obscurePassword = !obscurePassword),
                               child: obscurePassword
                                   ? ImageWidget(
-                                      svgAsset: GraphicsFoundation.instance.svg.view,
+                                      iconData: ShuffleUiKitIcons.view,
                                       color: colorScheme?.darkNeutral900,
                                     )
-                                  : GradientableWidget(
+                                  : const GradientableWidget(
                                       gradient: GradientFoundation.defaultRadialGradient,
                                       child: ImageWidget(
-                                        svgAsset: GraphicsFoundation.instance.svg.eyeOff,
+                                        iconData: ShuffleUiKitIcons.eyeoff,
                                         color: Colors.white,
                                       ),
                                     ),
@@ -313,15 +305,15 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                       text: privacyCaptions.first.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.push(WebViewScreen(
-                            title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
+                        ..onTap = () => context
+                            .push(WebViewScreen(title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
                   TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
                   TextSpan(
                       text: privacyCaptions.last.key,
                       style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.push(WebViewScreen(
-                            title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                        ..onTap = () => context
+                            .push(WebViewScreen(title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
                 ]),
               ),
               KeyboardVisibilityBuilder(

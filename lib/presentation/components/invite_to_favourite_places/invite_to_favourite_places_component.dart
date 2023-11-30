@@ -21,8 +21,7 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['invite_people_places'] ?? {});
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -84,8 +83,8 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
               blurred: false,
               data: BaseUiKitButtonData(
                 onPressed: onDatePressed,
-                icon: ImageWidget(
-                  link: GraphicsFoundation.instance.svg.calendar.path,
+                icon: const ImageWidget(
+                  iconData: ShuffleUiKitIcons.calendar,
                   color: Colors.white,
                 ),
               ),
