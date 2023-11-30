@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: ComponentsTestPage())
+                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.2')
@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class ComponentsTestPage extends StatefulWidget {
-  ComponentsTestPage({Key? key}) : super(key: key);
+  const ComponentsTestPage({Key? key}) : super(key: key);
 
   @override
   State<ComponentsTestPage> createState() => _ComponentsTestPageState();
@@ -385,9 +385,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           ),
                           2,
                         ),
-                      onChatSelected: (index) {
-                        print(index);
-                      },
+                      onChatSelected: (index) {},
                     ),
                   ),
                 ),
@@ -1113,7 +1111,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   UserTypeSelectionModel.fromJson(configuration.appConfig.content['user_type_selection']),
                   ComponentBuilder(
                     child: UserTypeSelectionComponent(
-                      onUserTypeSelected: (userType) => print(userType),
+                      onUserTypeSelected: (userType) {},
                       uiModel: UiUserTypeSelectionModel(
                         options: [],
                       ),
