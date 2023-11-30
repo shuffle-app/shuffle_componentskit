@@ -83,10 +83,10 @@ class ChatComponent extends StatelessWidget {
               hintText: S.of(context).TypeHere,
               icon: GestureDetector(
                 onTap: onMessageSent,
-                child: GradientableWidget(
+                child: const GradientableWidget(
                   gradient: GradientFoundation.defaultRadialGradient,
                   child: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.send,
+                    iconData: ShuffleUiKitIcons.send,
 
                     /// color has to be provided to make GradientableWidget work
                     color: Colors.white,

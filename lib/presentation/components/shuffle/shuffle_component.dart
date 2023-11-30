@@ -75,7 +75,7 @@ class ShuffleComponent extends StatelessWidget {
         ),
         SafeArea(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+            filter: ImageFilter.blur(sigmaY: 50, sigmaX: 50),
             child: Center(
               child: Column(
                 mainAxisAlignment: bodyAlignment.mainAxisAlignment,
@@ -87,8 +87,7 @@ class ShuffleComponent extends StatelessWidget {
                       clipBehavior: Clip.none,
                       alignment: Alignment.center,
                       children: [
-                        Text(S.of(context).TryYourself,
-                            style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
+                        Text(S.of(context).TryYourself, style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
                         if (shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null)
                           HowItWorksWidget(
                             customOffset: Offset(0.35.sw, 25),
@@ -171,8 +170,6 @@ class ShuffleComponent extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: () {
-                      final svg = GraphicsFoundation.instance.svg;
-
                       return [
                         RepaintBoundary(
                           child: context.bouncingButton(
@@ -183,8 +180,8 @@ class ShuffleComponent extends StatelessWidget {
                                 shuffle.dislikeController.forward(from: 0);
                                 onDislike?.call();
                               },
-                              icon: ImageWidget(
-                                svgAsset: svg.heartBrokenFill,
+                              icon: const ImageWidget(
+                                iconData: ShuffleUiKitIcons.heartbrokenfill,
                                 color: Colors.white,
                               ),
                             ),
@@ -201,10 +198,11 @@ class ShuffleComponent extends StatelessWidget {
                                   valueListenable: indexNotifier,
                                   builder: (_, value, __) {
                                     return ImageWidget(
-                                      svgAsset: shuffle.items.isNotEmpty &&
+                                      iconData: shuffle.items.isNotEmpty &&
                                               favoriteTitles.contains(shuffle.items[value % shuffle.items.length].title)
-                                          ? svg.starFill
-                                          : svg.starOutline,
+                                          ? ShuffleUiKitIcons.starfill
+                                          : ShuffleUiKitIcons.staroutline,
+                                      height: 20.h,
                                       color: Colors.white,
                                     );
                                   },
@@ -221,8 +219,8 @@ class ShuffleComponent extends StatelessWidget {
                               onPressed: () {
                                 shuffle.likeController.forward(from: 0);
                               },
-                              icon: ImageWidget(
-                                svgAsset: svg.heartFill,
+                              icon: const ImageWidget(
+                                iconData: ShuffleUiKitIcons.heartfill,
                                 color: Colors.white,
                               ),
                             ),

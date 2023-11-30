@@ -17,12 +17,11 @@ class CompanyProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_profile']);
     final title = model.content.title?[ContentItemType.text]?.properties?.keys.first;
     final bodyAlignment = model.positionModel?.bodyAlignment;
-    const iconWidth = 20.0;
+    final iconWidth = 16.h;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final buttons = model.content.body?[ContentItemType.button]?.properties;
     final buttonTypes = buttons?.values.map((e) => e.type).toList() ?? [];
@@ -35,14 +34,14 @@ class CompanyProfileComponent extends StatelessWidget {
     final sortedButtons = buttons?.entries
         .where((element) => element.value.type?.toUpperCase() == (uiModel?.selectedTab ?? tabs.first.title))
         .map<BaseUiKitButtonData>(
-          (value) => BaseUiKitButtonData(
-            text: value.key,
+          (buttonData) => BaseUiKitButtonData(
+            text: buttonData.key,
             icon: ImageWidget(
-              link: value.value.imageLink,
-              color: value.value.color ?? Colors.white,
+              iconData: GraphicsFoundation.instance.iconFromString(buttonData.value.imageLink ?? ''),
+              color: buttonData.value.color ?? Colors.white,
               width: iconWidth,
             ),
-            onPressed: () => onProfileItemChosen(value.value.value),
+            onPressed: () => onProfileItemChosen(buttonData.value.value),
           ),
         )
         .toList();

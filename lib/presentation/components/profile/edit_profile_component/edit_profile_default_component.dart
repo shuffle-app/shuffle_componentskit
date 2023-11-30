@@ -65,11 +65,9 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
-    final hintTitle =
-        model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    final hintTitle = model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
@@ -123,10 +121,9 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         data: BaseUiKitButtonData(
                           fit: ButtonFit.fitWidth,
                           text: S.of(context).Premium.toUpperCase(),
-                          icon: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.star2,
+                          icon: const ImageWidget(
+                            iconData: ShuffleUiKitIcons.star2,
                             color: Colors.black,
-                            height: 18,
                             fit: BoxFit.fitHeight,
                           ),
                           onPressed: onPremiumAccountRequested,
@@ -169,7 +166,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                             ),
                           ),
                           child: ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.info,
+                            iconData: ShuffleUiKitIcons.info,
                             width: 16.w,
                             color: theme?.colorScheme.darkNeutral900,
                           ),
@@ -207,10 +204,9 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
                       ),
                       availableLocales: availableLocales!,
-                      onLocaleChanged: (localeModel) =>
-                          context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
-                                localeModel.locale,
-                              ),
+                      onLocaleChanged: (localeModel) => context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
+                            localeModel.locale,
+                          ),
                     ),
                   ),
                   SpacingFoundation.verticalSpace16,

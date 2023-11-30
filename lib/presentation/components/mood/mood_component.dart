@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
@@ -21,8 +21,7 @@ class MoodComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentMoodModel model = ComponentMoodModel.fromJson(config['mood']);
 
     final theme = context.uiKitTheme;
@@ -55,14 +54,12 @@ class MoodComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace14,
         Row(
           children: [
-            Flexible(
-              child: UiKitGradientAttentionCard(
-                message: titleContent?.properties?.keys.firstOrNull ?? S.of(context).ThenCheckThisOut,
-                textColor: Colors.black,
-                width: cardWidth,
-              ),
+            UiKitGradientAttentionCard(
+              message: titleContent?.properties?.keys.firstOrNull ?? S.of(context).ThenCheckThisOut,
+              textColor: Colors.black,
+              width: cardWidth,
             ),
-            Flexible(
+            Expanded(
                 child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -101,8 +98,7 @@ class MoodComponent extends StatelessWidget {
         if (model.showPlaces ?? true && tabBarContent != null) ...[
           SpacingFoundation.verticalSpace24,
           Text(
-            tabBarContent?.body?[ContentItemType.text]?.properties?.keys.firstOrNull ??
-                S.of(context).WeHavePlacesJustForYou,
+            tabBarContent?.body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).WeHavePlacesJustForYou,
             style: theme?.boldTextTheme.title1,
           ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace4,
@@ -110,8 +106,8 @@ class MoodComponent extends StatelessWidget {
             return Column(
               children: [
                 IgnorePointer(
-                    ignoring: !(mood.activatedLevel == null ||
-                        !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!)),
+                    ignoring:
+                        !(mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!)),
                     child: UiKitCustomTabBar(
                       onTappedTab: (index) {
                         setState(() {

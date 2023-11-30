@@ -41,53 +41,67 @@ class PhotoVideoSelector extends StatelessWidget {
       crossAxisAlignment: (positionModel?.bodyAlignment).crossAxisAlignment,
       children: [
         SizedBox(
-            height: itemsSize.height * 1.2,
-            width: double.infinity,
-            child: Stack(alignment: Alignment.centerRight, children: [
-              Row(children: [
-                Text(
-                  S.of(context).Photo,
-                  style: theme?.regularTextTheme.labelSmall,
-                ).paddingSymmetric(horizontal: horizontalPadding),
-                Expanded(
+          height: itemsSize.height * 1.2,
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    S.of(context).Photo,
+                    style: theme?.regularTextTheme.labelSmall,
+                  ).paddingSymmetric(horizontal: horizontalPadding),
+                  Expanded(
                     child: ReorderableListView.builder(
-                        key: listPhotosKey,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Stack(key: ValueKey(photos[index].link), alignment: Alignment.topRight, children: [
-                              ClipPath(
-                                      clipper: ShapeBorderClipper(
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
-                                      child: photos[index].widget(itemsSize))
-                                  .paddingAll(4),
-                              context.outlinedButton(
-                                  hideBorder: true,
-                                  data: BaseUiKitButtonData(
-                                      onPressed: () => onPhotoDeleted.call(index),
-                                      icon: ImageWidget(
-                                        svgAsset: GraphicsFoundation.instance.svg.x,
-                                        color: Colors.white,
-                                        height: 8,
-                                        width: 8,
-                                      )))
-                            ]),
-                        itemCount: photos.length,
-                        onReorder: onPhotoReorderRequested))
-              ]),
+                      key: listPhotosKey,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) => Stack(
+                        key: ValueKey(photos[index].link),
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipPath(
+                                  clipper: ShapeBorderClipper(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
+                                  child: photos[index].widget(itemsSize))
+                              .paddingAll(4),
+                          context.outlinedButton(
+                            hideBorder: true,
+                            data: BaseUiKitButtonData(
+                              onPressed: () => onPhotoDeleted.call(index),
+                              icon: const ImageWidget(
+                                iconData: ShuffleUiKitIcons.x,
+                                color: Colors.white,
+                                height: 8,
+                                width: 8,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      itemCount: photos.length,
+                      onReorder: onPhotoReorderRequested,
+                    ),
+                  )
+                ],
+              ),
               context
                   .outlinedButton(
                     data: BaseUiKitButtonData(
-                        onPressed: onPhotoAddRequested,
-                        icon: ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.cameraPlus,
-                          color: Colors.white,
-                          height: 18,
-                          width: 18,
-                        )),
+                      onPressed: onPhotoAddRequested,
+                      icon: ImageWidget(
+                        iconData: ShuffleUiKitIcons.cameraplus,
+                        color: Colors.white,
+                        height: 16.h,
+                        width: 16.h,
+                      ),
+                    ),
                   )
-                  .paddingSymmetric(horizontal: horizontalPadding)
-            ])),
+                  .paddingSymmetric(horizontal: horizontalPadding),
+            ],
+          ),
+        ),
         SizedBox(
             height: itemsSize.height * 1.2,
             width: double.infinity,
@@ -113,8 +127,8 @@ class PhotoVideoSelector extends StatelessWidget {
                                   hideBorder: true,
                                   data: BaseUiKitButtonData(
                                       onPressed: () => onVideoDeleted.call(index),
-                                      icon: ImageWidget(
-                                        svgAsset: GraphicsFoundation.instance.svg.x,
+                                      icon: const ImageWidget(
+                                        iconData: ShuffleUiKitIcons.x,
                                         color: Colors.white,
                                         height: 6,
                                         width: 6,
@@ -128,10 +142,10 @@ class PhotoVideoSelector extends StatelessWidget {
                     data: BaseUiKitButtonData(
                         onPressed: onVideoAddRequested,
                         icon: ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.videoPlus,
+                          iconData: ShuffleUiKitIcons.videoplus,
                           color: Colors.white,
-                          height: 18,
-                          width: 18,
+                          height: 16.h,
+                          width: 16.h,
                         )),
                   )
                   .paddingSymmetric(horizontal: horizontalPadding)

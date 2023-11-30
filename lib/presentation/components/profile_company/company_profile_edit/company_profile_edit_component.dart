@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class CompanyProfileEditComponent extends StatelessWidget {
   final List<String> selectedAudience;
@@ -64,8 +64,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -117,6 +116,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
                     ],
                   ),
                 ],
+                SpacingFoundation.verticalSpace16,
                 if (availableLocales != null && availableLocales!.isNotEmpty) ...[
                   UiKitCardWrapper(
                     color: context.uiKitTheme?.colorScheme.surface1,
@@ -126,10 +126,9 @@ class CompanyProfileEditComponent extends StatelessWidget {
                         (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
                       ),
                       availableLocales: availableLocales!,
-                      onLocaleChanged: (localeModel) =>
-                          context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
-                                localeModel.locale,
-                              ),
+                      onLocaleChanged: (localeModel) => context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
+                            localeModel.locale,
+                          ),
                     ),
                   ),
                   SpacingFoundation.verticalSpace16,
