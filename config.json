@@ -265,48 +265,63 @@
             "properties": {
               "Self-care": {
                 "color": "#D808FA",
+                "value": "self-care",
                 "imageLink": "assets/images/png/search_category_self_care.png",
-                "sortNumber": 9
+                "sortNumber": 10
               },
               "Fine dining": {
                 "color": "#D808FA",
+                "value": "fine-dining",
                 "imageLink": "assets/images/png/search_category_food.png",
-                "sortNumber": 6
+                "sortNumber": 7
               },
               "Bliss and chill": {
                 "color": "#FA4C34",
+                "value": "bliss-and-chill",
                 "imageLink": "assets/images/png/search_category_chill.png",
-                "sortNumber": 7
+                "sortNumber": 8
               },
               "Sporty movements": {
                 "color": "#FAE634",
+                "value": "sporty-movements",
                 "imageLink": "assets/images/png/search_category_sport.png",
-                "sortNumber": 8
+                "sortNumber": 9
               },
               "Parties and dancing": {
                 "color": "#D808FA",
+                "value": "parties-and-dancing",
                 "imageLink": "assets/images/png/search_category_party.png",
-                "sortNumber": 3
+                "sortNumber": 4
+              },
+              "Age of Enlightenment": {
+                "color": "#FAE634",
+                "value": "age-of-enlightenment",
+                "imageLink": "assets/images/png/search_category_zadrot.png",
+                "sortNumber": 6
               },
               "Extremes and thrills": {
                 "color": "#FA4C34",
+                "value": "extremes-and-thrills",
                 "imageLink": "assets/images/png/search_category_extreme.png",
-                "sortNumber": 4
+                "sortNumber": 5
               },
               "Thirst for adventure": {
                 "color": "#FAE634",
+                "value": "thirst-for-adventure",
                 "imageLink": "assets/images/png/search_category_adventure.png",
-                "sortNumber": 2
+                "sortNumber": 3
               },
-              "Age of Enlightenment ": {
-                "color": "#FAE634",
-                "imageLink": "assets/images/png/search_category_zadrot.png",
-                "sortNumber": 5
+              "New Year's and Christmas": {
+                "color": "#FA4C34",
+                "value": "new-years-and-christmas",
+                "imageLink": "assets/images/png/NY-decor-1.png",
+                "sortNumber": 1
               },
               "Happiness for children and family": {
                 "color": "#FA4C34",
+                "value": "happiness-for-children-and-family",
                 "imageLink": "assets/images/png/search_category_family.png",
-                "sortNumber": 1
+                "sortNumber": 2
               }
             }
           }
@@ -710,14 +725,17 @@
               "single_select": {
                 "properties": {
                   "Male": {
+                    "value": "male",
                     "imageLink": "assets/images/png/Male.png",
                     "sortNumber": 1
                   },
                   "Other": {
+                    "value": "other",
                     "imageLink": "assets/images/png/Other-gender.png",
                     "sortNumber": 3
                   },
                   "Female": {
+                    "value": "female",
                     "imageLink": "assets/images/png/Female.png",
                     "sortNumber": 2
                   }
@@ -810,9 +828,11 @@
               "single_select": {
                 "properties": {
                   "Leisure": {
+                    "value": "leisure",
                     "sortNumber": 1
                   },
                   "Business": {
+                    "value": "business",
                     "sortNumber": 2
                   }
                 }
@@ -940,10 +960,18 @@
             "body": {
               "multi_select": {
                 "properties": {
-                  "Luxury": {},
-                  "Tourists": {},
-                  "Middle class": {},
-                  "Family friendly": {}
+                  "Luxury": {
+                    "value": "luxury"
+                  },
+                  "Tourists": {
+                    "value": "tourists"
+                  },
+                  "Middle class": {
+                    "value": "middle-class"
+                  },
+                  "Family friendly": {
+                    "value": "family-friendly"
+                  }
                 }
               }
             },
@@ -1389,36 +1417,43 @@
             "properties": {
               "Networking": {
                 "color": "#D808FA",
+                "value": "networking",
                 "imageLink": "assets/images/png/search_business_networking.png",
                 "sortNumber": 6
               },
               "Business clubs": {
                 "color": "#FA4C34",
+                "value": "business-clubs",
                 "imageLink": "assets/images/png/search_business_clubs.png",
                 "sortNumber": 1
               },
               "Business games": {
                 "color": "#FA4C34",
+                "value": "business-games",
                 "imageLink": "assets/images/png/search_business_games.png",
                 "sortNumber": 4
               },
               "Pitch sessions": {
                 "color": "#D808FA",
+                "value": "pitch-sessions",
                 "imageLink": "assets/images/png/search_business_speech.png",
                 "sortNumber": 3
               },
               "Seminars and trainings": {
                 "color": "#FA4C34",
+                "value": "seminars-and-trainings",
                 "imageLink": "assets/images/png/search_business_training.png",
                 "sortNumber": 7
               },
               "Digital & IT conferences": {
                 "color": "#FAE634",
+                "value": "digital-and-it-conferences",
                 "imageLink": "assets/images/png/search_business_conferences.png",
                 "sortNumber": 2
               },
               "Forums (industry exhibitions)": {
                 "color": "#FAE634",
+                "value": "forums-industry-exhibitions",
                 "imageLink": "assets/images/png/search_business_exhibition.png",
                 "sortNumber": 5
               }
@@ -1816,6 +1851,11 @@
     "company_credentials_verification": {
       "content": {
         "body": {
+          "password_hint": {
+            "properties": {
+              "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
+            }
+          },
           "country_selector": {
             "title": {
               "text": {
@@ -1847,9 +1887,6 @@
           "auth_type": {
             "value": "email"
           },
-          "password_hint": {
-            "value": "Letters, numbers, ! “ @ # $ % & symbols, 8 characters"
-          },
           "Privacy Policy": {
             "value": "https://azarties.com/privacy",
             "sortNumber": 2
@@ -1877,6 +1914,11 @@
             "properties": {
               "email": {},
               "account": {}
+            }
+          },
+          "password_hint": {
+            "properties": {
+              "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
             }
           },
           "vertical_list": {
@@ -1929,9 +1971,6 @@
           },
           "auth_type": {
             "value": "email"
-          },
-          "password_hint": {
-            "value": "Letters, numbers, ! “ @ # $ % & symbols, 8 characters"
           },
           "Privacy Policy": {
             "value": "https://azarties.com/privacy",
