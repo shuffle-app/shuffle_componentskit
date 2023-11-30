@@ -2,17 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -1063,8 +1062,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   mood: UiMoodModel(
                                     descriptionItems: [
                                       const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
-                                      const UiDescriptionItemModel(
-                                          active: true, title: 'Burned today', description: '432'),
+                                      const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
                                     ],
                                     title: 'need to cool down a bit?',
                                     logo: 'assets/images/png/crazy_emoji.png',
@@ -1082,9 +1080,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: PlaceComponent(place: place),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1095,9 +1093,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: EventComponent(event: event),
                             bottomBar: BottomBookingBar(
-                                model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event'])
-                                        .bookingElementModel ??
-                                    BookingElementModel(version: '0')))))),
+                                model:
+                                    ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
+                                        BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -1165,6 +1163,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                   ComponentBuilder(
                     child: CompanyCredentialsVerificationComponent(
+                      passwordController: TextEditingController(),
                       uiModel: UiCompanyCredentialsVerificationModel(),
                       credentialsController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
