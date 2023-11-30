@@ -176,15 +176,12 @@ class ProfileComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace24,
           Stack(
             children: [
-              Row(
-                children: [
-                  Flexible(child:
+
                   Text(
                     S.of(context).AskOrSupport,
                     style: textTheme?.title1,
-                  )).paddingSymmetric(horizontal: horizontalMargin),
-                ],
-              ),
+                  ).paddingSymmetric(horizontal: horizontalMargin),
+
               if (showHowItWorks)
                 HowItWorksWidget(
                   element: model.content.subtitle![ContentItemType.hintDialog]!,
