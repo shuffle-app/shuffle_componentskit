@@ -280,7 +280,7 @@ class FeedComponent extends StatelessWidget {
                           imageLink: item.bannerPicture,
                           title: advertisement.key,
                           size: AdvertisementBannerSize.values.byName(
-                            advertisement.value.value ?? S.of(context).Small.toLowerCase(),
+                            advertisement.value.type ?? S.of(context).Small.toLowerCase(),
                           ),
                         ),
                       )
