@@ -63,25 +63,31 @@ class _WelcomeComponentState extends State<WelcomeComponent> with SingleTickerPr
   Widget build(BuildContext context) {
     final bigHeight = 1.sh > 568;
 
-    return Scaffold(
-      body: AnimatedCrossFade(
+    return SizedBox(
+      height: 1.sh,
+      width: 1.sw,
+      child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
-        crossFadeState: crossFadeState,
-        firstChild: _FirstBody(
-          bigScreen: bigHeight,
-          animationController: animationController,
-          onNextPressed: () => setState(() => crossFadeState = CrossFadeState.showSecond),
-          backgroundImage: widget.firstBodyItem.imageLink,
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: child,
         ),
-        secondChild: _LastBody(
-          loading: loading,
-          bigScreen: bigHeight,
-          onFinished: () {
-            widget.onFinished?.call();
-            setState(() => loading = true);
-          },
-          backgroundImage: widget.lastBodyItem.imageLink,
-        ),
+        child: crossFadeState == CrossFadeState.showFirst
+            ? _FirstBody(
+                bigScreen: bigHeight,
+                animationController: animationController,
+                onNextPressed: () => setState(() => crossFadeState = CrossFadeState.showSecond),
+                backgroundImage: widget.firstBodyItem.imageLink,
+              )
+            : _LastBody(
+                loading: loading,
+                bigScreen: bigHeight,
+                onFinished: () {
+                  widget.onFinished?.call();
+                  setState(() => loading = true);
+                },
+                backgroundImage: widget.lastBodyItem.imageLink,
+              ),
       ),
     );
   }
