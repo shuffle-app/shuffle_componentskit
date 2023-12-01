@@ -202,7 +202,6 @@ class ShuffleComponent extends StatelessWidget {
                                               favoriteTitles.contains(shuffle.items[value % shuffle.items.length].title)
                                           ? ShuffleUiKitIcons.starfill
                                           : ShuffleUiKitIcons.staroutline,
-                                      height: 20.h,
                                       color: Colors.white,
                                     );
                                   },
