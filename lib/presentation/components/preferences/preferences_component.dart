@@ -94,11 +94,13 @@ class PreferencesComponent extends StatelessWidget {
             Expanded(
               child: LayoutBuilder(
                 builder: (context, size) {
-                  return Bubbles(
+                  return ClipRect(
+                      clipBehavior: Clip.hardEdge,
+                      child: Bubbles(
                     width: 1.sw,
                     height: size.maxHeight,
                     widgets: preferences.chips,
-                  );
+                  ));
                 },
               ).paddingOnly(bottom: 40.h),
             ),

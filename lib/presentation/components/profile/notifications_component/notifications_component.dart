@@ -40,7 +40,8 @@ class NotificationsComponent extends StatelessWidget {
               ),
               decorationIcons: [
                 ActionCardDecorationIconData(
-                  icon: ShuffleUiKitIcons.networking,
+                  iconLink: GraphicsFoundation.instance.svg.networking.path,
+                  // icon: ShuffleUiKitIcons.networking,
                   position: DecorationIconPosition(
                     right: 42,
                     top: -5,
@@ -48,7 +49,8 @@ class NotificationsComponent extends StatelessWidget {
                   iconSize: 92,
                 ),
                 ActionCardDecorationIconData(
-                  icon: ShuffleUiKitIcons.bellnotification,
+                  iconLink:GraphicsFoundation.instance.svg.bellNotification.path,
+                  // icon: ShuffleUiKitIcons.bellnotification,
                   position: DecorationIconPosition(
                     right: 0,
                     top: 4,

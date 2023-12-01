@@ -215,7 +215,7 @@ class PlaceComponent extends StatelessWidget {
                               child: PointBalancePlaceActionCard(
                                 value: '2 650',
                                 group: group,
-                                rasterIconAsset: GraphicsFoundation.instance.png.coin,
+                                rasterIconAsset: GraphicsFoundation.instance.png.money,
                                 action: () {
                                   log('balance was pressed');
                                 },

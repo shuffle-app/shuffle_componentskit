@@ -84,7 +84,7 @@ class SearchComponent extends StatelessWidget {
                 backgroundColor: e.value.color ?? Colors.white,
                 onPressed: () {
                   onSearchFieldTap?.call();
-                  searchController.text = e.value.value ?? '';
+                  searchController.text = e.value.value?.replaceAll('-', ' ') ?? '';
                 },
               ),
             )
@@ -141,7 +141,8 @@ class SearchComponent extends StatelessWidget {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      SpacingFoundation.verticalSpace12,
                     ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
         // SpacingFoundation.verticalSpace24,
         ListView(
@@ -269,7 +270,7 @@ class SearchComponent extends StatelessWidget {
 class _CustomBlurClipper extends CustomClipper<RRect> {
   @override
   RRect getClip(Size size) {
-    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, 110.h),
+    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, 120.h),
         bottomLeft: const Radius.circular(24), bottomRight: const Radius.circular(24));
   }
 

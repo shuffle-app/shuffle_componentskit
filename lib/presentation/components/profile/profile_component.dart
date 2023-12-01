@@ -175,21 +175,21 @@ class ProfileComponent extends StatelessWidget {
           if (events != null) MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
           SpacingFoundation.verticalSpace24,
           Stack(
+            alignment: AlignmentDirectional.topStart,
             children: [
-
                   Text(
                     S.of(context).AskOrSupport,
                     style: textTheme?.title1,
-                  ).paddingSymmetric(horizontal: horizontalMargin),
+                  ),
 
               if (showHowItWorks)
                 HowItWorksWidget(
                   element: model.content.subtitle![ContentItemType.hintDialog]!,
                   onPop: onHowItWorksPoped,
-                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.33, 8),
+                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
                 ),
             ],
-          ),
+          ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace16,
           Text(
             S.of(context).AcceptDonations,
