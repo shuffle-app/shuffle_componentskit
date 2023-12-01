@@ -22,6 +22,7 @@ class UiPlaceModel {
   String? location;
   String? website;
   String? phone;
+  List<HorizontalCaptionedImageData>? branches;
 
   UiPlaceModel({
     required this.id,
@@ -38,6 +39,7 @@ class UiPlaceModel {
     this.rating,
     this.status,
     this.placeType,
+    this.branches,
     required this.tags,
     this.baseTags = const [],
     this.weekdays = const [],

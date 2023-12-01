@@ -79,6 +79,31 @@ class PlaceComponent extends StatelessWidget {
                   baseTags: place.baseTags,
                   uniqueTags: place.tags,
                   horizontalMargin: horizontalMargin,
+                  branches: model.showBranches ?? false
+                      ? [
+                          /// mock branches
+                          HorizontalCaptionedImageData(
+                            imageUrl: GraphicsFoundation.instance.png.place.path,
+                            caption:
+                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                          ),
+                          HorizontalCaptionedImageData(
+                            imageUrl: GraphicsFoundation.instance.png.place.path,
+                            caption:
+                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                          ),
+                          HorizontalCaptionedImageData(
+                            imageUrl: GraphicsFoundation.instance.png.place.path,
+                            caption:
+                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                          ),
+                          HorizontalCaptionedImageData(
+                            imageUrl: GraphicsFoundation.instance.png.place.path,
+                            caption:
+                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                          ),
+                        ]
+                      : place.branckes,
                 ),
                 if (complaintFormComponent != null)
                   Positioned(

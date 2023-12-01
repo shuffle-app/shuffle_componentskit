@@ -194,6 +194,7 @@
       "show_rating": true,
       "builder_type": "modal_bottom_sheet",
       "show_reviews": true,
+      "show_branches": true,
       "position_model": {
         "version": "1.0.0",
         "body_alignment": "center",
