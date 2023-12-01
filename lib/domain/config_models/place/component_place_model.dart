@@ -5,7 +5,6 @@ part 'component_place_model.g.dart';
 
 @JsonSerializable()
 class ComponentPlaceModel extends UiBaseModel {
-
   @JsonKey(name: 'booking_element_model')
   final BookingElementModel? bookingElementModel;
 
@@ -18,17 +17,21 @@ class ComponentPlaceModel extends UiBaseModel {
   @JsonKey(name: 'show_reactions')
   final bool? showReactions;
 
-  ComponentPlaceModel(
-      {this.showRating,
-        this.showReviews,
-        this.bookingElementModel,
-        this.showReactions,
-        required super.pageBuilderType,
-        super.positionModel,
-        required super.version,}):super();
+  @JsonKey(name: 'show_branches')
+  final bool? showBranches;
 
-  factory ComponentPlaceModel.fromJson(Map<String, dynamic> json) =>
-      _$ComponentPlaceModelFromJson(json);
+  ComponentPlaceModel({
+    this.showRating,
+    this.showReviews,
+    this.bookingElementModel,
+    this.showReactions,
+    this.showBranches,
+    required super.pageBuilderType,
+    super.positionModel,
+    required super.version,
+  }) : super();
+
+  factory ComponentPlaceModel.fromJson(Map<String, dynamic> json) => _$ComponentPlaceModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ComponentPlaceModelToJson(this);
 }

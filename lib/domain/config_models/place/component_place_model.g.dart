@@ -15,6 +15,7 @@ ComponentPlaceModel _$ComponentPlaceModelFromJson(Map<String, dynamic> json) =>
           : BookingElementModel.fromJson(
               json['booking_element_model'] as Map<String, dynamic>),
       showReactions: json['show_reactions'] as bool?,
+      showBranches: json['show_branches'] as bool?,
       pageBuilderType:
           $enumDecode(_$PageBuilderTypeEnumMap, json['builder_type']),
       positionModel: json['position_model'] == null
@@ -34,6 +35,7 @@ Map<String, dynamic> _$ComponentPlaceModelToJson(
       'show_rating': instance.showRating,
       'show_reviews': instance.showReviews,
       'show_reactions': instance.showReactions,
+      'show_branches': instance.showBranches,
     };
 
 const _$PageBuilderTypeEnumMap = {

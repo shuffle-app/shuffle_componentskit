@@ -51,6 +51,8 @@ class PlaceComponent extends StatelessWidget {
 
     final theme = context.uiKitTheme;
 
+    print('model.showBranches ?? false: ${model.showBranches ?? false}');
+
     return Column(
       children: [
         Column(
@@ -79,6 +81,26 @@ class PlaceComponent extends StatelessWidget {
                   baseTags: place.baseTags,
                   uniqueTags: place.tags,
                   horizontalMargin: horizontalMargin,
+                  showBranches: model.showBranches ?? false,
+                  branches: [
+                    /// mock branches
+                    HorizontalCaptionedImageData(
+                      imageUrl: GraphicsFoundation.instance.png.place.path,
+                      caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                    ),
+                    HorizontalCaptionedImageData(
+                      imageUrl: GraphicsFoundation.instance.png.place.path,
+                      caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                    ),
+                    HorizontalCaptionedImageData(
+                      imageUrl: GraphicsFoundation.instance.png.place.path,
+                      caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                    ),
+                    HorizontalCaptionedImageData(
+                      imageUrl: GraphicsFoundation.instance.png.place.path,
+                      caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                    ),
+                  ],
                 ),
                 if (complaintFormComponent != null)
                   Positioned(
