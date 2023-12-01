@@ -51,8 +51,6 @@ class PlaceComponent extends StatelessWidget {
 
     final theme = context.uiKitTheme;
 
-    print('model.showBranches ?? false: ${model.showBranches ?? false}');
-
     return Column(
       children: [
         Column(
