@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiOwnerModel {
   final String name;
-  final String? username;
+  final Future<String>? username;
   final String? logo;
   final UserTileType type;
   final VoidCallback? onTap;
@@ -32,43 +34,45 @@ class UiOwnerModel {
     VoidCallback? onUnFollowTap,
     VoidCallback? onBlockTap,
   }) =>
-      UiKitPopUpMenuTile(
-        title: name,
-        titleIcon: const ImageWidget(
-          iconData: ShuffleUiKitIcons.memeberGradientStar,
-        ),
-        subtitle: username,
-        leading: BorderedUserCircleAvatar(
-          imageUrl: logo,
-          name: name,
-          size: 48,
-          border: GradientFoundation.gradientBorder,
-        ),
-        menuOptions: [
-          if (onBlockTap != null)
-            UiKitPopUpMenuButtonOption(
-              title: 'Block user',
-              value: 'Block user',
-              onTap: onBlockTap,
-            ),
-          if (onUnFollowTap != null)
-            UiKitPopUpMenuButtonOption(
-              title: 'Unfollow',
-              value: 'Unfollow',
-              onTap: onUnFollowTap,
-            ),
-          if (onFollowTap != null)
-            UiKitPopUpMenuButtonOption(
-              title: 'Follow',
-              value: 'Follow',
-              onTap: onFollowTap,
-            ),
-          if (onMessageTap != null)
-            UiKitPopUpMenuButtonOption(
-              title: 'Message',
-              value: 'message',
-              onTap: onMessageTap,
-            ),
-        ],
-      );
+      FutureBuilder(
+          future: username,
+          builder: (context, snapshot) => UiKitPopUpMenuTile(
+                title: name,
+                titleIcon: const ImageWidget(
+                  iconData: ShuffleUiKitIcons.memeberGradientStar,
+                ),
+                subtitle: snapshot.hasData ? snapshot.data : null,
+                leading: BorderedUserCircleAvatar(
+                  imageUrl: logo,
+                  name: name,
+                  size: 48,
+                  border: GradientFoundation.gradientBorder,
+                ),
+                menuOptions: [
+                  if (onBlockTap != null)
+                    UiKitPopUpMenuButtonOption(
+                      title: 'Block user',
+                      value: 'Block user',
+                      onTap: onBlockTap,
+                    ),
+                  if (onUnFollowTap != null)
+                    UiKitPopUpMenuButtonOption(
+                      title: 'Unfollow',
+                      value: 'Unfollow',
+                      onTap: onUnFollowTap,
+                    ),
+                  if (onFollowTap != null)
+                    UiKitPopUpMenuButtonOption(
+                      title: 'Follow',
+                      value: 'Follow',
+                      onTap: onFollowTap,
+                    ),
+                  if (onMessageTap != null)
+                    UiKitPopUpMenuButtonOption(
+                      title: 'Message',
+                      value: 'message',
+                      onTap: onMessageTap,
+                    ),
+                ],
+              ));
 }
