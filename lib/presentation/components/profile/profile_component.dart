@@ -177,11 +177,10 @@ class ProfileComponent extends StatelessWidget {
           Stack(
             alignment: AlignmentDirectional.topStart,
             children: [
-                  Text(
-                    S.of(context).AskOrSupport,
-                    style: textTheme?.title1,
-                  ),
-
+              Text(
+                S.of(context).AskOrSupport,
+                style: textTheme?.title1,
+              ),
               if (showHowItWorks)
                 HowItWorksWidget(
                   element: model.content.subtitle![ContentItemType.hintDialog]!,
