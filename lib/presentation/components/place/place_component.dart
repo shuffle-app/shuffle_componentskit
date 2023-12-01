@@ -105,7 +105,7 @@ class PlaceComponent extends StatelessWidget {
                                 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
                           ),
                         ]
-                      : null,
+                      : place.branckes,
                 ),
                 if (complaintFormComponent != null)
                   Positioned(
