@@ -71,7 +71,8 @@ class GlobalConfiguration {
         true
             ? 'https://n8n.tools.horum.co/webhook/configs-shuffle'
             : 'http://${_configUrl}/api/v1/settings/config/$version',
-        queryParameters: _languageCode != null ? {'lang': _languageCode!, 'version': version} : null,
+        queryParameters://TODO make working staging config
+            _languageCode != null ? {'lang': _languageCode!, 'version': version, 'configUrl': 'dev-api.elffuhs.com'} : null,
         headers: ConfigConstants.configHeaders))['config'];
     // print('got configAsMap $configAsMap');
     final model = ConfigurationModel(updated: DateTime.now(), content: configAsMap, theme: configAsMap['theme_name']);

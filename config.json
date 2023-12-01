@@ -480,7 +480,7 @@
       "show_messages": false,
       "position_model": {
         "version": "1.0.0",
-        "body_alignment": "center",
+        "body_alignment": "centerLeft",
         "title_alignment": "center",
         "vertical_margin": 16,
         "horizontal_margin": 16
@@ -819,7 +819,7 @@
               "your leisure selection": {
                 "gradient": "attentionCard"
               },
-              "The more info we get about you, the better ": {}
+              "The more info we get about you, the better": {}
             }
           }
         },
