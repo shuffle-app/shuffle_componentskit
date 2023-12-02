@@ -142,11 +142,10 @@ class SearchComponent extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SpacingFoundation.verticalSpace12,
                     ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
         // SpacingFoundation.verticalSpace24,
         ListView(
-          clipBehavior: Clip.none,
+          // clipBehavior: Clip.none,
           primary: true,
           padding: EdgeInsets.zero,
           controller: scrollController,
@@ -155,6 +154,7 @@ class SearchComponent extends StatelessWidget {
           //   mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
           //   crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
           children: [
+            127.h.heightBox,
             if (model.showFree ?? false) ...[
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
@@ -258,7 +258,8 @@ class SearchComponent extends StatelessWidget {
                 .toList(),
             kBottomNavigationBarHeight.heightBox,
           ],
-        ).paddingOnly(top: 118.h),
+        ),
+        // ).paddingOnly(top: 126.h),
         // ),
       ].reversed.toList(),
     ).paddingSymmetric(
@@ -270,7 +271,7 @@ class SearchComponent extends StatelessWidget {
 class _CustomBlurClipper extends CustomClipper<RRect> {
   @override
   RRect getClip(Size size) {
-    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, 120.h),
+    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, 118.h),
         bottomLeft: const Radius.circular(24), bottomRight: const Radius.circular(24));
   }
 

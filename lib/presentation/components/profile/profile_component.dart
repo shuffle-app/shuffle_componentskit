@@ -32,7 +32,8 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -58,20 +59,22 @@ class ProfileComponent extends StatelessWidget {
           //   ],
           // ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           SpacingFoundation.verticalSpace24,
-          Stack(
-            children: [
-              Text(
-                S.of(context).FindSomeoneToHangOutWith,
-                style: textTheme?.title1,
-              ),
-              if (showHowItWorks)
-                HowItWorksWidget(
-                  element: model.content.body![ContentItemType.hintDialog]!,
-                  onPop: onHowItWorksPoped,
-                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
-                ),
-            ],
-          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+          SizedBox(
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Text(
+                    S.of(context).FindSomeoneToHangOutWith,
+                    style: textTheme?.title1,
+                  ),
+                  if (showHowItWorks)
+                    HowItWorksWidget(
+                      element: model.content.body![ContentItemType.hintDialog]!,
+                      onPop: onHowItWorksPoped,
+                      customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
+                    ),
+                ],
+              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)),
           SpacingFoundation.verticalSpace24,
           UiKitHorizontalScroll3D(
             itemBuilder: (BuildContext context, int index) {
@@ -172,23 +175,25 @@ class ProfileComponent extends StatelessWidget {
             itemCount: recommendedUsers?.length ?? 3,
           ),
           SpacingFoundation.verticalSpace24,
-          if (events != null) MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
+          if (events != null)
+            MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
           SpacingFoundation.verticalSpace24,
-          Stack(
-            alignment: AlignmentDirectional.topStart,
-            children: [
-              Text(
-                S.of(context).AskOrSupport,
-                style: textTheme?.title1,
-              ),
-              if (showHowItWorks)
-                HowItWorksWidget(
-                  element: model.content.subtitle![ContentItemType.hintDialog]!,
-                  onPop: onHowItWorksPoped,
-                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
-                ),
-            ],
-          ).paddingSymmetric(horizontal: horizontalMargin),
+          SizedBox(
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Text(
+                    S.of(context).AskOrSupport,
+                    style: textTheme?.title1,
+                  ),
+                  if (showHowItWorks)
+                    HowItWorksWidget(
+                      element: model.content.subtitle![ContentItemType.hintDialog]!,
+                      onPop: onHowItWorksPoped,
+                      customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
+                    ),
+                ],
+              ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16,
           Text(
             S.of(context).AcceptDonations,
