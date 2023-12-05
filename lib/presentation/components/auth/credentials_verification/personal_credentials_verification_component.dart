@@ -96,7 +96,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       final clientType = Platform.isIOS ? 'iOS' : 'Android';
       socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
             return ShortLogInButton(
-              icon: GraphicsFoundation.instance.iconFromString(element.value.imageLink ?? ''),
+              link: element.value.imageLink ?? '',
               title: element.key,
               onTap: () => widget.onSocialsLogin?.call(
                 SocialsLoginModel(

@@ -132,7 +132,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         autoImplyLeading: true,
         appBarTrailing: widget.placeToEdit != null
             ? IconButton(
-                icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: theme?.colorScheme.inversePrimary, height: 20.h, fit: BoxFit.fitHeight),
                 onPressed: widget.onPlaceDeleted)
             : null,
         body: SingleChildScrollView(
@@ -158,7 +158,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               onPressed: _onLogoAddRequested,
                               icon: ImageWidget(
                                 iconData: ShuffleUiKitIcons.cameraplus,
-                                color: Colors.white,
+                                color: theme?.colorScheme.inversePrimary,
                                 height: 16.h,
                                 width: 16.h,
                               )),
@@ -197,16 +197,16 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
                             onPressed: () async {
-                              final maybeDate = await showUiKitTimeDialog(context);
-                              if (maybeDate != null) {
+                              final maybeTime = await showUiKitTimeDialog(context);
+                              if (maybeTime != null) {
                                 setState(() {
-                                  _placeToEdit.openFrom = maybeDate;
+                                  _placeToEdit.openFrom = maybeTime;
                                 });
                               }
                             },
                             icon: ImageWidget(
-                              iconData: ShuffleUiKitIcons.calendar,
-                              color: Colors.white,
+                              iconData: ShuffleUiKitIcons.clock,
+                              color: theme?.colorScheme.inversePrimary,
                               height: 16.h,
                               width: 16.h,
                             ),
@@ -226,16 +226,16 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
                             onPressed: () async {
-                              final maybeDate = await showUiKitTimeDialog(context);
-                              if (maybeDate != null) {
+                              final maybeTime = await showUiKitTimeDialog(context);
+                              if (maybeTime != null) {
                                 setState(() {
-                                  _placeToEdit.openTo = maybeDate;
+                                  _placeToEdit.openTo = maybeTime;
                                 });
                               }
                             },
                             icon: ImageWidget(
-                              iconData: ShuffleUiKitIcons.calendar,
-                              color: Colors.white,
+                              iconData: ShuffleUiKitIcons.clock,
+                              color: theme?.colorScheme.inversePrimary,
                               height: 16.h,
                               width: 16.h,
                             ),
@@ -268,7 +268,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             },
                             icon: ImageWidget(
                               iconData: ShuffleUiKitIcons.calendar,
-                              color: Colors.white,
+                              color: theme?.colorScheme.inversePrimary,
                               height: 16.h,
                               width: 16.h,
                             ),
@@ -289,8 +289,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             label: S.of(context).Address,
                             controller: _locationController,
                             icon: ImageWidget(
-                              iconData: ShuffleUiKitIcons.location,
-                              color: Colors.white,
+                              iconData: ShuffleUiKitIcons.landmark,
+                              color: theme?.colorScheme.inversePrimary,
                               height: 16.h,
                               width: 16.h,
                             ),
