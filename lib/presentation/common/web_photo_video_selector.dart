@@ -87,19 +87,22 @@ class WebPhotoVideoSelector extends StatelessWidget {
                           data: BaseUiKitButtonData(
                             onPressed: onLogoAddRequested,
                             icon: DecoratedBox(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                border: Border.fromBorderSide(
-                                  BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  border: Border.fromBorderSide(
+                                    BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                                  ),
+                                  borderRadius: BorderRadiusFoundation.all12,
                                 ),
-                                borderRadius: BorderRadiusFoundation.all12,
-                              ),
-                              child: const ImageWidget(
-                                iconData: ShuffleUiKitIcons.gradientPlus,
-                                height: 18,
-                                width: 18,
-                              ).paddingAll(EdgeInsetsFoundation.all12),
-                            ),
+                                child: GradientableWidget(
+                                  gradient: GradientFoundation.attentionCard,
+                                  child: ImageWidget(
+                                    iconData: ShuffleUiKitIcons.gradientPlus,
+                                    color: theme.colorScheme.inversePrimary,
+                                    height: 18,
+                                    width: 18,
+                                  ).paddingAll(EdgeInsetsFoundation.all12),
+                                )),
                           ),
                         )
                         .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
@@ -150,16 +153,17 @@ class WebPhotoVideoSelector extends StatelessWidget {
                     alignment: Alignment.topRight,
                     children: [
                       ClipPath(
-                        clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
+                        clipper: ShapeBorderClipper(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
                         child: photos[index].widget(itemsSize),
                       ).paddingAll(4),
                       context.outlinedButton(
                         hideBorder: true,
                         data: BaseUiKitButtonData(
                           onPressed: () => onPhotoDeleted.call(index),
-                          icon: const ImageWidget(
+                          icon: ImageWidget(
                             iconData: ShuffleUiKitIcons.x,
-                            color: Colors.white,
+                            color: theme?.colorScheme.inversePrimary,
                             height: 8,
                             width: 8,
                           ),
@@ -177,19 +181,22 @@ class WebPhotoVideoSelector extends StatelessWidget {
                         data: BaseUiKitButtonData(
                           onPressed: onPhotoAddRequested,
                           icon: DecoratedBox(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              border: Border.fromBorderSide(
-                                BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                border: Border.fromBorderSide(
+                                  BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                                ),
+                                borderRadius: BorderRadiusFoundation.all12,
                               ),
-                              borderRadius: BorderRadiusFoundation.all12,
-                            ),
-                            child: const ImageWidget(
-                              iconData: ShuffleUiKitIcons.gradientPlus,
-                              height: 18,
-                              width: 18,
-                            ).paddingAll(EdgeInsetsFoundation.all12),
-                          ),
+                              child: GradientableWidget(
+                                gradient: GradientFoundation.attentionCard,
+                                child: ImageWidget(
+                                  iconData: ShuffleUiKitIcons.gradientPlus,
+                                  color: theme?.colorScheme.inversePrimary,
+                                  height: 18,
+                                  width: 18,
+                                ).paddingAll(EdgeInsetsFoundation.all12),
+                              )),
                         ),
                       )
                       .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
@@ -239,16 +246,17 @@ class WebPhotoVideoSelector extends StatelessWidget {
                     alignment: Alignment.topRight,
                     children: [
                       ClipPath(
-                        clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
+                        clipper: ShapeBorderClipper(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
                         child: videos[index].widget(itemsSize),
                       ).paddingAll(4),
                       context.outlinedButton(
                         hideBorder: true,
                         data: BaseUiKitButtonData(
                           onPressed: () => onVideoDeleted.call(index),
-                          icon: const ImageWidget(
+                          icon: ImageWidget(
                             iconData: ShuffleUiKitIcons.x,
-                            color: Colors.white,
+                            color: theme?.colorScheme.inversePrimary,
                             height: 8,
                             width: 8,
                           ),
@@ -266,19 +274,22 @@ class WebPhotoVideoSelector extends StatelessWidget {
                         data: BaseUiKitButtonData(
                           onPressed: onVideoAddRequested,
                           icon: DecoratedBox(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              border: Border.fromBorderSide(
-                                BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                border: Border.fromBorderSide(
+                                  BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                                ),
+                                borderRadius: BorderRadiusFoundation.all12,
                               ),
-                              borderRadius: BorderRadiusFoundation.all12,
-                            ),
-                            child: const ImageWidget(
-                              iconData: ShuffleUiKitIcons.gradientPlus,
-                              height: 18,
-                              width: 18,
-                            ).paddingAll(EdgeInsetsFoundation.all12),
-                          ),
+                              child: GradientableWidget(
+                                gradient: GradientFoundation.attentionCard,
+                                child: ImageWidget(
+                                  iconData: ShuffleUiKitIcons.gradientPlus,
+                                  color: theme?.colorScheme.inversePrimary,
+                                  height: 18,
+                                  width: 18,
+                                ).paddingAll(EdgeInsetsFoundation.all12),
+                              )),
                         ),
                       )
                       .paddingOnly(left: EdgeInsetsFoundation.horizontal16),

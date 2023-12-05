@@ -1927,7 +1927,7 @@
               "continue with google": {
                 "type": "Google",
                 "value": "working",
-                "imageLink": "google_logo",
+                "imageLink": "assets/images/svg/google_logo.svg",
                 "sortNumber": 1
               },
               "continue with apple id": {

@@ -162,7 +162,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       WebFormField(
                         title: S.of(context).BaseProperties,
                         isRequired: true,
-                        child: UiKitTagSelector(
+                        child: UiKitTagSelector.darkBackground(
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
@@ -182,7 +182,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       WebFormField(
                         title: S.of(context).UniqueProperties,
                         isRequired: true,
-                        child: UiKitTagSelector(
+                        child: UiKitTagSelector.darkBackground(
                           borderRadius: BorderRadiusFoundation.all12,
                           onNotFoundTagCallback: (value) {
                             setState(() {
