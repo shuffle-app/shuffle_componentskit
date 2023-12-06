@@ -32,8 +32,7 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final titleAlignment = model.positionModel?.titleAlignment;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -175,9 +174,10 @@ class ProfileComponent extends StatelessWidget {
             itemCount: recommendedUsers?.length ?? 3,
           ),
           SpacingFoundation.verticalSpace24,
-          if (events != null)
+          if (events != null) ...[
             MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
-          SpacingFoundation.verticalSpace24,
+            SpacingFoundation.verticalSpace24,
+          ],
           SizedBox(
               width: double.infinity,
               child: Stack(
