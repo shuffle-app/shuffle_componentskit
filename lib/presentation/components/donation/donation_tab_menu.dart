@@ -81,17 +81,16 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
           Column(
             children: [
               SpacingFoundation.verticalSpace16,
-              ConstrainedBox(
-                constraints: BoxConstraints.expand(height: 40.h),
-                child: context.button(
-                  data: BaseUiKitButtonData(
-                    onPressed: () => widget.onNextButtonTap?.call(),
-                    fit: ButtonFit.fitWidth,
-                    icon: const Icon(CupertinoIcons.chevron_down),
-                    text: S.of(context).NextNPeople(7).toUpperCase(),
-                  ),
-                ),
-              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+              context
+                  .smallButton(
+                    data: BaseUiKitButtonData(
+                      onPressed: () => widget.onNextButtonTap?.call(),
+                      fit: ButtonFit.fitWidth,
+                      icon: const Icon(CupertinoIcons.chevron_down),
+                      text: S.of(context).NextNPeople(7).toUpperCase(),
+                    ),
+                  )
+                  .paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             ],
           ),
       ],
