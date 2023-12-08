@@ -154,7 +154,8 @@
         "version": "1.0.0",
         "body_alignment": "center",
         "title_alignment": "center",
-        "horizontal_margin": 8
+        "horizontal_margin": 8,
+        "vertical_margin": 16
       }
     },
     "chats": {

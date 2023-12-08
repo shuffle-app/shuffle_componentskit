@@ -299,6 +299,16 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     ),
                     ComponentBuilder(
                       child: ChatComponent(
+                        chatItemUiModel: ChatItemUiModel(
+                          id: 0,
+                          username: 'username',
+                          nickname: 'nickname',
+                          userType: UserTileType.ordinary,
+                          lastMessage: 'lastMessage',
+                          lastMessageTime: DateTime.now().subtract(
+                            const Duration(days: 2),
+                          ),
+                        ),
                         scrollController: ScrollController(),
                         messageController: TextEditingController(),
                         pagingController: PagingController<int, ChatMessageUiModel>(
@@ -899,20 +909,16 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentShuffleModel.fromJson(configuration.appConfig.content['profile']),
                         ComponentBuilder(
                             child: Scaffold(
-                          body: BlurredAppBarPage(
-                            title: 'My card',
-                            centerTitle: true,
-                            body: ProfileComponent(
-                                profile: UiProfileModel(
-                              name: 'Marry Williams',
-                              nickname: '@marywill',
-                              description:
-                                  'Just walking here and there trying to find something unique and interesting to show you!',
-                              avatarUrl: 'assets/images/png/profile_avatar.png',
-                              interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
-                              // followers: 2650,
-                            )),
-                          ),
+                          body: ProfileComponent(
+                              profile: UiProfileModel(
+                            name: 'Marry Williams',
+                            nickname: '@marywill',
+                            description:
+                                'Just walking here and there trying to find something unique and interesting to show you!',
+                            avatarUrl: 'assets/images/png/profile_avatar.png',
+                            interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
+                            // followers: 2650,
+                          )),
                         ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
