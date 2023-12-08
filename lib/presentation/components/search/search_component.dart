@@ -208,6 +208,7 @@ class SearchComponent extends StatelessWidget {
               ),
             ).paddingOnly(left: horizontalMargin),
             SpacingFoundation.verticalSpace24,
+
             Stack(clipBehavior: Clip.none, children: [
               Text(S.of(context).TopPlacesRatedBy, style: theme?.boldTextTheme.title1),
               () {

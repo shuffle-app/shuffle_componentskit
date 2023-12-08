@@ -17,6 +17,7 @@ class UiEventModel extends Advertisable {
   String? description;
   String? location;
   String? eventType;
+  String? price;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
   double? rating;
@@ -38,6 +39,7 @@ class UiEventModel extends Advertisable {
     this.tags = const [],
     this.baseTags = const [],
     this.rating,
+    this.price,
     this.time,
     this.timeTo,
     this.weekdays = const [],

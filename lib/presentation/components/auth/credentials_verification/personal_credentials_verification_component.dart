@@ -298,6 +298,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   ],
                 ),
               ),
+              if(privacyCaptions.isNotEmpty)
               RichText(
                 text: TextSpan(children: [
                   TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),

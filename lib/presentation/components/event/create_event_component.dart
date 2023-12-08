@@ -12,7 +12,8 @@ class CreateEventComponent extends StatefulWidget {
   final Future Function(UiEventModel) onEventCreated;
   final Future<String?> Function()? getLocation;
 
-  const CreateEventComponent({super.key, this.eventToEdit, this.getLocation, this.onEventDeleted, required this.onEventCreated});
+  const CreateEventComponent(
+      {super.key, this.eventToEdit, this.getLocation, this.onEventDeleted, required this.onEventCreated});
 
   @override
   State<CreateEventComponent> createState() => _CreateEventComponentState();
@@ -22,6 +23,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -37,6 +40,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
     _locationController.text = widget.eventToEdit?.location ?? '';
+    _priceController.text = widget.eventToEdit?.price ?? '';
+    _typeController.text = widget.eventToEdit?.eventType ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
@@ -93,6 +98,24 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   @override
+  void didUpdateWidget(covariant CreateEventComponent oldWidget) {
+if (oldWidget.eventToEdit!= widget.eventToEdit) {
+      _titleController.text = widget.eventToEdit?.title?? '';
+      _descriptionController.text = widget.eventToEdit?.description?? '';
+      _eventToEdit = widget.eventToEdit?? UiEventModel(id: -1);
+      _locationController.text = widget.eventToEdit?.location?? '';
+      _priceController.text = widget.eventToEdit?.price?? '';
+      _typeController.text = widget.eventToEdit?.eventType?? '';
+      _photos.clear();
+      _videos.clear();
+      _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      _descriptionController.addListener(_checkDescriptionHeightConstraint);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     _descriptionController.removeListener(_checkDescriptionHeightConstraint);
     super.dispose();
@@ -100,7 +123,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -258,30 +282,38 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 // SnackBarUtils.show(
                 //     message: 'in development', context: context);
 
-                _locationController.text = await widget.getLocation?.call() ?? '';
-                _eventToEdit.location = _locationController.text;
-              },
-              child: IgnorePointer(
-                  child: UiKitInputFieldNoFill(
-                          label: S.of(context).Address,
-                          controller: _locationController,
-                          icon: ImageWidget(iconData: ShuffleUiKitIcons.landmark, color: theme?.colorScheme.inversePrimary))
-                      .paddingSymmetric(horizontal: horizontalPadding))),
-          SpacingFoundation.verticalSpace24,
-          SafeArea(
-              top: false,
-              child: context.gradientButton(
-                  data: BaseUiKitButtonData(
-                      text: S.of(context).Save.toUpperCase(),
-                      fit: ButtonFit.fitWidth,
-                      onPressed: () {
-                        _eventToEdit.title = _titleController.text;
-                        _eventToEdit.description = _descriptionController.text;
-                        _eventToEdit.media = [..._photos, ..._videos];
-                        widget.onEventCreated.call(_eventToEdit);
-                      }))).paddingSymmetric(horizontal: horizontalPadding)
-        ],
-      ),
-    );
+                            _locationController.text = await widget.getLocation?.call() ?? '';
+                            _eventToEdit.location = _locationController.text;
+                          },
+                          child: IgnorePointer(
+                              child: UiKitInputFieldNoFill(
+                                      label: S.of(context).Address,
+                                      controller: _locationController,
+                                      icon: ImageWidget(
+                                          iconData: ShuffleUiKitIcons.landmark,
+                                          color: theme?.colorScheme.inversePrimary))
+                                  .paddingSymmetric(horizontal: horizontalPadding))),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                          keyboardType: TextInputType.text, label: S.of(context).Price, controller: _priceController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                          keyboardType: TextInputType.text, label: S.of(context).Category, controller: _typeController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      SafeArea(
+                          top: false,
+                          child: context.gradientButton(
+                              data: BaseUiKitButtonData(
+                                  text: S.of(context).Save.toUpperCase(),
+                                  fit: ButtonFit.fitWidth,
+                                  onPressed: () {
+                                    _eventToEdit.title = _titleController.text;
+                                    _eventToEdit.description = _descriptionController.text;
+                                    _eventToEdit.media = [..._photos, ..._videos];
+                                    widget.onEventCreated.call(_eventToEdit);
+                                  }))).paddingSymmetric(horizontal: horizontalPadding)
+                    ]))));
   }
 }

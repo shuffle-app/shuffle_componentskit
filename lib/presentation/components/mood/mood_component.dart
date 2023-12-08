@@ -104,14 +104,16 @@ class MoodComponent extends StatelessWidget {
             style: theme?.boldTextTheme.title1,
           ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace4,
-          StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                children: [
-                  IgnorePointer(
+          StatefulBuilder(builder: (context, setState) {
+            final isIgnoringPointer = !(mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!));
+
+            return Column(
+              children: [
+                IgnorePointer(
                     ignoring:
-                        !(mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!)),
+                        isIgnoringPointer,
                     child: UiKitCustomTabBar(
+                      selectedTab: mood.activatedLevel?.toUpperCase(),
                       onTappedTab: (index) {
                         setState(() {
                           selectedLevel = listOfTabs[index].value.value ?? '';
@@ -119,44 +121,40 @@ class MoodComponent extends StatelessWidget {
                         });
                       },
                       tabs: listOfTabs
-                          .map(
-                            (entry) => UiKitCustomTab(
-                              height: 20.h,
-                              title: entry.key.toUpperCase(),
-                              group: tabBarGroup,
-                            ),
-                          )
+                          .map((entry) => UiKitCustomTab(
+                                height: 20.h,
+                                title: entry.key.toUpperCase(),
+                                group: tabBarGroup,
+                                active: !isIgnoringPointer || entry.key.toUpperCase() == mood.activatedLevel!.toUpperCase(),
+                              ))
                           .toList(),
-                    ),
-                  ),
-                  SpacingFoundation.verticalSpace8,
-                  FutureBuilder(
+                    )),
+                SpacingFoundation.verticalSpace8,
+                FutureBuilder(
                     future: onTabChanged.call(selectedLevel),
                     builder: (context, AsyncSnapshot<List<UiUniversalModel>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Column(
-                          children: snapshot.data?.indexed.map(
-                                (value) {
-                                  final (index, item) = value;
-                                  return PlacePreview(
-                                    onTap: onPlacePressed,
-                                    shouldVisitAt:
-                                        //TODO get from DTO
-                                        index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                    place: UiPlaceModel(
-                                      id: item.id,
-                                      title: item.title,
-                                      description: item.description,
-                                      media: item.media,
-                                      weekdays: item.weekdays ?? [],
-                                      website: item.website,
-                                      tags: item.tags,
-                                      baseTags: item.baseTags ?? [],
-                                    ),
-                                    model: model,
-                                  ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12);
-                                },
-                              ).toList() ??
+                          children: snapshot.data?.indexed.map((value) {
+                                final (index, item) = value;
+                                return PlacePreview(
+                                  onTap: onPlacePressed,
+                                  shouldVisitAt:
+                                      //TODO get from DTO
+                                      index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                  place: UiPlaceModel(
+                                    id: item.id,
+                                    title: item.title,
+                                    description: item.description,
+                                    media: item.media,
+                                    weekdays: item.weekdays ?? [],
+                                    website: item.website,
+                                    tags: item.tags,
+                                    baseTags: item.baseTags ?? [],
+                                  ),
+                                  model: model,
+                                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12);
+                              }).toList() ??
                               [],
                         );
                       } else {
@@ -165,29 +163,25 @@ class MoodComponent extends StatelessWidget {
                           width: double.infinity,
                         );
                       }
-                    },
-                  )
-                ],
-              ).paddingSymmetric(horizontal: horizontalMargin);
-            },
-          ),
+                    })
+              ],
+            ).paddingSymmetric(horizontal: horizontalMargin);
+          }),
           SpacingFoundation.verticalSpace24,
           SlidableButton(
-            isCompleted: mood.activatedLevel != null,
-            customBorder: mood.activatedLevel == null || onLevelComplited != null
-                ? null
-                : const Border.fromBorderSide(BorderSide(color: UiKitColors.gradientGreyLight2, width: 2)),
-            slidableChild: context.gradientButton(
-                data: BaseUiKitButtonData(text: S.of(context).Go, onPressed: () {}, fit: ButtonFit.hugContent)),
-            onCompleted: () => onLevelActivated?.call(selectedLevel),
-            onCompletedChild: context.gradientButton(
-              data: BaseUiKitButtonData(
+              isCompleted: mood.activatedLevel != null,
+              customBorder: mood.activatedLevel == null || onLevelComplited != null
+                  ? null
+                  : const Border.fromBorderSide(BorderSide(color: UiKitColors.gradientGreyLight2, width: 2)),
+              slidableChild: context.gradientButton(
+                  data: BaseUiKitButtonData(text: S.of(context).Go, onPressed: () {}, fit: ButtonFit.hugContent)),
+              onCompleted: () => onLevelActivated?.call(selectedLevel),
+              onCompletedChild: context.gradientButton(
+                  data: BaseUiKitButtonData(
                 text: S.of(context).GetReward,
                 onPressed: onLevelComplited == null ? null : () => onLevelComplited?.call(),
                 fit: ButtonFit.fitWidth,
-              ),
-            ),
-          ).paddingSymmetric(horizontal: horizontalMargin),
+              ))).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace24,
           verticalMargin.heightBox,
         ],

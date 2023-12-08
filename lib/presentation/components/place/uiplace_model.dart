@@ -22,6 +22,7 @@ class UiPlaceModel {
   String? location;
   String? website;
   String? phone;
+  String? price;
   List<HorizontalCaptionedImageData>? branches;
 
   UiPlaceModel({
@@ -38,6 +39,7 @@ class UiPlaceModel {
     required this.description,
     this.rating,
     this.status,
+    this.price,
     this.placeType,
     this.branches,
     required this.tags,
@@ -63,8 +65,8 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Photos);
     } else if (logo == null || logo!.isEmpty) {
       return S.current.XIsRequired(S.current.Logo);
-    } else if (website == null || website!.isEmpty) {
-      return S.current.XIsRequired(S.current.Website);
+    // } else if (website == null || website!.isEmpty) {
+    //   return S.current.XIsRequired(S.current.Website);
     } else if (phone == null || phone!.isEmpty) {
       return S.current.XIsRequired(S.current.Phone);
     } else if (location == null || location!.isEmpty) {

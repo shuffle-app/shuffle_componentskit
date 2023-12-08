@@ -7,9 +7,12 @@ import '../../../domain/location_models/place_geocoding_response.dart';
 
 const apiKey = String.fromEnvironment('googleApiKey');
 
-
 class GoogleMapsApi {
-  static const baseUrl = 'maps.googleapis.com';
+  static const String _baseUrl = 'maps.googleapis.com';
+
+  static String get baseUrl => baseUrlPrefix + _baseUrl;
+
+  static String baseUrlPrefix = '';
 
   static Future<PlaceGeocodingResponse?> fetchPlaceFromCoordinates({
     required String latlng,
@@ -21,7 +24,9 @@ class GoogleMapsApi {
       'latlng': latlng,
       'language': language,
     });
-    final result = await http.get(url, );
+    final result = await http.get(
+      url,
+    );
     if (result.statusCode == 200) {
       return PlaceGeocodingResponse.fromJson(json.decode(result.body));
     }
