@@ -10,9 +10,13 @@ const apiKey = String.fromEnvironment('googleApiKey');
 class GoogleMapsApi {
   static const String _baseUrl = 'maps.googleapis.com';
 
-  static String get baseUrl => baseUrlPrefix + _baseUrl;
+  static String get baseUrl => _baseUrlPrefix + _baseUrl;
 
-  static String baseUrlPrefix = '';
+  static String _baseUrlPrefix = '';
+
+  static set baseUrlPrefix(String baseUrlPrefix) {
+    _baseUrlPrefix = baseUrlPrefix;
+  }
 
   static Future<PlaceGeocodingResponse?> fetchPlaceFromCoordinates({
     required String latlng,
