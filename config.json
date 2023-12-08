@@ -455,19 +455,19 @@
             },
             "properties": {
               "donate\nothers\n": {
-                "imageLink": "handshake_3",
+                "imageLink": "assets/images/svg/handshake_3.svg",
                 "sortNumber": 4
               },
               "write & make video": {
-                "imageLink": "film",
+                "imageLink": "assets/images/svg/film.svg",
                 "sortNumber": 2
               },
               "post a dream request": {
-                "imageLink": "donat",
+                "imageLink": "assets/images/svg/donat.svg",
                 "sortNumber": 1
               },
               "be convincing & honest": {
-                "imageLink": "hands",
+                "imageLink": "assets/images/svg/hands.svg",
                 "sortNumber": 3
               }
             }
@@ -1315,7 +1315,7 @@
               "SUPPORT": {
                 "type": "leisure",
                 "value": "support",
-                "imageLink": "lifebuoy",
+                "imageLink": "assets/images/svg/lifebuoy.svg",
                 "sortNumber": 7
               },
               "EDIT PROFILE": {
@@ -1557,57 +1557,62 @@
         "body": {
           "button": {
             "properties": {
+              "EDIT PROFILE": {
+                "value": "edit_profile",
+                "imageLink": "user",
+                "sortNumber": 1
+              },
+              "LOCATION": {
+                "value": "location",
+                "imageLink": "landmark",
+                "sortNumber": 2
+              },
+              "WALLET": {
+                "value": "wallet",
+                "imageLink": "wallet",
+                "sortNumber": 3
+              },
+              "FAVORITES": {
+                "value": "favorites",
+                "imageLink": "star-fill",
+                "sortNumber": 4
+              },
+              "followings": {
+                "value": "followings",
+                "imageLink": "heart-fill",
+                "sortNumber": 5
+              },
+              "notifications": {
+                "value": "notifications",
+                "imageLink": "bell",
+                "sortNumber": 6
+              },
+              "PRIVACY POLICY": {
+                "value": "privacy",
+                "imageLink": "warning",
+                "sortNumber": 7
+              },
+              "TERMS OF SERVICE": {
+                "value": "terms",
+                "imageLink": "flag",
+                "sortNumber": 8
+              },
+              "SUPPORT": {
+                "value": "support",
+                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "sortNumber": 9
+              },
               "EXIT": {
                 "color": "#FF453A",
                 "value": "exit",
                 "imageLink": "logout",
                 "sortNumber": 1
               },
-              "SUPPORT": {
-                "value": "support",
-                "imageLink": "lifebuoy",
-                "sortNumber": 8
-              },
-              "LOCATION": {
-                "value": "location",
-                "imageLink": "location",
-                "sortNumber": 2
-              },
-              "FAVORITES": {
-                "value": "favorites",
-                "imageLink": "star-outline",
-                "sortNumber": 3
-              },
-              "followings": {
-                "value": "followings",
-                "imageLink": "heart-fill",
-                "sortNumber": 4
-              },
-              "EDIT PROFILE": {
-                "value": "edit_profile",
-                "imageLink": "profile_outline",
-                "sortNumber": 1
-              },
-              "notifications": {
-                "value": "notifications",
-                "imageLink": "bell",
-                "sortNumber": 5
-              },
               "DELETE ACCOUNT": {
                 "color": "#FF453A",
                 "value": "delete",
                 "imageLink": "profile-delete",
                 "sortNumber": 2
-              },
-              "PRIVACY POLICY": {
-                "value": "privacy",
-                "imageLink": "warning",
-                "sortNumber": 6
-              },
-              "TERMS OF SERVICE": {
-                "value": "terms",
-                "imageLink": "flag",
-                "sortNumber": 7
               }
             }
           },
