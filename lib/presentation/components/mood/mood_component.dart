@@ -103,12 +103,15 @@ class MoodComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: horizontalMargin),
           SpacingFoundation.verticalSpace4,
           StatefulBuilder(builder: (context, setState) {
+            final isIgnoringPointer = !(mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!));
+
             return Column(
               children: [
                 IgnorePointer(
                     ignoring:
-                        !(mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!)),
+                        isIgnoringPointer,
                     child: UiKitCustomTabBar(
+                      selectedTab: mood.activatedLevel?.toUpperCase(),
                       onTappedTab: (index) {
                         setState(() {
                           selectedLevel = listOfTabs[index].value.value ?? '';
@@ -119,6 +122,7 @@ class MoodComponent extends StatelessWidget {
                                 height: 20.h,
                                 title: entry.key.toUpperCase(),
                                 group: tabBarGroup,
+                                active: !isIgnoringPointer || entry.key.toUpperCase() == mood.activatedLevel!.toUpperCase(),
                               ))
                           .toList(),
                     )),

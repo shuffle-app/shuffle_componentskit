@@ -11,7 +11,8 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
 
-  const CreatePlaceComponent({super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
+  const CreatePlaceComponent(
+      {super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
 
   @override
   State<CreatePlaceComponent> createState() => _CreatePlaceComponentState();
@@ -23,6 +24,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _websiteController = TextEditingController();
   late final TextEditingController _locationController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
+  late final TextEditingController _priceController = TextEditingController();
+  late final TextEditingController _typeController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiPlaceModel _placeToEdit;
@@ -49,6 +52,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
+    _priceController.text = widget.placeToEdit?.price ?? '';
+    _typeController.text = widget.placeToEdit?.placeType ?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -111,6 +116,31 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   @override
+  void didUpdateWidget(covariant CreatePlaceComponent oldWidget) {
+    if (oldWidget.placeToEdit != widget.placeToEdit) {
+      _placeToEdit = widget.placeToEdit ??
+          UiPlaceModel(
+            id: -1,
+            media: [],
+            tags: [],
+            description: '',
+          );
+      _photos.clear();
+      _videos.clear();
+      _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      _descriptionController.text = widget.placeToEdit?.description ?? '';
+      _websiteController.text = widget.placeToEdit?.website ?? '';
+      _phoneController.text = widget.placeToEdit?.phone ?? '';
+      _priceController.text = widget.placeToEdit?.price ?? '';
+      _typeController.text = widget.placeToEdit?.placeType ?? '';
+      _titleController.text = widget.placeToEdit?.title ?? '';
+      _locationController.text = widget.placeToEdit?.location ?? '';
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     _descriptionController.removeListener(_checkDescriptionHeightConstraint);
     super.dispose();
@@ -118,7 +148,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -132,7 +163,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         autoImplyLeading: true,
         appBarTrailing: widget.placeToEdit != null
             ? IconButton(
-                icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: theme?.colorScheme.inversePrimary, height: 20.h, fit: BoxFit.fitHeight),
+                icon: ImageWidget(
+                    iconData: ShuffleUiKitIcons.trash,
+                    color: theme?.colorScheme.inversePrimary,
+                    height: 20.h,
+                    fit: BoxFit.fitHeight),
                 onPressed: widget.onPlaceDeleted)
             : null,
         body: SingleChildScrollView(
@@ -151,7 +186,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           S.of(context).Logo,
                           style: theme?.regularTextTheme.labelSmall,
                         ).paddingOnly(right: horizontalPadding),
-                        if (_placeToEdit.logo != null) CircularAvatar(height: kIsWeb ? 40 : 40.h, avatarUrl: _placeToEdit.logo!),
+                        if (_placeToEdit.logo != null)
+                          CircularAvatar(height: kIsWeb ? 40 : 40.h, avatarUrl: _placeToEdit.logo!),
                         const Spacer(),
                         context.outlinedButton(
                           data: BaseUiKitButtonData(
@@ -299,11 +335,27 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       UiKitInputFieldNoFill(
-                              keyboardType: TextInputType.url, label: S.of(context).Website, controller: _websiteController)
+                              keyboardType: TextInputType.url,
+                              label: S.of(context).Website,
+                              controller: _websiteController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       UiKitInputFieldNoFill(
-                              keyboardType: TextInputType.phone, label: S.of(context).Phone, controller: _phoneController)
+                              keyboardType: TextInputType.phone,
+                              label: S.of(context).Phone,
+                              controller: _phoneController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                              keyboardType: TextInputType.text,
+                              label: S.of(context).Price,
+                              controller: _priceController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                              keyboardType: TextInputType.text,
+                              label: S.of(context).Category,
+                              controller: _typeController)
                           .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       Text(S.of(context).BaseProperties, style: theme?.regularTextTheme.labelSmall)
@@ -315,8 +367,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                     UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
                                   ]),
                               tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
-                              onRemoveTagCallback: (value) =>
-                                  setState(() => _placeToEdit.baseTags.removeWhere((element) => element.title == value)))
+                              onRemoveTagCallback: (value) => setState(
+                                  () => _placeToEdit.baseTags.removeWhere((element) => element.title == value)))
                           .paddingSymmetric(horizontal: horizontalPadding),
                       // UiKitTagsWidget(baseTags: _eventToEdit.baseTags ?? []),
                       SpacingFoundation.verticalSpace24,

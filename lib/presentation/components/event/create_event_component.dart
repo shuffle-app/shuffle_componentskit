@@ -23,6 +23,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -38,6 +40,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
     _locationController.text = widget.eventToEdit?.location ?? '';
+    _priceController.text = widget.eventToEdit?.price ?? '';
+    _typeController.text = widget.eventToEdit?.eventType ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
@@ -91,6 +95,24 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     setState(() {
       _videos.insert(newIndex, _videos.removeAt(oldIndex));
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant CreateEventComponent oldWidget) {
+if (oldWidget.eventToEdit!= widget.eventToEdit) {
+      _titleController.text = widget.eventToEdit?.title?? '';
+      _descriptionController.text = widget.eventToEdit?.description?? '';
+      _eventToEdit = widget.eventToEdit?? UiEventModel(id: -1);
+      _locationController.text = widget.eventToEdit?.location?? '';
+      _priceController.text = widget.eventToEdit?.price?? '';
+      _typeController.text = widget.eventToEdit?.eventType?? '';
+      _photos.clear();
+      _videos.clear();
+      _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      _descriptionController.addListener(_checkDescriptionHeightConstraint);
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -275,6 +297,14 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                           iconData: ShuffleUiKitIcons.landmark,
                                           color: theme?.colorScheme.inversePrimary))
                                   .paddingSymmetric(horizontal: horizontalPadding))),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                          keyboardType: TextInputType.text, label: S.of(context).Price, controller: _priceController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
+                      SpacingFoundation.verticalSpace24,
+                      UiKitInputFieldNoFill(
+                          keyboardType: TextInputType.text, label: S.of(context).Category, controller: _typeController)
+                          .paddingSymmetric(horizontal: horizontalPadding),
                       SpacingFoundation.verticalSpace24,
                       SafeArea(
                           top: false,
