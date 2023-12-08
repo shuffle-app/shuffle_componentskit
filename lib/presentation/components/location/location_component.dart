@@ -204,7 +204,6 @@ class _LocationComponentState extends State<LocationComponent> {
     if (placeFromCoordinates?.results?.isEmpty ?? true) {
       return;
     }
-    debugPrint('decodeCoordinates resulted with: ${placeFromCoordinates?.results?.map((e) => e.formattedAddress)}');
     final place = placeFromCoordinates?.results?.first;
     await widget.onPlacesCheck
         ?.call(latLng)

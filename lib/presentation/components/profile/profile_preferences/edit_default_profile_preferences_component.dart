@@ -14,14 +14,7 @@ class EditDefaultProfilePreferencesComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEditProfilePreferencesModel model =
-        ComponentEditProfilePreferencesModel.fromJson(config['profile_preferences']);
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
-    // horizontal: horizontalMargin,
-    // vertical: verticalMargin,
     return Scaffold(
       body: BlurredAppBarPage(
         title: S.of(context).Preferences,

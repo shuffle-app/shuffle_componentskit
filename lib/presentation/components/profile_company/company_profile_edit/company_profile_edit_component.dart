@@ -67,11 +67,8 @@ class CompanyProfileEditComponent extends StatelessWidget {
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
 
-    // horizontal: horizontalMargin,
-    // vertical: verticalMargin,
 
     return Scaffold(
       body: Form(

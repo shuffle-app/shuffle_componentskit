@@ -10,7 +10,7 @@ const apiKey = String.fromEnvironment('googleApiKey');
 class GoogleMapsApi {
   static const String _baseUrl = 'maps.googleapis.com';
 
-  static String get baseUrl => (baseUrlPrefix.isNotEmpty ? '$baseUrlPrefix/proxy/https://' : '') + _baseUrl;
+  static String get baseUrl => baseUrlPrefix + _baseUrl;
 
   static String baseUrlPrefix = '';
 
@@ -19,7 +19,7 @@ class GoogleMapsApi {
     String language = 'en',
   }) async {
     const path = '/maps/api/geocode/json';
-    final url = Uri.https(baseUrl, path, {
+    final url = _getUri(path, {
       'key': apiKey,
       'latlng': latlng,
       'language': language,
@@ -38,7 +38,7 @@ class GoogleMapsApi {
     required String placeId,
   }) async {
     const path = '/maps/api/place/details/json';
-    final url = Uri.https(baseUrl, path, {
+    final url = _getUri(path, {
       'key': apiKey,
       'place_id': placeId,
     });
@@ -54,7 +54,7 @@ class GoogleMapsApi {
     required String query,
   }) async {
     const path = '/maps/api/place/queryautocomplete/json';
-    final url = Uri.https(baseUrl, path, {
+    final url = _getUri(path, {
       'key': apiKey,
       'input': query,
     });
@@ -64,5 +64,11 @@ class GoogleMapsApi {
     }
 
     return null;
+  }
+
+  static _getUri(path, Map<String, String> queryParameters) {
+    final url = Uri.parse('https://$baseUrl$path');
+    url.queryParameters.addAll(queryParameters);
+    return url;
   }
 }

@@ -25,7 +25,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _descriptionController = TextEditingController();
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _typeController = TextEditingController();
-  late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiPlaceModel _placeToEdit;
 
