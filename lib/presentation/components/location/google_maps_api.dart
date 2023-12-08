@@ -10,7 +10,7 @@ const apiKey = String.fromEnvironment('googleApiKey');
 class GoogleMapsApi {
   static const String _baseUrl = 'maps.googleapis.com';
 
-  static String get baseUrl => baseUrlPrefix + _baseUrl;
+  static String get baseUrl => (baseUrlPrefix.isNotEmpty ? '$baseUrlPrefix/https://' : '') + _baseUrl;
 
   static String baseUrlPrefix = '';
 
