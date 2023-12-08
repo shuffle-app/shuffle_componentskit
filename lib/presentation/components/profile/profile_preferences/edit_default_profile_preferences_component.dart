@@ -14,33 +14,27 @@ class EditDefaultProfilePreferencesComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfilePreferencesModel model =
         ComponentEditProfilePreferencesModel.fromJson(config['profile_preferences']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
+    // horizontal: horizontalMargin,
+    // vertical: verticalMargin,
     return Scaffold(
       body: BlurredAppBarPage(
         title: S.of(context).Preferences,
         centerTitle: true,
         autoImplyLeading: true,
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SpacingFoundation.verticalSpace16,
-            // UiKitTagSelector(
-            /// здесь стоит подумать что если нет тэгов на выбор
-            // tags: preferencesModel.preferences ?? [],
-            // onTagsSelected: (tags) => onSelectedPreferencesChanged?.call(tags),
-            // ),
-          ],
-        ).paddingSymmetric(
-          horizontal: horizontalMargin,
-          vertical: verticalMargin,
-        ),
+        children: [
+          SpacingFoundation.verticalSpace16,
+          // UiKitTagSelector(
+          /// здесь стоит подумать что если нет тэгов на выбор
+          // tags: preferencesModel.preferences ?? [],
+          // onTagsSelected: (tags) => onSelectedPreferencesChanged?.call(tags),
+          // ),
+        ],
       ),
     );
   }

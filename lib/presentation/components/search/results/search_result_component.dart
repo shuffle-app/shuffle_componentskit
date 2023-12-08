@@ -55,19 +55,21 @@ class SearchResultComponent extends StatelessWidget {
           ),
         ),
       ),
-      body: GestureDetector(
-        onTap: () {
-          if (searchController.text.isEmpty) {
-            FocusManager.instance.primaryFocus?.unfocus();
-            context.pop();
-          }
-        },
-        child: resultBody.paddingOnly(
-          bottom: verticalMargin,
-          left: horizontalMargin,
-          right: horizontalMargin,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (searchController.text.isEmpty) {
+              FocusManager.instance.primaryFocus?.unfocus();
+              context.pop();
+            }
+          },
+          child: resultBody.paddingOnly(
+            bottom: verticalMargin,
+            left: horizontalMargin,
+            right: horizontalMargin,
+          ),
         ),
-      ),
+      ],
     );
   }
 }

@@ -26,122 +26,124 @@ class SupportComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final toolBarHeight = context.uiKitTheme?.customAppBapTheme.toolbarHeight ?? 90.0;
-    final remainingHeight = 1.sh - toolBarHeight - EdgeInsetsFoundation.vertical16 - SpacingFoundation.verticalSpacing24;
-
-    return BlurredAppBarPage(
-      centerTitle: true,
-      autoImplyLeading: true,
-      title: S.of(context).Support,
-      body: SizedBox(
-        height: remainingHeight,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            UiKitGradientSwitchTile(
-              title: S.of(context).EnableHintSystem,
-              onChanged: onSupportSubmitted,
-              switchedOn: isSupportActive,
-            ),
-            SpacingFoundation.verticalSpace24,
-            UiKitCardWrapper(
-              child: Theme(
-                data: ThemeData(
-                  textButtonTheme: TextButtonThemeData(
-                    style: context.uiKitTheme?.textButtonStyle(context.uiKitTheme!.colorScheme.inversePrimary),
-                  ),
-                ),
-                child: context
-                    .button(
-                      reversed: true,
-                      isTextButton: true,
-                      data: BaseUiKitButtonData(
-                        onPressed: () => context.push(
-                          FAQComponent(
-                            positionModel: position,
-                            faqData: content.body![ContentItemType.pageOpener]!.properties!.map(
-                              (key, value) => MapEntry(
-                                key,
-                                value.value!,
-                              ),
-                            ),
-                          ),
-                        ),
-                        text: S.of(context).Faq.toUpperCase(),
-                        icon: DecoratedBox(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.fromBorderSide(
-                              BorderSide(width: 2, color: Colors.white),
-                            ),
-                          ),
-                          child: const ImageWidget(
-                            iconData: ShuffleUiKitIcons.chevronright,
-                            color: Colors.white,
-                          ).paddingAll(SpacingFoundation.verticalSpacing12),
-                        ),
-                      ),
-                    )
-                    .paddingAll(SpacingFoundation.verticalSpacing16),
-              ),
-            ),
-            SpacingFoundation.verticalSpace24,
-            const Spacer(),
-            UiKitCardWrapper(
-              color: ColorsFoundation.surface1,
-              child: Form(
-                // key: GlobalKey<FormState>(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    UiKitInputFieldNoIcon(
-                      controller: _nameController,
-                      hintText: S.of(context).YourName.toUpperCase(),
-                      // validator: inputFieldValidator,
-                      fillColor: ColorsFoundation.surface3,
-                      // onChanged: (value) => onNameChanged?.call(value),
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    UiKitInputFieldNoIcon(
-                      controller: _emailController,
-                      hintText: S.of(context).YourEmail.toUpperCase(),
-                      // validator: inputFieldValidator,
-                      fillColor: ColorsFoundation.surface3,
-                      // onChanged: (value) => onNickNameChanged?.call(value),
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    UiKitInputFieldNoIcon(
-                      borderRadius: BorderRadiusFoundation.all24,
-                      controller: _textController,
-                      minLines: 3,
-                      hintText: S.of(context).DescribeYourIssue.toUpperCase(),
-                      // validator: inputFieldValidator,
-                      fillColor: ColorsFoundation.surface3,
-                      // onChanged: (value) => onNickNameChanged?.call(value),
-                    ),
-                  ],
-                ),
-              ).paddingAll(EdgeInsetsFoundation.all4),
-            ),
-            SpacingFoundation.verticalSpace24,
-            SizedBox(
-              width: double.infinity,
-              child: context.gradientButton(
-                data: BaseUiKitButtonData(
-                  text: S.of(context).Send.toLowerCase(),
-                  onPressed: () => SnackBarUtils.show(
-                    message: S.of(context).WillBeImplementedSoon.toLowerCase(),
-                    context: context,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ).paddingSymmetric(
-          vertical: position?.verticalMargin?.toDouble() ?? 0,
+    return Scaffold(
+      body: BlurredAppBarPage(
+        centerTitle: true,
+        autoImplyLeading: true,
+        title: S.of(context).Support,
+        childrenPadding: EdgeInsets.symmetric(
           horizontal: position?.horizontalMargin?.toDouble() ?? 0,
         ),
+        children: [
+          SpacingFoundation.verticalSpace16,
+          UiKitGradientSwitchTile(
+            title: S.of(context).EnableHintSystem,
+            onChanged: onSupportSubmitted,
+            switchedOn: isSupportActive,
+          ),
+          SpacingFoundation.verticalSpace24,
+          UiKitCardWrapper(
+            child: Theme(
+              data: ThemeData(
+                textButtonTheme: TextButtonThemeData(
+                  style: context.uiKitTheme?.textButtonStyle(context.uiKitTheme!.colorScheme.inversePrimary),
+                ),
+              ),
+              child: context
+                  .button(
+                    reversed: true,
+                    isTextButton: true,
+                    data: BaseUiKitButtonData(
+                      onPressed: () => context.push(
+                        FAQComponent(
+                          positionModel: position,
+                          faqData: content.body![ContentItemType.pageOpener]!.properties!.map(
+                            (key, value) => MapEntry(
+                              key,
+                              value.value!,
+                            ),
+                          ),
+                        ),
+                      ),
+                      text: S.of(context).Faq.toUpperCase(),
+                      icon: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.white),
+                          ),
+                        ),
+                        child: const ImageWidget(
+                          iconData: ShuffleUiKitIcons.chevronright,
+                          color: Colors.white,
+                        ).paddingAll(SpacingFoundation.verticalSpacing12),
+                      ),
+                    ),
+                  )
+                  .paddingAll(SpacingFoundation.verticalSpacing16),
+            ),
+          ),
+          SpacingFoundation.verticalSpace24,
+          Form(
+            // key: GlobalKey<FormState>(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                UiKitCardWrapper(
+                  color: ColorsFoundation.surface1,
+                  child: UiKitInputFieldNoIcon(
+                    controller: _nameController,
+                    hintText: S.of(context).YourName.toUpperCase(),
+                    // validator: inputFieldValidator,
+                    fillColor: ColorsFoundation.surface3,
+                    // onChanged: (value) => onNameChanged?.call(value),
+                  ).paddingAll(EdgeInsetsFoundation.all4),
+                ),
+                SpacingFoundation.verticalSpace16,
+                UiKitCardWrapper(
+                  color: ColorsFoundation.surface1,
+                  child: UiKitInputFieldNoIcon(
+                    controller: _emailController,
+                    hintText: S.of(context).YourEmail.toUpperCase(),
+                    // validator: inputFieldValidator,
+                    fillColor: ColorsFoundation.surface3,
+                    // onChanged: (value) => onNickNameChanged?.call(value),
+                  ).paddingAll(EdgeInsetsFoundation.all4),
+                ),
+                SpacingFoundation.verticalSpace16,
+                UiKitCardWrapper(
+                  color: ColorsFoundation.surface1,
+                  child: UiKitInputFieldNoIcon(
+                    borderRadius: BorderRadiusFoundation.all24,
+                    controller: _textController,
+                    minLines: 3,
+                    hintText: S.of(context).DescribeYourIssue.toUpperCase(),
+                    // validator: inputFieldValidator,
+                    fillColor: ColorsFoundation.surface3,
+                    // onChanged: (value) => onNickNameChanged?.call(value),
+                  ).paddingAll(EdgeInsetsFoundation.all4),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
+      bottomNavigationBar: context
+          .gradientButton(
+            data: BaseUiKitButtonData(
+              text: S.of(context).Send.toLowerCase(),
+              onPressed: () => SnackBarUtils.show(
+                message: S.of(context).WillBeImplementedSoon.toLowerCase(),
+                context: context,
+              ),
+            ),
+          )
+          .paddingOnly(
+            left: EdgeInsetsFoundation.horizontal16,
+            right: EdgeInsetsFoundation.horizontal16,
+            bottom: EdgeInsetsFoundation.vertical24,
+            top: EdgeInsetsFoundation.vertical24,
+          ),
     );
   }
 }

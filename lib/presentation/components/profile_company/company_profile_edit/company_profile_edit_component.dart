@@ -70,128 +70,121 @@ class CompanyProfileEditComponent extends StatelessWidget {
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
 
+    // horizontal: horizontalMargin,
+    // vertical: verticalMargin,
+
     return Scaffold(
-      body: BlurredAppBarPage(
-        // wrapSliverBox: false,
-        title: S.of(context).EditProfile,
-        autoImplyLeading: true,
-        centerTitle: true,
-        appBarBody: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircularAvatar(
-              avatarUrl: avatarUrl ?? '',
-              name: contactPersonController.text,
-              height: 48,
-            ),
-            SpacingFoundation.verticalSpace4,
-            InkWell(
-              onTap: onPhotoChangeRequested,
-              child: Text(
-                S.of(context).ChangePhoto,
-                style: textTheme?.caption2Bold,
+      body: Form(
+        key: formKey,
+        child: BlurredAppBarPage(
+          title: S.of(context).EditProfile,
+          autoImplyLeading: true,
+          centerTitle: true,
+          appBarBody: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircularAvatar(
+                avatarUrl: avatarUrl ?? '',
+                name: contactPersonController.text,
+                height: 48,
               ),
+              SpacingFoundation.verticalSpace4,
+              InkWell(
+                onTap: onPhotoChangeRequested,
+                child: Text(
+                  S.of(context).ChangePhoto,
+                  style: textTheme?.caption2Bold,
+                ),
+              ),
+            ],
+          ),
+          children: [
+            if (onIsLightThemeChanged != null) ...[
+              SpacingFoundation.verticalSpace16,
+              Row(
+                children: [
+                  Text(S.of(context).WhiteTheme, style: context.uiKitTheme?.regularTextTheme.labelSmall),
+                  SpacingFoundation.horizontalSpace16,
+                  const Spacer(),
+                  UiKitGradientSwitch(
+                    switchedOn: isLightTheme,
+                    onChanged: (value) => onIsLightThemeChanged!.call(value),
+                  )
+                ],
+              ),
+            ],
+            SpacingFoundation.verticalSpace16,
+            if (availableLocales != null && availableLocales!.isNotEmpty) ...[
+              UiKitCardWrapper(
+                color: context.uiKitTheme?.colorScheme.surface1,
+                borderRadius: BorderRadiusFoundation.max,
+                child: UiKitLocaleSelector(
+                  selectedLocale: availableLocales!.firstWhere(
+                    (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
+                  ),
+                  availableLocales: availableLocales!,
+                  onLocaleChanged: (localeModel) => context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
+                        localeModel.locale,
+                      ),
+                ),
+              ),
+              SpacingFoundation.verticalSpace16,
+            ],
+            UiKitInputFieldNoFill(
+              controller: titleController,
+              label: S.of(context).Title,
+              validator: titleValidator,
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
+              controller: contactPersonController,
+              label: S.of(context).ContactPerson,
+              validator: contactPersonValidator,
+              keyboardType: TextInputType.name,
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
+              controller: positionController,
+              label: S.of(context).Position,
+              validator: contactPersonValidator,
+              inputFormatters: [dateInputFormatter],
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
+              prefixText: '+',
+              controller: phoneController,
+              label: S.of(context).Phone,
+              validator: phoneValidator,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [americanInputFormatter],
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
+              controller: emailController,
+              label: S.of(context).Email,
+              validator: emailValidator,
+              keyboardType: TextInputType.emailAddress,
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitTitledSelectionTile(
+              onSelectionChanged: onNicheChangeRequested,
+              selectedItems: [selectedNiche],
+              title: S.of(context).YourNiche,
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitTitledSelectionTile(
+              onSelectionChanged: onAudienceChangeRequested,
+              selectedItems: selectedAudience,
+              title: S.of(context).YourAudience,
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitTitledSelectionTile(
+              onSelectionChanged: onAgeRangesChangeRequested,
+              selectedItems: selectedAgeRanges,
+              title: S.of(context).YourAudienceAge,
             ),
           ],
-        ),
-        body: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (onIsLightThemeChanged != null) ...[
-                  SpacingFoundation.verticalSpace16,
-                  Row(
-                    children: [
-                      Text(S.of(context).WhiteTheme, style: context.uiKitTheme?.regularTextTheme.labelSmall),
-                      SpacingFoundation.horizontalSpace16,
-                      const Spacer(),
-                      UiKitGradientSwitch(
-                        switchedOn: isLightTheme,
-                        onChanged: (value) => onIsLightThemeChanged!.call(value),
-                      )
-                    ],
-                  ),
-                ],
-                SpacingFoundation.verticalSpace16,
-                if (availableLocales != null && availableLocales!.isNotEmpty) ...[
-                  UiKitCardWrapper(
-                    color: context.uiKitTheme?.colorScheme.surface1,
-                    borderRadius: BorderRadiusFoundation.max,
-                    child: UiKitLocaleSelector(
-                      selectedLocale: availableLocales!.firstWhere(
-                        (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
-                      ),
-                      availableLocales: availableLocales!,
-                      onLocaleChanged: (localeModel) => context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
-                            localeModel.locale,
-                          ),
-                    ),
-                  ),
-                  SpacingFoundation.verticalSpace16,
-                ],
-                UiKitInputFieldNoFill(
-                  controller: titleController,
-                  label: S.of(context).Title,
-                  validator: titleValidator,
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitInputFieldNoFill(
-                  controller: contactPersonController,
-                  label: S.of(context).ContactPerson,
-                  validator: contactPersonValidator,
-                  keyboardType: TextInputType.name,
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitInputFieldNoFill(
-                  controller: positionController,
-                  label: S.of(context).Position,
-                  validator: contactPersonValidator,
-                  inputFormatters: [dateInputFormatter],
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitInputFieldNoFill(
-                  prefixText: '+',
-                  controller: phoneController,
-                  label: S.of(context).Phone,
-                  validator: phoneValidator,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [americanInputFormatter],
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitInputFieldNoFill(
-                  controller: emailController,
-                  label: S.of(context).Email,
-                  validator: emailValidator,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitTitledSelectionTile(
-                  onSelectionChanged: onNicheChangeRequested,
-                  selectedItems: [selectedNiche],
-                  title: S.of(context).YourNiche,
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitTitledSelectionTile(
-                  onSelectionChanged: onAudienceChangeRequested,
-                  selectedItems: selectedAudience,
-                  title: S.of(context).YourAudience,
-                ),
-                SpacingFoundation.verticalSpace16,
-                UiKitTitledSelectionTile(
-                  onSelectionChanged: onAgeRangesChangeRequested,
-                  selectedItems: selectedAgeRanges,
-                  title: S.of(context).YourAudienceAge,
-                ),
-              ],
-            ).paddingSymmetric(
-              horizontal: horizontalMargin,
-              vertical: verticalMargin,
-            ),
-          ),
         ),
       ),
       bottomNavigationBar: AnimatedOpacity(

@@ -18,61 +18,50 @@ class NotificationsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bodyAlignment = screenParams?.bodyAlignment;
-
     return BlurredAppBarPage(
       physics: const NeverScrollableScrollPhysics(),
       title: S.of(context).Notifications,
       autoImplyLeading: true,
       centerTitle: true,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-        children: [
-          if (hasNotifications)
-            UiKitDecoratedActionCard(
-              title: S.of(context).Notifications,
-              action: context.smallButton(
-                data: BaseUiKitButtonData(
-                  onPressed: seeAllNotificationsCallback,
-                  text: S.of(context).SeeAll.toUpperCase(),
-                ),
-              ),
-              decorationIcons: [
-                ActionCardDecorationIconData(
-                  iconLink: GraphicsFoundation.instance.svg.networking.path,
-                  // icon: ShuffleUiKitIcons.networking,
-                  position: DecorationIconPosition(
-                    right: 42,
-                    top: -5,
-                  ),
-                  iconSize: 92,
-                ),
-                ActionCardDecorationIconData(
-                  iconLink:GraphicsFoundation.instance.svg.bellNotification.path,
-                  // icon: ShuffleUiKitIcons.bellnotification,
-                  position: DecorationIconPosition(
-                    right: 0,
-                    top: 4,
-                  ),
-                  rotationAngle: 24,
-                ),
-              ],
-            ),
-          SpacingFoundation.verticalSpace16,
-          Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.zero,
-              itemBuilder: (context, index) => params?.elementAt(index),
-              separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-              itemCount: params?.length ?? 0,
-            ),
-          ),
-        ],
-      ).paddingSymmetric(
-        vertical: screenParams?.verticalMargin?.toDouble() ?? 0,
-        horizontal: screenParams?.horizontalMargin?.toDouble() ?? 0,
+      childrenPadding: EdgeInsets.only(
+        bottom: screenParams?.verticalMargin?.toDouble() ?? 0,
+        left: screenParams?.horizontalMargin?.toDouble() ?? 0,
+        right: screenParams?.horizontalMargin?.toDouble() ?? 0,
       ),
+      children: [
+        SpacingFoundation.zero.heightBox,
+        if (hasNotifications)
+          UiKitDecoratedActionCard(
+            title: S.of(context).Notifications,
+            action: context.smallButton(
+              data: BaseUiKitButtonData(
+                onPressed: seeAllNotificationsCallback,
+                text: S.of(context).SeeAll.toUpperCase(),
+              ),
+            ),
+            decorationIcons: [
+              ActionCardDecorationIconData(
+                iconLink: GraphicsFoundation.instance.svg.networking.path,
+                // icon: ShuffleUiKitIcons.networking,
+                position: DecorationIconPosition(
+                  right: 42,
+                  top: -5,
+                ),
+                iconSize: 92,
+              ),
+              ActionCardDecorationIconData(
+                iconLink: GraphicsFoundation.instance.svg.bellNotification.path,
+                // icon: ShuffleUiKitIcons.bellnotification,
+                position: DecorationIconPosition(
+                  right: 0,
+                  top: 4,
+                ),
+                rotationAngle: 24,
+              ),
+            ],
+          ),
+        ...params ?? [],
+      ],
     );
   }
 }

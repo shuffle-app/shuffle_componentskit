@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatelessWidget {
   final String title;
@@ -32,17 +32,32 @@ class WebViewScreen extends StatelessWidget {
 
     return Scaffold(
       body: BlurredAppBarPage(
-          physics: const NeverScrollableScrollPhysics(),
-          autoImplyLeading: true,
-          title: title,
-          centerTitle: true,
-          body: showWebView
-              ? Stack(children: [const Center(child: LoadingWidget()), WebViewWidget(controller: controller)])
-              : SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: WebContentComponent(
-                    url: url,
-                  ))),
+        physics: const NeverScrollableScrollPhysics(),
+        autoImplyLeading: true,
+        title: title,
+        centerTitle: true,
+        children: [
+          SizedBox.fromSize(
+            size: Size(1.sw, 1.sh),
+            child: showWebView
+                ? Stack(
+                    children: [
+                      const Positioned.fill(
+                        top: -190.0,
+                        child: LoadingWidget(),
+                      ),
+                      WebViewWidget(controller: controller),
+                    ],
+                  )
+                : SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: WebContentComponent(
+                      url: url,
+                    ),
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }

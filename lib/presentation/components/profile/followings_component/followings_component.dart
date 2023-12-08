@@ -25,59 +25,61 @@ class FollowingsComponent extends StatelessWidget {
     bool showFollowings = true;
 
     return BlurredAppBarPage(
-        autoImplyLeading: true,
-        centerTitle: true,
-        title: S.of(context).Followings,
-        body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-                horizontal: screenParams?.horizontalMargin?.toDouble() ?? 0,
-                vertical: screenParams?.verticalMargin?.toDouble() ?? 0),
-            child: StatefulBuilder(
-                builder: (context, setState) => Column(
-                        crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-                        mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-                        children: [
-                          SpacingFoundation.verticalSpace24,
-                          if (followers != null && followers!.isNotEmpty) ...[
-                            UiKitCustomTabBar(
-                              onTappedTab: (index) {
-                                if (index == 0) {
-                                  setState(() {
-                                    showFollowings = true;
-                                  });
-                                } else if (index == 1) {
-                                  setState(() {
-                                    showFollowings = false;
-                                  });
-                                }
-                              },
-                              tabs: [
-                                UiKitCustomTab(title: S.of(context).Followings.toUpperCase()),
-                                UiKitCustomTab(title: S.of(context).Followers.toUpperCase()),
-                              ],
-                            ),
-                            SpacingFoundation.verticalSpace24,
-                          ],
-                          if (showFollowings)
-                            ...(followings
-                                    ?.map((e) => e
-                                        .buildMenuItem(onMessageTap: onMessage, onFollowTap: onFollow)
-                                        .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
-                                    .toList() ??
-                                [
-                                  Text(S.of(context).NothingFound.toUpperCase(),
-                                      style: context.uiKitTheme?.boldTextTheme.caption1Bold),
-                                ])
-                          else
-                            ...(followers
-                                    ?.map((e) => e
-                                        .buildMenuItem(onMessageTap: onMessage, onFollowTap: onFollow)
-                                        .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
-                                    .toList() ??
-                                [
-                                  Text(S.of(context).NothingFound.toUpperCase(),
-                                      style: context.uiKitTheme?.boldTextTheme.caption1Bold),
-                                ]),
-                        ]))));
+      autoImplyLeading: true,
+      centerTitle: true,
+      title: S.of(context).Followings,
+      children: [
+        StatefulBuilder(
+          builder: (context, setState) => Column(
+            crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+            mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+            children: [
+              SpacingFoundation.verticalSpace24,
+              if (followers != null && followers!.isNotEmpty) ...[
+                UiKitCustomTabBar(
+                  onTappedTab: (index) {
+                    if (index == 0) {
+                      setState(() {
+                        showFollowings = true;
+                      });
+                    } else if (index == 1) {
+                      setState(() {
+                        showFollowings = false;
+                      });
+                    }
+                  },
+                  tabs: [
+                    UiKitCustomTab(title: S.of(context).Followings.toUpperCase()),
+                    UiKitCustomTab(title: S.of(context).Followers.toUpperCase()),
+                  ],
+                ),
+                SpacingFoundation.verticalSpace24,
+              ],
+              if (showFollowings)
+                ...(followings
+                        ?.map((e) => e
+                            .buildMenuItem(onMessageTap: onMessage, onFollowTap: onFollow)
+                            .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
+                        .toList() ??
+                    [
+                      Text(S.of(context).NothingFound.toUpperCase(), style: context.uiKitTheme?.boldTextTheme.caption1Bold),
+                    ])
+              else
+                ...(followers
+                        ?.map((e) => e
+                            .buildMenuItem(onMessageTap: onMessage, onFollowTap: onFollow)
+                            .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
+                        .toList() ??
+                    [
+                      Text(S.of(context).NothingFound.toUpperCase(), style: context.uiKitTheme?.boldTextTheme.caption1Bold),
+                    ]),
+            ],
+          ),
+        ).paddingSymmetric(
+          horizontal: screenParams?.horizontalMargin?.toDouble() ?? 0,
+          vertical: screenParams?.verticalMargin?.toDouble() ?? 0,
+        ),
+      ],
+    );
   }
 }
