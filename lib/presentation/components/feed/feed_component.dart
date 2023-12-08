@@ -20,6 +20,7 @@ class FeedComponent extends StatelessWidget {
   final VoidCallback? onAdvertisementPressed;
   final bool showBusinessContent;
   final bool preserveScrollPosition;
+  final Widget? progressIndicator;
 
   const FeedComponent({
     Key? key,
@@ -27,6 +28,7 @@ class FeedComponent extends StatelessWidget {
     required this.controller,
     required this.showBusinessContent,
     this.mood,
+    this.progressIndicator,
     this.preserveScrollPosition = false,
     this.onEventPressed,
     this.onMoodPressed,
@@ -38,14 +40,6 @@ class FeedComponent extends StatelessWidget {
     this.onListItemPressed,
     this.onAdvertisementPressed,
   }) : super(key: key);
-
-  final progressIndicator = const SizedBox(
-      width: 20,
-      height: 20,
-      child: GradientableWidget(
-          gradient: GradientFoundation.attentionCard,
-          active: true,
-          child: CircularProgressIndicator.adaptive(backgroundColor: Colors.white)));
 
   @override
   Widget build(BuildContext context) {
@@ -267,8 +261,8 @@ class FeedComponent extends StatelessWidget {
             shrinkWrapFirstPageIndicators: true,
             builderDelegate: PagedChildBuilderDelegate(
               animateTransitions: true,
-              firstPageProgressIndicatorBuilder: (c) => const SizedBox.shrink(),
-              newPageProgressIndicatorBuilder: (c) => const SizedBox.shrink(),
+              firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+              newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
               itemBuilder: (_, item, index) {
                 item as UiUniversalModel;
                 if (item.isAdvertisement && advertisement != null) {

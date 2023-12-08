@@ -63,6 +63,9 @@ class SpinnerComponent extends StatelessWidget {
                 pagingController: itemsController,
                 scrollController: spinner.cardsScrollController,
                 spacing: SpacingFoundation.horizontalSpacing12,
+                shimmerLoadingChild: UiKitSpinnerCard(
+                  availableHeight: size.maxHeight,
+                ),
                 itemBuilder: (_, item, index) {
                   if (item.isAdvertisement && (ads?.entries.isNotEmpty ?? false)) {
                     final advertisement = ads?.entries.first;
