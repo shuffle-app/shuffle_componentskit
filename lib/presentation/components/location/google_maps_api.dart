@@ -6,17 +6,12 @@ import '../../../domain/location_models/location_search_autocomplete_response.da
 import '../../../domain/location_models/place_geocoding_response.dart';
 
 const apiKey = String.fromEnvironment('googleApiKey');
+const proxyPrefix = String.fromEnvironment('proxyPrefix', defaultValue: '');
 
 class GoogleMapsApi {
   static const String _baseUrl = 'maps.googleapis.com';
 
-  static String get baseUrl => _baseUrlPrefix + _baseUrl;
-
-  static String _baseUrlPrefix = '';
-
-  static set baseUrlPrefix(String baseUrlPrefix) {
-    _baseUrlPrefix = baseUrlPrefix;
-  }
+  static String get baseUrl => (proxyPrefix.isNotEmpty ? '$proxyPrefix/proxy/' : proxyPrefix) + _baseUrl;
 
   static Future<PlaceGeocodingResponse?> fetchPlaceFromCoordinates({
     required String latlng,
