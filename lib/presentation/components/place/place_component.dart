@@ -110,9 +110,9 @@ class PlaceComponent extends StatelessWidget {
                     top: (kIsWeb ? 156 : 0.48.sw) - 40,
                     right: 0,
                     child: Transform.scale(
-                      scale: 0.5.sp,
+                      scale: 0.42.sp,
                       child: context.smallOutlinedButton(
-                        color: UiKitColors.darkNeutral800.withOpacity(0.5),
+                        color: UiKitColors.darkNeutral800.withOpacity(0.15),
                         data: BaseUiKitButtonData(
                           onPressed: () {
                             showUiKitGeneralFullScreenDialog(

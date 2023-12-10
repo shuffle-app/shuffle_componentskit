@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 import '../../../domain/location_models/location_details_response.dart';
@@ -11,7 +12,7 @@ const proxyPrefix = String.fromEnvironment('proxyPrefix', defaultValue: '');
 class GoogleMapsApi {
   static const String _baseUrl = 'maps.googleapis.com';
 
-  static String get baseUrl => (proxyPrefix.isNotEmpty ? '$proxyPrefix/proxy/' : proxyPrefix) + _baseUrl;
+  static String get baseUrl => (proxyPrefix.isNotEmpty ? '$proxyPrefix/proxy/https://' : proxyPrefix) + _baseUrl;
 
   static Future<PlaceGeocodingResponse?> fetchPlaceFromCoordinates({
     required String latlng,
@@ -68,6 +69,8 @@ class GoogleMapsApi {
   static _getUri(path, Map<String, String> queryParameters) {
     final url = Uri.parse('https://$baseUrl$path');
     url.queryParameters.addAll(queryParameters);
+
+    log('_getUri resulted url: $url ${url.host}',name: 'GoogleMapsApi');
     return url;
   }
 }

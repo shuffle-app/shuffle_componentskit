@@ -95,9 +95,9 @@ class EventComponent extends StatelessWidget {
                       bottom: -10.h,
                       right: -10.w,
                       child: Transform.scale(
-                        scale: 0.5.sp,
+                        scale: 0.42.sp,
                         child: context.smallOutlinedButton(
-                          color: UiKitColors.darkNeutral800.withOpacity(0.5),
+                          color: UiKitColors.darkNeutral800.withOpacity(0.15),
                           data: BaseUiKitButtonData(
                             onPressed: () {
                               showUiKitGeneralFullScreenDialog(
