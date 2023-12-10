@@ -110,7 +110,7 @@ class EventComponent extends StatelessWidget {
                               );
                             },
                             icon: Transform.scale(
-                              scale: 1.5.sp,
+                              scale: 1.25.sp,
                               child: ImageWidget(
                                 // height: 20,
                                 iconData: ShuffleUiKitIcons.alertcircle,
