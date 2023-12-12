@@ -1,0 +1,1861 @@
+{
+  "config": {
+    "exit": {
+      "content": {
+        "title": {
+          "text": {
+            "properties": {
+              "Уверены, что хотите выйти?": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog"
+    },
+    "feed": {
+      "content": {
+        "body": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "нажимаешь и случайная выдача": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Его величество случай...": {}
+                }
+              }
+            },
+            "properties": {
+              "press & scroll\n": {
+                "imageLink": "assets/images/png/Press-scroll.png",
+                "sortNumber": 4
+              },
+              "события & места": {
+                "imageLink": "assets/images/png/Events.png",
+                "sortNumber": 1
+              },
+              "фильтруется тегами": {
+                "imageLink": "assets/images/png/Filtering.png",
+                "sortNumber": 2
+              },
+              "выбираешь & нажимаешь": {
+                "imageLink": "assets/images/png/Chips-select.png",
+                "sortNumber": 3
+              }
+            }
+          },
+          "advertisement": {
+            "properties": {
+              "Дубай": {
+                "type": "small",
+                "imageLink": "assets/images/png/mock_ad_banner_1.jpeg",
+                "sortNumber": 2
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "получаешь то, что нужно конкретно тебе": {}
+                }
+              }
+            },
+            "text": {
+              "title": {
+                "properties": {
+                  "Зависит от...": {}
+                }
+              }
+            },
+            "properties": {
+              "гео": {
+                "imageLink": "assets/images/png/Map.png",
+                "sortNumber": 1
+              },
+              "погода вокруг": {
+                "imageLink": "assets/images/png/Sun-clouds.png",
+                "sortNumber": 3
+              },
+              "интересы": {
+                "imageLink": "assets/images/png/Dart.png",
+                "sortNumber": 2
+              },
+              "и ещё 14 параметров": {
+                "imageLink": "assets/images/png/Smile-mood.png",
+                "sortNumber": 4
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.2",
+      "show_places": true,
+      "builder_type": "page",
+      "show_stories": true,
+      "show_feelings": true,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 12,
+        "horizontal_margin": 16
+      },
+      "show_daily_recomendation": true
+    },
+    "mood": {
+      "content": {
+        "body": {
+          "tab_bar": {
+            "body": {
+              "text": {
+                "properties": {
+                  "Есть решение только для тебя": {}
+                }
+              }
+            },
+            "properties": {
+              "Изи": {
+                "value": "eazy",
+                "sortNumber": 1
+              },
+              "Честный": {
+                "value": "fair",
+                "sortNumber": 2
+              },
+              "Жесть": {
+                "value": "hardcore",
+                "sortNumber": 3
+              }
+            }
+          }
+        },
+        "title": {
+          "card": {
+            "properties": {
+              "Теперь зацени это": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_stats": true,
+      "show_places": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 8
+      }
+    },
+    "chats": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "event": {
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "show_reviews": true,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 8
+      },
+      "show_reactions": true,
+      "booking_element_model": {
+        "version": "1.0.2",
+        "show_route": true,
+        "show_magnify": true,
+        "position_model": {
+          "version": "1.0.0",
+          "body_alignment": "center",
+          "title_alignment": "center",
+          "horizontal_margin": 8
+        }
+      }
+    },
+    "place": {
+      "version": "1.0.1",
+      "show_rating": true,
+      "builder_type": "modal_bottom_sheet",
+      "show_reviews": true,
+      "show_branches": true,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 8
+      },
+      "show_reactions": true,
+      "booking_element_model": {
+        "version": "1.0.2",
+        "show_route": true,
+        "show_magnify": true,
+        "position_model": {
+          "version": "1.0.0",
+          "body_alignment": "center",
+          "title_alignment": "center",
+          "horizontal_margin": 8
+        }
+      }
+    },
+    "terms": {
+      "content": {
+        "properties": {
+          "Политика конфиденциальности": {
+            "value": "https://azarties.com/privacy"
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "delete": {
+      "content": {
+        "title": {
+          "text": {
+            "properties": {
+              "Уверены, что хотите удалить аккаунт?": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog"
+    },
+    "search": {
+      "content": {
+        "body": {
+          "text": {
+            "properties": {
+              "Выбери себя": {}
+            }
+          },
+          "advertisement": {
+            "properties": {
+              "Дубай": {
+                "type": "small",
+                "imageLink": "assets/images/png/mock_ad_banner_4.jpeg",
+                "sortNumber": 0
+              }
+            }
+          },
+          "horizontal_list": {
+            "properties": {
+              "Забота": {
+                "color": "#D808FA",
+                "value": "self-care",
+                "imageLink": "assets/images/png/search_category_self_care.png",
+                "sortNumber": 10
+              },
+              "Кухня": {
+                "color": "#D808FA",
+                "value": "fine-dining",
+                "imageLink": "assets/images/png/search_category_food.png",
+                "sortNumber": 7
+              },
+              "Блаж и чилл": {
+                "color": "#FA4C34",
+                "value": "bliss-and-chill",
+                "imageLink": "assets/images/png/search_category_chill.png",
+                "sortNumber": 8
+              },
+              "Спортивные вайбы": {
+                "color": "#FAE634",
+                "value": "sporty-movements",
+                "imageLink": "assets/images/png/search_category_sport.png",
+                "sortNumber": 9
+              },
+              "Тусовки и танцы": {
+                "color": "#D808FA",
+                "value": "parties-and-dancing",
+                "imageLink": "assets/images/png/search_category_party.png",
+                "sortNumber": 4
+              },
+              "Экстрим и динамика": {
+                "color": "#FAE634",
+                "value": "age-of-enlightenment",
+                "imageLink": "assets/images/png/search_category_zadrot.png",
+                "sortNumber": 6
+              },
+              "Жажда приключений": {
+                "color": "#FA4C34",
+                "value": "extremes-and-thrills",
+                "imageLink": "assets/images/png/search_category_extreme.png",
+                "sortNumber": 5
+              },
+              "Эпоха просвещения": {
+                "color": "#FAE634",
+                "value": "thirst-for-adventure",
+                "imageLink": "assets/images/png/search_category_adventure.png",
+                "sortNumber": 3
+              },
+              "Семейное счастье и дети": {
+                "color": "#FA4C34",
+                "value": "happiness-for-children-and-family",
+                "imageLink": "assets/images/png/search_category_family.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Ты это найдёшь": {}
+            }
+          },
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "ищи или выбирай выбор других": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Обычный поиск...": {}
+                }
+              }
+            },
+            "properties": {
+              "events/\nplaces\n": {
+                "imageLink": "assets/images/png/Place-events.png",
+                "sortNumber": 2
+              },
+              "type & get result\n": {
+                "imageLink": "assets/images/png/Result.png",
+                "sortNumber": 3
+              },
+              "рейтинги & подборки": {
+                "imageLink": "assets/images/png/Rating.png",
+                "sortNumber": 4
+              },
+              "предпочтения не работают": {
+                "imageLink": "assets/images/png/Pixelated-sunglasses-emoji.png",
+                "sortNumber": 1
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "privacy": {
+      "content": {
+        "properties": {
+          "Политика конфиденциальности": {
+            "value": "https://azarties.com/privacy"
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "profile": {
+      "content": {
+        "body": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "пойти куда-то вместе": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Вы не одни...": {}
+                }
+              }
+            },
+            "properties": {
+              "no\nfoes\n": {
+                "imageLink": "assets/images/png/Foe.png",
+                "sortNumber": 4
+              },
+              "найти компаньонов": {
+                "imageLink": "assets/images/png/Companions.png",
+                "sortNumber": 1
+              },
+              "равные предпочтения": {
+                "imageLink": "assets/images/png/Preferences.png",
+                "sortNumber": 2
+              },
+              "проверяй репутацию": {
+                "imageLink": "assets/images/png/Points-reputation.png",
+                "sortNumber": 3
+              }
+            }
+          }
+        },
+        "subtitle": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "твоя или кого-то ещё": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Исполнить мечту": {}
+                }
+              }
+            },
+            "properties": {
+              "donate\nothers\n": {
+                "imageLink": "assets/images/svg/handshake_3.svg",
+                "sortNumber": 4
+              },
+              "пиши & делай видео": {
+                "imageLink": "assets/images/svg/film.svg",
+                "sortNumber": 2
+              },
+              "запости запрос на мечту": {
+                "imageLink": "assets/images/svg/donat.svg",
+                "sortNumber": 1
+              },
+              "убедительно & честно": {
+                "imageLink": "assets/images/svg/hands.svg",
+                "sortNumber": 3
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_balace": false,
+      "builder_type": "page",
+      "show_reviews": false,
+      "show_messages": false,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "show_reactions": false,
+      "show_find_people": false
+    },
+    "shuffle": {
+      "content": {
+        "body": {
+          "advertisement": {
+            "properties": {
+              "Дубай": {
+                "type": "large",
+                "imageLink": "assets/images/png/mock_ad_banner_5.jpeg"
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "находя подходящие места": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Листая места...": {}
+                }
+              }
+            },
+            "properties": {
+              "обучай нашу систему": {
+                "imageLink": "assets/images/png/Teach.png",
+                "sortNumber": 4
+              },
+              "свайпай в лубую сторону": {
+                "imageLink": "assets/images/png/Shuffle-any.png",
+                "sortNumber": 1
+              },
+              "лайк дизлайк избранное": {
+                "imageLink": "assets/images/png/Like-dislike.png",
+                "sortNumber": 3
+              },
+              "свайпай свойства мест": {
+                "imageLink": "assets/images/png/Swipe-properties.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "show_favorite": true,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 8
+      }
+    },
+    "spinner": {
+      "content": {
+        "body": {
+          "advertisement": {
+            "properties": {
+              "Дубай": {
+                "type": "medium",
+                "imageLink": "assets/images/png/mock_ad_banner_3.jpeg",
+                "sortNumber": -1
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "находя подходящие события": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Ты крутишь...": {}
+                }
+              }
+            },
+            "properties": {
+              "забавно": {
+                "imageLink": "assets/images/png/Giving-like-emoji.png",
+                "sortNumber": 1
+              },
+              "выбираешь & планируешь": {
+                "imageLink": "assets/images/png/choosePlan.png",
+                "sortNumber": 3
+              },
+              "ищешь & букируешь": {
+                "imageLink": "assets/images/png/Booking.png",
+                "sortNumber": 4
+              },
+              "свайпай категорию": {
+                "imageLink": "assets/images/png/Swipe-category.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "show_favorite": true
+    },
+    "support": {
+      "content": {
+        "body": {
+          "page_opener": {
+            "properties": {
+              "Как написать лучший код?": {
+                "value": "https://railway.app/"
+              },
+              "Как пригласить кого-то?": {
+                "value": "https://pub.dev/packages/flutter_html/versions/3.0.0-beta.2"
+              },
+              "Что такое премиум?": {
+                "value": "https://pub.dev/packages/flutter_html"
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "version": "1.0.2",
+    "welcome": {
+      "content": {
+        "body": {
+          "onboarding_card": {
+            "properties": {}
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "chat_page": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "favorites": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "about_user": {
+      "content": {
+        "body": {
+          "multi_select": {
+            "body": {
+              "multi_select": {
+                "properties": {
+                  "Хинди": {
+                    "value": "hindu",
+                    "imageLink": "assets/images/png/hindu.png"
+                  },
+                  "Ислам": {
+                    "value": "islam",
+                    "imageLink": "assets/images/png/muslim_flag.png"
+                  },
+                  "Атеизм": {
+                    "value": "atheism",
+                    "imageLink": "assets/images/png/atheist.png"
+                  },
+                  "Буддизм": {
+                    "value": "buddism",
+                    "imageLink": "assets/images/png/buddism_flag.png"
+                  },
+                  "Иудаизм": {
+                    "value": "judaism",
+                    "imageLink": "assets/images/png/judaism.png"
+                  },
+                  "Христианство": {
+                    "value": "christianity",
+                    "imageLink": "assets/images/png/christianity.png"
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Выбери религию": {}
+                }
+              }
+            }
+          },
+          "single_select": {
+            "body": {
+              "single_select": {
+                "properties": {
+                  "Мужской": {
+                    "value": "male",
+                    "imageLink": "assets/images/png/Male.png",
+                    "sortNumber": 1
+                  },
+                  "Другой": {
+                    "value": "other",
+                    "imageLink": "assets/images/png/Other-gender.png",
+                    "sortNumber": 3
+                  },
+                  "Женский": {
+                    "value": "female",
+                    "imageLink": "assets/images/png/Female.png",
+                    "sortNumber": 2
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Пол": {}
+                }
+              }
+            }
+          },
+          "single_dropdown": {
+            "body": {
+              "single_dropdown": {
+                "properties": {
+                  "Гурман": {
+                    "value": "foodie",
+                    "imageLink": "assets/images/svg/food.svg",
+                    "sortNumber": 4
+                  },
+                  "Семьянин": {
+                    "value": "family",
+                    "imageLink": "assets/images/svg/family.svg",
+                    "sortNumber": 5
+                  },
+                  "Заядлый интеллектуал": {
+                    "value": "pointy",
+                    "imageLink": "assets/images/svg/pointy-head.svg",
+                    "sortNumber": 6
+                  },
+                  "Активный тигр": {
+                    "value": "tiger",
+                    "imageLink": "assets/images/svg/tiger.svg",
+                    "sortNumber": 3
+                  },
+                  "Атлет без тормозов": {
+                    "value": "athlete",
+                    "imageLink": "assets/images/svg/athlete.svg",
+                    "sortNumber": 8
+                  },
+                  "Отдыхающий ленивец": {
+                    "value": "sloth",
+                    "imageLink": "assets/images/svg/sleep.svg",
+                    "sortNumber": 7
+                  },
+                  "Авантюрист в интересе": {
+                    "value": "adventurer",
+                    "imageLink": "assets/images/svg/adventure.svg",
+                    "sortNumber": 1
+                  },
+                  "Любящий плавать ловкач": {
+                    "value": "trickster",
+                    "imageLink": "assets/images/svg/swim.svg",
+                    "sortNumber": 2
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Опиши себя": {}
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "А теперь давай познакомимся": {}
+            }
+          },
+          "text_gradientable": {
+            "properties": {
+              " will be.": {},
+              "выбор твоего досуга": {
+                "gradient": "attentionCard"
+              },
+              "Чем больше инфы про тебя, тем лучше": {}
+            }
+          }
+        },
+        "subtitle": {
+          "single_select": {
+            "body": {
+              "single_select": {
+                "properties": {}
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {}
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.2",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "show_search_bubbles": false
+    },
+    "event_edit": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "center",
+        "horizontal_margin": 8
+      }
+    },
+    "followings": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "onboarding": {
+      "content": {
+        "body": {
+          "onboarding_card": {
+            "properties": {
+              "немного повеселиться": {
+                "duration": 1500,
+                "imageLink": "assets/images/png/onboarding_mock_1.png",
+                "sortNumber": 1
+              },
+              "просто расслабиться": {
+                "duration": 1500,
+                "imageLink": "assets/images/png/onboarding_mock_2.png",
+                "sortNumber": 3
+              },
+              "вариации досуга и бизнеса": {
+                "duration": 1500,
+                "imageLink": "assets/images/png/onboarding_mock_3.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        },
+        "properties": {}
+      },
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 16
+      }
+    },
+    "theme_name": "default",
+    "company_home": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "edit_profile": {
+      "content": {
+        "body": {
+          "popover": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Разрешите добавить себя в поиск компаньонов, чтобы вас могли найти и пригласить. Или вы могли бы сделать это": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "about_company": {
+      "content": {
+        "body": {
+          "multi_select": {
+            "body": {
+              "multi_select": {
+                "properties": {
+                  "Лакшери": {
+                    "value": "luxury"
+                  },
+                  "Туристы": {
+                    "value": "tourists"
+                  },
+                  "Средний класс": {
+                    "value": "middle-class"
+                  },
+                  "Семейные": {
+                    "value": "family-friendly"
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Выберите свою ЦА": {}
+                }
+              }
+            }
+          },
+          "single_dropdown": {
+            "body": {
+              "single_dropdown": {
+                "properties": {
+                  "спорт": {
+                    "type": "leisure",
+                    "value": "gym",
+                    "imageLink": "assets/images/svg/gym.svg",
+                    "sortNumber": 6
+                  },
+                  "клуб": {
+                    "type": "leisure",
+                    "value": "club",
+                    "imageLink": "assets/images/svg/club.svg",
+                    "sortNumber": 3
+                  },
+                  "финансы": {
+                    "type": "business",
+                    "value": "finance",
+                    "imageLink": "assets/images/svg/finance.svg",
+                    "sortNumber": 4
+                  },
+                  "караоке": {
+                    "type": "leisure",
+                    "value": "karaoke",
+                    "imageLink": "assets/images/svg/karaoke.svg",
+                    "sortNumber": 2
+                  },
+                  "аквапарк": {
+                    "type": "leisure",
+                    "value": "aquapark",
+                    "imageLink": "assets/images/svg/aquapark.svg",
+                    "sortNumber": 5
+                  },
+                  "аналитика": {
+                    "type": "business",
+                    "value": "analytics",
+                    "imageLink": "assets/images/svg/analytics_business.svg",
+                    "sortNumber": 5
+                  },
+                  "коворкинг": {
+                    "type": "business",
+                    "value": "coworking",
+                    "imageLink": "assets/images/svg/coworking.svg",
+                    "sortNumber": 2
+                  },
+                  "инвестиции": {
+                    "type": "business",
+                    "value": "investment",
+                    "imageLink": "assets/images/svg/investment.svg",
+                    "sortNumber": 3
+                  },
+                  "ресторан": {
+                    "type": "leisure",
+                    "value": "restaurant",
+                    "imageLink": "assets/images/svg/restaurant.svg",
+                    "sortNumber": 1
+                  },
+                  "бассеин": {
+                    "type": "leisure",
+                    "value": "water pool",
+                    "imageLink": "assets/images/svg/waterpool.svg",
+                    "sortNumber": 4
+                  },
+                  "бизнесмен": {
+                    "type": "business",
+                    "value": "businessman",
+                    "imageLink": "assets/images/svg/businessman.svg",
+                    "sortNumber": 1
+                  },
+                  "конференции": {
+                    "type": "business",
+                    "value": "conferences",
+                    "imageLink": "assets/images/svg/conferences.svg",
+                    "sortNumber": 6
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Ваша ниша": {}
+                }
+              }
+            }
+          },
+          "additional_multi_select": {
+            "body": {
+              "multi_select": {
+                "properties": {}
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Выберите возраст": {}
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Теперь опишите ваш бизнес": {}
+            }
+          },
+          "text_gradientable": {
+            "properties": {
+              " will be.": {},
+              "The more info we get, the better ": {},
+              "ваш трафик": {
+                "gradient": "attentionCard"
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "feed_business": {
+      "content": {
+        "body": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "нажимаешь и случайная выдача": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Его величество случай...": {}
+                }
+              }
+            },
+            "properties": {
+              "press & scroll\n": {
+                "imageLink": "assets/images/png/Press-scroll.png",
+                "sortNumber": 4
+              },
+              "события & места": {
+                "imageLink": "assets/images/png/Events.png",
+                "sortNumber": 1
+              },
+              "фильтруется тегами": {
+                "imageLink": "assets/images/png/Filtering.png",
+                "sortNumber": 2
+              },
+              "выбираешь & нажимаешь": {
+                "imageLink": "assets/images/png/Chips-select.png",
+                "sortNumber": 3
+              }
+            }
+          },
+          "horizontal_list": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Грядущие глобальные": {}
+                }
+              },
+              "horizontal_list": {
+                "properties": {}
+              }
+            },
+            "properties": {
+              "Недвижимость": {
+                "imageLink": "assets/images/png/Real-estate.png",
+                "sortNumber": 1
+              },
+              "торговля": {
+                "imageLink": "assets/images/png/Trade.png",
+                "sortNumber": 3
+              },
+              "интернет бизнес": {
+                "imageLink": "assets/images/png/Internet-business.png",
+                "sortNumber": 9
+              },
+              "здравоохранение": {
+                "imageLink": "assets/images/png/Healtcare.png",
+                "sortNumber": 8
+              },
+              "iT": {
+                "imageLink": "assets/images/png/IT.png",
+                "sortNumber": 4
+              },
+              "туризм и гостеприимство": {
+                "imageLink": "assets/images/png/Baggage.png",
+                "sortNumber": 5
+              },
+              "производство и дистрибуция": {
+                "imageLink": "assets/images/png/production.png",
+                "sortNumber": 2
+              },
+              "финансовые услуги": {
+                "imageLink": "assets/images/png/Fintech.png",
+                "sortNumber": 7
+              },
+              "сель хоз и производство еды": {
+                "imageLink": "assets/images/png/Food-industry.png",
+                "sortNumber": 10
+              },
+              "тренинги и образование": {
+                "imageLink": "assets/images/png/Training.png",
+                "sortNumber": 11
+              },
+              "рестораны и кафе": {
+                "imageLink": "assets/images/png/catering.png",
+                "sortNumber": 6
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "получаешь то, что нужно конкретно тебе": {}
+                }
+              }
+            },
+            "text": {
+              "title": {
+                "properties": {
+                  "Зависит от...": {}
+                }
+              }
+            },
+            "properties": {
+              "гео": {
+                "imageLink": "assets/images/png/Map.png",
+                "sortNumber": 1
+              },
+              "погода вокруг": {
+                "imageLink": "assets/images/png/Sun-clouds.png",
+                "sortNumber": 3
+              },
+              "интересы": {
+                "imageLink": "assets/images/png/Dart.png",
+                "sortNumber": 2
+              },
+              "и ещё 14 параметров": {
+                "imageLink": "assets/images/png/Smile-mood.png",
+                "sortNumber": 4
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "show_daily_recomendation": false
+    },
+    "notifications": {
+      "content": {},
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "company_profile": {
+      "content": {
+        "body": {
+          "button": {
+            "properties": {
+              "ВЫХОД": {
+                "type": "leisure",
+                "color": "#FF453A",
+                "value": "exit",
+                "imageLink": "logout",
+                "sortNumber": 8
+              },
+              "КОШЕЛЁК": {
+                "type": "leisure",
+                "value": "wallet",
+                "imageLink": "wallet",
+                "sortNumber": 2
+              },
+              "АРХИВ": {
+                "type": "leisure",
+                "value": "archive",
+                "imageLink": "archive",
+                "sortNumber": 4
+              },
+              "САППОРТ": {
+                "type": "leisure",
+                "value": "support",
+                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "sortNumber": 7
+              },
+              "РЕДАКТИРОВАТЬ": {
+                "type": "leisure",
+                "value": "edit_profile",
+                "imageLink": "building",
+                "sortNumber": 1
+              },
+              "ДОБАВИТЬ ПРОМО": {
+                "type": "leisure",
+                "value": "promotion",
+                "imageLink": "label",
+                "sortNumber": 3
+              },
+              "УДАЛИТЬ КОМПАНИЮ": {
+                "type": "leisure",
+                "color": "#FF453A",
+                "value": "delete",
+                "imageLink": "profile-delete",
+                "sortNumber": 9
+              }
+            }
+          },
+          "tab_bar": {
+            "properties": {
+              "досуг": {},
+              "бизнес": {}
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Настройки": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.1",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "topCenter",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "forgot_password": {
+      "content": {
+        "body": {
+          "button": {
+            "properties": {
+              "Уупс, попробую ещё": {
+                "color": "#000000"
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Неверный логин / пароль": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Забыт пароль": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog",
+      "vertical_margin": 24,
+      "horizontal_margin": 24
+    },
+    "search_business": {
+      "content": {
+        "body": {
+          "text": {
+            "properties": {
+              "Выбери себя": {}
+            }
+          },
+          "horizontal_list": {
+            "properties": {
+              "Нетворкинг": {
+                "color": "#D808FA",
+                "value": "networking",
+                "imageLink": "assets/images/png/search_business_networking.png",
+                "sortNumber": 6
+              },
+              "Бизнес клубы": {
+                "color": "#FA4C34",
+                "value": "business-clubs",
+                "imageLink": "assets/images/png/search_business_clubs.png",
+                "sortNumber": 1
+              },
+              "Бизнес игры": {
+                "color": "#FA4C34",
+                "value": "business-games",
+                "imageLink": "assets/images/png/search_business_games.png",
+                "sortNumber": 4
+              },
+              "Питч сессии": {
+                "color": "#D808FA",
+                "value": "pitch-sessions",
+                "imageLink": "assets/images/png/search_business_speech.png",
+                "sortNumber": 3
+              },
+              "Семинары и тренинги": {
+                "color": "#FA4C34",
+                "value": "seminars-and-trainings",
+                "imageLink": "assets/images/png/search_business_training.png",
+                "sortNumber": 7
+              },
+              "Digital & IT конференции": {
+                "color": "#FAE634",
+                "value": "digital-and-it-conferences",
+                "imageLink": "assets/images/png/search_business_conferences.png",
+                "sortNumber": 2
+              },
+              "Форумы (выставки индустрии)": {
+                "color": "#FAE634",
+                "value": "forums-industry-exhibitions",
+                "imageLink": "assets/images/png/search_business_exhibition.png",
+                "sortNumber": 5
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Ты это найдёшь": {}
+            }
+          },
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "ищи или выбирай выбор других": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Обычный поиск...": {}
+                }
+              }
+            },
+            "properties": {
+              "events/\nplaces\n": {
+                "imageLink": "assets/images/png/Place-events.png",
+                "sortNumber": 2
+              },
+              "type & get result\n": {
+                "imageLink": "assets/images/png/Result.png",
+                "sortNumber": 3
+              },
+              "рейтинги & подборки": {
+                "imageLink": "assets/images/png/Rating.png",
+                "sortNumber": 4
+              },
+              "предпочтения не работают": {
+                "imageLink": "assets/images/png/Pixelated-sunglasses-emoji.png",
+                "sortNumber": 1
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "pro_account_info": {
+      "content": {
+        "body": {
+          "vertical_list": {
+            "properties": {
+              "Специальный значок профиля": {
+                "sortNumber": 1
+              },
+              "Возможность создавать свои события": {
+                "sortNumber": 2
+              },
+              "Возможность использовать спец уведомления": {
+                "sortNumber": 6
+              },
+              "Возможность делать допродажи услуг": {
+                "sortNumber": 4
+              },
+              "Внутреннее таргетированное продвижение событий, статистика и аналитика": {
+                "sortNumber": 5
+              },
+              "Дополнительная система мотивации своих пользователей через систему поинтов": {
+                "sortNumber": 3
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "profile_settings": {
+      "content": {
+        "body": {
+          "button": {
+            "properties": {
+              "ВЫХОД": {
+                "color": "#FF453A",
+                "value": "exit",
+                "imageLink": "logout",
+                "sortNumber": 1
+              },
+              "КОШЕЛЁК": {
+                "value": "wallet",
+                "imageLink": "wallet",
+                "sortNumber": 3
+              },
+              "САППОРТ": {
+                "value": "support",
+                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "sortNumber": 9
+              },
+              "РЕДАКТИРОВАТЬ": {
+                "value": "edit_profile",
+                "imageLink": "user",
+                "sortNumber": 1
+              },
+              "ЛОКАЦИЯ": {
+                "value": "location",
+                "imageLink": "landmark",
+                "sortNumber": 2
+              },
+              "ИЗБРАННОЕ": {
+                "value": "favorites",
+                "imageLink": "star-fill",
+                "sortNumber": 4
+              },
+              "подписки": {
+                "value": "followings",
+                "imageLink": "heart-fill",
+                "sortNumber": 5
+              },
+              "уведомления": {
+                "value": "notifications",
+                "imageLink": "bell",
+                "sortNumber": 6
+              },
+              "УДАЛИТЬ АККАУНТ": {
+                "color": "#FF453A",
+                "value": "delete",
+                "imageLink": "profile-delete",
+                "sortNumber": 2
+              }
+            }
+          },
+          "tab_bar": {
+            "properties": {
+              "досуг": {},
+              "бизнес": {}
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Настройки": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.1",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "topCenter",
+        "vertical_margin": 24,
+        "horizontal_margin": 16
+      }
+    },
+    "recover_password": {
+      "content": {
+        "body": {
+          "input": {
+            "properties": {
+              "почта": {}
+            }
+          },
+          "button": {
+            "properties": {
+              "СБРОСИТЬ ПАРОЛЬ": {
+                "color": "#000000"
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Ввести свою почту": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog",
+      "vertical_margin": 24,
+      "horizontal_margin": 24
+    },
+    "sms_verification": {
+      "content": {
+        "title": {
+          "text": {
+            "properties": {
+              "Мобильная верификация": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Please type verification code sent to ": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "additional_settings": {
+        "code_digits": 4
+      }
+    },
+    "in_app_notification": {
+      "content": {
+        "properties": {
+          "Расскажи нам больше": {
+            "value": "feed",
+            "duration": 200,
+            "gradient": "badgeIcon",
+            "startDelay": 5000
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog"
+    },
+    "user_type_selection": {
+      "content": {
+        "body": {
+          "redirects": {
+            "properties": {
+              "Компания": {
+                "imageLink": "assets/images/svg/company_layered.svg",
+                "sortNumber": 1
+              },
+              "Личный": {
+                "imageLink": "assets/images/svg/person_layered.svg",
+                "sortNumber": 2
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Велкам": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Выбери тип аккаунта, который хочешь создать": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "invite_people_places": {
+      "content": {
+        "body": {
+          "vertical_list": {
+            "properties": {}
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Пригласить в своё любимое место": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 8
+      }
+    },
+    "premium_account_info": {
+      "content": {
+        "body": {
+          "vertical_list": {
+            "properties": {
+              "Специальный значок профиля": {
+                "sortNumber": 1
+              },
+              "Возможность стать инфлюенсером": {
+                "sortNumber": 6
+              },
+              "Возможность добавлять/предлагать любимые места": {
+                "sortNumber": 3
+              },
+              "Светлая/тёмная тема": {
+                "sortNumber": 4
+              },
+              "Возможность предлагать уникальные свойства к контенту, улучшая уникальный механизм рекомендаций": {
+                "sortNumber": 5
+              },
+              "Возможность оставлять отзывы, снимать видео реакции о местах и событиях, участвовать в составлении рейтингов": {
+                "sortNumber": 2
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "company_credentials_verification": {
+      "content": {
+        "body": {
+          "password_hint": {
+            "properties": {}
+          },
+          "country_selector": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Где вы находитесь": {}
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Счастливы вас видеть": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Чтобы получить доступ вы должны залогиниться": {}
+            }
+          }
+        },
+        "properties": {}
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "personal_credentials_verification": {
+      "content": {
+        "body": {
+          "tab_bar": {
+            "properties": {
+              "почта": {},
+              "аккаунт": {}
+            }
+          },
+          "password_hint": {
+            "properties": {}
+          },
+          "vertical_list": {
+            "properties": {
+              "войти черех Google": {
+                "type": "Google",
+                "value": "working",
+                "imageLink": "assets/images/svg/google_logo.svg",
+                "sortNumber": 1
+              },
+              "войти через apple id": {
+                "type": "Apple",
+                "imageLink": "apple_logo",
+                "sortNumber": 3
+              },
+              "войти через facebook": {
+                "type": "Facebook",
+                "imageLink": "facebook_logo",
+                "sortNumber": 2
+              }
+            }
+          },
+          "country_selector": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Где вы находитесь": {}
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Счастливы видеть вас": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Чтобы получить доступ вы должны залогиниться": {}
+            }
+          }
+        },
+        "properties": {}
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    }
+  }
+}
