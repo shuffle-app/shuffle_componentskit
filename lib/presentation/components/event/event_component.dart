@@ -91,24 +91,27 @@ class EventComponent extends StatelessWidget {
                     height: 156.h,
                     actions: [
                       if (complaintFormComponent != null)
-                        SmallBlurredOutlinedIconButton(
-                          blurValue: 25,
-                          borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
-                          color: Colors.white.withOpacity(0.01),
-                          icon: ImageWidget(
-                            iconData: ShuffleUiKitIcons.alertcircle,
-                            color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                        context.smallOutlinedButton(
+                          blurred: true,
+                          data: BaseUiKitButtonData(
+                            icon: ImageWidget(
+                              iconData: ShuffleUiKitIcons.alertcircle,
+                              color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                            ),
+                            onPressed: () {
+                              showUiKitGeneralFullScreenDialog(
+                                context,
+                                GeneralDialogData(
+                                  topPadding: 0.3.sh,
+                                  useRootNavigator: false,
+                                  child: complaintFormComponent!,
+                                ),
+                              );
+                            },
+                            borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
                           ),
-                          onPressed: () {
-                            showUiKitGeneralFullScreenDialog(
-                              context,
-                              GeneralDialogData(
-                                topPadding: 0.3.sh,
-                                useRootNavigator: false,
-                                child: complaintFormComponent!,
-                              ),
-                            );
-                          },
+                          color: Colors.white.withOpacity(0.01),
+                          blurValue: 25,
                         ),
                     ],
                   ),
