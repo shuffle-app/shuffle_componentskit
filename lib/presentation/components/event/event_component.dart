@@ -89,39 +89,29 @@ class EventComponent extends StatelessWidget {
                     onTap: null,
                     width: 1.sw - horizontalMargin * 2,
                     height: 156.h,
-                  ),
-                  if (complaintFormComponent != null)
-                    Positioned(
-                      bottom: -10.h,
-                      right: -10.w,
-                      child: Transform.scale(
-                        scale: 0.5.sp,
-                        child: context.smallOutlinedButton(
-                          color: UiKitColors.darkNeutral800.withOpacity(0.5),
-                          data: BaseUiKitButtonData(
-                            onPressed: () {
-                              showUiKitGeneralFullScreenDialog(
-                                context,
-                                GeneralDialogData(
-                                  topPadding: 0.3.sh,
-                                  useRootNavigator: false,
-                                  child: complaintFormComponent!,
-                                ),
-                              );
-                            },
-                            icon: Transform.scale(
-                              scale: 1.25.sp,
-                              child: ImageWidget(
-                                // height: 20,
-                                iconData: ShuffleUiKitIcons.alertcircle,
-                                color: context.uiKitTheme?.colorScheme.darkNeutral900,
-                              ),
-                            ),
+                    actions: [
+                      if (complaintFormComponent != null)
+                        SmallBlurredOutlinedIconButton(
+                          blurValue: 25,
+                          borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
+                          color: Colors.white.withOpacity(0.01),
+                          icon: ImageWidget(
+                            iconData: ShuffleUiKitIcons.alertcircle,
+                            color: context.uiKitTheme?.colorScheme.darkNeutral900,
                           ),
-                          blurred: true,
+                          onPressed: () {
+                            showUiKitGeneralFullScreenDialog(
+                              context,
+                              GeneralDialogData(
+                                topPadding: 0.3.sh,
+                                useRootNavigator: false,
+                                child: complaintFormComponent!,
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    ),
+                    ],
+                  ),
                 ],
               ),
             ),

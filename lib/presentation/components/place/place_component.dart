@@ -104,38 +104,29 @@ class PlaceComponent extends StatelessWidget {
                           ),
                         ]
                       : place.branches,
-                ),
-                if (complaintFormComponent != null)
-                  Positioned(
-                    top: (kIsWeb ? 156 : 0.48.sw) - 40,
-                    right: 0,
-                    child: Transform.scale(
-                      scale: 0.5.sp,
-                      child: context.smallOutlinedButton(
-                        color: UiKitColors.darkNeutral800.withOpacity(0.5),
-                        data: BaseUiKitButtonData(
-                          onPressed: () {
-                            showUiKitGeneralFullScreenDialog(
-                              context,
-                              GeneralDialogData(
-                                topPadding: 0.3.sh,
-                                useRootNavigator: false,
-                                child: complaintFormComponent!,
-                              ),
-                            );
-                          },
-                          icon: Transform.scale(
-                            scale: 1.25.sp,
-                            child: ImageWidget(
-                              iconData: ShuffleUiKitIcons.alertcircle,
-                              color: context.uiKitTheme?.colorScheme.darkNeutral900,
-                            ),
-                          ),
+                  actions: [
+                    if (complaintFormComponent != null)
+                      SmallBlurredOutlinedIconButton(
+                        blurValue: 25,
+                        borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
+                        color: Colors.white.withOpacity(0.01),
+                        icon: ImageWidget(
+                          iconData: ShuffleUiKitIcons.alertcircle,
+                          color: context.uiKitTheme?.colorScheme.darkNeutral900,
                         ),
-                        blurred: true,
+                        onPressed: () {
+                          showUiKitGeneralFullScreenDialog(
+                            context,
+                            GeneralDialogData(
+                              topPadding: 0.3.sh,
+                              useRootNavigator: false,
+                              child: complaintFormComponent!,
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                  ),
+                  ],
+                ),
               ],
             ),
             SpacingFoundation.verticalSpace8,
