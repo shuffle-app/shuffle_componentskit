@@ -1037,9 +1037,11 @@ packages:
   shuffle_uikit:
     dependency: "direct main"
     description:
-      path: "../shuffle_uikit"
-      relative: true
-    source: path
+      path: "."
+      ref: "18cfd66899f83c7aa5d49c629b79c81472d74e15"
+      resolved-ref: "18cfd66899f83c7aa5d49c629b79c81472d74e15"
+      url: "https://github.com/shuffle-app/shuffle_ui_kit.git"
+    source: git
     version: "0.0.1"
   sky_engine:
     dependency: transitive
