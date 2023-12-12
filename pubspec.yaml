@@ -17,7 +17,7 @@ dependencies:
 #    path: ../shuffle_uikit
     git:
       url: https://github.com/shuffle-app/shuffle_ui_kit.git
-      ref: 18cfd66899f83c7aa5d49c629b79c81472d74e15
+      ref: v1.0.0
 
   #tools for config workers
   json_annotation: ^4.8.1
