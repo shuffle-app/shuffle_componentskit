@@ -44,7 +44,7 @@ class BottomBookingBar extends StatelessWidget {
 
                       return [
                         if (model.showRoute ?? true)
-                          context.smallOutlinedButton(
+                          context.outlinedButton(
                             blurred: true,
                             data: BaseUiKitButtonData(
                                 onPressed: onShowRoute,
@@ -65,7 +65,7 @@ class BottomBookingBar extends StatelessWidget {
                         ))),
                         SpacingFoundation.horizontalSpace12,
                         if (model.showMagnify ?? true)
-                          context.smallOutlinedButton(
+                          context.outlinedButton(
                               blurred: true,
                               data: BaseUiKitButtonData(
                                 onPressed: onMagnify,

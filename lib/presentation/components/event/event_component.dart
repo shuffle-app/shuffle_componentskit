@@ -89,16 +89,15 @@ class EventComponent extends StatelessWidget {
                     onTap: null,
                     width: 1.sw - horizontalMargin * 2,
                     height: 156.h,
-                  ),
-                  if (complaintFormComponent != null)
-                    Positioned(
-                      bottom: -10.h,
-                      right: -10.w,
-                      child: Transform.scale(
-                        scale: 0.42.sp,
-                        child: context.smallOutlinedButton(
-                          color: UiKitColors.darkNeutral800.withOpacity(0.15),
+                    actions: [
+                      if (complaintFormComponent != null)
+                        context.smallOutlinedButton(
+                          blurred: true,
                           data: BaseUiKitButtonData(
+                            icon: ImageWidget(
+                              iconData: ShuffleUiKitIcons.alertcircle,
+                              color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                            ),
                             onPressed: () {
                               showUiKitGeneralFullScreenDialog(
                                 context,
@@ -109,19 +108,13 @@ class EventComponent extends StatelessWidget {
                                 ),
                               );
                             },
-                            icon: Transform.scale(
-                              scale: 1.25.sp,
-                              child: ImageWidget(
-                                // height: 20,
-                                iconData: ShuffleUiKitIcons.alertcircle,
-                                color: context.uiKitTheme?.colorScheme.darkNeutral900,
-                              ),
-                            ),
+                            borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
                           ),
-                          blurred: true,
+                          color: Colors.white.withOpacity(0.01),
+                          blurValue: 25,
                         ),
-                      ),
-                    ),
+                    ],
+                  ),
                 ],
               ),
             ),

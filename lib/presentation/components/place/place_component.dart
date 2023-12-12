@@ -104,16 +104,15 @@ class PlaceComponent extends StatelessWidget {
                           ),
                         ]
                       : place.branches,
-                ),
-                if (complaintFormComponent != null)
-                  Positioned(
-                    top: (kIsWeb ? 156 : 0.48.sw) - 40,
-                    right: 0,
-                    child: Transform.scale(
-                      scale: 0.42.sp,
-                      child: context.smallOutlinedButton(
-                        color: UiKitColors.darkNeutral800.withOpacity(0.15),
+                  actions: [
+                    if (complaintFormComponent != null)
+                      context.smallOutlinedButton(
+                        blurred: true,
                         data: BaseUiKitButtonData(
+                          icon: ImageWidget(
+                            iconData: ShuffleUiKitIcons.alertcircle,
+                            color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                          ),
                           onPressed: () {
                             showUiKitGeneralFullScreenDialog(
                               context,
@@ -124,18 +123,13 @@ class PlaceComponent extends StatelessWidget {
                               ),
                             );
                           },
-                          icon: Transform.scale(
-                            scale: 1.25.sp,
-                            child: ImageWidget(
-                              iconData: ShuffleUiKitIcons.alertcircle,
-                              color: context.uiKitTheme?.colorScheme.darkNeutral900,
-                            ),
-                          ),
+                          borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
                         ),
-                        blurred: true,
+                        color: Colors.white.withOpacity(0.01),
+                        blurValue: 25,
                       ),
-                    ),
-                  ),
+                  ],
+                ),
               ],
             ),
             SpacingFoundation.verticalSpace8,
