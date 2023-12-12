@@ -81,21 +81,24 @@ class ShuffleComponent extends StatelessWidget {
                 mainAxisAlignment: bodyAlignment.mainAxisAlignment,
                 crossAxisAlignment: bodyAlignment.crossAxisAlignment,
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Text(S.of(context).TryYourself, style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
-                        if (shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null)
-                          HowItWorksWidget(
-                            customOffset: Offset(0.35.sw, 25),
-                            element: configModel.content.title![ContentItemType.hintDialog]!,
-                            onPop: onHowItWorksPoped,
-                          ),
-                      ],
-                    ),
+                  RepaintBoundary(
+                    child: SizedBox(
+                        width: double.infinity,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                          children: [
+                            Text(S.of(context).TryYourself,
+                                style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
+                            if (shuffle.showHowItWorks &&
+                                configModel.content.title?[ContentItemType.hintDialog] != null)
+                              HowItWorksWidget(
+                                customOffset: Offset(0.35.sw, 25),
+                                element: configModel.content.title![ContentItemType.hintDialog]!,
+                                onPop: onHowItWorksPoped,
+                              ),
+                          ],
+                        )),
                   ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
                   SizedBox(
                     height: 1.sh / 1.6,
