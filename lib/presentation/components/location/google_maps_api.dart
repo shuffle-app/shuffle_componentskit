@@ -67,8 +67,7 @@ class GoogleMapsApi {
   }
 
   static _getUri(path, Map<String, String> queryParameters) {
-    final url = Uri.parse('https://$baseUrl$path');
-    url.queryParameters.addAll(queryParameters);
+    final url = Uri.https(baseUrl, path, queryParameters);
 
     log('_getUri resulted url: $url ${url.host}',name: 'GoogleMapsApi');
     return url;
