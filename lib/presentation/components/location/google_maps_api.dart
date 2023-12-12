@@ -67,9 +67,9 @@ class GoogleMapsApi {
   }
 
   static _getUri(path, Map<String, String> queryParameters) {
-    Uri url = Uri.parse('https://$baseUrl$path');
+    final url = Uri.https(proxyPrefix.isNotEmpty ? '$proxyPrefix/proxy' : _baseUrl, proxyPrefix.isNotEmpty ? 'https://$_baseUrl$path' : path, queryParameters);
 
     log('_getUri resulted url: $url ${url.host}',name: 'GoogleMapsApi');
-    return url.replace(queryParameters: queryParameters);
+    return url;
   }
 }
