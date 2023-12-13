@@ -177,7 +177,7 @@ class AboutUserComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
             title: contentTitle!,
-            infoText: 'You can switch it at any time in your profile settings',
+            infoText: S.of(context).SwitchAnyTime,
             child: UiKitCustomTabBar(
               tabs: configSubtitle!.body![ContentItemType.singleSelect]!.properties!.entries
                   .map((property) => UiKitCustomTab(title: property.key))
