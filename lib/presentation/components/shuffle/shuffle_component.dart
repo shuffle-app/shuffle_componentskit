@@ -88,10 +88,12 @@ class ShuffleComponent extends StatelessWidget {
                           clipBehavior: Clip.none,
                           alignment: Alignment.center,
                           children: [
-                            Text(S.of(context).TryYourself,
-                                style: theme?.boldTextTheme.title1, textAlign: TextAlign.center),
-                            if (shuffle.showHowItWorks &&
-                                configModel.content.title?[ContentItemType.hintDialog] != null)
+                            Text(
+                              S.of(context).TryYourself,
+                              style: theme?.boldTextTheme.title1.copyWith(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                            if (shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null)
                               HowItWorksWidget(
                                 customOffset: Offset(0.35.sw, 25),
                                 element: configModel.content.title![ContentItemType.hintDialog]!,
@@ -183,7 +185,7 @@ class ShuffleComponent extends StatelessWidget {
                                 shuffle.dislikeController.forward(from: 0);
                                 onDislike?.call();
                               },
-                              icon: const ImageWidget(
+                              iconInfo: BaseUiKitButtonIconData(
                                 iconData: ShuffleUiKitIcons.heartbrokenfill,
                                 color: Colors.white,
                               ),
@@ -197,7 +199,7 @@ class ShuffleComponent extends StatelessWidget {
                               blurred: true,
                               data: BaseUiKitButtonData(
                                 onPressed: () => onFavorite?.call(shuffle.items[indexNotifier.value].title),
-                                icon: ValueListenableBuilder(
+                                iconWidget: ValueListenableBuilder(
                                   valueListenable: indexNotifier,
                                   builder: (_, value, __) {
                                     return ImageWidget(
@@ -221,7 +223,7 @@ class ShuffleComponent extends StatelessWidget {
                               onPressed: () {
                                 shuffle.likeController.forward(from: 0);
                               },
-                              icon: const ImageWidget(
+                              iconInfo: BaseUiKitButtonIconData(
                                 iconData: ShuffleUiKitIcons.heartfill,
                                 color: Colors.white,
                               ),

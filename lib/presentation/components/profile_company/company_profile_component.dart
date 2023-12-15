@@ -36,10 +36,10 @@ class CompanyProfileComponent extends StatelessWidget {
         .map<BaseUiKitButtonData>(
           (buttonData) => BaseUiKitButtonData(
             text: buttonData.key,
-            icon: ImageWidget(
+            iconInfo: BaseUiKitButtonIconData(
               iconData: GraphicsFoundation.instance.iconFromString(buttonData.value.imageLink ?? ''),
-              color: buttonData.value.color ?? Colors.white,
-              width: iconWidth,
+              color: buttonData.value.color ?? context.uiKitTheme?.colorScheme.inverseSurface,
+              size: iconWidth,
             ),
             onPressed: () => onProfileItemChosen(buttonData.value.value),
           ),

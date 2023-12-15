@@ -26,6 +26,10 @@ class SupportComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.uiKitTheme;
+    final surface1 = theme?.colorScheme.surface1;
+    final surface3 = theme?.colorScheme.surface3;
+
     return Scaffold(
       body: BlurredAppBarPage(
         centerTitle: true,
@@ -66,16 +70,19 @@ class SupportComponent extends StatelessWidget {
                         ),
                       ),
                       text: S.of(context).Faq.toUpperCase(),
-                      icon: DecoratedBox(
-                        decoration: const BoxDecoration(
+                      iconWidget: DecoratedBox(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.white),
+                            BorderSide(
+                              width: 2,
+                              color: context.uiKitTheme?.colorScheme.inversePrimary ?? Colors.transparent,
+                            ),
                           ),
                         ),
-                        child: const ImageWidget(
+                        child: ImageWidget(
                           iconData: ShuffleUiKitIcons.chevronright,
-                          color: Colors.white,
+                          color: context.uiKitTheme?.colorScheme.inversePrimary,
                         ).paddingAll(SpacingFoundation.verticalSpacing12),
                       ),
                     ),
@@ -90,36 +97,38 @@ class SupportComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 UiKitCardWrapper(
-                  color: ColorsFoundation.surface1,
+                  borderRadius: BorderRadiusFoundation.max,
+                  color: surface1,
                   child: UiKitInputFieldNoIcon(
                     controller: _nameController,
                     hintText: S.of(context).YourName.toUpperCase(),
                     // validator: inputFieldValidator,
-                    fillColor: ColorsFoundation.surface3,
+                    fillColor: surface3,
                     // onChanged: (value) => onNameChanged?.call(value),
                   ).paddingAll(EdgeInsetsFoundation.all4),
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitCardWrapper(
-                  color: ColorsFoundation.surface1,
+                  borderRadius: BorderRadiusFoundation.max,
+                  color: surface1,
                   child: UiKitInputFieldNoIcon(
                     controller: _emailController,
                     hintText: S.of(context).YourEmail.toUpperCase(),
                     // validator: inputFieldValidator,
-                    fillColor: ColorsFoundation.surface3,
+                    fillColor: surface3,
                     // onChanged: (value) => onNickNameChanged?.call(value),
                   ).paddingAll(EdgeInsetsFoundation.all4),
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitCardWrapper(
-                  color: ColorsFoundation.surface1,
+                  color: surface1,
                   child: UiKitInputFieldNoIcon(
                     borderRadius: BorderRadiusFoundation.all24,
                     controller: _textController,
                     minLines: 3,
                     hintText: S.of(context).DescribeYourIssue.toUpperCase(),
                     // validator: inputFieldValidator,
-                    fillColor: ColorsFoundation.surface3,
+                    fillColor: surface3,
                     // onChanged: (value) => onNickNameChanged?.call(value),
                   ).paddingAll(EdgeInsetsFoundation.all4),
                 ),

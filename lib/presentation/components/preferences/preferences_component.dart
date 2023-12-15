@@ -43,34 +43,37 @@ class PreferencesComponent extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: S.of(context).TapOnceToChoose,
-                    style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
+                    style: subHeadline,
                   ),
                   TextSpan(
-                      text: S.of(context).WhatYouLike.toLowerCase(),
-                      style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
+                      text: S.of(context).WhatYouLike.toLowerCase(), style: subHeadline?.copyWith(color: Colors.transparent)),
                   TextSpan(
                     text: S.of(context).TapTwiceToMarkYourFavorites,
-                    style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
+                    style: subHeadline,
                   )
                 ],
               )),
               GradientableWidget(
                 gradient: GradientFoundation.attentionCard,
                 child: RichText(
-                    // key: _richTextKey,
-                    text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: S.of(context).TapOnceToChoose,
-                      style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
-                    ),
-                    TextSpan(text: S.of(context).WhatYouLike.toLowerCase(), style: subHeadline),
-                    TextSpan(
-                      text: S.of(context).TapTwiceToMarkYourFavorites,
-                      style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
-                    )
-                  ],
-                )),
+                  // key: _richTextKey,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: S.of(context).TapOnceToChoose,
+                        style: subHeadline?.copyWith(color: Colors.transparent),
+                      ),
+                      TextSpan(
+                        text: S.of(context).WhatYouLike.toLowerCase(),
+                        style: subHeadline?.copyWith(color: Colors.white),
+                      ),
+                      TextSpan(
+                        text: S.of(context).TapTwiceToMarkYourFavorites,
+                        style: subHeadline?.copyWith(color: Colors.transparent),
+                      )
+                    ],
+                  ),
+                ),
               )
             ]).paddingSymmetric(horizontal: horizontalMargin),
             if (model.showBubbleSearch ?? true) ...[
@@ -97,10 +100,10 @@ class PreferencesComponent extends StatelessWidget {
                   return ClipRect(
                       clipBehavior: Clip.hardEdge,
                       child: Bubbles(
-                    width: 1.sw,
-                    height: size.maxHeight,
-                    widgets: preferences.chips,
-                  ));
+                        width: 1.sw,
+                        height: size.maxHeight,
+                        widgets: preferences.chips,
+                      ));
                 },
               ).paddingOnly(bottom: 40.h),
             ),

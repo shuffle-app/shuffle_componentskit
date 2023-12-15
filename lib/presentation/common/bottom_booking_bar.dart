@@ -23,62 +23,63 @@ class BottomBookingBar extends StatelessWidget {
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.center,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.transparent,
-              Colors.black,
-            ],
-          ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            context.uiKitTheme?.colorScheme.surface.withOpacity(0.5) ?? Colors.transparent,
+            context.uiKitTheme?.colorScheme.surface ?? Colors.transparent,
+          ],
         ),
-        child: SafeArea(
-            top: false,
-            child: Row(
-                    crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-                    mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-                    mainAxisSize: MainAxisSize.max,
-                    children: () {
-                      final svg = Assets.images.svg;
-
-                      return [
-                        if (model.showRoute ?? true)
-                          context.outlinedButton(
-                            blurred: true,
-                            data: BaseUiKitButtonData(
-                                onPressed: onShowRoute,
-                                icon: ImageWidget(
-                                  height: 18.sp,
-                                  svgAsset: svg.route,
-                                  color: Colors.white,
-                                )),
-                          ),
-                        SpacingFoundation.horizontalSpace12,
-                        Expanded(
-                            child: context.gradientButton(
-                                data: BaseUiKitButtonData(
-                          text: S.of(context).BookIt,
-                          onPressed: onBook,
-                          loading: isLoading,
-                          // fit: ButtonFit.hugContent
-                        ))),
-                        SpacingFoundation.horizontalSpace12,
-                        if (model.showMagnify ?? true)
-                          context.outlinedButton(
-                              blurred: true,
-                              data: BaseUiKitButtonData(
-                                onPressed: onMagnify,
-                                icon: ImageWidget(
-                                  height: 18.sp,
-                                  svgAsset: svg.searchPeople,
-                                  color: Colors.white,
-                                ),
-                              )),
-                      ];
-                    }())
-                .paddingSymmetric(
-                    vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
-                    horizontal: (model.positionModel?.horizontalMargin ?? 0).toDouble())));
+      ),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+          mainAxisSize: MainAxisSize.max,
+          children: () {
+            return [
+              if (model.showRoute ?? true)
+                context.outlinedButton(
+                  blurred: true,
+                  data: BaseUiKitButtonData(
+                    onPressed: onShowRoute,
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.route,
+                    ),
+                  ),
+                ),
+              SpacingFoundation.horizontalSpace12,
+              Expanded(
+                child: context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    text: S.of(context).BookIt,
+                    onPressed: onBook,
+                    loading: isLoading,
+                    // fit: ButtonFit.hugContent
+                  ),
+                ),
+              ),
+              SpacingFoundation.horizontalSpace12,
+              if (model.showMagnify ?? true)
+                context.outlinedButton(
+                  blurred: true,
+                  data: BaseUiKitButtonData(
+                    onPressed: onMagnify,
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.searchpeople,
+                    ),
+                  ),
+                ),
+            ];
+          }(),
+        ).paddingSymmetric(
+          vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
+          horizontal: (model.positionModel?.horizontalMargin ?? 0).toDouble(),
+        ),
+      ),
+    );
   }
 }

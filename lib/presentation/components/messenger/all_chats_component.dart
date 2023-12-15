@@ -27,7 +27,7 @@ class AllChatsComponent extends StatelessWidget {
       autoImplyLeading: true,
       appBarTrailing: ImageWidget(
         svgAsset: GraphicsFoundation.instance.svg.search,
-        color: Colors.white,
+        color: context.uiKitTheme?.colorScheme.inverseSurface,
       ),
       children: [
         PagedListView<int, ChatItemUiModel>.separated(

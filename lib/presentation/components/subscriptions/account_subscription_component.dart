@@ -28,8 +28,9 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
   Widget build(BuildContext context) {
     final verticalMargin = (widget.configModel.positionModel?.verticalMargin ?? 0).toDouble();
     final horizontalMargin = (widget.configModel.positionModel?.horizontalMargin ?? 0).toDouble();
-    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
-    final regularTextTheme = context.uiKitTheme?.regularTextTheme;
+    final theme = context.uiKitTheme;
+    final boldTextTheme = theme?.boldTextTheme;
+    final regularTextTheme = theme?.regularTextTheme;
 
     return SingleChildScrollView(
       child: Column(
@@ -71,7 +72,9 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
           ),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
-            gradient: GradientFoundation.shunyGreyGradient,
+            gradient: theme?.themeMode == ThemeMode.light
+                ? GradientFoundation.lightShunyGreyGradient
+                : GradientFoundation.shunyGreyGradient,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,

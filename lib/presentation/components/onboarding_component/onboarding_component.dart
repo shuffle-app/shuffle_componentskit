@@ -125,6 +125,7 @@ class _OnboardingComponentState extends State<OnboardingComponent> with SingleTi
     return Stack(
       fit: StackFit.expand,
       children: [
+        Container(color: Colors.black),
         Positioned(
           bottom: 0,
           child: AnimatedOpacity(

@@ -94,9 +94,9 @@ class EventComponent extends StatelessWidget {
                         context.smallOutlinedButton(
                           blurred: true,
                           data: BaseUiKitButtonData(
-                            icon: ImageWidget(
+                            iconInfo: BaseUiKitButtonIconData(
                               iconData: ShuffleUiKitIcons.alertcircle,
-                              color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                              color: context.uiKitTheme?.colorScheme.darkNeutral800,
                             ),
                             onPressed: () {
                               showUiKitGeneralFullScreenDialog(
@@ -108,7 +108,6 @@ class EventComponent extends StatelessWidget {
                                 ),
                               );
                             },
-                            borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
                           ),
                           color: Colors.white.withOpacity(0.01),
                           blurValue: 25,
@@ -151,6 +150,9 @@ class EventComponent extends StatelessWidget {
         ),
       ],
       // ),
-    ).paddingSymmetric(vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(), horizontal: horizontalMargin);
+    ).paddingSymmetric(
+      vertical: (model.positionModel?.verticalMargin ?? 0).toDouble(),
+      horizontal: horizontalMargin,
+    );
   }
 }

@@ -187,11 +187,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             context.outlinedButton(
               data: BaseUiKitButtonData(
                 onPressed: _onLogoAddRequested,
-                icon: ImageWidget(
+                iconInfo: BaseUiKitButtonIconData(
                   iconData: ShuffleUiKitIcons.cameraplus,
-                  color: theme?.colorScheme.inversePrimary,
-                  height: 16.h,
-                  width: 16.h,
+                  size: 16.h,
                 ),
               ),
             )
@@ -239,11 +237,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     });
                   }
                 },
-                icon: ImageWidget(
+                iconInfo: BaseUiKitButtonIconData(
                   iconData: ShuffleUiKitIcons.clock,
-                  color: theme?.colorScheme.inversePrimary,
-                  height: 16.h,
-                  width: 16.h,
+                  size: 16.h,
                 ),
               ),
             ),
@@ -270,11 +266,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     });
                   }
                 },
-                icon: ImageWidget(
+                iconInfo: BaseUiKitButtonIconData(
                   iconData: ShuffleUiKitIcons.clock,
-                  color: theme?.colorScheme.inversePrimary,
-                  height: 16.h,
-                  width: 16.h,
+                  size: 16.h,
                 ),
               ),
             ),
@@ -304,11 +298,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   });
                 }
               },
-              icon: ImageWidget(
+              iconInfo: BaseUiKitButtonIconData(
                 iconData: ShuffleUiKitIcons.calendar,
-                color: theme?.colorScheme.inversePrimary,
-                height: 16.h,
-                width: 16.h,
+                size: 16.h,
               ),
             ),
           ),

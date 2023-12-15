@@ -109,9 +109,9 @@ class PlaceComponent extends StatelessWidget {
                       context.smallOutlinedButton(
                         blurred: true,
                         data: BaseUiKitButtonData(
-                          icon: ImageWidget(
+                          iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.alertcircle,
-                            color: context.uiKitTheme?.colorScheme.darkNeutral900,
+                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
                           ),
                           onPressed: () {
                             showUiKitGeneralFullScreenDialog(
@@ -123,7 +123,6 @@ class PlaceComponent extends StatelessWidget {
                               ),
                             );
                           },
-                          borderColor: context.uiKitTheme?.colorScheme.darkNeutral800.withOpacity(0.08),
                         ),
                         color: Colors.white.withOpacity(0.01),
                         blurValue: 25,
@@ -172,8 +171,8 @@ class PlaceComponent extends StatelessWidget {
                                               ComponentBuilder(child: EventComponent(event: event)));
                                         }
                                       },
-                                      icon: Icon(
-                                        CupertinoIcons.right_chevron,
+                                      iconInfo: BaseUiKitButtonIconData(
+                                        iconData: CupertinoIcons.right_chevron,
                                         color: theme?.colorScheme.inversePrimary,
                                         size: 20.w,
                                       ),

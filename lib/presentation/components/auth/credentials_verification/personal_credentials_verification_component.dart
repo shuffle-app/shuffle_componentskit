@@ -242,7 +242,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             enabled: true,
                             hintText: S.of(context).Email.toUpperCase(),
                             controller: widget.credentialsController,
-                            fillColor: ColorsFoundation.surface3,
+                            fillColor: colorScheme?.surface3,
                             validator: widget.credentialsValidator,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
@@ -253,7 +253,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             enabled: true,
                             hintText: S.of(context).Password.toUpperCase(),
                             controller: widget.passwordController,
-                            fillColor: ColorsFoundation.surface3,
+                            fillColor: colorScheme?.surface3,
                             validator: widget.passwordValidator,
                             icon: GestureDetector(
                               onTap: () => setState(() => obscurePassword = !obscurePassword),
@@ -298,25 +298,25 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   ],
                 ),
               ),
-              if(privacyCaptions.isNotEmpty)
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
-                  TextSpan(
-                      text: privacyCaptions.first.key,
-                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => context
-                            .push(WebViewScreen(title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                  TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
-                  TextSpan(
-                      text: privacyCaptions.last.key,
-                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => context
-                            .push(WebViewScreen(title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
-                ]),
-              ),
+              if (privacyCaptions.isNotEmpty)
+                RichText(
+                  text: TextSpan(children: [
+                    TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
+                    TextSpan(
+                        text: privacyCaptions.first.key,
+                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => context.push(
+                              WebViewScreen(title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
+                    TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
+                    TextSpan(
+                        text: privacyCaptions.last.key,
+                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => context
+                              .push(WebViewScreen(title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                  ]),
+                ),
               KeyboardVisibilityBuilder(
                 builder: (context, visible) => AnimatedSwitcher(
                   reverseDuration: const Duration(milliseconds: 300),
@@ -338,7 +338,9 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             context.button(
                               data: BaseUiKitButtonData(
                                 text: S.of(context).Next.toUpperCase(),
-                                onPressed: widget.onSubmit,
+                                onPressed: widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
+                                    ? null
+                                    : widget.onSubmit,
                                 loading: widget.loading,
                                 fit: ButtonFit.fitWidth,
                               ),

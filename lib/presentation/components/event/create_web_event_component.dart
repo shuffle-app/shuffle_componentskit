@@ -276,9 +276,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                               scale: 0.6,
                               child: context.smallOutlinedButton(
                                 data: BaseUiKitButtonData(
-                                    icon: const ImageWidget(
+                                    iconInfo: BaseUiKitButtonIconData(
                                       iconData: ShuffleUiKitIcons.clock,
-                                      color: Colors.white,
                                     ),
                                     onPressed: () async {
                                       await showUiKitTimeFromToDialog(context, (from, to) {

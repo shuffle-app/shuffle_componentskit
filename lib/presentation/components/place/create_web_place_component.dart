@@ -299,9 +299,8 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                 )),
                             context.smallOutlinedButton(
                               data: BaseUiKitButtonData(
-                                  icon: const ImageWidget(
+                                  iconInfo: BaseUiKitButtonIconData(
                                     iconData: ShuffleUiKitIcons.clock,
-                                    color: Colors.white,
                                   ),
                                   onPressed: () async {
                                     await showUiKitTimeFromToDialog(context, (from, to) {

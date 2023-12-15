@@ -34,7 +34,6 @@ class FollowingsComponent extends StatelessWidget {
             crossAxisAlignment: bodyAlignment.crossAxisAlignment,
             mainAxisAlignment: bodyAlignment.mainAxisAlignment,
             children: [
-              SpacingFoundation.verticalSpace24,
               if (followers != null && followers!.isNotEmpty) ...[
                 UiKitCustomTabBar(
                   onTappedTab: (index) {
@@ -77,7 +76,6 @@ class FollowingsComponent extends StatelessWidget {
           ),
         ).paddingSymmetric(
           horizontal: screenParams?.horizontalMargin?.toDouble() ?? 0,
-          vertical: screenParams?.verticalMargin?.toDouble() ?? 0,
         ),
       ],
     );

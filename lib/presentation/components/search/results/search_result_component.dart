@@ -27,6 +27,7 @@ class SearchResultComponent extends StatelessWidget {
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final colorScheme = context.uiKitTheme?.colorScheme;
 
     return BlurredAppBarPage(
       title: S.of(context).YoullFindIt,
@@ -41,11 +42,14 @@ class SearchResultComponent extends StatelessWidget {
           width: double.infinity,
           child: UiKitInputFieldRightIcon(
             autofocus: autofocus,
-            fillColor: ColorsFoundation.surface3,
+            fillColor: colorScheme?.surface3,
             hintText: S.of(context).Search.toUpperCase(),
             controller: searchController,
             icon: searchController.text.isEmpty
-                ? ImageWidget(iconData: ShuffleUiKitIcons.search, color: Colors.white.withOpacity(0.5))
+                ? ImageWidget(
+                    svgAsset: GraphicsFoundation.instance.svg.search,
+                    color: colorScheme?.bodyTypography,
+                  )
                 : null,
             onPressed: () {
               searchController.clear();

@@ -46,11 +46,10 @@ class ProfileComponent extends StatelessWidget {
       title: S.of(context).MyCard,
       leading: context.badgeButtonNoValue(
         data: BaseUiKitButtonData(
-          icon: ImageWidget(
-            svgAsset: GraphicsFoundation.instance.svg.settings,
+          iconInfo: BaseUiKitButtonIconData(
+            iconData: ShuffleUiKitIcons.settings,
             color: context.uiKitTheme?.colorScheme.inversePrimary,
-            height: 26.h,
-            fit: BoxFit.fitHeight,
+            size: 26.h,
           ),
           onPressed: onSettingsPressed,
         ),
@@ -58,11 +57,10 @@ class ProfileComponent extends StatelessWidget {
       ),
       appBarTrailing: context.badgeButton(
         data: BaseUiKitButtonData(
-          icon: ImageWidget(
-            svgAsset: GraphicsFoundation.instance.svg.message,
+          iconInfo: BaseUiKitButtonIconData(
+            iconData: ShuffleUiKitIcons.message,
             color: context.uiKitTheme?.colorScheme.inversePrimary,
-            height: 26.h,
-            fit: BoxFit.fitHeight,
+            size: 26.h,
           ),
           onPressed: onMessagePressed,
         ),
@@ -210,7 +208,8 @@ class ProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         GradientableWidget(
           gradient: GradientFoundation.attentionCard,
-          child: context.outlinedButton(
+          child: context.outlinedGradientButton(
+            gradient: GradientFoundation.touchIdgradientBorder,
             data: BaseUiKitButtonData(
               fit: ButtonFit.fitWidth,
               text: S.of(context).FulfillTheDream.toUpperCase(),

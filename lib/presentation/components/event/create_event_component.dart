@@ -247,9 +247,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                       });
                     });
                   },
-                  icon: ImageWidget(
+                  iconInfo: BaseUiKitButtonIconData(
                     iconData: ShuffleUiKitIcons.clock,
-                    color: theme?.colorScheme.inversePrimary,
                   ),
                 ),
               ),
@@ -288,9 +287,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                     })
                                   });
                         },
-                  icon: ImageWidget(
+                  iconInfo: BaseUiKitButtonIconData(
                     iconData: ShuffleUiKitIcons.calendar,
-                    color: theme?.colorScheme.inversePrimary,
                   ),
                 ),
               ),

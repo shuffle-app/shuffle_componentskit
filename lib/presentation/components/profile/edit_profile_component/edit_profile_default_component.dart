@@ -119,10 +119,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
                     data: BaseUiKitButtonData(
                       fit: ButtonFit.fitWidth,
                       text: S.of(context).Premium.toUpperCase(),
-                      icon: const ImageWidget(
+                      iconInfo: BaseUiKitButtonIconData(
                         iconData: ShuffleUiKitIcons.star2,
-                        color: Colors.black,
-                        fit: BoxFit.fitHeight,
                       ),
                       onPressed: onPremiumAccountRequested,
                     ),
@@ -158,7 +156,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         title: Text(
                           hintTitle,
                           style: theme?.regularTextTheme.body.copyWith(
-                            color: theme.colorScheme.primary,
+                            color: theme.colorScheme.bodyTypography,
                           ),
                           textAlign: TextAlign.center,
                         ),

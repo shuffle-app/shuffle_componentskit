@@ -167,9 +167,8 @@ class _InviteComponentState extends State<InviteComponent> {
                               setState(() => _date = selectedDate);
                             }
                           }),
-                          icon: const ImageWidget(
+                          iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.calendar,
-                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -221,7 +220,7 @@ class _InviteComponentState extends State<InviteComponent> {
                               widget.onAddWishTap?.call(_wishController.text, _date!);
                             }
                           },
-                          icon: const ImageWidget(
+                          iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
                           ),
                         ),

@@ -59,7 +59,12 @@ class SettingsComponent extends StatelessWidget {
         ],
         Theme(
           data: ThemeData(
-              textButtonTheme: TextButtonThemeData(style: uiKitTheme!.textButtonStyle(uiKitTheme.colorScheme.inversePrimary))),
+            textButtonTheme: TextButtonThemeData(
+              style: uiKitTheme!.textButtonStyle(uiKitTheme.colorScheme.inversePrimary).copyWith(
+                    padding: const MaterialStatePropertyAll(EdgeInsets.zero),
+                  ),
+            ),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: bodyAligment.crossAxisAlignment,
@@ -75,7 +80,9 @@ class SettingsComponent extends StatelessWidget {
         Theme(
           data: ThemeData(
             textButtonTheme: TextButtonThemeData(
-              style: context.uiKitTheme?.textButtonStyle(UiKitColors.error),
+              style: context.uiKitTheme?.textButtonStyle(UiKitColors.error).copyWith(
+                    padding: const MaterialStatePropertyAll(EdgeInsets.zero),
+                  ),
             ),
           ),
           child: Column(

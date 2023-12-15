@@ -56,7 +56,6 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
         UiKitCardWrapper(
           height: 0.55.sh,
           borderRadius: BorderRadius.zero,
-          color: ColorsFoundation.surface1,
           child: ListView.separated(
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) => places[index],
@@ -83,9 +82,8 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
               blurred: false,
               data: BaseUiKitButtonData(
                 onPressed: onDatePressed,
-                icon: const ImageWidget(
+                iconInfo: BaseUiKitButtonIconData(
                   iconData: ShuffleUiKitIcons.calendar,
-                  color: Colors.white,
                 ),
               ),
             ),
