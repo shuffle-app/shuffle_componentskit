@@ -180,10 +180,12 @@ class AboutUserComponent extends StatelessWidget {
                 onSelected: (personType) => onPersonTypeChanged?.call(personType),
               )),
         ],
+        //Type of content selection section
         if (model.content.subtitle?[ContentItemType.singleSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
             title: contentTitle!,
+            infoText: S.of(context).SwitchAnyTime,
             child: UiKitCustomTabBar(
               tabs: configSubtitle!.body![ContentItemType.singleSelect]!.properties!.entries
                   .map((property) => UiKitCustomTab(title: property.key))
@@ -199,6 +201,7 @@ class AboutUserComponent extends StatelessWidget {
             ),
           ),
         ],
+        //Religions selection section
         if (model.content.body?[ContentItemType.multiSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
