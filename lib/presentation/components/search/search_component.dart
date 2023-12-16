@@ -143,22 +143,18 @@ class SearchComponent extends StatelessWidget {
                         ),
                       ),
                     ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
-        // SpacingFoundation.verticalSpace24,
         ListView(
-          // clipBehavior: Clip.none,
           primary: true,
           padding: EdgeInsets.zero,
           controller: scrollController,
-          // child: Column(
-          //   mainAxisSize: MainAxisSize.min,
-          //   mainAxisAlignment: (model.positionModel?.bodyAlignment).mainAxisAlignment,
-          //   crossAxisAlignment: (model.positionModel?.bodyAlignment).crossAxisAlignment,
           children: [
             127.h.heightBox,
             if (model.showFree ?? false) ...[
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
-                action: context.smallButton(data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it')),
+                action: context.smallButton(
+                  data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it'),
+                ),
                 title: Stack(
                   children: [
                     RichText(
@@ -182,7 +178,10 @@ class SearchComponent extends StatelessWidget {
                               text: S.of(context).SelectionOfTheBest,
                               style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
                             ),
-                            TextSpan(text: S.of(context).FreePlaces, style: theme?.boldTextTheme.subHeadline)
+                            TextSpan(
+                              text: S.of(context).FreePlaces,
+                              style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
+                            )
                           ],
                         ),
                       ),
@@ -208,7 +207,6 @@ class SearchComponent extends StatelessWidget {
               ),
             ).paddingOnly(left: horizontalMargin),
             SpacingFoundation.verticalSpace24,
-
             Stack(clipBehavior: Clip.none, children: [
               Text(S.of(context).TopPlacesRatedBy, style: theme?.boldTextTheme.title1),
               () {

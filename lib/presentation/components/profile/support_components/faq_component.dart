@@ -83,7 +83,7 @@ class _FAQComponentState extends State<FAQComponent> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if(index == 0) SpacingFoundation.verticalSpace16,
+                if (index == 0) SpacingFoundation.verticalSpace16,
                 context.button(
                   reversed: true,
                   isTextButton: true,
@@ -97,7 +97,7 @@ class _FAQComponentState extends State<FAQComponent> {
                       ),
                     ),
                     text: itemsToShow[index],
-                    icon: const ImageWidget(
+                    iconInfo: BaseUiKitButtonIconData(
                       iconData: ShuffleUiKitIcons.chevronright,
                       color: Colors.white,
                     ),

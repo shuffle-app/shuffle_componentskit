@@ -102,11 +102,9 @@ class PlacePreview extends StatelessWidget {
                           blurred: true,
                           data: BaseUiKitButtonData(
                             onPressed: onFavoriteChanged,
-                            icon: ImageWidget(
-                              height: isFavorite ? 15.w : null,
-                              fit: isFavorite ? BoxFit.fitWidth : null,
-                              color: Colors.white,
+                            iconInfo: BaseUiKitButtonIconData(
                               iconData: isFavorite ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
+                              size: isFavorite ? 15.w : null,
                             ),
                           ),
                         ),

@@ -43,9 +43,8 @@ class ChatComponent extends StatelessWidget {
       canFoldAppBar: false,
       appBarTrailing: context.smallGradientButton(
         data: BaseUiKitButtonData(
-          icon: ImageWidget(
-            svgAsset: GraphicsFoundation.instance.svg.profilePlus,
-            fit: BoxFit.fitHeight,
+          iconInfo: BaseUiKitButtonIconData(
+            iconData: ShuffleUiKitIcons.profileplus,
           ),
           onPressed: onProfileTapped,
         ),
@@ -148,6 +147,7 @@ class ChatComponent extends StatelessWidget {
           ),
           separatorBuilder: (context, index) => SpacingFoundation.verticalSpace8,
         ),
+        SpacingFoundation.verticalSpace4,
         UiKitCardWrapper(
           child: UiKitInputFieldRightIcon(
             fillColor: context.uiKitTheme?.colorScheme.surface3,

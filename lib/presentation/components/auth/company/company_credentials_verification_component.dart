@@ -148,7 +148,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                       enabled: true,
                       hintText: 'EMAIL',
                       controller: credentialsController,
-                      fillColor: ColorsFoundation.surface3,
+                      fillColor: colorScheme?.surface3,
                       validator: credentialsValidator,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
@@ -160,7 +160,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                         enabled: true,
                         hintText: 'PASSWORD',
                         controller: passwordController,
-                        fillColor: ColorsFoundation.surface3,
+                        fillColor: colorScheme?.surface3,
                         validator: passwordValidator,
                         icon: GestureDetector(
                           onTap: () => setState(() => obscurePassword = !obscurePassword),
@@ -221,7 +221,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                   context.button(
                     data: BaseUiKitButtonData(
                       text: S.of(context).Next.toUpperCase(),
-                      onPressed: onSubmitted,
+                      onPressed: credentialsController.text.isEmpty || passwordController.text.isEmpty ? null : onSubmitted,
                       loading: loading,
                     ),
                   ),

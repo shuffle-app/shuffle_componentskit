@@ -48,11 +48,11 @@ class _LastBody extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: S.of(context).ThisIs,
-                      style: regularTextTheme?.title1,
+                      style: regularTextTheme?.title1.copyWith(color: Colors.white),
                     ),
                     TextSpan(
                       text: S.of(context).Shuffle.toLowerCase(),
-                      style: boldTextTheme?.title1,
+                      style: boldTextTheme?.title1.copyWith(color: Colors.white),
                     )
                   ],
                 ),
@@ -60,7 +60,7 @@ class _LastBody extends StatelessWidget {
               SpacingFoundation.verticalSpace16,
               Text(
                 S.of(context).SmartLeisureSelection,
-                style: boldTextTheme?.subHeadline,
+                style: boldTextTheme?.subHeadline.copyWith(color: Colors.white),
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),
               if (bigScreen) ...[
@@ -70,15 +70,18 @@ class _LastBody extends StatelessWidget {
               ],
               if (!bigScreen) SpacingFoundation.verticalSpace16,
               Hero(
-                  tag: S.of(context).Welcome.toLowerCase(),
-                  transitionOnUserGestures: true,
-                  child: context.button(
-                    data: BaseUiKitButtonData(
-                      text: S.of(context).GetStarted,
-                      onPressed: onFinished,
-                      loading: loading,
-                    ),
-                  )).paddingSymmetric(
+                tag: S.of(context).Welcome.toLowerCase(),
+                transitionOnUserGestures: true,
+                child: context.button(
+                  data: BaseUiKitButtonData(
+                    text: S.of(context).GetStarted,
+                    onPressed: onFinished,
+                    loading: loading,
+                    textColor: Colors.black,
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+              ).paddingSymmetric(
                 horizontal: EdgeInsetsFoundation.horizontal16,
               ),
               SpacingFoundation.verticalSpace24,

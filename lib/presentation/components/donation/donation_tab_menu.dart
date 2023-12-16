@@ -86,7 +86,9 @@ class _DonationTabMenuState extends State<_DonationTabMenu> {
                     data: BaseUiKitButtonData(
                       onPressed: () => widget.onNextButtonTap?.call(),
                       fit: ButtonFit.fitWidth,
-                      icon: const Icon(CupertinoIcons.chevron_down),
+                      iconInfo: BaseUiKitButtonIconData(
+                        iconData: CupertinoIcons.chevron_down,
+                      ),
                       text: S.of(context).NextNPeople(7).toUpperCase(),
                     ),
                   )

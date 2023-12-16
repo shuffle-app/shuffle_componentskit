@@ -234,7 +234,7 @@ class FeedComponent extends StatelessWidget {
                     selected: feed.activeFilterChips?.map((e) => e.title).contains(S.of(context).Favorites) ?? false,
                     title: S.of(context).Favorites,
                     onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(S.of(context).Favorites),
-                    icon: ShuffleUiKitIcons.star,
+                    icon: ShuffleUiKitIcons.starfill,
                   ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
                   Wrap(
                     spacing: SpacingFoundation.verticalSpacing8,

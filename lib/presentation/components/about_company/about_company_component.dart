@@ -31,6 +31,7 @@ class AboutCompanyComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
+    final colorScheme = context.uiKitTheme?.colorScheme;
 
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_company']);
@@ -82,14 +83,14 @@ class AboutCompanyComponent extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: S.of(context).TheMoreInfoWeGetTheBetter,
-                        style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(1)),
+                        style: boldTextTheme?.subHeadline,
                       ),
                       TextSpan(
                           text: S.of(context).YourTraffic.toLowerCase(),
-                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(0))),
+                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent)),
                       TextSpan(
                         text: S.of(context).WillBe.toLowerCase(),
-                        style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(1)),
+                        style: boldTextTheme?.subHeadline,
                       ),
                     ],
                   ),
@@ -102,14 +103,14 @@ class AboutCompanyComponent extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: S.of(context).TheMoreInfoWeGetTheBetter,
-                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(0)),
+                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
                         ),
                         TextSpan(
                             text: S.of(context).YourTraffic.toLowerCase(),
-                            style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(1))),
+                            style: boldTextTheme?.subHeadline.copyWith(color: Colors.white)),
                         TextSpan(
                           text: S.of(context).WillBe.toLowerCase(),
-                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.white.withOpacity(0)),
+                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
                         ),
                       ],
                     ),
@@ -120,23 +121,21 @@ class AboutCompanyComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace16,
             UiKitCardWrapper(
-              color: ColorsFoundation.surface1,
               borderRadius: BorderRadiusFoundation.max,
               child: UiKitInputFieldNoIcon(
                 controller: nameController,
                 hintText: S.of(context).YourName.toUpperCase(),
-                fillColor: ColorsFoundation.surface3,
+                fillColor: colorScheme?.surface3,
                 validator: nameValidator,
               ).paddingAll(EdgeInsetsFoundation.all4),
             ),
             SpacingFoundation.verticalSpace16,
             UiKitCardWrapper(
-              color: ColorsFoundation.surface1,
               borderRadius: BorderRadiusFoundation.max,
               child: UiKitInputFieldNoIcon(
                 controller: positionController,
                 hintText: S.of(context).YourPosition.toUpperCase(),
-                fillColor: ColorsFoundation.surface3,
+                fillColor: colorScheme?.surface3,
                 validator: positionValidator,
               ).paddingAll(EdgeInsetsFoundation.all4),
             ),

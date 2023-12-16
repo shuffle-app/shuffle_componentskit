@@ -62,19 +62,20 @@ class PhotoVideoSelector extends StatelessWidget {
                         alignment: Alignment.topRight,
                         children: [
                           ClipPath(
-                                  clipper: ShapeBorderClipper(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
-                                  child: photos[index].widget(itemsSize))
-                              .paddingAll(4),
+                            clipper: ShapeBorderClipper(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusFoundation.all8,
+                              ),
+                            ),
+                            child: photos[index].widget(itemsSize),
+                          ).paddingAll(4),
                           context.outlinedButton(
                             hideBorder: true,
                             data: BaseUiKitButtonData(
                               onPressed: () => onPhotoDeleted.call(index),
-                              icon: const ImageWidget(
+                              iconInfo: BaseUiKitButtonIconData(
                                 iconData: ShuffleUiKitIcons.x,
-                                color: Colors.white,
-                                height: 8,
-                                width: 8,
+                                size: 8,
                               ),
                             ),
                           ),
@@ -90,11 +91,9 @@ class PhotoVideoSelector extends StatelessWidget {
                   .outlinedButton(
                     data: BaseUiKitButtonData(
                       onPressed: onPhotoAddRequested,
-                      icon: ImageWidget(
+                      iconInfo: BaseUiKitButtonIconData(
                         iconData: ShuffleUiKitIcons.cameraplus,
-                        color: Colors.white,
-                        height: 16.h,
-                        width: 16.h,
+                        size: 16.h,
                       ),
                     ),
                   )
@@ -103,53 +102,66 @@ class PhotoVideoSelector extends StatelessWidget {
           ),
         ),
         SizedBox(
-            height: itemsSize.height * 1.2,
-            width: double.infinity,
-            child: Stack(alignment: Alignment.centerRight, children: [
-              Row(children: [
-                Text(
-                  S.of(context).Video,
-                  style: theme?.regularTextTheme.labelSmall,
-                ).paddingSymmetric(horizontal: horizontalPadding),
-                Expanded(
+          height: itemsSize.height * 1.2,
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    S.of(context).Video,
+                    style: theme?.regularTextTheme.labelSmall,
+                  ).paddingSymmetric(horizontal: horizontalPadding),
+                  Expanded(
                     child: ReorderableListView.builder(
-                        key: listVideosKey,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Stack(key: ValueKey(videos[index].link), alignment: Alignment.topRight, children: [
-                              ClipPath(
-                                      clipper: ShapeBorderClipper(
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8)),
-                                      child: videos[index].widget(itemsSize))
-                                  .paddingAll(4),
-                              context.outlinedButton(
-                                  hideBorder: true,
-                                  data: BaseUiKitButtonData(
-                                      onPressed: () => onVideoDeleted.call(index),
-                                      icon: const ImageWidget(
-                                        iconData: ShuffleUiKitIcons.x,
-                                        color: Colors.white,
-                                        height: 6,
-                                        width: 6,
-                                      )))
-                            ]),
-                        itemCount: videos.length,
-                        onReorder: onVideoReorderRequested))
-              ]),
+                      key: listVideosKey,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) => Stack(
+                        key: ValueKey(videos[index].link),
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipPath(
+                            clipper: ShapeBorderClipper(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusFoundation.all8,
+                              ),
+                            ),
+                            child: videos[index].widget(itemsSize),
+                          ).paddingAll(4),
+                          context.outlinedButton(
+                            hideBorder: true,
+                            data: BaseUiKitButtonData(
+                              onPressed: () => onVideoDeleted.call(index),
+                              iconInfo: BaseUiKitButtonIconData(
+                                iconData: ShuffleUiKitIcons.x,
+                                size: 6,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      itemCount: videos.length,
+                      onReorder: onVideoReorderRequested,
+                    ),
+                  ),
+                ],
+              ),
               context
                   .outlinedButton(
                     data: BaseUiKitButtonData(
-                        onPressed: onVideoAddRequested,
-                        icon: ImageWidget(
-                          iconData: ShuffleUiKitIcons.videoplus,
-                          color: Colors.white,
-                          height: 16.h,
-                          width: 16.h,
-                        )),
+                      onPressed: onVideoAddRequested,
+                      iconInfo: BaseUiKitButtonIconData(
+                        iconData: ShuffleUiKitIcons.videoplus,
+                        size: 16.h,
+                      ),
+                    ),
                   )
                   .paddingSymmetric(horizontal: horizontalPadding)
-            ])),
+            ],
+          ),
+        ),
       ],
     );
   }

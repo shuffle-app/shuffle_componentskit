@@ -49,15 +49,15 @@ class _FirstBody extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: S.of(context).WhatIs,
-                          style: textTheme?.caption1Medium,
+                          style: textTheme?.caption1Medium.copyWith(color: Colors.white),
                         ),
                         TextSpan(
                           text: S.of(context).ShuffleWithRightWhitespace.toLowerCase(),
-                          style: textTheme?.caption1Bold,
+                          style: textTheme?.caption1Bold.copyWith(color: Colors.white),
                         ),
                         TextSpan(
                           text: S.of(context).For.toLowerCase(),
-                          style: textTheme?.caption1Medium,
+                          style: textTheme?.caption1Medium.copyWith(color: Colors.white),
                         ),
                       ],
                     ),
@@ -73,7 +73,7 @@ class _FirstBody extends StatelessWidget {
                   blurValue: 24,
                   message: Text(
                     S.of(context).ThroughANonAggregatorSystem,
-                    style: textTheme?.caption1Bold,
+                    style: textTheme?.caption1Bold.copyWith(color: Colors.white),
                   ),
                   icon: ShuffleUiKitIcons.whiteStarTransparentCenter,
                   iconColor: Colors.white,
@@ -86,7 +86,7 @@ class _FirstBody extends StatelessWidget {
                   blurValue: 24,
                   message: Text(
                     S.of(context).WithYourPreferences,
-                    style: textTheme?.caption1Bold,
+                    style: textTheme?.caption1Bold.copyWith(color: Colors.white),
                   ),
                   icon: ShuffleUiKitIcons.whiteStarTransparentCenter,
                   iconColor: Colors.white,
@@ -100,7 +100,7 @@ class _FirstBody extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   message: Text(
                     S.of(context).DontBeAlone,
-                    style: textTheme?.caption1Bold,
+                    style: textTheme?.caption1Bold.copyWith(color: Colors.white),
                   ),
                   icon: ShuffleUiKitIcons.whiteStarTransparentCenter,
                   iconColor: Colors.white,
@@ -113,7 +113,7 @@ class _FirstBody extends StatelessWidget {
                   blurValue: 24,
                   message: Text(
                     S.of(context).LovelyTouchAmazingInteraction,
-                    style: textTheme?.caption1Bold,
+                    style: textTheme?.caption1Bold.copyWith(color: Colors.white),
                   ),
                   icon: ShuffleUiKitIcons.whiteStarTransparentCenter,
                   iconColor: Colors.white,

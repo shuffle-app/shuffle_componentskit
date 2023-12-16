@@ -43,6 +43,7 @@ class AboutUserComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final theme = context.uiKitTheme;
+    final colorScheme = theme?.colorScheme;
     final subHeadline = theme?.boldTextTheme.subHeadline;
     final titleAlignment = model.positionModel?.titleAlignment;
     final configSubtitle = model.content.subtitle?[ContentItemType.singleSelect];
@@ -58,91 +59,98 @@ class AboutUserComponent extends StatelessWidget {
       children: [
         if (model.content.title != null)
           Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: titleAlignment.crossAxisAlignment,
-              mainAxisAlignment: titleAlignment.mainAxisAlignment,
-              children: () {
-                final List<ContentItemType> contentTypeList = model.content.title!.keys.toList();
-                final List<ContentBaseModel> contents = model.content.title!.values.toList();
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: titleAlignment.crossAxisAlignment,
+            mainAxisAlignment: titleAlignment.mainAxisAlignment,
+            children: () {
+              final List<ContentItemType> contentTypeList = model.content.title!.keys.toList();
+              final List<ContentBaseModel> contents = model.content.title!.values.toList();
 
-                return [
-                  if (contentTypeList.first == ContentItemType.text)
-                    Text(
-                      contents.first.properties?.keys.first ?? S.of(context).NowLetsGetToKnowEachOther,
-                      style: theme?.boldTextTheme.title1,
-                    ),
-                  SpacingFoundation.verticalSpace16,
-                  Stack(children: [
+              return [
+                if (contentTypeList.first == ContentItemType.text)
+                  Text(
+                    contents.first.properties?.keys.first ?? S.of(context).NowLetsGetToKnowEachOther,
+                    style: theme?.boldTextTheme.title1,
+                  ),
+                SpacingFoundation.verticalSpace16,
+                Stack(
+                  children: [
                     RichText(
                         text: TextSpan(
                       children: [
                         TextSpan(
                           text: S.of(context).TheMoreInfoWeGetTheBetter,
-                          style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
+                          style: subHeadline,
                         ),
                         TextSpan(
                             text: S.of(context).YourLeisureSelection.toLowerCase(),
-                            style: subHeadline?.copyWith(color: Colors.white.withOpacity(0))),
+                            style: subHeadline?.copyWith(color: Colors.transparent)),
                         TextSpan(
                           text: S.of(context).WillBe,
-                          style: subHeadline?.copyWith(color: Colors.white.withOpacity(1)),
+                          style: subHeadline,
                         )
                       ],
                     )),
                     GradientableWidget(
                       gradient: GradientFoundation.attentionCard,
                       child: RichText(
-                          // key: _richTextKey,
-                          text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: S.of(context).TheMoreInfoWeGetTheBetter,
-                            style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
-                          ),
-                          TextSpan(text: S.of(context).YourLeisureSelection.toLowerCase(), style: subHeadline),
-                          TextSpan(
-                            text: S.of(context).WillBe,
-                            style: subHeadline?.copyWith(color: Colors.white.withOpacity(0)),
-                          )
-                        ],
-                      )),
+                        // key: _richTextKey,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: S.of(context).TheMoreInfoWeGetTheBetter,
+                              style: subHeadline?.copyWith(color: Colors.transparent),
+                            ),
+                            TextSpan(
+                              text: S.of(context).YourLeisureSelection.toLowerCase(),
+                              style: subHeadline?.copyWith(color: Colors.white),
+                            ),
+                            TextSpan(
+                              text: S.of(context).WillBe,
+                              style: subHeadline?.copyWith(color: Colors.transparent),
+                            )
+                          ],
+                        ),
+                      ),
                     )
-                  ]),
-                  SpacingFoundation.verticalSpace16,
-                ];
-              }()),
+                  ],
+                ),
+                SpacingFoundation.verticalSpace16,
+              ];
+            }(),
+          ),
         UiKitCardWrapper(
-          color: ColorsFoundation.surface1,
           borderRadius: BorderRadiusFoundation.all24r,
           child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
-                children: [
-                  UiKitInputFieldNoIcon(
-                    controller: nameController,
-                    hintText: S.of(context).Name.toUpperCase(),
-                    validator: inputFieldValidator,
-                    fillColor: ColorsFoundation.surface3,
-                    // onChanged: (value) => onNameChanged?.call(value),
-                  ),
-                  SpacingFoundation.verticalSpace16,
-                  UiKitInputFieldNoIcon(
-                    controller: nickNameController,
-                    hintText: S.of(context).Nickname.toUpperCase(),
-                    validator: inputFieldValidator,
-                    fillColor: ColorsFoundation.surface3,
-                    // onChanged: (value) => onNickNameChanged?.call(value),
-                  ),
-                ],
-              )).paddingAll(EdgeInsetsFoundation.all4),
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: (model.positionModel?.titleAlignment).mainAxisAlignment,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: (model.positionModel?.titleAlignment).crossAxisAlignment,
+              children: [
+                UiKitInputFieldNoIcon(
+                  controller: nameController,
+                  hintText: S.of(context).Name.toUpperCase(),
+                  validator: inputFieldValidator,
+                  fillColor: colorScheme?.surface3,
+                  // onChanged: (value) => onNameChanged?.call(value),
+                ),
+                SpacingFoundation.verticalSpace16,
+                UiKitInputFieldNoIcon(
+                  controller: nickNameController,
+                  hintText: S.of(context).Nickname.toUpperCase(),
+                  validator: inputFieldValidator,
+                  fillColor: colorScheme?.surface3,
+                  // onChanged: (value) => onNickNameChanged?.call(value),
+                ),
+              ],
+            ),
+          ).paddingAll(EdgeInsetsFoundation.all4),
         ),
         if (model.content.body?[ContentItemType.singleDropdown] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-              color: Colors.black,
+              color: colorScheme?.surface,
               title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                   S.of(context).DescribeYourself,
               hasError: aboutUserModel.errorPersonTypeMessage != null,
@@ -261,7 +269,7 @@ class AboutUserComponent extends StatelessWidget {
                                 caption: e.key,
                                 sign: ImageWidget(link: e.value.imageLink),
                                 autoSizeGroup: genderGroup,
-                                onTap: () => onGenderChanged?.call(e.value.value?? ''),
+                                onTap: () => onGenderChanged?.call(e.value.value ?? ''),
                               ))
                           .toList() ??
                       [])

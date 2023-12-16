@@ -154,8 +154,8 @@
         "version": "1.0.0",
         "body_alignment": "center",
         "title_alignment": "center",
-        "horizontal_margin": 8,
-        "vertical_margin": 16
+        "vertical_margin": 16,
+        "horizontal_margin": 8
       }
     },
     "chats": {
@@ -175,7 +175,7 @@
         "version": "1.0.0",
         "body_alignment": "center",
         "title_alignment": "center",
-        "horizontal_margin": 8
+        "horizontal_margin": 16
       },
       "show_reactions": true,
       "booking_element_model": {
@@ -186,7 +186,7 @@
           "version": "1.0.0",
           "body_alignment": "center",
           "title_alignment": "center",
-          "horizontal_margin": 8
+          "horizontal_margin": 16
         }
       }
     },
@@ -200,7 +200,7 @@
         "version": "1.0.0",
         "body_alignment": "center",
         "title_alignment": "center",
-        "horizontal_margin": 8
+        "horizontal_margin": 16
       },
       "show_reactions": true,
       "booking_element_model": {
@@ -211,7 +211,7 @@
           "version": "1.0.0",
           "body_alignment": "center",
           "title_alignment": "center",
-          "horizontal_margin": 8
+          "horizontal_margin": 16
         }
       }
     },
@@ -1557,20 +1557,26 @@
         "body": {
           "button": {
             "properties": {
-              "EDIT PROFILE": {
-                "value": "edit_profile",
-                "imageLink": "user",
+              "EXIT": {
+                "color": "#FF453A",
+                "value": "exit",
+                "imageLink": "logout",
                 "sortNumber": 1
-              },
-              "LOCATION": {
-                "value": "location",
-                "imageLink": "landmark",
-                "sortNumber": 2
               },
               "WALLET": {
                 "value": "wallet",
                 "imageLink": "wallet",
                 "sortNumber": 3
+              },
+              "SUPPORT": {
+                "value": "support",
+                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "sortNumber": 9
+              },
+              "LOCATION": {
+                "value": "location",
+                "imageLink": "landmark",
+                "sortNumber": 2
               },
               "FAVORITES": {
                 "value": "favorites",
@@ -1582,10 +1588,21 @@
                 "imageLink": "heart-fill",
                 "sortNumber": 5
               },
+              "EDIT PROFILE": {
+                "value": "edit_profile",
+                "imageLink": "user",
+                "sortNumber": 1
+              },
               "notifications": {
                 "value": "notifications",
                 "imageLink": "bell",
                 "sortNumber": 6
+              },
+              "DELETE ACCOUNT": {
+                "color": "#FF453A",
+                "value": "delete",
+                "imageLink": "profile-delete",
+                "sortNumber": 2
               },
               "PRIVACY POLICY": {
                 "value": "privacy",
@@ -1596,23 +1613,6 @@
                 "value": "terms",
                 "imageLink": "flag",
                 "sortNumber": 8
-              },
-              "SUPPORT": {
-                "value": "support",
-                "imageLink": "assets/images/svg/lifebuoy.svg",
-                "sortNumber": 9
-              },
-              "EXIT": {
-                "color": "#FF453A",
-                "value": "exit",
-                "imageLink": "logout",
-                "sortNumber": 1
-              },
-              "DELETE ACCOUNT": {
-                "color": "#FF453A",
-                "value": "delete",
-                "imageLink": "profile-delete",
-                "sortNumber": 2
               }
             }
           },

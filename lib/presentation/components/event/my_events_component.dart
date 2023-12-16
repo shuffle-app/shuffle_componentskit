@@ -56,9 +56,8 @@ class MyEventsComponent extends StatelessWidget {
                   trailing: context.smallButton(
                     data: BaseUiKitButtonData(
                       onPressed: onTap(event),
-                      icon: Icon(
-                        CupertinoIcons.right_chevron,
-                        color: theme?.colorScheme.inversePrimary,
+                      iconInfo: BaseUiKitButtonIconData(
+                        iconData: CupertinoIcons.right_chevron,
                         size: 20.w,
                       ),
                     ),

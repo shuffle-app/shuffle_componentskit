@@ -66,6 +66,7 @@ class DonationComponent extends StatelessWidget {
         Text(S.of(context).SupportPeopleAroundYou, style: boldTextTheme?.title1),
         SpacingFoundation.verticalSpace16,
         UiKitCardWrapper(
+          color: context.uiKitTheme?.colorScheme.surface1,
           child: Column(
             children: [
               DonationMapPreview(onTap: onMapTap),
