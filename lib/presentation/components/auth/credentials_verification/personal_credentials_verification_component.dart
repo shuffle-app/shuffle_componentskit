@@ -93,7 +93,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       passwordHint = model.content.body?[ContentItemType.passwordHint]?.properties?.keys.firstOrNull ?? '';
       final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
       socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
-      final clientType = Platform.isIOS ? 'iOS' : 'Android';
+      final clientType = Platform.isIOS ? 'Ios' : 'Android';
       socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
             return ShortLogInButton(
               link: element.value.imageLink ?? '',
