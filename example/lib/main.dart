@@ -1063,6 +1063,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       ),
                       body: SingleChildScrollView(
                         child: MoodComponent(
+                          controller: ScrollController(),
                           mood: UiMoodModel(
                             descriptionItems: [
                               const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
@@ -1075,6 +1076,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           onTabChanged: (String name) {
                             return null;
                           },
+                          isVisibleButton: ValueNotifier<bool>(true),
                         ),
                       ),
                     ),
