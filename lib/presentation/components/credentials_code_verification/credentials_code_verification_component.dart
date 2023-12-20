@@ -4,11 +4,12 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class CredentialsCodeVerificationComponent extends StatelessWidget {
-  final VoidCallback? onSubmit;
+  final ValueChanged<String>? onSubmit;
   final TextEditingController codeController;
   final GlobalKey<FormState> formKey;
   final String credentials;
   final String? errorText;
+  final VoidCallback? onResendCode;
 
   const CredentialsCodeVerificationComponent({
     super.key,
@@ -17,16 +18,13 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
     required this.credentials,
     this.onSubmit,
     this.errorText,
+    this.onResendCode,
   });
 
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent
-            .of(context)
-            ?.globalConfiguration
-            .appConfig
-            .content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['sms_verification']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -42,10 +40,7 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: MediaQuery
-                .of(context)
-                .viewPadding
-                .top,
+            height: MediaQuery.of(context).viewPadding.top,
           ),
           Text(
             title,
@@ -92,15 +87,24 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
             ],
           ),
           Expanded(
-            child: Center(
-              child: UiKitCodeInputField(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              UiKitCodeInputField(
                   controller: codeController,
                   codeDigitsCount: codeDigits,
-                  onDone: (code) => onSubmit?.call(),
-                  errorText: errorText
-              ),
-            ),
-          ),
+                  onDone: (code) => onSubmit?.call(code),
+                  errorText: errorText),
+              SpacingFoundation.verticalSpace24,
+              SizedBox(
+                  width: 0.5.sw,
+                  child: context.smallOutlinedButton(
+                      data: BaseUiKitButtonData(
+                          text: 'Resend code'.toUpperCase(), onPressed: onResendCode, fit: ButtonFit.hugContent))),
+              SpacingFoundation.verticalSpace24,
+            ],
+          )),
         ],
       ).paddingSymmetric(
         horizontal: horizontalMargin,

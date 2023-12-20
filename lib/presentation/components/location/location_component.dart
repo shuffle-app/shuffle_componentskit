@@ -98,12 +98,6 @@ class _LocationComponentState extends State<LocationComponent> {
 
       final placeDetails = await GoogleMapsApi.fetchPlaceDetails(placeId: placeId);
 
-      widget.onLocationChanged.call(
-        address: suggestion.title,
-        latitude: placeDetails?.locationDetails?.geometry?.location?.lat ?? 0,
-        longitude: placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
-      );
-
       await mapsController.animateCamera(
         CameraUpdate.newLatLngBounds(
           LatLngBounds(
@@ -137,7 +131,6 @@ class _LocationComponentState extends State<LocationComponent> {
           ?.call(placeCoordinates)
           .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
 
-
       final placeFromCoordinates = await GoogleMapsApi.fetchPlaceFromCoordinates(
         latlng: '${placeCoordinates.latitude}, ${placeCoordinates.longitude}',
       );
@@ -148,13 +141,17 @@ class _LocationComponentState extends State<LocationComponent> {
         _newPlaceTapped = true;
       });
 
-
+      widget.onLocationChanged.call(
+        address: placeFromCoordinates?.results?.firstOrNull?.formattedAddress ?? suggestion.title,
+        latitude: placeDetails?.locationDetails?.geometry?.location?.lat ?? 0,
+        longitude: placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
+      );
 
       setState(() => _suggestionPlaces = placeFromCoordinates?.results
-          ?.map(
-            (place) => KnownLocation(title: place.formattedAddress ?? ''),
-      )
-          .toList() ??
+              ?.map(
+                (place) => KnownLocation(title: place.formattedAddress ?? ''),
+              )
+              .toList() ??
           []);
     }
   }
@@ -208,7 +205,6 @@ class _LocationComponentState extends State<LocationComponent> {
     await widget.onPlacesCheck
         ?.call(latLng)
         .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
-
 
     setState(() => _suggestionPlaces = placeFromCoordinates?.results
             ?.map(
