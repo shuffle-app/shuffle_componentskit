@@ -17,6 +17,7 @@ class PasswordUpdatingComponent extends StatefulWidget {
     this.passwordValidator,
     this.codeErrorText,
     this.passwordErrorText,
+    this.onResendCode,
   });
 
   final GlobalKey<FormState> formKey;
@@ -28,6 +29,7 @@ class PasswordUpdatingComponent extends StatefulWidget {
   final bool loading;
 
   final ValueChanged<String>? onCodeSubmit;
+  final VoidCallback? onResendCode;
   final String? Function(String?)? passwordValidator;
   final String? codeErrorText;
   final String? passwordErrorText;
@@ -54,13 +56,26 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
       curve: Curves.fastOutSlowIn,
     );
     _passwordFocus = FocusNode()
-      ..addListener(() {
-        if (_passwordFocus.hasFocus) {
-          _hideCodeInput();
-        } else {
-          _showCodeInput();
-        }
-      });
+        // ..addListener(() {
+        //   if (_passwordFocus.hasFocus) {
+        //     _hideCodeInput();
+        //   } else {
+        //     _showCodeInput();
+        //   }
+        // })
+        ;
+  }
+
+  @override
+  void didUpdateWidget(covariant PasswordUpdatingComponent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.passwordFieldEnabled != oldWidget.passwordFieldEnabled) {
+      if (widget.passwordFieldEnabled) {
+        _hideCodeInput();
+      } else {
+        _showCodeInput();
+      }
+    }
   }
 
   void _hideCodeInput() {
@@ -133,6 +148,7 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                         sizeFactor: _animation,
                         axisAlignment: 1,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             UiKitCodeInputField(
                               controller: widget.codeController,
@@ -140,6 +156,14 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                               onDone: (code) => widget.onCodeSubmit?.call(code),
                               errorText: widget.codeErrorText,
                             ),
+                            SpacingFoundation.verticalSpace24,
+                            SizedBox(
+                                width: 0.5.sw,
+                                child: context.smallOutlinedButton(
+                                    data: BaseUiKitButtonData(
+                                        text: 'Resend code'.toUpperCase(),
+                                        onPressed: widget.onResendCode,
+                                        fit: ButtonFit.hugContent))),
                             SpacingFoundation.verticalSpace24,
                           ],
                         ),
