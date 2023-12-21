@@ -89,7 +89,7 @@ class PreferencesComponent extends StatelessWidget {
                             color: Colors.white.withOpacity(0.5),
                           )
                         : null,
-                    onPressed: () {
+                    onIconPressed: () {
                       if (preferences.searchController.text.isNotEmpty) preferences.searchController.clear();
                     },
                   )).paddingSymmetric(horizontal: horizontalMargin),

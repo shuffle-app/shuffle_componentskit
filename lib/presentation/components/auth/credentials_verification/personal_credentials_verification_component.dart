@@ -298,29 +298,10 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   ],
                 ),
               ),
-              if (privacyCaptions.isNotEmpty)
-                RichText(
-                  text: TextSpan(children: [
-                    TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
-                    TextSpan(
-                        text: privacyCaptions.first.key,
-                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push(
-                              WebViewScreen(title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                    TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
-                    TextSpan(
-                        text: privacyCaptions.last.key,
-                        style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => context
-                              .push(WebViewScreen(title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
-                  ]),
-                ),
               KeyboardVisibilityBuilder(
                 builder: (context, visible) => AnimatedSwitcher(
-                  reverseDuration: const Duration(milliseconds: 300),
-                  duration: const Duration(milliseconds: 300),
+                  reverseDuration: const Duration(milliseconds: 50),
+                  duration: const Duration(milliseconds: 500),
                   transitionBuilder: (child, animation) => SlideTransition(
                     position: Tween<Offset>(
                       begin: const Offset(0, 1),
@@ -334,6 +315,25 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   child: tabController.index < 1 && !visible
                       ? Column(
                           children: [
+                            if (privacyCaptions.isNotEmpty)
+                              RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
+                                  TextSpan(
+                                      text: privacyCaptions.first.key,
+                                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => context.push(WebViewScreen(
+                                            title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
+                                  TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
+                                  TextSpan(
+                                      text: privacyCaptions.last.key,
+                                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => context.push(WebViewScreen(
+                                            title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
+                                ]),
+                              ),
                             SpacingFoundation.verticalSpace16,
                             context.button(
                               data: BaseUiKitButtonData(
