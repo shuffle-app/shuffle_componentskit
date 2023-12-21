@@ -300,8 +300,8 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
               ),
               KeyboardVisibilityBuilder(
                 builder: (context, visible) => AnimatedSwitcher(
-                  reverseDuration: const Duration(milliseconds: 300),
-                  duration: const Duration(milliseconds: 300),
+                  reverseDuration: const Duration(milliseconds: 50),
+                  duration: const Duration(milliseconds: 500),
                   transitionBuilder: (child, animation) => SlideTransition(
                     position: Tween<Offset>(
                       begin: const Offset(0, 1),
