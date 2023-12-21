@@ -51,8 +51,8 @@ class SearchResultComponent extends StatelessWidget {
                     color: colorScheme?.bodyTypography,
                   )
                 : null,
-            onPressed: () {
-              searchController.clear();
+            onIconPressed: () {
+              if (searchController.text.isNotEmpty) searchController.clear();
               // context.pop();
             },
             onFieldSubmitted: onFieldSubmitted,
