@@ -31,10 +31,6 @@ class ChatComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalConfiguration().appConfig.content['chat_page'];
-    final model = ComponentModel.fromJson(config);
-    final horizontalMargin = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
-    final verticalMargin = model.positionModel?.verticalMargin?.toDouble() ?? 0;
     final theme = context.uiKitTheme;
 
     return BlurredAppBarPage(
@@ -148,30 +144,6 @@ class ChatComponent extends StatelessWidget {
           separatorBuilder: (context, index) => SpacingFoundation.verticalSpace8,
         ),
         SpacingFoundation.verticalSpace4,
-        UiKitCardWrapper(
-          child: UiKitInputFieldRightIcon(
-            fillColor: context.uiKitTheme?.colorScheme.surface3,
-            controller: messageController,
-            hintText: S.of(context).TypeHere,
-            icon: GestureDetector(
-              onTap: onMessageSent,
-              child: GradientableWidget(
-                gradient: GradientFoundation.defaultRadialGradient,
-                child: ImageWidget(
-                  svgAsset: GraphicsFoundation.instance.svg.send,
-
-                  /// color has to be provided to make GradientableWidget work
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ).paddingOnly(
-            left: horizontalMargin,
-            right: horizontalMargin,
-            top: verticalMargin,
-            bottom: EdgeInsetsFoundation.vertical24,
-          ),
-        ),
       ],
     );
   }
