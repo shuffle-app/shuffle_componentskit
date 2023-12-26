@@ -9,11 +9,17 @@ class EventComponent extends StatelessWidget {
   final UiEventModel event;
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
+  final VoidCallback? onSharePressed;
   final ComplaintFormComponent? complaintFormComponent;
 
-  const EventComponent(
-      {Key? key, required this.event, this.isEligibleForEdit = false, this.onEditPressed, this.complaintFormComponent})
-      : super(key: key);
+  const EventComponent({
+    Key? key,
+    required this.event,
+    this.isEligibleForEdit = false,
+    this.onEditPressed,
+    this.onSharePressed,
+    this.complaintFormComponent,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +96,19 @@ class EventComponent extends StatelessWidget {
                     width: 1.sw - horizontalMargin * 2,
                     height: 156.h,
                     actions: [
+                      if (onSharePressed != null)
+                        context.smallOutlinedButton(
+                          blurred: true,
+                          color: Colors.white.withOpacity(0.01),
+                          blurValue: 25,
+                          data: BaseUiKitButtonData(
+                            iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.share,
+                              color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                            ),
+                            onPressed: onSharePressed,
+                          ),
+                        ),
                       if (complaintFormComponent != null)
                         context.smallOutlinedButton(
                           blurred: true,

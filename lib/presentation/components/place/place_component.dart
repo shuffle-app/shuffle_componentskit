@@ -18,16 +18,18 @@ class PlaceComponent extends StatelessWidget {
   final FutureOr<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
+  final VoidCallback? onSharePressed;
 
-  const PlaceComponent(
-      {Key? key,
-      required this.place,
-      this.complaintFormComponent,
-      this.isCreateEventAvaliable = false,
-      this.onEventCreate,
-      this.onEventTap,
-      this.events})
-      : super(key: key);
+  const PlaceComponent({
+    Key? key,
+    required this.place,
+    this.complaintFormComponent,
+    this.isCreateEventAvaliable = false,
+    this.onEventCreate,
+    this.onEventTap,
+    this.onSharePressed,
+    this.events,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +107,19 @@ class PlaceComponent extends StatelessWidget {
                         ]
                       : place.branches,
                   actions: [
+                    if (onSharePressed != null)
+                      context.smallOutlinedButton(
+                        blurred: true,
+                        color: Colors.white.withOpacity(0.01),
+                        blurValue: 25,
+                        data: BaseUiKitButtonData(
+                          iconInfo: BaseUiKitButtonIconData(
+                            iconData: ShuffleUiKitIcons.share,
+                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                          ),
+                          onPressed: onSharePressed,
+                        ),
+                      ),
                     if (complaintFormComponent != null)
                       context.smallOutlinedButton(
                         blurred: true,
