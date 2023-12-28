@@ -184,11 +184,11 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                 context.button(
                   data: BaseUiKitButtonData(
                     loading: widget.loading,
-                    onPressed: () {
+                    onPressed: widget.passwordFieldEnabled ? () {
                       if (widget.formKey.currentState!.validate()) {
                         widget.onPasswordChanged.call(widget.passwordController.text);
                       }
-                    },
+                    } : null,
                     text: 'next',
                     fit: ButtonFit.fitWidth,
                   ),
