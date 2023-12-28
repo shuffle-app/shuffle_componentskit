@@ -33,7 +33,8 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -136,6 +137,19 @@ class PlaceComponent extends StatelessWidget {
                         color: Colors.white.withOpacity(0.01),
                         blurValue: 25,
                       ),
+                    if (onSharePressed != null)
+                      context.smallOutlinedButton(
+                        blurred: true,
+                        color: Colors.white.withOpacity(0.01),
+                        blurValue: 25,
+                        data: BaseUiKitButtonData(
+                          iconInfo: BaseUiKitButtonIconData(
+                            iconData: ShuffleUiKitIcons.share,
+                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                          ),
+                          onPressed: onSharePressed,
+                        ),
+                      ),
                   ],
                 ),
               ],
@@ -145,60 +159,64 @@ class PlaceComponent extends StatelessWidget {
               FutureBuilder(
                   future: Future.value(events ?? []),
                   builder: (context, snapshot) => UiKitCardWrapper(
-                          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
-                        if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
-                          SpacingFoundation.verticalSpace8,
-                          for (var event in snapshot.data!)
-                            ListTile(
-                              isThreeLine: true,
-                              contentPadding: EdgeInsets.zero,
-                              leading: BorderedUserCircleAvatar(
-                                imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                                size: 40.w,
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                            Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
+                            if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
+                              SpacingFoundation.verticalSpace8,
+                              for (var event in snapshot.data!)
+                                ListTile(
+                                  isThreeLine: true,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: BorderedUserCircleAvatar(
+                                    imageUrl:
+                                        event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                                    size: 40.w,
+                                  ),
+                                  title: Text(
+                                    event.title ?? '',
+                                    style: theme?.boldTextTheme.caption1Bold,
+                                  ),
+                                  subtitle: event.date != null
+                                      ? Text(
+                                          DateFormat('MMMM d').format(event.date!),
+                                          style: theme?.boldTextTheme.caption1Medium.copyWith(
+                                            color: theme.colorScheme.darkNeutral500,
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                  trailing: context
+                                      .smallButton(
+                                        data: BaseUiKitButtonData(
+                                          onPressed: () {
+                                            if (onEventTap != null) {
+                                              onEventTap?.call(event);
+                                            } else {
+                                              buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                                  ComponentBuilder(child: EventComponent(event: event)));
+                                            }
+                                          },
+                                          iconInfo: BaseUiKitButtonIconData(
+                                            iconData: CupertinoIcons.right_chevron,
+                                            color: theme?.colorScheme.inversePrimary,
+                                            size: 20.w,
+                                          ),
+                                        ),
+                                      )
+                                      .paddingOnly(top: SpacingFoundation.verticalSpacing4),
+                                ),
+                            ],
+                            SpacingFoundation.verticalSpace4,
+                            context.gradientButton(
+                              data: BaseUiKitButtonData(
+                                text: S.of(context).CreateEvent,
+                                onPressed: onEventCreate,
+                                fit: ButtonFit.fitWidth,
                               ),
-                              title: Text(
-                                event.title ?? '',
-                                style: theme?.boldTextTheme.caption1Bold,
-                              ),
-                              subtitle: event.date != null
-                                  ? Text(
-                                      DateFormat('MMMM d').format(event.date!),
-                                      style: theme?.boldTextTheme.caption1Medium.copyWith(
-                                        color: theme.colorScheme.darkNeutral500,
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                              trailing: context
-                                  .smallButton(
-                                    data: BaseUiKitButtonData(
-                                      onPressed: () {
-                                        if (onEventTap != null) {
-                                          onEventTap?.call(event);
-                                        } else {
-                                          buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                              ComponentBuilder(child: EventComponent(event: event)));
-                                        }
-                                      },
-                                      iconInfo: BaseUiKitButtonIconData(
-                                        iconData: CupertinoIcons.right_chevron,
-                                        color: theme?.colorScheme.inversePrimary,
-                                        size: 20.w,
-                                      ),
-                                    ),
-                                  )
-                                  .paddingOnly(top: SpacingFoundation.verticalSpacing4),
-                            ),
-                        ],
-                        SpacingFoundation.verticalSpace4,
-                        context.gradientButton(
-                          data: BaseUiKitButtonData(
-                            text: S.of(context).CreateEvent,
-                            onPressed: onEventCreate,
-                            fit: ButtonFit.fitWidth,
-                          ),
-                        )
-                      ]).paddingSymmetric(
+                            )
+                          ]).paddingSymmetric(
                         horizontal: SpacingFoundation.horizontalSpacing16,
                         vertical: SpacingFoundation.verticalSpacing8,
                       )).paddingSymmetric(
@@ -216,7 +234,8 @@ class PlaceComponent extends StatelessWidget {
 
                           final closestEvent = tempSorted.firstOrNull;
 
-                          final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
+                          final Duration daysToEvent =
+                              closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
 
                           return [
                             Expanded(

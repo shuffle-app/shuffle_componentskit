@@ -153,9 +153,6 @@ class SpinnerComponent extends StatelessWidget {
         UiKitSpinner(
           pagingController: categoriesController,
           scrollController: spinner.categoriesScrollController,
-          // categories: spinner.categories
-          //     .map((e) => e.substring(0, 1).toUpperCase() + e.substring(1))
-          //     .toList(),
           onSpinChangedCategory: spinner.onSpinChangedCategory,
         ),
       ],
