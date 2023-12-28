@@ -70,7 +70,19 @@ class EventComponent extends StatelessWidget {
                             fit: BoxFit.fitHeight),
                         onPressed: () => onEditPressed?.call(),
                       ),
-                    )
+                    ),
+                  if (onSharePressed != null)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: GestureDetector(
+                        onTap: onSharePressed,
+                        child: ImageWidget(
+                          iconData: ShuffleUiKitIcons.share,
+                          color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                        ),
+                      ),
+                    ),
                 ],
               ),
               SpacingFoundation.verticalSpace8,
@@ -101,19 +113,6 @@ class EventComponent extends StatelessWidget {
                     width: 1.sw - horizontalMargin * 2,
                     height: 156.h,
                     actions: [
-                      if (onSharePressed != null)
-                        context.smallOutlinedButton(
-                          blurred: true,
-                          color: Colors.white.withOpacity(0.01),
-                          blurValue: 25,
-                          data: BaseUiKitButtonData(
-                            iconInfo: BaseUiKitButtonIconData(
-                              iconData: ShuffleUiKitIcons.share,
-                              color: context.uiKitTheme?.colorScheme.darkNeutral800,
-                            ),
-                            onPressed: onSharePressed,
-                          ),
-                        ),
                       if (complaintFormComponent != null)
                         context.smallOutlinedButton(
                           blurred: true,

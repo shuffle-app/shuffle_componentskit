@@ -65,6 +65,13 @@ class PlaceComponent extends StatelessWidget {
               title: place.title,
               avatarUrl: place.logo,
               horizontalMargin: horizontalMargin,
+              trailing: GestureDetector(
+                onTap: onSharePressed,
+                child: Icon(
+                  ShuffleUiKitIcons.share,
+                  color: theme?.colorScheme.darkNeutral800,
+                ),
+              ),
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
@@ -108,19 +115,6 @@ class PlaceComponent extends StatelessWidget {
                         ]
                       : place.branches,
                   actions: [
-                    if (onSharePressed != null)
-                      context.smallOutlinedButton(
-                        blurred: true,
-                        color: Colors.white.withOpacity(0.01),
-                        blurValue: 25,
-                        data: BaseUiKitButtonData(
-                          iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.share,
-                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
-                          ),
-                          onPressed: onSharePressed,
-                        ),
-                      ),
                     if (complaintFormComponent != null)
                       context.smallOutlinedButton(
                         blurred: true,

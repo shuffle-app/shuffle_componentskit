@@ -25,8 +25,7 @@ class MoodComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentMoodModel model = ComponentMoodModel.fromJson(config['mood']);
 
     final theme = context.uiKitTheme;
@@ -78,7 +77,7 @@ class MoodComponent extends StatelessWidget {
                         return UiKitWeatherInfoCard(
                           weatherType: item.title,
                           temperature: item.description,
-                          active: item.active,
+                          active: !item.active,
                           height: smallCardHeight,
                         );
                       }(),
@@ -107,15 +106,14 @@ class MoodComponent extends StatelessWidget {
           if (model.showPlaces ?? true && tabBarContent != null) ...[
             SpacingFoundation.verticalSpace24,
             Text(
-              tabBarContent?.body?[ContentItemType.text]?.properties?.keys.firstOrNull ??
-                  S.of(context).WeHavePlacesJustForYou,
+              tabBarContent?.body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).WeHavePlacesJustForYou,
               style: theme?.boldTextTheme.title1,
             ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             StatefulBuilder(
               builder: (context, setState) {
-                final isIgnoringPointer = !(mood.activatedLevel == null ||
-                    !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!));
+                final isIgnoringPointer =
+                    !(mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!));
 
                 return Column(
                   children: [
@@ -135,8 +133,7 @@ class MoodComponent extends StatelessWidget {
                                 height: 20.h,
                                 title: entry.key.toUpperCase(),
                                 group: tabBarGroup,
-                                active:
-                                    !isIgnoringPointer || entry.key.toUpperCase() == mood.activatedLevel!.toUpperCase(),
+                                active: !isIgnoringPointer || entry.key.toUpperCase() == mood.activatedLevel!.toUpperCase(),
                               ),
                             )
                             .toList(),
@@ -188,9 +185,8 @@ class MoodComponent extends StatelessWidget {
       ),
       ValueListenableBuilder<bool>(
         valueListenable: isVisibleButton,
-        builder: (context, value, child) => AnimatedOpacity(
-            duration: const Duration(milliseconds: 200),
-            opacity: value ? 1:0, child: child!),
+        builder: (context, value, child) =>
+            AnimatedOpacity(duration: const Duration(milliseconds: 200), opacity: value ? 1 : 0, child: child!),
         // builder: (context, value, child) => Visibility.maintain(visible: value, child: child!),
         child: SlidableButton(
           isCompleted: mood.activatedLevel != null,
