@@ -6,11 +6,6 @@ class UnderDevelopment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLightTheme = context.uiKitTheme?.themeMode == ThemeMode.light;
-    String animationPath = isLightTheme
-        ? GraphicsFoundation.instance.animations.lottie.shuffleLoaderWhiteTheme.path
-        : GraphicsFoundation.instance.animations.lottie.shuffleLoaderBlackTheme.path;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,7 +19,7 @@ class UnderDevelopment extends StatelessWidget {
           width: MediaQuery.sizeOf(context).width / 2,
           child: Center(
             child: LottieAnimation(
-              lottiePath: animationPath,
+              lottiePath: GraphicsFoundation.instance.animations.lottie.shuffleLoader1.path,
             ),
           ),
         ),
