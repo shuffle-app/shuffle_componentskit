@@ -23,12 +23,14 @@ class EventComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
             version: '0',
             pageBuilderType: PageBuilderType.page,
-            positionModel: PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
+            positionModel:
+                PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
@@ -62,7 +64,10 @@ class EventComponent extends StatelessWidget {
                       right: 0,
                       child: IconButton(
                         icon: ImageWidget(
-                            iconData: ShuffleUiKitIcons.pencil, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                            iconData: ShuffleUiKitIcons.pencil,
+                            color: Colors.white,
+                            height: 20.h,
+                            fit: BoxFit.fitHeight),
                         onPressed: () => onEditPressed?.call(),
                       ),
                     )
@@ -130,6 +135,19 @@ class EventComponent extends StatelessWidget {
                           ),
                           color: Colors.white.withOpacity(0.01),
                           blurValue: 25,
+                        ),
+                      if (onSharePressed != null)
+                        context.smallOutlinedButton(
+                          blurred: true,
+                          color: Colors.white.withOpacity(0.01),
+                          blurValue: 25,
+                          data: BaseUiKitButtonData(
+                            iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.share,
+                              color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                            ),
+                            onPressed: onSharePressed,
+                          ),
                         ),
                     ],
                   ),
