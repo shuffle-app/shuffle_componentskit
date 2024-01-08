@@ -372,6 +372,7 @@
       },
       "version": "1.0.0",
       "show_free": true,
+      "show_social": true,
       "builder_type": "page",
       "position_model": {
         "version": "1.0.0",
@@ -1700,6 +1701,80 @@
         "code_digits": 4
       }
     },
+    "search_social_page": {
+      "content": {
+        "body": {
+          "horizontal_list": {
+            "properties": {
+              "Cloths": {
+                "type": "place",
+                "color": "#62355C",
+                "imageLink": "assets/images/svg/clothing.svg",
+                "sortNumber": 3
+              },
+              "Doctors": {
+                "type": "services",
+                "imageLink": "assets/images/png/Doctor.png",
+                "sortNumber": 5
+              },
+              "Parcels": {
+                "type": "place",
+                "color": "#62355C",
+                "imageLink": "assets/images/svg/parcel.svg",
+                "sortNumber": 5
+              },
+              "Manicure": {
+                "type": "services",
+                "imageLink": "assets/images/png/manicure.png",
+                "sortNumber": 1
+              },
+              "Pharmacy": {
+                "type": "place",
+                "color": "#E74424",
+                "imageLink": "assets/images/svg/pharmacy.svg",
+                "sortNumber": 1
+              },
+              "Products": {
+                "type": "place",
+                "color": "#FDC74F",
+                "imageLink": "assets/images/svg/grocery.svg",
+                "sortNumber": 2
+              },
+              "Training": {
+                "type": "services",
+                "imageLink": "assets/images/png/coach.png",
+                "sortNumber": 2
+              },
+              "Accountant": {
+                "type": "services",
+                "imageLink": "assets/images/png/Accountant.png",
+                "sortNumber": 3
+              },
+              "Transportation": {
+                "type": "place",
+                "color": "#FDC74F",
+                "imageLink": "assets/images/svg/delivery-truck.svg",
+                "sortNumber": 4
+              },
+              "Real Estate Consulting": {
+                "type": "services",
+                "imageLink": "assets/images/png/real.png",
+                "sortNumber": 4
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
     "in_app_notification": {
       "content": {
         "properties": {
@@ -1855,6 +1930,97 @@
         "horizontal_margin": 16
       }
     },
+    "search_social_filters_sheet": {
+      "body": {
+        "single_dropdown": {
+          "properties": {
+            "Deira": {
+              "type": "district",
+              "value": "deira",
+              "sortNumber": 6
+            },
+            "Trainer": {
+              "type": "service",
+              "value": "trainer",
+              "imageLink": "assets/images/svg/musculous.svg",
+              "sortNumber": 6
+            },
+            "Cleaning": {
+              "type": "service",
+              "value": "cleaning",
+              "imageLink": "assets/images/svg/cleaning.svg",
+              "sortNumber": 3
+            },
+            "Jumeirah": {
+              "type": "district",
+              "value": "jumeirah",
+              "sortNumber": 2
+            },
+            "Manicure": {
+              "type": "service",
+              "value": "manicure",
+              "imageLink": "assets/images/svg/manicure.svg",
+              "sortNumber": 1
+            },
+            "Bur Dubai": {
+              "type": "district",
+              "value": "bur-dubai",
+              "sortNumber": 4
+            },
+            "Babysitter": {
+              "type": "service",
+              "value": "babysitter",
+              "imageLink": "assets/images/svg/baby.svg",
+              "sortNumber": 2
+            },
+            "Pet walker": {
+              "type": "service",
+              "value": "pet-walker",
+              "imageLink": "assets/images/svg/paw.svg",
+              "sortNumber": 4
+            },
+            "Dubai Marina": {
+              "type": "district",
+              "value": "dubai-marina",
+              "sortNumber": 5
+            },
+            "Palm Jumeirah": {
+              "type": "district",
+              "value": "palm-jumeirah",
+              "sortNumber": 3
+            },
+            "Downtown Dubai": {
+              "type": "district",
+              "value": "downtown-dubai",
+              "sortNumber": 1
+            },
+            "Language teacher": {
+              "type": "service",
+              "value": "language-teacher",
+              "imageLink": "assets/images/svg/language.svg",
+              "sortNumber": 5
+            }
+          }
+        }
+      },
+      "title": {
+        "text": {
+          "properties": {
+            "Service": {},
+            "District": {}
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
     "company_credentials_verification": {
       "content": {
         "body": {
@@ -1989,6 +2155,17 @@
           }
         }
       },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "search_social_content_type_recommendation": {
       "version": "1.0.0",
       "builder_type": "page",
       "position_model": {
