@@ -11,6 +11,7 @@ class SearchComponent extends StatelessWidget {
   final VoidCallback? onFreeCardPressed;
   final VoidCallback? onSearchFieldTap;
   final VoidCallback? onHowItWorksPoped;
+  final VoidCallback? onSocialCardPressed;
   final Function? onPlaceTapped;
   final Function? onTagSortPressed;
   final bool showBusinessContent;
@@ -26,6 +27,7 @@ class SearchComponent extends StatelessWidget {
     this.onHowItWorksPoped,
     this.onTagSortPressed,
     this.onFreeCardPressed,
+    this.onSocialCardPressed,
   });
 
   final _decorationItemsForFreeCards = [
@@ -61,12 +63,40 @@ class SearchComponent extends StatelessWidget {
     )
   ];
 
+  final _decorationItemsForSocials = [
+    ActionCardDecorationIconData(
+      iconLink: GraphicsFoundation.instance.svg.pharmacy.path,
+      position: DecorationIconPosition(top: -14, left: -16),
+      iconSize: 64,
+      rotationAngle: 0,
+    ),
+    ActionCardDecorationIconData(
+      iconLink: GraphicsFoundation.instance.svg.deliveryTruck.path,
+      position: DecorationIconPosition(bottom: -20, left: 36),
+      iconSize: 56,
+      rotationAngle: 0,
+    ),
+    ActionCardDecorationIconData(
+      iconLink: GraphicsFoundation.instance.svg.parcel.path,
+      position: DecorationIconPosition(top: 4, left: 64),
+      iconSize: 36,
+      rotationAngle: -42,
+    ),
+    ActionCardDecorationIconData(
+      iconLink: GraphicsFoundation.instance.svg.clothing.path,
+      position: DecorationIconPosition(top: -18, left: 112),
+      iconSize: 56,
+      rotationAngle: 25,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final config = GlobalConfiguration().appConfig.content;
     final source = showBusinessContent ? 'search_business' : 'search';
     final model = ComponentSearchModel.fromJson(config[source]);
+    final showSocial = model.showSocial ?? false;
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
@@ -149,6 +179,16 @@ class SearchComponent extends StatelessWidget {
           controller: scrollController,
           children: [
             127.h.heightBox,
+            if (showSocial) ...[
+              UiKitNoActionOverflownCard(
+                horizontalMargin: horizontalMargin,
+                title: 'Social',
+                subtitle: 'Useful services and places',
+                decorationIcons: _decorationItemsForSocials,
+                onTap: onSocialCardPressed,
+              ),
+              SpacingFoundation.verticalSpace24,
+            ],
             if (model.showFree ?? false) ...[
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
@@ -190,7 +230,7 @@ class SearchComponent extends StatelessWidget {
                 ),
                 overflownIconLink: GraphicsFoundation.instance.svg.map.path,
                 decorationIcons: _decorationItemsForFreeCards,
-              ).paddingOnly(right: horizontalMargin),
+              ),
             ],
             SpacingFoundation.verticalSpace24,
             Text(

@@ -8,19 +8,22 @@ class ComponentSearchModel extends UiBaseModel {
   @JsonKey(name: 'show_free')
   final bool? showFree;
 
-  @JsonKey(name: 'content',)
+  @JsonKey(name: 'show_social')
+  final bool? showSocial;
+
+  @JsonKey(name: 'content')
   final ContentBaseModel content;
 
   ComponentSearchModel({
     this.showFree,
+    this.showSocial,
     required this.content,
     required super.pageBuilderType,
     super.positionModel,
     required super.version,
   }) : super();
 
-  factory ComponentSearchModel.fromJson(Map<String, dynamic> json) =>
-      _$ComponentSearchModelFromJson(json);
+  factory ComponentSearchModel.fromJson(Map<String, dynamic> json) => _$ComponentSearchModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ComponentSearchModelToJson(this);
 }
