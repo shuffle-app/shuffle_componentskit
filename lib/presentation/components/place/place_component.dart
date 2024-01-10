@@ -53,7 +53,10 @@ class PlaceComponent extends StatelessWidget {
 
     final theme = context.uiKitTheme;
 
-    return Column(
+    return ListView(
+      primary: false,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,

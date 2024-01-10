@@ -36,7 +36,10 @@ class EventComponent extends StatelessWidget {
     final titleAlignment = model.positionModel?.titleAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
-    return Column(
+    return ListView(
+      primary: false,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         SpacingFoundation.verticalSpace8,
         Column(
