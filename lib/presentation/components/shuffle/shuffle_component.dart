@@ -75,7 +75,7 @@ class ShuffleComponent extends StatelessWidget {
         ),
         SafeArea(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaY: 50, sigmaX: 50),
+            filter: ImageFilter.blur(sigmaY: 35, sigmaX: 35),
             child: Center(
               child: Column(
                 mainAxisAlignment: bodyAlignment.mainAxisAlignment,
