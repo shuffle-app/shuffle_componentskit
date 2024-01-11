@@ -1354,8 +1354,12 @@
           },
           "tab_bar": {
             "properties": {
-              "leisure": {},
-              "business": {}
+              "leisure": {
+                "value": "leisure"
+              },
+              "business": {
+                "value": "business"
+              }
             }
           }
         },
@@ -1619,8 +1623,12 @@
           },
           "tab_bar": {
             "properties": {
-              "leisure": {},
-              "business": {}
+              "leisure": {
+                "value": "leisure"
+              },
+              "business": {
+                "value": "business"
+              }
             }
           }
         },
@@ -2085,8 +2093,12 @@
         "body": {
           "tab_bar": {
             "properties": {
-              "email": {},
-              "account": {}
+              "email": {
+                "value": "email"
+              },
+              "account": {
+                "value": "account"
+              }
             }
           },
           "password_hint": {
