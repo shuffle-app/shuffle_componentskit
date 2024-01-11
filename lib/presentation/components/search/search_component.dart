@@ -65,25 +65,25 @@ class SearchComponent extends StatelessWidget {
 
   final _decorationItemsForSocials = [
     ActionCardDecorationIconData(
-      iconLink: GraphicsFoundation.instance.svg.pharmacy.path,
+      iconLink: GraphicsFoundation.instance.png.pharmacyPlus.path,
       position: DecorationIconPosition(top: -14, left: -16),
       iconSize: 64,
       rotationAngle: 0,
     ),
     ActionCardDecorationIconData(
-      iconLink: GraphicsFoundation.instance.svg.deliveryTruck.path,
+      iconLink: GraphicsFoundation.instance.png.deliveryTruck.path,
       position: DecorationIconPosition(bottom: -20, left: 36),
       iconSize: 56,
       rotationAngle: 0,
     ),
     ActionCardDecorationIconData(
-      iconLink: GraphicsFoundation.instance.svg.parcel.path,
+      iconLink: GraphicsFoundation.instance.png.parcel.path,
       position: DecorationIconPosition(top: 4, left: 64),
       iconSize: 36,
       rotationAngle: -42,
     ),
     ActionCardDecorationIconData(
-      iconLink: GraphicsFoundation.instance.svg.clothing.path,
+      iconLink: GraphicsFoundation.instance.png.clothing.path,
       position: DecorationIconPosition(top: -18, left: 112),
       iconSize: 56,
       rotationAngle: 25,
