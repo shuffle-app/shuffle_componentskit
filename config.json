@@ -1709,7 +1709,7 @@
               "Cloths": {
                 "type": "place",
                 "color": "#62355C",
-                "imageLink": "assets/images/svg/clothing.svg",
+                "imageLink": "assets/images/png/clothing.png",
                 "sortNumber": 3
               },
               "Doctors": {
@@ -1720,7 +1720,7 @@
               "Parcels": {
                 "type": "place",
                 "color": "#62355C",
-                "imageLink": "assets/images/svg/parcel.svg",
+                "imageLink": "assets/images/png/parcel.png",
                 "sortNumber": 5
               },
               "Manicure": {
@@ -1731,13 +1731,13 @@
               "Pharmacy": {
                 "type": "place",
                 "color": "#E74424",
-                "imageLink": "assets/images/svg/pharmacy.svg",
+                "imageLink": "assets/images/png/pharmacy_plus.png",
                 "sortNumber": 1
               },
               "Products": {
                 "type": "place",
                 "color": "#FDC74F",
-                "imageLink": "assets/images/svg/grocery.svg",
+                "imageLink": "assets/images/png/grocery.png",
                 "sortNumber": 2
               },
               "Training": {
@@ -1753,7 +1753,7 @@
               "Transportation": {
                 "type": "place",
                 "color": "#FDC74F",
-                "imageLink": "assets/images/svg/delivery-truck.svg",
+                "imageLink": "assets/images/png/delivery-truck.png",
                 "sortNumber": 4
               },
               "Real Estate Consulting": {

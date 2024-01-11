@@ -11,9 +11,11 @@ class UiFeedModel {
   // final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
+  // final List<BusinessGlobalEventUiModel>? globalEvents;
 
   UiFeedModel({
     this.filterChips,
+    // this.globalEvents,
     this.activeFilterChips,
     this.showHowItWorksBody = false,
     this.isHealthKitEnabled = true,

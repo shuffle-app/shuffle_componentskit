@@ -65,6 +65,7 @@ class SearchSocialComponent extends StatelessWidget {
         UiKitTitledSection(
           borderRadius: BorderRadius.zero,
           title: S.of(context).Places,
+          titleStyle: textTheme?.title1,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -139,6 +140,7 @@ class SearchSocialComponent extends StatelessWidget {
         UiKitTitledSection(
           borderRadius: BorderRadius.zero,
           title: S.of(context).Services,
+          titleStyle: textTheme?.title1,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
