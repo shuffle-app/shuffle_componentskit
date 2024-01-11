@@ -1127,7 +1127,18 @@
                 }
               },
               "horizontal_list": {
-                "properties": {}
+                "properties": {
+                  "CES 2023": {
+                    "type": "Бесплатно",
+                    "value": "2023-11-17T16:31:56.971869",
+                    "imageLink": "assets/images/png/business_mock_1.png"
+                  },
+                  "Техно-конференция": {
+                    "type": "Бесплатно",
+                    "value": "2023-12-15T16:31:56.971869",
+                    "imageLink": "assets/images/png/business_mock_2.png"
+                  }
+                }
               }
             },
             "properties": {
