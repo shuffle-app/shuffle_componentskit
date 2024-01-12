@@ -51,7 +51,7 @@ class SettingsComponent extends StatelessWidget {
         if (tabs != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
-            selectedTab: selectedContentType?.toUpperCase(),
+            selectedTab: selectedContentType,
             onTappedTab: (index) => onTabSwitched?.call(index),
             tabs: tabs!,
           ),
