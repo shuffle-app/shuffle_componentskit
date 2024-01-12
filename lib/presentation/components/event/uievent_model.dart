@@ -18,6 +18,8 @@ class UiEventModel extends Advertisable {
   String? location;
   String? eventType;
   String? price;
+  String? website;
+  String? phone;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
   double? rating;
@@ -40,6 +42,8 @@ class UiEventModel extends Advertisable {
     this.baseTags = const [],
     this.rating,
     this.price,
+    this.phone,
+    this.website,
     this.time,
     this.timeTo,
     this.weekdays = const [],
@@ -56,6 +60,16 @@ class UiEventModel extends Advertisable {
             UiDescriptionItemModel(
               title: S.current.Place,
               description: location,
+            ),
+          if (phone != null)
+            UiDescriptionItemModel(
+              title: S.current.Phone,
+              description: phone,
+            ),
+          if (website != null)
+            UiDescriptionItemModel(
+              title: S.current.Website,
+              description: website,
             ),
         ],
         super(isAdvertisement: isAdvertisement ?? false);

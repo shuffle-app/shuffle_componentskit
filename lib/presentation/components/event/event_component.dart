@@ -101,11 +101,11 @@ class EventComponent extends StatelessWidget {
           ],
         ),
         SpacingFoundation.verticalSpace16,
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-          children: [
+        // Column(
+        //   mainAxisSize: MainAxisSize.min,
+        //   mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        //   crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+        //   children: [
             Align(
               alignment: Alignment.center,
               child: Stack(
@@ -173,8 +173,8 @@ class EventComponent extends StatelessWidget {
                       )).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4))
                   .toList(),
             SpacingFoundation.verticalSpace16,
-          ],
-        ),
+          // ],
+        // ),
       ],
       // ),
     ).paddingSymmetric(

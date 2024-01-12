@@ -77,11 +77,11 @@ class PlaceComponent extends StatelessWidget {
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-          children: [
+        // Column(
+        //   mainAxisSize: MainAxisSize.min,
+        //   mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        //   crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+        //   children: [
             Stack(
               children: [
                 UiKitMediaSliderWithTags(
@@ -252,7 +252,7 @@ class PlaceComponent extends StatelessWidget {
                             ),
                           ];
                         }(),
-                      )),
+                      )).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             Wrap(
               spacing: SpacingFoundation.horizontalSpacing8,
@@ -275,10 +275,10 @@ class PlaceComponent extends StatelessWidget {
                         spacing: SpacingFoundation.horizontalSpacing8,
                       )))
                   .toList(),
-            ),
+            ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
-          ],
-        ),
+          // ],
+        // ),
       ],
       // ),
     ).paddingSymmetric(vertical: verticalMargin);
