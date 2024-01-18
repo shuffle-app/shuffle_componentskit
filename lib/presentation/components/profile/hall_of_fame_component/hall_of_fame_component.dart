@@ -9,13 +9,13 @@ class HallOfFameComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlurredAppBarPage(title: S.of(context).HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
-      SpacingFoundation.verticalSpace16,
       GridView.count(
         crossAxisCount: 3,
-        clipBehavior: Clip.hardEdge,
-        shrinkWrap: true,
+        // clipBehavior: Clip.hardEdge,
         physics: const NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        padding: EdgeInsets.symmetric(
+            horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing16),
         childAspectRatio: 0.56.sp,
         crossAxisSpacing: SpacingFoundation.verticalSpacing8,
         children: items
@@ -26,7 +26,8 @@ class HallOfFameComponent extends StatelessWidget {
                   ),
                 ))
             .toList(),
-      ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16)
+      ),
+      kBottomNavigationBarHeight.heightBox
     ]);
   }
 }
