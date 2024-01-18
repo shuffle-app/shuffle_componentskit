@@ -11,7 +11,7 @@ class HallOfFameComponent extends StatelessWidget {
     return BlurredAppBarPage(title: S.of(context).HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
       GridView.count(
         crossAxisCount: 3,
-        // clipBehavior: Clip.hardEdge,
+        addAutomaticKeepAlives: false,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(

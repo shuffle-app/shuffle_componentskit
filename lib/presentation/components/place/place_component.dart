@@ -255,7 +255,7 @@ class PlaceComponent extends StatelessWidget {
                       )).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             Wrap(
-              spacing: SpacingFoundation.horizontalSpacing8,
+              // spacing: SpacingFoundation.horizontalSpacing8,
               runSpacing: SpacingFoundation.verticalSpacing8,
               children: place.descriptionItems!
                   .map((e) => GestureDetector(
