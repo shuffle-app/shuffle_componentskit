@@ -39,6 +39,7 @@ export 'profile/followings_component/followings_component.dart';
 export 'profile/notifications_component/notifications_component.dart';
 export 'profile/notifications_component/notifications_list_component.dart';
 export 'profile/profile_component.dart';
+export 'profile/hall_of_fame_component/hall_of_fame_component.dart';
 export 'profile/profile_preferences/edit_default_profile_preferences_component.dart';
 export 'profile/profile_preferences/ui_edit_default_profile_preferences_model.dart';
 export 'profile/settings_component/settings_component.dart';
