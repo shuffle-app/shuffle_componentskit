@@ -47,7 +47,6 @@ class PlaceComponent extends StatelessWidget {
           )
         : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
-    final bodyAlignment = model.positionModel?.bodyAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
