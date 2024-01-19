@@ -70,6 +70,7 @@ class GlobalConfiguration {
     Map<String, dynamic> configAsMap = (await _getFromUrl(
         true
             ? 'https://n8n.tools.horum.co/webhook/configs-shuffle'
+            // ? 'https://n8n.tools.horum.co/webhook/shuffle-stable-configs'
         //ignore: dead_code
             : 'http://${_configUrl}/api/v1/settings/config/$version',
         queryParameters://TODO make working staging config

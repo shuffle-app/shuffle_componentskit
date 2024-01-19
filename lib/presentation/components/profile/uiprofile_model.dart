@@ -15,6 +15,8 @@ class UiProfileModel {
   final List<String>? interests;
   final List<String>? favorites;
   final List<String>? matchingInterests;
+  final VoidCallback? onViewAllAchievements;
+  final List<UiKitAchievementsModel> achievements;
 
   ProfileCard get cardWidget {
     AutoSizeGroup group = AutoSizeGroup();
@@ -31,6 +33,8 @@ class UiProfileModel {
       profileType: ProfileCardType.personal,
       showSupportShuffle: showSupportShuffle,
       onDonate: onDonate,
+      onViewAllAchievements: onViewAllAchievements,
+      achievements: achievements.where((element) => element.asset!=null).toList(),
       profileStats: [
         UiKitStats(
           title: S.current.Balance,
@@ -65,6 +69,8 @@ class UiProfileModel {
     this.avatarUrl,
     this.interests,
     this.followers,
+    this.achievements = const [],
+    this.onViewAllAchievements,
   });
 
   /// write [copyWith] method
@@ -82,6 +88,8 @@ class UiProfileModel {
     List<String>? interests,
     List<String>? favorites,
     List<String>? matchingInterests,
+    VoidCallback? onViewAllAchievements,
+    List<UiKitAchievementsModel>? achievements,
   }) =>
       UiProfileModel(
         nickname: nickname ?? this.nickname,
@@ -96,5 +104,7 @@ class UiProfileModel {
         interests: interests ?? this.interests,
         favorites: favorites ?? this.favorites,
         matchingInterests: matchingInterests ?? this.matchingInterests,
+        onViewAllAchievements: onViewAllAchievements?? this.onViewAllAchievements,
+        achievements: achievements?? this.achievements,
       );
 }

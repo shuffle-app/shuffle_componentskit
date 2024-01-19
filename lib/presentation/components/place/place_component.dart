@@ -47,7 +47,6 @@ class PlaceComponent extends StatelessWidget {
           )
         : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
-    final bodyAlignment = model.positionModel?.bodyAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
@@ -255,7 +254,7 @@ class PlaceComponent extends StatelessWidget {
                       )).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             Wrap(
-              spacing: SpacingFoundation.horizontalSpacing8,
+              // spacing: SpacingFoundation.horizontalSpacing8,
               runSpacing: SpacingFoundation.verticalSpacing8,
               children: place.descriptionItems!
                   .map((e) => GestureDetector(

@@ -32,7 +32,6 @@ class EventComponent extends StatelessWidget {
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
-    final bodyAlignment = model.positionModel?.bodyAlignment;
     final titleAlignment = model.positionModel?.titleAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
