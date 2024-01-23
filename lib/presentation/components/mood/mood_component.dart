@@ -181,8 +181,9 @@ class MoodComponent extends StatelessWidget {
                 ).paddingSymmetric(horizontal: horizontalMargin);
               },
             ),
-            (kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing20 * 3).heightBox,
+            (kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing20 * 3.5).heightBox,
             verticalMargin.heightBox,
+            MediaQuery.paddingOf(context).bottom.heightBox,
           ],
         ],
       ),

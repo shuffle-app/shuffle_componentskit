@@ -7,9 +7,11 @@ class UiDonationUserModel {
   final String name;
   final String? points;
   final UserTileType userType;
+  final String? avatarUrl;
 
   UiDonationUserModel({
     this.points,
+    this.avatarUrl,
     required this.sum,
     required this.name,
     required this.userType,

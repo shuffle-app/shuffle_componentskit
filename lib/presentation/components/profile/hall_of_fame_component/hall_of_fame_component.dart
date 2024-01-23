@@ -9,6 +9,7 @@ class HallOfFameComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlurredAppBarPage(title: S.of(context).HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
+      SpacingFoundation.verticalSpace12,
       GridView.count(
         crossAxisCount: 3,
         addAutomaticKeepAlives: false,
@@ -16,7 +17,7 @@ class HallOfFameComponent extends StatelessWidget {
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(
             horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing16),
-        childAspectRatio: 0.56.sp,
+        childAspectRatio: 0.5.sp,
         crossAxisSpacing: SpacingFoundation.verticalSpacing8,
         children: items
             .map((e) => GridTitledItemWidget(

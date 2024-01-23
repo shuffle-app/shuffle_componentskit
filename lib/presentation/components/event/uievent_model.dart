@@ -56,17 +56,17 @@ class UiEventModel extends Advertisable {
               title: S.current.DontMissIt,
               description: formatDate(date, dateTo, time, timeTo, weekdays)!,
             ),
-          if (location != null)
+          if (location != null && location.isNotEmpty)
             UiDescriptionItemModel(
               title: S.current.Place,
               description: location,
             ),
-          if (phone != null)
+          if (phone != null && phone.isNotEmpty)
             UiDescriptionItemModel(
               title: S.current.Phone,
               description: phone,
             ),
-          if (website != null)
+          if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(
               title: S.current.Website,
               description: website,
