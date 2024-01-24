@@ -117,8 +117,10 @@ class _UserListView extends StatelessWidget {
 
         return UiKitDonationCard(
           number: user.position,
-          title: user.username,
-          subtitle: user.name,
+          username: user.username,
+          name: user.name,
+          avatarUrl: user.avatarUrl,
+          userTileType: user.userType,
           points: user.points,
           sum: user.sum.toString(),
         );

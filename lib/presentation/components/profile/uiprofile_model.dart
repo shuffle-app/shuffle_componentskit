@@ -17,6 +17,7 @@ class UiProfileModel {
   final List<String>? matchingInterests;
   final VoidCallback? onViewAllAchievements;
   final List<UiKitAchievementsModel> achievements;
+  final UserTileType userTileType;
 
   ProfileCard get cardWidget {
     AutoSizeGroup group = AutoSizeGroup();
@@ -28,13 +29,14 @@ class UiProfileModel {
       avatarUrl: avatarUrl,
       followers: followers,
       interests: interests,
+      userTileType: userTileType,
       onFollow: onFollow,
       matchingInterests: matchingInterests,
       profileType: ProfileCardType.personal,
       showSupportShuffle: showSupportShuffle,
       onDonate: onDonate,
       onViewAllAchievements: onViewAllAchievements,
-      achievements: achievements.where((element) => element.asset!=null).toList(),
+      achievements: achievements.where((element) => element.asset != null).toList(),
       profileStats: [
         UiKitStats(
           title: S.current.Balance,
@@ -68,6 +70,7 @@ class UiProfileModel {
     this.favorites,
     this.avatarUrl,
     this.interests,
+    this.userTileType = UserTileType.ordinary,
     this.followers,
     this.achievements = const [],
     this.onViewAllAchievements,
@@ -90,6 +93,7 @@ class UiProfileModel {
     List<String>? matchingInterests,
     VoidCallback? onViewAllAchievements,
     List<UiKitAchievementsModel>? achievements,
+    UserTileType? userTileType,
   }) =>
       UiProfileModel(
         nickname: nickname ?? this.nickname,
@@ -104,7 +108,8 @@ class UiProfileModel {
         interests: interests ?? this.interests,
         favorites: favorites ?? this.favorites,
         matchingInterests: matchingInterests ?? this.matchingInterests,
-        onViewAllAchievements: onViewAllAchievements?? this.onViewAllAchievements,
-        achievements: achievements?? this.achievements,
+        onViewAllAchievements: onViewAllAchievements ?? this.onViewAllAchievements,
+        achievements: achievements ?? this.achievements,
+        userTileType: userTileType ?? this.userTileType,
       );
 }

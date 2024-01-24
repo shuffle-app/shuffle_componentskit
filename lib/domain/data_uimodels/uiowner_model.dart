@@ -42,12 +42,7 @@ class UiOwnerModel {
                   iconData: ShuffleUiKitIcons.memeberGradientStar,
                 ),
                 subtitle: snapshot.hasData ? snapshot.data : null,
-                leading: BorderedUserCircleAvatar(
-                  imageUrl: logo,
-                  name: name,
-                  size: 48,
-                  border: GradientFoundation.gradientBorder,
-                ),
+                leading: context.userAvatar(size: UserAvatarSize.x40x40, type: type, userName: name, imageUrl: logo),
                 menuOptions: [
                   if (onBlockTap != null)
                     UiKitPopUpMenuButtonOption(

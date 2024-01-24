@@ -48,6 +48,7 @@ class _FAQComponentState extends State<FAQComponent> {
           child: UiKitInputFieldRightIcon(
             hintText: S.of(context).Search.toUpperCase(),
             controller: _controller,
+            fillColor: theme?.colorScheme.surface3,
             icon: ImageWidget(
               svgAsset: GraphicsFoundation.instance.svg.search,
               color: Colors.white.withOpacity(0.5),

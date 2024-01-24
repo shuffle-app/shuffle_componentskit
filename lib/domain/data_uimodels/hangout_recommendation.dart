@@ -1,3 +1,4 @@
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 class HangoutRecommendation {
   final int userId;
 
@@ -11,6 +12,8 @@ class HangoutRecommendation {
 
   final int? commonInterests;
 
+  final UserTileType userTileType;
+
   HangoutRecommendation({
     required this.userId,
     this.userAvatar,
@@ -18,6 +21,7 @@ class HangoutRecommendation {
     this.userName,
     this.userPointsBalance,
     this.commonInterests,
+    this.userTileType = UserTileType.ordinary,
   });
 
   HangoutRecommendation copyWith({
