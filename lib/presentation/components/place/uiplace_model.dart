@@ -46,7 +46,10 @@ class UiPlaceModel {
     this.baseTags = const [],
     this.weekdays = const [],
   }) : descriptionItems = [
-          UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website ?? ''),
+          UiDescriptionItemModel(
+              title: S.current.Website,
+              description: website != null && website.isNotEmpty ? title ?? '' : '',
+              descriptionUrl: website ?? ''),
           UiDescriptionItemModel(title: S.current.Phone, description: phone ?? ''),
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
           if (formatDate(null, null, openFrom, openTo, weekdays) != null)
@@ -65,8 +68,6 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Photos);
     } else if (logo == null || logo!.isEmpty) {
       return S.current.XIsRequired(S.current.Logo);
-    // } else if (website == null || website!.isEmpty) {
-    //   return S.current.XIsRequired(S.current.Website);
     } else if (phone == null || phone!.isEmpty) {
       return S.current.XIsRequired(S.current.Phone);
     } else if (location == null || location!.isEmpty) {

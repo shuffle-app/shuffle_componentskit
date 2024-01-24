@@ -78,7 +78,7 @@ class MoodComponent extends StatelessWidget {
                         return UiKitWeatherInfoCard(
                           weatherType: item.title,
                           temperature: item.description,
-                          active: item.active,
+                          active: !item.active,
                           height: smallCardHeight,
                         );
                       }(),
@@ -181,17 +181,16 @@ class MoodComponent extends StatelessWidget {
                 ).paddingSymmetric(horizontal: horizontalMargin);
               },
             ),
-            (kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing20 * 3).heightBox,
+            (kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing20 * 3.5).heightBox,
             verticalMargin.heightBox,
+            MediaQuery.paddingOf(context).bottom.heightBox,
           ],
         ],
       ),
       ValueListenableBuilder<bool>(
         valueListenable: isVisibleButton,
-        builder: (context, value, child) => AnimatedOpacity(
-            duration: const Duration(milliseconds: 200),
-            opacity: value ? 1:0, child: child!),
-        // builder: (context, value, child) => Visibility.maintain(visible: value, child: child!),
+        builder: (context, value, child) =>
+            AnimatedOpacity(duration: const Duration(milliseconds: 200), opacity: value ? 1 : 0, child: child!),
         child: SlidableButton(
           isCompleted: mood.activatedLevel != null,
           customBorder: mood.activatedLevel == null || onLevelComplited != null
@@ -208,7 +207,9 @@ class MoodComponent extends StatelessWidget {
             ),
           ),
         ).paddingSymmetric(horizontal: horizontalMargin),
-      ).paddingOnly(bottom: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing12),
+      ).paddingOnly(
+          bottom:
+               MediaQuery.paddingOf(context).bottom),
     ]);
   }
 }

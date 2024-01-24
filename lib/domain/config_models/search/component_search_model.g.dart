@@ -10,6 +10,7 @@ ComponentSearchModel _$ComponentSearchModelFromJson(
         Map<String, dynamic> json) =>
     ComponentSearchModel(
       showFree: json['show_free'] as bool?,
+      showSocial: json['show_social'] as bool?,
       content:
           ContentBaseModel.fromJson(json['content'] as Map<String, dynamic>),
       pageBuilderType:
@@ -28,6 +29,7 @@ Map<String, dynamic> _$ComponentSearchModelToJson(
       'builder_type': _$PageBuilderTypeEnumMap[instance.pageBuilderType]!,
       'position_model': instance.positionModel,
       'show_free': instance.showFree,
+      'show_social': instance.showSocial,
       'content': instance.content,
     };
 

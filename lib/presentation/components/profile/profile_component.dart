@@ -14,6 +14,8 @@ class ProfileComponent extends StatelessWidget {
   final bool showHowItWorks;
   final List<HangoutRecommendation>? recommendedUsers;
   final List<UiEventModel>? events;
+  final List<UiEventModel> favoriteEvents;
+  final List<UiPlaceModel> favoritePlaces;
   final Function(UiEventModel)? onEventTap;
   final VoidCallback? onFulfillDream;
   final VoidCallback? onSettingsPressed;
@@ -31,12 +33,15 @@ class ProfileComponent extends StatelessWidget {
     this.onEventTap,
     this.onSettingsPressed,
     this.onMessagePressed,
+    this.favoriteEvents = const [],
+    this.favoritePlaces = const [],
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -100,6 +105,7 @@ class ProfileComponent extends StatelessWidget {
               userName: user?.userName ?? '',
               userPoints: user?.userPointsBalance ?? 0,
               sameInterests: user?.commonInterests ?? 0,
+              userTileType: user?.userTileType ?? UserTileType.ordinary,
               onMessage: () {
                 buildComponent(
                   context,
@@ -108,32 +114,43 @@ class ProfileComponent extends StatelessWidget {
                     useRootNavigator: true,
                     child: Builder(
                       builder: (context) {
-                        var model = UiInviteToFavouritePlacesModel(
+                        var model = UiInviteToFavoritePlacesModel(
                           date: DateTime.now(),
                         );
                         String? selected;
 
                         return StatefulBuilder(
-                          builder: (context, state) => InviteToFavouritePlacesComponent(
-                            places: List<UiKitLeadingRadioTile>.generate(
-                              10,
-                              (index) => UiKitLeadingRadioTile(
-                                title: S.of(context).NPlace(index),
-                                selected: selected == S.of(context).NPlace(index),
-                                onTap: () {
-                                  state(() {
-                                    selected = S.of(context).NPlace(index);
-                                  });
-                                },
-                                avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
-                                tags: [
-                                  UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
-                                  UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
-                                  UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
-                                  UiKitTag(title: S.of(context).Title, icon: ShuffleUiKitIcons.cocktail),
-                                ],
-                              ),
-                            ),
+                          builder: (context, state) => InviteToFavoritePlacesComponent(
+                            places: favoritePlaces
+                                .map(
+                                  (e) => UiKitLeadingRadioTile(
+                                    title: e.title ?? '',
+                                    selected: selected == (e.title ?? ''),
+                                    onTap: () {
+                                      state(() {
+                                        selected = e.title ?? '';
+                                      });
+                                    },
+                                    avatarLink:
+                                        e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                                    tags: e.tags,
+                                  ),
+                                )
+                                .toList(),
+                            events: favoriteEvents
+                                .map((e) => UiKitLeadingRadioTile(
+                                      title: e.title ?? '',
+                                      selected: selected == (e.title ?? ''),
+                                      onTap: () {
+                                        state(() {
+                                          selected = e.title ?? '';
+                                        });
+                                      },
+                                      avatarLink:
+                                          e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                                      tags: e.tags,
+                                    ))
+                                .toList(),
                             uiModel: model,
                             onInvite: onInvite == null || selected == null
                                 ? null
@@ -164,7 +181,7 @@ class ProfileComponent extends StatelessWidget {
                                 },
                               );
                               if (newDate != null) {
-                                state(() => model = UiInviteToFavouritePlacesModel(date: newDate));
+                                state(() => model = UiInviteToFavoritePlacesModel(date: newDate));
                               }
                             },
                           ),

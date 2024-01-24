@@ -18,16 +18,18 @@ class PlaceComponent extends StatelessWidget {
   final FutureOr<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
+  final VoidCallback? onSharePressed;
 
-  const PlaceComponent(
-      {Key? key,
-      required this.place,
-      this.complaintFormComponent,
-      this.isCreateEventAvaliable = false,
-      this.onEventCreate,
-      this.onEventTap,
-      this.events})
-      : super(key: key);
+  const PlaceComponent({
+    Key? key,
+    required this.place,
+    this.complaintFormComponent,
+    this.isCreateEventAvaliable = false,
+    this.onEventCreate,
+    this.onEventTap,
+    this.onSharePressed,
+    this.events,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +47,15 @@ class PlaceComponent extends StatelessWidget {
           )
         : ComponentPlaceModel.fromJson(config['place']);
     final titleAlignment = model.positionModel?.titleAlignment;
-    final bodyAlignment = model.positionModel?.bodyAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     final theme = context.uiKitTheme;
 
-    return Column(
+    return ListView(
+      primary: false,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -62,14 +66,21 @@ class PlaceComponent extends StatelessWidget {
               title: place.title,
               avatarUrl: place.logo,
               horizontalMargin: horizontalMargin,
+              trailing: GestureDetector(
+                onTap: onSharePressed,
+                child: Icon(
+                  ShuffleUiKitIcons.share,
+                  color: theme?.colorScheme.darkNeutral800,
+                ),
+              ),
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-          children: [
+        // Column(
+        //   mainAxisSize: MainAxisSize.min,
+        //   mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        //   crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+        //   children: [
             Stack(
               children: [
                 UiKitMediaSliderWithTags(
@@ -240,10 +251,10 @@ class PlaceComponent extends StatelessWidget {
                             ),
                           ];
                         }(),
-                      )),
+                      )).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
             Wrap(
-              spacing: SpacingFoundation.horizontalSpacing8,
+              // spacing: SpacingFoundation.horizontalSpacing8,
               runSpacing: SpacingFoundation.verticalSpacing8,
               children: place.descriptionItems!
                   .map((e) => GestureDetector(
@@ -263,10 +274,10 @@ class PlaceComponent extends StatelessWidget {
                         spacing: SpacingFoundation.horizontalSpacing8,
                       )))
                   .toList(),
-            ),
+            ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace8,
-          ],
-        ),
+          // ],
+        // ),
       ],
       // ),
     ).paddingSymmetric(vertical: verticalMargin);

@@ -136,6 +136,7 @@ class _InviteComponentState extends State<InviteComponent> {
             ? UiKitUserTileWithOption(
                 date: widget.invitedUser!.date,
                 name: widget.invitedUser!.name,
+                type: widget.invitedUser!.userTileType,
                 subtitle: widget.invitedUser!.description,
                 onOptionTap: widget.onRemoveUserOptionTap!,
                 options: [

@@ -90,7 +90,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GradientableWidget(
-                        gradient: GradientFoundation.buttonGradient,
+                        gradient: GradientFoundation.starLinearGradient,
                         child: ImageWidget(
                           iconData: ShuffleUiKitIcons.gradientStar,
                           color: Colors.white,

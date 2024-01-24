@@ -36,9 +36,10 @@ class _FAQComponentState extends State<FAQComponent> {
 
     final itemsToShow = _controller.text.isEmpty
         ? widget.faqData.keys.toList()
-        : widget.faqData.keys.where((element) => element.toLowerCase().contains(_controller.text.toLowerCase())).toList();
-    // vertical: widget.positionModel?.verticalMargin?.toDouble() ?? 0,
-    // horizontal: widget.positionModel?.horizontalMargin?.toDouble() ?? 0,
+        : widget.faqData.keys
+            .where((element) => element.toLowerCase().contains(_controller.text.toLowerCase()))
+            .toList();
+
     return Scaffold(
       body: BlurredAppBarPage(
         title: S.of(context).Faq.toUpperCase(),
@@ -48,9 +49,10 @@ class _FAQComponentState extends State<FAQComponent> {
           child: UiKitInputFieldRightIcon(
             hintText: S.of(context).Search.toUpperCase(),
             controller: _controller,
+            fillColor: theme?.colorScheme.surface3,
             icon: ImageWidget(
               svgAsset: GraphicsFoundation.instance.svg.search,
-              color: Colors.white.withOpacity(0.5),
+              color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
             ),
           ),
         ),
@@ -70,11 +72,11 @@ class _FAQComponentState extends State<FAQComponent> {
           return Theme(
             data: ThemeData(
               textButtonTheme: TextButtonThemeData(
-                style: context.uiKitTheme?.textButtonStyle().copyWith(
+                style: theme?.textButtonStyle(theme.colorScheme.inversePrimary).copyWith(
                       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
                       textStyle: MaterialStateTextStyle.resolveWith(
                         (states) {
-                          return context.uiKitTheme!.regularTextTheme.body;
+                          return theme.regularTextTheme.body;
                         },
                       ),
                     ),
@@ -99,11 +101,12 @@ class _FAQComponentState extends State<FAQComponent> {
                     text: itemsToShow[index],
                     iconInfo: BaseUiKitButtonIconData(
                       iconData: ShuffleUiKitIcons.chevronright,
-                      color: Colors.white,
+                      color: theme?.colorScheme.inversePrimary,
                     ),
                   ),
                 ),
-                const Divider(color: UiKitColors.darkNeutral600).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
+                Divider(color: theme?.colorScheme.darkNeutral600)
+                    .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
               ],
             ),
           );

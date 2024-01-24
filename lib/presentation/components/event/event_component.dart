@@ -9,11 +9,17 @@ class EventComponent extends StatelessWidget {
   final UiEventModel event;
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
+  final VoidCallback? onSharePressed;
   final ComplaintFormComponent? complaintFormComponent;
 
-  const EventComponent(
-      {Key? key, required this.event, this.isEligibleForEdit = false, this.onEditPressed, this.complaintFormComponent})
-      : super(key: key);
+  const EventComponent({
+    Key? key,
+    required this.event,
+    this.isEligibleForEdit = false,
+    this.onEditPressed,
+    this.onSharePressed,
+    this.complaintFormComponent,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +32,13 @@ class EventComponent extends StatelessWidget {
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
-    final bodyAlignment = model.positionModel?.bodyAlignment;
     final titleAlignment = model.positionModel?.titleAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
-    return Column(
+    return ListView(
+      primary: false,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         SpacingFoundation.verticalSpace8,
         Column(
@@ -39,28 +47,46 @@ class EventComponent extends StatelessWidget {
           crossAxisAlignment: titleAlignment.crossAxisAlignment,
           children: [
             if (event.title != null) ...[
-              Stack(
-                alignment: titleAlignment.crossAxisAlignment == CrossAxisAlignment.center
-                    ? Alignment.center
-                    : AlignmentDirectional.topStart,
-                children: [
-                  AutoSizeText(
-                    event.title!,
-                    minFontSize: 18.w,
-                    stepGranularity: 1.w,
-                    style: theme?.boldTextTheme.title2,
-                    textAlign: titleAlignment.textAlign,
-                  ),
-                  if (isEligibleForEdit)
-                    Positioned(
-                      right: 0,
-                      child: IconButton(
-                        icon: ImageWidget(
-                            iconData: ShuffleUiKitIcons.pencil, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
-                        onPressed: () => onEditPressed?.call(),
+              SizedBox(
+                width: 1.sw,
+                child: Stack(
+                  alignment: titleAlignment.crossAxisAlignment == CrossAxisAlignment.center
+                      ? Alignment.center
+                      : AlignmentDirectional.topStart,
+                  children: [
+                    SizedBox(
+                      width: 1.sw - (56.w),
+                      child: AutoSizeText(
+                        event.title!,
+                        minFontSize: 18.w,
+                        stepGranularity: 1.w,
+                        style: theme?.boldTextTheme.title2,
+                        textAlign: titleAlignment.textAlign,
                       ),
-                    )
-                ],
+                    ),
+                    if (isEligibleForEdit)
+                      Positioned(
+                        right: 0,
+                        child: IconButton(
+                          icon: ImageWidget(
+                              iconData: ShuffleUiKitIcons.pencil, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                          onPressed: () => onEditPressed?.call(),
+                        ),
+                      ),
+                    if (onSharePressed != null)
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: GestureDetector(
+                          onTap: onSharePressed,
+                          child: ImageWidget(
+                            iconData: ShuffleUiKitIcons.share,
+                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
               SpacingFoundation.verticalSpace8,
             ],
@@ -74,11 +100,11 @@ class EventComponent extends StatelessWidget {
           ],
         ),
         SpacingFoundation.verticalSpace16,
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-          crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-          children: [
+        // Column(
+        //   mainAxisSize: MainAxisSize.min,
+        //   mainAxisAlignment: bodyAlignment.mainAxisAlignment,
+        //   crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+        //   children: [
             Align(
               alignment: Alignment.center,
               child: Stack(
@@ -146,8 +172,8 @@ class EventComponent extends StatelessWidget {
                       )).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4))
                   .toList(),
             SpacingFoundation.verticalSpace16,
-          ],
-        ),
+          // ],
+        // ),
       ],
       // ),
     ).paddingSymmetric(

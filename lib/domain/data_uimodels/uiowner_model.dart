@@ -38,16 +38,14 @@ class UiOwnerModel {
           future: username,
           builder: (context, snapshot) => UiKitPopUpMenuTile(
                 title: name,
-                titleIcon: const ImageWidget(
-                  iconData: ShuffleUiKitIcons.memeberGradientStar,
-                ),
-                subtitle: snapshot.hasData ? snapshot.data : null,
-                leading: BorderedUserCircleAvatar(
-                  imageUrl: logo,
-                  name: name,
-                  size: 48,
-                  border: GradientFoundation.gradientBorder,
-                ),
+                titleIcon: const GradientableWidget(
+                    gradient: GradientFoundation.starLinearGradient,
+                    child: ImageWidget(
+                      iconData: ShuffleUiKitIcons.memeberGradientStar,
+                      color: Colors.white,
+                    )),
+                subtitle: snapshot.hasData ? '@${snapshot.data}' : null,
+                leading: context.userAvatar(size: UserAvatarSize.x40x40, type: type, userName: name, imageUrl: logo),
                 menuOptions: [
                   if (onBlockTap != null)
                     UiKitPopUpMenuButtonOption(

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -37,13 +38,40 @@ class DonationComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
+    final theme = context.uiKitTheme;
+    //TODO move to strings/config
+    const hintTitle = 'You can only spend on your dream, otherwise the money will go back to the donators. One request per month.';
+    final boldTextTheme = theme?.boldTextTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SpacingFoundation.verticalSpace16,
+        Row(children: [
         Text(S.of(context).AskPeople, style: boldTextTheme?.title1),
+          const Spacer(),
+          Builder(
+            builder: (context) {
+              return GestureDetector(
+                onTap: () => showUiKitPopover(
+                  context,
+                  showButton: false,
+                  title: Text(
+                    hintTitle,
+                    style: theme?.regularTextTheme.body.copyWith(
+                      color: Colors.black87,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                child: ImageWidget(
+                  iconData: ShuffleUiKitIcons.info,
+                  width: 16.w,
+                  color: theme?.colorScheme.darkNeutral900,
+                ),
+              );
+            },
+          ),]),
         SpacingFoundation.verticalSpace16,
         DonationInfoIndicatorCard(
           number: donationNumber.toString(),

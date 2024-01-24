@@ -3,28 +3,33 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class InviteToFavouritePlacesComponent extends StatelessWidget {
+class InviteToFavoritePlacesComponent extends StatelessWidget {
   final VoidCallback? onInvite;
   final VoidCallback? onDatePressed;
-  final UiInviteToFavouritePlacesModel uiModel;
+  final UiInviteToFavoritePlacesModel uiModel;
   final List<UiKitLeadingRadioTile> places;
+  final List<UiKitLeadingRadioTile> events;
 
-  const InviteToFavouritePlacesComponent({
+  const InviteToFavoritePlacesComponent({
     super.key,
     this.onInvite,
     this.onDatePressed,
     required this.uiModel,
     required this.places,
+    required this.events,
   });
 
   @override
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['invite_people_places'] ?? {});
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+
+    final itemCount = (places.isNotEmpty ? places.length + 1 : 0) + (events.isNotEmpty ? events.length + 1 : 0);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -36,7 +41,7 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                S.of(context).InviteToFavouritePlaces,
+                S.of(context).InviteToFavoritePlaces,
                 style: boldTextTheme?.subHeadline,
               ),
             ),
@@ -58,9 +63,31 @@ class InviteToFavouritePlacesComponent extends StatelessWidget {
           borderRadius: BorderRadius.zero,
           child: ListView.separated(
             padding: EdgeInsets.zero,
-            itemBuilder: (context, index) => places[index],
+            itemBuilder: (context, index) {
+              if (places.isEmpty && events.isEmpty) {
+                return Text(
+                  S.of(context).NoFavoritesFound,
+                  style: regularTextTheme?.title2,
+                );
+              }
+              if (index == 0 && places.isNotEmpty) {
+                return Text(
+                  S.of(context).Places,
+                  style: regularTextTheme?.title2,
+                );
+              } else if (index == (places.isNotEmpty ? places.length + 1 : 0) && events.isNotEmpty) {
+                return Text(
+                  S.of(context).Events,
+                  style: regularTextTheme?.title2,
+                );
+              } else if (index <= places.length) {
+                return places[index - 1];
+              } else {
+                return events[index - (places.isNotEmpty ? places.length - 1 : 0) - 1];
+              }
+            },
             separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-            itemCount: places.length,
+            itemCount: itemCount == 0 ? 1 : itemCount,
           ).paddingSymmetric(
             horizontal: horizontalMargin,
             vertical: verticalMargin,

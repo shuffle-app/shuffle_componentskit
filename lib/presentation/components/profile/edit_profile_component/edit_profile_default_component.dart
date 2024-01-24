@@ -156,7 +156,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         title: Text(
                           hintTitle,
                           style: theme?.regularTextTheme.body.copyWith(
-                            color: theme.colorScheme.bodyTypography,
+                            color: Colors.black87,
                           ),
                           textAlign: TextAlign.center,
                         ),

@@ -3,6 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class UiAboutUserModel {
   final UiKitMenuItem<String>? selectedPersonType;
   final List<String>? selectedReligions;
+
   final String? selectedGender;
   final int? selectedAge;
   String? errorPersonTypeMessage;
