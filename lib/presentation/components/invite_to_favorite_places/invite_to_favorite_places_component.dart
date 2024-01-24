@@ -29,6 +29,8 @@ class InviteToFavoritePlacesComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
+    final itemCount = (places.isNotEmpty ? places.length + 1 : 0) + (events.isNotEmpty ? events.length + 1 : 0);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -73,19 +75,19 @@ class InviteToFavoritePlacesComponent extends StatelessWidget {
                   S.of(context).Places,
                   style: regularTextTheme?.title2,
                 );
-              } else if (index == places.length+1 && events.isNotEmpty) {
+              } else if (index == (places.isNotEmpty ? places.length + 1 : 0) && events.isNotEmpty) {
                 return Text(
                   S.of(context).Events,
                   style: regularTextTheme?.title2,
                 );
-              } else if(index <= places.length) {
-                return places[index-1];
+              } else if (index <= places.length) {
+                return places[index - 1];
               } else {
-                return events[index-places.length-2];
+                return events[index - (places.isNotEmpty ? places.length - 1 : 0) - 1];
               }
             },
             separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-            itemCount: places.length + events.length + 2,
+            itemCount: itemCount == 0 ? 1 : itemCount,
           ).paddingSymmetric(
             horizontal: horizontalMargin,
             vertical: verticalMargin,

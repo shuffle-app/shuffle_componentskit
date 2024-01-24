@@ -1,4 +1,4 @@
-import 'package:shuffle_components_kit/presentation/components/invite_to_favourite_places/ui_invite_to_favourite_places_model.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiInvitePersonModel extends UiInviteToFavoritePlacesModel {
