@@ -1245,21 +1245,21 @@
               }
             },
             "properties": {
-              "select the niche": {
-                "imageLink": "assets/images/png/Select-niche.png",
-                "sortNumber": 1
-              },
-              "press": {
+              "press\n": {
                 "imageLink": "assets/images/png/Press-niche.png",
-                "sortNumber": 3
-              },
-              "get selection": {
-                "imageLink": "assets/images/png/Get-selection.png",
                 "sortNumber": 2
               },
               "choose & plan": {
                 "imageLink": "assets/images/png/Choose-plan.png",
                 "sortNumber": 4
+              },
+              "get selection": {
+                "imageLink": "assets/images/png/Get-selection.png",
+                "sortNumber": 3
+              },
+              "select the niche": {
+                "imageLink": "assets/images/png/Select-niche.png",
+                "sortNumber": 1
               }
             }
           }
