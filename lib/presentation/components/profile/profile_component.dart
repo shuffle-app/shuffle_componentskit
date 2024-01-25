@@ -12,6 +12,7 @@ class ProfileComponent extends StatelessWidget {
   final VoidCallback? onHowItWorksPoped;
   final ValueChanged<InvitationData?>? onInvite;
   final bool showHowItWorks;
+  final bool businessContentEnabled;
   final List<HangoutRecommendation>? recommendedUsers;
   final List<UiEventModel>? events;
   final List<UiEventModel> favoriteEvents;
@@ -26,6 +27,7 @@ class ProfileComponent extends StatelessWidget {
     required this.profile,
     this.recommendedUsers,
     this.showHowItWorks = false,
+    this.businessContentEnabled = false,
     this.onHowItWorksPoped,
     this.onFulfillDream,
     this.onInvite,
@@ -40,8 +42,7 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -81,10 +82,16 @@ class ProfileComponent extends StatelessWidget {
           width: double.infinity,
           child: Stack(
             children: [
-              Text(
-                S.of(context).FindSomeoneToHangOutWith,
-                style: textTheme?.title1,
-              ),
+              if (businessContentEnabled)
+                Text(
+                  S.of(context).FindSomeoneToNetworkWith,
+                  style: textTheme?.title1,
+                ),
+              if (!businessContentEnabled)
+                Text(
+                  S.of(context).FindSomeoneToHangOutWith,
+                  style: textTheme?.title1,
+                ),
               if (showHowItWorks)
                 HowItWorksWidget(
                   element: model.content.body![ContentItemType.hintDialog]!,
@@ -131,8 +138,7 @@ class ProfileComponent extends StatelessWidget {
                                         selected = e.title ?? '';
                                       });
                                     },
-                                    avatarLink:
-                                        e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                                    avatarLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
                                     tags: e.tags,
                                   ),
                                 )
@@ -146,8 +152,7 @@ class ProfileComponent extends StatelessWidget {
                                           selected = e.title ?? '';
                                         });
                                       },
-                                      avatarLink:
-                                          e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                                      avatarLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
                                       tags: e.tags,
                                     ))
                                 .toList(),
