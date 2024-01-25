@@ -2177,6 +2177,16 @@
         "horizontal_margin": 16
       }
     },
+    "search_social_section_item_details": {
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 16
+      }
+    },
     "search_social_content_type_recommendation": {
       "version": "1.0.0",
       "builder_type": "page",

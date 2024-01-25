@@ -20,6 +20,7 @@ class SearchSocialComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
+    final isLightTheme = context.uiKitTheme?.themeMode == ThemeMode.light;
     final model = ComponentModel.fromJson(GlobalConfiguration().appConfig.content['search_social_page']);
     final placeTypes = model.content.body?[ContentItemType.horizontalList]?.properties?.entries
             .where((element) => element.value.type == 'place')
@@ -79,6 +80,7 @@ class SearchSocialComponent extends StatelessWidget {
                         title: e.key,
                         iconData: BaseUiKitButtonIconData(iconPath: e.value.imageLink),
                         iconRingColor: e.value.color,
+                        backgroundColor: isLightTheme ? colorScheme?.surface : null,
                       ).paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                     )
                     .toList(),
@@ -89,9 +91,11 @@ class SearchSocialComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace24,
         if (placesEvents != null && placesEvents!.isNotEmpty) ...[
           UiKitExpandableList(
+            itemsTitle: S.of(context).Places,
             items: placesEvents!
                 .map(
                   (e) => UiKitSocialSearchCard(
+                    onTap: e.onTap,
                     title: e.title,
                     subtitle: e.subtitle,
                     distance: e.distance,
@@ -175,9 +179,11 @@ class SearchSocialComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace24,
         if (servicesEvents != null && servicesEvents!.isNotEmpty) ...[
           UiKitExpandableList(
+            itemsTitle: S.of(context).Services,
             items: servicesEvents!
                 .map(
                   (e) => UiKitSocialSearchCard(
+                    onTap: e.onTap,
                     title: e.title,
                     subtitle: e.subtitle,
                     distance: e.distance,
