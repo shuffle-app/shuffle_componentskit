@@ -1233,32 +1233,32 @@
             "body": {
               "text": {
                 "properties": {
-                  "you get exactly what you need": {}
+                  "you get what your niche contains": {}
                 }
               }
             },
             "text": {
               "title": {
                 "properties": {
-                  "Depending on...": {}
+                  "Great match...": {}
                 }
               }
             },
             "properties": {
-              "your location": {
-                "imageLink": "assets/images/png/Map.png",
+              "select the niche": {
+                "imageLink": "assets/images/png/Select-niche.png",
                 "sortNumber": 1
               },
-              "weather around": {
-                "imageLink": "assets/images/png/Sun-clouds.png",
+              "press": {
+                "imageLink": "assets/images/png/Press-niche.png",
                 "sortNumber": 3
               },
-              "your interests": {
-                "imageLink": "assets/images/png/Dart.png",
+              "get selection": {
+                "imageLink": "assets/images/png/Get-selection.png",
                 "sortNumber": 2
               },
-              "and other 14 scales": {
-                "imageLink": "assets/images/png/Smile-mood.png",
+              "choose & plan": {
+                "imageLink": "assets/images/png/Choose-plan.png",
                 "sortNumber": 4
               }
             }
