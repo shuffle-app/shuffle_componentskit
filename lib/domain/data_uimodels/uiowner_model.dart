@@ -38,12 +38,7 @@ class UiOwnerModel {
           future: username,
           builder: (context, snapshot) => UiKitPopUpMenuTile(
                 title: name,
-                titleIcon: const GradientableWidget(
-                    gradient: GradientFoundation.starLinearGradient,
-                    child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.memeberGradientStar,
-                      color: Colors.white,
-                    )),
+                titleIcon: UiKitUserBadge(userType: type,),
                 subtitle: snapshot.hasData ? '@${snapshot.data}' : null,
                 leading: context.userAvatar(size: UserAvatarSize.x40x40, type: type, userName: name, imageUrl: logo),
                 menuOptions: [

@@ -143,7 +143,9 @@ class ChatComponent extends StatelessWidget {
           ),
           separatorBuilder: (context, index) => SpacingFoundation.verticalSpace8,
         ),
-        SpacingFoundation.verticalSpace4,
+        SpacingFoundation.verticalSpace24,
+        SpacingFoundation.verticalSpace12,
+        SpacingFoundation.verticalSpace24,
       ],
     );
   }
