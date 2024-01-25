@@ -8,6 +8,7 @@ class AboutUserComponent extends StatelessWidget {
   final VoidCallback? onSubmitUserData;
   final ValueChanged<String>? onReligionSelected;
   final ValueChanged<UiKitMenuItem<String>?>? onPersonTypeChanged;
+  final List<UiKitMenuItem<String>> mindsets;
   final ValueChanged<int?>? onAgeChanged;
   final String? Function(String?)? inputFieldValidator;
   final ValueChanged<String>? onGenderChanged;
@@ -21,6 +22,7 @@ class AboutUserComponent extends StatelessWidget {
   const AboutUserComponent({
     Key? key,
     required this.aboutUserModel,
+    required this.mindsets,
     this.onReligionSelected,
     this.inputFieldValidator,
     required this.nameController,
@@ -151,32 +153,19 @@ class AboutUserComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
               color: colorScheme?.surface,
-              title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
+              title:
+              // title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                   S.of(context).DescribeYourself,
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
               child: UiKitMenu<String>(
                 tilesColor: Colors.transparent,
                 useCustomTiles: false,
-                title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
+                title:
+                // title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                     S.of(context).DescribeYourself,
                 selectedItem: aboutUserModel.selectedPersonType,
-                items: () {
-                  final rawItems =
-                      model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
-
-                  return (rawItems?.entries
-                          .map<UiKitMenuItem<String>>(
-                            (e) => UiKitMenuItem<String>(
-                              title: e.key,
-                              value: e.value.value,
-                              iconLink: e.value.imageLink ?? '',
-                            ),
-                          )
-                          .toList() ??
-                      [])
-                    ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
-                }(),
+                items: mindsets,
                 onSelected: (personType) => onPersonTypeChanged?.call(personType),
               )),
         ],

@@ -5,6 +5,9 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class AboutCompanyComponent extends StatelessWidget {
   final VoidCallback? onFinished;
   final UiAboutCompanyModel uiModel;
+  final List<UiKitMenuItem<String>> niches;
+  final List<String> audiences;
+  final List<String> targetAges;
   final TextEditingController nameController;
   final TextEditingController positionController;
   final GlobalKey<FormState> formKey;
@@ -26,6 +29,9 @@ class AboutCompanyComponent extends StatelessWidget {
     this.onAudiencesChanged,
     this.nameValidator,
     this.positionValidator,
+    required this.niches,
+    required this.audiences,
+    required this.targetAges,
   });
 
   @override
@@ -33,31 +39,38 @@ class AboutCompanyComponent extends StatelessWidget {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
 
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_company']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     String ageGroupsTitle = '';
-    if (model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ??
+    if (model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]?.properties
+            ?.isNotEmpty ??
         false) {
-      ageGroupsTitle =
-          model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+      ageGroupsTitle = model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]
+              ?.properties?.keys.first ??
+          '';
     }
-    final ageGroups = model
-            .content.body?[ContentItemType.additionalMultiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys
-            .toList() ??
-        [];
-    ageGroups.sort((a, b) => int.parse(a.characters.first).compareTo(int.parse(b.characters.first)));
+    // final ageGroups = model
+    //         .content.body?[ContentItemType.additionalMultiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys
+    //         .toList() ??
+    //     [];
+    // ageGroups.sort((a, b) => int.parse(a.characters.first).compareTo(int.parse(b.characters.first)));
     String audiencesTitle = '';
-    if (model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ?? false) {
+    if (model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ??
+        false) {
       audiencesTitle =
           model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     }
-    final audiences =
-        model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys.toList() ?? [];
+    // final audiences = model
+    //         .content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys
+    //         .toList() ??
+    //     [];
     final nicheTitle =
         model.content.body?[ContentItemType.singleDropdown]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    final niches = model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
+    // final niches =
+    //     model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
     final pageTitle = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
 
     return SingleChildScrollView(
@@ -150,17 +163,7 @@ class AboutCompanyComponent extends StatelessWidget {
                 onSelected: (item) => onNicheChanged?.call(item),
                 title: nicheTitle,
                 selectedItem: uiModel.selectedMenuItem,
-                items: niches?.keys.map<UiKitMenuItem<String>>((e) {
-                      final item = niches[e];
-
-                      return UiKitMenuItem<String>(
-                        title: e.toUpperCase(),
-                        value: item?.value,
-                        iconLink: item?.imageLink ?? '',
-                        type: item?.type,
-                      );
-                    }).toList() ??
-                    [],
+                items: niches,
               ).paddingAll(EdgeInsetsFoundation.all4),
             ),
             SpacingFoundation.verticalSpace16,
@@ -193,7 +196,7 @@ class AboutCompanyComponent extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  children: ageGroups
+                  children: targetAges
                       .map<Widget>(
                         (e) => UiKitOrdinaryChip(
                           title: e,
