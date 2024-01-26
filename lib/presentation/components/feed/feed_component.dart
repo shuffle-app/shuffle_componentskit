@@ -279,6 +279,9 @@ class FeedComponent extends StatelessWidget {
                 }
 
                 return PlacePreview(
+                  showFavoriteHint: index==0,
+                  isFavorite: item.isFavorite,
+                  onFavoriteChanged: item.onFavoriteChanged,
                   onTap: (id) => onListItemPressed?.call(id, item.type, item.source),
                   place: UiPlaceModel(
                     id: item.id,
