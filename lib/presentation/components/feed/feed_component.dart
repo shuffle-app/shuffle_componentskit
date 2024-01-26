@@ -71,10 +71,10 @@ class FeedComponent extends StatelessWidget {
 
     return CustomScrollView(
       slivers: [
+        SizedBox(
+          height: MediaQuery.viewPaddingOf(context).top,
+        ).wrapSliverBox,
         if (showBusinessContent) ...[
-          SizedBox(
-            height: MediaQuery.viewPaddingOf(context).top,
-          ).wrapSliverBox,
           Text(
             upcomingGlobalsTitle ?? '',
             style: themeTitleStyle,
@@ -144,19 +144,16 @@ class FeedComponent extends StatelessWidget {
         if (!showBusinessContent) ...[
           SpacingFoundation.verticalSpace16.wrapSliverBox,
           if (feed.recommendedEvent != null && (feedLeisureModel.showDailyRecomendation ?? true)) ...[
-            SafeArea(
-              bottom: false,
-              child: UiKitAccentCard(
-                onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
-                title: feed.recommendedEvent!.title ?? '',
-                additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
-                accentMessage: S.of(context).DontMissIt,
-                image: ImageWidget(
-                  link: feed.recommendedEvent?.media.firstOrNull?.link,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  errorWidget: const UiKitBigPhotoErrorWidget(),
-                ),
+            UiKitAccentCard(
+              onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
+              title: feed.recommendedEvent!.title ?? '',
+              additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
+              accentMessage: S.of(context).DontMissIt,
+              image: ImageWidget(
+                link: feed.recommendedEvent?.media.firstOrNull?.link,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                errorWidget: const UiKitBigPhotoErrorWidget(),
               ),
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace24.wrapSliverBox,
