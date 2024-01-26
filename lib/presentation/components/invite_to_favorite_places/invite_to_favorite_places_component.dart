@@ -83,7 +83,7 @@ class InviteToFavoritePlacesComponent extends StatelessWidget {
               } else if (index <= places.length) {
                 return places[index - 1];
               } else {
-                return events[index - (places.isNotEmpty ? places.length - 1 : 0) - 1];
+                return events[index - (places.isNotEmpty ? places.length + 1 : 0) - 1];
               }
             },
             separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,

@@ -1,5 +1,5 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-
+import 'package:flutter/material.dart';
 import '../../../shuffle_components_kit.dart';
 
 class UiFeedModel {
@@ -38,6 +38,8 @@ class UiUniversalModel extends Advertisable {
   final String? title;
   final String? website;
   final String? location;
+  final Stream<bool>? isFavorite;
+  final VoidCallback? onFavoriteChanged;
 
   UiUniversalModel({
     required this.id,
@@ -51,6 +53,8 @@ class UiUniversalModel extends Advertisable {
     this.location,
     this.source,
     this.title,
+    this.isFavorite,
+    this.onFavoriteChanged,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -65,5 +69,7 @@ class UiUniversalModel extends Advertisable {
     this.location,
     this.source,
     this.title,
+    this.isFavorite,
+    this.onFavoriteChanged,
   }) : super(isAdvertisement: true);
 }
