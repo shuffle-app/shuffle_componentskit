@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class ComplaintFormComponent extends StatelessWidget {
+class ComplaintFormComponent extends StatefulWidget {
   const ComplaintFormComponent({
     super.key,
     required this.onSend,
@@ -25,11 +25,41 @@ class ComplaintFormComponent extends StatelessWidget {
   final String? Function(String?)? issueValidator;
 
   @override
+  State<ComplaintFormComponent> createState() => _ComplaintFormComponentState();
+}
+
+class _ComplaintFormComponentState extends State<ComplaintFormComponent> {
+  final ValueNotifier<bool> formFillNotifier = ValueNotifier<bool>(false);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget.nameController.addListener(_textControllersListener);
+      widget.emailController.addListener(_textControllersListener);
+      widget.issueController.addListener(_textControllersListener);
+    });
+  }
+
+  _textControllersListener() {
+    formFillNotifier.value =
+        widget.emailController.text.isNotEmpty && widget.nameController.text.isNotEmpty && widget.issueController.text.isNotEmpty;
+  }
+
+  @override
+  void dispose() {
+    widget.nameController.removeListener(_textControllersListener);
+    widget.emailController.removeListener(_textControllersListener);
+    widget.issueController.removeListener(_textControllersListener);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
     return Form(
-      key: formKey,
+      key: widget.formKey,
       child: Column(
         children: [
           SpacingFoundation.verticalSpace12,
@@ -37,39 +67,46 @@ class ComplaintFormComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoIcon(
-            controller: nameController,
-            validator: nameValidator,
+            controller: widget.nameController,
+            validator: widget.nameValidator,
             hintText: S.of(context).YourName.toUpperCase(),
             fillColor: theme?.colorScheme.surface3,
           ),
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoIcon(
-            controller: emailController,
-            validator: emailValidator,
+            controller: widget.emailController,
+            validator: widget.emailValidator,
             hintText: S.of(context).YourEmail.toUpperCase(),
             fillColor: theme?.colorScheme.surface3,
           ),
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoIcon(
-            controller: issueController,
-            validator: issueValidator,
+            controller: widget.issueController,
+            validator: widget.issueValidator,
             hintText: S.of(context).DescribeYourIssue.toUpperCase(),
             fillColor: theme?.colorScheme.surface3,
             minLines: 3,
             borderRadius: BorderRadiusFoundation.all24,
           ),
           SpacingFoundation.verticalSpace16,
-          context.gradientButton(
-            data: BaseUiKitButtonData(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  context.pop();
-                  onSend();
-                }
-              },
-              text: S.of(context).Send.toLowerCase(),
-              fit: ButtonFit.fitWidth,
-            ),
+          ValueListenableBuilder(
+            valueListenable: formFillNotifier,
+            builder: (context, hasFilled, child) {
+              return context.gradientButton(
+                data: BaseUiKitButtonData(
+                  onPressed: hasFilled
+                      ? () {
+                          if (widget.formKey.currentState!.validate()) {
+                            context.pop();
+                            widget.onSend();
+                          }
+                        }
+                      : null,
+                  text: S.of(context).Send.toLowerCase(),
+                  fit: ButtonFit.fitWidth,
+                ),
+              );
+            },
           ),
           SpacingFoundation.verticalSpace16,
           MediaQuery.viewInsetsOf(context).bottom.heightBox
