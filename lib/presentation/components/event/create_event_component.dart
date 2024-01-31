@@ -136,7 +136,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         title: S.of(context).Event,
         centerTitle: true,
         autoImplyLeading: true,
-        appBarTrailing: widget.eventToEdit != null
+        appBarTrailing: (widget.eventToEdit?.id ?? -1) > 0
             ? IconButton(
                 icon: ImageWidget(
                     iconData: ShuffleUiKitIcons.trash,

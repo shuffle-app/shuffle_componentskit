@@ -76,4 +76,56 @@ class UiPlaceModel {
 
     return null;
   }
+
+  UiPlaceModel copyWith({
+    int? id,
+    List<BaseUiKitMedia>? media,
+    List<String>? weekdays,
+    String? description,
+    List<UiKitTag>? tags,
+    List<UiKitTag>? baseTags,
+    double? rating,
+    String? title,
+    String? source,
+    String? placeType,
+    String? status,
+    String? logo,
+    List<UiDescriptionItemModel>? descriptionItems,
+    TimeOfDay? openFrom,
+    TimeOfDay? openTo,
+    String? location,
+    String? website,
+    String? phone,
+    String? price,
+    List<HorizontalCaptionedImageData>? branches,
+  }) =>
+      UiPlaceModel(
+        id: id ?? this.id,
+        media: media ?? this.media,
+        weekdays: weekdays ?? this.weekdays,
+        description: description ?? this.description,
+        tags: tags ?? this.tags,
+        baseTags: baseTags ?? this.baseTags,
+        rating: rating ?? this.rating,
+        title: title ?? this.title,
+        source: source ?? this.source,
+        placeType: placeType ?? this.placeType,
+        status: status ?? this.status,
+        logo: logo ?? this.logo,
+        openFrom: openFrom ?? this.openFrom,
+        openTo: openTo ?? this.openTo,
+        location: location ?? this.location,
+        website: website ?? this.website,
+        phone: phone ?? this.phone,
+        price: price ?? this.price,
+        branches: branches ?? this.branches,
+      );
+
+  UiPlaceModel.empty()
+      : id = -1,
+        media = [],
+        weekdays = [],
+        description = '',
+        tags = [],
+        baseTags = [];
 }

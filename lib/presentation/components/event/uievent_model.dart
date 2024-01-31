@@ -106,4 +106,29 @@ class UiEventModel extends Advertisable {
 
     return null;
   }
+
+  UiEventModel.empty()
+      : id = -1,
+        title = null,
+        owner = null,
+        media = const [],
+        favorite = false,
+        isRecurrent = false,
+        date = null,
+        dateTo = null,
+        time = null,
+        timeTo = null,
+        description = null,
+        location = null,
+        eventType = null,
+        price = null,
+        website = null,
+        phone = null,
+        tags = const [],
+        baseTags = const [],
+        rating = null,
+        archived = false,
+        weekdays = const [],
+        descriptionItems = const [],
+        super(isAdvertisement: false);
 }

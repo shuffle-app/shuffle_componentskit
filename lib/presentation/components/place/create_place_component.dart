@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,7 +13,8 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
 
-  const CreatePlaceComponent({super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
+  const CreatePlaceComponent(
+      {super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
 
   @override
   State<CreatePlaceComponent> createState() => _CreatePlaceComponentState();
@@ -146,7 +149,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -158,7 +162,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       title: S.of(context).Place,
       centerTitle: true,
       autoImplyLeading: true,
-      appBarTrailing: widget.placeToEdit != null
+      appBarTrailing: (widget.placeToEdit?.id ?? -1) > 0
           ? IconButton(
               icon: ImageWidget(
                   iconData: ShuffleUiKitIcons.trash,
