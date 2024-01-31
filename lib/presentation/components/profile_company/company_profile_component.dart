@@ -17,7 +17,8 @@ class CompanyProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_profile']);
     final title = model.content.title?[ContentItemType.text]?.properties?.keys.first;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -34,17 +35,22 @@ class CompanyProfileComponent extends StatelessWidget {
     final sortedButtons = buttons?.entries
         .where((element) => element.value.type?.toUpperCase() == (uiModel?.selectedTab ?? tabs.first.title))
         .map<BaseUiKitButtonData>(
-          (buttonData) => BaseUiKitButtonData(
-            text: buttonData.key,
-            iconInfo: BaseUiKitButtonIconData(
-              iconData: GraphicsFoundation.instance.iconFromString(buttonData.value.imageLink ?? ''),
-              color: buttonData.value.color ?? context.uiKitTheme?.colorScheme.inverseSurface,
-              size: iconWidth,
-            ),
-            onPressed: () => onProfileItemChosen(buttonData.value.value),
+      (buttonData) {
+        final linkIsPath = (buttonData.value.imageLink?.contains('.svg') ?? false) ||
+            (buttonData.value.imageLink?.contains('.png') ?? false);
+
+        return BaseUiKitButtonData(
+          text: buttonData.key,
+          iconInfo: BaseUiKitButtonIconData(
+            iconPath: linkIsPath ? buttonData.value.imageLink : null,
+            iconData: linkIsPath ? null : GraphicsFoundation.instance.iconFromString(buttonData.value.imageLink ?? ''),
+            color: buttonData.value.color ?? context.uiKitTheme?.colorScheme.inverseSurface,
+            size: iconWidth,
           ),
-        )
-        .toList();
+          onPressed: () => onProfileItemChosen(buttonData.value.value),
+        );
+      },
+    ).toList();
     sortedButtons?.sort(
       (a, b) => buttons![a.text]!.sortNumber!.compareTo(buttons[b.text]!.sortNumber!),
     );

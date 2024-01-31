@@ -88,6 +88,14 @@ class PlacePreview extends StatelessWidget {
                   builder: (context, snapshot) => Align(
                       alignment: Alignment.center,
                       child: GestureDetector(
+                        onLongPressStart: showFavoriteBtn
+                            ? null
+                            : (event) {
+                                FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                                  intensities: [140, 150, 170, 200],
+                                  pattern: [20, 15, 10, 5],
+                                ));
+                              },
                         onLongPress: showFavoriteBtn
                             ? null
                             : () {
@@ -124,16 +132,17 @@ class PlacePreview extends StatelessWidget {
                               ListenableBuilder(
                                   listenable: _animationNotifier,
                                   builder: (context, child) {
-                                    return _animationNotifier.value ?? const SizedBox.shrink();
+                                    return _animationNotifier.value ??
+                                        (showFavoriteHint
+                                            ? const DelayAndDisposeAnimationWrapper(
+                                                delay: Duration(milliseconds: 500),
+                                                durationToDelay: Duration(milliseconds: 1700 * 5),
+                                                child: UiKitLongTapHintAnimation(
+                                                  duration: Duration(milliseconds: 1700),
+                                                ),
+                                              )
+                                            : const SizedBox.shrink());
                                   }),
-                            if (showFavoriteHint)
-                              const DelayAndDisposeAnimationWrapper(
-                                delay: Duration(milliseconds: 500),
-                                durationToDelay: Duration(milliseconds: 1700 * 5),
-                                child: UiKitLongTapHintAnimation(
-                                  duration: Duration(milliseconds: 1700),
-                                ),
-                              ),
                             if (showFavoriteBtn)
                               Positioned(
                                 top: -5.h,
