@@ -6,29 +6,36 @@ class SupportComponent extends StatelessWidget {
   final TextEditingController _nameController;
   final TextEditingController _emailController;
   final TextEditingController _textController;
+  final TextEditingController _daysCountController;
+
+  final FocusNode daysFocusNode;
   final PositionModel? position;
   final ContentBaseModel content;
   final ValueChanged<bool> onSupportSubmitted;
   final bool isSupportActive;
 
-  SupportComponent(
-      {super.key,
-      this.position,
-      this.isSupportActive = false,
-      required this.onSupportSubmitted,
-      required this.content,
-      TextEditingController? nameController,
-      TextEditingController? emailController,
-      TextEditingController? textController})
-      : _nameController = nameController ?? TextEditingController(),
+  SupportComponent({
+    super.key,
+    this.position,
+    this.isSupportActive = false,
+    required this.onSupportSubmitted,
+    required this.daysFocusNode,
+    required this.content,
+    TextEditingController? nameController,
+    TextEditingController? emailController,
+    TextEditingController? textController,
+    TextEditingController? daysCountController,
+  })  : _nameController = nameController ?? TextEditingController(),
         _emailController = emailController ?? TextEditingController(),
-        _textController = textController ?? TextEditingController();
+        _textController = textController ?? TextEditingController(),
+        _daysCountController = daysCountController ?? TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final surface1 = theme?.colorScheme.surface1;
     final surface3 = theme?.colorScheme.surface3;
+    final textTheme = theme?.boldTextTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -44,6 +51,37 @@ class SupportComponent extends StatelessWidget {
             title: S.of(context).EnableHintSystem,
             onChanged: onSupportSubmitted,
             switchedOn: isSupportActive,
+            subtitle: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'for',
+                  style: textTheme?.labelLarge,
+                ),
+                SpacingFoundation.horizontalSpace16,
+                SizedBox(
+                  width: 0.2.sw,
+                  height: 0.625 * 0.2.sw,
+                  child: UiKitInputFieldNoIcon(
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    customPadding: EdgeInsets.symmetric(
+                      vertical: EdgeInsetsFoundation.vertical12,
+                      horizontal: EdgeInsetsFoundation.horizontal16,
+                    ),
+                    fillColor: surface3,
+                    hintText: '123',
+                    node: daysFocusNode,
+                    controller: _daysCountController,
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace16,
+                Text(
+                  'days',
+                  style: textTheme?.labelLarge,
+                ),
+              ],
+            ),
           ),
           SpacingFoundation.verticalSpace24,
           UiKitCardWrapper(
