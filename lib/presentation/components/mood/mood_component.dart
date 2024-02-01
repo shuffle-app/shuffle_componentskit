@@ -157,6 +157,8 @@ class MoodComponent extends StatelessWidget {
                                       return PreviewCardsWrapper(
                                         cards:[PlacePreview(
                                           onTap: onPlacePressed,
+                                          isFavorite: item.isFavorite,
+                                          onFavoriteChanged: item.onFavoriteChanged,
                                           shouldVisitAt:
                                           //TODO get from DTO
                                           index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
@@ -181,6 +183,8 @@ class MoodComponent extends StatelessWidget {
                                         cards: [
                                           PlacePreview(
                                             onTap: onPlacePressed,
+                                            isFavorite: item.isFavorite,
+                                            onFavoriteChanged: item.onFavoriteChanged,
                                             shouldVisitAt:
                                             //TODO get from DTO
                                             index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
@@ -198,6 +202,8 @@ class MoodComponent extends StatelessWidget {
                                           ),
                                           PlacePreview(
                                             onTap: onPlacePressed,
+                                            isFavorite: secondItem.isFavorite,
+                                            onFavoriteChanged: secondItem.onFavoriteChanged,
                                             shouldVisitAt:
                                             //TODO get from DTO
                                             index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
