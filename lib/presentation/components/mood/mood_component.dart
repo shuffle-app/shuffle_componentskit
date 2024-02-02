@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/mood/widgets/preview_cards_wrapper.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -150,23 +151,96 @@ class MoodComponent extends StatelessWidget {
                             return Column(
                               children: snapshot.data?.indexed.map((value) {
                                     final (index, item) = value;
-                                    return PlacePreview(
-                                      onTap: onPlacePressed,
-                                      shouldVisitAt:
+                                    if(index.isOdd) return const SizedBox.shrink();
+
+                                    if(index+1 == snapshot.data!.length){
+                                      return PreviewCardsWrapper(
+                                        cards:[PlacePreview(
+                                          onTap: onPlacePressed,
+                                          isFavorite: item.isFavorite,
+                                          onFavoriteChanged: item.onFavoriteChanged,
+                                          shouldVisitAt:
                                           //TODO get from DTO
                                           index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                      place: UiPlaceModel(
-                                        id: item.id,
-                                        title: item.title,
-                                        description: item.description,
-                                        media: item.media,
-                                        weekdays: item.weekdays ?? [],
-                                        website: item.website,
-                                        tags: item.tags,
-                                        baseTags: item.baseTags ?? [],
-                                      ),
-                                      model: model,
-                                    ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12);
+                                          place: UiPlaceModel(
+                                            id: item.id,
+                                            title: item.title,
+                                            description: item.description,
+                                            media: item.media,
+                                            weekdays: item.weekdays ?? [],
+                                            website: item.website,
+                                            tags: item.tags,
+                                            baseTags: item.baseTags ?? [],
+                                          ),
+                                          model: model,
+                                        )],
+                                        shouldVisitAt: index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                      );
+                                    } else {
+                                      final secondItem = snapshot.data![index + 1];
+
+                                      return PreviewCardsWrapper(
+                                        cards: [
+                                          PlacePreview(
+                                            onTap: onPlacePressed,
+                                            isFavorite: item.isFavorite,
+                                            onFavoriteChanged: item.onFavoriteChanged,
+                                            shouldVisitAt:
+                                            //TODO get from DTO
+                                            index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                            place: UiPlaceModel(
+                                              id: item.id,
+                                              title: item.title,
+                                              description: item.description,
+                                              media: item.media,
+                                              weekdays: item.weekdays ?? [],
+                                              website: item.website,
+                                              tags: item.tags,
+                                              baseTags: item.baseTags ?? [],
+                                            ),
+                                            model: model,
+                                          ),
+                                          PlacePreview(
+                                            onTap: onPlacePressed,
+                                            isFavorite: secondItem.isFavorite,
+                                            onFavoriteChanged: secondItem.onFavoriteChanged,
+                                            shouldVisitAt:
+                                            //TODO get from DTO
+                                            index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                            place: UiPlaceModel(
+                                              id: secondItem.id,
+                                              title: secondItem.title,
+                                              description: secondItem.description,
+                                              media: secondItem.media,
+                                              weekdays: secondItem.weekdays ?? [],
+                                              website: secondItem.website,
+                                              tags: secondItem.tags,
+                                              baseTags: secondItem.baseTags ?? [],
+                                            ),
+                                            model: model,
+                                          )
+                                        ],
+                                        shouldVisitAt: index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                      );
+                                    }
+                                    //
+                                    // return PlacePreview(
+                                    //   onTap: onPlacePressed,
+                                    //   shouldVisitAt:
+                                    //       //TODO get from DTO
+                                    //       index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                    //   place: UiPlaceModel(
+                                    //     id: item.id,
+                                    //     title: item.title,
+                                    //     description: item.description,
+                                    //     media: item.media,
+                                    //     weekdays: item.weekdays ?? [],
+                                    //     website: item.website,
+                                    //     tags: item.tags,
+                                    //     baseTags: item.baseTags ?? [],
+                                    //   ),
+                                    //   model: model,
+                                    // ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12);
                                   }).toList() ??
                                   [],
                             );
