@@ -269,61 +269,55 @@
                 "color": "#D808FA",
                 "value": "self-care",
                 "imageLink": "assets/images/png/search_category_self_care.png",
-                "sortNumber": 10
+                "sortNumber": 9
               },
               "Fine dining": {
                 "color": "#D808FA",
                 "value": "fine-dining",
                 "imageLink": "assets/images/png/search_category_food.png",
-                "sortNumber": 7
+                "sortNumber": 6
               },
               "Bliss and chill": {
                 "color": "#FA4C34",
                 "value": "bliss-and-chill",
                 "imageLink": "assets/images/png/search_category_chill.png",
-                "sortNumber": 8
+                "sortNumber": 7
               },
               "Sporty movements": {
                 "color": "#FAE634",
                 "value": "sporty-movements",
                 "imageLink": "assets/images/png/search_category_sport.png",
-                "sortNumber": 9
+                "sortNumber": 8
               },
               "Parties and dancing": {
                 "color": "#D808FA",
                 "value": "parties-and-dancing",
                 "imageLink": "assets/images/png/search_category_party.png",
-                "sortNumber": 4
+                "sortNumber": 3
               },
               "Age of Enlightenment": {
                 "color": "#FAE634",
                 "value": "age-of-enlightenment",
                 "imageLink": "assets/images/png/search_category_zadrot.png",
-                "sortNumber": 6
+                "sortNumber": 5
               },
               "Extremes and thrills": {
                 "color": "#FA4C34",
                 "value": "extremes-and-thrills",
                 "imageLink": "assets/images/png/search_category_extreme.png",
-                "sortNumber": 5
+                "sortNumber": 4
               },
               "Thirst for adventure": {
                 "color": "#FAE634",
                 "value": "thirst-for-adventure",
                 "imageLink": "assets/images/png/search_category_adventure.png",
-                "sortNumber": 3
-              },
-              "New Year's and Christmas": {
-                "color": "#FA4C34",
-                "value": "new-years-and-christmas",
-                "imageLink": "assets/images/png/NY-decor-1.png",
-                "sortNumber": 1
+                "sortNumber": 2
               },
               "Happiness for children and family": {
                 "color": "#FA4C34",
                 "value": "happiness-for-children-and-family",
                 "imageLink": "assets/images/png/search_category_family.png",
-                "sortNumber": 2
+                "sortNumber": 1
               }
             }
           }
@@ -1299,25 +1293,19 @@
                 "color": "#FF453A",
                 "value": "exit",
                 "imageLink": "logout",
-                "sortNumber": 8
-              },
-              "WALLET": {
-                "type": "leisure",
-                "value": "wallet",
-                "imageLink": "wallet",
-                "sortNumber": 2
+                "sortNumber": 7
               },
               "ARCHIVE": {
                 "type": "leisure",
                 "value": "archive",
                 "imageLink": "archive",
-                "sortNumber": 4
+                "sortNumber": 3
               },
               "SUPPORT": {
                 "type": "leisure",
                 "value": "support",
                 "imageLink": "assets/images/svg/lifebuoy.svg",
-                "sortNumber": 7
+                "sortNumber": 6
               },
               "EDIT PROFILE": {
                 "type": "leisure",
@@ -1329,26 +1317,26 @@
                 "type": "leisure",
                 "value": "promotion",
                 "imageLink": "label",
-                "sortNumber": 3
+                "sortNumber": 2
               },
               "DELETE COMPANY": {
                 "type": "leisure",
                 "color": "#FF453A",
                 "value": "delete",
                 "imageLink": "profile-delete",
-                "sortNumber": 9
+                "sortNumber": 8
               },
               "PRIVACY POLICY": {
                 "type": "leisure",
                 "value": "privacy",
                 "imageLink": "warning",
-                "sortNumber": 5
+                "sortNumber": 4
               },
               "TERMS OF SERVICE": {
                 "type": "leisure",
                 "value": "terms",
                 "imageLink": "flag",
-                "sortNumber": 6
+                "sortNumber": 5
               }
             }
           },
@@ -1568,30 +1556,20 @@
                 "imageLink": "logout",
                 "sortNumber": 1
               },
-              "WALLET": {
-                "value": "wallet",
-                "imageLink": "wallet",
-                "sortNumber": 3
-              },
               "SUPPORT": {
                 "value": "support",
                 "imageLink": "assets/images/svg/lifebuoy.svg",
-                "sortNumber": 9
-              },
-              "LOCATION": {
-                "value": "location",
-                "imageLink": "landmark",
-                "sortNumber": 2
+                "sortNumber": 7
               },
               "FAVORITES": {
                 "value": "favorites",
                 "imageLink": "star-fill",
-                "sortNumber": 4
+                "sortNumber": 2
               },
               "followings": {
                 "value": "followings",
                 "imageLink": "heart-fill",
-                "sortNumber": 5
+                "sortNumber": 3
               },
               "EDIT PROFILE": {
                 "value": "edit_profile",
@@ -1601,7 +1579,7 @@
               "notifications": {
                 "value": "notifications",
                 "imageLink": "bell",
-                "sortNumber": 6
+                "sortNumber": 4
               },
               "DELETE ACCOUNT": {
                 "color": "#FF453A",
@@ -1612,12 +1590,12 @@
               "PRIVACY POLICY": {
                 "value": "privacy",
                 "imageLink": "warning",
-                "sortNumber": 7
+                "sortNumber": 5
               },
               "TERMS OF SERVICE": {
                 "value": "terms",
                 "imageLink": "flag",
-                "sortNumber": 8
+                "sortNumber": 6
               }
             }
           },
@@ -1714,7 +1692,7 @@
         "body": {
           "horizontal_list": {
             "properties": {
-              "Cloths": {
+              "Clothes": {
                 "type": "place",
                 "color": "#62355C",
                 "imageLink": "assets/images/png/clothing.png",
@@ -2072,7 +2050,7 @@
             "value": "https://azarties.com/privacy",
             "sortNumber": 2
           },
-          "Terms of Use and Service": {
+          "Terms of Service": {
             "value": "https://azarties.com/privacy",
             "sortNumber": 1
           }
@@ -2161,7 +2139,7 @@
             "value": "https://azarties.com/privacy",
             "sortNumber": 2
           },
-          "Terms of Use and Service": {
+          "Terms of Service": {
             "value": "https://azarties.com/privacy",
             "sortNumber": 1
           }

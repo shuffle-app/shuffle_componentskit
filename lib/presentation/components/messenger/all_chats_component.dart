@@ -25,35 +25,36 @@ class AllChatsComponent extends StatelessWidget {
       title: S.of(context).Messages,
       centerTitle: true,
       autoImplyLeading: true,
-      appBarTrailing: ImageWidget(
-        svgAsset: GraphicsFoundation.instance.svg.search,
-        color: context.uiKitTheme?.colorScheme.inverseSurface,
-      ),
+      // appBarTrailing: ImageWidget(
+      //   svgAsset: GraphicsFoundation.instance.svg.search,
+      //   color: context.uiKitTheme?.colorScheme.inverseSurface,
+      // ),
       children: [
-        PagedListView<int, ChatItemUiModel>.separated(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          padding: EdgeInsets.symmetric(
-            horizontal: horizontalMargin,
-            vertical: verticalMargin,
-          ),
-          pagingController: controller,
-          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-          builderDelegate: PagedChildBuilderDelegate<ChatItemUiModel>(
-            itemBuilder: (context, item, index) {
-              return UiKitMessageCard(
-                name: item.username,
-                username: item.nickname,
-                lastMessage: item.lastMessage,
-                lastMessageTime: item.lastMessageTimeFormatted,
-                avatarPath: item.avatarUrl ?? '',
-                userType: item.userType,
-                onTap: () => onChatSelected.call(item.id),
-                unreadMessageCount: item.unreadMessageCount,
-              );
-            },
-          ),
-        )
+        const UnderDevelopment().paddingOnly(top: 0.3.sh),
+        // PagedListView<int, ChatItemUiModel>.separated(
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   shrinkWrap: true,
+        //   padding: EdgeInsets.symmetric(
+        //     horizontal: horizontalMargin,
+        //     vertical: verticalMargin,
+        //   ),
+        //   pagingController: controller,
+        //   separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+        //   builderDelegate: PagedChildBuilderDelegate<ChatItemUiModel>(
+        //     itemBuilder: (context, item, index) {
+        //       return UiKitMessageCard(
+        //         name: item.username,
+        //         username: item.nickname,
+        //         lastMessage: item.lastMessage,
+        //         lastMessageTime: item.lastMessageTimeFormatted,
+        //         avatarPath: item.avatarUrl ?? '',
+        //         userType: item.userType,
+        //         onTap: () => onChatSelected.call(item.id),
+        //         unreadMessageCount: item.unreadMessageCount,
+        //       );
+        //     },
+        //   ),
+        // )
       ],
     );
   }

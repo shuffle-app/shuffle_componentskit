@@ -240,7 +240,6 @@ class EditProfileDefaultComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(
-              prefixText: '+',
               controller: phoneController,
               label: S.of(context).Phone,
               hintText: S.of(context).Phone,

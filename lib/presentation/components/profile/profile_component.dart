@@ -50,7 +50,7 @@ class ProfileComponent extends StatelessWidget {
     return BlurredAppBarPage(
       centerTitle: true,
       title: S.of(context).MyCard,
-      leading: context.badgeButtonNoValue(
+      leading: context.iconButtonNoPadding(
         data: BaseUiKitButtonData(
           iconInfo: BaseUiKitButtonIconData(
             iconData: ShuffleUiKitIcons.settings,
@@ -59,9 +59,8 @@ class ProfileComponent extends StatelessWidget {
           ),
           onPressed: onSettingsPressed,
         ),
-        badgeAlignment: Alignment.topRight,
       ),
-      appBarTrailing: context.badgeButton(
+      appBarTrailing: context.iconButtonNoPadding(
         data: BaseUiKitButtonData(
           iconInfo: BaseUiKitButtonIconData(
             iconData: ShuffleUiKitIcons.message,
@@ -70,8 +69,6 @@ class ProfileComponent extends StatelessWidget {
           ),
           onPressed: onMessagePressed,
         ),
-        badgeValue: 2,
-        badgeAlignment: Alignment.topLeft,
       ),
       bodyBottomSpace: verticalMargin,
       children: [

@@ -40,7 +40,7 @@ class DonationComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     //TODO move to strings/config
-    const hintTitle = 'You can only spend on your dream, otherwise the money will go back to the donators. One request per month.';
+    final hintTitle = S.current.DonationHint;
     final boldTextTheme = theme?.boldTextTheme;
 
     return Column(
@@ -48,8 +48,8 @@ class DonationComponent extends StatelessWidget {
       children: [
         SpacingFoundation.verticalSpace16,
         Row(children: [
-        Text(S.of(context).AskPeople, style: boldTextTheme?.title1),
-          const Spacer(),
+          Text(S.of(context).AskPeople, style: boldTextTheme?.title1),
+          SpacingFoundation.horizontalSpace12,
           Builder(
             builder: (context) {
               return GestureDetector(
@@ -71,7 +71,8 @@ class DonationComponent extends StatelessWidget {
                 ),
               );
             },
-          ),]),
+          ),
+        ]),
         SpacingFoundation.verticalSpace16,
         DonationInfoIndicatorCard(
           number: donationNumber.toString(),
