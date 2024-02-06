@@ -1,2011 +1,1455 @@
 {
-    "config": {
-      "exit": {
-        "content": {
-          "title": {
-            "text": {
-              "properties": {
-                "Are you sure you want to log out?": {}
-              }
+  "config": {
+    "exit": {
+      "content": {
+        "title": {
+          "text": {
+            "properties": {
+              "Are you sure you want to log out?": {}
             }
           }
-        },
-        "version": "1.0.0",
-        "builder_type": "dialog"
+        }
       },
-      "feed": {
-        "content": {
-          "body": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "you press and get random": {}
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Randomizing...": {}
-                  }
-                }
-              },
-              "properties": {
-                "events & places": {
-                  "imageLink": "assets/images/png/Events.png",
-                  "sortNumber": 1
-                },
-                "press & scroll\n": {
-                  "imageLink": "assets/images/png/Press-scroll.png",
-                  "sortNumber": 4
-                },
-                "filtering by chips": {
-                  "imageLink": "assets/images/png/Filtering.png",
-                  "sortNumber": 2
-                },
-                "choose chip & press": {
-                  "imageLink": "assets/images/png/Chips-select.png",
-                  "sortNumber": 3
-                }
-              }
-            },
-            "advertisement": {
-              "properties": {
-                "Dubai": {
-                  "type": "small",
-                  "imageLink": "assets/images/png/mock_ad_banner_1.jpeg",
-                  "sortNumber": 2
-                }
-              }
-            }
-          },
-          "title": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "you get exactly what you need": {}
-                  }
-                }
-              },
+      "version": "1.0.0",
+      "builder_type": "dialog"
+    },
+    "feed": {
+      "content": {
+        "body": {
+          "hint_dialog": {
+            "body": {
               "text": {
-                "title": {
-                  "properties": {
-                    "Depending on...": {}
-                  }
-                }
-              },
-              "properties": {
-                "your location": {
-                  "imageLink": "assets/images/png/Map.png",
-                  "sortNumber": 1
-                },
-                "weather around": {
-                  "imageLink": "assets/images/png/Sun-clouds.png",
-                  "sortNumber": 3
-                },
-                "your interests": {
-                  "imageLink": "assets/images/png/Dart.png",
-                  "sortNumber": 2
-                },
-                "and other 14 scales": {
-                  "imageLink": "assets/images/png/Smile-mood.png",
-                  "sortNumber": 4
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.2",
-        "show_places": true,
-        "builder_type": "page",
-        "show_stories": true,
-        "show_feelings": true,
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 12,
-          "horizontal_margin": 16
-        },
-        "show_daily_recomendation": true
-      },
-      "mood": {
-        "content": {
-          "body": {
-            "tab_bar": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "We have solution just for you": {}
-                  }
-                }
-              },
-              "properties": {
-                "Eazy": {
-                  "value": "eazy",
-                  "sortNumber": 1
-                },
-                "Fair": {
-                  "value": "fair",
-                  "sortNumber": 2
-                },
-                "Hardcore": {
-                  "value": "hardcore",
-                  "sortNumber": 3
-                }
-              }
-            }
-          },
-          "title": {
-            "card": {
-              "properties": {
-                "Then check this out": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "show_stats": true,
-        "show_places": true,
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 8
-        }
-      },
-      "chats": {
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "event": {
-        "version": "1.0.0",
-        "builder_type": "modal_bottom_sheet",
-        "show_reviews": true,
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "horizontal_margin": 16
-        },
-        "show_reactions": true,
-        "booking_element_model": {
-          "version": "1.0.2",
-          "show_route": true,
-          "show_magnify": true,
-          "position_model": {
-            "version": "1.0.0",
-            "body_alignment": "center",
-            "title_alignment": "center",
-            "horizontal_margin": 16
-          }
-        }
-      },
-      "place": {
-        "version": "1.0.1",
-        "show_rating": true,
-        "builder_type": "modal_bottom_sheet",
-        "show_reviews": true,
-        "show_branches": true,
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "horizontal_margin": 16
-        },
-        "show_reactions": true,
-        "booking_element_model": {
-          "version": "1.0.2",
-          "show_route": true,
-          "show_magnify": true,
-          "position_model": {
-            "version": "1.0.0",
-            "body_alignment": "center",
-            "title_alignment": "center",
-            "horizontal_margin": 16
-          }
-        }
-      },
-      "terms": {
-        "content": {
-          "properties": {
-            "Privacy policy": {
-              "value": "https://azarties.com/privacy"
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "delete": {
-        "content": {
-          "title": {
-            "text": {
-              "properties": {
-                "Are you sure you want to delete your account?": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "dialog"
-      },
-      "search": {
-        "content": {
-          "body": {
-            "text": {
-              "properties": {
-                "Choose yourself": {}
-              }
-            },
-            "advertisement": {
-              "properties": {
-                "Dubai": {
-                  "type": "small",
-                  "imageLink": "assets/images/png/mock_ad_banner_4.jpeg",
-                  "sortNumber": 0
+                "properties": {
+                  "you press and get random": {}
                 }
               }
             },
-            "horizontal_list": {
-              "properties": {
-                "Self-care": {
-                  "color": "#D808FA",
-                  "value": "self-care",
-                  "imageLink": "assets/images/png/search_category_self_care.png",
-                  "sortNumber": 10
-                },
-                "Fine dining": {
-                  "color": "#D808FA",
-                  "value": "fine-dining",
-                  "imageLink": "assets/images/png/search_category_food.png",
-                  "sortNumber": 7
-                },
-                "Bliss and chill": {
-                  "color": "#FA4C34",
-                  "value": "bliss-and-chill",
-                  "imageLink": "assets/images/png/search_category_chill.png",
-                  "sortNumber": 8
-                },
-                "Sporty movements": {
-                  "color": "#FAE634",
-                  "value": "sporty-movements",
-                  "imageLink": "assets/images/png/search_category_sport.png",
-                  "sortNumber": 9
-                },
-                "Parties and dancing": {
-                  "color": "#D808FA",
-                  "value": "parties-and-dancing",
-                  "imageLink": "assets/images/png/search_category_party.png",
-                  "sortNumber": 4
-                },
-                "Age of Enlightenment": {
-                  "color": "#FAE634",
-                  "value": "age-of-enlightenment",
-                  "imageLink": "assets/images/png/search_category_zadrot.png",
-                  "sortNumber": 6
-                },
-                "Extremes and thrills": {
-                  "color": "#FA4C34",
-                  "value": "extremes-and-thrills",
-                  "imageLink": "assets/images/png/search_category_extreme.png",
-                  "sortNumber": 5
-                },
-                "Thirst for adventure": {
-                  "color": "#FAE634",
-                  "value": "thirst-for-adventure",
-                  "imageLink": "assets/images/png/search_category_adventure.png",
-                  "sortNumber": 3
-                },
-                "New Year's and Christmas": {
-                  "color": "#FA4C34",
-                  "value": "new-years-and-christmas",
-                  "imageLink": "assets/images/png/NY-decor-1.png",
-                  "sortNumber": 1
-                },
-                "Happiness for children and family": {
-                  "color": "#FA4C34",
-                  "value": "happiness-for-children-and-family",
-                  "imageLink": "assets/images/png/search_category_family.png",
-                  "sortNumber": 2
+            "title": {
+              "text": {
+                "properties": {
+                  "Randomizing...": {}
                 }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "You'll find it": {}
               }
             },
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "search or choose others choice": {}
-                  }
-                }
+            "properties": {
+              "events & places": {
+                "imageLink": "assets/images/png/Events.png",
+                "sortNumber": 1
               },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Usual search...": {}
-                  }
-                }
+              "press & scroll\n": {
+                "imageLink": "assets/images/png/Press-scroll.png",
+                "sortNumber": 4
               },
-              "properties": {
-                "events/\nplaces\n": {
-                  "imageLink": "assets/images/png/Place-events.png",
-                  "sortNumber": 2
-                },
-                "type & get result\n": {
-                  "imageLink": "assets/images/png/Result.png",
-                  "sortNumber": 3
-                },
-                "use ratings & models": {
-                  "imageLink": "assets/images/png/Rating.png",
-                  "sortNumber": 4
-                },
-                "preferences don’t work": {
-                  "imageLink": "assets/images/png/Pixelated-sunglasses-emoji.png",
-                  "sortNumber": 1
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "show_free": true,
-        "show_social": true,
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "topLeft",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "privacy": {
-        "content": {
-          "properties": {
-            "Privacy policy": {
-              "value": "https://azarties.com/privacy"
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "profile": {
-        "content": {
-          "body": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "go somewhere together": {}
-                  }
-                }
+              "filtering by chips": {
+                "imageLink": "assets/images/png/Filtering.png",
+                "sortNumber": 2
               },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Don’t be alone...": {}
-                  }
-                }
-              },
-              "properties": {
-                "no\nfoes\n": {
-                  "imageLink": "assets/images/png/Foe.png",
-                  "sortNumber": 4
-                },
-                "find compani\nons": {
-                  "imageLink": "assets/images/png/Companions.png",
-                  "sortNumber": 1
-                },
-                "similar preferen\nces": {
-                  "imageLink": "assets/images/png/Preferences.png",
-                  "sortNumber": 2
-                },
-                "check point reputation": {
-                  "imageLink": "assets/images/png/Points-reputation.png",
-                  "sortNumber": 3
-                }
+              "choose chip & press": {
+                "imageLink": "assets/images/png/Chips-select.png",
+                "sortNumber": 3
               }
             }
           },
-          "subtitle": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "yours or someone else's": {}
-                  }
+          "advertisement": {
+            "properties": {
+              "Dubai": {
+                "type": "small",
+                "imageLink": "assets/images/png/mock_ad_banner_1.jpeg",
+                "sortNumber": 2
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "you get exactly what you need": {}
                 }
-              },
+              }
+            },
+            "text": {
               "title": {
-                "text": {
-                  "properties": {
-                    "Fulfill the dream": {}
-                  }
+                "properties": {
+                  "Depending on...": {}
                 }
+              }
+            },
+            "properties": {
+              "your location": {
+                "imageLink": "assets/images/png/Map.png",
+                "sortNumber": 1
               },
-              "properties": {
-                "donate\nothers\n": {
-                  "imageLink": "assets/images/svg/handshake_3.svg",
-                  "sortNumber": 4
-                },
-                "write & make video": {
-                  "imageLink": "assets/images/svg/film.svg",
-                  "sortNumber": 2
-                },
-                "post a dream request": {
-                  "imageLink": "assets/images/svg/donat.svg",
-                  "sortNumber": 1
-                },
-                "be convincing & honest": {
-                  "imageLink": "assets/images/svg/hands.svg",
-                  "sortNumber": 3
-                }
+              "weather around": {
+                "imageLink": "assets/images/png/Sun-clouds.png",
+                "sortNumber": 3
+              },
+              "your interests": {
+                "imageLink": "assets/images/png/Dart.png",
+                "sortNumber": 2
+              },
+              "and other 14 scales": {
+                "imageLink": "assets/images/png/Smile-mood.png",
+                "sortNumber": 4
               }
             }
           }
-        },
-        "version": "1.0.0",
-        "show_balace": false,
-        "builder_type": "page",
-        "show_reviews": false,
-        "show_messages": false,
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "centerLeft",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        },
-        "show_reactions": false,
-        "show_find_people": false
-      },
-      "shuffle": {
-        "content": {
-          "body": {
-            "advertisement": {
-              "properties": {
-                "Dubai": {
-                  "type": "large",
-                  "imageLink": "assets/images/png/mock_ad_banner_5.jpeg"
-                }
-              }
-            }
-          },
-          "title": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "finding personalized places": {}
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Shuffling places...": {}
-                  }
-                }
-              },
-              "properties": {
-                "teach our system": {
-                  "imageLink": "assets/images/png/Teach.png",
-                  "sortNumber": 4
-                },
-                "swipe\nany direction": {
-                  "imageLink": "assets/images/png/Shuffle-any.png",
-                  "sortNumber": 1
-                },
-                "like dislike favorite": {
-                  "imageLink": "assets/images/png/Like-dislike.png",
-                  "sortNumber": 3
-                },
-                "swipe place qualities": {
-                  "imageLink": "assets/images/png/Swipe-properties.png",
-                  "sortNumber": 2
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "show_favorite": true,
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "horizontal_margin": 8
-        }
-      },
-      "spinner": {
-        "content": {
-          "body": {
-            "advertisement": {
-              "properties": {
-                "Dubai": {
-                  "type": "medium",
-                  "imageLink": "assets/images/png/mock_ad_banner_3.jpeg",
-                  "sortNumber": -1
-                }
-              }
-            }
-          },
-          "title": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "finding personalized events": {}
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "You spin it...": {}
-                  }
-                }
-              },
-              "properties": {
-                "for\nfun": {
-                  "imageLink": "assets/images/png/Giving-like-emoji.png",
-                  "sortNumber": 1
-                },
-                "choose & plan": {
-                  "imageLink": "assets/images/png/choosePlan.png",
-                  "sortNumber": 3
-                },
-                "search & book": {
-                  "imageLink": "assets/images/png/Booking.png",
-                  "sortNumber": 4
-                },
-                "swipe category": {
-                  "imageLink": "assets/images/png/Swipe-category.png",
-                  "sortNumber": 2
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "show_favorite": true
-      },
-      "support": {
-        "content": {
-          "body": {
-            "page_opener": {
-              "properties": {
-                "How to do best code?": {
-                  "value": "https://railway.app/"
-                },
-                "How to invite someone?": {
-                  "value": "https://pub.dev/packages/flutter_html/versions/3.0.0-beta.2"
-                },
-                "What is premium account?": {
-                  "value": "https://pub.dev/packages/flutter_html"
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
         }
       },
       "version": "1.0.2",
-      "welcome": {
-        "content": {
-          "body": {
-            "onboarding_card": {
-              "properties": {
-                "1": {
-                  "duration": 10000,
-                  "imageLink": "assets/images/png/welcome_slide_1.png",
-                  "sortNumber": 1
-                },
-                "2": {
-                  "duration": 5000,
-                  "imageLink": "assets/images/png/welcome_slide_2.png",
-                  "sortNumber": 2
-                }
-              }
-            }
-          }
-        },
+      "show_places": true,
+      "builder_type": "page",
+      "show_stories": true,
+      "show_feelings": true,
+      "position_model": {
         "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 12,
+        "horizontal_margin": 16
       },
-      "chat_page": {
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "favorites": {
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "about_user": {
-        "content": {
-          "body": {
-            "multi_select": {
-              "body": {
-                "multi_select": {
-                  "properties": {
-                    "Hindu": {
-                      "value": "hindu",
-                      "imageLink": "assets/images/png/hindu.png"
-                    },
-                    "Islam": {
-                      "value": "islam",
-                      "imageLink": "assets/images/png/muslim_flag.png"
-                    },
-                    "Atheism": {
-                      "value": "atheism",
-                      "imageLink": "assets/images/png/atheist.png"
-                    },
-                    "Buddism": {
-                      "value": "buddism",
-                      "imageLink": "assets/images/png/buddism_flag.png"
-                    },
-                    "Judaism": {
-                      "value": "judaism",
-                      "imageLink": "assets/images/png/judaism.png"
-                    },
-                    "Christianity": {
-                      "value": "christianity",
-                      "imageLink": "assets/images/png/christianity.png"
-                    }
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Select your religions": {}
-                  }
-                }
-              }
-            },
-            "single_select": {
-              "body": {
-                "single_select": {
-                  "properties": {
-                    "Male": {
-                      "value": "male",
-                      "imageLink": "assets/images/png/Male.png",
-                      "sortNumber": 1
-                    },
-                    "Other": {
-                      "value": "other",
-                      "imageLink": "assets/images/png/Other-gender.png",
-                      "sortNumber": 3
-                    },
-                    "Female": {
-                      "value": "female",
-                      "imageLink": "assets/images/png/Female.png",
-                      "sortNumber": 2
-                    }
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Gender": {}
-                  }
-                }
-              }
-            },
-            "single_dropdown": {
-              "body": {
-                "single_dropdown": {
-                  "properties": {
-                    "Foodie": {
-                      "value": "foodie",
-                      "imageLink": "assets/images/svg/food.svg",
-                      "sortNumber": 4
-                    },
-                    "Family fan": {
-                      "value": "family",
-                      "imageLink": "assets/images/svg/family.svg",
-                      "sortNumber": 5
-                    },
-                    "Pointy head": {
-                      "value": "pointy",
-                      "imageLink": "assets/images/svg/pointy-head.svg",
-                      "sortNumber": 6
-                    },
-                    "Active Tiger": {
-                      "value": "tiger",
-                      "imageLink": "assets/images/svg/tiger.svg",
-                      "sortNumber": 3
-                    },
-                    "Unstoppable athlete": {
-                      "value": "athlete",
-                      "imageLink": "assets/images/svg/athlete.svg",
-                      "sortNumber": 8
-                    },
-                    "Forever Resting sloth": {
-                      "value": "sloth",
-                      "imageLink": "assets/images/svg/sleep.svg",
-                      "sortNumber": 7
-                    },
-                    "Interested Adventurer": {
-                      "value": "adventurer",
-                      "imageLink": "assets/images/svg/adventure.svg",
-                      "sortNumber": 1
-                    },
-                    "A swim loving trickster": {
-                      "value": "trickster",
-                      "imageLink": "assets/images/svg/swim.svg",
-                      "sortNumber": 2
-                    }
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Describe yourself": {}
-                  }
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Now let's get to know each other": {}
-              }
-            },
-            "text_gradientable": {
-              "properties": {
-                " will be.": {},
-                "your leisure selection": {
-                  "gradient": "attentionCard"
-                },
-                "The more info we get about you, the better": {}
-              }
-            }
-          },
-          "subtitle": {
-            "single_select": {
-              "body": {
-                "single_select": {
-                  "properties": {
-                    "Leisure": {
-                      "value": "leisure",
-                      "sortNumber": 1
-                    },
-                    "Business": {
-                      "value": "business",
-                      "sortNumber": 2
-                    }
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Type of content": {}
-                  }
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.2",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        },
-        "show_search_bubbles": false
-      },
-      "event_edit": {
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "centerLeft",
-          "title_alignment": "center",
-          "horizontal_margin": 8
-        }
-      },
-      "followings": {
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "onboarding": {
-        "content": {
-          "body": {
-            "onboarding_card": {
-              "properties": {
-                "to have some fun": {
-                  "duration": 1500,
-                  "imageLink": "assets/images/png/onboarding_mock_1.png",
-                  "sortNumber": 1
-                },
-                "to just chill out": {
-                  "duration": 1500,
-                  "imageLink": "assets/images/png/onboarding_mock_2.png",
-                  "sortNumber": 3
-                },
-                "to explore leisure and business": {
-                  "duration": 1500,
-                  "imageLink": "assets/images/png/onboarding_mock_3.png",
-                  "sortNumber": 2
-                }
-              }
-            }
-          },
-          "properties": {
-            "general": {
-              "duration": 500
-            }
-          }
-        },
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "horizontal_margin": 16
-        }
-      },
-      "theme_name": "default",
-      "company_home": {
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "centerLeft",
-          "title_alignment": "centerLeft",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "edit_profile": {
-        "content": {
-          "body": {
-            "popover": {
-              "title": {
-                "text": {
-                  "properties": {
-                    "Allow yourself to be added to the companions search, so you can be found and invited somewhere. Or you could do it": {}
-                  }
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "about_company": {
-        "content": {
-          "body": {
-            "multi_select": {
-              "body": {
-                "multi_select": {
-                  "properties": {
-                    "Luxury": {
-                      "value": "luxury"
-                    },
-                    "Tourists": {
-                      "value": "tourists"
-                    },
-                    "Middle class": {
-                      "value": "middle-class"
-                    },
-                    "Family friendly": {
-                      "value": "family-friendly"
-                    }
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Select your target audience": {}
-                  }
-                }
-              }
-            },
-            "single_dropdown": {
-              "body": {
-                "single_dropdown": {
-                  "properties": {
-                    "gym": {
-                      "type": "leisure",
-                      "value": "gym",
-                      "imageLink": "assets/images/svg/gym.svg",
-                      "sortNumber": 6
-                    },
-                    "club": {
-                      "type": "leisure",
-                      "value": "club",
-                      "imageLink": "assets/images/svg/club.svg",
-                      "sortNumber": 3
-                    },
-                    "finance": {
-                      "type": "business",
-                      "value": "finance",
-                      "imageLink": "assets/images/svg/finance.svg",
-                      "sortNumber": 4
-                    },
-                    "karaoke": {
-                      "type": "leisure",
-                      "value": "karaoke",
-                      "imageLink": "assets/images/svg/karaoke.svg",
-                      "sortNumber": 2
-                    },
-                    "aquapark": {
-                      "type": "leisure",
-                      "value": "aquapark",
-                      "imageLink": "assets/images/svg/aquapark.svg",
-                      "sortNumber": 5
-                    },
-                    "analytics": {
-                      "type": "business",
-                      "value": "analytics",
-                      "imageLink": "assets/images/svg/analytics_business.svg",
-                      "sortNumber": 5
-                    },
-                    "coworking": {
-                      "type": "business",
-                      "value": "coworking",
-                      "imageLink": "assets/images/svg/coworking.svg",
-                      "sortNumber": 2
-                    },
-                    "investment": {
-                      "type": "business",
-                      "value": "investment",
-                      "imageLink": "assets/images/svg/investment.svg",
-                      "sortNumber": 3
-                    },
-                    "restaurant": {
-                      "type": "leisure",
-                      "value": "restaurant",
-                      "imageLink": "assets/images/svg/restaurant.svg",
-                      "sortNumber": 1
-                    },
-                    "water pool": {
-                      "type": "leisure",
-                      "value": "water pool",
-                      "imageLink": "assets/images/svg/waterpool.svg",
-                      "sortNumber": 4
-                    },
-                    "businessman": {
-                      "type": "business",
-                      "value": "businessman",
-                      "imageLink": "assets/images/svg/businessman.svg",
-                      "sortNumber": 1
-                    },
-                    "conferences": {
-                      "type": "business",
-                      "value": "conferences",
-                      "imageLink": "assets/images/svg/conferences.svg",
-                      "sortNumber": 6
-                    }
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Your niche": {}
-                  }
-                }
-              }
-            },
-            "additional_multi_select": {
-              "body": {
-                "multi_select": {
-                  "properties": {
-                    "50+": {},
-                    "18-24": {},
-                    "25-35": {},
-                    "36-45": {},
-                    "46-50": {}
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Select range of age": {}
-                  }
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Now describe your business": {}
-              }
-            },
-            "text_gradientable": {
-              "properties": {
-                " will be.": {},
-                "your traffic": {
-                  "gradient": "attentionCard"
-                },
-                "The more info we get, the better ": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "feed_business": {
-        "content": {
-          "body": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "you press and get random": {}
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Randomizing...": {}
-                  }
-                }
-              },
-              "properties": {
-                "events & places": {
-                  "imageLink": "assets/images/png/Events.png",
-                  "sortNumber": 1
-                },
-                "press & scroll\n": {
-                  "imageLink": "assets/images/png/Press-scroll.png",
-                  "sortNumber": 4
-                },
-                "filtering by chips": {
-                  "imageLink": "assets/images/png/Filtering.png",
-                  "sortNumber": 2
-                },
-                "choose chip & press": {
-                  "imageLink": "assets/images/png/Chips-select.png",
-                  "sortNumber": 3
-                }
-              }
-            },
-            "horizontal_list": {
-              "title": {
-                "text": {
-                  "properties": {
-                    "Upcoming global": {}
-                  }
-                },
-                "horizontal_list": {
-                  "properties": {
-                    "CES 2023": {
-                      "type": "Free",
-                      "value": "2023-11-17T16:31:56.971869",
-                      "imageLink": "assets/images/png/business_mock_1.png"
-                    },
-                    "Tech Conference": {
-                      "type": "Free",
-                      "value": "2023-12-15T16:31:56.971869",
-                      "imageLink": "assets/images/png/business_mock_2.png"
-                    }
-                  }
-                }
-              },
-              "properties": {
-                "Real estate": {
-                  "imageLink": "assets/images/png/Real-estate.png",
-                  "sortNumber": 1
-                },
-                "retail trade": {
-                  "imageLink": "assets/images/png/Trade.png",
-                  "sortNumber": 3
-                },
-                "internet business": {
-                  "imageLink": "assets/images/png/Internet-business.png",
-                  "sortNumber": 9
-                },
-                "health care sector": {
-                  "imageLink": "assets/images/png/Healtcare.png",
-                  "sortNumber": 8
-                },
-                "information technology": {
-                  "imageLink": "assets/images/png/IT.png",
-                  "sortNumber": 4
-                },
-                "tourism and hospitality": {
-                  "imageLink": "assets/images/png/Baggage.png",
-                  "sortNumber": 5
-                },
-                "production and distribution": {
-                  "imageLink": "assets/images/png/production.png",
-                  "sortNumber": 2
-                },
-                "financial services (fintech)": {
-                  "imageLink": "assets/images/png/Fintech.png",
-                  "sortNumber": 7
-                },
-                "agriculture and food industry": {
-                  "imageLink": "assets/images/png/Food-industry.png",
-                  "sortNumber": 10
-                },
-                "training and education services": {
-                  "imageLink": "assets/images/png/Training.png",
-                  "sortNumber": 11
-                },
-                "catering (restaurants and cafes)": {
-                  "imageLink": "assets/images/png/catering.png",
-                  "sortNumber": 6
-                }
-              }
-            }
-          },
-          "title": {
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "you get exactly what you need": {}
-                  }
-                }
-              },
-              "text": {
-                "title": {
-                  "properties": {
-                    "Depending on...": {}
-                  }
-                }
-              },
-              "properties": {
-                "your location": {
-                  "imageLink": "assets/images/png/Map.png",
-                  "sortNumber": 1
-                },
-                "weather around": {
-                  "imageLink": "assets/images/png/Sun-clouds.png",
-                  "sortNumber": 3
-                },
-                "your interests": {
-                  "imageLink": "assets/images/png/Dart.png",
-                  "sortNumber": 2
-                },
-                "and other 14 scales": {
-                  "imageLink": "assets/images/png/Smile-mood.png",
-                  "sortNumber": 4
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "show_free": true,
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "topLeft",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        },
-        "show_daily_recomendation": false
-      },
-      "notifications": {
-        "content": {},
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "company_profile": {
-        "content": {
-          "body": {
-            "button": {
-              "properties": {
-                "EXIT": {
-                  "type": "leisure",
-                  "color": "#FF453A",
-                  "value": "exit",
-                  "imageLink": "logout",
-                  "sortNumber": 8
-                },
-                "WALLET": {
-                  "type": "leisure",
-                  "value": "wallet",
-                  "imageLink": "wallet",
-                  "sortNumber": 2
-                },
-                "ARCHIVE": {
-                  "type": "leisure",
-                  "value": "archive",
-                  "imageLink": "archive",
-                  "sortNumber": 4
-                },
-                "SUPPORT": {
-                  "type": "leisure",
-                  "value": "support",
-                  "imageLink": "assets/images/svg/lifebuoy.svg",
-                  "sortNumber": 7
-                },
-                "EDIT PROFILE": {
-                  "type": "leisure",
-                  "value": "edit_profile",
-                  "imageLink": "building",
-                  "sortNumber": 1
-                },
-                "ADD PROMOTION": {
-                  "type": "leisure",
-                  "value": "promotion",
-                  "imageLink": "label",
-                  "sortNumber": 3
-                },
-                "DELETE COMPANY": {
-                  "type": "leisure",
-                  "color": "#FF453A",
-                  "value": "delete",
-                  "imageLink": "profile-delete",
-                  "sortNumber": 9
-                },
-                "PRIVACY POLICY": {
-                  "type": "leisure",
-                  "value": "privacy",
-                  "imageLink": "warning",
-                  "sortNumber": 5
-                },
-                "TERMS OF SERVICE": {
-                  "type": "leisure",
-                  "value": "terms",
-                  "imageLink": "flag",
-                  "sortNumber": 6
-                }
-              }
-            },
-            "tab_bar": {
-              "properties": {
-                "leisure": {
-                  "value": "leisure"
-                },
-                "business": {
-                  "value": "business"
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Settings": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.1",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "topLeft",
-          "title_alignment": "topCenter",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "forgot_password": {
-        "content": {
-          "body": {
-            "button": {
-              "properties": {
-                "Oops, I'll try again": {
-                  "color": "#000000"
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Incorrect login or password": {}
-              }
-            }
-          },
-          "subtitle": {
-            "text": {
-              "properties": {
-                "Forgot password": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "dialog",
-        "vertical_margin": 24,
-        "horizontal_margin": 24
-      },
-      "search_business": {
-        "content": {
-          "body": {
-            "text": {
-              "properties": {
-                "Choose yourself": {}
-              }
-            },
-            "horizontal_list": {
-              "properties": {
-                "Networking": {
-                  "color": "#D808FA",
-                  "value": "networking",
-                  "imageLink": "assets/images/png/search_business_networking.png",
-                  "sortNumber": 6
-                },
-                "Business clubs": {
-                  "color": "#FA4C34",
-                  "value": "business-clubs",
-                  "imageLink": "assets/images/png/search_business_clubs.png",
-                  "sortNumber": 1
-                },
-                "Business games": {
-                  "color": "#FA4C34",
-                  "value": "business-games",
-                  "imageLink": "assets/images/png/search_business_games.png",
-                  "sortNumber": 4
-                },
-                "Pitch sessions": {
-                  "color": "#D808FA",
-                  "value": "pitch-sessions",
-                  "imageLink": "assets/images/png/search_business_speech.png",
-                  "sortNumber": 3
-                },
-                "Seminars and trainings": {
-                  "color": "#FA4C34",
-                  "value": "seminars-and-trainings",
-                  "imageLink": "assets/images/png/search_business_training.png",
-                  "sortNumber": 7
-                },
-                "Digital & IT conferences": {
-                  "color": "#FAE634",
-                  "value": "digital-and-it-conferences",
-                  "imageLink": "assets/images/png/search_business_conferences.png",
-                  "sortNumber": 2
-                },
-                "Forums (industry exhibitions)": {
-                  "color": "#FAE634",
-                  "value": "forums-industry-exhibitions",
-                  "imageLink": "assets/images/png/search_business_exhibition.png",
-                  "sortNumber": 5
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "You'll find it": {}
-              }
-            },
-            "hint_dialog": {
-              "body": {
-                "text": {
-                  "properties": {
-                    "search or choose others choice": {}
-                  }
-                }
-              },
-              "title": {
-                "text": {
-                  "properties": {
-                    "Usual search...": {}
-                  }
-                }
-              },
-              "properties": {
-                "events/\nplaces\n": {
-                  "imageLink": "assets/images/png/Place-events.png",
-                  "sortNumber": 2
-                },
-                "type & get result\n": {
-                  "imageLink": "assets/images/png/Result.png",
-                  "sortNumber": 3
-                },
-                "use ratings & models": {
-                  "imageLink": "assets/images/png/Rating.png",
-                  "sortNumber": 4
-                },
-                "preferences don’t work": {
-                  "imageLink": "assets/images/png/Pixelated-sunglasses-emoji.png",
-                  "sortNumber": 1
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "show_free": true,
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "topLeft",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "pro_account_info": {
-        "content": {
-          "body": {
-            "vertical_list": {
-              "properties": {
-                "Special profile label": {
-                  "sortNumber": 1
-                },
-                "Ability to create your own events": {
-                  "sortNumber": 2
-                },
-                "Ability to use specialised notifications": {
-                  "sortNumber": 6
-                },
-                "Ability to sell related services through ticket booking": {
-                  "sortNumber": 4
-                },
-                "Internal targeted promotion of your events, statistics and analytics": {
-                  "sortNumber": 5
-                },
-                "Additional motivation of potential audience (clients/visitors) with the help of points system": {
-                  "sortNumber": 3
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "modal_bottom_sheet",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "centerLeft",
-          "title_alignment": "centerLeft",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "profile_settings": {
-        "content": {
-          "body": {
-            "button": {
-              "properties": {
-                "EXIT": {
-                  "color": "#FF453A",
-                  "value": "exit",
-                  "imageLink": "logout",
-                  "sortNumber": 1
-                },
-                "WALLET": {
-                  "value": "wallet",
-                  "imageLink": "wallet",
-                  "sortNumber": 3
-                },
-                "SUPPORT": {
-                  "value": "support",
-                  "imageLink": "assets/images/svg/lifebuoy.svg",
-                  "sortNumber": 9
-                },
-                "LOCATION": {
-                  "value": "location",
-                  "imageLink": "landmark",
-                  "sortNumber": 2
-                },
-                "FAVORITES": {
-                  "value": "favorites",
-                  "imageLink": "star-fill",
-                  "sortNumber": 4
-                },
-                "followings": {
-                  "value": "followings",
-                  "imageLink": "heart-fill",
-                  "sortNumber": 5
-                },
-                "EDIT PROFILE": {
-                  "value": "edit_profile",
-                  "imageLink": "user",
-                  "sortNumber": 1
-                },
-                "notifications": {
-                  "value": "notifications",
-                  "imageLink": "bell",
-                  "sortNumber": 6
-                },
-                "DELETE ACCOUNT": {
-                  "color": "#FF453A",
-                  "value": "delete",
-                  "imageLink": "profile-delete",
-                  "sortNumber": 2
-                },
-                "PRIVACY POLICY": {
-                  "value": "privacy",
-                  "imageLink": "warning",
-                  "sortNumber": 7
-                },
-                "TERMS OF SERVICE": {
-                  "value": "terms",
-                  "imageLink": "flag",
-                  "sortNumber": 8
-                }
-              }
-            },
-            "tab_bar": {
-              "properties": {
-                "leisure": {
-                  "value": "leisure"
-                },
-                "business": {
-                  "value": "business"
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Settings": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.1",
-        "builder_type": "modal_bottom_sheet",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "topLeft",
-          "title_alignment": "topCenter",
-          "vertical_margin": 24,
-          "horizontal_margin": 16
-        }
-      },
-      "recover_password": {
-        "content": {
-          "body": {
-            "input": {
-              "properties": {
-                "email": {}
-              }
-            },
-            "button": {
-              "properties": {
-                "RESET PASSWORD": {
-                  "color": "#000000"
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Enter your e-mail address": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "dialog",
-        "vertical_margin": 24,
-        "horizontal_margin": 24
-      },
-      "sms_verification": {
-        "content": {
-          "title": {
-            "text": {
-              "properties": {
-                "Mobile verification": {}
-              }
-            }
-          },
-          "subtitle": {
-            "text": {
-              "properties": {
-                "Please type verification code sent to ": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        },
-        "additional_settings": {
-          "code_digits": 4
-        }
-      },
-      "search_social_page": {
-        "content": {
-          "body": {
-            "horizontal_list": {
-              "properties": {
-                "Cloths": {
-                  "type": "place",
-                  "color": "#62355C",
-                  "imageLink": "assets/images/png/clothing.png",
-                  "sortNumber": 3
-                },
-                "Doctors": {
-                  "type": "services",
-                  "imageLink": "assets/images/png/Doctor.png",
-                  "sortNumber": 5
-                },
-                "Parcels": {
-                  "type": "place",
-                  "color": "#62355C",
-                  "imageLink": "assets/images/png/parcel.png",
-                  "sortNumber": 5
-                },
-                "Manicure": {
-                  "type": "services",
-                  "imageLink": "assets/images/png/manicure.png",
-                  "sortNumber": 1
-                },
-                "Pharmacy": {
-                  "type": "place",
-                  "color": "#E74424",
-                  "imageLink": "assets/images/png/pharmacy_plus.png",
-                  "sortNumber": 1
-                },
-                "Products": {
-                  "type": "place",
-                  "color": "#FDC74F",
-                  "imageLink": "assets/images/png/grocery.png",
-                  "sortNumber": 2
-                },
-                "Training": {
-                  "type": "services",
-                  "imageLink": "assets/images/png/coach.png",
-                  "sortNumber": 2
-                },
-                "Accountant": {
-                  "type": "services",
-                  "imageLink": "assets/images/png/Accountant.png",
-                  "sortNumber": 3
-                },
-                "Transportation": {
-                  "type": "place",
-                  "color": "#FDC74F",
-                  "imageLink": "assets/images/png/delivery-truck.png",
-                  "sortNumber": 4
-                },
-                "Real Estate Consulting": {
-                  "type": "services",
-                  "imageLink": "assets/images/png/real.png",
-                  "sortNumber": 4
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "in_app_notification": {
-        "content": {
-          "properties": {
-            "Tell us More": {
-              "value": "feed",
-              "duration": 200,
-              "gradient": "badgeIcon",
-              "startDelay": 5000
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "dialog"
-      },
-      "user_type_selection": {
-        "content": {
-          "body": {
-            "redirects": {
-              "properties": {
-                "Company": {
-                  "imageLink": "assets/images/svg/company_layered.svg",
-                  "sortNumber": 1
-                },
-                "Personal": {
-                  "imageLink": "assets/images/svg/person_layered.svg",
-                  "sortNumber": 2
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Welcome": {}
-              }
-            }
-          },
-          "subtitle": {
-            "text": {
-              "properties": {
-                "Select the type of account you would like to create": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "invite_people_places": {
-        "content": {
-          "body": {
-            "vertical_list": {
-              "properties": {
-                "La Citytel": {
-                  "tags": {
-                    "Closed": "clock",
-                    "Restaurant": "cutlery"
-                  },
-                  "imageLink": "assets/images/png/invite_mock_4.png"
-                },
-                "La Vue Citytel": {
-                  "tags": {
-                    "Closed": "clock",
-                    "Restaurant": "cutlery"
-                  },
-                  "imageLink": "assets/images/png/invite_mock_2.png"
-                },
-                "La Citytel Group": {
-                  "tags": {
-                    "Closed": "clock",
-                    "Restaurant": "cutlery"
-                  },
-                  "imageLink": "assets/images/png/invite_mock_4.png"
-                },
-                "Vue Citytel Group": {
-                  "tags": {
-                    "Closed": "clock",
-                    "Restaurant": "cutlery"
-                  },
-                  "imageLink": "assets/images/png/invite_mock_3.png"
-                },
-                "La Vue Citytel Group": {
-                  "tags": {
-                    "Club": "club",
-                    "Closed": "clock",
-                    "Restaurant": "cutlery"
-                  },
-                  "imageLink": "assets/images/png/invite_mock_1.png"
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "Invite to your favorite place": {}
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "show_free": true,
-        "builder_type": "modal_bottom_sheet",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "topLeft",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 8
-        }
-      },
-      "premium_account_info": {
-        "content": {
-          "body": {
-            "vertical_list": {
-              "properties": {
-                "Special profile label": {
-                  "sortNumber": 1
-                },
-                "Ability to become an Influencer": {
-                  "sortNumber": 6
-                },
-                "Ability to add/suggest favourite places": {
-                  "sortNumber": 3
-                },
-                "Ability to switch dark/light design theme": {
-                  "sortNumber": 4
-                },
-                "Ability to offer unique properties to places and improve the matching algorithm": {
-                  "sortNumber": 5
-                },
-                "Ability to leave reviews, shoot video-reactions about places and events, participate in ratings": {
-                  "sortNumber": 2
-                }
-              }
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "modal_bottom_sheet",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "centerLeft",
-          "title_alignment": "centerLeft",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "search_social_filters_sheet": {
+      "show_daily_recomendation": true
+    },
+    "mood": {
+      "content": {
         "body": {
-          "single_dropdown": {
+          "tab_bar": {
+            "body": {
+              "text": {
+                "properties": {
+                  "We have solution just for you": {}
+                }
+              }
+            },
             "properties": {
-              "Deira": {
-                "type": "district",
-                "value": "deira",
-                "sortNumber": 6
-              },
-              "Trainer": {
-                "type": "service",
-                "value": "trainer",
-                "imageLink": "assets/images/svg/musculous.svg",
-                "sortNumber": 6
-              },
-              "Cleaning": {
-                "type": "service",
-                "value": "cleaning",
-                "imageLink": "assets/images/svg/cleaning.svg",
-                "sortNumber": 3
-              },
-              "Jumeirah": {
-                "type": "district",
-                "value": "jumeirah",
-                "sortNumber": 2
-              },
-              "Manicure": {
-                "type": "service",
-                "value": "manicure",
-                "imageLink": "assets/images/svg/manicure.svg",
+              "Eazy": {
+                "value": "eazy",
                 "sortNumber": 1
               },
-              "Bur Dubai": {
-                "type": "district",
-                "value": "bur-dubai",
-                "sortNumber": 4
-              },
-              "Babysitter": {
-                "type": "service",
-                "value": "babysitter",
-                "imageLink": "assets/images/svg/baby.svg",
+              "Fair": {
+                "value": "fair",
                 "sortNumber": 2
               },
-              "Pet walker": {
-                "type": "service",
-                "value": "pet-walker",
-                "imageLink": "assets/images/svg/paw.svg",
-                "sortNumber": 4
+              "Hardcore": {
+                "value": "hardcore",
+                "sortNumber": 3
+              }
+            }
+          }
+        },
+        "title": {
+          "card": {
+            "properties": {
+              "Then check this out": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_stats": true,
+      "show_places": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 8
+      }
+    },
+    "chats": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "event": {
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "show_reviews": true,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 16
+      },
+      "show_reactions": true,
+      "booking_element_model": {
+        "version": "1.0.2",
+        "show_route": true,
+        "show_magnify": true,
+        "position_model": {
+          "version": "1.0.0",
+          "body_alignment": "center",
+          "title_alignment": "center",
+          "horizontal_margin": 16
+        }
+      }
+    },
+    "place": {
+      "version": "1.0.1",
+      "show_rating": true,
+      "builder_type": "modal_bottom_sheet",
+      "show_reviews": true,
+      "show_branches": true,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 16
+      },
+      "show_reactions": true,
+      "booking_element_model": {
+        "version": "1.0.2",
+        "show_route": true,
+        "show_magnify": true,
+        "position_model": {
+          "version": "1.0.0",
+          "body_alignment": "center",
+          "title_alignment": "center",
+          "horizontal_margin": 16
+        }
+      }
+    },
+    "terms": {
+      "content": {
+        "properties": {
+          "Terms of use": {
+            "value": "https://shuffle.city/terms"
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "delete": {
+      "content": {
+        "title": {
+          "text": {
+            "properties": {
+              "Are you sure you want to delete your account?": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog"
+    },
+    "search": {
+      "content": {
+        "body": {
+          "text": {
+            "properties": {
+              "Choose yourself": {}
+            }
+          },
+          "advertisement": {
+            "properties": {
+              "Dubai": {
+                "type": "small",
+                "imageLink": "assets/images/png/mock_ad_banner_4.jpeg",
+                "sortNumber": 0
+              }
+            }
+          },
+          "horizontal_list": {
+            "properties": {
+              "Self-care": {
+                "color": "#D808FA",
+                "value": "self-care",
+                "imageLink": "assets/images/png/search_category_self_care.png",
+                "sortNumber": 9
               },
-              "Dubai Marina": {
-                "type": "district",
-                "value": "dubai-marina",
+              "Fine dining": {
+                "color": "#D808FA",
+                "value": "fine-dining",
+                "imageLink": "assets/images/png/search_category_food.png",
+                "sortNumber": 6
+              },
+              "Bliss and chill": {
+                "color": "#FA4C34",
+                "value": "bliss-and-chill",
+                "imageLink": "assets/images/png/search_category_chill.png",
+                "sortNumber": 7
+              },
+              "Sporty movements": {
+                "color": "#FAE634",
+                "value": "sporty-movements",
+                "imageLink": "assets/images/png/search_category_sport.png",
+                "sortNumber": 8
+              },
+              "Parties and dancing": {
+                "color": "#D808FA",
+                "value": "parties-and-dancing",
+                "imageLink": "assets/images/png/search_category_party.png",
+                "sortNumber": 3
+              },
+              "Age of Enlightenment": {
+                "color": "#FAE634",
+                "value": "age-of-enlightenment",
+                "imageLink": "assets/images/png/search_category_zadrot.png",
                 "sortNumber": 5
               },
-              "Palm Jumeirah": {
-                "type": "district",
-                "value": "palm-jumeirah",
+              "Extremes and thrills": {
+                "color": "#FA4C34",
+                "value": "extremes-and-thrills",
+                "imageLink": "assets/images/png/search_category_extreme.png",
+                "sortNumber": 4
+              },
+              "Thirst for adventure": {
+                "color": "#FAE634",
+                "value": "thirst-for-adventure",
+                "imageLink": "assets/images/png/search_category_adventure.png",
+                "sortNumber": 2
+              },
+              "Happiness for children and family": {
+                "color": "#FA4C34",
+                "value": "happiness-for-children-and-family",
+                "imageLink": "assets/images/png/search_category_family.png",
+                "sortNumber": 1
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "You'll find it": {}
+            }
+          },
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "search or choose others choice": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Usual search...": {}
+                }
+              }
+            },
+            "properties": {
+              "events/\nplaces\n": {
+                "imageLink": "assets/images/png/Place-events.png",
+                "sortNumber": 2
+              },
+              "type & get result\n": {
+                "imageLink": "assets/images/png/Result.png",
                 "sortNumber": 3
               },
-              "Downtown Dubai": {
-                "type": "district",
-                "value": "downtown-dubai",
+              "use ratings & models": {
+                "imageLink": "assets/images/png/Rating.png",
+                "sortNumber": 4
+              },
+              "preferences don’t work": {
+                "imageLink": "assets/images/png/Pixelated-sunglasses-emoji.png",
+                "sortNumber": 1
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "show_social": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "privacy": {
+      "content": {
+        "properties": {
+          "Privacy policy": {
+            "value": "https://shuffle.city/privacy"
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "profile": {
+      "content": {
+        "body": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "go somewhere together": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Don’t be alone...": {}
+                }
+              }
+            },
+            "properties": {
+              "no\nfoes\n": {
+                "imageLink": "assets/images/png/Foe.png",
+                "sortNumber": 4
+              },
+              "find compani\nons": {
+                "imageLink": "assets/images/png/Companions.png",
                 "sortNumber": 1
               },
-              "Language teacher": {
-                "type": "service",
-                "value": "language-teacher",
-                "imageLink": "assets/images/svg/language.svg",
+              "similar preferen\nces": {
+                "imageLink": "assets/images/png/Preferences.png",
+                "sortNumber": 2
+              },
+              "check point reputation": {
+                "imageLink": "assets/images/png/Points-reputation.png",
+                "sortNumber": 3
+              }
+            }
+          }
+        },
+        "subtitle": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "yours or someone else's": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Fulfill the dream": {}
+                }
+              }
+            },
+            "properties": {
+              "donate\nothers\n": {
+                "imageLink": "assets/images/svg/handshake_3.svg",
+                "sortNumber": 4
+              },
+              "write & make video": {
+                "imageLink": "assets/images/svg/film.svg",
+                "sortNumber": 2
+              },
+              "post a dream request": {
+                "imageLink": "assets/images/svg/donat.svg",
+                "sortNumber": 1
+              },
+              "be convincing & honest": {
+                "imageLink": "assets/images/svg/hands.svg",
+                "sortNumber": 3
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_balace": false,
+      "builder_type": "page",
+      "show_reviews": false,
+      "show_messages": false,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "show_reactions": false,
+      "show_find_people": false
+    },
+    "shuffle": {
+      "content": {
+        "body": {
+          "advertisement": {
+            "properties": {
+              "Dubai": {
+                "type": "large",
+                "imageLink": "assets/images/png/mock_ad_banner_5.jpeg"
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "finding personalized places": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Shuffling places...": {}
+                }
+              }
+            },
+            "properties": {
+              "teach our system": {
+                "imageLink": "assets/images/png/Teach.png",
+                "sortNumber": 4
+              },
+              "swipe\nany direction": {
+                "imageLink": "assets/images/png/Shuffle-any.png",
+                "sortNumber": 1
+              },
+              "like dislike favorite": {
+                "imageLink": "assets/images/png/Like-dislike.png",
+                "sortNumber": 3
+              },
+              "swipe place qualities": {
+                "imageLink": "assets/images/png/Swipe-properties.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "show_favorite": true,
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 8
+      }
+    },
+    "spinner": {
+      "content": {
+        "body": {
+          "advertisement": {
+            "properties": {
+              "Dubai": {
+                "type": "medium",
+                "imageLink": "assets/images/png/mock_ad_banner_3.jpeg",
+                "sortNumber": -1
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "finding personalized events": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "You spin it...": {}
+                }
+              }
+            },
+            "properties": {
+              "for\nfun": {
+                "imageLink": "assets/images/png/Giving-like-emoji.png",
+                "sortNumber": 1
+              },
+              "choose & plan": {
+                "imageLink": "assets/images/png/choosePlan.png",
+                "sortNumber": 3
+              },
+              "search & book": {
+                "imageLink": "assets/images/png/Booking.png",
+                "sortNumber": 4
+              },
+              "swipe category": {
+                "imageLink": "assets/images/png/Swipe-category.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "show_favorite": true
+    },
+    "support": {
+      "content": {
+        "body": {
+          "page_opener": {
+            "properties": {
+              "How to do best code?": {
+                "value": "https://railway.app/"
+              },
+              "How to invite someone?": {
+                "value": "https://pub.dev/packages/flutter_html/versions/3.0.0-beta.2"
+              },
+              "What is premium account?": {
+                "value": "https://pub.dev/packages/flutter_html"
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "version": "1.0.2",
+    "welcome": {
+      "content": {
+        "body": {
+          "onboarding_card": {
+            "properties": {
+              "1": {
+                "duration": 10000,
+                "imageLink": "assets/images/png/welcome_slide_1.png",
+                "sortNumber": 1
+              },
+              "2": {
+                "duration": 5000,
+                "imageLink": "assets/images/png/welcome_slide_2.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "chat_page": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "favorites": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "about_user": {
+      "content": {
+        "body": {
+          "multi_select": {
+            "body": {
+              "multi_select": {
+                "properties": {
+                  "Hindu": {
+                    "value": "hindu",
+                    "imageLink": "assets/images/png/hindu.png"
+                  },
+                  "Islam": {
+                    "value": "islam",
+                    "imageLink": "assets/images/png/muslim_flag.png"
+                  },
+                  "Atheism": {
+                    "value": "atheism",
+                    "imageLink": "assets/images/png/atheist.png"
+                  },
+                  "Buddism": {
+                    "value": "buddism",
+                    "imageLink": "assets/images/png/buddism_flag.png"
+                  },
+                  "Judaism": {
+                    "value": "judaism",
+                    "imageLink": "assets/images/png/judaism.png"
+                  },
+                  "Christianity": {
+                    "value": "christianity",
+                    "imageLink": "assets/images/png/christianity.png"
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Select your religions": {}
+                }
+              }
+            }
+          },
+          "single_select": {
+            "body": {
+              "single_select": {
+                "properties": {
+                  "Male": {
+                    "value": "male",
+                    "imageLink": "assets/images/png/Male.png",
+                    "sortNumber": 1
+                  },
+                  "Other": {
+                    "value": "other",
+                    "imageLink": "assets/images/png/Other-gender.png",
+                    "sortNumber": 3
+                  },
+                  "Female": {
+                    "value": "female",
+                    "imageLink": "assets/images/png/Female.png",
+                    "sortNumber": 2
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Gender": {}
+                }
+              }
+            }
+          },
+          "single_dropdown": {
+            "body": {
+              "single_dropdown": {
+                "properties": {
+                  "Foodie": {
+                    "value": "foodie",
+                    "imageLink": "assets/images/svg/food.svg",
+                    "sortNumber": 4
+                  },
+                  "Family fan": {
+                    "value": "family",
+                    "imageLink": "assets/images/svg/family.svg",
+                    "sortNumber": 5
+                  },
+                  "Pointy head": {
+                    "value": "pointy",
+                    "imageLink": "assets/images/svg/pointy-head.svg",
+                    "sortNumber": 6
+                  },
+                  "Active Tiger": {
+                    "value": "tiger",
+                    "imageLink": "assets/images/svg/tiger.svg",
+                    "sortNumber": 3
+                  },
+                  "Unstoppable athlete": {
+                    "value": "athlete",
+                    "imageLink": "assets/images/svg/athlete.svg",
+                    "sortNumber": 8
+                  },
+                  "Forever Resting sloth": {
+                    "value": "sloth",
+                    "imageLink": "assets/images/svg/sleep.svg",
+                    "sortNumber": 7
+                  },
+                  "Interested Adventurer": {
+                    "value": "adventurer",
+                    "imageLink": "assets/images/svg/adventure.svg",
+                    "sortNumber": 1
+                  },
+                  "A swim loving trickster": {
+                    "value": "trickster",
+                    "imageLink": "assets/images/svg/swim.svg",
+                    "sortNumber": 2
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Describe yourself": {}
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Now let's get to know each other": {}
+            }
+          },
+          "text_gradientable": {
+            "properties": {
+              " will be.": {},
+              "your leisure selection": {
+                "gradient": "attentionCard"
+              },
+              "The more info we get about you, the better": {}
+            }
+          }
+        },
+        "subtitle": {
+          "single_select": {
+            "body": {
+              "single_select": {
+                "properties": {
+                  "Leisure": {
+                    "value": "leisure",
+                    "sortNumber": 1
+                  },
+                  "Business": {
+                    "value": "business",
+                    "sortNumber": 2
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Type of content": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.2",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "show_search_bubbles": false
+    },
+    "event_edit": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "center",
+        "horizontal_margin": 8
+      }
+    },
+    "followings": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "onboarding": {
+      "content": {
+        "body": {
+          "onboarding_card": {
+            "properties": {
+              "to have some fun": {
+                "duration": 1500,
+                "imageLink": "assets/images/png/onboarding_mock_1.png",
+                "sortNumber": 1
+              },
+              "to just chill out": {
+                "duration": 1500,
+                "imageLink": "assets/images/png/onboarding_mock_2.png",
+                "sortNumber": 3
+              },
+              "to explore leisure and business": {
+                "duration": 1500,
+                "imageLink": "assets/images/png/onboarding_mock_3.png",
+                "sortNumber": 2
+              }
+            }
+          }
+        },
+        "properties": {
+          "general": {
+            "duration": 500
+          }
+        }
+      },
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 16
+      }
+    },
+    "theme_name": "default",
+    "company_home": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "edit_profile": {
+      "content": {
+        "body": {
+          "popover": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Allow yourself to be added to the companions search, so you can be found and invited somewhere. Or you could do it": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "about_company": {
+      "content": {
+        "body": {
+          "multi_select": {
+            "body": {
+              "multi_select": {
+                "properties": {
+                  "Luxury": {
+                    "value": "luxury"
+                  },
+                  "Tourists": {
+                    "value": "tourists"
+                  },
+                  "Middle class": {
+                    "value": "middle-class"
+                  },
+                  "Family friendly": {
+                    "value": "family-friendly"
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Select your target audience": {}
+                }
+              }
+            }
+          },
+          "single_dropdown": {
+            "body": {
+              "single_dropdown": {
+                "properties": {
+                  "gym": {
+                    "type": "leisure",
+                    "value": "gym",
+                    "imageLink": "assets/images/svg/gym.svg",
+                    "sortNumber": 6
+                  },
+                  "club": {
+                    "type": "leisure",
+                    "value": "club",
+                    "imageLink": "assets/images/svg/club.svg",
+                    "sortNumber": 3
+                  },
+                  "finance": {
+                    "type": "business",
+                    "value": "finance",
+                    "imageLink": "assets/images/svg/finance.svg",
+                    "sortNumber": 4
+                  },
+                  "karaoke": {
+                    "type": "leisure",
+                    "value": "karaoke",
+                    "imageLink": "assets/images/svg/karaoke.svg",
+                    "sortNumber": 2
+                  },
+                  "aquapark": {
+                    "type": "leisure",
+                    "value": "aquapark",
+                    "imageLink": "assets/images/svg/aquapark.svg",
+                    "sortNumber": 5
+                  },
+                  "analytics": {
+                    "type": "business",
+                    "value": "analytics",
+                    "imageLink": "assets/images/svg/analytics_business.svg",
+                    "sortNumber": 5
+                  },
+                  "coworking": {
+                    "type": "business",
+                    "value": "coworking",
+                    "imageLink": "assets/images/svg/coworking.svg",
+                    "sortNumber": 2
+                  },
+                  "investment": {
+                    "type": "business",
+                    "value": "investment",
+                    "imageLink": "assets/images/svg/investment.svg",
+                    "sortNumber": 3
+                  },
+                  "restaurant": {
+                    "type": "leisure",
+                    "value": "restaurant",
+                    "imageLink": "assets/images/svg/restaurant.svg",
+                    "sortNumber": 1
+                  },
+                  "water pool": {
+                    "type": "leisure",
+                    "value": "water pool",
+                    "imageLink": "assets/images/svg/waterpool.svg",
+                    "sortNumber": 4
+                  },
+                  "businessman": {
+                    "type": "business",
+                    "value": "businessman",
+                    "imageLink": "assets/images/svg/businessman.svg",
+                    "sortNumber": 1
+                  },
+                  "conferences": {
+                    "type": "business",
+                    "value": "conferences",
+                    "imageLink": "assets/images/svg/conferences.svg",
+                    "sortNumber": 6
+                  }
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Your niche": {}
+                }
+              }
+            }
+          },
+          "additional_multi_select": {
+            "body": {
+              "multi_select": {
+                "properties": {
+                  "50+": {},
+                  "18-24": {},
+                  "25-35": {},
+                  "36-45": {},
+                  "46-50": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Select range of age": {}
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Now describe your business": {}
+            }
+          },
+          "text_gradientable": {
+            "properties": {
+              " will be.": {},
+              "your traffic": {
+                "gradient": "attentionCard"
+              },
+              "The more info we get, the better ": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "feed_business": {
+      "content": {
+        "body": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "you press and get random": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Randomizing...": {}
+                }
+              }
+            },
+            "properties": {
+              "events & places": {
+                "imageLink": "assets/images/png/Events.png",
+                "sortNumber": 1
+              },
+              "press & scroll\n": {
+                "imageLink": "assets/images/png/Press-scroll.png",
+                "sortNumber": 4
+              },
+              "filtering by chips": {
+                "imageLink": "assets/images/png/Filtering.png",
+                "sortNumber": 2
+              },
+              "choose chip & press": {
+                "imageLink": "assets/images/png/Chips-select.png",
+                "sortNumber": 3
+              }
+            }
+          },
+          "horizontal_list": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Upcoming global": {}
+                }
+              },
+              "horizontal_list": {
+                "properties": {
+                  "CES 2023": {
+                    "type": "Free",
+                    "value": "2023-11-17T16:31:56.971869",
+                    "imageLink": "assets/images/png/business_mock_1.png"
+                  },
+                  "Tech Conference": {
+                    "type": "Free",
+                    "value": "2023-12-15T16:31:56.971869",
+                    "imageLink": "assets/images/png/business_mock_2.png"
+                  }
+                }
+              }
+            },
+            "properties": {
+              "Real estate": {
+                "imageLink": "assets/images/png/Real-estate.png",
+                "sortNumber": 1
+              },
+              "retail trade": {
+                "imageLink": "assets/images/png/Trade.png",
+                "sortNumber": 3
+              },
+              "internet business": {
+                "imageLink": "assets/images/png/Internet-business.png",
+                "sortNumber": 9
+              },
+              "health care sector": {
+                "imageLink": "assets/images/png/Healtcare.png",
+                "sortNumber": 8
+              },
+              "information technology": {
+                "imageLink": "assets/images/png/IT.png",
+                "sortNumber": 4
+              },
+              "tourism and hospitality": {
+                "imageLink": "assets/images/png/Baggage.png",
+                "sortNumber": 5
+              },
+              "production and distribution": {
+                "imageLink": "assets/images/png/production.png",
+                "sortNumber": 2
+              },
+              "financial services (fintech)": {
+                "imageLink": "assets/images/png/Fintech.png",
+                "sortNumber": 7
+              },
+              "agriculture and food industry": {
+                "imageLink": "assets/images/png/Food-industry.png",
+                "sortNumber": 10
+              },
+              "training and education services": {
+                "imageLink": "assets/images/png/Training.png",
+                "sortNumber": 11
+              },
+              "catering (restaurants and cafes)": {
+                "imageLink": "assets/images/png/catering.png",
+                "sortNumber": 6
+              }
+            }
+          }
+        },
+        "title": {
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "you get what your niche contains": {}
+                }
+              }
+            },
+            "text": {
+              "title": {
+                "properties": {
+                  "Great match...": {}
+                }
+              }
+            },
+            "properties": {
+              "press\n": {
+                "imageLink": "assets/images/png/Press-niche.png",
+                "sortNumber": 2
+              },
+              "choose & plan": {
+                "imageLink": "assets/images/png/Choose-plan.png",
+                "sortNumber": 4
+              },
+              "get selection": {
+                "imageLink": "assets/images/png/Get-selection.png",
+                "sortNumber": 3
+              },
+              "select the niche": {
+                "imageLink": "assets/images/png/Select-niche.png",
+                "sortNumber": 1
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "show_daily_recomendation": false
+    },
+    "notifications": {
+      "content": {},
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "company_profile": {
+      "content": {
+        "body": {
+          "button": {
+            "properties": {
+              "EXIT": {
+                "type": "leisure",
+                "color": "#FF453A",
+                "value": "exit",
+                "imageLink": "logout",
+                "sortNumber": 7
+              },
+              "ARCHIVE": {
+                "type": "leisure",
+                "value": "archive",
+                "imageLink": "archive",
+                "sortNumber": 3
+              },
+              "SUPPORT": {
+                "type": "leisure",
+                "value": "support",
+                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "sortNumber": 6
+              },
+              "EDIT PROFILE": {
+                "type": "leisure",
+                "value": "edit_profile",
+                "imageLink": "building",
+                "sortNumber": 1
+              },
+              "ADD PROMOTION": {
+                "type": "leisure",
+                "value": "promotion",
+                "imageLink": "label",
+                "sortNumber": 2
+              },
+              "DELETE COMPANY": {
+                "type": "leisure",
+                "color": "#FF453A",
+                "value": "delete",
+                "imageLink": "profile-delete",
+                "sortNumber": 8
+              },
+              "PRIVACY POLICY": {
+                "type": "leisure",
+                "value": "privacy",
+                "imageLink": "warning",
+                "sortNumber": 4
+              },
+              "TERMS OF SERVICE": {
+                "type": "leisure",
+                "value": "terms",
+                "imageLink": "flag",
+                "sortNumber": 5
+              }
+            }
+          },
+          "tab_bar": {
+            "properties": {
+              "leisure": {
+                "value": "leisure"
+              },
+              "business": {
+                "value": "business"
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Settings": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.1",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "topCenter",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "forgot_password": {
+      "content": {
+        "body": {
+          "button": {
+            "properties": {
+              "Oops, I'll try again": {
+                "color": "#000000"
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Incorrect login or password": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Forgot password": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog",
+      "vertical_margin": 24,
+      "horizontal_margin": 24
+    },
+    "search_business": {
+      "content": {
+        "body": {
+          "text": {
+            "properties": {
+              "Choose yourself": {}
+            }
+          },
+          "horizontal_list": {
+            "properties": {
+              "Networking": {
+                "color": "#D808FA",
+                "value": "networking",
+                "imageLink": "assets/images/png/search_business_networking.png",
+                "sortNumber": 6
+              },
+              "Business clubs": {
+                "color": "#FA4C34",
+                "value": "business-clubs",
+                "imageLink": "assets/images/png/search_business_clubs.png",
+                "sortNumber": 1
+              },
+              "Business games": {
+                "color": "#FA4C34",
+                "value": "business-games",
+                "imageLink": "assets/images/png/search_business_games.png",
+                "sortNumber": 4
+              },
+              "Pitch sessions": {
+                "color": "#D808FA",
+                "value": "pitch-sessions",
+                "imageLink": "assets/images/png/search_business_speech.png",
+                "sortNumber": 3
+              },
+              "Seminars and trainings": {
+                "color": "#FA4C34",
+                "value": "seminars-and-trainings",
+                "imageLink": "assets/images/png/search_business_training.png",
+                "sortNumber": 7
+              },
+              "Digital & IT conferences": {
+                "color": "#FAE634",
+                "value": "digital-and-it-conferences",
+                "imageLink": "assets/images/png/search_business_conferences.png",
+                "sortNumber": 2
+              },
+              "Forums (industry exhibitions)": {
+                "color": "#FAE634",
+                "value": "forums-industry-exhibitions",
+                "imageLink": "assets/images/png/search_business_exhibition.png",
                 "sortNumber": 5
               }
             }
@@ -2014,179 +1458,723 @@
         "title": {
           "text": {
             "properties": {
-              "Service": {},
-              "District": {}
+              "You'll find it": {}
+            }
+          },
+          "hint_dialog": {
+            "body": {
+              "text": {
+                "properties": {
+                  "search or choose others choice": {}
+                }
+              }
+            },
+            "title": {
+              "text": {
+                "properties": {
+                  "Usual search...": {}
+                }
+              }
+            },
+            "properties": {
+              "events/\nplaces\n": {
+                "imageLink": "assets/images/png/Place-events.png",
+                "sortNumber": 2
+              },
+              "type & get result\n": {
+                "imageLink": "assets/images/png/Result.png",
+                "sortNumber": 3
+              },
+              "use ratings & models": {
+                "imageLink": "assets/images/png/Rating.png",
+                "sortNumber": 4
+              },
+              "preferences don’t work": {
+                "imageLink": "assets/images/png/Pixelated-sunglasses-emoji.png",
+                "sortNumber": 1
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "pro_account_info": {
+      "content": {
+        "body": {
+          "vertical_list": {
+            "properties": {
+              "Special profile label": {
+                "sortNumber": 1
+              },
+              "Ability to create your own events": {
+                "sortNumber": 2
+              },
+              "Ability to use specialised notifications": {
+                "sortNumber": 6
+              },
+              "Ability to sell related services through ticket booking": {
+                "sortNumber": 4
+              },
+              "Internal targeted promotion of your events, statistics and analytics": {
+                "sortNumber": 5
+              },
+              "Additional motivation of potential audience (clients/visitors) with the help of points system": {
+                "sortNumber": 3
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "profile_settings": {
+      "content": {
+        "body": {
+          "button": {
+            "properties": {
+              "EXIT": {
+                "color": "#FF453A",
+                "value": "exit",
+                "imageLink": "logout",
+                "sortNumber": 1
+              },
+              "SUPPORT": {
+                "value": "support",
+                "imageLink": "assets/images/svg/lifebuoy.svg",
+                "sortNumber": 7
+              },
+              "FAVORITES": {
+                "value": "favorites",
+                "imageLink": "star-fill",
+                "sortNumber": 2
+              },
+              "followings": {
+                "value": "followings",
+                "imageLink": "heart-fill",
+                "sortNumber": 3
+              },
+              "EDIT PROFILE": {
+                "value": "edit_profile",
+                "imageLink": "user",
+                "sortNumber": 1
+              },
+              "notifications": {
+                "value": "notifications",
+                "imageLink": "bell",
+                "sortNumber": 4
+              },
+              "DELETE ACCOUNT": {
+                "color": "#FF453A",
+                "value": "delete",
+                "imageLink": "profile-delete",
+                "sortNumber": 2
+              },
+              "PRIVACY POLICY": {
+                "value": "privacy",
+                "imageLink": "warning",
+                "sortNumber": 5
+              },
+              "TERMS OF SERVICE": {
+                "value": "terms",
+                "imageLink": "flag",
+                "sortNumber": 6
+              }
+            }
+          },
+          "tab_bar": {
+            "properties": {
+              "leisure": {
+                "value": "leisure"
+              },
+              "business": {
+                "value": "business"
+              }
             }
           }
         },
-        "version": "1.0.0",
-        "builder_type": "modal_bottom_sheet",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "centerLeft",
-          "title_alignment": "centerLeft",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
+        "title": {
+          "text": {
+            "properties": {
+              "Settings": {}
+            }
+          }
         }
       },
-      "company_credentials_verification": {
-        "content": {
-          "body": {
-            "password_hint": {
-              "properties": {
-                "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
-              }
-            },
-            "country_selector": {
-              "title": {
-                "text": {
-                  "properties": {
-                    "Where are you located": {}
-                  }
-                }
-              }
+      "version": "1.0.1",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "topCenter",
+        "vertical_margin": 24,
+        "horizontal_margin": 16
+      }
+    },
+    "recover_password": {
+      "content": {
+        "body": {
+          "input": {
+            "properties": {
+              "email": {}
             }
           },
-          "title": {
-            "text": {
-              "properties": {
-                "Happy to see you": {}
+          "button": {
+            "properties": {
+              "RESET PASSWORD": {
+                "color": "#000000"
               }
             }
-          },
-          "subtitle": {
-            "text": {
-              "properties": {
-                "To gain access you must log in first": {}
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Enter your e-mail address": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog",
+      "vertical_margin": 24,
+      "horizontal_margin": 24
+    },
+    "sms_verification": {
+      "content": {
+        "title": {
+          "text": {
+            "properties": {
+              "Mobile verification": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Please type verification code sent to ": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      },
+      "additional_settings": {
+        "code_digits": 4
+      }
+    },
+    "search_social_page": {
+      "content": {
+        "body": {
+          "horizontal_list": {
+            "properties": {
+              "Clothes": {
+                "type": "place",
+                "color": "#62355C",
+                "imageLink": "assets/images/png/clothing.png",
+                "sortNumber": 3
+              },
+              "Doctors": {
+                "type": "services",
+                "imageLink": "assets/images/png/Doctor.png",
+                "sortNumber": 5
+              },
+              "Parcels": {
+                "type": "place",
+                "color": "#62355C",
+                "imageLink": "assets/images/png/parcel.png",
+                "sortNumber": 5
+              },
+              "Manicure": {
+                "type": "services",
+                "imageLink": "assets/images/png/manicure.png",
+                "sortNumber": 1
+              },
+              "Pharmacy": {
+                "type": "place",
+                "color": "#E74424",
+                "imageLink": "assets/images/png/pharmacy_plus.png",
+                "sortNumber": 1
+              },
+              "Products": {
+                "type": "place",
+                "color": "#FDC74F",
+                "imageLink": "assets/images/png/grocery.png",
+                "sortNumber": 2
+              },
+              "Training": {
+                "type": "services",
+                "imageLink": "assets/images/png/coach.png",
+                "sortNumber": 2
+              },
+              "Accountant": {
+                "type": "services",
+                "imageLink": "assets/images/png/Accountant.png",
+                "sortNumber": 3
+              },
+              "Transportation": {
+                "type": "place",
+                "color": "#FDC74F",
+                "imageLink": "assets/images/png/delivery-truck.png",
+                "sortNumber": 4
+              },
+              "Real Estate Consulting": {
+                "type": "services",
+                "imageLink": "assets/images/png/real.png",
+                "sortNumber": 4
               }
             }
-          },
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "in_app_notification": {
+      "content": {
+        "properties": {
+          "Tell us More": {
+            "value": "feed",
+            "duration": 200,
+            "gradient": "badgeIcon",
+            "startDelay": 5000
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "dialog"
+    },
+    "user_type_selection": {
+      "content": {
+        "body": {
+          "redirects": {
+            "properties": {
+              "Company": {
+                "imageLink": "assets/images/svg/company_layered.svg",
+                "sortNumber": 1
+              },
+              "Personal": {
+                "imageLink": "assets/images/svg/person_layered.svg",
+                "sortNumber": 2
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Welcome": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "Select the type of account you would like to create": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "invite_people_places": {
+      "content": {
+        "body": {
+          "vertical_list": {
+            "properties": {
+              "La Citytel": {
+                "tags": {
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
+                },
+                "imageLink": "assets/images/png/invite_mock_4.png"
+              },
+              "La Vue Citytel": {
+                "tags": {
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
+                },
+                "imageLink": "assets/images/png/invite_mock_2.png"
+              },
+              "La Citytel Group": {
+                "tags": {
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
+                },
+                "imageLink": "assets/images/png/invite_mock_4.png"
+              },
+              "Vue Citytel Group": {
+                "tags": {
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
+                },
+                "imageLink": "assets/images/png/invite_mock_3.png"
+              },
+              "La Vue Citytel Group": {
+                "tags": {
+                  "Club": "club",
+                  "Closed": "clock",
+                  "Restaurant": "cutlery"
+                },
+                "imageLink": "assets/images/png/invite_mock_1.png"
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "Invite to your favorite place": {}
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "show_free": true,
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "topLeft",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 8
+      }
+    },
+    "premium_account_info": {
+      "content": {
+        "body": {
+          "vertical_list": {
+            "properties": {
+              "Special profile label": {
+                "sortNumber": 1
+              },
+              "Ability to become an Influencer": {
+                "sortNumber": 6
+              },
+              "Ability to add/suggest favourite places": {
+                "sortNumber": 3
+              },
+              "Ability to switch dark/light design theme": {
+                "sortNumber": 4
+              },
+              "Ability to offer unique properties to places and improve the matching algorithm": {
+                "sortNumber": 5
+              },
+              "Ability to leave reviews, shoot video-reactions about places and events, participate in ratings": {
+                "sortNumber": 2
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "search_social_filters_sheet": {
+      "body": {
+        "single_dropdown": {
           "properties": {
-            "image": {
-              "imageLink": "assets/images/svg/big_arrow.svg"
+            "Deira": {
+              "type": "district",
+              "value": "deira",
+              "sortNumber": 6
             },
-            "auth_type": {
-              "value": "email"
+            "Trainer": {
+              "type": "service",
+              "value": "trainer",
+              "imageLink": "assets/images/svg/musculous.svg",
+              "sortNumber": 6
             },
-            "Privacy Policy": {
-              "value": "https://azarties.com/privacy",
+            "Cleaning": {
+              "type": "service",
+              "value": "cleaning",
+              "imageLink": "assets/images/svg/cleaning.svg",
+              "sortNumber": 3
+            },
+            "Jumeirah": {
+              "type": "district",
+              "value": "jumeirah",
               "sortNumber": 2
             },
-            "Terms of Use and Service": {
-              "value": "https://azarties.com/privacy",
+            "Manicure": {
+              "type": "service",
+              "value": "manicure",
+              "imageLink": "assets/images/svg/manicure.svg",
               "sortNumber": 1
-            }
-          }
-        },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
-        }
-      },
-      "personal_credentials_verification": {
-        "content": {
-          "body": {
-            "tab_bar": {
-              "properties": {
-                "email": {
-                  "value": "email"
-                },
-                "account": {
-                  "value": "account"
-                }
-              }
             },
-            "password_hint": {
-              "properties": {
-                "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
-              }
+            "Bur Dubai": {
+              "type": "district",
+              "value": "bur-dubai",
+              "sortNumber": 4
             },
-            "vertical_list": {
-              "properties": {
-                "continue with google": {
-                  "type": "Google",
-                  "value": "working",
-                  "imageLink": "assets/images/svg/google_logo.svg",
-                  "sortNumber": 1
-                },
-                "continue with apple id": {
-                  "type": "Apple",
-                  "imageLink": "apple_logo",
-                  "sortNumber": 3
-                },
-                "continue with facebook": {
-                  "type": "Facebook",
-                  "imageLink": "facebook_logo",
-                  "sortNumber": 2
-                }
-              }
-            },
-            "country_selector": {
-              "title": {
-                "text": {
-                  "properties": {
-                    "Where are you located": {}
-                  }
-                }
-              }
-            }
-          },
-          "title": {
-            "text": {
-              "properties": {
-                "We are happy to see you": {}
-              }
-            }
-          },
-          "subtitle": {
-            "text": {
-              "properties": {
-                "To gain access you must log in first": {}
-              }
-            }
-          },
-          "properties": {
-            "image": {
-              "imageLink": "assets/images/svg/big_arrow.svg"
-            },
-            "auth_type": {
-              "value": "email"
-            },
-            "Privacy Policy": {
-              "value": "https://azarties.com/privacy",
+            "Babysitter": {
+              "type": "service",
+              "value": "babysitter",
+              "imageLink": "assets/images/svg/baby.svg",
               "sortNumber": 2
             },
-            "Terms of Use and Service": {
-              "value": "https://azarties.com/privacy",
+            "Pet walker": {
+              "type": "service",
+              "value": "pet-walker",
+              "imageLink": "assets/images/svg/paw.svg",
+              "sortNumber": 4
+            },
+            "Dubai Marina": {
+              "type": "district",
+              "value": "dubai-marina",
+              "sortNumber": 5
+            },
+            "Palm Jumeirah": {
+              "type": "district",
+              "value": "palm-jumeirah",
+              "sortNumber": 3
+            },
+            "Downtown Dubai": {
+              "type": "district",
+              "value": "downtown-dubai",
               "sortNumber": 1
+            },
+            "Language teacher": {
+              "type": "service",
+              "value": "language-teacher",
+              "imageLink": "assets/images/svg/language.svg",
+              "sortNumber": 5
+            }
+          }
+        }
+      },
+      "title": {
+        "text": {
+          "properties": {
+            "Service": {},
+            "District": {}
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "centerLeft",
+        "title_alignment": "centerLeft",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "company_credentials_verification": {
+      "content": {
+        "body": {
+          "password_hint": {
+            "properties": {
+              "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
+            }
+          },
+          "country_selector": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Where are you located": {}
+                }
+              }
             }
           }
         },
-        "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
+        "title": {
+          "text": {
+            "properties": {
+              "Happy to see you": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "To gain access you must log in first": {}
+            }
+          }
+        },
+        "properties": {
+          "image": {
+            "imageLink": "assets/images/svg/big_arrow.svg"
+          },
+          "auth_type": {
+            "value": "email"
+          },
+          "Privacy Policy": {
+            "value": "https://shuffle.city/privacy",
+            "sortNumber": 2
+          },
+          "Terms of Service": {
+            "value": "https://shuffle.city/terms",
+            "sortNumber": 1
+          }
         }
       },
-      "search_social_content_type_recommendation": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
         "version": "1.0.0",
-        "builder_type": "page",
-        "position_model": {
-          "version": "1.0.0",
-          "body_alignment": "center",
-          "title_alignment": "center",
-          "vertical_margin": 16,
-          "horizontal_margin": 16
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "personal_credentials_verification": {
+      "content": {
+        "body": {
+          "tab_bar": {
+            "properties": {
+              "email": {
+                "value": "email"
+              },
+              "account": {
+                "value": "account"
+              }
+            }
+          },
+          "password_hint": {
+            "properties": {
+              "Letters, numbers, ! “ @ # $ % & symbols, 8 characters": {}
+            }
+          },
+          "vertical_list": {
+            "properties": {
+              "continue with google": {
+                "type": "Google",
+                "value": "working",
+                "imageLink": "assets/images/svg/google_logo.svg",
+                "sortNumber": 1
+              },
+              "continue with apple id": {
+                "type": "Apple",
+                "imageLink": "apple_logo",
+                "sortNumber": 3
+              },
+              "continue with facebook": {
+                "type": "Facebook",
+                "imageLink": "facebook_logo",
+                "sortNumber": 2
+              }
+            }
+          },
+          "country_selector": {
+            "title": {
+              "text": {
+                "properties": {
+                  "Where are you located": {}
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "text": {
+            "properties": {
+              "We are happy to see you": {}
+            }
+          }
+        },
+        "subtitle": {
+          "text": {
+            "properties": {
+              "To gain access you must log in first": {}
+            }
+          }
+        },
+        "properties": {
+          "image": {
+            "imageLink": "assets/images/svg/big_arrow.svg"
+          },
+          "auth_type": {
+            "value": "email"
+          },
+          "Privacy Policy": {
+            "value": "https://shuffle.city/privacy",
+            "sortNumber": 2
+          },
+          "Terms of Service": {
+            "value": "https://shuffle.city/terms",
+            "sortNumber": 1
+          }
         }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
+    },
+    "search_social_section_item_details": {
+      "version": "1.0.0",
+      "builder_type": "modal_bottom_sheet",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "horizontal_margin": 16
+      }
+    },
+    "search_social_content_type_recommendation": {
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
       }
     }
   }
+}
