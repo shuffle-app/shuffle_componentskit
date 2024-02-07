@@ -38,7 +38,7 @@ class WebViewScreen extends StatelessWidget {
         centerTitle: true,
         children: [
           SizedBox.fromSize(
-            size: Size(1.sw, 1.sh),
+            size: Size(1.sw, 1.sh - MediaQuery.of(context).padding.top - kToolbarHeight - SpacingFoundation.verticalSpacing24),
             child: showWebView
                 ? Stack(
                     children: [
