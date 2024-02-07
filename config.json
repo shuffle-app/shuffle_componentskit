@@ -599,21 +599,7 @@
     },
     "support": {
       "content": {
-        "body": {
-          "page_opener": {
-            "properties": {
-              "How to do best code?": {
-                "value": "https://railway.app/"
-              },
-              "How to invite someone?": {
-                "value": "https://pub.dev/packages/flutter_html/versions/3.0.0-beta.2"
-              },
-              "What is premium account?": {
-                "value": "https://pub.dev/packages/flutter_html"
-              }
-            }
-          }
-        }
+        "body": {}
       },
       "version": "1.0.0",
       "builder_type": "page",

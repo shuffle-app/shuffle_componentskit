@@ -55,7 +55,7 @@ class SupportComponent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'for',
+                  S.current.ForPeriod.toLowerCase(),
                   style: textTheme?.labelLarge,
                 ),
                 SpacingFoundation.horizontalSpace16,
@@ -77,7 +77,7 @@ class SupportComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.horizontalSpace16,
                 Text(
-                  'days',
+                  S.current.Days(int.tryParse(_daysCountController.text) ?? 0).toLowerCase(),
                   style: textTheme?.labelLarge,
                 ),
               ],
@@ -99,12 +99,13 @@ class SupportComponent extends StatelessWidget {
                       onPressed: () => context.push(
                         FAQComponent(
                           positionModel: position,
-                          faqData: content.body![ContentItemType.pageOpener]!.properties!.map(
-                            (key, value) => MapEntry(
-                              key,
-                              value.value!,
-                            ),
-                          ),
+                          faqData: content.body?[ContentItemType.pageOpener]?.properties?.map(
+                                (key, value) => MapEntry(
+                                  key,
+                                  value.value!,
+                                ),
+                              ) ??
+                              Map<String, String>.identity(),
                         ),
                       ),
                       text: S.of(context).Faq.toUpperCase(),
