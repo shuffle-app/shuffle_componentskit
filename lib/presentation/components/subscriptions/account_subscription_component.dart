@@ -122,7 +122,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                     _selectedOffer == null ? '' : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
                   )
                   .toUpperCase(),
-              onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
+              // onPressed:  _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),
           SpacingFoundation.verticalSpace24,

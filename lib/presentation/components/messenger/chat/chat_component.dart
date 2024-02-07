@@ -82,7 +82,7 @@ class ChatComponent extends StatelessWidget {
                         ),
                       if (chatItemUiModel.userType == UserTileType.pro)
                         GradientableWidget(
-                          gradient: GradientFoundation.defaultLinearGradient,
+                          gradient: GradientFoundation.premiumLinearGradient,
                           child: Text(
                             'pro',
                             style: theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
