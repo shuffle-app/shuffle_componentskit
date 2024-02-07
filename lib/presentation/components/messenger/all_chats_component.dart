@@ -15,11 +15,11 @@ class AllChatsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    // final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
 
-    final model = ComponentModel.fromJson(config['chats']);
-    final horizontalMargin = model.positionModel?.horizontalMargin?.toDouble() ?? EdgeInsetsFoundation.horizontal16;
-    final verticalMargin = model.positionModel?.verticalMargin?.toDouble() ?? EdgeInsetsFoundation.vertical16;
+    // final model = ComponentModel.fromJson(config['chats']);
+    // final horizontalMargin = model.positionModel?.horizontalMargin?.toDouble() ?? EdgeInsetsFoundation.horizontal16;
+    // final verticalMargin = model.positionModel?.verticalMargin?.toDouble() ?? EdgeInsetsFoundation.vertical16;
 
     return BlurredAppBarPage(
       title: S.of(context).Messages,
