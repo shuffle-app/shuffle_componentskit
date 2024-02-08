@@ -40,7 +40,7 @@ class SubscriptionOfferWidget extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadiusFoundation.max,
-                gradient: GradientFoundation.defaultRadialGradient,
+                gradient: GradientFoundation.donationLinearGradient,
               ),
               child: Text(
                 '${model.savings}%',

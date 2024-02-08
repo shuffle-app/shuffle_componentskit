@@ -155,19 +155,13 @@ class SearchComponent extends StatelessWidget {
                         behavior: HitTestBehavior.opaque,
                         onTap: onSearchFieldTap,
                         child: IgnorePointer(
-                          child: Hero(
-                            tag: search.heroSearchTag,
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: UiKitInputFieldRightIcon(
-                                fillColor: theme?.colorScheme.surface3,
-                                hintText: S.of(context).Search.toUpperCase(),
-                                controller: searchController,
-                                icon: ImageWidget(
-                                  svgAsset: GraphicsFoundation.instance.svg.search,
-                                  color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
-                                ),
-                              ),
+                          child: UiKitInputFieldRightIcon(
+                            fillColor: theme?.colorScheme.surface3,
+                            hintText: S.of(context).Search.toUpperCase(),
+                            controller: searchController,
+                            icon: ImageWidget(
+                              svgAsset: GraphicsFoundation.instance.svg.search,
+                              color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                             ),
                           ),
                         ),

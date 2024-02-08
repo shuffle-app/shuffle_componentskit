@@ -34,30 +34,24 @@ class SearchResultComponent extends StatelessWidget {
       wrapSliverBox: false,
       centerTitle: true,
       autoImplyLeading: true,
-      customToolbarHeight: 160.0,
+      customToolbarHeight: 170.0,
       canFoldAppBar: false,
-      appBarBody: Hero(
-        tag: heroSearchTag,
-        child: SizedBox(
-          width: double.infinity,
-          child: UiKitInputFieldRightIcon(
-            autofocus: autofocus,
-            fillColor: colorScheme?.surface3,
-            hintText: S.of(context).Search.toUpperCase(),
-            controller: searchController,
-            icon: searchController.text.isEmpty
-                ? ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.search,
-                    color: colorScheme?.bodyTypography,
-                  )
-                : null,
-            onIconPressed: () {
-              if (searchController.text.isNotEmpty) searchController.clear();
-              // context.pop();
-            },
-            onFieldSubmitted: onFieldSubmitted,
-          ),
-        ),
+      appBarBody: UiKitInputFieldRightIcon(
+        autofocus: autofocus,
+        fillColor: colorScheme?.surface3,
+        hintText: S.of(context).Search.toUpperCase(),
+        controller: searchController,
+        icon: searchController.text.isEmpty
+            ? ImageWidget(
+                svgAsset: GraphicsFoundation.instance.svg.search,
+                color: colorScheme?.bodyTypography,
+              )
+            : null,
+        onIconPressed: () {
+          if (searchController.text.isNotEmpty) searchController.clear();
+          // context.pop();
+        },
+        onFieldSubmitted: onFieldSubmitted,
       ),
       children: [
         GestureDetector(
