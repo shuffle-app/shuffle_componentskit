@@ -173,13 +173,13 @@ class FeedComponent extends StatelessWidget {
               isHealthKitEnabled: feed.isHealthKitEnabled,
               title: Text(
                 S.of(context).Guess,
-                style: context.uiKitTheme?.boldTextTheme.subHeadline,
+                style: context.uiKitTheme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
               ),
               backgroundImage: ImageWidget(
                 width: double.infinity,
-                rasterAsset: GraphicsFoundation.instance.png.dubaiSilhouette,
-                fit: BoxFit.cover,
-                color: context.uiKitTheme?.colorScheme.surface2,
+                svgAsset: GraphicsFoundation.instance.svg.dubaiSilhouette,
+                fit: BoxFit.fitWidth,
+                color: context.uiKitTheme?.colorScheme.surface1,
               ),
               animationPath: GraphicsFoundation.instance.animations.lottie.animationTouchId.path,
               isCompleted: mood != null,
@@ -279,7 +279,7 @@ class FeedComponent extends StatelessWidget {
                 }
 
                 return PlacePreview(
-                  showFavoriteHint: index==0,
+                  // showFavoriteHint: index==0,
                   isFavorite: item.isFavorite,
                   onFavoriteChanged: item.onFavoriteChanged,
                   onTap: (id) => onListItemPressed?.call(id, item.type, item.source),

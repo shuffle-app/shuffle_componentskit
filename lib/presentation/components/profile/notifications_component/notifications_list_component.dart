@@ -28,26 +28,28 @@ class NotificationsListComponent extends StatelessWidget {
           S.of(context).Notifications,
           style: context.uiKitTheme?.boldTextTheme.subHeadline,
         ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
-        AnimatedList(
-          key: listKey,
-          physics: const NeverScrollableScrollPhysics(),
-          initialItemCount: notifications.length,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int index, Animation<double> animation) {
-            return ScaleTransition(
-              scale: animation,
-              child: Dismissible(
-                key: ValueKey(notifications[index]),
-                direction: DismissDirection.endToStart,
-                onDismissed: (direction) => onDismissed.call(index),
-                child: notifications[index].paddingSymmetric(
-                  horizontal: horizontalMargin,
-                  vertical: SpacingFoundation.verticalSpacing8,
+        if (notifications.isEmpty) const UiKitEmptyListPlaceHolder().paddingOnly(top: 0.35.sh),
+        if (notifications.isNotEmpty)
+          AnimatedList(
+            key: listKey,
+            physics: const NeverScrollableScrollPhysics(),
+            initialItemCount: notifications.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index, Animation<double> animation) {
+              return ScaleTransition(
+                scale: animation,
+                child: Dismissible(
+                  key: ValueKey(notifications[index]),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) => onDismissed.call(index),
+                  child: notifications[index].paddingSymmetric(
+                    horizontal: horizontalMargin,
+                    vertical: SpacingFoundation.verticalSpacing8,
+                  ),
                 ),
-              ),
-            );
-          },
-        )
+              );
+            },
+          )
       ],
     );
   }

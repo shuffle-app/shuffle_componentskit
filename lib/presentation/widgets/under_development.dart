@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UnderDevelopment extends StatelessWidget {
-  const UnderDevelopment({super.key});
+  final String? customMessage;
+
+  const UnderDevelopment({
+    super.key,
+    this.customMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +21,9 @@ class UnderDevelopment extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Under Development',
+          customMessage ?? 'Under Development',
           style: context.uiKitTheme?.boldTextTheme.subHeadline,
+          textAlign: TextAlign.center,
         ),
         SpacingFoundation.verticalSpace16,
         SizedBox(
