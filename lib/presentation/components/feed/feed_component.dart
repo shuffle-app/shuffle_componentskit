@@ -105,7 +105,7 @@ class FeedComponent extends StatelessWidget {
             ).paddingSymmetric(horizontal: horizontalMargin),
           ).wrapSliverBox,
           SpacingFoundation.verticalSpace24.wrapSliverBox,
-          if (feed.moods != null && (feedBusinessModel.showFeelings ?? true)) ...[
+          if ((feedBusinessModel.showFeelings ?? true)) ...[
             Stack(
               children: [
                 Text(S.of(context).YourNiche, style: themeTitleStyle),
@@ -158,7 +158,7 @@ class FeedComponent extends StatelessWidget {
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
-          if (feed.moods != null && (feedLeisureModel.showFeelings ?? true)) ...[
+          if ((feedLeisureModel.showFeelings ?? true)) ...[
             Stack(
               children: [
                 Text(S.of(context).HowAreYouFeelingTonight, style: themeTitleStyle),

@@ -7,7 +7,6 @@ class UiFeedModel {
   final bool showHowItWorksTitle;
   final bool showHowItWorksBody;
   final bool isHealthKitEnabled;
-  final List<UiMoodModel>? moods;
   // final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
@@ -21,7 +20,6 @@ class UiFeedModel {
     this.isHealthKitEnabled = true,
     this.recommendedEvent,
     this.showHowItWorksTitle = false,
-    this.moods,
     // this.mixedItems
   });
 }
