@@ -40,7 +40,7 @@ class UiProfileModel {
       profileStats: [
         UiKitStats(
           title: S.current.Balance,
-          value: '993 \$',
+          value: '0\$',
           actionButton: SmallOrdinaryButton(
             text: S.current.Details.toUpperCase(),
             group: group,
@@ -48,7 +48,7 @@ class UiProfileModel {
         ),
         UiKitStats(
           title: S.current.Points,
-          value: '553',
+          value: '0',
           actionButton: SmallOrdinaryButton(
             text: S.current.Spent.toUpperCase(),
             group: group,

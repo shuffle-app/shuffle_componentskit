@@ -54,6 +54,8 @@ class FollowingsComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.verticalSpace24,
               ],
+              if ((followings?.isEmpty ?? false) || (followers?.isEmpty ?? false))
+                const UiKitEmptyListPlaceHolder().paddingOnly(top: 0.35.sh),
               if (showFollowings)
                 ...(followings
                         ?.map((e) => e

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/gestures.dart';
@@ -80,6 +81,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
 
       privacyCaptions = captionTexts.entries.toList();
       privacyCaptions.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
+      log('privacyCaptions: $privacyCaptions');
 
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
@@ -166,8 +168,14 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                 style: textTheme?.subHeadline,
               ),
               KeyboardVisibilityBuilder(builder: (context, visibility) {
-                if (visibility) return SpacingFoundation.verticalSpace16;
-                return Spacer(flex: isSmallScreen ? 2 : 1);
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  height: visibility
+                      ? SpacingFoundation.verticalSpacing16
+                      : isSmallScreen
+                          ? 0.05.sh
+                          : 0.2.sh,
+                );
               }),
               KeyboardVisibilityBuilder(builder: (context, visibility) {
                 return AnimatedSwitcher(

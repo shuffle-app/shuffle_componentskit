@@ -231,9 +231,9 @@ class AboutUserComponent extends StatelessWidget {
         ],
         SpacingFoundation.verticalSpace16,
         UiKitHorizontalWheelNumberSelector(
-          values: List<int>.generate(70, (index) => index + 16),
+          values: List<int>.generate(70, (index) => index + 13),
           title: S.of(context).YourAge,
-          initialValue: aboutUserModel.selectedAge == null ? null : aboutUserModel.selectedAge! - 16,
+          initialValue: aboutUserModel.selectedAge == null ? 11 : aboutUserModel.selectedAge! - 13,
           onValueChanged: (age) => onAgeChanged?.call(age),
         ),
         if (model.content.body?[ContentItemType.singleSelect] != null) ...[
