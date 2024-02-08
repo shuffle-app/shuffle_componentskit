@@ -12,17 +12,19 @@ class MoodComponent extends StatelessWidget {
   final VoidCallback? onLevelComplited;
   final ScrollController controller;
   final ValueNotifier<bool> isVisibleButton;
+  final bool rewardIsUnderDev;
 
-  const MoodComponent(
-      {Key? key,
-      required this.mood,
-      this.onPlacePressed,
-      required this.controller,
-      required this.onTabChanged,
-      this.onLevelComplited,
-      required this.isVisibleButton,
-      this.onLevelActivated})
-      : super(key: key);
+  const MoodComponent({
+    Key? key,
+    required this.mood,
+    this.onPlacePressed,
+    required this.controller,
+    required this.onTabChanged,
+    this.onLevelComplited,
+    required this.isVisibleButton,
+    this.onLevelActivated,
+    this.rewardIsUnderDev = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -151,29 +153,31 @@ class MoodComponent extends StatelessWidget {
                             return Column(
                               children: snapshot.data?.indexed.map((value) {
                                     final (index, item) = value;
-                                    if(index.isOdd) return const SizedBox.shrink();
+                                    if (index.isOdd) return const SizedBox.shrink();
 
-                                    if(index+1 == snapshot.data!.length){
+                                    if (index + 1 == snapshot.data!.length) {
                                       return PreviewCardsWrapper(
-                                        cards:[PlacePreview(
-                                          onTap: onPlacePressed,
-                                          isFavorite: item.isFavorite,
-                                          onFavoriteChanged: item.onFavoriteChanged,
-                                          shouldVisitAt:
-                                          //TODO get from DTO
-                                          index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                          place: UiPlaceModel(
-                                            id: item.id,
-                                            title: item.title,
-                                            description: item.description,
-                                            media: item.media,
-                                            weekdays: item.weekdays ?? [],
-                                            website: item.website,
-                                            tags: item.tags,
-                                            baseTags: item.baseTags ?? [],
-                                          ),
-                                          model: model,
-                                        )],
+                                        cards: [
+                                          PlacePreview(
+                                            onTap: onPlacePressed,
+                                            isFavorite: item.isFavorite,
+                                            onFavoriteChanged: item.onFavoriteChanged,
+                                            shouldVisitAt:
+                                                //TODO get from DTO
+                                                index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                            place: UiPlaceModel(
+                                              id: item.id,
+                                              title: item.title,
+                                              description: item.description,
+                                              media: item.media,
+                                              weekdays: item.weekdays ?? [],
+                                              website: item.website,
+                                              tags: item.tags,
+                                              baseTags: item.baseTags ?? [],
+                                            ),
+                                            model: model,
+                                          )
+                                        ],
                                         shouldVisitAt: index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
                                       );
                                     } else {
@@ -186,8 +190,8 @@ class MoodComponent extends StatelessWidget {
                                             isFavorite: item.isFavorite,
                                             onFavoriteChanged: item.onFavoriteChanged,
                                             shouldVisitAt:
-                                            //TODO get from DTO
-                                            index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                                //TODO get from DTO
+                                                index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
                                             place: UiPlaceModel(
                                               id: item.id,
                                               title: item.title,
@@ -205,8 +209,8 @@ class MoodComponent extends StatelessWidget {
                                             isFavorite: secondItem.isFavorite,
                                             onFavoriteChanged: secondItem.onFavoriteChanged,
                                             shouldVisitAt:
-                                            //TODO get from DTO
-                                            index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
+                                                //TODO get from DTO
+                                                index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
                                             place: UiPlaceModel(
                                               id: secondItem.id,
                                               title: secondItem.title,
@@ -273,11 +277,22 @@ class MoodComponent extends StatelessWidget {
           slidableChild: context.gradientButton(
               data: BaseUiKitButtonData(text: S.of(context).Go, onPressed: () {}, fit: ButtonFit.hugContent)),
           onCompleted: () => onLevelActivated?.call(selectedLevel),
-          onCompletedChild: context.gradientButton(
-            data: BaseUiKitButtonData(
-              text: S.of(context).GetReward,
-              onPressed: onLevelComplited == null ? null : () => onLevelComplited?.call(),
-              fit: ButtonFit.fitWidth,
+          onCompletedChild: GestureDetector(
+            onTap: rewardIsUnderDev
+                ? () => showUiKitGeneralFullScreenDialog(
+                      context,
+                      GeneralDialogData(
+                        topPadding: 0.5.sh,
+                        child: const UnderDevelopment().paddingOnly(top: 0.125.sh),
+                      ),
+                    )
+                : null,
+            child: context.gradientButton(
+              data: BaseUiKitButtonData(
+                text: S.of(context).GetReward,
+                onPressed: onLevelComplited == null ? null : () => onLevelComplited?.call(),
+                fit: ButtonFit.fitWidth,
+              ),
             ),
           ),
         ).paddingSymmetric(horizontal: horizontalMargin),
