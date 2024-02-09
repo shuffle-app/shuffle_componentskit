@@ -66,6 +66,7 @@ class FeedComponent extends StatelessWidget {
     final horizontalMargin = (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
+    final isLightTheme = context.uiKitTheme?.themeMode == ThemeMode.light;
 
     final size = MediaQuery.sizeOf(context);
 
@@ -181,7 +182,9 @@ class FeedComponent extends StatelessWidget {
                 fit: BoxFit.fitWidth,
                 color: context.uiKitTheme?.colorScheme.surface1,
               ),
-              animationPath: GraphicsFoundation.instance.animations.lottie.animationTouchId.path,
+              animationPath: isLightTheme
+                  ? GraphicsFoundation.instance.animations.lottie.fingerprintWhite.path
+                  : GraphicsFoundation.instance.animations.lottie.fingerprintBlack.path,
               isCompleted: mood != null,
               onCompleted: onMoodCompleted,
               onPressed: onMoodCheck,

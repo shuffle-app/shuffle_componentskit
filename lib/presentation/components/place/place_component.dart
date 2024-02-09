@@ -52,10 +52,7 @@ class PlaceComponent extends StatelessWidget {
 
     final theme = context.uiKitTheme;
 
-    return ListView(
-      primary: false,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    return Column(
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -76,210 +73,193 @@ class PlaceComponent extends StatelessWidget {
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
-        // Column(
-        //   mainAxisSize: MainAxisSize.min,
-        //   mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-        //   crossAxisAlignment: bodyAlignment.crossAxisAlignment,
-        //   children: [
-            Stack(
-              children: [
-                UiKitMediaSliderWithTags(
-                  rating: place.rating,
-                  media: place.media,
-                  description: place.description,
-                  baseTags: place.baseTags,
-                  uniqueTags: place.tags,
-                  horizontalMargin: horizontalMargin,
-                  branches: model.showBranches ?? false
-                      ? [
-                          /// mock branches
-                          HorizontalCaptionedImageData(
-                            imageUrl: GraphicsFoundation.instance.png.place.path,
-                            caption:
-                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                          ),
-                          HorizontalCaptionedImageData(
-                            imageUrl: GraphicsFoundation.instance.png.place.path,
-                            caption:
-                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                          ),
-                          HorizontalCaptionedImageData(
-                            imageUrl: GraphicsFoundation.instance.png.place.path,
-                            caption:
-                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                          ),
-                          HorizontalCaptionedImageData(
-                            imageUrl: GraphicsFoundation.instance.png.place.path,
-                            caption:
-                                'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                          ),
-                        ]
-                      : place.branches,
-                  actions: [
-                    if (complaintFormComponent != null)
-                      context.smallOutlinedButton(
-                        blurred: true,
-                        data: BaseUiKitButtonData(
-                          iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.alertcircle,
-                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
-                          ),
-                          onPressed: () {
-                            showUiKitGeneralFullScreenDialog(
-                              context,
-                              GeneralDialogData(
-                                topPadding: 0.3.sh,
-                                useRootNavigator: false,
-                                child: complaintFormComponent!,
-                              ),
-                            );
-                          },
-                        ),
-                        color: Colors.white.withOpacity(0.01),
-                        blurValue: 25,
+        UiKitMediaSliderWithTags(
+          rating: place.rating,
+          media: place.media,
+          description: place.description,
+          baseTags: place.baseTags,
+          uniqueTags: place.tags,
+          horizontalMargin: horizontalMargin,
+          branches: model.showBranches ?? false
+              ? [
+                  /// mock branches
+                  HorizontalCaptionedImageData(
+                    imageUrl: GraphicsFoundation.instance.png.place.path,
+                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                  ),
+                  HorizontalCaptionedImageData(
+                    imageUrl: GraphicsFoundation.instance.png.place.path,
+                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                  ),
+                  HorizontalCaptionedImageData(
+                    imageUrl: GraphicsFoundation.instance.png.place.path,
+                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                  ),
+                  HorizontalCaptionedImageData(
+                    imageUrl: GraphicsFoundation.instance.png.place.path,
+                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+                  ),
+                ]
+              : place.branches,
+          actions: [
+            if (complaintFormComponent != null)
+              context.smallOutlinedButton(
+                blurred: true,
+                data: BaseUiKitButtonData(
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.alertcircle,
+                    color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                  ),
+                  onPressed: () {
+                    showUiKitGeneralFullScreenDialog(
+                      context,
+                      GeneralDialogData(
+                        topPadding: 0.3.sh,
+                        useRootNavigator: false,
+                        child: complaintFormComponent!,
                       ),
-                  ],
+                    );
+                  },
                 ),
-              ],
-            ),
-            SpacingFoundation.verticalSpace8,
-            if (isCreateEventAvaliable)
-              FutureBuilder(
-                  future: Future.value(events ?? []),
-                  builder: (context, snapshot) => UiKitCardWrapper(
-                          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
-                        if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
-                          SpacingFoundation.verticalSpace8,
-                          for (var event in snapshot.data!)
-                            ListTile(
-                              isThreeLine: true,
-                              contentPadding: EdgeInsets.zero,
-                              leading: BorderedUserCircleAvatar(
-                                imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                                size: 40.w,
-                              ),
-                              title: Text(
-                                event.title ?? '',
-                                style: theme?.boldTextTheme.caption1Bold,
-                              ),
-                              subtitle: event.date != null
-                                  ? Text(
-                                      DateFormat('MMMM d').format(event.date!),
-                                      style: theme?.boldTextTheme.caption1Medium.copyWith(
-                                        color: theme.colorScheme.darkNeutral500,
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                              trailing: context
-                                  .smallButton(
-                                    data: BaseUiKitButtonData(
-                                      onPressed: () {
-                                        if (onEventTap != null) {
-                                          onEventTap?.call(event);
-                                        } else {
-                                          buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                              ComponentBuilder(child: EventComponent(event: event)));
-                                        }
-                                      },
-                                      iconInfo: BaseUiKitButtonIconData(
-                                        iconData: CupertinoIcons.right_chevron,
-                                        color: theme?.colorScheme.inversePrimary,
-                                        size: 20.w,
-                                      ),
-                                    ),
-                                  )
-                                  .paddingOnly(top: SpacingFoundation.verticalSpacing4),
-                            ),
-                        ],
-                        SpacingFoundation.verticalSpace4,
-                        context.gradientButton(
-                          data: BaseUiKitButtonData(
-                            text: S.of(context).CreateEvent,
-                            onPressed: onEventCreate,
-                            fit: ButtonFit.fitWidth,
+                color: Colors.white.withOpacity(0.01),
+                blurValue: 25,
+              ),
+          ],
+        ),
+        SpacingFoundation.verticalSpace8,
+        if (isCreateEventAvaliable)
+          FutureBuilder(
+              future: Future.value(events ?? []),
+              builder: (context, snapshot) => UiKitCardWrapper(
+                      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
+                    if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
+                      SpacingFoundation.verticalSpace8,
+                      for (var event in snapshot.data!)
+                        ListTile(
+                          isThreeLine: true,
+                          contentPadding: EdgeInsets.zero,
+                          leading: BorderedUserCircleAvatar(
+                            imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                            size: 40.w,
                           ),
-                        )
-                      ]).paddingSymmetric(
-                        horizontal: SpacingFoundation.horizontalSpacing16,
-                        vertical: SpacingFoundation.verticalSpacing8,
-                      )).paddingSymmetric(
-                        horizontal: horizontalMargin,
-                      ))
-            else
-              FutureBuilder(
-                  future: Future.value(events ?? []),
-                  builder: (context, snapshot) => Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: () {
-                          final AutoSizeGroup group = AutoSizeGroup();
-
-                          final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
-
-                          final closestEvent = tempSorted.firstOrNull;
-
-                          final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
-
-                          return [
-                            Expanded(
-                              child: UpcomingEventPlaceActionCard(
-                                value: 'in ${printDuration(daysToEvent, tersity: DurationTersity.day)}',
-                                group: group,
-                                rasterIconAsset: GraphicsFoundation.instance.png.events,
-                                action: () {
-                                  if (closestEvent != null) {
+                          title: Text(
+                            event.title ?? '',
+                            style: theme?.boldTextTheme.caption1Bold,
+                          ),
+                          subtitle: event.date != null
+                              ? Text(
+                                  DateFormat('MMMM d').format(event.date!),
+                                  style: theme?.boldTextTheme.caption1Medium.copyWith(
+                                    color: theme.colorScheme.darkNeutral500,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          trailing: context
+                              .smallButton(
+                                data: BaseUiKitButtonData(
+                                  onPressed: () {
                                     if (onEventTap != null) {
-                                      onEventTap?.call(closestEvent);
+                                      onEventTap?.call(event);
                                     } else {
                                       buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                          ComponentBuilder(child: EventComponent(event: closestEvent)));
+                                          ComponentBuilder(child: EventComponent(event: event)));
                                     }
-                                  }
-                                },
-                              ),
-                            ),
-                            SpacingFoundation.horizontalSpace8,
-                            Expanded(
-                              child: PointBalancePlaceActionCard(
-                                value: '2 650',
-                                group: group,
-                                rasterIconAsset: GraphicsFoundation.instance.png.money,
-                                action: () {
-                                  log('balance was pressed');
-                                },
-                              ),
-                            ),
-                          ];
-                        }(),
-                      )).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace8,
-            Wrap(
-              // spacing: SpacingFoundation.horizontalSpacing8,
-              runSpacing: SpacingFoundation.verticalSpacing8,
-              children: place.descriptionItems!
-                  .map((e) => GestureDetector(
-                      onTap: () {
-                        final url = e.descriptionUrl ?? e.description;
+                                  },
+                                  iconInfo: BaseUiKitButtonIconData(
+                                    iconData: CupertinoIcons.right_chevron,
+                                    color: theme?.colorScheme.inversePrimary,
+                                    size: 20.w,
+                                  ),
+                                ),
+                              )
+                              .paddingOnly(top: SpacingFoundation.verticalSpacing4),
+                        ),
+                    ],
+                    SpacingFoundation.verticalSpace4,
+                    context.gradientButton(
+                      data: BaseUiKitButtonData(
+                        text: S.of(context).CreateEvent,
+                        onPressed: onEventCreate,
+                        fit: ButtonFit.fitWidth,
+                      ),
+                    )
+                  ]).paddingSymmetric(
+                    horizontal: SpacingFoundation.horizontalSpacing16,
+                    vertical: SpacingFoundation.verticalSpacing8,
+                  )).paddingSymmetric(
+                    horizontal: horizontalMargin,
+                  ))
+        else
+          FutureBuilder(
+              future: Future.value(events ?? []),
+              builder: (context, snapshot) => Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: () {
+                      final AutoSizeGroup group = AutoSizeGroup();
 
-                        if (url.startsWith('http')) {
-                          launchUrlString(url);
-                        } else if (url.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
-                          log('launching $url', name: 'PlaceComponent');
-                          launchUrlString('tel:${url}');
-                        }
-                      },
-                      child: UiKitTitledDescriptionGridWidget(
-                        title: e.title,
-                        description: e.description,
-                        spacing: SpacingFoundation.horizontalSpacing8,
-                      )))
-                  .toList(),
-            ).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace8,
-          // ],
-        // ),
+                      final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
+
+                      final closestEvent = tempSorted.firstOrNull;
+
+                      final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
+
+                      return [
+                        Expanded(
+                          child: UpcomingEventPlaceActionCard(
+                            value: 'in ${printDuration(daysToEvent, tersity: DurationTersity.day)}',
+                            group: group,
+                            rasterIconAsset: GraphicsFoundation.instance.png.events,
+                            action: () {
+                              if (closestEvent != null) {
+                                if (onEventTap != null) {
+                                  onEventTap?.call(closestEvent);
+                                } else {
+                                  buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                      ComponentBuilder(child: EventComponent(event: closestEvent)));
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                        SpacingFoundation.horizontalSpace8,
+                        Expanded(
+                          child: PointBalancePlaceActionCard(
+                            value: '2 650',
+                            group: group,
+                            rasterIconAsset: GraphicsFoundation.instance.png.money,
+                            action: () {
+                              log('balance was pressed');
+                            },
+                          ),
+                        ),
+                      ];
+                    }(),
+                  )).paddingSymmetric(horizontal: horizontalMargin),
+        SpacingFoundation.verticalSpace8,
+        Wrap(
+          runSpacing: SpacingFoundation.verticalSpacing8,
+          children: place.descriptionItems!
+              .map((e) => GestureDetector(
+                  onTap: () {
+                    final url = e.descriptionUrl ?? e.description;
+
+                    if (url.startsWith('http')) {
+                      launchUrlString(url);
+                    } else if (url.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                      log('launching $url', name: 'PlaceComponent');
+                      launchUrlString('tel:${url}');
+                    }
+                  },
+                  child: UiKitTitledDescriptionGridWidget(
+                    title: e.title,
+                    description: e.description,
+                    spacing: SpacingFoundation.horizontalSpacing8,
+                  )))
+              .toList(),
+        ).paddingSymmetric(horizontal: horizontalMargin),
+        SpacingFoundation.verticalSpace8,
       ],
-      // ),
     ).paddingSymmetric(vertical: verticalMargin);
   }
 }
