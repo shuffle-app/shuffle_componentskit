@@ -1870,23 +1870,26 @@
         "body": {
           "vertical_list": {
             "properties": {
-              "Special profile label": {
+              "Unique feature \"Connects\".  Search, communicate, meet someone, networking": {
                 "sortNumber": 1
               },
+              "Special profile label": {
+                "sortNumber": 2
+              },
               "Ability to become an Influencer": {
-                "sortNumber": 6
+                "sortNumber": 7
               },
               "Ability to add/suggest favourite places": {
-                "sortNumber": 3
-              },
-              "Ability to switch dark/light design theme": {
                 "sortNumber": 4
               },
-              "Ability to offer unique properties to places and improve the matching algorithm": {
+              "Ability to switch dark/light design theme": {
                 "sortNumber": 5
               },
+              "Ability to offer unique properties to places and improve the matching algorithm": {
+                "sortNumber": 6
+              },
               "Ability to leave reviews, shoot video-reactions about places and events, participate in ratings": {
-                "sortNumber": 2
+                "sortNumber": 3
               }
             }
           }
