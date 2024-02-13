@@ -7,7 +7,13 @@ class UiMoodModel {
   final String? activatedLevel;
   final List<UiDescriptionItemModel>? descriptionItems;
 
-  UiMoodModel({required this.id, required this.title, required this.logo, this.activatedLevel, this.descriptionItems});
+  UiMoodModel({
+    required this.id,
+    required this.title,
+    required this.logo,
+    this.activatedLevel,
+    this.descriptionItems,
+  });
 
   UiMoodModel copyWith({
     int? id,
