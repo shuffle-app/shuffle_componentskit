@@ -13,6 +13,8 @@ class SpinnerComponent extends StatelessWidget {
   final Function? onFavoriteTap;
   final Function? favoriteStream;
   final VoidCallback? onAdvertisementTap;
+  final ValueChanged<DateTimeRange?>? onDateRangeChanged;
+  final DateTimeRange? filterDate;
 
   const SpinnerComponent(
       {Key? key,
@@ -21,6 +23,8 @@ class SpinnerComponent extends StatelessWidget {
       this.onHowItWorksPoped,
       this.onFavoriteTap,
       this.onAdvertisementTap,
+      this.onDateRangeChanged,
+      this.filterDate,
       required this.categoriesController,
       required this.itemsController,
       this.favoriteStream})
@@ -29,7 +33,8 @@ class SpinnerComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spacing = SpacingFoundation.verticalSpace16;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final model = ComponentSpinnerModel.fromJson(config['spinner']);
     final ads = model.content.body?[ContentItemType.advertisement]?.properties;
 
@@ -88,7 +93,9 @@ class SpinnerComponent extends StatelessWidget {
                               )
                               .paddingOnly(
                                 left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
-                                right: itemsController.itemList?.length == index + 1 ? SpacingFoundation.horizontalSpacing16 : 0,
+                                right: itemsController.itemList?.length == index + 1
+                                    ? SpacingFoundation.horizontalSpacing16
+                                    : 0,
                               ),
                         ],
                       ),
@@ -151,10 +158,11 @@ class SpinnerComponent extends StatelessWidget {
         ),
         spacing,
         UiKitSpinner(
-          pagingController: categoriesController,
-          scrollController: spinner.categoriesScrollController,
-          onSpinChangedCategory: spinner.onSpinChangedCategory,
-        ),
+            pagingController: categoriesController,
+            scrollController: spinner.categoriesScrollController,
+            onSpinChangedCategory: spinner.onSpinChangedCategory,
+            onDateRangeChanged: onDateRangeChanged,
+            filterDate: filterDate),
       ],
     );
   }
