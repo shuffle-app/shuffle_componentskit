@@ -23,7 +23,7 @@ class UiPlaceModel {
   String? website;
   String? phone;
   String? price;
-  List<HorizontalCaptionedImageData>? branches;
+  Future<List<HorizontalCaptionedImageData>?>? branches;
 
   UiPlaceModel({
     required this.id,
@@ -97,7 +97,7 @@ class UiPlaceModel {
     String? website,
     String? phone,
     String? price,
-    List<HorizontalCaptionedImageData>? branches,
+    Future<List<HorizontalCaptionedImageData>?>? branches,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
