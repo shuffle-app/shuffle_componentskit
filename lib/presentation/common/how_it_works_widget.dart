@@ -1,21 +1,31 @@
 import 'dart:math';
-import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+import '../../domain/data_uimodels/hint_card_ui_model.dart';
+
 class HowItWorksWidget extends StatelessWidget {
-  final ContentBaseModel element;
+  final String title;
+  final String subtitle;
+  final List<HintCardUiModel> hintTiles;
   final Offset? customOffset;
 
   // final
   final VoidCallback? onPop;
 
-  const HowItWorksWidget({super.key, required this.element, this.onPop, this.customOffset});
+  const HowItWorksWidget({
+    super.key,
+    required this.subtitle,
+    required this.title,
+    required this.hintTiles,
+    this.onPop,
+    this.customOffset,
+  });
 
   _howItWorksDialog(_, textStyle) => UiKitHintDialog(
-        title: element.title?[ContentItemType.text]?.properties?.keys.first ?? S.current.DependingOn,
-        subtitle: element.body?[ContentItemType.text]?.properties?.keys.first ??
-            S.current.YouGetExactlyWhatYouNeed.toLowerCase(),
+        title: title,
+        subtitle: subtitle,
         textStyle: textStyle,
         dismissText: S.current.OkayCool.toUpperCase(),
         onDismiss: () {
@@ -23,24 +33,18 @@ class HowItWorksWidget extends StatelessWidget {
 
           return Navigator.pop(_);
         },
-        hintTiles: () {
-          final list = element.properties?.entries.map((e) {
-                return UiKitIconHintCard(
-                  icon: ImageWidget(
-                    height: 74.h,
-                    fit: BoxFit.fitHeight,
-                    link: e.value.imageLink,
-                  ),
-                  hint: e.key,
-                );
-              }).toList() ??
-              [];
-
-          list.sort((a, b) =>
-              (element.properties?[a.hint]?.sortNumber ?? 0).compareTo(element.properties?[b.hint]?.sortNumber ?? 0));
-
-          return list;
-        }(),
+        hintTiles: hintTiles
+            .map<UiKitIconHintCard>(
+              (e) => UiKitIconHintCard(
+                hint: e.title,
+                icon: ImageWidget(
+                  link: e.imageUrl,
+                  height: 74.h,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            )
+            .toList(),
       );
 
   @override
@@ -62,8 +66,11 @@ class HowItWorksWidget extends StatelessWidget {
           startDelay: Duration(seconds: Random().nextInt(8) + 2),
           child: UiKitBlurredQuestionChip(
             label: S.of(context).HowItWorks,
-            onTap: () => showUiKitFullScreenAlertDialog(context,
-                child: _howItWorksDialog, paddingAll: EdgeInsetsFoundation.all12),
+            onTap: () => showUiKitFullScreenAlertDialog(
+              context,
+              child: _howItWorksDialog,
+              paddingAll: EdgeInsetsFoundation.all12,
+            ),
           ),
         ),
       ),

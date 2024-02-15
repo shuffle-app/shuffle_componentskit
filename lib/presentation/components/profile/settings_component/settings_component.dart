@@ -31,23 +31,16 @@ class SettingsComponent extends StatelessWidget {
     const divider = Divider(
       height: 1,
       thickness: 1,
-      color: ColorsFoundation.darkNeutral400,
+      color: ColorsFoundation.surface2,
     );
 
     return Column(
       children: [
-        if (model.content.title != null)
-          Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: titleAligment.crossAxisAlignment,
-              mainAxisAlignment: titleAligment.mainAxisAlignment,
-              children: [
-                Text(
-                  model.content.title![ContentItemType.text]?.properties?.keys.first ?? 'Settings',
-                  style: textStyle?.title1,
-                ),
-                SpacingFoundation.verticalSpace12
-              ]),
+        Text(
+          S.current.Settings,
+          style: textStyle?.title1,
+        ),
+        SpacingFoundation.verticalSpace12,
         if (tabs != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
@@ -57,50 +50,82 @@ class SettingsComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace12,
         ],
-        Theme(
-          data: ThemeData(
-            textButtonTheme: TextButtonThemeData(
-              style: uiKitTheme!.textButtonStyle(uiKitTheme.colorScheme.inversePrimary).copyWith(
-                    padding: const MaterialStatePropertyAll(EdgeInsets.zero),
-                  ),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: bodyAligment.crossAxisAlignment,
-            mainAxisAlignment: bodyAligment.mainAxisAlignment,
-            children: btnDataList
-                .map(
-                  (e) => [context.button(isTextButton: true, data: e), divider],
-                )
-                .expand((element) => element)
-                .toList(),
-          ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: bodyAligment.crossAxisAlignment,
+          mainAxisAlignment: bodyAligment.mainAxisAlignment,
+          children: btnDataList
+              .map(
+                (e) => [
+                  _InlineButton(data: e),
+                  SpacingFoundation.verticalSpace16,
+                  divider,
+                  SpacingFoundation.verticalSpace16,
+                ],
+              )
+              .expand((element) => element)
+              .toList(),
         ),
-        Theme(
-          data: ThemeData(
-            textButtonTheme: TextButtonThemeData(
-              style: context.uiKitTheme?.textButtonStyle(UiKitColors.error).copyWith(
-                    padding: const MaterialStatePropertyAll(EdgeInsets.zero),
-                  ),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: bodyAligment.crossAxisAlignment,
-            mainAxisAlignment: bodyAligment.mainAxisAlignment,
-            children: [
-              context.button(isTextButton: true, data: redBtnDataList.first),
-              divider,
-              context.button(isTextButton: true, data: redBtnDataList.last),
-            ],
-          ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: bodyAligment.crossAxisAlignment,
+          mainAxisAlignment: bodyAligment.mainAxisAlignment,
+          children: [
+            _InlineButton(data: redBtnDataList.first),
+            SpacingFoundation.verticalSpace16,
+            divider,
+            SpacingFoundation.verticalSpace16,
+            _InlineButton(data: redBtnDataList.last),
+            SpacingFoundation.verticalSpace16,
+          ],
         ),
         kBottomNavigationBarHeight.heightBox
       ],
     ).paddingSymmetric(
       horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0,
       vertical: model.positionModel?.verticalMargin?.toDouble() ?? 0,
+    );
+  }
+}
+
+class _InlineButton extends StatelessWidget {
+  final BaseUiKitButtonData data;
+
+  const _InlineButton({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.uiKitTheme?.colorScheme;
+    final textStyle = context.uiKitTheme?.boldTextTheme;
+
+    return GestureDetector(
+      onTap: data.onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          data.iconWidget ??
+              ImageWidget(
+                iconData: data.iconInfo?.iconData,
+                link: data.iconInfo?.iconPath,
+                color: data.iconInfo?.color ?? colorScheme?.inverseSurface,
+                height: data.iconInfo?.size,
+                fit: BoxFit.fitHeight,
+              ),
+          SpacingFoundation.horizontalSpace12,
+          Expanded(
+            child: Text(
+              data.text ?? '',
+              style: textStyle?.title2.copyWith(
+                overflow: TextOverflow.ellipsis,
+                color: data.textColor ?? colorScheme?.inverseSurface,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

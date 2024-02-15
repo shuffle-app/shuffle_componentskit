@@ -19,6 +19,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final String? avatarUrl;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
+  final ValueChanged<String>? onLocaleUpdated;
   final String? Function(String?)? nameValidator;
   final String? Function(String?)? emailValidator;
   final String? Function(String?)? phoneValidator;
@@ -41,6 +42,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.formKey,
     this.onPhotoChangeRequested,
     this.onPreferencesChanged,
+    this.onLocaleUpdated,
     this.nameValidator,
     this.emailValidator,
     this.avatarUrl,
@@ -200,9 +202,12 @@ class EditProfileDefaultComponent extends StatelessWidget {
                     (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
                   ),
                   availableLocales: availableLocales!,
-                  onLocaleChanged: (localeModel) => context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
-                        localeModel.locale,
-                      ),
+                  onLocaleChanged: (localeModel) {
+                    onLocaleUpdated?.call(localeModel.locale.languageCode);
+                    context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
+                          localeModel.locale,
+                        );
+                  },
                 ),
               ),
               SpacingFoundation.verticalSpace16,

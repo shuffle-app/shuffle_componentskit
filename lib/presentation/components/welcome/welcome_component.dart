@@ -19,14 +19,22 @@ class WelcomeComponent extends StatefulWidget {
     final rawItems =
         model.content.body?.entries.firstWhere((element) => element.key == ContentItemType.onboardingCard).value.properties;
     firstBodyItem = OnBoardingPageItem(
-      imageLink: rawItems?.entries.first.value.imageLink ?? '',
-      title: rawItems?.entries.first.key ?? '',
-      autoSwitchDuration: rawItems?.entries.first.value.duration ?? const Duration(milliseconds: 5000),
+      title: '',
+      imageLink: (rawItems?.isNotEmpty ?? false)
+          ? rawItems?.entries.first.value.imageLink ?? GraphicsFoundation.instance.png.welcomeSlide1.path
+          : GraphicsFoundation.instance.png.welcomeSlide1.path,
+      autoSwitchDuration: (rawItems?.isNotEmpty ?? false)
+          ? rawItems?.entries.first.value.duration ?? const Duration(milliseconds: 5000)
+          : const Duration(milliseconds: 5000),
     );
     lastBodyItem = OnBoardingPageItem(
-      imageLink: rawItems?.entries.last.value.imageLink ?? '',
-      title: rawItems?.entries.last.key ?? '',
-      autoSwitchDuration: rawItems?.entries.last.value.duration ?? const Duration(milliseconds: 5000),
+      title: '',
+      imageLink: (rawItems?.isNotEmpty ?? false)
+          ? rawItems?.entries.last.value.imageLink ?? GraphicsFoundation.instance.png.welcomeSlide2.path
+          : GraphicsFoundation.instance.png.welcomeSlide2.path,
+      autoSwitchDuration: (rawItems?.isNotEmpty ?? false)
+          ? rawItems?.entries.last.value.duration ?? const Duration(milliseconds: 5000)
+          : const Duration(milliseconds: 5000),
     );
   }
 

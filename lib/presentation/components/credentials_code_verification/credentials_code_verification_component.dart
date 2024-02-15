@@ -23,14 +23,11 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['sms_verification']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
-    final title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    final subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
     final codeDigits = config['additional_settings']?['code_digits'] ?? 4;
 
     return Form(
@@ -43,7 +40,7 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
             height: MediaQuery.of(context).viewPadding.top,
           ),
           Text(
-            title,
+            credentials.contains('@') ? S.current.EmailVerification : S.current.PhoneVerification,
             style: boldTextTheme?.title1,
           ),
           SpacingFoundation.verticalSpace16,
@@ -53,7 +50,7 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: subtitle,
+                      text: '${S.current.CredentialsCodeVerificationSubtitle} ',
                       style: boldTextTheme?.subHeadline,
                     ),
                     TextSpan(
@@ -69,7 +66,7 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: subtitle,
+                        text: '${S.current.CredentialsCodeVerificationSubtitle} ',
                         style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
                       ),
                       TextSpan(
@@ -87,24 +84,28 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
             ],
           ),
           Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              UiKitCodeInputField(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                UiKitCodeInputField(
                   controller: codeController,
                   codeDigitsCount: codeDigits,
                   onDone: (code) => onSubmit?.call(code),
-                  errorText: errorText),
-              SpacingFoundation.verticalSpace24,
-              SizedBox(
-                  width: 0.5.sw,
-                  child: context.smallOutlinedButton(
-                      data: BaseUiKitButtonData(
-                          text: 'Resend code'.toUpperCase(), onPressed: onResendCode, fit: ButtonFit.hugContent))),
-              SpacingFoundation.verticalSpace24,
-            ],
-          )),
+                  errorText: errorText,
+                ),
+                SpacingFoundation.verticalSpace24,
+                context.smallOutlinedButton(
+                  data: BaseUiKitButtonData(
+                    text: S.current.ResendCode.toUpperCase(),
+                    onPressed: onResendCode,
+                    fit: ButtonFit.hugContent,
+                  ),
+                ),
+                SpacingFoundation.verticalSpace24,
+              ],
+            ),
+          ),
         ],
       ).paddingSymmetric(
         horizontal: horizontalMargin,

@@ -45,7 +45,7 @@ class SearchSocialComponent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              'Filter',
+              S.current.Filters,
               style: textTheme?.labelLarge,
             ),
             SpacingFoundation.horizontalSpace12,
@@ -116,7 +116,7 @@ class SearchSocialComponent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Top useful places rated by',
+                    S.current.TopPlacesRatedBy(' '),
                     style: textTheme?.body,
                   ),
                   SpacingFoundation.verticalSpace4,
@@ -183,6 +183,7 @@ class SearchSocialComponent extends StatelessWidget {
             items: servicesEvents!
                 .map(
                   (e) => UiKitSocialSearchCard(
+                    useAvatars: true,
                     onTap: e.onTap,
                     title: e.title,
                     subtitle: e.subtitle,

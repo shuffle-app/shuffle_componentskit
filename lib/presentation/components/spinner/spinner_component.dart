@@ -48,9 +48,29 @@ class SpinnerComponent extends StatelessWidget {
             ),
             if (spinner.showHowItWorks)
               HowItWorksWidget(
-                  customOffset: Offset(0.78.sw, 35),
-                  element: model.content.title![ContentItemType.hintDialog]!,
-                  onPop: onHowItWorksPoped),
+                title: S.current.SpinnerHiwTitle,
+                subtitle: S.current.SpinnerHiwSubtitle,
+                hintTiles: [
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(0),
+                    imageUrl: GraphicsFoundation.instance.png.givingLikeEmoji.path,
+                  ),
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(1),
+                    imageUrl: GraphicsFoundation.instance.png.swipeCategory.path,
+                  ),
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(2),
+                    imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
+                  ),
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(3),
+                    imageUrl: GraphicsFoundation.instance.png.booking.path,
+                  ),
+                ],
+                customOffset: Offset(0.78.sw, 35),
+                onPop: onHowItWorksPoped,
+              ),
           ],
         ),
         Expanded(

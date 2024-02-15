@@ -13,6 +13,7 @@ class MoodComponent extends StatelessWidget {
   final ScrollController controller;
   final ValueNotifier<bool> isVisibleButton;
   final bool rewardIsUnderDev;
+  final bool showHowItWorks;
 
   const MoodComponent({
     Key? key,
@@ -24,6 +25,7 @@ class MoodComponent extends StatelessWidget {
     required this.isVisibleButton,
     this.onLevelActivated,
     this.rewardIsUnderDev = false,
+    this.showHowItWorks = false,
   }) : super(key: key);
 
   @override
@@ -110,11 +112,39 @@ class MoodComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: horizontalMargin),
           if (model.showPlaces ?? true && tabBarContent != null) ...[
             SpacingFoundation.verticalSpace24,
-            Text(
-              S.of(context).WeHavePlacesJustForYou,
-              style: theme?.boldTextTheme.title1,
-            ).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace4,
+            Stack(
+              children: [
+                Text(
+                  S.of(context).WeHavePlacesJustForYou,
+                  style: theme?.boldTextTheme.title1,
+                ).paddingSymmetric(horizontal: horizontalMargin),
+                if (showHowItWorks)
+                  HowItWorksWidget(
+                    title: S.current.CheckInHiwTitle,
+                    subtitle: S.current.CheckInHiwSubtitle,
+                    hintTiles: [
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(0),
+                        imageUrl: GraphicsFoundation.instance.png.threeLevels.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(1),
+                        imageUrl: GraphicsFoundation.instance.png.visitFirst.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(2),
+                        imageUrl: GraphicsFoundation.instance.png.checkIn.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(3),
+                        imageUrl: GraphicsFoundation.instance.png.reward.path,
+                      ),
+                    ],
+                    customOffset: Offset(0.6.sw, 24),
+                  ),
+              ],
+            ),
+            SpacingFoundation.verticalSpace24,
             StatefulBuilder(
               builder: (context, setState) {
                 final isIgnoringPointer =
