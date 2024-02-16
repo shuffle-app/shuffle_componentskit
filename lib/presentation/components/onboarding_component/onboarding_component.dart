@@ -11,13 +11,30 @@ class OnboardingComponent extends StatefulWidget {
 
   OnboardingComponent({super.key, this.onFinished}) {
     model = ComponentModel.fromJson(GlobalConfiguration().appConfig.content['onboarding']);
-    final rawItems =
-        model.content.body?.entries.firstWhere((element) => element.key == ContentItemType.onboardingCard).value.properties;
-    items = rawItems?.entries
-            .map((e) => OnBoardingPageItem(imageLink: e.value.imageLink!, title: e.key, autoSwitchDuration: e.value.duration!))
-            .toList() ??
-        [];
-    items.sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+    // final rawItems =
+    //     model.content.body?.entries.firstWhere((element) => element.key == ContentItemType.onboardingCard).value.properties;
+    // items = rawItems?.entries
+    //         .map((e) => OnBoardingPageItem(imageLink: e.value.imageLink!, title: e.key, autoSwitchDuration: e.value.duration!))
+    //         .toList() ??
+    //     [];
+    // items.sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
+    items = [
+      OnBoardingPageItem(
+        imageLink: GraphicsFoundation.instance.png.onboardingMock1.path,
+        title: S.current.OnboardingSlide1,
+        autoSwitchDuration: const Duration(milliseconds: 1500),
+      ),
+      OnBoardingPageItem(
+        imageLink: GraphicsFoundation.instance.png.onboardingMock2.path,
+        title: S.current.OnboardingSlide2,
+        autoSwitchDuration: const Duration(milliseconds: 1500),
+      ),
+      OnBoardingPageItem(
+        imageLink: GraphicsFoundation.instance.png.onboardingMock3.path,
+        title: S.current.OnboardingSlide3,
+        autoSwitchDuration: const Duration(milliseconds: 1500),
+      ),
+    ];
   }
 
   Duration get transitionDuration => model.content.properties?['general']?.duration ?? const Duration(milliseconds: 500);
@@ -170,7 +187,7 @@ class _OnboardingComponentState extends State<OnboardingComponent> with SingleTi
                 currentIndex >= widget.items.length ? widget.items.last.title : widget.items.elementAt(currentIndex).title,
                 style: context.uiKitTheme?.boldTextTheme.titleLarge,
                 textAlign: TextAlign.center,
-              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),
+              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal20),
             ),
             const Spacer(),
             AnimatedBuilder(

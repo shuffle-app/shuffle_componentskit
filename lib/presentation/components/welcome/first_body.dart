@@ -18,6 +18,7 @@ class _FirstBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     Widget spacing = SpacingFoundation.verticalSpace16;
+    final langCode = Localizations.localeOf(context).languageCode;
     if (bigScreen) spacing = SpacingFoundation.verticalSpace24;
 
     return SizedBox(
@@ -48,17 +49,18 @@ class _FirstBody extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: S.of(context).WhatIs,
+                          text: '${S.of(context).WhatIs} ',
                           style: textTheme?.caption1Medium.copyWith(color: Colors.white),
                         ),
                         TextSpan(
                           text: S.of(context).ShuffleWithRightWhitespace.toLowerCase(),
                           style: textTheme?.caption1Bold.copyWith(color: Colors.white),
                         ),
-                        TextSpan(
-                          text: S.of(context).For.toLowerCase(),
-                          style: textTheme?.caption1Medium.copyWith(color: Colors.white),
-                        ),
+                        if (langCode != 'ru')
+                          TextSpan(
+                            text: S.of(context).For.toLowerCase(),
+                            style: textTheme?.caption1Medium.copyWith(color: Colors.white),
+                          ),
                       ],
                     ),
                   ),

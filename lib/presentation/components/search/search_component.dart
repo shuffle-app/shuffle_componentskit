@@ -125,48 +125,75 @@ class SearchComponent extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         ClipRRect(
-            borderRadius: BorderRadiusFoundation.onlyBottom24,
-            clipper: _CustomBlurClipper(),
-            child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                child: SafeArea(
-                    bottom: false,
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      SizedBox(
-                          width: double.infinity,
-                          // height: 30.h,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            alignment: Alignment.center,
-                            children: [
-                              Text(
-                                title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).YoullFindIt,
-                                style: theme?.boldTextTheme.title1,
+          borderRadius: BorderRadiusFoundation.onlyBottom24,
+          clipper: _CustomBlurClipper(),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    // height: 30.h,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Text(
+                          title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).YoullFindIt,
+                          style: theme?.boldTextTheme.title1,
+                        ),
+                        if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
+                          HowItWorksWidget(
+                            title: S.current.SearchHiwTitle,
+                            subtitle: S.current.SearchHiwSubtitle,
+                            hintTiles: [
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(0),
+                                imageUrl: GraphicsFoundation.instance.png.pixelatedSunglassesEmoji.path,
                               ),
-                              if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
-                                HowItWorksWidget(
-                                    customOffset: Offset(0.35.sw, 10),
-                                    element: title![ContentItemType.hintDialog]!,
-                                    onPop: onHowItWorksPoped),
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(1),
+                                imageUrl: GraphicsFoundation.instance.png.placeEvents.path,
+                              ),
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(2),
+                                imageUrl: GraphicsFoundation.instance.png.result.path,
+                              ),
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(3),
+                                imageUrl: GraphicsFoundation.instance.png.rating.path,
+                              ),
                             ],
-                          )),
-                      SpacingFoundation.verticalSpace16,
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: onSearchFieldTap,
-                        child: IgnorePointer(
-                          child: UiKitInputFieldRightIcon(
-                            fillColor: theme?.colorScheme.surface3,
-                            hintText: S.of(context).Search.toUpperCase(),
-                            controller: searchController,
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.search,
-                              color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
-                            ),
+                            customOffset: Offset(0.35.sw, 10),
+                            onPop: onHowItWorksPoped,
                           ),
+                      ],
+                    ),
+                  ),
+                  SpacingFoundation.verticalSpace16,
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: onSearchFieldTap,
+                    child: IgnorePointer(
+                      child: UiKitInputFieldRightIcon(
+                        fillColor: theme?.colorScheme.surface3,
+                        hintText: S.of(context).Search.toUpperCase(),
+                        controller: searchController,
+                        icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.search,
+                          color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                         ),
                       ),
-                    ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
+                    ),
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            ),
+          ),
+        ),
         ListView(
           primary: true,
           padding: EdgeInsets.zero,
@@ -177,7 +204,7 @@ class SearchComponent extends StatelessWidget {
               UiKitNoActionOverflownCard(
                 horizontalMargin: horizontalMargin,
                 title: 'Social',
-                subtitle: 'Useful services and places',
+                subtitle: S.current.SocialSubtitle,
                 decorationIcons: _decorationItemsForSocials,
                 onTap: onSocialCardPressed,
               ),
@@ -187,7 +214,10 @@ class SearchComponent extends StatelessWidget {
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
                 action: context.smallButton(
-                  data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it'),
+                  data: BaseUiKitButtonData(
+                    onPressed: onFreeCardPressed,
+                    text: S.current.CheckItOut.toUpperCase(),
+                  ),
                 ),
                 title: Stack(
                   children: [
@@ -228,7 +258,7 @@ class SearchComponent extends StatelessWidget {
             ],
             SpacingFoundation.verticalSpace24,
             Text(
-              body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'Choose yourself',
+              S.current.ChooseYourself,
               style: theme?.boldTextTheme.title1,
             ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace24,
@@ -242,12 +272,11 @@ class SearchComponent extends StatelessWidget {
             ).paddingOnly(left: horizontalMargin),
             SpacingFoundation.verticalSpace24,
             Stack(clipBehavior: Clip.none, children: [
-              Text(S.of(context).TopPlacesRatedBy, style: theme?.boldTextTheme.title1),
+              Text(S.of(context).TopPlacesRatedBy('\n'), style: theme?.boldTextTheme.title1),
               () {
                 const MemberPlate widget = MemberPlate();
 
                 return Positioned(
-                  width: widget.width,
                   top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
                   left: SizesFoundation.screenWidth / 5,
                   child: widget,

@@ -6,13 +6,14 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
-  final Future<List<UiUniversalModel>>? Function(String name) onTabChanged;
+  final Future<UiMoodGameContentModel>? Function(String name) onTabChanged;
   final Function? onPlacePressed;
   final Function(String level)? onLevelActivated;
   final VoidCallback? onLevelComplited;
   final ScrollController controller;
   final ValueNotifier<bool> isVisibleButton;
   final bool rewardIsUnderDev;
+  final bool showHowItWorks;
 
   const MoodComponent({
     Key? key,
@@ -24,6 +25,7 @@ class MoodComponent extends StatelessWidget {
     required this.isVisibleButton,
     this.onLevelActivated,
     this.rewardIsUnderDev = false,
+    this.showHowItWorks = false,
   }) : super(key: key);
 
   @override
@@ -38,7 +40,6 @@ class MoodComponent extends StatelessWidget {
     final cardWidth = 0.5.sw - horizontalMargin * 2;
     final smallCardHeight = cardWidth / 2 - SpacingFoundation.verticalSpacing8 / 2;
 
-    final titleContent = model.content.title?[ContentItemType.card];
     final tabBarContent = model.content.body?[ContentItemType.tabBar];
 
     final listOfTabs = List<MapEntry<String, PropertiesBaseModel>>.of(tabBarContent?.properties?.entries ?? []);
@@ -65,7 +66,7 @@ class MoodComponent extends StatelessWidget {
           Row(
             children: [
               UiKitGradientAttentionCard(
-                message: titleContent?.properties?.keys.firstOrNull ?? S.of(context).ThenCheckThisOut,
+                message: S.current.ThenCheckThisOut,
                 textColor: Colors.black,
                 width: cardWidth,
               ),
@@ -111,11 +112,39 @@ class MoodComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: horizontalMargin),
           if (model.showPlaces ?? true && tabBarContent != null) ...[
             SpacingFoundation.verticalSpace24,
-            Text(
-              tabBarContent?.body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).WeHavePlacesJustForYou,
-              style: theme?.boldTextTheme.title1,
-            ).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace4,
+            Stack(
+              children: [
+                Text(
+                  S.of(context).WeHavePlacesJustForYou,
+                  style: theme?.boldTextTheme.title1,
+                ).paddingSymmetric(horizontal: horizontalMargin),
+                if (showHowItWorks)
+                  HowItWorksWidget(
+                    title: S.current.CheckInHiwTitle,
+                    subtitle: S.current.CheckInHiwSubtitle,
+                    hintTiles: [
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(0),
+                        imageUrl: GraphicsFoundation.instance.png.threeLevels.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(1),
+                        imageUrl: GraphicsFoundation.instance.png.visitFirst.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(2),
+                        imageUrl: GraphicsFoundation.instance.png.checkIn.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.CheckInHiwHint(3),
+                        imageUrl: GraphicsFoundation.instance.png.reward.path,
+                      ),
+                    ],
+                    customOffset: Offset(0.6.sw, 24),
+                  ),
+              ],
+            ),
+            SpacingFoundation.verticalSpace24,
             StatefulBuilder(
               builder: (context, setState) {
                 final isIgnoringPointer =
@@ -133,134 +162,139 @@ class MoodComponent extends StatelessWidget {
                             onTabChanged.call(selectedLevel);
                           });
                         },
-                        tabs: listOfTabs
-                            .map(
-                              (entry) => UiKitCustomTab(
-                                height: 20.h,
-                                title: entry.key.toUpperCase(),
-                                group: tabBarGroup,
-                                active: !isIgnoringPointer || entry.key.toUpperCase() == mood.activatedLevel!.toUpperCase(),
-                              ),
-                            )
-                            .toList(),
+                        tabs: [
+                          UiKitCustomTab(
+                            height: 20.h,
+                            title: S.current.Easy.toUpperCase(),
+                            group: tabBarGroup,
+                            active: !isIgnoringPointer || mood.activatedLevel == 'easy',
+                            customValue: 'easy',
+                          ),
+                          UiKitCustomTab(
+                            height: 20.h,
+                            title: S.current.Fair.toUpperCase(),
+                            group: tabBarGroup,
+                            active: !isIgnoringPointer || mood.activatedLevel == 'fair',
+                            customValue: 'fair',
+                          ),
+                          UiKitCustomTab(
+                            height: 20.h,
+                            title: S.current.Hardcore.toUpperCase(),
+                            group: tabBarGroup,
+                            active: !isIgnoringPointer || mood.activatedLevel == 'hardcore',
+                            customValue: 'hardcore',
+                          ),
+                        ],
                       ),
                     ),
                     SpacingFoundation.verticalSpace8,
                     FutureBuilder(
-                        future: onTabChanged.call(selectedLevel),
-                        builder: (context, AsyncSnapshot<List<UiUniversalModel>> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
-                            return Column(
-                              children: snapshot.data?.indexed.map((value) {
-                                    final (index, item) = value;
-                                    if (index.isOdd) return const SizedBox.shrink();
-
-                                    if (index + 1 == snapshot.data!.length) {
-                                      return PreviewCardsWrapper(
-                                        cards: [
-                                          PlacePreview(
-                                            onTap: onPlacePressed,
-                                            isFavorite: item.isFavorite,
-                                            onFavoriteChanged: item.onFavoriteChanged,
-                                            shouldVisitAt:
-                                                //TODO get from DTO
-                                                index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                            place: UiPlaceModel(
-                                              id: item.id,
-                                              title: item.title,
-                                              description: item.description,
-                                              media: item.media,
-                                              weekdays: item.weekdays ?? [],
-                                              website: item.website,
-                                              tags: item.tags,
-                                              baseTags: item.baseTags ?? [],
-                                            ),
-                                            model: model,
-                                          )
-                                        ],
-                                        shouldVisitAt: index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                      );
-                                    } else {
-                                      final secondItem = snapshot.data![index + 1];
-
-                                      return PreviewCardsWrapper(
-                                        cards: [
-                                          PlacePreview(
-                                            onTap: onPlacePressed,
-                                            isFavorite: item.isFavorite,
-                                            onFavoriteChanged: item.onFavoriteChanged,
-                                            shouldVisitAt:
-                                                //TODO get from DTO
-                                                index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                            place: UiPlaceModel(
-                                              id: item.id,
-                                              title: item.title,
-                                              description: item.description,
-                                              media: item.media,
-                                              weekdays: item.weekdays ?? [],
-                                              website: item.website,
-                                              tags: item.tags,
-                                              baseTags: item.baseTags ?? [],
-                                            ),
-                                            model: model,
+                      future: onTabChanged.call(selectedLevel),
+                      builder: (context, AsyncSnapshot<UiMoodGameContentModel> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          final todayContent = snapshot.data?.todayGameContent;
+                          final tomorrowContent = snapshot.data?.tomorrowGameContent;
+                          final dayAfterTomorrowContent = snapshot.data?.dayAfterTomorrowGameContent;
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (todayContent != null)
+                                PreviewCardsWrapper(
+                                  cards: [
+                                    PlacePreview(
+                                      onTap: onPlacePressed,
+                                      isFavorite: todayContent.isFavorite,
+                                      onFavoriteChanged: todayContent.onFavoriteChanged,
+                                      shouldVisitAt: DateTime.now(),
+                                      place: UiPlaceModel(
+                                        id: todayContent.id,
+                                        title: todayContent.title,
+                                        description: todayContent.description,
+                                        media: todayContent.media,
+                                        weekdays: todayContent.weekdays ?? [],
+                                        website: todayContent.website,
+                                        tags: todayContent.tags,
+                                        baseTags: todayContent.baseTags ?? [],
+                                      ),
+                                      model: model,
+                                    ),
+                                  ],
+                                  shouldVisitAt: DateTime.now(),
+                                ),
+                              if (tomorrowContent != null)
+                                PreviewCardsWrapper(
+                                  cards: tomorrowContent
+                                      .map(
+                                        (content) => PlacePreview(
+                                          onTap: onPlacePressed,
+                                          isFavorite: content.isFavorite,
+                                          onFavoriteChanged: content.onFavoriteChanged,
+                                          shouldVisitAt: DateTime.now().add(const Duration(days: 1)),
+                                          place: UiPlaceModel(
+                                            id: content.id,
+                                            title: content.title,
+                                            description: content.description,
+                                            media: content.media,
+                                            weekdays: content.weekdays ?? [],
+                                            website: content.website,
+                                            tags: content.tags,
+                                            baseTags: content.baseTags ?? [],
                                           ),
-                                          PlacePreview(
-                                            onTap: onPlacePressed,
-                                            isFavorite: secondItem.isFavorite,
-                                            onFavoriteChanged: secondItem.onFavoriteChanged,
-                                            shouldVisitAt:
-                                                //TODO get from DTO
-                                                index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                            place: UiPlaceModel(
-                                              id: secondItem.id,
-                                              title: secondItem.title,
-                                              description: secondItem.description,
-                                              media: secondItem.media,
-                                              weekdays: secondItem.weekdays ?? [],
-                                              website: secondItem.website,
-                                              tags: secondItem.tags,
-                                              baseTags: secondItem.baseTags ?? [],
-                                            ),
-                                            model: model,
-                                          )
-                                        ],
-                                        shouldVisitAt: index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                      );
-                                    }
-                                    //
-                                    // return PlacePreview(
-                                    //   onTap: onPlacePressed,
-                                    //   shouldVisitAt:
-                                    //       //TODO get from DTO
-                                    //       index == 0 ? DateTime.now() : DateTime.now().add(Duration(days: index)),
-                                    //   place: UiPlaceModel(
-                                    //     id: item.id,
-                                    //     title: item.title,
-                                    //     description: item.description,
-                                    //     media: item.media,
-                                    //     weekdays: item.weekdays ?? [],
-                                    //     website: item.website,
-                                    //     tags: item.tags,
-                                    //     baseTags: item.baseTags ?? [],
-                                    //   ),
-                                    //   model: model,
-                                    // ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12);
-                                  }).toList() ??
-                                  [],
-                            );
-                          } else {
-                            return SizedBox(
-                              height: 156.h * 2,
-                              width: double.infinity,
-                            );
-                          }
-                        })
+                                          model: model,
+                                        ),
+                                      )
+                                      .toList(),
+                                  shouldVisitAt: DateTime.now().add(const Duration(days: 1)),
+                                ),
+                              if (dayAfterTomorrowContent != null)
+                                PreviewCardsWrapper(
+                                  cards: dayAfterTomorrowContent
+                                      .map(
+                                        (content) => PlacePreview(
+                                          onTap: onPlacePressed,
+                                          isFavorite: content.isFavorite,
+                                          onFavoriteChanged: content.onFavoriteChanged,
+                                          shouldVisitAt: DateTime.now().add(const Duration(days: 2)),
+                                          place: UiPlaceModel(
+                                            id: content.id,
+                                            title: content.title,
+                                            description: content.description,
+                                            media: content.media,
+                                            weekdays: content.weekdays ?? [],
+                                            website: content.website,
+                                            tags: content.tags,
+                                            baseTags: content.baseTags ?? [],
+                                          ),
+                                          model: model,
+                                        ),
+                                      )
+                                      .toList(),
+                                  shouldVisitAt: DateTime.now().add(const Duration(days: 2)),
+                                ),
+                            ],
+                          );
+                        } else {
+                          return UiKitShimmerProgressIndicator(
+                            gradient: GradientFoundation.greyGradient,
+                            child: PlacePreview(
+                              onTap: null,
+                              place: UiPlaceModel(id: -1, media: [], description: '', tags: []),
+                              model: ComponentMoodModel(
+                                version: '',
+                                content: const ContentBaseModel(),
+                                pageBuilderType: PageBuilderType.modalBottomSheet,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ).paddingSymmetric(horizontal: horizontalMargin);
               },
             ),
-            (kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing20 * 3.5).heightBox,
-            verticalMargin.heightBox,
+            SpacingFoundation.bottomNavigationBarSpacing,
             MediaQuery.paddingOf(context).bottom.heightBox,
           ],
         ],
