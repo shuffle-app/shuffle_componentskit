@@ -13,7 +13,7 @@ class AboutUserComponent extends StatelessWidget {
   final String? Function(String?)? inputFieldValidator;
   final ValueChanged<String>? onGenderChanged;
   final ValueChanged<String>? onTypeOfContentChanged;
-
+  final String? selectedContentType;
   final TextEditingController nameController;
   final TextEditingController nickNameController;
 
@@ -33,6 +33,7 @@ class AboutUserComponent extends StatelessWidget {
     required this.nickNameController,
     this.onPersonTypeChanged,
     this.onAgeChanged,
+    this.selectedContentType,
     this.formKey,
     this.onGenderChanged,
     this.onSubmitUserData,
@@ -177,6 +178,7 @@ class AboutUserComponent extends StatelessWidget {
             title: S.current.TypeOfContent,
             infoText: S.of(context).SwitchAnyTime,
             child: UiKitCustomTabBar(
+              selectedTab: selectedContentType,
               tabs: tabs,
               onTappedTab: (index) {
                 final value = tabs.elementAt(index).customValue;
