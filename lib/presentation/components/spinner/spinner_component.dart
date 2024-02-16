@@ -33,8 +33,7 @@ class SpinnerComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spacing = SpacingFoundation.verticalSpace16;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final model = ComponentSpinnerModel.fromJson(config['spinner']);
     final ads = model.content.body?[ContentItemType.advertisement]?.properties;
 
@@ -47,15 +46,35 @@ class SpinnerComponent extends StatelessWidget {
         Stack(
           children: [
             Text(
-              spinner.title,
+              S.current.SpinnerTitle,
               style: context.uiKitTheme?.boldTextTheme.title1,
               textAlign: TextAlign.center,
             ),
             if (spinner.showHowItWorks)
               HowItWorksWidget(
-                  customOffset: Offset(0.78.sw, 35),
-                  element: model.content.title![ContentItemType.hintDialog]!,
-                  onPop: onHowItWorksPoped),
+                title: S.current.SpinnerHiwTitle,
+                subtitle: S.current.SpinnerHiwSubtitle,
+                hintTiles: [
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(0),
+                    imageUrl: GraphicsFoundation.instance.png.givingLikeEmoji.path,
+                  ),
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(1),
+                    imageUrl: GraphicsFoundation.instance.png.swipeCategory.path,
+                  ),
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(2),
+                    imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
+                  ),
+                  HintCardUiModel(
+                    title: S.current.SpinnerHiwHint(3),
+                    imageUrl: GraphicsFoundation.instance.png.booking.path,
+                  ),
+                ],
+                customOffset: Offset(0.78.sw, 35),
+                onPop: onHowItWorksPoped,
+              ),
           ],
         ),
         Expanded(
@@ -93,9 +112,7 @@ class SpinnerComponent extends StatelessWidget {
                               )
                               .paddingOnly(
                                 left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
-                                right: itemsController.itemList?.length == index + 1
-                                    ? SpacingFoundation.horizontalSpacing16
-                                    : 0,
+                                right: itemsController.itemList?.length == index + 1 ? SpacingFoundation.horizontalSpacing16 : 0,
                               ),
                         ],
                       ),

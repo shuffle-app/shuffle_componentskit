@@ -47,7 +47,7 @@ class _LastBody extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: S.of(context).ThisIs,
+                      text: '${S.of(context).ThisIs} ',
                       style: regularTextTheme?.title1.copyWith(color: Colors.white),
                     ),
                     TextSpan(

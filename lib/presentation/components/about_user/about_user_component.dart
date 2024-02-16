@@ -18,8 +18,12 @@ class AboutUserComponent extends StatelessWidget {
   final TextEditingController nickNameController;
 
   final GlobalKey? formKey;
+  final tabs = [
+    UiKitCustomTab(title: S.current.Leisure, customValue: 'leisure'),
+    UiKitCustomTab(title: S.current.Business, customValue: 'business'),
+  ];
 
-  const AboutUserComponent({
+  AboutUserComponent({
     Key? key,
     required this.aboutUserModel,
     required this.mindsets,
@@ -48,11 +52,6 @@ class AboutUserComponent extends StatelessWidget {
     final colorScheme = theme?.colorScheme;
     final subHeadline = theme?.boldTextTheme.subHeadline;
     final titleAlignment = model.positionModel?.titleAlignment;
-    final configSubtitle = model.content.subtitle?[ContentItemType.singleSelect];
-    final contentTitle = configSubtitle?.title?[ContentItemType.text]?.properties?.keys.first;
-    configSubtitle?.body?[ContentItemType.singleSelect]?.properties?.entries.toList().sort(
-          (a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0,
-        );
 
     final AutoSizeGroup genderGroup = AutoSizeGroup();
 
@@ -66,51 +65,53 @@ class AboutUserComponent extends StatelessWidget {
             mainAxisAlignment: titleAlignment.mainAxisAlignment,
             children: () {
               final List<ContentItemType> contentTypeList = model.content.title!.keys.toList();
-              final List<ContentBaseModel> contents = model.content.title!.values.toList();
 
               return [
                 if (contentTypeList.first == ContentItemType.text)
                   Text(
-                    contents.first.properties?.keys.first ?? S.of(context).NowLetsGetToKnowEachOther,
+                    S.of(context).NowLetsGetToKnowEachOther,
                     style: theme?.boldTextTheme.title1,
                   ),
                 SpacingFoundation.verticalSpace16,
                 Stack(
                   children: [
                     RichText(
-                        text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: S.of(context).TheMoreInfoWeGetTheBetter,
-                          style: subHeadline,
-                        ),
-                        TextSpan(
-                            text: S.of(context).YourLeisureSelection.toLowerCase(),
-                            style: subHeadline?.copyWith(color: Colors.transparent)),
-                        TextSpan(
-                          text: S.of(context).WillBe,
-                          style: subHeadline,
-                        )
-                      ],
-                    )),
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
+                            style: subHeadline,
+                          ),
+                          TextSpan(
+                            text: S.of(context).YourLeisureSelection,
+                            style: subHeadline?.copyWith(color: Colors.transparent),
+                          ),
+                          if (Localizations.localeOf(context).languageCode != 'ru')
+                            TextSpan(
+                              text: ' ${S.of(context).WillBe}',
+                              style: subHeadline,
+                            ),
+                        ],
+                      ),
+                    ),
                     GradientableWidget(
                       gradient: GradientFoundation.attentionCard,
                       child: RichText(
-                        // key: _richTextKey,
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: S.of(context).TheMoreInfoWeGetTheBetter,
+                              text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
                               style: subHeadline?.copyWith(color: Colors.transparent),
                             ),
                             TextSpan(
                               text: S.of(context).YourLeisureSelection.toLowerCase(),
                               style: subHeadline?.copyWith(color: Colors.white),
                             ),
-                            TextSpan(
-                              text: S.of(context).WillBe,
-                              style: subHeadline?.copyWith(color: Colors.transparent),
-                            )
+                            if (Localizations.localeOf(context).languageCode != 'ru')
+                              TextSpan(
+                                text: ' ${S.of(context).WillBe}',
+                                style: subHeadline?.copyWith(color: Colors.transparent),
+                              )
                           ],
                         ),
                       ),
@@ -173,19 +174,13 @@ class AboutUserComponent extends StatelessWidget {
         if (model.content.subtitle?[ContentItemType.singleSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-            title: contentTitle!,
+            title: S.current.TypeOfContent,
             infoText: S.of(context).SwitchAnyTime,
             child: UiKitCustomTabBar(
-              tabs: configSubtitle!.body![ContentItemType.singleSelect]!.properties!.entries
-                  .map((property) => UiKitCustomTab(title: property.key))
-                  .toList(),
+              tabs: tabs,
               onTappedTab: (index) {
-                onTypeOfContentChanged?.call(
-                  configSubtitle.body![ContentItemType.singleSelect]!.properties!.entries
-                      .firstWhere((element) => element.value.sortNumber == index + 1)
-                      .key
-                      .toLowerCase(),
-                );
+                final value = tabs.elementAt(index).customValue;
+                if (value != null) onTypeOfContentChanged?.call(value);
               },
             ),
           ),
@@ -194,40 +189,56 @@ class AboutUserComponent extends StatelessWidget {
         if (model.content.body?[ContentItemType.multiSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-              title: model.content.body?[ContentItemType.multiSelect]?.title?.entries.first.value.properties?.keys.first ??
-                  S.of(context).SelectYourReligions,
-              hasError: aboutUserModel.errorReligionMessage != null,
-              errorText: aboutUserModel.errorReligionMessage,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Wrap(
-                  spacing: SpacingFoundation.horizontalSpacing8,
-                  children: () {
-                    final rawItems =
-                        model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties;
-
-                    final items = (rawItems?.entries.map(
-                          (e) {
-                            return UiKitBorderedChipWithIcon(
-                              icon: ImageWidget(
-                                link: e.value.imageLink,
-                              ),
-                              title: e.key,
-                              isSelected: aboutUserModel.selectedReligions?.contains(e.key.toLowerCase()) ?? false,
-                              onPressed: () => onReligionSelected?.call(e.value.value ?? ''),
-                            );
-                          },
-                        ).toList() ??
-                        [])
-                      ..sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
-
-                    return items.map((e) => e).toList();
-                  }(),
-                ).paddingOnly(
-                  left: EdgeInsetsFoundation.horizontal4,
-                  bottom: EdgeInsetsFoundation.vertical4,
-                ),
-              )),
+            title: S.of(context).SelectYourReligions,
+            hasError: aboutUserModel.errorReligionMessage != null,
+            errorText: aboutUserModel.errorReligionMessage,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  UiKitBorderedChipWithIcon(
+                    icon: ImageWidget(link: GraphicsFoundation.instance.png.hindu.path),
+                    title: S.current.Hindu,
+                    isSelected: aboutUserModel.selectedReligions?.contains('hindu') ?? false,
+                    onPressed: () => onReligionSelected?.call('hindu'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                  UiKitBorderedChipWithIcon(
+                    icon: ImageWidget(link: GraphicsFoundation.instance.png.muslimFlag.path),
+                    title: S.current.Islam,
+                    isSelected: aboutUserModel.selectedReligions?.contains('islam') ?? false,
+                    onPressed: () => onReligionSelected?.call('islam'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                  UiKitBorderedChipWithIcon(
+                    icon: ImageWidget(link: GraphicsFoundation.instance.png.atheist.path),
+                    title: S.current.Atheism,
+                    isSelected: aboutUserModel.selectedReligions?.contains('atheism') ?? false,
+                    onPressed: () => onReligionSelected?.call('atheism'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                  UiKitBorderedChipWithIcon(
+                    icon: ImageWidget(link: GraphicsFoundation.instance.png.buddismFlag.path),
+                    title: S.current.Buddhism,
+                    isSelected: aboutUserModel.selectedReligions?.contains('buddism') ?? false,
+                    onPressed: () => onReligionSelected?.call('buddism'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                  UiKitBorderedChipWithIcon(
+                    icon: ImageWidget(link: GraphicsFoundation.instance.png.judaism.path),
+                    title: S.current.Judaism,
+                    isSelected: aboutUserModel.selectedReligions?.contains('judaism') ?? false,
+                    onPressed: () => onReligionSelected?.call('judaism'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                  UiKitBorderedChipWithIcon(
+                    icon: ImageWidget(link: GraphicsFoundation.instance.png.christianity.path),
+                    title: S.current.Christianity,
+                    isSelected: aboutUserModel.selectedReligions?.contains('christianity') ?? false,
+                    onPressed: () => onReligionSelected?.call('christianity'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                ],
+              ).paddingOnly(
+                left: EdgeInsetsFoundation.horizontal4,
+                bottom: EdgeInsetsFoundation.vertical4,
+              ),
+            ),
+          ),
         ],
         SpacingFoundation.verticalSpace16,
         UiKitHorizontalWheelNumberSelector(
@@ -239,8 +250,7 @@ class AboutUserComponent extends StatelessWidget {
         if (model.content.body?[ContentItemType.singleSelect] != null) ...[
           SpacingFoundation.verticalSpace16,
           UiKitTitledSection(
-            title: model.content.body?[ContentItemType.singleSelect]?.title?.entries.first.value.properties?.keys.first ??
-                S.of(context).Gender,
+            title: S.of(context).Gender,
             hasError: aboutUserModel.errorGenderMessage != null,
             errorText: aboutUserModel.errorGenderMessage,
             child: Row(
@@ -248,28 +258,33 @@ class AboutUserComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SpacingFoundation.horizontalSpace16,
-                ...() {
-                  final rawItems =
-                      model.content.body?[ContentItemType.singleSelect]?.body?[ContentItemType.singleSelect]?.properties;
-
-                  final items = (rawItems?.entries
-                          .map((e) => UiKitVerticalChip(
-                                selected: aboutUserModel.selectedGender == e.value.value,
-                                caption: e.key,
-                                sign: ImageWidget(link: e.value.imageLink),
-                                autoSizeGroup: genderGroup,
-                                onTap: () => onGenderChanged?.call(e.value.value ?? ''),
-                              ))
-                          .toList() ??
-                      [])
-                    ..sort((a, b) => (rawItems?[a.caption]?.sortNumber ?? 0).compareTo((rawItems?[b.caption]?.sortNumber ?? 0)));
-
-                  return items
-                      .map((e) => Expanded(
-                            child: e.paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                          ))
-                      .toList();
-                }(),
+                Expanded(
+                  child: UiKitVerticalChip(
+                    selected: aboutUserModel.selectedGender == 'male',
+                    caption: S.current.Male,
+                    sign: ImageWidget(link: GraphicsFoundation.instance.png.male.path),
+                    autoSizeGroup: genderGroup,
+                    onTap: () => onGenderChanged?.call('male'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                ),
+                Expanded(
+                  child: UiKitVerticalChip(
+                    selected: aboutUserModel.selectedGender == 'female',
+                    caption: S.current.Female,
+                    sign: ImageWidget(link: GraphicsFoundation.instance.png.male.path),
+                    autoSizeGroup: genderGroup,
+                    onTap: () => onGenderChanged?.call('female'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                ),
+                Expanded(
+                  child: UiKitVerticalChip(
+                    selected: aboutUserModel.selectedGender == 'other',
+                    caption: S.current.Other,
+                    sign: ImageWidget(link: GraphicsFoundation.instance.png.male.path),
+                    autoSizeGroup: genderGroup,
+                    onTap: () => onGenderChanged?.call('other'),
+                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                ),
                 SpacingFoundation.horizontalSpace16,
               ],
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
@@ -277,10 +292,11 @@ class AboutUserComponent extends StatelessWidget {
         ],
         SpacingFoundation.verticalSpace16,
         context.button(
-            data: BaseUiKitButtonData(
-          text: S.of(context).Confirm.toUpperCase(),
-          onPressed: onSubmitUserData,
-        )),
+          data: BaseUiKitButtonData(
+            text: S.of(context).Confirm.toUpperCase(),
+            onPressed: onSubmitUserData,
+          ),
+        ),
         SpacingFoundation.verticalSpace24,
       ],
     ).paddingSymmetric(

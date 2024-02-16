@@ -94,7 +94,26 @@ class ProfileComponent extends StatelessWidget {
                   ),
                 if (showHowItWorks)
                   HowItWorksWidget(
-                    element: model.content.body![ContentItemType.hintDialog]!,
+                    title: S.current.ProfileFindSomeoneHiwTitle,
+                    subtitle: S.current.ProfileFindSomeoneHiwSubtitle,
+                    hintTiles: [
+                      HintCardUiModel(
+                        title: S.current.ProfileFindSomeoneHiwHint(0),
+                        imageUrl: GraphicsFoundation.instance.png.companions.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.ProfileFindSomeoneHiwHint(1),
+                        imageUrl: GraphicsFoundation.instance.png.preferences.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.ProfileFindSomeoneHiwHint(2),
+                        imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
+                      ),
+                      HintCardUiModel(
+                        title: S.current.ProfileFindSomeoneHiwHint(3),
+                        imageUrl: GraphicsFoundation.instance.png.foe.path,
+                      ),
+                    ],
                     onPop: onHowItWorksPoped,
                     customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
                   ),
@@ -217,7 +236,26 @@ class ProfileComponent extends StatelessWidget {
               ),
               if (showHowItWorks)
                 HowItWorksWidget(
-                  element: model.content.subtitle![ContentItemType.hintDialog]!,
+                  title: S.current.ProfileAskOrSupportHiwTitle,
+                  subtitle: S.current.ProfileAskOrSupportHiwSubtitle,
+                  hintTiles: [
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(0),
+                      imageUrl: GraphicsFoundation.instance.svg.donat.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(1),
+                      imageUrl: GraphicsFoundation.instance.svg.film.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(2),
+                      imageUrl: GraphicsFoundation.instance.svg.hands.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(3),
+                      imageUrl: GraphicsFoundation.instance.svg.handshake3.path,
+                    ),
+                  ],
                   onPop: onHowItWorksPoped,
                   customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
                 ),

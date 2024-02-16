@@ -55,8 +55,6 @@ class FeedComponent extends StatelessWidget {
     final nicheData = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties;
     final upcomingGlobals =
         feedBusinessModel.content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
-    final upcomingGlobalsTitle =
-        feedBusinessModel.content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.text]?.properties?.keys.first;
     nicheTitles?.sort((a, b) {
       final aSortNumber = nicheData?[a]?.sortNumber ?? 0;
       final bSortNumber = nicheData?[b]?.sortNumber ?? 0;
@@ -77,7 +75,7 @@ class FeedComponent extends StatelessWidget {
         ).wrapSliverBox,
         if (showBusinessContent) ...[
           Text(
-            upcomingGlobalsTitle ?? '',
+            S.current.UpcomingGlobalEvents,
             style: themeTitleStyle,
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           SpacingFoundation.verticalSpace16.wrapSliverBox,
@@ -112,7 +110,26 @@ class FeedComponent extends StatelessWidget {
                 Text(S.of(context).YourNiche, style: themeTitleStyle),
                 if (feed.showHowItWorksTitle)
                   HowItWorksWidget(
-                    element: feedBusinessModel.content.title![ContentItemType.hintDialog]!,
+                    title: S.current.FeedNichesHiwTitle,
+                    subtitle: S.current.FeedNichesHiwSubtitle,
+                    hintTiles: [
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.selectNiche.path,
+                        title: S.current.FeedNichesHiwItems(0),
+                      ),
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.pressNiche.path,
+                        title: S.current.FeedNichesHiwItems(1),
+                      ),
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.getSelection.path,
+                        title: S.current.FeedNichesHiwItems(2),
+                      ),
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
+                        title: S.current.FeedNichesHiwItems(3),
+                      ),
+                    ],
                     onPop: onHowItWorksPoped,
                     customOffset: Offset(1.sw / 1.7, 0),
                   ),
@@ -165,7 +182,28 @@ class FeedComponent extends StatelessWidget {
                 Text(S.of(context).HowAreYouFeelingTonight, style: themeTitleStyle),
                 if (feed.showHowItWorksTitle)
                   HowItWorksWidget(
-                      element: feedLeisureModel.content.title![ContentItemType.hintDialog]!, onPop: onHowItWorksPoped),
+                    title: S.current.FeedFeelingsHiwTitle,
+                    subtitle: S.current.FeedFeelingsHiwSubtitle,
+                    hintTiles: [
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.map.path,
+                        title: S.current.FeedFeelingsHiwItems(0),
+                      ),
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.dart.path,
+                        title: S.current.FeedFeelingsHiwItems(1),
+                      ),
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.sunClouds.path,
+                        title: S.current.FeedFeelingsHiwItems(2),
+                      ),
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.smileMood.path,
+                        title: S.current.FeedFeelingsHiwItems(3),
+                      ),
+                    ],
+                    onPop: onHowItWorksPoped,
+                  ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
@@ -210,7 +248,28 @@ class FeedComponent extends StatelessWidget {
               ),
               if (feed.showHowItWorksBody)
                 HowItWorksWidget(
-                    element: feedLeisureModel.content.body![ContentItemType.hintDialog]!, onPop: onHowItWorksPopedBody),
+                  title: S.current.FeedRandomizerHiwTitle,
+                  subtitle: S.current.FeedRandomizerHiwSubtitle,
+                  hintTiles: [
+                    HintCardUiModel(
+                      imageUrl: GraphicsFoundation.instance.png.events.path,
+                      title: S.current.FeedRandomizerHiwItems(0),
+                    ),
+                    HintCardUiModel(
+                      imageUrl: GraphicsFoundation.instance.png.filtering.path,
+                      title: S.current.FeedRandomizerHiwItems(1),
+                    ),
+                    HintCardUiModel(
+                      imageUrl: GraphicsFoundation.instance.png.chipsSelect.path,
+                      title: S.current.FeedRandomizerHiwItems(2),
+                    ),
+                    HintCardUiModel(
+                      imageUrl: GraphicsFoundation.instance.png.pressScroll.path,
+                      title: S.current.FeedRandomizerHiwItems(3),
+                    ),
+                  ],
+                  onPop: onHowItWorksPopedBody,
+                ),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[

@@ -21,7 +21,7 @@ class UnderDevelopment extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          customMessage ?? 'Under Development',
+          customMessage ?? S.current.UnderDevelopmentMessage,
           style: context.uiKitTheme?.boldTextTheme.subHeadline,
           textAlign: TextAlign.center,
         ),

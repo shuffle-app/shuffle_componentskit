@@ -24,6 +24,7 @@ export 'location/location_component.dart';
 export 'messenger/all_chats_component.dart';
 export 'messenger/chat/chat_component.dart';
 export 'mood/mood_component.dart';
+export 'mood/ui_mood_game_content_model.dart';
 export 'mood/uimood_model.dart';
 export 'onboarding_component/onboarding_component.dart';
 export 'onboarding_component/onboarding_page_item.dart';

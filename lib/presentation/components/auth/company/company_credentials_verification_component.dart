@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
+import 'package:shuffle_components_kit/presentation/utils/policies_localization_getter.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -44,8 +45,6 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     final ComponentModel model = ComponentModel.fromJson(config['company_credentials_verification']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    final title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    final subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
     final decorationLink = model.content.properties?.values.first;
     final tabBar = model.content.body?[ContentItemType.tabBar]?.properties;
     final countrySelectorTitle =
@@ -60,7 +59,6 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
     privacyCaptions.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
 
     final authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
-    final passwordHint = model.content.body?[ContentItemType.passwordHint]?.properties?.keys.firstOrNull ?? '';
 
     final colorScheme = context.uiKitTheme?.colorScheme;
     bool obscurePassword = true;
@@ -75,7 +73,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
             right: SpacingFoundation.horizontalSpacing16,
             top: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing6,
             child: ImageWidget(
-              link: decorationLink?.imageLink ?? '',
+              link: decorationLink?.imageLink ?? GraphicsFoundation.instance.svg.bigArrow.path,
               fit: BoxFit.fitWidth,
               width: 1.sw,
             ),
@@ -93,12 +91,12 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                     height: MediaQuery.viewPaddingOf(context).top,
                   ),
                   Text(
-                    title,
+                    S.current.CredentialsVerificationTitle,
                     style: boldTextTheme?.titleLarge,
                   ),
                   SpacingFoundation.verticalSpace16,
                   Text(
-                    subtitle,
+                    S.current.CredentialsVerificationPrompt,
                     style: boldTextTheme?.subHeadline,
                   ),
                   const Spacer(),
@@ -146,7 +144,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace16,
                     UiKitWrappedInputField.uiKitInputFieldNoIcon(
                       enabled: true,
-                      hintText: 'EMAIL',
+                      hintText: S.current.Email.toUpperCase(),
                       controller: credentialsController,
                       fillColor: colorScheme?.surface3,
                       validator: credentialsValidator,
@@ -158,7 +156,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                       builder: (context, setState) => UiKitWrappedInputField.uiKitInputFieldRightIcon(
                         obscureText: obscurePassword,
                         enabled: true,
-                        hintText: 'PASSWORD',
+                        hintText: S.current.Password.toUpperCase(),
                         controller: passwordController,
                         fillColor: colorScheme?.surface3,
                         validator: passwordValidator,
@@ -181,7 +179,7 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                     ),
                     SpacingFoundation.verticalSpace2,
                     Text(
-                      passwordHint,
+                      S.current.PasswordHint,
                       style: regTextTheme?.caption4,
                       textAlign: TextAlign.center,
                     ),
@@ -190,27 +188,37 @@ class CompanyCredentialsVerificationComponent extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
                         TextSpan(
-                          text: privacyCaptions.first.key,
+                          text: '${S.of(context).ByContinuingYouAcceptThe} ',
+                          style: regTextTheme?.caption4,
+                        ),
+                        TextSpan(
+                          text: S.current.TermsOfService,
                           style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => context.push(
                                   WebViewScreen(
-                                    title: privacyCaptions.first.key,
-                                    url: privacyCaptions.first.value.value ?? '',
+                                    title: S.current.TermsOfService,
+                                    url: PolicyLocalizer.localizedTermsOfService(
+                                      Localizations.localeOf(context).languageCode,
+                                    ),
                                   ),
                                 ),
                         ),
-                        TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
                         TextSpan(
-                          text: privacyCaptions.last.key,
+                          text: S.of(context).AndWithWhitespaces.toLowerCase(),
+                          style: regTextTheme?.caption4,
+                        ),
+                        TextSpan(
+                          text: S.current.PrivacyPolicy,
                           style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => context.push(
                                   WebViewScreen(
-                                    title: privacyCaptions.last.key,
-                                    url: privacyCaptions.last.value.value ?? '',
+                                    title: S.current.PrivacyPolicy,
+                                    url: PolicyLocalizer.localizedPrivacyPolicy(
+                                      Localizations.localeOf(context).languageCode,
+                                    ),
                                   ),
                                 ),
                         ),

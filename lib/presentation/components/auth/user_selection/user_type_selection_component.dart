@@ -27,14 +27,6 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
     final ComponentModel model = ComponentModel.fromJson(config['user_type_selection']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    String title = '';
-    if (model.content.title?[ContentItemType.text]?.properties?.isNotEmpty ?? false) {
-      title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    }
-    String subtitle = '';
-    if (model.content.subtitle?[ContentItemType.text]?.properties?.isNotEmpty ?? false) {
-      subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
-    }
 
     return Stack(
       fit: StackFit.passthrough,
@@ -48,12 +40,12 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
             ),
             // if (contentTypeList.first == ContentItemType.text)
             Text(
-              title,
+              S.current.Welcome,
               style: boldTextTheme?.titleLarge,
             ),
             SpacingFoundation.verticalSpace16,
             Text(
-              subtitle,
+              S.current.UserTypeSelectionPrompt,
               style: boldTextTheme?.subHeadline,
             ),
           ],

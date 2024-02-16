@@ -84,7 +84,7 @@ class AboutCompanyComponent extends StatelessWidget {
               height: MediaQuery.viewPaddingOf(context).top,
             ),
             Text(
-              pageTitle,
+              S.current.DescribeYourBusiness,
               style: boldTextTheme?.title1,
             ),
             SpacingFoundation.verticalSpace16,
@@ -95,16 +95,18 @@ class AboutCompanyComponent extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: S.of(context).TheMoreInfoWeGetTheBetter,
+                        text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
                         style: boldTextTheme?.subHeadline,
                       ),
                       TextSpan(
-                          text: S.of(context).YourTraffic.toLowerCase(),
-                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent)),
-                      TextSpan(
-                        text: S.of(context).WillBe.toLowerCase(),
-                        style: boldTextTheme?.subHeadline,
+                        text: S.of(context).YourTraffic.toLowerCase(),
+                        style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
                       ),
+                      if (Localizations.localeOf(context).languageCode != 'ru')
+                        TextSpan(
+                          text: S.of(context).WillBe.toLowerCase(),
+                          style: boldTextTheme?.subHeadline,
+                        ),
                     ],
                   ),
                   textAlign: TextAlign.left,
@@ -115,16 +117,18 @@ class AboutCompanyComponent extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: S.of(context).TheMoreInfoWeGetTheBetter,
+                          text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
                           style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
                         ),
                         TextSpan(
-                            text: S.of(context).YourTraffic.toLowerCase(),
-                            style: boldTextTheme?.subHeadline.copyWith(color: Colors.white)),
-                        TextSpan(
-                          text: S.of(context).WillBe.toLowerCase(),
-                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
+                          text: S.of(context).YourTraffic.toLowerCase(),
+                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.white),
                         ),
+                        if (Localizations.localeOf(context).languageCode != 'ru')
+                          TextSpan(
+                            text: S.of(context).WillBe.toLowerCase(),
+                            style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
+                          ),
                       ],
                     ),
                     textAlign: TextAlign.left,
@@ -154,14 +158,15 @@ class AboutCompanyComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSection(
+              color: colorScheme?.surface,
               errorText: uiModel.errorSelectedMenuItem,
               hasError: uiModel.errorSelectedMenuItem != null,
-              title: nicheTitle,
+              title: S.current.YourNiche,
               child: UiKitMenu<String>(
                 tilesColor: Colors.transparent,
                 useCustomTiles: false,
                 onSelected: (item) => onNicheChanged?.call(item),
-                title: nicheTitle,
+                title: S.current.YourNiche,
                 selectedItem: uiModel.selectedMenuItem,
                 items: niches,
               ).paddingAll(EdgeInsetsFoundation.all4),
@@ -170,7 +175,7 @@ class AboutCompanyComponent extends StatelessWidget {
             UiKitTitledSection(
               errorText: uiModel.errorSelectedAudiences,
               hasError: uiModel.errorSelectedAudiences != null,
-              title: audiencesTitle,
+              title: S.current.YourAudience,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
@@ -191,7 +196,7 @@ class AboutCompanyComponent extends StatelessWidget {
             UiKitTitledSection(
               errorText: uiModel.errorSelectedAgeRanges,
               hasError: uiModel.errorSelectedAgeRanges != null,
-              title: ageGroupsTitle,
+              title: S.current.YourAudienceAge,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
