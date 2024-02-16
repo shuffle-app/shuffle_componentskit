@@ -22,9 +22,7 @@ class SettingsComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final config = GlobalConfiguration().appConfig.content['profile_settings'];
     final model = ComponentModel.fromJson(config);
-    final uiKitTheme = context.uiKitTheme;
 
-    final titleAligment = model.positionModel?.titleAlignment;
     final bodyAligment = model.positionModel?.bodyAlignment;
 
     final textStyle = context.uiKitTheme?.boldTextTheme;
