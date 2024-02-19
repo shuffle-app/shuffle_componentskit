@@ -142,7 +142,7 @@ class SearchComponent extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Text(
-                          title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).YoullFindIt,
+                          S.of(context).YoullFindIt,
                           style: theme?.boldTextTheme.title1,
                         ),
                         if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
