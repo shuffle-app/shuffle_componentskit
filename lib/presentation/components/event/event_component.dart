@@ -59,6 +59,8 @@ class EventComponent extends StatelessWidget {
                       child: AutoSizeText(
                         event.title!,
                         minFontSize: 18.w,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         stepGranularity: 1.w,
                         style: theme?.boldTextTheme.title2,
                         textAlign: titleAlignment.textAlign,

@@ -10,13 +10,12 @@ class WebViewScreen extends StatelessWidget {
   final NavigationDelegate? navigationDelegate;
   final bool useLightTheme;
 
-  const WebViewScreen(
-      {super.key,
-      required this.title,
-      required this.url,
-      this.showWebView = false,
-      this.navigationDelegate,
-      this.useLightTheme = false});
+  const WebViewScreen({super.key,
+    required this.title,
+    required this.url,
+    this.showWebView = false,
+    this.navigationDelegate,
+    this.useLightTheme = false});
 
   @override
   Widget build(BuildContext context) {
@@ -38,23 +37,28 @@ class WebViewScreen extends StatelessWidget {
         centerTitle: true,
         children: [
           SizedBox.fromSize(
-            size: Size(1.sw, 1.sh - MediaQuery.of(context).padding.top - kToolbarHeight - SpacingFoundation.verticalSpacing24),
+            size: Size(1.sw, 1.sh - MediaQuery
+                .of(context)
+                .padding
+                .top - kToolbarHeight - SpacingFoundation.verticalSpacing24),
             child: showWebView
                 ? Stack(
-                    children: [
-                      const Positioned.fill(
-                        top: -190.0,
-                        child: LoadingWidget(),
-                      ),
-                      WebViewWidget(controller: controller),
-                    ],
-                  )
+              children: [
+                const Positioned.fill(
+                  top: -190.0,
+                  child: LoadingWidget(),
+                ),
+                WebViewWidget(controller: controller).paddingOnly(bottom: MediaQuery
+                    .paddingOf(context)
+                    .bottom),
+              ],
+            )
                 : SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: WebContentComponent(
-                      url: url,
-                    ),
-                  ),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: WebContentComponent(
+                url: url,
+              ),
+            ),
           ),
         ],
       ),
