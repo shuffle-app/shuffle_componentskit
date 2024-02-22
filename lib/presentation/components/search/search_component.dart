@@ -101,25 +101,6 @@ class SearchComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final title = model.content.title;
-    final body = model.content.body;
-
-    final chooseCards = body?[ContentItemType.horizontalList]?.properties?.entries.toList()
-      ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
-
-    final sortedCards = chooseCards
-            ?.map(
-              (e) => UiKitTitledCardWithBackground(
-                title: e.key,
-                backgroundImageLink: e.value.imageLink ?? '',
-                backgroundColor: e.value.color ?? Colors.white,
-                onPressed: () {
-                  onSearchFieldTap?.call();
-                  searchController.text = e.value.value?.replaceAll('-', ' ') ?? '';
-                },
-              ),
-            )
-            .toList() ??
-        [];
 
     return Stack(
       fit: StackFit.expand,
@@ -267,7 +248,89 @@ class SearchComponent extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Wrap(
                 spacing: SpacingFoundation.horizontalSpacing12,
-                children: sortedCards,
+                children: [
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself1,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFamily.path,
+                    backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'happiness-for-children-and-family'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself2,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryAdventure.path,
+                    backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'thirst-for-adventure'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself3,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryParty.path,
+                    backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'parties-and-dancing'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself4,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryExtreme.path,
+                    backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'extremes-and-thrills'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself5,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryZadrot.path,
+                    backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'age-of-enlightenment'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself6,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFood.path,
+                    backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'fine-dining'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself7,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryChill.path,
+                    backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'bliss-and-chill'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself8,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategorySport.path,
+                    backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'sporty-movements'.replaceAll('-', ' ');
+                    },
+                  ),
+                  UiKitTitledCardWithBackground(
+                    title: S.current.SearchChooseYourself9,
+                    backgroundImageLink: GraphicsFoundation.instance.png.searchCategorySelfCare.path,
+                    backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
+                    onPressed: () {
+                      onSearchFieldTap?.call();
+                      searchController.text = 'self-care'.replaceAll('-', ' ');
+                    },
+                  ),
+                ],
               ),
             ).paddingOnly(left: horizontalMargin),
             SpacingFoundation.verticalSpace24,
