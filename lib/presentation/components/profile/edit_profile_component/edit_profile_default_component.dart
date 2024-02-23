@@ -271,7 +271,6 @@ class EditProfileDefaultComponent extends StatelessWidget {
               onTap: onActivityTileTap,
               item: activityItem,
               autoPopUp: false,
-              showSeparator: false,
             ),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSelectionTile(
