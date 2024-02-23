@@ -18,7 +18,6 @@ class PlaceComponent extends StatelessWidget {
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
   final VoidCallback? onSharePressed;
-  final VoidCallback? onUpcomingEventsTap;
 
   const PlaceComponent({
     Key? key,
@@ -29,7 +28,6 @@ class PlaceComponent extends StatelessWidget {
     this.onEventTap,
     this.onSharePressed,
     this.events,
-    this.onUpcomingEventsTap,
   }) : super(key: key);
 
   @override
@@ -212,7 +210,12 @@ class PlaceComponent extends StatelessWidget {
                       group: group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
                       action: () {
-                        onUpcomingEventsTap?.call();
+                        if (closestEvent != null) {
+                          onEventTap?.call(closestEvent!);
+                        } else {
+                          buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                              ComponentBuilder(child: EventComponent(event: closestEvent!)));
+                        }
                       },
                     ),
                   ),
