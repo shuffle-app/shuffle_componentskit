@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -207,17 +206,15 @@ class PlaceComponent extends StatelessWidget {
                 return [
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
-                      value: 'in ${printDuration(daysToEvent, tersity: DurationTersity.day)}',
+                      value: S.current.WithInDays(daysToEvent.inDays),
                       group: group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
                       action: () {
                         if (closestEvent != null) {
-                          if (onEventTap != null) {
-                            onEventTap?.call(closestEvent);
-                          } else {
-                            buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                ComponentBuilder(child: EventComponent(event: closestEvent)));
-                          }
+                          onEventTap?.call(closestEvent!);
+                        } else {
+                          buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                              ComponentBuilder(child: EventComponent(event: closestEvent!)));
                         }
                       },
                     ),
