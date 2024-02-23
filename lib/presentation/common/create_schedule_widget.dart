@@ -22,7 +22,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   UiScheduleModel? scheduleModel;
   UiScheduleModel? selectedTemplate;
 
-  final listKey = GlobalKey<AnimatedListState>();
+  final listKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   }
 
   void onAddButtonPressed() {
-    listKey.currentState!.insertItem(initialItemsCount + scheduleModel!.itemsCount);
+    listKey.currentState!.insertItem(initialItemsCount + scheduleModel!.itemsCount - 1);
   }
 
   void onMinusButtonPressed() {
@@ -168,7 +168,7 @@ class UiScheduleTimeModel extends UiScheduleModel {
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
       StatefulBuilder(builder: (context, setState) {
         final MapEntry<String, List<TimeOfDay>> thisObject =
-            weeklySchedule.isNotEmpty ? weeklySchedule[index] : const MapEntry('', []);
+            weeklySchedule.isNotEmpty && weeklySchedule.length > index? weeklySchedule[index] : const MapEntry('', []);
         return _CardListWrapper(
           children: [
             UiKitAddableFormField(
@@ -177,6 +177,7 @@ class UiScheduleTimeModel extends UiScheduleModel {
                 weeklySchedule.add(const MapEntry('', []));
                 onAdd?.call();
               },
+              isAbleToRemove: index > 0,
               onRemove: index > 0
                   ? () {
                       weeklySchedule.removeAt(index);
@@ -236,7 +237,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
       StatefulBuilder(builder: (context, setState) {
         final MapEntry<String, List<TimeOfDay>> thisObject =
-            dailySchedule.isNotEmpty ? dailySchedule[index] : const MapEntry('', []);
+            dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
         return _CardListWrapper(children: [
           UiKitAddableFormField(
               title: 'Date',
@@ -244,6 +245,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
                 dailySchedule.add(const MapEntry('', []));
                 onAdd?.call();
               },
+              isAbleToRemove: index > 0,
               onRemove: index > 0
                   ? () {
                       dailySchedule.removeAt(index);
@@ -318,7 +320,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
       StatefulBuilder(builder: (context, setState) {
         final MapEntry<String, List<TimeOfDay>> thisObject =
-            dailySchedule.isNotEmpty ? dailySchedule[index] : const MapEntry('', []);
+            dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
         return _CardListWrapper(children: [
           UiKitAddableFormField(
               title: 'Date Range',
@@ -326,6 +328,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                 dailySchedule.add(const MapEntry('', []));
                 onAdd?.call();
               },
+              isAbleToRemove: index > 0,
               onRemove: index > 0
                   ? () {
                       dailySchedule.removeAt(index);
