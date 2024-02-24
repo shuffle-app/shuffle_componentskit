@@ -92,14 +92,71 @@ class SearchComponent extends StatelessWidget {
     ),
   ];
 
-  List<UiKitTitledCardWithBackground> get _mockedChips => [
+  List<UiKitTitledCardWithBackground> get _mockedBusinessChips => [
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchBusinessChooseYourself1,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessClubs.path,
+          backgroundColor: Colors.transparent,
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'business club';
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchBusinessChooseYourself2,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessConferences.path,
+          backgroundColor: Colors.transparent,
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'conference';
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchBusinessChooseYourself3,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessSpeech.path,
+          backgroundColor: Colors.transparent,
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'pitch';
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchBusinessChooseYourself4,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessGames.path,
+          backgroundColor: Colors.transparent,
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'business games';
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchBusinessChooseYourself5,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessNetworking.path,
+          backgroundColor: Colors.transparent,
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'networking';
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchBusinessChooseYourself6,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessTraining.path,
+          backgroundColor: Colors.transparent,
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'business training';
+          },
+        ),
+      ];
+
+  List<UiKitTitledCardWithBackground> get _mockedLeisureChips => [
         UiKitTitledCardWithBackground(
           title: S.current.SearchChooseYourself1,
           backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFamily.path,
           backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'happiness-for-children-and-family'.replaceAll('-', ' ');
+            searchController.text = 'happiness for children and family';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -108,7 +165,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'thirst-for-adventure'.replaceAll('-', ' ');
+            searchController.text = 'thirst for adventure';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -117,7 +174,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'parties-and-dancing'.replaceAll('-', ' ');
+            searchController.text = 'parties and dancing';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -126,7 +183,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'extremes-and-thrills'.replaceAll('-', ' ');
+            searchController.text = 'extremes and thrills';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -135,7 +192,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'age-of-enlightenment'.replaceAll('-', ' ');
+            searchController.text = 'age of enlightenment';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -144,7 +201,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'fine-dining'.replaceAll('-', ' ');
+            searchController.text = 'fine dining';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -153,7 +210,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'bliss-and-chill'.replaceAll('-', ' ');
+            searchController.text = 'bliss and chill';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -162,7 +219,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'sporty-movements'.replaceAll('-', ' ');
+            searchController.text = 'sporty movements';
           },
         ),
         UiKitTitledCardWithBackground(
@@ -171,7 +228,7 @@ class SearchComponent extends StatelessWidget {
           backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
           onPressed: () {
             onSearchFieldTap?.call();
-            searchController.text = 'self-care'.replaceAll('-', ' ');
+            searchController.text = 'self care';
           },
         ),
       ];
@@ -334,7 +391,7 @@ class SearchComponent extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Wrap(
                 spacing: SpacingFoundation.horizontalSpacing12,
-                children: chooseYourselfChips ?? _mockedChips,
+                children: chooseYourselfChips ?? (showBusinessContent ? _mockedBusinessChips : _mockedLeisureChips),
               ),
             ).paddingOnly(left: horizontalMargin),
             SpacingFoundation.verticalSpace24,
