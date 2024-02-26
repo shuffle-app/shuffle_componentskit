@@ -66,11 +66,11 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                   setState(() {
                     selectedScheduleName = type;
                     if (type == scheduleTypes[0]) {
-                      scheduleModel = UiScheduleTimeModel(weeklySchedule: List.empty(growable: true));
+                      scheduleModel = UiScheduleTimeModel();
                     } else if (type == scheduleTypes[1]) {
-                      scheduleModel = UiScheduleDatesModel(dailySchedule: List.empty(growable: true));
+                      scheduleModel = UiScheduleDatesModel();
                     } else if (type == scheduleTypes[2]) {
-                      scheduleModel = UiScheduleDatesRangeModel(dailySchedule: List.empty(growable: true));
+                      scheduleModel = UiScheduleDatesRangeModel();
                     }
                   });
                 }
@@ -85,6 +85,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                   if (selectedTemplate != null) {
                     setState(() {
                       scheduleModel = selectedTemplate;
+                      //TODO insert all items
                     });
                   }
                 },
@@ -113,6 +114,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                   onPressed: scheduleModel != null ? () => widget.onScheduleCreated?.call(scheduleModel!) : null,
                 ),
               ),
+              SpacingFoundation.verticalSpace4,
               if (scheduleModel != null)
                 context.outlinedButton(
                   data: BaseUiKitButtonData(
@@ -125,7 +127,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   }
 }
 
-const _paddingMultiplier = 3.5;
+const _paddingMultiplier = 4.2;
 
 enum ScheduleType { weekly, dayTime, dayRangeTime }
 
@@ -179,9 +181,10 @@ abstract class UiScheduleModel {
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
-  final List<MapEntry<String, List<TimeOfDay>>> weeklySchedule;
+  final List<MapEntry<String, List<TimeOfDay>>> weeklySchedule = List.empty(growable: true)
+    ..add(const MapEntry('', []));
 
-  UiScheduleTimeModel({required this.weeklySchedule});
+  UiScheduleTimeModel();
 
   @override
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
@@ -189,13 +192,14 @@ class UiScheduleTimeModel extends UiScheduleModel {
         final MapEntry<String, List<TimeOfDay>> thisObject =
             weeklySchedule.isNotEmpty && weeklySchedule.length > index ? weeklySchedule[index] : const MapEntry('', []);
         log('rebuild is here $thisObject', name: 'UiScheduleTimeModel');
+        log('index is $index', name: 'UiScheduleTimeModel');
         return _CardListWrapper(
           children: [
             UiKitAddableFormField(
               title: S.current.Time,
               onAdd: () {
-                weeklySchedule.add(const MapEntry('', []));
                 onAdd?.call();
+                weeklySchedule.add(const MapEntry('', []));
               },
               isAbleToRemove: index > 0,
               onRemove: index > 0
@@ -212,12 +216,16 @@ class UiScheduleTimeModel extends UiScheduleModel {
                         (TimeOfDay? from, TimeOfDay? to) {
                           if (from != null || to != null) {
                             final newValues = [from, to]..removeWhere((element) => element == null);
+                            log('weeklySchedule.isNotEmpty is ${weeklySchedule.isNotEmpty}',
+                                name: 'UiScheduleTimeModel');
+                            log('weeklySchedule.length is ${weeklySchedule.length}', name: 'UiScheduleTimeModel');
                             setState(() {
-                              if (weeklySchedule.isNotEmpty && weeklySchedule.length < index) {
+                              if (weeklySchedule.isNotEmpty && weeklySchedule.length > index) {
                                 weeklySchedule[index] = MapEntry(thisObject.key, newValues.map((e) => e!).toList());
                               } else {
                                 weeklySchedule.add(MapEntry(thisObject.key, newValues.map((e) => e!).toList()));
                               }
+                              log('weeklySchedule ${weeklySchedule}', name: 'UiScheduleTimeModel');
                             });
                           }
                         },
@@ -232,11 +240,14 @@ class UiScheduleTimeModel extends UiScheduleModel {
                   final result = await showUiKitWeekdaySelector(navigatorKey.currentContext!);
                   if (result != null) {
                     setState(() {
-                      if (weeklySchedule.isNotEmpty && weeklySchedule.length < index) {
+                      log('weeklySchedule.isNotEmpty is ${weeklySchedule.isNotEmpty}', name: 'UiScheduleTimeModel');
+                      log('weeklySchedule.length is ${weeklySchedule.length}', name: 'UiScheduleTimeModel');
+                      if (weeklySchedule.isNotEmpty && weeklySchedule.length > index) {
                         weeklySchedule[index] = MapEntry(result.join(', '), thisObject.value);
                       } else {
                         weeklySchedule.add(MapEntry(result.join(', '), thisObject.value));
                       }
+                      log('weeklySchedule ${weeklySchedule}', name: 'UiScheduleTimeModel');
                     });
                   }
                 },
@@ -245,16 +256,16 @@ class UiScheduleTimeModel extends UiScheduleModel {
           ],
         );
       }).paddingOnly(
-          bottom: weeklySchedule.length == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+          bottom: weeklySchedule.length-1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
 
   @override
   int get itemsCount => weeklySchedule.length;
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
-  final List<MapEntry<String, List<TimeOfDay>>> dailySchedule;
+  final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
-  UiScheduleDatesModel({required this.dailySchedule});
+  UiScheduleDatesModel();
 
   @override
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
@@ -266,8 +277,8 @@ class UiScheduleDatesModel extends UiScheduleModel {
           UiKitAddableFormField(
               title: 'Date',
               onAdd: () {
-                dailySchedule.add(const MapEntry('', []));
                 onAdd?.call();
+                dailySchedule.add(const MapEntry('', []));
               },
               isAbleToRemove: index > 0,
               onRemove: index > 0
@@ -282,7 +293,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
                     final result = await showUiKitCalendarDialog(navigatorKey.currentContext!);
                     if (result != null) {
                       setState(() {
-                        if (dailySchedule.isNotEmpty && dailySchedule.length < index) {
+                        if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                           dailySchedule[index] = MapEntry(convertDateToKey(result), thisObject.value);
                         } else {
                           dailySchedule.add(MapEntry(convertDateToKey(result), thisObject.value));
@@ -295,7 +306,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
                 title: S.current.Time,
                 onAdd: () {
                   setState(() {
-                    if (dailySchedule.isNotEmpty && dailySchedule.length < index) {
+                    if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                       dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
                     } else {
                       dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
@@ -307,7 +318,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
                     final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
                     if (result != null) {
                       setState(() {
-                        if (dailySchedule.isNotEmpty && dailySchedule.length < index) {
+                        if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                           dailySchedule[index] = MapEntry(thisObject.key, [result]);
                         } else {
                           dailySchedule.add(MapEntry(thisObject.key, [result]));
@@ -322,7 +333,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
                   title: S.current.Time,
                   onAdd: () {
                     setState(() {
-                      if (dailySchedule.isNotEmpty && dailySchedule.length < index) {
+                      if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                         dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
                       } else {
                         dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
@@ -352,16 +363,16 @@ class UiScheduleDatesModel extends UiScheduleModel {
                   ))
         ]);
       }).paddingOnly(
-          bottom: dailySchedule.length == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+          bottom: dailySchedule.length-1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
 
   @override
   int get itemsCount => dailySchedule.length;
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
-  final List<MapEntry<String, List<TimeOfDay>>> dailySchedule;
+  final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
-  UiScheduleDatesRangeModel({required this.dailySchedule});
+  UiScheduleDatesRangeModel();
 
   @override
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
@@ -373,8 +384,8 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
           UiKitAddableFormField(
               title: 'Date Range',
               onAdd: () {
-                dailySchedule.add(const MapEntry('', []));
                 onAdd?.call();
+                dailySchedule.add(const MapEntry('', []));
               },
               isAbleToRemove: index > 0,
               onRemove: index > 0
@@ -389,7 +400,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                     final result = await showDateRangePickerDialog(navigatorKey.currentContext!);
                     if (result != null) {
                       setState(() {
-                        if (dailySchedule.isNotEmpty && dailySchedule.length < index) {
+                        if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                           dailySchedule[index] = MapEntry(convertDateRangeToKey(result), thisObject.value);
                         } else {
                           dailySchedule.add(MapEntry(convertDateRangeToKey(result), thisObject.value));
@@ -402,7 +413,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                 title: S.current.Time,
                 onAdd: () {
                   setState(() {
-                    if (dailySchedule.isNotEmpty && dailySchedule.length < index) {
+                    if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                       dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
                     } else {
                       dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
@@ -424,7 +435,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                   title: S.current.Time,
                   onAdd: () {
                     setState(() {
-                      if (dailySchedule.isNotEmpty && dailySchedule.length < index) {
+                      if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                         dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
                       } else {
                         dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
@@ -454,7 +465,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                   ))
         ]);
       }).paddingOnly(
-          bottom: dailySchedule.length == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+          bottom: dailySchedule.length -1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
 
   @override
   int get itemsCount => dailySchedule.length;
