@@ -1,10 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
+import 'package:shuffle_components_kit/presentation/utils/policies_localization_getter.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -47,19 +47,29 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   bool inited = false;
   late final double horizontalMargin;
   late final double verticalMargin;
-  late final String title;
-  late final String subtitle;
   late final String decorationLink;
   late final String countrySelectorTitle;
   late final RegistrationType? authType;
-  late final String passwordHint;
-  late final List<ShortLogInButton> socials;
-  late final List<String>? tabBar;
-  late final List<MapEntry<String, PropertiesBaseModel>> privacyCaptions;
+  List<ShortLogInButton> get socials => [
+        ShortLogInButton(
+          link: GraphicsFoundation.instance.svg.googleLogo.path,
+          title: S.current.LoginWith('google').toUpperCase(),
+          onTap: () => widget.onSocialsLogin?.call(
+            SocialsLoginModel(
+              provider: 'google',
+              clientType: Platform.isIOS ? 'iOS' : 'Android',
+            ),
+          ),
+        ),
+      ];
   late final bool isSmallScreen;
   final FocusNode credentialsFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   bool obscurePassword = true;
+  List<UiKitCustomTab> get tabs => [
+        UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
+        UiKitCustomTab.small(title: S.current.Account.toUpperCase(), customValue: 'account'),
+      ];
 
   @override
   void initState() {
@@ -70,45 +80,33 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       final ComponentModel model = ComponentModel.fromJson(config['personal_credentials_verification']);
       horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
       verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-      title = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-      subtitle = model.content.subtitle?[ContentItemType.text]?.properties?.keys.first ?? '';
-      decorationLink = model.content.properties?['image']?.imageLink ?? '';
+      decorationLink = model.content.properties?['image']?.imageLink ?? GraphicsFoundation.instance.svg.bigArrow.path;
 
       final captionTexts = Map<String, PropertiesBaseModel>.of(model.content.properties ?? {});
 
       captionTexts.remove('image');
       captionTexts.remove('auth_type');
 
-      privacyCaptions = captionTexts.entries.toList();
-      privacyCaptions.sort((a, b) => (a.value.sortNumber ?? 0).compareTo(b.value.sortNumber ?? 0));
-      log('privacyCaptions: $privacyCaptions');
-
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
           model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-      tabBar = model.content.body?[ContentItemType.tabBar]?.properties?.keys.toList();
-      if (tabBar?.isNotEmpty ?? false) {
-        if (_selectedTab == null) setState(() => _selectedTab = tabBar?.first);
-      }
       authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
-      passwordHint = model.content.body?[ContentItemType.passwordHint]?.properties?.keys.firstOrNull ?? '';
-      final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
-      socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
-      final clientType = Platform.isIOS ? 'iOS' : 'Android';
-      socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
-            return ShortLogInButton(
-              link: element.value.imageLink ?? '',
-              title: element.key,
-              onTap: () => widget.onSocialsLogin?.call(
-                SocialsLoginModel(
-                  provider: element.value.type!,
-                  clientType: clientType,
-                ),
-              ),
-            );
-          }).toList() ??
-          [];
+      // final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
+      // socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
+      // socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
+      //       return ShortLogInButton(
+      //         link: element.value.imageLink ?? '',
+      //         title: element.key,
+      //         onTap: () => widget.onSocialsLogin?.call(
+      //           SocialsLoginModel(
+      //             provider: element.value.type!,
+      //             clientType: clientType,
+      //           ),
+      //         ),
+      //       );
+      //     }).toList() ??
+      //     [];
       isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
       tabController.addListener(_tabListener);
       setState(() => inited = true);
@@ -118,7 +116,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   void _tabListener() {
     FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
-      _selectedTab = tabBar?.elementAt(tabController.index);
+      _selectedTab = tabs.elementAt(tabController.index).customValue;
     });
   }
 
@@ -159,12 +157,12 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                 height: MediaQuery.viewPaddingOf(context).top,
               ),
               Text(
-                title,
+                S.current.CredentialsVerificationTitle,
                 style: textTheme?.titleLarge,
               ),
               SpacingFoundation.verticalSpace16,
               Text(
-                subtitle,
+                S.current.CredentialsVerificationPrompt,
                 style: textTheme?.subHeadline,
               ),
               KeyboardVisibilityBuilder(builder: (context, visibility) {
@@ -177,47 +175,54 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           : 0.2.sh,
                 );
               }),
-              KeyboardVisibilityBuilder(builder: (context, visibility) {
-                return AnimatedSwitcher(
+              KeyboardVisibilityBuilder(
+                builder: (context, keyboardVisible) {
+                  return AnimatedSwitcher(
                     reverseDuration: const Duration(milliseconds: 250),
                     duration: const Duration(milliseconds: 125),
                     transitionBuilder: (child, animation) => FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        ),
-                    child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                      // const Spacer(flex: 1),
-                      if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty && !visibility) ...[
-                        UiKitCardWrapper(
-                          color: colorScheme?.surface1,
-                          borderRadius: BorderRadiusFoundation.max,
-                          child: UiKitLocaleSelector(
-                              selectedLocale: widget.availableLocales!
-                                  .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
-                              availableLocales: widget.availableLocales!,
-                              onLocaleChanged: (LocaleModel value) {
-                                context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
-                                setState(() {});
-                              }).paddingAll(EdgeInsetsFoundation.all4),
-                        ),
-                        SpacingFoundation.verticalSpace16
+                      opacity: animation,
+                      child: child,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // const Spacer(flex: 1),
+                        if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty && !keyboardVisible) ...[
+                          UiKitCardWrapper(
+                            color: colorScheme?.surface1,
+                            borderRadius: BorderRadiusFoundation.max,
+                            child: UiKitLocaleSelector(
+                                selectedLocale: widget.availableLocales!
+                                    .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                                availableLocales: widget.availableLocales!,
+                                onLocaleChanged: (LocaleModel value) {
+                                  context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
+                                  setState(() {});
+                                }).paddingAll(EdgeInsetsFoundation.all4),
+                          ),
+                          SpacingFoundation.verticalSpace16
+                        ],
+                        if (!keyboardVisible) ...[
+                          UiKitCustomTabBar(
+                            tabController: tabController,
+                            selectedTab: _selectedTab,
+                            tabs: tabs,
+                            onTappedTab: (tabIndex) {
+                              setState(() {
+                                _selectedTab = tabs.elementAt(tabIndex).customValue;
+                                // tabController.animateTo(tabIndex);
+                              });
+                            },
+                          ),
+                          SpacingFoundation.verticalSpace16,
+                        ],
                       ],
-                      if (tabBar != null && !visibility) ...[
-                        UiKitCustomTabBar(
-                          tabController: tabController,
-                          selectedTab: _selectedTab,
-                          tabs: tabBar!.map<UiKitCustomTab>((key) => UiKitCustomTab.small(title: key.toUpperCase())).toList(),
-                          onTappedTab: (tabIndex) {
-                            setState(() {
-                              _selectedTab = tabBar!.elementAt(tabIndex);
-                              // tabController.animateTo(tabIndex);
-                            });
-                          },
-                        ),
-                        SpacingFoundation.verticalSpace16,
-                      ],
-                    ]));
-              }),
+                    ),
+                  );
+                },
+              ),
               Expanded(
                 flex: isSmallScreen ? 7 : 2,
                 child: TabBarView(
@@ -281,7 +286,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           ),
                           SpacingFoundation.verticalSpace2,
                           Text(
-                            passwordHint,
+                            S.current.PasswordHint,
                             style: regTextTheme?.caption4,
                             textAlign: TextAlign.center,
                           ),
@@ -323,25 +328,46 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   child: tabController.index < 1 && !visible
                       ? Column(
                           children: [
-                            if (privacyCaptions.isNotEmpty)
-                              RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(text: S.of(context).ByContinuingYouAcceptThe, style: regTextTheme?.caption4),
+                            RichText(
+                              text: TextSpan(
+                                children: [
                                   TextSpan(
-                                      text: privacyCaptions.first.key,
-                                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () => context.push(WebViewScreen(
-                                            title: privacyCaptions.first.key, url: privacyCaptions.first.value.value ?? ''))),
-                                  TextSpan(text: S.of(context).AndWithWhitespaces, style: regTextTheme?.caption4),
+                                    text: '${S.of(context).ByContinuingYouAcceptThe} ',
+                                    style: regTextTheme?.caption4,
+                                  ),
                                   TextSpan(
-                                      text: privacyCaptions.last.key,
-                                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () => context.push(WebViewScreen(
-                                            title: privacyCaptions.last.key, url: privacyCaptions.last.value.value ?? '')))
-                                ]),
+                                    text: S.current.TermsOfService,
+                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => context.push(
+                                            WebViewScreen(
+                                              title: S.current.TermsOfService,
+                                              url: PolicyLocalizer.localizedTermsOfService(
+                                                Localizations.localeOf(context).languageCode,
+                                              ),
+                                            ),
+                                          ),
+                                  ),
+                                  TextSpan(
+                                    text: S.of(context).AndWithWhitespaces.toLowerCase(),
+                                    style: regTextTheme?.caption4,
+                                  ),
+                                  TextSpan(
+                                    text: S.current.PrivacyPolicy,
+                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => context.push(
+                                            WebViewScreen(
+                                              title: S.current.PrivacyPolicy,
+                                              url: PolicyLocalizer.localizedPrivacyPolicy(
+                                                Localizations.localeOf(context).languageCode,
+                                              ),
+                                            ),
+                                          ),
+                                  ),
+                                ],
                               ),
+                            ),
                             SpacingFoundation.verticalSpace16,
                             context.button(
                               data: BaseUiKitButtonData(

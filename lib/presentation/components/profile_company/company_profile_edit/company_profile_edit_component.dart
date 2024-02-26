@@ -12,6 +12,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final VoidCallback? onAgeRangesChangeRequested;
   final VoidCallback? onPhotoChangeRequested;
   final VoidCallback? onNicheChangeRequested;
+  final ValueChanged<String>? onLanguageChanged;
   final ValueChanged<bool>? onIsLightThemeChanged;
   final String? avatarUrl;
   final String selectedNiche;
@@ -39,6 +40,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
     required this.selectedAudience,
     required this.selectedAgeRanges,
     required this.selectedNiche,
+    this.onLanguageChanged,
     this.onProfileEditSubmitted,
     this.onNicheChangeRequested,
     this.formKey,
@@ -69,7 +71,6 @@ class CompanyProfileEditComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
 
-
     return Scaffold(
       body: Form(
         key: formKey,
@@ -96,6 +97,9 @@ class CompanyProfileEditComponent extends StatelessWidget {
               ),
             ],
           ),
+          childrenPadding: EdgeInsets.symmetric(
+            horizontal: horizontalMargin,
+          ),
           children: [
             if (onIsLightThemeChanged != null) ...[
               SpacingFoundation.verticalSpace16,
@@ -121,9 +125,12 @@ class CompanyProfileEditComponent extends StatelessWidget {
                     (localeModel) => localeModel.locale.languageCode == Intl.getCurrentLocale(),
                   ),
                   availableLocales: availableLocales!,
-                  onLocaleChanged: (localeModel) => context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
-                        localeModel.locale,
-                      ),
+                  onLocaleChanged: (localeModel) {
+                    onLanguageChanged?.call(localeModel.locale.languageCode);
+                    context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(
+                          localeModel.locale,
+                        );
+                  },
                 ),
               ),
               SpacingFoundation.verticalSpace16,

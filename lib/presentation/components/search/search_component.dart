@@ -15,6 +15,7 @@ class SearchComponent extends StatelessWidget {
   final Function? onPlaceTapped;
   final Function? onTagSortPressed;
   final bool showBusinessContent;
+  final List<UiKitTitledCardWithBackground>? chooseYourselfChips;
 
   SearchComponent({
     super.key,
@@ -23,6 +24,7 @@ class SearchComponent extends StatelessWidget {
     this.scrollController,
     required this.search,
     this.onPlaceTapped,
+    this.chooseYourselfChips,
     this.onSearchFieldTap,
     this.onHowItWorksPoped,
     this.onTagSortPressed,
@@ -90,6 +92,90 @@ class SearchComponent extends StatelessWidget {
     ),
   ];
 
+  List<UiKitTitledCardWithBackground> get _mockedChips => [
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself1,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFamily.path,
+          backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'happiness-for-children-and-family'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself2,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryAdventure.path,
+          backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'thirst-for-adventure'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself3,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryParty.path,
+          backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'parties-and-dancing'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself4,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryExtreme.path,
+          backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'extremes-and-thrills'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself5,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryZadrot.path,
+          backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'age-of-enlightenment'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself6,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFood.path,
+          backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'fine-dining'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself7,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryChill.path,
+          backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'bliss-and-chill'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself8,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategorySport.path,
+          backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'sporty-movements'.replaceAll('-', ' ');
+          },
+        ),
+        UiKitTitledCardWithBackground(
+          title: S.current.SearchChooseYourself9,
+          backgroundImageLink: GraphicsFoundation.instance.png.searchCategorySelfCare.path,
+          backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
+          onPressed: () {
+            onSearchFieldTap?.call();
+            searchController.text = 'self-care'.replaceAll('-', ' ');
+          },
+        ),
+      ];
+
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
@@ -101,72 +187,80 @@ class SearchComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final title = model.content.title;
-    final body = model.content.body;
-
-    final chooseCards = body?[ContentItemType.horizontalList]?.properties?.entries.toList()
-      ?..sort((a, b) => a.value.sortNumber!.compareTo(b.value.sortNumber!));
-
-    final sortedCards = chooseCards
-            ?.map(
-              (e) => UiKitTitledCardWithBackground(
-                title: e.key,
-                backgroundImageLink: e.value.imageLink ?? '',
-                backgroundColor: e.value.color ?? Colors.white,
-                onPressed: () {
-                  onSearchFieldTap?.call();
-                  searchController.text = e.value.value?.replaceAll('-', ' ') ?? '';
-                },
-              ),
-            )
-            .toList() ??
-        [];
 
     return Stack(
       fit: StackFit.expand,
       children: [
         ClipRRect(
-            borderRadius: BorderRadiusFoundation.onlyBottom24,
-            clipper: _CustomBlurClipper(),
-            child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                child: SafeArea(
-                    bottom: false,
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      SizedBox(
-                          width: double.infinity,
-                          // height: 30.h,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            alignment: Alignment.center,
-                            children: [
-                              Text(
-                                title?[ContentItemType.text]?.properties?.keys.firstOrNull ?? S.of(context).YoullFindIt,
-                                style: theme?.boldTextTheme.title1,
+          borderRadius: BorderRadiusFoundation.onlyBottom24,
+          clipper: _CustomBlurClipper(),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    // height: 30.h,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Text(
+                          S.of(context).YoullFindIt,
+                          style: theme?.boldTextTheme.title1,
+                        ),
+                        if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
+                          HowItWorksWidget(
+                            title: S.current.SearchHiwTitle,
+                            subtitle: S.current.SearchHiwSubtitle,
+                            hintTiles: [
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(0),
+                                imageUrl: GraphicsFoundation.instance.png.pixelatedSunglassesEmoji.path,
                               ),
-                              if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
-                                HowItWorksWidget(
-                                    customOffset: Offset(0.35.sw, 10),
-                                    element: title![ContentItemType.hintDialog]!,
-                                    onPop: onHowItWorksPoped),
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(1),
+                                imageUrl: GraphicsFoundation.instance.png.placeEvents.path,
+                              ),
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(2),
+                                imageUrl: GraphicsFoundation.instance.png.result.path,
+                              ),
+                              HintCardUiModel(
+                                title: S.current.SearchHiwHint(3),
+                                imageUrl: GraphicsFoundation.instance.png.rating.path,
+                              ),
                             ],
-                          )),
-                      SpacingFoundation.verticalSpace16,
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: onSearchFieldTap,
-                        child: IgnorePointer(
-                          child: UiKitInputFieldRightIcon(
-                            fillColor: theme?.colorScheme.surface3,
-                            hintText: S.of(context).Search.toUpperCase(),
-                            controller: searchController,
-                            icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.search,
-                              color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
-                            ),
+                            customOffset: Offset(0.35.sw, 10),
+                            onPop: onHowItWorksPoped,
                           ),
+                      ],
+                    ),
+                  ),
+                  SpacingFoundation.verticalSpace16,
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: onSearchFieldTap,
+                    child: IgnorePointer(
+                      child: UiKitInputFieldRightIcon(
+                        fillColor: theme?.colorScheme.surface3,
+                        hintText: S.of(context).Search.toUpperCase(),
+                        controller: searchController,
+                        icon: ImageWidget(
+                          svgAsset: GraphicsFoundation.instance.svg.search,
+                          color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                         ),
                       ),
-                    ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
+                    ),
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            ),
+          ),
+        ),
         ListView(
           primary: true,
           padding: EdgeInsets.zero,
@@ -177,7 +271,7 @@ class SearchComponent extends StatelessWidget {
               UiKitNoActionOverflownCard(
                 horizontalMargin: horizontalMargin,
                 title: 'Social',
-                subtitle: 'Useful services and places',
+                subtitle: S.current.SocialSubtitle,
                 decorationIcons: _decorationItemsForSocials,
                 onTap: onSocialCardPressed,
               ),
@@ -187,7 +281,10 @@ class SearchComponent extends StatelessWidget {
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
                 action: context.smallButton(
-                  data: BaseUiKitButtonData(onPressed: onFreeCardPressed, text: 'Check out it'),
+                  data: BaseUiKitButtonData(
+                    onPressed: onFreeCardPressed,
+                    text: S.current.CheckItOut.toUpperCase(),
+                  ),
                 ),
                 title: Stack(
                   children: [
@@ -228,7 +325,7 @@ class SearchComponent extends StatelessWidget {
             ],
             SpacingFoundation.verticalSpace24,
             Text(
-              body?[ContentItemType.text]?.properties?.keys.firstOrNull ?? 'Choose yourself',
+              S.current.ChooseYourself,
               style: theme?.boldTextTheme.title1,
             ).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace24,
@@ -237,23 +334,21 @@ class SearchComponent extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Wrap(
                 spacing: SpacingFoundation.horizontalSpacing12,
-                children: sortedCards,
+                children: chooseYourselfChips ?? _mockedChips,
               ),
             ).paddingOnly(left: horizontalMargin),
             SpacingFoundation.verticalSpace24,
-            Stack(clipBehavior: Clip.none, children: [
-              Text(S.of(context).TopPlacesRatedBy, style: theme?.boldTextTheme.title1),
-              () {
-                const MemberPlate widget = MemberPlate();
-
-                return Positioned(
-                  width: widget.width,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Text(S.of(context).TopPlacesRatedBy('\n'), style: theme?.boldTextTheme.title1),
+                Positioned(
                   top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
                   left: SizesFoundation.screenWidth / 5,
-                  child: widget,
-                );
-              }()
-            ]).paddingSymmetric(horizontal: horizontalMargin),
+                  child: MemberPlate(),
+                ),
+              ],
+            ).paddingSymmetric(horizontal: horizontalMargin),
             if (search.filterChips != null && search.filterChips!.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
               SingleChildScrollView(

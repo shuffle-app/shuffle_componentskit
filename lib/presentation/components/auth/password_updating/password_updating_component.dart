@@ -106,13 +106,18 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(height: MediaQuery.of(context).viewPadding.top),
-          Text('Reset password', style: boldTextTheme?.title1),
+          SizedBox(
+            height: MediaQuery.of(context).viewPadding.top,
+          ),
+          Text(
+            S.current.ResetPassword,
+            style: boldTextTheme?.title1,
+          ),
           SpacingFoundation.verticalSpace16,
           Stack(
             children: [
               Text(
-                'Please type verification code sent to ',
+                '${S.current.CredentialsCodeVerificationSubtitle} ',
                 style: boldTextTheme?.subHeadline,
               ),
               GradientableWidget(
@@ -121,7 +126,7 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Please type verification code sent to ',
+                        text: '${S.current.CredentialsCodeVerificationSubtitle} ',
                         style: boldTextTheme?.subHeadline.copyWith(
                           color: Colors.transparent,
                         ),
@@ -158,25 +163,28 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                             ),
                             SpacingFoundation.verticalSpace24,
                             SizedBox(
-                                width: 0.5.sw,
-                                child: context.smallOutlinedButton(
-                                    data: BaseUiKitButtonData(
-                                        text: 'Resend code'.toUpperCase(),
-                                        onPressed: widget.onResendCode,
-                                        fit: ButtonFit.hugContent))),
+                              width: 0.5.sw,
+                              child: context.smallOutlinedButton(
+                                data: BaseUiKitButtonData(
+                                  text: S.current.ResendCode.toUpperCase(),
+                                  onPressed: widget.onResendCode,
+                                  fit: ButtonFit.hugContent,
+                                ),
+                              ),
+                            ),
                             SpacingFoundation.verticalSpace24,
                           ],
                         ),
                       ),
                       UiKitTitledTextField(
-                        title: 'Enter new password',
+                        title: S.current.EnterNewPassword,
                         controller: widget.passwordController,
-                        hintText: 'password'.toUpperCase(),
+                        hintText: S.current.Password.toUpperCase(),
                         validator: widget.passwordValidator,
                         errorText: widget.passwordErrorText,
                         focusNode: _passwordFocus,
                         enabled: widget.passwordFieldEnabled,
-                        validationLetters: 'Letters, numbers, ! “ @ # \$ % & symbols, 8 characters',
+                        validationLetters: S.current.PasswordHint,
                       ),
                     ],
                   ),
@@ -184,12 +192,14 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                 context.button(
                   data: BaseUiKitButtonData(
                     loading: widget.loading,
-                    onPressed: widget.passwordFieldEnabled ? () {
-                      if (widget.formKey.currentState!.validate()) {
-                        widget.onPasswordChanged.call(widget.passwordController.text);
-                      }
-                    } : null,
-                    text: 'next',
+                    onPressed: widget.passwordFieldEnabled
+                        ? () {
+                            if (widget.formKey.currentState!.validate()) {
+                              widget.onPasswordChanged.call(widget.passwordController.text);
+                            }
+                          }
+                        : null,
+                    text: S.current.Next,
                     fit: ButtonFit.fitWidth,
                   ),
                 ),

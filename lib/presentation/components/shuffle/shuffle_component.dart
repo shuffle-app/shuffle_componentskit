@@ -97,8 +97,27 @@ class ShuffleComponent extends StatelessWidget {
                         ),
                         if (shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null)
                           HowItWorksWidget(
+                            title: S.of(context).ShuffleHiwTitle,
+                            subtitle: S.of(context).ShuffleHiwSubtitle,
+                            hintTiles: [
+                              HintCardUiModel(
+                                title: S.of(context).ShuffleHiwHint(0),
+                                imageUrl: GraphicsFoundation.instance.png.shuffleAny.path,
+                              ),
+                              HintCardUiModel(
+                                title: S.of(context).ShuffleHiwHint(1),
+                                imageUrl: GraphicsFoundation.instance.png.swipeProperties.path,
+                              ),
+                              HintCardUiModel(
+                                title: S.of(context).ShuffleHiwHint(2),
+                                imageUrl: GraphicsFoundation.instance.png.likeDislike.path,
+                              ),
+                              HintCardUiModel(
+                                title: S.of(context).ShuffleHiwHint(3),
+                                imageUrl: GraphicsFoundation.instance.png.teach.path,
+                              ),
+                            ],
                             customOffset: Offset(0.35.sw, 25),
-                            element: configModel.content.title![ContentItemType.hintDialog]!,
                             onPop: onHowItWorksPoped,
                           ),
                       ],
@@ -121,8 +140,11 @@ class ShuffleComponent extends StatelessWidget {
                             scale: ended ? 1 : 0,
                             duration: animDuration,
                             child: ended
-                                ? Shimmer(
-                                    gradient: GradientFoundation.greyGradient,
+                                ? Shimmer.fromColors(
+                                    direction: ShimmerDirection.ltr,
+                                    baseColor: Colors.white,
+                                    highlightColor: ColorsFoundation.gradientGreyLight3,
+                                    period: const Duration(milliseconds: 1000),
                                     child: UiKitLastSwiperCard.fixed(),
                                   )
                                 : const SizedBox(),

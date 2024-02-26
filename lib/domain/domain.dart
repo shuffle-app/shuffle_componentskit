@@ -17,6 +17,7 @@ export 'config_models/universal_model/component_model.dart';
 export 'data_uimodels/chat_item_ui_model.dart';
 export 'data_uimodels/chat_message_ui_model.dart';
 export 'data_uimodels/hangout_recommendation.dart';
+export 'data_uimodels/hint_card_ui_model.dart';
 export 'data_uimodels/invitation_data.dart';
 export 'data_uimodels/registration_type.dart';
 export 'data_uimodels/search_social_card_ui_model.dart';

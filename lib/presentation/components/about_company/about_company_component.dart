@@ -37,28 +37,19 @@ class AboutCompanyComponent extends StatelessWidget {
     final ComponentModel model = ComponentModel.fromJson(config['about_company']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    String ageGroupsTitle = '';
-    if (model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ??
-        false) {
-      ageGroupsTitle =
-          model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    }
-    final ageGroups = model
-            .content.body?[ContentItemType.additionalMultiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys
+
+    final ageGroupsData = model
+            .content.body?[ContentItemType.additionalMultiSelect]?.body?[ContentItemType.multiSelect]?.properties?.entries
             .toList() ??
         [];
-    ageGroups.sort((a, b) => int.parse(a.characters.first).compareTo(int.parse(b.characters.first)));
-    String audiencesTitle = '';
-    if (model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ?? false) {
-      audiencesTitle =
-          model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    }
-    final audiences =
+    if (ageGroupsData.isNotEmpty) ageGroupsData.sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
+    List<String> ageGroups = ageGroupsData.map((e) => e.key).toList();
+    if (ageGroups.isEmpty) ageGroups.addAll(['13-17', '18-24', '25-34', '35-44', '45-54', '54+']);
+    List<String> audiences =
         model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys.toList() ?? [];
-    final nicheTitle =
-        model.content.body?[ContentItemType.singleDropdown]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    if (audiences.isEmpty) audiences = ['Luxury', 'Tourists', 'Middle class', 'Family friendly'];
+
     final niches = model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
-    final pageTitle = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
 
     return SingleChildScrollView(
       child: Form(
@@ -71,7 +62,7 @@ class AboutCompanyComponent extends StatelessWidget {
               height: MediaQuery.viewPaddingOf(context).top,
             ),
             Text(
-              pageTitle,
+              S.current.DescribeYourBusiness,
               style: boldTextTheme?.title1,
             ),
             SpacingFoundation.verticalSpace16,
@@ -82,16 +73,18 @@ class AboutCompanyComponent extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: S.of(context).TheMoreInfoWeGetTheBetter,
+                        text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
                         style: boldTextTheme?.subHeadline,
                       ),
                       TextSpan(
-                          text: S.of(context).YourTraffic.toLowerCase(),
-                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent)),
-                      TextSpan(
-                        text: S.of(context).WillBe.toLowerCase(),
-                        style: boldTextTheme?.subHeadline,
+                        text: S.of(context).YourTraffic.toLowerCase(),
+                        style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
                       ),
+                      if (Localizations.localeOf(context).languageCode != 'ru')
+                        TextSpan(
+                          text: S.of(context).WillBe.toLowerCase(),
+                          style: boldTextTheme?.subHeadline,
+                        ),
                     ],
                   ),
                   textAlign: TextAlign.left,
@@ -102,16 +95,18 @@ class AboutCompanyComponent extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: S.of(context).TheMoreInfoWeGetTheBetter,
+                          text: '${S.of(context).TheMoreInfoWeGetTheBetter} ',
                           style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
                         ),
                         TextSpan(
-                            text: S.of(context).YourTraffic.toLowerCase(),
-                            style: boldTextTheme?.subHeadline.copyWith(color: Colors.white)),
-                        TextSpan(
-                          text: S.of(context).WillBe.toLowerCase(),
-                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
+                          text: S.of(context).YourTraffic.toLowerCase(),
+                          style: boldTextTheme?.subHeadline.copyWith(color: Colors.white),
                         ),
+                        if (Localizations.localeOf(context).languageCode != 'ru')
+                          TextSpan(
+                            text: S.of(context).WillBe.toLowerCase(),
+                            style: boldTextTheme?.subHeadline.copyWith(color: Colors.transparent),
+                          ),
                       ],
                     ),
                     textAlign: TextAlign.left,
@@ -141,33 +136,36 @@ class AboutCompanyComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSection(
+              color: colorScheme?.surface,
               errorText: uiModel.errorSelectedMenuItem,
               hasError: uiModel.errorSelectedMenuItem != null,
-              title: nicheTitle,
+              title: S.current.YourNiche,
               child: UiKitMenu<String>(
                 tilesColor: Colors.transparent,
                 useCustomTiles: false,
                 onSelected: (item) => onNicheChanged?.call(item),
-                title: nicheTitle,
+                title: S.current.YourNiche,
                 selectedItem: uiModel.selectedMenuItem,
-                items: niches?.keys.map<UiKitMenuItem<String>>((e) {
-                      final item = niches[e];
+                items: niches?.keys.map<UiKitMenuItem<String>>(
+                      (e) {
+                        final item = niches[e];
 
-                      return UiKitMenuItem<String>(
-                        title: e.toUpperCase(),
-                        value: item?.value,
-                        iconLink: item?.imageLink ?? '',
-                        type: item?.type,
-                      );
-                    }).toList() ??
+                        return UiKitMenuItem<String>(
+                          title: e.toUpperCase(),
+                          value: item?.value,
+                          iconLink: item?.imageLink ?? '',
+                          type: item?.type == 'business' ? S.current.Business : S.current.Leisure,
+                        );
+                      },
+                    ).toList() ??
                     [],
-              ).paddingAll(EdgeInsetsFoundation.all4),
+              ),
             ),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSection(
               errorText: uiModel.errorSelectedAudiences,
               hasError: uiModel.errorSelectedAudiences != null,
-              title: audiencesTitle,
+              title: S.current.YourAudience,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
@@ -188,7 +186,7 @@ class AboutCompanyComponent extends StatelessWidget {
             UiKitTitledSection(
               errorText: uiModel.errorSelectedAgeRanges,
               hasError: uiModel.errorSelectedAgeRanges != null,
-              title: ageGroupsTitle,
+              title: S.current.YourAudienceAge,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Wrap(

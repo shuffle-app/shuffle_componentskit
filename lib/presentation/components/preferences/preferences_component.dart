@@ -39,28 +39,28 @@ class PreferencesComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             Stack(children: [
               RichText(
-                  text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: S.of(context).TapOnceToChoose,
-                    style: subHeadline,
-                  ),
-                  TextSpan(
-                      text: S.of(context).WhatYouLike.toLowerCase(), style: subHeadline?.copyWith(color: Colors.transparent)),
-                  TextSpan(
-                    text: S.of(context).TapTwiceToMarkYourFavorites,
-                    style: subHeadline,
-                  )
-                ],
-              )),
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${S.of(context).TapOnceToChoose} ',
+                      style: subHeadline,
+                    ),
+                    TextSpan(
+                        text: S.of(context).WhatYouLike.toLowerCase(), style: subHeadline?.copyWith(color: Colors.transparent)),
+                    TextSpan(
+                      text: S.of(context).TapTwiceToMarkYourFavorites,
+                      style: subHeadline,
+                    )
+                  ],
+                ),
+              ),
               GradientableWidget(
                 gradient: GradientFoundation.attentionCard,
                 child: RichText(
-                  // key: _richTextKey,
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: S.of(context).TapOnceToChoose,
+                        text: '${S.of(context).TapOnceToChoose} ',
                         style: subHeadline?.copyWith(color: Colors.transparent),
                       ),
                       TextSpan(
