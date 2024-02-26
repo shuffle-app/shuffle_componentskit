@@ -345,7 +345,7 @@ class SearchComponent extends StatelessWidget {
                 Positioned(
                   top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
                   left: SizesFoundation.screenWidth / 5,
-                  child: MemberPlate(),
+                  child: const MemberPlate(),
                 ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
