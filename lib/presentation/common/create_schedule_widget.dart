@@ -63,6 +63,11 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
               value: selectedScheduleName,
               onChanged: (String? type) {
                 if (type != null) {
+                  if ((scheduleModel?.itemsCount ?? 0) > 1) {
+                    for (var i = 0; i < scheduleModel!.itemsCount; i++) {
+                      onMinusButtonPressed();
+                    }
+                  }
                   setState(() {
                     selectedScheduleName = type;
                     if (type == scheduleTypes[0]) {
@@ -83,10 +88,17 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                 value: scheduleModel,
                 onChanged: (UiScheduleModel? selectedTemplate) {
                   if (selectedTemplate != null) {
+                    if ((scheduleModel?.itemsCount ?? 0) > 1) {
+                      for (var i = 0; i < scheduleModel!.itemsCount; i++) {
+                        onMinusButtonPressed();
+                      }
+                    }
                     setState(() {
                       scheduleModel = selectedTemplate;
-                      //TODO insert all items
                     });
+                    if ((scheduleModel?.itemsCount ?? 0) > 1) {
+                      listKey.currentState!.insertAllItems(initialItemsCount, scheduleModel!.itemsCount);
+                    }
                   }
                 },
               );
@@ -119,7 +131,41 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                 context.outlinedButton(
                   data: BaseUiKitButtonData(
                       text: 'Save template',
-                      onPressed: scheduleModel == null ? null : () => widget.onTemplateCreated?.call(scheduleModel!)),
+                      onPressed: scheduleModel == null
+                          ? null
+                          : () async {
+                              final textTheme = context.uiKitTheme?.boldTextTheme;
+                              final controller = TextEditingController();
+                              final name = await showUiKitAlertDialog<String?>(
+                                  context,
+                                  AlertDialogData(
+                                      title: Text(
+                                        'Save template',
+                                        style:
+                                            textTheme?.title2.copyWith(color: UiKitColors.lightHeadingTypographyColor),
+                                      ),
+                                      content: UiKitInputFieldNoFill(
+                                        controller: controller,
+                                        autofocus: true,
+                                        customInputTextColor: UiKitColors.lightHeadingTypographyColor,
+                                        customLabelColor: UiKitColors.lightBodyTypographyColor,
+                                        label: 'Template name',
+                                      ),
+                                      actions: [
+                                        context.dialogButton(
+                                            dialogButtonType: DialogButtonType.buttonBlack,
+                                            data: BaseUiKitButtonData(
+                                                text: 'Save',
+                                                fit: ButtonFit.fitWidth,
+                                                onPressed: () => context.pop(result: controller.text)))
+                                      ],
+                                      defaultButtonText: 'Save',
+                                      onPop: () => context.pop(result: controller.text)));
+                              if (name != null) {
+                                scheduleModel!.templateName = name;
+                                widget.onTemplateCreated?.call(scheduleModel!);
+                              }
+                            }),
                 ),
             ],
           ))
@@ -256,7 +302,7 @@ class UiScheduleTimeModel extends UiScheduleModel {
           ],
         );
       }).paddingOnly(
-          bottom: weeklySchedule.length-1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+          bottom: weeklySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
 
   @override
   int get itemsCount => weeklySchedule.length;
@@ -363,7 +409,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
                   ))
         ]);
       }).paddingOnly(
-          bottom: dailySchedule.length-1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+          bottom: dailySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
 
   @override
   int get itemsCount => dailySchedule.length;
@@ -465,7 +511,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                   ))
         ]);
       }).paddingOnly(
-          bottom: dailySchedule.length -1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+          bottom: dailySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
 
   @override
   int get itemsCount => dailySchedule.length;
