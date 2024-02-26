@@ -50,15 +50,26 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   late final String decorationLink;
   late final String countrySelectorTitle;
   late final RegistrationType? authType;
-  late final List<ShortLogInButton> socials;
+  List<ShortLogInButton> get socials => [
+        ShortLogInButton(
+          link: GraphicsFoundation.instance.svg.googleLogo.path,
+          title: S.current.LoginWith('google').toUpperCase(),
+          onTap: () => widget.onSocialsLogin?.call(
+            SocialsLoginModel(
+              provider: 'google',
+              clientType: Platform.isIOS ? 'iOS' : 'Android',
+            ),
+          ),
+        ),
+      ];
   late final bool isSmallScreen;
   final FocusNode credentialsFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   bool obscurePassword = true;
-  final tabs = [
-    UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
-    UiKitCustomTab.small(title: S.current.Account, customValue: 'account'),
-  ];
+  List<UiKitCustomTab> get tabs => [
+        UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
+        UiKitCustomTab.small(title: S.current.Account.toUpperCase(), customValue: 'account'),
+      ];
 
   @override
   void initState() {
@@ -81,22 +92,22 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       countrySelectorTitle =
           model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
       authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
-      final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
-      socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
+      // final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
+      // socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
+      // socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
+      //       return ShortLogInButton(
+      //         link: element.value.imageLink ?? '',
+      //         title: element.key,
+      //         onTap: () => widget.onSocialsLogin?.call(
+      //           SocialsLoginModel(
+      //             provider: element.value.type!,
+      //             clientType: clientType,
+      //           ),
+      //         ),
+      //       );
+      //     }).toList() ??
+      //     [];
       final clientType = Platform.isIOS ? 'Ios' : 'Android';
-      socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
-            return ShortLogInButton(
-              link: element.value.imageLink ?? '',
-              title: element.key,
-              onTap: () => widget.onSocialsLogin?.call(
-                SocialsLoginModel(
-                  provider: element.value.type!,
-                  clientType: clientType,
-                ),
-              ),
-            );
-          }).toList() ??
-          [];
       isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
       tabController.addListener(_tabListener);
       setState(() => inited = true);

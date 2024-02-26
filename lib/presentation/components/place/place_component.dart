@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,6 @@ class PlaceComponent extends StatelessWidget {
             ),
           )
         : ComponentPlaceModel.fromJson(config['place']);
-    final titleAlignment = model.positionModel?.titleAlignment;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
@@ -54,25 +52,20 @@ class PlaceComponent extends StatelessWidget {
 
     return Column(
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: titleAlignment.mainAxisAlignment,
-          crossAxisAlignment: titleAlignment.crossAxisAlignment,
-          children: [
-            TitleWithAvatar(
-              title: place.title,
-              avatarUrl: place.logo,
-              horizontalMargin: horizontalMargin,
-              trailing: GestureDetector(
-                onTap: onSharePressed,
-                child: Icon(
-                  ShuffleUiKitIcons.share,
-                  color: theme?.colorScheme.darkNeutral800,
-                ),
-              ),
+        SpacingFoundation.verticalSpace16,
+        TitleWithAvatar(
+          title: place.title,
+          avatarUrl: place.logo,
+          horizontalMargin: horizontalMargin,
+          trailing: GestureDetector(
+            onTap: onSharePressed,
+            child: Icon(
+              ShuffleUiKitIcons.share,
+              color: theme?.colorScheme.darkNeutral800,
             ),
-          ],
-        ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
+          ),
+        ).paddingSymmetric(horizontal: horizontalMargin),
+        SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
           rating: place.rating,
           media: place.media,
@@ -129,118 +122,124 @@ class PlaceComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace8,
         if (isCreateEventAvaliable)
           FutureBuilder(
-              future: Future.value(events ?? []),
-              builder: (context, snapshot) => UiKitCardWrapper(
-                      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
-                    if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
-                      SpacingFoundation.verticalSpace8,
-                      for (var event in snapshot.data!)
-                        ListTile(
-                          isThreeLine: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: BorderedUserCircleAvatar(
-                            imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                            size: 40.w,
-                          ),
-                          title: Text(
-                            event.title ?? '',
-                            style: theme?.boldTextTheme.caption1Bold,
-                          ),
-                          subtitle: event.date != null
-                              ? Text(
-                                  DateFormat('MMMM d').format(event.date!),
-                                  style: theme?.boldTextTheme.caption1Medium.copyWith(
-                                    color: theme.colorScheme.darkNeutral500,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          trailing: context
-                              .smallButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () {
-                                    if (onEventTap != null) {
-                                      onEventTap?.call(event);
-                                    } else {
-                                      buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                          ComponentBuilder(child: EventComponent(event: event)));
-                                    }
-                                  },
-                                  iconInfo: BaseUiKitButtonIconData(
-                                    iconData: CupertinoIcons.right_chevron,
-                                    color: theme?.colorScheme.inversePrimary,
-                                    size: 20.w,
-                                  ),
+            future: Future.value(events ?? []),
+            builder: (context, snapshot) => UiKitCardWrapper(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
+                  if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
+                    SpacingFoundation.verticalSpace8,
+                    for (var event in snapshot.data!)
+                      ListTile(
+                        isThreeLine: true,
+                        contentPadding: EdgeInsets.zero,
+                        leading: BorderedUserCircleAvatar(
+                          imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                          size: 40.w,
+                        ),
+                        title: Text(
+                          event.title ?? '',
+                          style: theme?.boldTextTheme.caption1Bold,
+                        ),
+                        subtitle: event.date != null
+                            ? Text(
+                                DateFormat('MMMM d').format(event.date!),
+                                style: theme?.boldTextTheme.caption1Medium.copyWith(
+                                  color: theme.colorScheme.darkNeutral500,
                                 ),
                               )
-                              .paddingOnly(top: SpacingFoundation.verticalSpacing4),
-                        ),
-                    ],
-                    SpacingFoundation.verticalSpace4,
-                    context.gradientButton(
-                      data: BaseUiKitButtonData(
-                        text: S.of(context).CreateEvent,
-                        onPressed: onEventCreate,
-                        fit: ButtonFit.fitWidth,
+                            : const SizedBox.shrink(),
+                        trailing: context
+                            .smallButton(
+                              data: BaseUiKitButtonData(
+                                onPressed: () {
+                                  if (onEventTap != null) {
+                                    onEventTap?.call(event);
+                                  } else {
+                                    buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                        ComponentBuilder(child: EventComponent(event: event)));
+                                  }
+                                },
+                                iconInfo: BaseUiKitButtonIconData(
+                                  iconData: CupertinoIcons.right_chevron,
+                                  color: theme?.colorScheme.inversePrimary,
+                                  size: 20.w,
+                                ),
+                              ),
+                            )
+                            .paddingOnly(top: SpacingFoundation.verticalSpacing4),
                       ),
-                    )
-                  ]).paddingSymmetric(
-                    horizontal: SpacingFoundation.horizontalSpacing16,
-                    vertical: SpacingFoundation.verticalSpacing8,
-                  )).paddingSymmetric(
-                    horizontal: horizontalMargin,
-                  ))
+                  ],
+                  SpacingFoundation.verticalSpace4,
+                  context.gradientButton(
+                    data: BaseUiKitButtonData(
+                      text: S.of(context).CreateEvent,
+                      onPressed: onEventCreate,
+                      fit: ButtonFit.fitWidth,
+                    ),
+                  )
+                ],
+              ).paddingSymmetric(
+                horizontal: SpacingFoundation.horizontalSpacing16,
+                vertical: SpacingFoundation.verticalSpacing8,
+              ),
+            ).paddingSymmetric(
+              horizontal: horizontalMargin,
+            ),
+          )
         else
           FutureBuilder(
-              future: Future.value(events ?? []),
-              builder: (context, snapshot) => Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: () {
-                      final AutoSizeGroup group = AutoSizeGroup();
+            future: Future.value(events ?? []),
+            builder: (context, snapshot) => Row(
+              mainAxisSize: MainAxisSize.max,
+              children: () {
+                final AutoSizeGroup group = AutoSizeGroup();
 
-                      final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
+                final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
 
-                      final closestEvent = tempSorted.firstOrNull;
+                final closestEvent = tempSorted.firstOrNull;
 
-                      final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
+                final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
 
-                      return [
-                        Expanded(
-                          child: UpcomingEventPlaceActionCard(
-                            value: 'in ${printDuration(daysToEvent, tersity: DurationTersity.day)}',
-                            group: group,
-                            rasterIconAsset: GraphicsFoundation.instance.png.events,
-                            action: () {
-                              if (closestEvent != null) {
-                                if (onEventTap != null) {
-                                  onEventTap?.call(closestEvent);
-                                } else {
-                                  buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                                      ComponentBuilder(child: EventComponent(event: closestEvent)));
-                                }
-                              }
-                            },
-                          ),
-                        ),
-                        SpacingFoundation.horizontalSpace8,
-                        Expanded(
-                          child: PointBalancePlaceActionCard(
-                            value: '2 650',
-                            group: group,
-                            rasterIconAsset: GraphicsFoundation.instance.png.money,
-                            action: () {
-                              log('balance was pressed');
-                            },
-                          ),
-                        ),
-                      ];
-                    }(),
-                  )).paddingSymmetric(horizontal: horizontalMargin),
+                return [
+                  Expanded(
+                    child: UpcomingEventPlaceActionCard(
+                      value: S.current.WithInDays(daysToEvent.inDays),
+                      group: group,
+                      rasterIconAsset: GraphicsFoundation.instance.png.events,
+                      action: () {
+                        if (closestEvent != null) {
+                          onEventTap?.call(closestEvent!);
+                        } else {
+                          buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                              ComponentBuilder(child: EventComponent(event: closestEvent!)));
+                        }
+                      },
+                    ),
+                  ),
+                  SpacingFoundation.horizontalSpace8,
+                  Expanded(
+                    child: PointBalancePlaceActionCard(
+                      value: '2 650',
+                      group: group,
+                      rasterIconAsset: GraphicsFoundation.instance.png.money,
+                      action: () {
+                        log('balance was pressed');
+                      },
+                    ),
+                  ),
+                ];
+              }(),
+            ),
+          ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace8,
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,
           children: place.descriptionItems!
-              .map((e) => GestureDetector(
+              .map(
+                (e) => GestureDetector(
                   onTap: () {
                     final url = e.descriptionUrl ?? e.description;
 
@@ -255,7 +254,9 @@ class PlaceComponent extends StatelessWidget {
                     title: e.title,
                     description: e.description,
                     spacing: SpacingFoundation.horizontalSpacing8,
-                  )))
+                  ),
+                ),
+              )
               .toList(),
         ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace8,

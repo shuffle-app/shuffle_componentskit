@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -65,6 +66,7 @@ class SupportComponent extends StatelessWidget {
                   child: UiKitInputFieldNoIcon(
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     customPadding: EdgeInsets.symmetric(
                       vertical: EdgeInsetsFoundation.vertical12,
                       horizontal: EdgeInsetsFoundation.horizontal16,

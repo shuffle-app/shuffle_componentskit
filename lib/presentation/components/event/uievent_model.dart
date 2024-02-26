@@ -69,7 +69,8 @@ class UiEventModel extends Advertisable {
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(
               title: S.current.Website,
-              description: website,
+              description: title ?? '',
+              descriptionUrl: website
             ),
         ],
         super(isAdvertisement: isAdvertisement ?? false);

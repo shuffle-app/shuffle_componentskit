@@ -140,8 +140,11 @@ class ShuffleComponent extends StatelessWidget {
                             scale: ended ? 1 : 0,
                             duration: animDuration,
                             child: ended
-                                ? Shimmer(
-                                    gradient: GradientFoundation.greyGradient,
+                                ? Shimmer.fromColors(
+                                    direction: ShimmerDirection.ltr,
+                                    baseColor: Colors.white,
+                                    highlightColor: ColorsFoundation.gradientGreyLight3,
+                                    period: const Duration(milliseconds: 1000),
                                     child: UiKitLastSwiperCard.fixed(),
                                   )
                                 : const SizedBox(),
