@@ -19,7 +19,7 @@ class CreateScheduleWidget extends StatefulWidget {
 
 class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   // ScheduleType selectedInputType = ScheduleType.weekly;
-  late final initialItemsCount;
+  late final int initialItemsCount;
   String? selectedScheduleName;
 
   UiScheduleModel? scheduleModel;
@@ -520,7 +520,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
 class _CardListWrapper extends StatelessWidget {
   final List<Widget> children;
 
-  const _CardListWrapper({super.key, required this.children});
+  const _CardListWrapper({required this.children});
 
   @override
   Widget build(BuildContext context) {
