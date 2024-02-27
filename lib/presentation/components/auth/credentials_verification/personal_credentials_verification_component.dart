@@ -50,6 +50,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   late final String decorationLink;
   late final String countrySelectorTitle;
   late final RegistrationType? authType;
+
   List<ShortLogInButton> get socials => [
         ShortLogInButton(
           link: GraphicsFoundation.instance.svg.googleLogo.path,
@@ -57,15 +58,17 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
           onTap: () => widget.onSocialsLogin?.call(
             SocialsLoginModel(
               provider: 'google',
-              clientType: Platform.isIOS ? 'iOS' : 'Android',
+              clientType: clientType,
             ),
           ),
         ),
       ];
   late final bool isSmallScreen;
+  late final String clientType;
   final FocusNode credentialsFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   bool obscurePassword = true;
+
   List<UiKitCustomTab> get tabs => [
         UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
         UiKitCustomTab.small(title: S.current.Account.toUpperCase(), customValue: 'account'),
@@ -86,11 +89,12 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
 
       captionTexts.remove('image');
       captionTexts.remove('auth_type');
-
+      clientType = Platform.isIOS ? 'Ios' : 'Android';
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
-          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
+              '';
       authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
       // final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
       // socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
@@ -107,7 +111,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       //       );
       //     }).toList() ??
       //     [];
-      final clientType = Platform.isIOS ? 'Ios' : 'Android';
+
       isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
       tabController.addListener(_tabListener);
       setState(() => inited = true);
@@ -190,7 +194,9 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // const Spacer(flex: 1),
-                        if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty && !keyboardVisible) ...[
+                        if (widget.availableLocales != null &&
+                            widget.availableLocales!.isNotEmpty &&
+                            !keyboardVisible) ...[
                           UiKitCardWrapper(
                             color: colorScheme?.surface1,
                             borderRadius: BorderRadiusFoundation.max,
@@ -373,9 +379,10 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             context.button(
                               data: BaseUiKitButtonData(
                                 text: S.of(context).Next.toUpperCase(),
-                                onPressed: widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
-                                    ? null
-                                    : widget.onSubmit,
+                                onPressed:
+                                    widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
+                                        ? null
+                                        : widget.onSubmit,
                                 loading: widget.loading,
                                 fit: ButtonFit.fitWidth,
                               ),

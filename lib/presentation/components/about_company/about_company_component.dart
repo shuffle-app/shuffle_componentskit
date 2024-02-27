@@ -44,34 +44,6 @@ class AboutCompanyComponent extends StatelessWidget {
     final ComponentModel model = ComponentModel.fromJson(config['about_company']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    String ageGroupsTitle = '';
-    if (model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]?.properties
-            ?.isNotEmpty ??
-        false) {
-      ageGroupsTitle = model.content.body?[ContentItemType.additionalMultiSelect]?.title?[ContentItemType.text]
-              ?.properties?.keys.first ??
-          '';
-    }
-    // final ageGroups = model
-    //         .content.body?[ContentItemType.additionalMultiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys
-    //         .toList() ??
-    //     [];
-    // ageGroups.sort((a, b) => int.parse(a.characters.first).compareTo(int.parse(b.characters.first)));
-    String priceSegmentsTitle = 'Price Segments';
-    // if (model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ??
-    //     false) {
-    //   audiencesTitle =
-    //       model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    // }
-    // final audiences = model
-    //         .content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys
-    //         .toList() ??
-    //     [];
-    final nicheTitle =
-        model.content.body?[ContentItemType.singleDropdown]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    // final niches =
-    //     model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
-    final pageTitle = model.content.title?[ContentItemType.text]?.properties?.keys.first ?? '';
 
     return SingleChildScrollView(
       child: Form(
