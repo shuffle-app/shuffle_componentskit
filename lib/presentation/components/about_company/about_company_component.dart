@@ -6,7 +6,7 @@ class AboutCompanyComponent extends StatelessWidget {
   final VoidCallback? onFinished;
   final UiAboutCompanyModel uiModel;
   final List<UiKitMenuItem<String>> niches;
-  final List<String> audiences;
+  final List<String> priceSegments;
   final List<String> targetAges;
   final TextEditingController nameController;
   final TextEditingController positionController;
@@ -30,7 +30,7 @@ class AboutCompanyComponent extends StatelessWidget {
     this.nameValidator,
     this.positionValidator,
     required this.niches,
-    required this.audiences,
+    required this.priceSegments,
     required this.targetAges,
   });
 
@@ -57,12 +57,12 @@ class AboutCompanyComponent extends StatelessWidget {
     //         .toList() ??
     //     [];
     // ageGroups.sort((a, b) => int.parse(a.characters.first).compareTo(int.parse(b.characters.first)));
-    String audiencesTitle = '';
-    if (model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ??
-        false) {
-      audiencesTitle =
-          model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
-    }
+    String priceSegmentsTitle = 'Price Segments';
+    // if (model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.isNotEmpty ??
+    //     false) {
+    //   audiencesTitle =
+    //       model.content.body?[ContentItemType.multiSelect]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    // }
     // final audiences = model
     //         .content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys
     //         .toList() ??
@@ -175,16 +175,16 @@ class AboutCompanyComponent extends StatelessWidget {
             UiKitTitledSection(
               errorText: uiModel.errorSelectedAudiences,
               hasError: uiModel.errorSelectedAudiences != null,
-              title: S.current.YourAudience,
+              title: S.current.YourPriceSegment,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  children: audiences
+                  children: priceSegments
                       .map(
                         (e) => UiKitOrdinaryChip(
                           title: e,
-                          selected: uiModel.selectedAudiences?.contains(e) ?? false,
+                          selected: uiModel.selectedPriceSegments?.contains(e) ?? false,
                           onPressed: () => onAudiencesChanged?.call(e),
                         ),
                       )

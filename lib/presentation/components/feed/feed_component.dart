@@ -290,9 +290,10 @@ class FeedComponent extends StatelessWidget {
                       },
                       length: feed.filterChips?.length ?? 0),
                   UiKitTitledFilterChip(
-                    selected: feed.activeFilterChips?.map((e) => e.title).contains(S.of(context).Favorites) ?? false,
+                    //const flag for showing favorites is 'Favorites'
+                    selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
                     title: S.of(context).Favorites,
-                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(S.of(context).Favorites),
+                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
                     icon: ShuffleUiKitIcons.starfill,
                   ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
                   Wrap(

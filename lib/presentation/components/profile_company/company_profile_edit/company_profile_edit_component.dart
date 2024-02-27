@@ -4,11 +4,11 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class CompanyProfileEditComponent extends StatelessWidget {
-  final List<String> selectedAudience;
+  final List<String> selectedPriceSegments;
   final List<String> selectedAgeRanges;
   final VoidCallback? onProfileEditSubmitted;
   final GlobalKey? formKey;
-  final VoidCallback? onAudienceChangeRequested;
+  final VoidCallback? onPriceSegmentChangeRequested;
   final VoidCallback? onAgeRangesChangeRequested;
   final VoidCallback? onPhotoChangeRequested;
   final VoidCallback? onNicheChangeRequested;
@@ -37,7 +37,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
 
   const CompanyProfileEditComponent({
     Key? key,
-    required this.selectedAudience,
+    required this.selectedPriceSegments,
     required this.selectedAgeRanges,
     required this.selectedNiche,
     this.onLanguageChanged,
@@ -58,7 +58,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
     required this.positionController,
     required this.phoneController,
     this.onAgeRangesChangeRequested,
-    this.onAudienceChangeRequested,
+    this.onPriceSegmentChangeRequested,
     this.onIsLightThemeChanged,
     this.isLoading = false,
     this.isLightTheme = false,
@@ -178,9 +178,9 @@ class CompanyProfileEditComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSelectionTile(
-              onSelectionChanged: onAudienceChangeRequested,
-              selectedItems: selectedAudience,
-              title: S.of(context).YourAudience,
+              onSelectionChanged: onPriceSegmentChangeRequested,
+              selectedItems: selectedPriceSegments,
+              title: S.of(context).YourPriceSegment,
             ),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSelectionTile(
