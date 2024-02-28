@@ -40,12 +40,12 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
           transitionBuilder: (child, animation) {
             return FadeTransition(
               opacity: animation,
-              child: child,
+              child: animationEnded
+                  ? const SizedBox()
+                  : child,
             );
           },
-          child: animationEnded
-              ? const SizedBox()
-              : Row(
+          child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
