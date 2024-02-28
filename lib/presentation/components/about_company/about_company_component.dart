@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class AboutCompanyComponent extends StatelessWidget {
   final VoidCallback? onFinished;
   final UiAboutCompanyModel uiModel;
-  final List<UiKitMenuItem<String>> niches;
+  final List<UiKitMenuItem<int>> niches;
   final List<String> priceSegments;
   final List<String> targetAges;
   final TextEditingController nameController;
@@ -15,7 +15,7 @@ class AboutCompanyComponent extends StatelessWidget {
   final String? Function(String?)? positionValidator;
   final ValueChanged<String>? onAgeRangesChanged;
   final ValueChanged<String>? onAudiencesChanged;
-  final ValueChanged<UiKitMenuItem<String>?>? onNicheChanged;
+  final ValueChanged<UiKitMenuItem<int>?>? onNicheChanged;
 
   const AboutCompanyComponent({
     super.key,
@@ -134,7 +134,7 @@ class AboutCompanyComponent extends StatelessWidget {
               errorText: uiModel.errorSelectedMenuItem,
               hasError: uiModel.errorSelectedMenuItem != null,
               title: S.current.YourNiche,
-              child: UiKitMenu<String>(
+              child: UiKitMenu<int>(
                 tilesColor: Colors.transparent,
                 useCustomTiles: false,
                 onSelected: (item) => onNicheChanged?.call(item),

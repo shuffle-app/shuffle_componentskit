@@ -1,7 +1,7 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiAboutCompanyModel {
-  final UiKitMenuItem<String>? selectedMenuItem;
+  final UiKitMenuItem<int>? selectedMenuItem;
   final List<String>? selectedPriceSegments;
   final List<String>? selectedAgeRanges;
   String? errorSelectedMenuItem;
@@ -30,7 +30,7 @@ class UiAboutCompanyModel {
   });
 
   UiAboutCompanyModel copyWith({
-    UiKitMenuItem<String>? selectedMenuItem,
+    UiKitMenuItem<int>? selectedMenuItem,
     List<String>? selectedPriceSegments,
     List<String>? selectedAgeRanges,
   }) {
