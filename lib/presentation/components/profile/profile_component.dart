@@ -241,19 +241,19 @@ class ProfileComponent extends StatelessWidget {
                   hintTiles: [
                     HintCardUiModel(
                       title: S.current.ProfileAskOrSupportHiwHint(0),
-                      imageUrl: GraphicsFoundation.instance.svg.donat.path,
+                      imageUrl: GraphicsFoundation.instance.png.donat.path,
                     ),
                     HintCardUiModel(
                       title: S.current.ProfileAskOrSupportHiwHint(1),
-                      imageUrl: GraphicsFoundation.instance.svg.film.path,
+                      imageUrl: GraphicsFoundation.instance.png.shoot.path,
                     ),
                     HintCardUiModel(
                       title: S.current.ProfileAskOrSupportHiwHint(2),
-                      imageUrl: GraphicsFoundation.instance.svg.hands.path,
+                      imageUrl: GraphicsFoundation.instance.png.honest.path,
                     ),
                     HintCardUiModel(
                       title: S.current.ProfileAskOrSupportHiwHint(3),
-                      imageUrl: GraphicsFoundation.instance.svg.handshake3.path,
+                      imageUrl: GraphicsFoundation.instance.png.help.path,
                     ),
                   ],
                   onPop: onHowItWorksPoped,
