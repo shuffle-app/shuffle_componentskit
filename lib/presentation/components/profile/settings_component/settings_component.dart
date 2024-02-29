@@ -7,7 +7,7 @@ class SettingsComponent extends StatelessWidget {
   final String? selectedContentType;
   final List<UiKitCustomTab>? tabs;
   final List<BaseUiKitButtonData> btnDataList;
-  final List<BaseUiKitButtonData> redBtnDataList;
+  final List<BaseUiKitButtonData> controlExpansionTileButtons;
 
   const SettingsComponent({
     Key? key,
@@ -15,7 +15,7 @@ class SettingsComponent extends StatelessWidget {
     this.selectedContentType,
     this.tabs,
     required this.btnDataList,
-    required this.redBtnDataList,
+    required this.controlExpansionTileButtons,
   }) : super(key: key);
 
   @override
@@ -45,7 +45,7 @@ class SettingsComponent extends StatelessWidget {
             selectedTab: selectedContentType,
             onTappedTab: (index) => onTabSwitched?.call(index),
             tabs: tabs!,
-          ),
+          ).paddingSymmetric(horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0),
           SpacingFoundation.verticalSpace12,
         ],
         Column(
@@ -55,7 +55,7 @@ class SettingsComponent extends StatelessWidget {
           children: btnDataList
               .map(
                 (e) => [
-                  _InlineButton(data: e),
+                  UiKitInlineButton(data: e),
                   SpacingFoundation.verticalSpace16,
                   divider,
                   SpacingFoundation.verticalSpace16,
@@ -63,67 +63,20 @@ class SettingsComponent extends StatelessWidget {
               )
               .expand((element) => element)
               .toList(),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: bodyAligment.crossAxisAlignment,
-          mainAxisAlignment: bodyAligment.mainAxisAlignment,
-          children: [
-            _InlineButton(data: redBtnDataList.first),
-            SpacingFoundation.verticalSpace16,
-            divider,
-            SpacingFoundation.verticalSpace16,
-            _InlineButton(data: redBtnDataList.last),
-            SpacingFoundation.verticalSpace16,
-          ],
+        ).paddingSymmetric(horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0),
+        UiKitExpansionTile(
+          leadingIconData: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.tool),
+          title: S.current.Control.toUpperCase(),
+          children: controlExpansionTileButtons
+              .map((e) => UiKitInlineButton(
+                    data: e,
+                  ))
+              .toList(),
         ),
         kBottomNavigationBarHeight.heightBox
       ],
     ).paddingSymmetric(
-      horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0,
       vertical: model.positionModel?.verticalMargin?.toDouble() ?? 0,
-    );
-  }
-}
-
-class _InlineButton extends StatelessWidget {
-  final BaseUiKitButtonData data;
-
-  const _InlineButton({
-    Key? key,
-    required this.data,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.uiKitTheme?.colorScheme;
-    final textStyle = context.uiKitTheme?.boldTextTheme;
-
-    return GestureDetector(
-      onTap: data.onPressed,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          data.iconWidget ??
-              ImageWidget(
-                iconData: data.iconInfo?.iconData,
-                link: data.iconInfo?.iconPath,
-                color: data.iconInfo?.color ?? colorScheme?.inverseSurface,
-                height: data.iconInfo?.size,
-                fit: BoxFit.fitHeight,
-              ),
-          SpacingFoundation.horizontalSpace12,
-          Expanded(
-            child: Text(
-              data.text ?? '',
-              style: textStyle?.title2.copyWith(
-                overflow: TextOverflow.ellipsis,
-                color: data.textColor ?? colorScheme?.inverseSurface,
-              ),
-            ),
-          )
-        ],
-      ),
     );
   }
 }

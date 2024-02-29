@@ -199,11 +199,11 @@ class ShuffleComponent extends StatelessWidget {
                   ),
                 ),
                 SpacingFoundation.verticalSpace4,
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    RepaintBoundary(
-                      child: context.bouncingButton(
+                RepaintBoundary(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      context.bouncingButton(
                         blurred: true,
                         small: true,
                         data: BaseUiKitButtonData(
@@ -217,11 +217,9 @@ class ShuffleComponent extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                    SpacingFoundation.horizontalSpace24,
-                    if (configModel.showFavorite ?? true)
-                      RepaintBoundary(
-                        child: context.bouncingButton(
+                      SpacingFoundation.horizontalSpace24,
+                      if (configModel.showFavorite ?? true)
+                        context.bouncingButton(
                           blurred: true,
                           data: BaseUiKitButtonData(
                             onPressed: () => onFavorite?.call(shuffle.items[indexNotifier.value].title),
@@ -239,10 +237,8 @@ class ShuffleComponent extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                    SpacingFoundation.horizontalSpace24,
-                    RepaintBoundary(
-                      child: context.bouncingButton(
+                      SpacingFoundation.horizontalSpace24,
+                      context.bouncingButton(
                         blurred: true,
                         small: true,
                         data: BaseUiKitButtonData(
@@ -255,8 +251,8 @@ class ShuffleComponent extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SpacingFoundation.bottomNavigationBarSpacing,
               ],

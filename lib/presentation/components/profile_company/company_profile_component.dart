@@ -78,7 +78,7 @@ class CompanyProfileComponent extends StatelessWidget {
             tabs: tabs,
             onTappedTab: (index) => onTabSwitched?.call(tabs.elementAt(index).title),
           ),
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconData: ShuffleUiKitIcons.building,
@@ -91,7 +91,7 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         divider,
         SpacingFoundation.verticalSpace16,
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconData: ShuffleUiKitIcons.label,
@@ -104,7 +104,7 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         divider,
         SpacingFoundation.verticalSpace16,
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconData: ShuffleUiKitIcons.archive,
@@ -117,7 +117,7 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         divider,
         SpacingFoundation.verticalSpace16,
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconData: ShuffleUiKitIcons.warning,
@@ -130,7 +130,7 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         divider,
         SpacingFoundation.verticalSpace16,
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconData: ShuffleUiKitIcons.flag,
@@ -143,7 +143,7 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         divider,
         SpacingFoundation.verticalSpace16,
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconPath: GraphicsFoundation.instance.svg.lifebuoy.path,
@@ -156,7 +156,7 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         divider,
         SpacingFoundation.verticalSpace16,
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconData: ShuffleUiKitIcons.logout,
@@ -171,7 +171,7 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         divider,
         SpacingFoundation.verticalSpace16,
-        _InlineButton(
+        UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
               iconData: ShuffleUiKitIcons.profiledelete,
@@ -185,47 +185,5 @@ class CompanyProfileComponent extends StatelessWidget {
         ),
       ],
     ).paddingSymmetric(horizontal: horizontalMargin));
-  }
-}
-
-class _InlineButton extends StatelessWidget {
-  final BaseUiKitButtonData data;
-
-  const _InlineButton({
-    Key? key,
-    required this.data,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.uiKitTheme?.colorScheme;
-    final textStyle = context.uiKitTheme?.boldTextTheme;
-
-    return GestureDetector(
-      onTap: data.onPressed,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          data.iconWidget ??
-              ImageWidget(
-                iconData: data.iconInfo?.iconData,
-                link: data.iconInfo?.iconPath,
-                color: data.iconInfo?.color ?? colorScheme?.inverseSurface,
-                height: data.iconInfo?.size,
-                fit: BoxFit.fitHeight,
-              ),
-          SpacingFoundation.horizontalSpace12,
-          Expanded(
-            child: Text(
-              data.text ?? '',
-              style: textStyle?.title2.copyWith(
-                overflow: TextOverflow.ellipsis,
-                color: data.textColor ?? colorScheme?.inverseSurface,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
   }
 }

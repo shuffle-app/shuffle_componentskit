@@ -56,14 +56,14 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
       curve: Curves.fastOutSlowIn,
     );
     _passwordFocus = FocusNode()
-        // ..addListener(() {
-        //   if (_passwordFocus.hasFocus) {
-        //     _hideCodeInput();
-        //   } else {
-        //     _showCodeInput();
-        //   }
-        // })
-        ;
+      ..addListener(() {
+        print('Focus: ${_passwordFocus.hasFocus}');
+        if (_passwordFocus.hasFocus) {
+          _hideCodeInput();
+        } else {
+          _showCodeInput();
+        }
+      });
   }
 
   @override
