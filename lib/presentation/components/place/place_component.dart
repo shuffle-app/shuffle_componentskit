@@ -50,7 +50,9 @@ class PlaceComponent extends StatelessWidget {
 
     final theme = context.uiKitTheme;
 
-    return Column(
+    return ListView(
+      addAutomaticKeepAlives: false,
+      physics: const ClampingScrollPhysics(),
       children: [
         SpacingFoundation.verticalSpace16,
         TitleWithAvatar(
@@ -260,6 +262,7 @@ class PlaceComponent extends StatelessWidget {
               .toList(),
         ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace8,
+        (kBottomNavigationBarHeight * 1.5).heightBox,
       ],
     ).paddingSymmetric(vertical: verticalMargin);
   }
