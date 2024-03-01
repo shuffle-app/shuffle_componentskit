@@ -1,7 +1,7 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiAboutUserModel {
-  final UiKitMenuItem<String>? selectedPersonType;
+  final UiKitMenuItem<int>? selectedPersonType;
   final List<String>? selectedReligions;
 
   final String? selectedGender;
@@ -33,7 +33,7 @@ class UiAboutUserModel {
   });
 
   UiAboutUserModel copyWith({
-    UiKitMenuItem<String>? selectedPersonType,
+    UiKitMenuItem<int>? selectedPersonType,
     List<String>? selectedReligions,
     String? selectedGender,
     int? selectedAge,

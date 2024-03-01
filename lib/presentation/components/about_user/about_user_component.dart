@@ -7,8 +7,8 @@ class AboutUserComponent extends StatelessWidget {
   final UiAboutUserModel aboutUserModel;
   final VoidCallback? onSubmitUserData;
   final ValueChanged<String>? onReligionSelected;
-  final ValueChanged<UiKitMenuItem<String>?>? onPersonTypeChanged;
-  final List<UiKitMenuItem<String>> mindsets;
+  final ValueChanged<UiKitMenuItem<int>?>? onPersonTypeChanged;
+  final List<UiKitMenuItem<int>> mindsets;
   final ValueChanged<int?>? onAgeChanged;
   final String? Function(String?)? inputFieldValidator;
   final ValueChanged<String>? onGenderChanged;
@@ -160,7 +160,7 @@ class AboutUserComponent extends StatelessWidget {
                   S.of(context).DescribeYourself,
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
-              child: UiKitMenu<String>(
+              child: UiKitMenu<int>(
                 tilesColor: Colors.transparent,
                 useCustomTiles: false,
                 title:
