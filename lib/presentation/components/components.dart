@@ -15,6 +15,8 @@ export 'event/my_events_component.dart';
 export 'event/uievent_model.dart';
 export 'feed/feed_component.dart';
 export 'feed/uifeed_model.dart';
+export 'feedback/add_feedback_component.dart';
+export 'feedback/add_review_component.dart';
 export 'forgot_password/forgot_password_component.dart';
 export 'invite/invite_component.dart';
 export 'invite/ui_invite_person_model.dart';
