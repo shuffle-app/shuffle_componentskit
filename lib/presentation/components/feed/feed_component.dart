@@ -68,6 +68,16 @@ class FeedComponent extends StatelessWidget {
 
     final size = MediaQuery.sizeOf(context);
 
+    late final String feelingText;
+    final now = DateTime.now();
+    if (now.hour >= 12 && now.hour < 18) {
+      feelingText =  S.of(context).HowAreYouFeelingToday;
+    } else if (now.hour >= 6 && now.hour < 12) {
+      feelingText = S.of(context).HowAreYouFeelingThisMorning;
+    } else {
+      feelingText =  S.of(context).HowAreYouFeelingTonight;
+    }
+
     return CustomScrollView(
       slivers: [
         SizedBox(
@@ -179,7 +189,7 @@ class FeedComponent extends StatelessWidget {
           if ((feedLeisureModel.showFeelings ?? true)) ...[
             Stack(
               children: [
-                Text(S.of(context).HowAreYouFeelingTonight, style: themeTitleStyle),
+                Text(feelingText, style: themeTitleStyle),
                 if (feed.showHowItWorksTitle)
                   HowItWorksWidget(
                     title: S.current.FeedFeelingsHiwTitle,

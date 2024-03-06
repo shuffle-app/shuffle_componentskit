@@ -22,6 +22,7 @@ buildComponent(BuildContext context, UiBaseModel configuration, ComponentBuilder
       return kit.showUiKitGeneralFullScreenDialog(
         context,
         kit.GeneralDialogData(
+          isWidgetScrollable: componentWidgets.isWidgetScrollable,
           child: componentWidgets.child,
           bottomBar: componentWidgets.bottomBar,
           useRootNavigator: componentWidgets.useRootNavigator,
@@ -40,6 +41,9 @@ class ComponentBuilder {
   final Widget? bottomBar;
   final kit.AlertDialogData? alertDialogData;
   final bool useRootNavigator;
+  late final bool isWidgetScrollable;
 
-  ComponentBuilder({required this.child, this.bottomBar, this.alertDialogData, this.useRootNavigator = false});
+  ComponentBuilder({required this.child, this.bottomBar, this.alertDialogData, this.useRootNavigator = false}) {
+    isWidgetScrollable = child.runtimeType == PlaceComponent || child.runtimeType == EventComponent;
+  }
 }

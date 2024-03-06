@@ -38,9 +38,8 @@ class EventComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return ListView(
-      primary: false,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
+      addAutomaticKeepAlives: false,
       children: [
         SpacingFoundation.verticalSpace8,
         Column(
@@ -183,6 +182,7 @@ class EventComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         // ],
         // ),
+        (kBottomNavigationBarHeight * 1.5).heightBox
       ],
       // ),
     ).paddingSymmetric(
