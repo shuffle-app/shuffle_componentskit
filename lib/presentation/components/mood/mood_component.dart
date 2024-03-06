@@ -42,10 +42,7 @@ class MoodComponent extends StatelessWidget {
 
     final tabBarContent = model.content.body?[ContentItemType.tabBar];
 
-    final listOfTabs = List<MapEntry<String, PropertiesBaseModel>>.of(tabBarContent?.properties?.entries ?? []);
-    listOfTabs.sort((a, b) => (a.value.sortNumber ?? 0).compareTo((b.value.sortNumber ?? 0)));
-
-    String selectedLevel = mood.activatedLevel ?? listOfTabs.firstOrNull?.value.value ?? '';
+    String selectedLevel = mood.activatedLevel ?? 'easy';
 
     final AutoSizeGroup tabBarGroup = AutoSizeGroup();
 
@@ -147,8 +144,9 @@ class MoodComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace24,
             StatefulBuilder(
               builder: (context, setState) {
+                final lvls = ['easy','fair', 'hardcore'];
                 final isIgnoringPointer =
-                    !(mood.activatedLevel == null || !listOfTabs.map((e) => e.value.value).contains(mood.activatedLevel!));
+                    !(mood.activatedLevel == null || !lvls.contains(mood.activatedLevel!));
 
                 return Column(
                   children: [
@@ -158,7 +156,7 @@ class MoodComponent extends StatelessWidget {
                         selectedTab: mood.activatedLevel?.toUpperCase(),
                         onTappedTab: (index) {
                           setState(() {
-                            selectedLevel = listOfTabs[index].value.value ?? '';
+                            selectedLevel = lvls[index] ?? '';
                             onTabChanged.call(selectedLevel);
                           });
                         },

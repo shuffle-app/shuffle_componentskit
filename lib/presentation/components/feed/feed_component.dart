@@ -10,7 +10,7 @@ class FeedComponent extends StatelessWidget {
   final PagingController controller;
   final UiMoodModel? mood;
   final Function? onEventPressed;
-  final Function(int id, String type, [String? source])? onListItemPressed;
+  final Function(int id, String type)? onListItemPressed;
   final Function? onTagSortPressed;
   final VoidCallback? onHowItWorksPoped;
   final VoidCallback? onMoodPressed;
@@ -345,7 +345,7 @@ class FeedComponent extends StatelessWidget {
                   // showFavoriteHint: index==0,
                   isFavorite: item.isFavorite,
                   onFavoriteChanged: item.onFavoriteChanged,
-                  onTap: (id) => onListItemPressed?.call(id, item.type, item.source),
+                  onTap: (id) => onListItemPressed?.call(id, item.type),
                   place: UiPlaceModel(
                     id: item.id,
                     title: item.title,
