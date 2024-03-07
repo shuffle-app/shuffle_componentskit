@@ -31,7 +31,7 @@ class PublicProfileComponent extends StatelessWidget {
               placesVisited: profileStats!.placesVisited,
               reviewsPosted: profileStats!.reviewsPosted,
               points: profileStats!.points,
-            ).paddingSymmetric(horizontal: horizontalMargin),
+            ).paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
         ]);
   }
 }
