@@ -19,6 +19,8 @@ class UiProfileModel {
   final VoidCallback? onViewAllAchievements;
   final List<UiKitAchievementsModel> achievements;
   final UserTileType userTileType;
+  final String? specialization;
+  final List<String>? socialLinks;
 
   ProfileCard get cardWidget {
     AutoSizeGroup group = AutoSizeGroup();
@@ -27,6 +29,8 @@ class UiProfileModel {
       onShare: onShare,
       nickname: nickname,
       name: name,
+      socialLinks: socialLinks,
+      speciality: specialization,
       description: description,
       avatarUrl: avatarUrl,
       followers: followers,
@@ -77,6 +81,8 @@ class UiProfileModel {
     this.followers,
     this.achievements = const [],
     this.onViewAllAchievements,
+    this.socialLinks,
+    this.specialization,
   });
 
   /// write [copyWith] method
