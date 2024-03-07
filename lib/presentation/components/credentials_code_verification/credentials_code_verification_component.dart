@@ -85,7 +85,7 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
           ),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 UiKitCodeInputField(
@@ -95,11 +95,14 @@ class CredentialsCodeVerificationComponent extends StatelessWidget {
                   errorText: errorText,
                 ),
                 SpacingFoundation.verticalSpace24,
-                context.smallOutlinedButton(
-                  data: BaseUiKitButtonData(
-                    text: S.current.ResendCode.toUpperCase(),
-                    onPressed: onResendCode,
-                    fit: ButtonFit.hugContent,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: context.smallOutlinedButton(
+                    data: BaseUiKitButtonData(
+                      text: S.current.ResendCode.toUpperCase(),
+                      onPressed: onResendCode,
+                      fit: ButtonFit.hugContent,
+                    ),
                   ),
                 ),
                 SpacingFoundation.verticalSpace24,

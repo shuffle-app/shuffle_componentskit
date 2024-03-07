@@ -281,7 +281,7 @@ class AboutUserComponent extends StatelessWidget {
                   child: UiKitVerticalChip(
                     selected: aboutUserModel.selectedGender == 'female',
                     caption: S.current.Female,
-                    sign: ImageWidget(link: GraphicsFoundation.instance.png.male.path),
+                    sign: ImageWidget(link: GraphicsFoundation.instance.png.female.path),
                     autoSizeGroup: genderGroup,
                     onTap: () => onGenderChanged?.call('female'),
                   ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
@@ -290,7 +290,7 @@ class AboutUserComponent extends StatelessWidget {
                   child: UiKitVerticalChip(
                     selected: aboutUserModel.selectedGender == 'other',
                     caption: S.current.Other,
-                    sign: ImageWidget(link: GraphicsFoundation.instance.png.male.path),
+                    sign: ImageWidget(link: GraphicsFoundation.instance.png.otherGender.path),
                     autoSizeGroup: genderGroup,
                     onTap: () => onGenderChanged?.call('other'),
                   ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),

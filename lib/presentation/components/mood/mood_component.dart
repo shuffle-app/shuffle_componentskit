@@ -140,7 +140,7 @@ class MoodComponent extends StatelessWidget {
                         imageUrl: GraphicsFoundation.instance.png.reward.path,
                       ),
                     ],
-                    customOffset: Offset(0.6.sw, 24),
+                    customOffset: Offset(0.6.sw, 40),
                   ),
               ],
             ),
