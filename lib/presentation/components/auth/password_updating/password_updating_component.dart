@@ -57,7 +57,7 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
     );
     _passwordFocus = FocusNode()
       ..addListener(() {
-        print('Focus: ${_passwordFocus.hasFocus}');
+        // print('Focus: ${_passwordFocus.hasFocus}');
         if (_passwordFocus.hasFocus) {
           _hideCodeInput();
         } else {
