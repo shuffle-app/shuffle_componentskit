@@ -57,7 +57,7 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
     );
     _passwordFocus = FocusNode()
       ..addListener(() {
-        print('Focus: ${_passwordFocus.hasFocus}');
+        // print('Focus: ${_passwordFocus.hasFocus}');
         if (_passwordFocus.hasFocus) {
           _hideCodeInput();
         } else {
@@ -144,16 +144,18 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
           ),
           Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizeTransition(
                         sizeFactor: _animation,
                         axisAlignment: 1,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             UiKitCodeInputField(
                               controller: widget.codeController,
@@ -162,8 +164,8 @@ class _PasswordUpdatingComponentState extends State<PasswordUpdatingComponent> w
                               errorText: widget.codeErrorText,
                             ),
                             SpacingFoundation.verticalSpace24,
-                            SizedBox(
-                              width: 0.5.sw,
+                            Align(
+                              alignment: Alignment.centerRight,
                               child: context.smallOutlinedButton(
                                 data: BaseUiKitButtonData(
                                   text: S.current.ResendCode.toUpperCase(),

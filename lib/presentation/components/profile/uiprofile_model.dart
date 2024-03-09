@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiProfileModel {
+  final VoidCallback? onShare;
   final String? nickname;
   final String? name;
   final String? description;
@@ -18,13 +19,18 @@ class UiProfileModel {
   final VoidCallback? onViewAllAchievements;
   final List<UiKitAchievementsModel> achievements;
   final UserTileType userTileType;
+  final String? specialization;
+  final List<String>? socialLinks;
 
   ProfileCard get cardWidget {
     AutoSizeGroup group = AutoSizeGroup();
 
     return ProfileCard(
+      onShare: onShare,
       nickname: nickname,
       name: name,
+      socialLinks: socialLinks,
+      speciality: specialization,
       description: description,
       avatarUrl: avatarUrl,
       followers: followers,
@@ -59,6 +65,7 @@ class UiProfileModel {
   }
 
   UiProfileModel({
+    this.onShare,
     this.onDonate,
     this.showSupportShuffle = false,
     this.onFollow,
@@ -74,6 +81,8 @@ class UiProfileModel {
     this.followers,
     this.achievements = const [],
     this.onViewAllAchievements,
+    this.socialLinks,
+    this.specialization,
   });
 
   /// write [copyWith] method
@@ -94,8 +103,10 @@ class UiProfileModel {
     VoidCallback? onViewAllAchievements,
     List<UiKitAchievementsModel>? achievements,
     UserTileType? userTileType,
+    VoidCallback? onShare,
   }) =>
       UiProfileModel(
+        onShare: onShare ?? this.onShare,
         nickname: nickname ?? this.nickname,
         name: name ?? this.name,
         description: description ?? this.description,

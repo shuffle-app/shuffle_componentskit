@@ -18,7 +18,9 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final ValueChanged<bool>? onIsLightThemeChanged;
   final String? avatarUrl;
 
+  final List<String> socialLinks;
   final ValueChanged<List<String>>? onPreferencesChanged;
+  final ValueChanged<List<String>>? onSocialLinksChanged;
   final ValueChanged<String>? onLocaleUpdated;
   final String? Function(String?)? nameValidator;
   final String? Function(String?)? emailValidator;
@@ -42,10 +44,12 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.formKey,
     this.onPhotoChangeRequested,
     this.onPreferencesChanged,
+    this.onSocialLinksChanged,
     this.onLocaleUpdated,
     this.nameValidator,
     this.emailValidator,
     this.avatarUrl,
+    this.socialLinks = const [],
     this.phoneValidator,
     this.dateOfBirthValidator,
     this.onPreferencesChangeRequested,
@@ -67,9 +71,11 @@ class EditProfileDefaultComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
-    final hintTitle = model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+    final hintTitle =
+        model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? EdgeInsetsFoundation.horizontal16).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
@@ -261,9 +267,52 @@ class EditProfileDefaultComponent extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
             ),
             SpacingFoundation.verticalSpace16,
+            Row(
+              children: [
+                Text(
+                  'Links',
+                  style: theme?.regularTextTheme.labelSmall,
+                ),
+                const Spacer(),
+                context.smallOutlinedButton(
+                    data: BaseUiKitButtonData(
+                        onPressed: () async {
+                          final newLinks = await socialLinksEditBuilder(context, socialLinks: socialLinks);
+                          if (newLinks.isNotEmpty) {
+                            onSocialLinksChanged?.call(newLinks);
+                          }
+                        },
+                        iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.plus, color: Colors.white)))
+              ],
+            ),
+            if (socialLinks.isNotEmpty)
+              ...socialLinks.map((e) => Row(
+                    children: [
+                      context.iconButtonNoPadding(
+                          data: BaseUiKitButtonData(
+                              iconWidget: ImageWidget(
+                        svgAsset: e.icon,
+                        color: theme?.colorScheme.inversePrimary,
+                      ))),
+                      SpacingFoundation.horizontalSpace16,
+                      Expanded(
+                          child: Text(
+                        '@${e.split('/').last}',
+                        style: theme?.boldTextTheme.caption1Medium,
+                      )),
+                      SpacingFoundation.horizontalSpace16,
+                      context.iconButtonNoPadding(
+                          data: BaseUiKitButtonData(
+                              iconInfo: BaseUiKitButtonIconData(
+                        iconData: ShuffleUiKitIcons.trash,
+                        color: theme?.colorScheme.inversePrimary,
+                      )))
+                    ],
+                  )),
+            SpacingFoundation.verticalSpace16,
             Text(
               S.of(context).ActivityType,
-              style: context.uiKitTheme?.regularTextTheme.labelSmall,
+              style: theme?.regularTextTheme.labelSmall,
             ),
             SpacingFoundation.verticalSpace4,
             UiKitMenuItemTile.custom(
