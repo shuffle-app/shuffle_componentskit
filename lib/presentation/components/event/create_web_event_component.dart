@@ -254,55 +254,56 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                         )
                       ]),
                       SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: S.of(context).OpeningHours,
-                        isRequired: true,
-                        child: Row(children: [
-                          Expanded(
-                              flex: 3,
-                              child: UiKitTitledDescriptionWithDivider(
-                                description: [
-                                  '${normalizedTi(_eventToEdit.time)} - ${normalizedTi(_eventToEdit.timeTo)}',
-                                  if (_eventToEdit.isRecurrent)
-                                    _eventToEdit.weekdays.join(', ')
-                                  else
-                                    '${_eventToEdit.date == null ? '' : DateFormat('MMM dd').format(_eventToEdit.date!)} - ${_eventToEdit.dateTo == null ? '' : DateFormat('MMM dd').format(_eventToEdit.dateTo!)}'
-                                ],
-                                direction: Axis.horizontal,
-                                // onTrailingTap: widget.onTimeEditTap,
-                                title: '',
-                              )),
-                          Transform.scale(
-                              scale: 0.6,
-                              child: context.smallOutlinedButton(
-                                data: BaseUiKitButtonData(
-                                    iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.clock,
-                                    ),
-                                    onPressed: () async {
-                                      await showUiKitTimeFromToDialog(context, (from, to) {
-                                        setState(() {
-                                          _eventToEdit.time = to;
-                                          _eventToEdit.timeTo = from;
-                                        });
-                                      });
-                                      if (_eventToEdit.isRecurrent) {
-                                        final weekdays = await showUiKitWeekdaySelector(context) ?? [];
-                                        setState(() {
-                                          _eventToEdit.weekdays = weekdays;
-                                        });
-                                      } else {
-                                        await showUiKitCalendarFromToDialog(context, (from, to) {
-                                          setState(() {
-                                            _eventToEdit.date = to;
-                                            _eventToEdit.dateTo = from;
-                                          });
-                                        });
-                                      }
-                                    }),
-                              ))
-                        ]),
-                      ),
+                      //TODO restore editing schedules
+                      // WebFormField(
+                      //   title: S.of(context).OpeningHours,
+                      //   isRequired: true,
+                      //   child: Row(children: [
+                      //     Expanded(
+                      //         flex: 3,
+                      //         child: UiKitTitledDescriptionWithDivider(
+                      //           description: [
+                      //             '${normalizedTi(_eventToEdit.time)} - ${normalizedTi(_eventToEdit.timeTo)}',
+                      //             if (_eventToEdit.isRecurrent)
+                      //               _eventToEdit.weekdays.join(', ')
+                      //             else
+                      //               '${_eventToEdit.date == null ? '' : DateFormat('MMM dd').format(_eventToEdit.date!)} - ${_eventToEdit.dateTo == null ? '' : DateFormat('MMM dd').format(_eventToEdit.dateTo!)}'
+                      //           ],
+                      //           direction: Axis.horizontal,
+                      //           // onTrailingTap: widget.onTimeEditTap,
+                      //           title: '',
+                      //         )),
+                      //     Transform.scale(
+                      //         scale: 0.6,
+                      //         child: context.smallOutlinedButton(
+                      //           data: BaseUiKitButtonData(
+                      //               iconInfo: BaseUiKitButtonIconData(
+                      //                 iconData: ShuffleUiKitIcons.clock,
+                      //               ),
+                      //               onPressed: () async {
+                      //                 await showUiKitTimeFromToDialog(context, (from, to) {
+                      //                   setState(() {
+                      //                     _eventToEdit.time = to;
+                      //                     _eventToEdit.timeTo = from;
+                      //                   });
+                      //                 });
+                      //                 if (_eventToEdit.isRecurrent) {
+                      //                   final weekdays = await showUiKitWeekdaySelector(context) ?? [];
+                      //                   setState(() {
+                      //                     _eventToEdit.weekdays = weekdays;
+                      //                   });
+                      //                 } else {
+                      //                   await showUiKitCalendarFromToDialog(context, (from, to) {
+                      //                     setState(() {
+                      //                       _eventToEdit.date = to;
+                      //                       _eventToEdit.dateTo = from;
+                      //                     });
+                      //                   });
+                      //                 }
+                      //               }),
+                      //         ))
+                      //   ]),
+                      // ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: S.of(context).Description,

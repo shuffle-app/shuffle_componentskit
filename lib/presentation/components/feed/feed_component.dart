@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -18,6 +19,7 @@ class FeedComponent extends StatelessWidget {
   final AsyncCallback? onMoodCompleted;
   final VoidCallback? onHowItWorksPopedBody;
   final VoidCallback? onAdvertisementPressed;
+  final VoidCallback? onLoadMoreChips;
   final bool showBusinessContent;
   final bool preserveScrollPosition;
   final Widget? progressIndicator;
@@ -39,11 +41,13 @@ class FeedComponent extends StatelessWidget {
     this.onHowItWorksPopedBody,
     this.onListItemPressed,
     this.onAdvertisementPressed,
+    this.onLoadMoreChips,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentFeedModel feedLeisureModel = ComponentFeedModel.fromJson(config['feed']);
     final ComponentFeedModel feedBusinessModel = ComponentFeedModel.fromJson(config['feed_business']);
     MapEntry<String, PropertiesBaseModel>? advertisement;
@@ -53,8 +57,8 @@ class FeedComponent extends StatelessWidget {
 
     final nicheTitles = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties?.keys.toList();
     final nicheData = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties;
-    final upcomingGlobals =
-        feedBusinessModel.content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
+    final upcomingGlobals = feedBusinessModel
+        .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
     nicheTitles?.sort((a, b) {
       final aSortNumber = nicheData?[a]?.sortNumber ?? 0;
       final bSortNumber = nicheData?[b]?.sortNumber ?? 0;
@@ -71,11 +75,11 @@ class FeedComponent extends StatelessWidget {
     late final String feelingText;
     final now = DateTime.now();
     if (now.hour >= 12 && now.hour < 18) {
-      feelingText =  S.of(context).HowAreYouFeelingToday;
+      feelingText = S.of(context).HowAreYouFeelingToday;
     } else if (now.hour >= 6 && now.hour < 12) {
       feelingText = S.of(context).HowAreYouFeelingThisMorning;
     } else {
-      feelingText =  S.of(context).HowAreYouFeelingTonight;
+      feelingText = S.of(context).HowAreYouFeelingTonight;
     }
 
     return CustomScrollView(
@@ -107,7 +111,8 @@ class FeedComponent extends StatelessWidget {
                               icon: ShuffleUiKitIcons.label,
                             ),
                           ],
-                        ).paddingOnly(right: e == upcomingGlobals.keys.last ? 0 : SpacingFoundation.horizontalSpacing12),
+                        ).paddingOnly(
+                            right: e == upcomingGlobals.keys.last ? 0 : SpacingFoundation.horizontalSpacing12),
                       )
                       .toList() ??
                   [],
@@ -284,47 +289,92 @@ class FeedComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
             SpacingFoundation.verticalSpace8.wrapSliverBox,
-            SingleChildScrollView(
-              primary: false,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  RollingDiceButton(
-                      onPressed: (value) {
-                        final Set<String> list = {};
-                        for (int i in value) {
-                          list.add(feed.filterChips![i].title);
+            NotificationListener(
+                onNotification: (notification) {
+                  if (notification is ScrollUpdateNotification) {
+                    if (notification.metrics.pixels >= notification.metrics.maxScrollExtent * 0.8) {
+                      onLoadMoreChips?.call();
+                    }
+                  }
+                  return false;
+                },
+                child: ConstrainedBox(
+                    constraints: BoxConstraints.loose(Size(double.infinity, 40.h)),
+                    child: ListView.builder(
+                        padding: EdgeInsets.only(left: horizontalMargin),
+                        primary: false,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: feed.filterChips!.length + 2,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return RollingDiceButton(
+                                onPressed: (value) {
+                                  final Set<String> list = {};
+                                  for (int i in value) {
+                                    list.add(feed.filterChips![i].title);
+                                  }
+
+                                  onTagSortPressed?.call('Random', list);
+                                },
+                                length: feed.filterChips?.length ?? 0);
+                          } else if (index == 1) {
+                            return UiKitTitledFilterChip(
+                              //const flag for showing favorites is 'Favorites'
+                              selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
+                              title: S.of(context).Favorites,
+                              onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                              icon: ShuffleUiKitIcons.starfill,
+                            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
+                          } else {
+                            return feed.filterChips!
+                                .map((e) => UiKitTitledFilterChip(
+                                      selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                                      title: e.title,
+                                      onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                                      icon: e.icon,
+                                    ).paddingOnly(right: horizontalMargin))
+                                .toList()[index - 2];
+                          }
                         }
-
-                        onTagSortPressed?.call('Random', list);
-                      },
-                      length: feed.filterChips?.length ?? 0),
-                  UiKitTitledFilterChip(
-                    //const flag for showing favorites is 'Favorites'
-                    selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
-                    title: S.of(context).Favorites,
-                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
-                    icon: ShuffleUiKitIcons.starfill,
-                  ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
-                  Wrap(
-                    spacing: SpacingFoundation.verticalSpacing8,
-                    children: feed.filterChips!.map(
-                      (e) {
-                        double padding = 0;
-                        if (e == feed.filterChips?.last) padding = horizontalMargin;
-
-                        return UiKitTitledFilterChip(
-                          selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
-                          title: e.title,
-                          onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                          icon: e.icon,
-                        ).paddingOnly(right: padding);
-                      },
-                    ).toList(),
-                  ),
-                ],
-              ).paddingOnly(left: horizontalMargin),
-            ).wrapSliverBox,
+                        // child: Row(
+                        //   children: [
+                        //     RollingDiceButton(
+                        //         onPressed: (value) {
+                        //           final Set<String> list = {};
+                        //           for (int i in value) {
+                        //             list.add(feed.filterChips![i].title);
+                        //           }
+                        //
+                        //           onTagSortPressed?.call('Random', list);
+                        //         },
+                        //         length: feed.filterChips?.length ?? 0),
+                        //     UiKitTitledFilterChip(
+                        //       //const flag for showing favorites is 'Favorites'
+                        //       selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
+                        //       title: S.of(context).Favorites,
+                        //       onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                        //       icon: ShuffleUiKitIcons.starfill,
+                        //     ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
+                        //     Wrap(
+                        //       spacing: SpacingFoundation.verticalSpacing8,
+                        //       children: feed.filterChips!.map(
+                        //         (e) {
+                        //           double padding = 0;
+                        //           if (e == feed.filterChips?.last) padding = horizontalMargin;
+                        //
+                        //           return UiKitTitledFilterChip(
+                        //             selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                        //             title: e.title,
+                        //             onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                        //             icon: e.icon,
+                        //           ).paddingOnly(right: padding);
+                        //         },
+                        //       ).toList(),
+                        //     ),
+                        //   ],
+                        // ).paddingOnly(left: horizontalMargin),
+                        ))).wrapSliverBox,
           ],
           SpacingFoundation.verticalSpace24.wrapSliverBox,
           PagedSliverList.separated(

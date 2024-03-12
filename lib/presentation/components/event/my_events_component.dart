@@ -45,14 +45,15 @@ class MyEventsComponent extends StatelessWidget {
                     event.title ?? '',
                     style: theme?.boldTextTheme.caption1Bold,
                   ),
-                  subtitle: event.date != null
-                      ? Text(
-                          DateFormat('MMMM d').format(event.date!),
-                          style: theme?.boldTextTheme.caption1Medium.copyWith(
-                            color: theme.colorScheme.darkNeutral500,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                  //TODO restore schedules
+                  // subtitle: event.date != null
+                  //     ? Text(
+                  //         DateFormat('MMMM d').format(event.date!),
+                  //         style: theme?.boldTextTheme.caption1Medium.copyWith(
+                  //           color: theme.colorScheme.darkNeutral500,
+                  //         ),
+                  //       )
+                  //     : const SizedBox.shrink(),
                   trailing: context.smallButton(
                     data: BaseUiKitButtonData(
                       onPressed: onTap(event),

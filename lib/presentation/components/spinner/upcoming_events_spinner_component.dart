@@ -104,11 +104,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
                 builder: (_, favoriteValue) => UiKitSpinnerCard(
                   availableHeight: cardsListHeight,
                   title: item.title,
-                  date: item.date,
-                  time: item.time,
-                  timeTo: item.timeTo,
-                  weekdays: item.weekdays,
-                  dateTo: item.dateTo,
+                  scheduleString: item.scheduleString?.replaceAll('\n', ', '),
                   favourite: favoriteValue.data as bool? ?? item.favorite,
                   photoLink: item.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
                   ownerTileTitle: item.owner?.name,

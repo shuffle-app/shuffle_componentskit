@@ -219,63 +219,65 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ),
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        Row(
-          children: [
-            Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
-            const Spacer(),
-            Text(
-              _placeToEdit.openFrom == null
-                  ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-                  : normalizedTi(_placeToEdit.openFrom),
-              style: theme?.boldTextTheme.body,
-            ),
-            context.outlinedButton(
-              data: BaseUiKitButtonData(
-                onPressed: () async {
-                  final maybeTime = await showUiKitTimeDialog(context);
-                  if (maybeTime != null) {
-                    setState(() {
-                      _placeToEdit.openFrom = maybeTime;
-                    });
-                  }
-                },
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.clock,
-                  size: 16.h,
-                ),
-              ),
-            ),
-          ],
-        ).paddingSymmetric(horizontal: horizontalPadding),
+        //TODO restore editing schedules
+        // Row(
+        //   children: [
+        //     Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
+        //     const Spacer(),
+        //     Text(
+        //       _placeToEdit.openFrom == null
+        //           ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
+        //           : normalizedTi(_placeToEdit.openFrom),
+        //       style: theme?.boldTextTheme.body,
+        //     ),
+        //     context.outlinedButton(
+        //       data: BaseUiKitButtonData(
+        //         onPressed: () async {
+        //           final maybeTime = await showUiKitTimeDialog(context);
+        //           if (maybeTime != null) {
+        //             setState(() {
+        //               _placeToEdit.openFrom = maybeTime;
+        //             });
+        //           }
+        //         },
+        //         iconInfo: BaseUiKitButtonIconData(
+        //           iconData: ShuffleUiKitIcons.clock,
+        //           size: 16.h,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        Row(
-          children: [
-            Text(S.of(context).OpenTo, style: theme?.regularTextTheme.labelSmall),
-            const Spacer(),
-            Text(
-              _placeToEdit.openTo == null
-                  ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-                  : normalizedTi(_placeToEdit.openTo),
-              style: theme?.boldTextTheme.body,
-            ),
-            context.outlinedButton(
-              data: BaseUiKitButtonData(
-                onPressed: () async {
-                  final maybeTime = await showUiKitTimeDialog(context);
-                  if (maybeTime != null) {
-                    setState(() {
-                      _placeToEdit.openTo = maybeTime;
-                    });
-                  }
-                },
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.clock,
-                  size: 16.h,
-                ),
-              ),
-            ),
-          ],
-        ).paddingSymmetric(horizontal: horizontalPadding),
+        //TODO restore editing schedules
+        // Row(
+        //   children: [
+        //     Text(S.of(context).OpenTo, style: theme?.regularTextTheme.labelSmall),
+        //     const Spacer(),
+        //     Text(
+        //       _placeToEdit.openTo == null
+        //           ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
+        //           : normalizedTi(_placeToEdit.openTo),
+        //       style: theme?.boldTextTheme.body,
+        //     ),
+        //     context.outlinedButton(
+        //       data: BaseUiKitButtonData(
+        //         onPressed: () async {
+        //           final maybeTime = await showUiKitTimeDialog(context);
+        //           if (maybeTime != null) {
+        //             setState(() {
+        //               _placeToEdit.openTo = maybeTime;
+        //             });
+        //           }
+        //         },
+        //         iconInfo: BaseUiKitButtonIconData(
+        //           iconData: ShuffleUiKitIcons.clock,
+        //           size: 16.h,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         Row(children: [
           Text(S.of(context).DaysOfWeek, style: theme?.regularTextTheme.labelSmall),

@@ -10,10 +10,11 @@ class UiEventModel extends Advertisable {
   List<BaseUiKitMedia> media;
   bool? favorite;
   bool isRecurrent;
-  DateTime? date;
-  DateTime? dateTo;
-  TimeOfDay? time;
-  TimeOfDay? timeTo;
+  String? scheduleString;
+  // DateTime? date;
+  // DateTime? dateTo;
+  // TimeOfDay? time;
+  // TimeOfDay? timeTo;
   String? description;
   String? location;
   String? eventType;
@@ -33,8 +34,6 @@ class UiEventModel extends Advertisable {
     this.favorite,
     this.owner,
     this.eventType,
-    this.date,
-    this.dateTo,
     this.media = const [],
     this.description,
     this.location,
@@ -44,17 +43,17 @@ class UiEventModel extends Advertisable {
     this.price,
     this.phone,
     this.website,
-    this.time,
-    this.timeTo,
+    this.scheduleString,
     this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
     bool? isAdvertisement,
   })  : descriptionItems = [
-          if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
+          if (scheduleString != null)
+          // if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
             UiDescriptionItemModel(
               title: S.current.DontMissIt,
-              description: formatDate(date, dateTo, time, timeTo, weekdays)!,
+              description: scheduleString,
             ),
           if (location != null && location.isNotEmpty)
             UiDescriptionItemModel(
@@ -80,16 +79,13 @@ class UiEventModel extends Advertisable {
     this.title,
     this.favorite,
     this.owner,
-    this.date,
-    this.dateTo,
+    this.scheduleString,
     this.media = const [],
     this.description,
     this.location,
     this.tags = const [],
     this.baseTags = const [],
     this.rating,
-    this.time,
-    this.timeTo,
     this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
@@ -115,10 +111,7 @@ class UiEventModel extends Advertisable {
         media = const [],
         favorite = false,
         isRecurrent = false,
-        date = null,
-        dateTo = null,
-        time = null,
-        timeTo = null,
+        scheduleString = null,
         description = null,
         location = null,
         eventType = null,

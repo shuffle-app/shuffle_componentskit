@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -17,19 +16,18 @@ class UiPlaceModel {
   String? status;
   String? logo;
   List<UiDescriptionItemModel>? descriptionItems;
-  TimeOfDay? openFrom;
-  TimeOfDay? openTo;
+  String? scheduleString;
   String? location;
   String? website;
   String? phone;
   String? price;
   Future<List<HorizontalCaptionedImageData>?>? branches;
+  Object? schedule;
 
   UiPlaceModel({
     required this.id,
     this.title,
-    this.openFrom,
-    this.openTo,
+    this.scheduleString,
     this.location,
     this.media = const [],
     this.logo,
@@ -52,10 +50,11 @@ class UiPlaceModel {
               descriptionUrl: website ?? ''),
           UiDescriptionItemModel(title: S.current.Phone, description: phone ?? ''),
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
-          if (formatDate(null, null, openFrom, openTo, weekdays) != null)
+          if (scheduleString != null)
             UiDescriptionItemModel(
               title: S.current.WorkHours,
-              description: formatDate(null, null, openFrom, openTo, weekdays)!,
+              description: scheduleString,
+              // description: formatDate(null, null, openFrom, openTo, weekdays)!,
             ),
         ];
 
@@ -91,8 +90,7 @@ class UiPlaceModel {
     String? status,
     String? logo,
     List<UiDescriptionItemModel>? descriptionItems,
-    TimeOfDay? openFrom,
-    TimeOfDay? openTo,
+    String? scheduleString,
     String? location,
     String? website,
     String? phone,
@@ -112,8 +110,7 @@ class UiPlaceModel {
         placeType: placeType ?? this.placeType,
         status: status ?? this.status,
         logo: logo ?? this.logo,
-        openFrom: openFrom ?? this.openFrom,
-        openTo: openTo ?? this.openTo,
+        scheduleString: scheduleString ?? this.scheduleString,
         location: location ?? this.location,
         website: website ?? this.website,
         phone: phone ?? this.phone,

@@ -9,6 +9,7 @@ class UiProfileModel {
   final String? description;
   final String? avatarUrl;
   final String? userCredo;
+  final int? mindsetId;
   final int? followers;
   final VoidCallback? onFollow;
   final bool showSupportShuffle;
@@ -67,6 +68,7 @@ class UiProfileModel {
   UiProfileModel({
     this.onShare,
     this.onDonate,
+    this.mindsetId,
     this.showSupportShuffle = false,
     this.onFollow,
     this.matchingInterests,
@@ -94,6 +96,7 @@ class UiProfileModel {
     String? avatarUrl,
     String? userCredo,
     int? followers,
+    int? mindsetId,
     VoidCallback? onFollow,
     bool? showSupportShuffle,
     ValueChanged<int>? onDonate,
@@ -106,21 +109,21 @@ class UiProfileModel {
     VoidCallback? onShare,
   }) =>
       UiProfileModel(
-        onShare: onShare ?? this.onShare,
-        nickname: nickname ?? this.nickname,
-        name: name ?? this.name,
-        description: description ?? this.description,
-        avatarUrl: avatarUrl ?? this.avatarUrl,
-        userCredo: userCredo ?? this.userCredo,
-        followers: followers ?? this.followers,
-        onFollow: onFollow ?? this.onFollow,
-        showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
-        onDonate: onDonate ?? this.onDonate,
-        interests: interests ?? this.interests,
-        favorites: favorites ?? this.favorites,
-        matchingInterests: matchingInterests ?? this.matchingInterests,
-        onViewAllAchievements: onViewAllAchievements ?? this.onViewAllAchievements,
-        achievements: achievements ?? this.achievements,
-        userTileType: userTileType ?? this.userTileType,
-      );
+          onShare: onShare ?? this.onShare,
+          nickname: nickname ?? this.nickname,
+          name: name ?? this.name,
+          description: description ?? this.description,
+          avatarUrl: avatarUrl ?? this.avatarUrl,
+          userCredo: userCredo ?? this.userCredo,
+          followers: followers ?? this.followers,
+          onFollow: onFollow ?? this.onFollow,
+          showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
+          onDonate: onDonate ?? this.onDonate,
+          interests: interests ?? this.interests,
+          favorites: favorites ?? this.favorites,
+          matchingInterests: matchingInterests ?? this.matchingInterests,
+          onViewAllAchievements: onViewAllAchievements ?? this.onViewAllAchievements,
+          achievements: achievements ?? this.achievements,
+          userTileType: userTileType ?? this.userTileType,
+          mindsetId: mindsetId ?? this.mindsetId);
 }

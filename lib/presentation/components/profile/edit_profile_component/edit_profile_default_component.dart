@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class EditProfileDefaultComponent extends StatelessWidget {
   final List<String> selectedPreferences;
-  final UiKitMenuItem<String> activityItem;
+  final UiKitMenuItem<int> activityItem;
   final VoidCallback? onProfileEditSubmitted;
   final GlobalKey? formKey;
   final VoidCallback? onPreferencesChangeRequested;

@@ -229,71 +229,73 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          Row(
-            children: [
-              Text(S.of(context).Time, style: theme?.regularTextTheme.labelSmall),
-              const Spacer(),
-              Text(
-                '${_eventToEdit.time == null ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase() : normalizedTi(_eventToEdit.time, showDateName: false)} ${_eventToEdit.timeTo == null ? '' : '- ${normalizedTi(_eventToEdit.timeTo, showDateName: false)} '}',
-                style: theme?.boldTextTheme.body,
-              ),
-              context.outlinedButton(
-                data: BaseUiKitButtonData(
-                  onPressed: () async {
-                    await showUiKitTimeFromToDialog(context, (from, to) {
-                      setState(() {
-                        _eventToEdit.time = from;
-                        _eventToEdit.timeTo = to;
-                      });
-                    });
-                  },
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: ShuffleUiKitIcons.clock,
-                  ),
-                ),
-              ),
-            ],
-          ).paddingSymmetric(horizontal: horizontalPadding),
+          //TODO restore editing schedules
+          // Row(
+          //   children: [
+          //     Text(S.of(context).Time, style: theme?.regularTextTheme.labelSmall),
+          //     const Spacer(),
+          //     Text(
+          //       '${_eventToEdit.time == null ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase() : normalizedTi(_eventToEdit.time, showDateName: false)} ${_eventToEdit.timeTo == null ? '' : '- ${normalizedTi(_eventToEdit.timeTo, showDateName: false)} '}',
+          //       style: theme?.boldTextTheme.body,
+          //     ),
+          //     context.outlinedButton(
+          //       data: BaseUiKitButtonData(
+          //         onPressed: () async {
+          //           await showUiKitTimeFromToDialog(context, (from, to) {
+          //             setState(() {
+          //               _eventToEdit.time = from;
+          //               _eventToEdit.timeTo = to;
+          //             });
+          //           });
+          //         },
+          //         iconInfo: BaseUiKitButtonIconData(
+          //           iconData: ShuffleUiKitIcons.clock,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          Row(
-            children: [
-              Text(_eventToEdit.isRecurrent ? S.of(context).DaysOfWeek : S.of(context).Dates,
-                  style: theme?.regularTextTheme.labelSmall),
-              const Spacer(),
-              Expanded(
-                  child: Text(
-                      _eventToEdit.isRecurrent
-                          ? _eventToEdit.weekdays.join(', ')
-                          : '${_eventToEdit.date == null ? S.of(context).SelectType(S.of(context).Day.toLowerCase()) : DateFormat('MM/dd').format(_eventToEdit.date!)} ${_eventToEdit.dateTo == null ? '' : '- ${DateFormat('MM/dd').format(_eventToEdit.dateTo!)}'}',
-                      style: theme?.boldTextTheme.body)),
-              context.outlinedButton(
-                data: BaseUiKitButtonData(
-                  onPressed: _eventToEdit.isRecurrent
-                      ? () async {
-                          final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
-                          if (maybeDaysOfWeek != null) {
-                            setState(() {
-                              _eventToEdit.weekdays = maybeDaysOfWeek;
-                            });
-                          }
-                        }
-                      : () async {
-                          await showUiKitCalendarFromToDialog(
-                              context,
-                              (from, to) => {
-                                    setState(() {
-                                      _eventToEdit.date = from;
-                                      _eventToEdit.dateTo = to;
-                                    })
-                                  });
-                        },
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: ShuffleUiKitIcons.calendar,
-                  ),
-                ),
-              ),
-            ],
-          ).paddingSymmetric(horizontal: horizontalPadding),
+          //TODO restore editing schedules
+          // Row(
+          //   children: [
+          //     Text(_eventToEdit.isRecurrent ? S.of(context).DaysOfWeek : S.of(context).Dates,
+          //         style: theme?.regularTextTheme.labelSmall),
+          //     const Spacer(),
+          //     Expanded(
+          //         child: Text(
+          //             _eventToEdit.isRecurrent
+          //                 ? _eventToEdit.weekdays.join(', ')
+          //                 : '${_eventToEdit.date == null ? S.of(context).SelectType(S.of(context).Day.toLowerCase()) : DateFormat('MM/dd').format(_eventToEdit.date!)} ${_eventToEdit.dateTo == null ? '' : '- ${DateFormat('MM/dd').format(_eventToEdit.dateTo!)}'}',
+          //             style: theme?.boldTextTheme.body)),
+          //     context.outlinedButton(
+          //       data: BaseUiKitButtonData(
+          //         onPressed: _eventToEdit.isRecurrent
+          //             ? () async {
+          //                 final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
+          //                 if (maybeDaysOfWeek != null) {
+          //                   setState(() {
+          //                     _eventToEdit.weekdays = maybeDaysOfWeek;
+          //                   });
+          //                 }
+          //               }
+          //             : () async {
+          //                 await showUiKitCalendarFromToDialog(
+          //                     context,
+          //                     (from, to) => {
+          //                           setState(() {
+          //                             _eventToEdit.date = from;
+          //                             _eventToEdit.dateTo = to;
+          //                           })
+          //                         });
+          //               },
+          //         iconInfo: BaseUiKitButtonIconData(
+          //           iconData: ShuffleUiKitIcons.calendar,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           InkWell(
             onTap: () async {
