@@ -144,7 +144,7 @@ class SpinnerComponent extends StatelessWidget {
                       title: item.title,
                       scheduleString: item.scheduleString?.replaceAll('\n', ', '),
                       favourite: favoriteValue.data as bool? ?? item.favorite,
-                      photoLink: item.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                      photoLink: item.verticalPreview?.link ?? item.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
                       ownerTileTitle: item.owner?.name,
                       ownerPhotoLink: item.owner?.logo,
                       ownerTileSubtitle: item.owner?.username,

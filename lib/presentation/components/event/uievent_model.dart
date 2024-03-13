@@ -8,6 +8,7 @@ class UiEventModel extends Advertisable {
   String? title;
   UiOwnerModel? owner;
   List<BaseUiKitMedia> media;
+  BaseUiKitMedia? verticalPreview;
   bool? favorite;
   bool isRecurrent;
   String? scheduleString;
@@ -37,6 +38,7 @@ class UiEventModel extends Advertisable {
     this.media = const [],
     this.description,
     this.location,
+    this.verticalPreview,
     this.tags = const [],
     this.baseTags = const [],
     this.rating,
