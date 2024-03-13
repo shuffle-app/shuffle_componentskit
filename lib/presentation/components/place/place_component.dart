@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -14,10 +15,13 @@ class PlaceComponent extends StatelessWidget {
   final UiPlaceModel place;
   final bool isCreateEventAvaliable;
   final VoidCallback? onEventCreate;
+  final VoidCallback? onAddReactionTapped;
   final FutureOr<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
   final VoidCallback? onSharePressed;
+  final PagingController<int, VideoReactionUiModel>? reactionsPagingController;
+  final PagingController<int, FeedbackUiModel>? feedbacksPagingController;
 
   const PlaceComponent({
     Key? key,
@@ -25,9 +29,12 @@ class PlaceComponent extends StatelessWidget {
     this.complaintFormComponent,
     this.isCreateEventAvaliable = false,
     this.onEventCreate,
+    this.onAddReactionTapped,
     this.onEventTap,
     this.onSharePressed,
     this.events,
+    this.reactionsPagingController,
+    this.feedbacksPagingController,
   }) : super(key: key);
 
   @override
@@ -49,6 +56,8 @@ class PlaceComponent extends StatelessWidget {
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     final theme = context.uiKitTheme;
+    final colorScheme = theme?.colorScheme;
+    final boldTextTheme = theme?.boldTextTheme;
 
     return ListView(
       addAutomaticKeepAlives: false,
@@ -63,7 +72,7 @@ class PlaceComponent extends StatelessWidget {
             onTap: onSharePressed,
             child: Icon(
               ShuffleUiKitIcons.share,
-              color: theme?.colorScheme.darkNeutral800,
+              color: colorScheme?.darkNeutral800,
             ),
           ),
         ).paddingSymmetric(horizontal: horizontalMargin),
@@ -121,7 +130,54 @@ class PlaceComponent extends StatelessWidget {
               ),
           ],
         ),
-        SpacingFoundation.verticalSpace8,
+        if (reactionsPagingController != null)
+          UiKitColoredAccentBlock(
+            color: colorScheme?.surface1,
+            title: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  S.current.ReactionsBy,
+                  style: boldTextTheme?.body,
+                ),
+                SpacingFoundation.horizontalSpace12,
+                const Expanded(child: MemberPlate()),
+              ],
+            ),
+            contentHeight: 0.2605.sh,
+            content: reactionsPagingController?.itemList?.isEmpty ?? true
+                ? Align(
+                    alignment: Alignment.centerLeft,
+                    child: UiKitReactionPreview.empty(onTap: onAddReactionTapped).paddingSymmetric(horizontal: horizontalMargin),
+                  )
+                : UiKitHorizontalScrollableList<VideoReactionUiModel>(
+                    leftPadding: horizontalMargin,
+                    spacing: SpacingFoundation.horizontalSpacing8,
+                    itemBuilder: (context, reaction, index) {
+                      if (index == 0) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            UiKitReactionPreview.empty(onTap: onAddReactionTapped),
+                            SpacingFoundation.horizontalSpace8,
+                            UiKitReactionPreview(
+                              imagePath: reaction.previewImageUrl ?? '',
+                              viewed: false,
+                              onTap: () {},
+                            ),
+                          ],
+                        );
+                      }
+
+                      return UiKitReactionPreview(
+                        imagePath: reaction.previewImageUrl ?? '',
+                        viewed: false,
+                        onTap: () {},
+                      );
+                    },
+                    pagingController: reactionsPagingController!,
+                  ),
+          ),
         if (isCreateEventAvaliable)
           FutureBuilder(
             future: Future.value(events ?? []),
@@ -130,7 +186,7 @@ class PlaceComponent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
+                  Text(S.of(context).UpcomingEvent, style: boldTextTheme?.subHeadline),
                   if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
                     SpacingFoundation.verticalSpace8,
                     for (var event in snapshot.data!)
@@ -143,13 +199,13 @@ class PlaceComponent extends StatelessWidget {
                         ),
                         title: Text(
                           event.title ?? '',
-                          style: theme?.boldTextTheme.caption1Bold,
+                          style: boldTextTheme?.caption1Bold,
                         ),
                         subtitle: event.date != null
                             ? Text(
                                 DateFormat('MMMM d').format(event.date!),
-                                style: theme?.boldTextTheme.caption1Medium.copyWith(
-                                  color: theme.colorScheme.darkNeutral500,
+                                style: boldTextTheme?.caption1Medium.copyWith(
+                                  color: colorScheme?.darkNeutral500,
                                 ),
                               )
                             : const SizedBox.shrink(),
@@ -166,7 +222,7 @@ class PlaceComponent extends StatelessWidget {
                                 },
                                 iconInfo: BaseUiKitButtonIconData(
                                   iconData: CupertinoIcons.right_chevron,
-                                  color: theme?.colorScheme.inversePrimary,
+                                  color: colorScheme?.inversePrimary,
                                   size: 20.w,
                                 ),
                               ),
@@ -189,6 +245,7 @@ class PlaceComponent extends StatelessWidget {
               ),
             ).paddingSymmetric(
               horizontal: horizontalMargin,
+              vertical: EdgeInsetsFoundation.vertical8,
             ),
           )
         else
@@ -235,8 +292,7 @@ class PlaceComponent extends StatelessWidget {
                 ];
               }(),
             ),
-          ).paddingSymmetric(horizontal: horizontalMargin),
-        SpacingFoundation.verticalSpace8,
+          ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical8),
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,
           children: place.descriptionItems!
