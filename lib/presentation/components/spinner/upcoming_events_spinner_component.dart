@@ -24,6 +24,35 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
     this.onAdvertisementTap,
   }) : super(key: key);
 
+  factory UpcomingEventsSpinnerComponent.simple(
+      {required List<UiEventModel> events, Function? onEventTap, Function? onFavoriteTap, Function? favoriteStream}) {
+    final PagingController<int, UiEventModel> itemsController =
+        PagingController<int, UiEventModel>(firstPageKey: 1, invisibleItemsThreshold: 1);
+    final PagingController<int, String> categoriesController =
+        PagingController<int, String>(firstPageKey: 1, invisibleItemsThreshold: 1);
+    categoriesController.appendLastPage(events.map((event) => event.eventType ?? 'category').toList());
+    itemsController
+        .appendLastPage(events.where((element) => element.eventType == categoriesController.itemList?.first).toList());
+    final cardsScroll = ScrollController();
+    final UiUpcomingEventsSpinnerModel uiModel = UiUpcomingEventsSpinnerModel(
+        categoriesScrollController: ScrollController(),
+        cardsScrollController: cardsScroll,
+        onSpinChangedCategory: (value) {
+          itemsController.refresh();
+          itemsController.appendLastPage(events.where((element) => element.eventType == value).toList());
+          cardsScroll.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.bounceIn);
+        });
+
+    return UpcomingEventsSpinnerComponent(
+      onEventTap: onEventTap,
+      uiModel: uiModel,
+      onFavoriteTap: onFavoriteTap,
+      favoriteStream: favoriteStream,
+      itemsController: itemsController,
+      categoriesController: categoriesController,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;

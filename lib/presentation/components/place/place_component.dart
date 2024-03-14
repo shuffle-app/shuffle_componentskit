@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -14,7 +13,7 @@ class PlaceComponent extends StatelessWidget {
   final UiPlaceModel place;
   final bool isCreateEventAvaliable;
   final VoidCallback? onEventCreate;
-  final FutureOr<List<UiEventModel>>? events;
+  final Future<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
   final VoidCallback? onSharePressed;
@@ -32,7 +31,8 @@ class PlaceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -76,26 +76,26 @@ class PlaceComponent extends StatelessWidget {
           uniqueTags: place.tags,
           horizontalMargin: horizontalMargin,
           branches: place.branches
-              // ?? Future.value( [
-              //     /// mock branches
-              //     HorizontalCaptionedImageData(
-              //       imageUrl: GraphicsFoundation.instance.png.place.path,
-              //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-              //     ),
-              //     HorizontalCaptionedImageData(
-              //       imageUrl: GraphicsFoundation.instance.png.place.path,
-              //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-              //     ),
-              //     HorizontalCaptionedImageData(
-              //       imageUrl: GraphicsFoundation.instance.png.place.path,
-              //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-              //     ),
-              //     HorizontalCaptionedImageData(
-              //       imageUrl: GraphicsFoundation.instance.png.place.path,
-              //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-              //     ),
-              //   ])
-              ,
+          // ?? Future.value( [
+          //     /// mock branches
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //   ])
+          ,
           actions: [
             if (complaintFormComponent != null)
               context.smallOutlinedButton(
@@ -124,7 +124,7 @@ class PlaceComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace8,
         if (isCreateEventAvaliable)
           FutureBuilder(
-            future: Future.value(events ?? []),
+            future: events,
             builder: (context, snapshot) => UiKitCardWrapper(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -133,7 +133,7 @@ class PlaceComponent extends StatelessWidget {
                   Text(S.of(context).UpcomingEvent, style: theme?.boldTextTheme.subHeadline),
                   if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
                     SpacingFoundation.verticalSpace8,
-                    for (var event in snapshot.data!)
+                    for (UiEventModel event in snapshot.data!)
                       ListTile(
                         isThreeLine: true,
                         contentPadding: EdgeInsets.zero,
@@ -145,14 +145,22 @@ class PlaceComponent extends StatelessWidget {
                           event.title ?? '',
                           style: theme?.boldTextTheme.caption1Bold,
                         ),
-                        subtitle: event.date != null
+                        subtitle: event.scheduleString != null
                             ? Text(
-                                DateFormat('MMMM d').format(event.date!),
+                                event.scheduleString!,
                                 style: theme?.boldTextTheme.caption1Medium.copyWith(
                                   color: theme.colorScheme.darkNeutral500,
                                 ),
                               )
-                            : const SizedBox.shrink(),
+                            : null,
+                        // event.date != null
+                        //     ? Text(
+                        //         DateFormat('MMMM d').format(event.date!),
+                        //         style: theme?.boldTextTheme.caption1Medium.copyWith(
+                        //           color: theme.colorScheme.darkNeutral500,
+                        //         ),
+                        //       )
+                        //     : const SizedBox.shrink(),
                         trailing: context
                             .smallButton(
                               data: BaseUiKitButtonData(
@@ -193,15 +201,18 @@ class PlaceComponent extends StatelessWidget {
           )
         else
           FutureBuilder(
-            future: Future.value(events ?? []),
+            future: events,
             builder: (context, snapshot) => Row(
               mainAxisSize: MainAxisSize.max,
               children: () {
                 final AutoSizeGroup group = AutoSizeGroup();
+                log('here we are building ${snapshot.data?.length?? 0} events',name: 'PlaceComponent');
 
                 final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
 
                 final closestEvent = tempSorted.firstOrNull;
+
+                log('here we have a closest event $closestEvent and tempSorted ${tempSorted.length}',name: 'PlaceComponent');
 
                 final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
 

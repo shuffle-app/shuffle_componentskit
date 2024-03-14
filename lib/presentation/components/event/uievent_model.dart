@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -12,7 +11,8 @@ class UiEventModel extends Advertisable {
   bool? favorite;
   bool isRecurrent;
   String? scheduleString;
-  // DateTime? date;
+
+  DateTime? date;
   // DateTime? dateTo;
   // TimeOfDay? time;
   // TimeOfDay? timeTo;
@@ -49,10 +49,11 @@ class UiEventModel extends Advertisable {
     this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
+    this.date,
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
-          // if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
+            // if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
             UiDescriptionItemModel(
               title: S.current.DontMissIt,
               description: scheduleString,
@@ -68,11 +69,7 @@ class UiEventModel extends Advertisable {
               description: phone,
             ),
           if (website != null && website.isNotEmpty)
-            UiDescriptionItemModel(
-              title: S.current.Website,
-              description: title ?? '',
-              descriptionUrl: website
-            ),
+            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
         ],
         super(isAdvertisement: isAdvertisement ?? false);
 
@@ -81,6 +78,7 @@ class UiEventModel extends Advertisable {
     this.title,
     this.favorite,
     this.owner,
+    this.date,
     this.scheduleString,
     this.media = const [],
     this.description,

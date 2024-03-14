@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/mood/widgets/preview_cards_wrapper.dart';
@@ -45,6 +47,8 @@ class MoodComponent extends StatelessWidget {
     String selectedLevel = mood.activatedLevel ?? 'easy';
 
     final AutoSizeGroup tabBarGroup = AutoSizeGroup();
+    
+    log('here we are building weather with value ${mood.descriptionItems}',name: 'MoodComponent');
 
     return Stack(alignment: Alignment.bottomCenter, clipBehavior: Clip.none, children: [
       BlurredAppBarPage(
@@ -78,7 +82,7 @@ class MoodComponent extends StatelessWidget {
                         return UiKitWeatherInfoCard(
                           weatherType: item.title,
                           temperature: item.description,
-                          active: !item.active,
+                          active: item.active,
                           height: smallCardHeight,
                         );
                       }(),
@@ -156,7 +160,7 @@ class MoodComponent extends StatelessWidget {
                         selectedTab: mood.activatedLevel?.toUpperCase(),
                         onTappedTab: (index) {
                           setState(() {
-                            selectedLevel = lvls[index] ?? '';
+                            selectedLevel = lvls[index];
                             onTabChanged.call(selectedLevel);
                           });
                         },
