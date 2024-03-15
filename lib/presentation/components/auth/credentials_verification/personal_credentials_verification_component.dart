@@ -224,7 +224,8 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             },
                           ),
                           SpacingFoundation.verticalSpace16,
-                        ],
+                        ] else
+                          isSmallScreen ? const SizedBox.shrink() : 20.h.heightBox
                       ],
                     ),
                   );
@@ -387,6 +388,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                                 fit: ButtonFit.fitWidth,
                               ),
                             ),
+                            SpacingFoundation.verticalSpace4,
                           ],
                         )
                       : !visible
@@ -394,7 +396,6 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           : SpacingFoundation.none,
                 ),
               ),
-              SpacingFoundation.verticalSpace4,
             ],
           ).paddingSymmetric(
             horizontal: horizontalMargin,
