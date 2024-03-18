@@ -21,6 +21,7 @@ class FeedComponent extends StatelessWidget {
   final bool showBusinessContent;
   final bool preserveScrollPosition;
   final Widget? progressIndicator;
+  final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final PagingController<int, VideoReactionUiModel>? storiesPagingController;
 
   const FeedComponent({
@@ -29,6 +30,7 @@ class FeedComponent extends StatelessWidget {
     required this.controller,
     required this.showBusinessContent,
     this.storiesPagingController,
+    this.onReactionTapped,
     this.mood,
     this.progressIndicator,
     this.preserveScrollPosition = false,
@@ -189,26 +191,32 @@ class FeedComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
           if (storiesPagingController != null) ...[
-            Text(S.current.YouMissedALot, style: themeTitleStyle).wrapSliverBox,
+            Text(S.current.YouMissedALot, style: themeTitleStyle).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
-            PagedListView.separated(
-              scrollDirection: Axis.horizontal,
-              builderDelegate: PagedChildBuilderDelegate(
-                firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
-                newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
-                itemBuilder: (_, item, index) {
-                  item as VideoReactionUiModel;
-                  return UiKitReactionPreview(
-                    imagePath: item.previewImageUrl ?? '',
-                    viewed: false,
-                    onTap: () {},
-                  );
-                },
+            SizedBox(
+              height: 0.26.sh,
+              child: PagedListView<int, VideoReactionUiModel>.separated(
+                scrollDirection: Axis.horizontal,
+                builderDelegate: PagedChildBuilderDelegate(
+                  firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+                  newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+                  itemBuilder: (_, item, index) {
+                    double leftPadding = 0;
+                    if (index == 0) leftPadding = horizontalMargin;
+
+                    return UiKitReactionPreview(
+                      imagePath: item.previewImageUrl ?? '',
+                      viewed: false,
+                      onTap: () => onReactionTapped?.call(item),
+                    ).paddingOnly(left: leftPadding);
+                  },
+                ),
+                itemExtent: 147.h,
+                separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
+                pagingController: storiesPagingController!,
               ),
-              itemExtent: 147.h,
-              separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
-              pagingController: storiesPagingController!,
-            ),
+            ).wrapSliverBox,
+            SpacingFoundation.verticalSpace16.wrapSliverBox,
           ],
           if (feed.moods != null && (feedLeisureModel.showFeelings ?? true)) ...[
             Stack(

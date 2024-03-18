@@ -54,6 +54,7 @@ export 'profile/uiprofile_model.dart';
 export 'profile_company/company_profile_component.dart';
 export 'profile_company/company_profile_edit/company_profile_edit_component.dart';
 export 'profile_company/ui_company_profile_model.dart';
+export 'reactions/reaction_view_component.dart';
 export 'recover_password/recover_password_component.dart';
 export 'search/results/search_result_component.dart';
 export 'search/search_component.dart';
