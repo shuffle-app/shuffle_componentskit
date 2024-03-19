@@ -11,8 +11,10 @@ class VideoReactionUiModel {
   final DateTime? eventDate;
   final int? answeredCompanyId;
   final String? eventName;
+  final bool empty;
 
   VideoReactionUiModel({
+    this.empty = false,
     this.videoUrl,
     this.previewImageUrl,
     this.placeName,
@@ -26,4 +28,6 @@ class VideoReactionUiModel {
     this.eventDate,
     this.eventName,
   });
+
+  factory VideoReactionUiModel.empty() => VideoReactionUiModel(empty: true);
 }
