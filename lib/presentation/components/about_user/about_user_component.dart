@@ -16,6 +16,8 @@ class AboutUserComponent extends StatelessWidget {
   final String? selectedContentType;
   final TextEditingController nameController;
   final TextEditingController nickNameController;
+  final List<String>? religions;
+  final List<String>? genders;
 
   final GlobalKey? formKey;
   final tabs = [
@@ -38,6 +40,8 @@ class AboutUserComponent extends StatelessWidget {
     this.onGenderChanged,
     this.onSubmitUserData,
     this.onTypeOfContentChanged,
+    this.religions,
+    this.genders,
   }) : super(key: key);
 
   @override
@@ -45,7 +49,8 @@ class AboutUserComponent extends StatelessWidget {
     if (aboutUserModel.selectedAge == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
     }
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -156,7 +161,7 @@ class AboutUserComponent extends StatelessWidget {
           UiKitTitledSection(
               color: colorScheme?.surface,
               title:
-              // title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
+                  // title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                   S.of(context).DescribeYourself,
               hasError: aboutUserModel.errorPersonTypeMessage != null,
               errorText: aboutUserModel.errorPersonTypeMessage,
@@ -164,7 +169,7 @@ class AboutUserComponent extends StatelessWidget {
                 tilesColor: Colors.transparent,
                 useCustomTiles: false,
                 title:
-                // title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
+                    // title: model.content.body?[ContentItemType.singleDropdown]?.title?.entries.first.value.properties?.keys.first ??
                     S.of(context).DescribeYourself,
                 selectedItem: aboutUserModel.selectedPersonType,
                 items: mindsets,
@@ -197,44 +202,52 @@ class AboutUserComponent extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: [
-                  UiKitBorderedChipWithIcon(
-                    icon: ImageWidget(link: GraphicsFoundation.instance.png.hindu.path),
-                    title: S.current.Hindu,
-                    isSelected: aboutUserModel.selectedReligions?.contains('hindu') ?? false,
-                    onPressed: () => onReligionSelected?.call('hindu'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
-                  UiKitBorderedChipWithIcon(
-                    icon: ImageWidget(link: GraphicsFoundation.instance.png.muslimFlag.path),
-                    title: S.current.Islam,
-                    isSelected: aboutUserModel.selectedReligions?.contains('islam') ?? false,
-                    onPressed: () => onReligionSelected?.call('islam'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
-                  UiKitBorderedChipWithIcon(
-                    icon: ImageWidget(link: GraphicsFoundation.instance.png.atheist.path),
-                    title: S.current.Atheism,
-                    isSelected: aboutUserModel.selectedReligions?.contains('atheism') ?? false,
-                    onPressed: () => onReligionSelected?.call('atheism'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
-                  UiKitBorderedChipWithIcon(
-                    icon: ImageWidget(link: GraphicsFoundation.instance.png.buddismFlag.path),
-                    title: S.current.Buddhism,
-                    isSelected: aboutUserModel.selectedReligions?.contains('buddism') ?? false,
-                    onPressed: () => onReligionSelected?.call('buddism'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
-                  UiKitBorderedChipWithIcon(
-                    icon: ImageWidget(link: GraphicsFoundation.instance.png.judaism.path),
-                    title: S.current.Judaism,
-                    isSelected: aboutUserModel.selectedReligions?.contains('judaism') ?? false,
-                    onPressed: () => onReligionSelected?.call('judaism'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
-                  UiKitBorderedChipWithIcon(
-                    icon: ImageWidget(link: GraphicsFoundation.instance.png.christianity.path),
-                    title: S.current.Christianity,
-                    isSelected: aboutUserModel.selectedReligions?.contains('christianity') ?? false,
-                    onPressed: () => onReligionSelected?.call('christianity'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
-                ],
+                children: religions
+                        ?.map((e) => UiKitBorderedChipWithIcon(
+                              icon: _getIconForReligionMock(e),
+                              title: e,
+                              isSelected: aboutUserModel.selectedReligions?.contains(e) ?? false,
+                              onPressed: () => onReligionSelected?.call(e),
+                            ).paddingOnly(right: EdgeInsetsFoundation.horizontal8))
+                        .toList() ??
+                    [
+                      UiKitBorderedChipWithIcon(
+                        icon: ImageWidget(link: GraphicsFoundation.instance.png.hindu.path),
+                        title: S.current.Hindu,
+                        isSelected: aboutUserModel.selectedReligions?.contains('hindu') ?? false,
+                        onPressed: () => onReligionSelected?.call('hindu'),
+                      ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                      UiKitBorderedChipWithIcon(
+                        icon: ImageWidget(link: GraphicsFoundation.instance.png.muslimFlag.path),
+                        title: S.current.Islam,
+                        isSelected: aboutUserModel.selectedReligions?.contains('islam') ?? false,
+                        onPressed: () => onReligionSelected?.call('islam'),
+                      ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                      UiKitBorderedChipWithIcon(
+                        icon: ImageWidget(link: GraphicsFoundation.instance.png.atheist.path),
+                        title: S.current.Atheism,
+                        isSelected: aboutUserModel.selectedReligions?.contains('atheism') ?? false,
+                        onPressed: () => onReligionSelected?.call('atheism'),
+                      ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                      UiKitBorderedChipWithIcon(
+                        icon: ImageWidget(link: GraphicsFoundation.instance.png.buddismFlag.path),
+                        title: S.current.Buddhism,
+                        isSelected: aboutUserModel.selectedReligions?.contains('buddism') ?? false,
+                        onPressed: () => onReligionSelected?.call('buddism'),
+                      ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                      UiKitBorderedChipWithIcon(
+                        icon: ImageWidget(link: GraphicsFoundation.instance.png.judaism.path),
+                        title: S.current.Judaism,
+                        isSelected: aboutUserModel.selectedReligions?.contains('judaism') ?? false,
+                        onPressed: () => onReligionSelected?.call('judaism'),
+                      ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                      UiKitBorderedChipWithIcon(
+                        icon: ImageWidget(link: GraphicsFoundation.instance.png.christianity.path),
+                        title: S.current.Christianity,
+                        isSelected: aboutUserModel.selectedReligions?.contains('christianity') ?? false,
+                        onPressed: () => onReligionSelected?.call('christianity'),
+                      ).paddingOnly(right: EdgeInsetsFoundation.horizontal8),
+                    ],
               ).paddingOnly(
                 left: EdgeInsetsFoundation.horizontal4,
                 bottom: EdgeInsetsFoundation.vertical4,
@@ -260,33 +273,47 @@ class AboutUserComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SpacingFoundation.horizontalSpace16,
-                Expanded(
-                  child: UiKitVerticalChip(
-                    selected: aboutUserModel.selectedGender == 'male',
-                    caption: S.current.Male,
-                    sign: ImageWidget(link: GraphicsFoundation.instance.png.male.path),
-                    autoSizeGroup: genderGroup,
-                    onTap: () => onGenderChanged?.call('male'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                ),
-                Expanded(
-                  child: UiKitVerticalChip(
-                    selected: aboutUserModel.selectedGender == 'female',
-                    caption: S.current.Female,
-                    sign: ImageWidget(link: GraphicsFoundation.instance.png.female.path),
-                    autoSizeGroup: genderGroup,
-                    onTap: () => onGenderChanged?.call('female'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                ),
-                Expanded(
-                  child: UiKitVerticalChip(
-                    selected: aboutUserModel.selectedGender == 'other',
-                    caption: S.current.Other,
-                    sign: ImageWidget(link: GraphicsFoundation.instance.png.otherGender.path),
-                    autoSizeGroup: genderGroup,
-                    onTap: () => onGenderChanged?.call('other'),
-                  ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                ),
+                if (genders != null)
+                  ...genders!
+                      .map((e) => Expanded(
+                            child: UiKitVerticalChip(
+                              selected: aboutUserModel.selectedGender == e,
+                              caption: e,
+                              sign: _getIconForGenderMock(e),
+                              autoSizeGroup: genderGroup,
+                              onTap: () => onGenderChanged?.call(e),
+                            ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                          ))
+                      .toList()
+                else ...[
+                  Expanded(
+                    child: UiKitVerticalChip(
+                      selected: aboutUserModel.selectedGender == 'male',
+                      caption: S.current.Male,
+                      sign: ImageWidget(link: GraphicsFoundation.instance.png.male.path),
+                      autoSizeGroup: genderGroup,
+                      onTap: () => onGenderChanged?.call('male'),
+                    ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                  ),
+                  Expanded(
+                    child: UiKitVerticalChip(
+                      selected: aboutUserModel.selectedGender == 'female',
+                      caption: S.current.Female,
+                      sign: ImageWidget(link: GraphicsFoundation.instance.png.female.path),
+                      autoSizeGroup: genderGroup,
+                      onTap: () => onGenderChanged?.call('female'),
+                    ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                  ),
+                  Expanded(
+                    child: UiKitVerticalChip(
+                      selected: aboutUserModel.selectedGender == 'other',
+                      caption: S.current.Other,
+                      sign: ImageWidget(link: GraphicsFoundation.instance.png.otherGender.path),
+                      autoSizeGroup: genderGroup,
+                      onTap: () => onGenderChanged?.call('other'),
+                    ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                  )
+                ],
                 SpacingFoundation.horizontalSpace16,
               ],
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
@@ -305,5 +332,37 @@ class AboutUserComponent extends StatelessWidget {
       vertical: verticalMargin,
       horizontal: horizontalMargin,
     );
+  }
+}
+
+ImageWidget _getIconForReligionMock(String religion) {
+  switch (religion) {
+    case 'hindu':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.hindu);
+    case 'islam':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.muslimFlag);
+    case 'atheism':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.atheist);
+    case 'buddism':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.buddismFlag);
+    case 'judaism':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.judaism);
+    case 'christianity':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.christianity);
+    default:
+      return const ImageWidget();
+  }
+}
+
+ImageWidget _getIconForGenderMock(String gender) {
+  switch (gender) {
+    case 'male':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.male);
+    case 'female':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.female);
+    case 'other':
+      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.otherGender);
+    default:
+      return const ImageWidget();
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:collection/collection.dart';
 
 class FeedComponent extends StatelessWidget {
   final UiFeedModel feed;
@@ -54,16 +54,16 @@ class FeedComponent extends StatelessWidget {
       advertisement = feedLeisureModel.content.body?[ContentItemType.advertisement]?.properties?.entries.first;
     }
 
-    final nicheTitles = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties?.keys.toList();
-    final nicheData = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties;
-    final upcomingGlobals = feedBusinessModel
-        .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
-    nicheTitles?.sort((a, b) {
-      final aSortNumber = nicheData?[a]?.sortNumber ?? 0;
-      final bSortNumber = nicheData?[b]?.sortNumber ?? 0;
-
-      return aSortNumber.compareTo(bSortNumber);
-    });
+    // final nicheTitles = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties?.keys.toList();
+    // final nicheData = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties;
+    // final upcomingGlobals = feedBusinessModel
+    //     .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
+    // nicheTitles?.sort((a, b) {
+    //   final aSortNumber = nicheData?[a]?.sortNumber ?? 0;
+    //   final bSortNumber = nicheData?[b]?.sortNumber ?? 0;
+    //
+    //   return aSortNumber.compareTo(bSortNumber);
+    // });
     final horizontalMargin = (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
@@ -87,37 +87,37 @@ class FeedComponent extends StatelessWidget {
           height: MediaQuery.viewPaddingOf(context).top,
         ).wrapSliverBox,
         if (showBusinessContent) ...[
-          Text(
-            S.current.UpcomingGlobalEvents,
-            style: themeTitleStyle,
-          ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
-          SpacingFoundation.verticalSpace16.wrapSliverBox,
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: upcomingGlobals?.keys
-                      .map<Widget>(
-                        (e) => UiKitImageWithDescriptionCard(
-                          title: e,
-                          imageUrl: upcomingGlobals[e]?.imageLink ?? '',
-                          subtitleIcon: ShuffleUiKitIcons.clock,
-                          subtitle: DateFormat('MMM dd, HH:mm a')
-                              .format(DateTime.tryParse(upcomingGlobals[e]?.value ?? '') ?? DateTime.now()),
-                          tags: [
-                            UiKitTag(
-                              title: upcomingGlobals[e]?.type ?? '',
-                              icon: ShuffleUiKitIcons.label,
-                            ),
-                          ],
-                        ).paddingOnly(
-                            right: e == upcomingGlobals.keys.last ? 0 : SpacingFoundation.horizontalSpacing12),
-                      )
-                      .toList() ??
-                  [],
-            ).paddingSymmetric(horizontal: horizontalMargin),
-          ).wrapSliverBox,
-          SpacingFoundation.verticalSpace24.wrapSliverBox,
+          if (feed.recommendedBusinessEvents != null && feed.recommendedBusinessEvents!.isNotEmpty) ...[
+            Text(
+              S.current.UpcomingGlobalEvents,
+              style: themeTitleStyle,
+            ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+            SpacingFoundation.verticalSpace16.wrapSliverBox,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: feed.recommendedBusinessEvents
+                        ?.map<Widget>(
+                          (e) => UiKitImageWithDescriptionCard(
+                            title: e.title ?? '',
+                            imageUrl: e.verticalPreview?.link ??
+                                e.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link ??
+                                '',
+                            subtitleIcon: ShuffleUiKitIcons.clock,
+                            subtitle: e.scheduleString,
+                            tags: e.tags,
+                          ).paddingOnly(
+                              right: e.id == feed.recommendedBusinessEvents?.last.id
+                                  ? 0
+                                  : SpacingFoundation.horizontalSpacing12),
+                        )
+                        .toList() ??
+                    [],
+              ).paddingSymmetric(horizontal: horizontalMargin),
+            ).wrapSliverBox,
+            SpacingFoundation.verticalSpace24.wrapSliverBox
+          ],
           if ((feedBusinessModel.showFeelings ?? true)) ...[
             Stack(
               children: [
@@ -155,14 +155,14 @@ class FeedComponent extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Wrap(
               spacing: SpacingFoundation.horizontalSpacing12,
-              children: nicheTitles?.map<Widget>(
+              children: feed.niches?.map<Widget>(
                     (e) {
                       double padding = 0.0;
-                      if (e == nicheTitles.first) padding = horizontalMargin;
+                      if (e.title == feed.niches?.first.title) padding = horizontalMargin;
 
                       return UiKitMessageCardWithIcon(
-                        message: e,
-                        iconLink: nicheData?[e]?.imageLink,
+                        message: e.title,
+                        iconLink: e.icon is String ? e.icon as String : '',
                         layoutDirection: Axis.vertical,
                         type: MessageCardType.wide,
                       ).paddingOnly(left: padding);

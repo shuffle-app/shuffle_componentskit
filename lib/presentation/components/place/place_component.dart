@@ -206,42 +206,49 @@ class PlaceComponent extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: () {
                 final AutoSizeGroup group = AutoSizeGroup();
-                log('here we are building ${snapshot.data?.length?? 0} events',name: 'PlaceComponent');
+                log('here we are building ${snapshot.data?.length ?? 0} events', name: 'PlaceComponent');
 
-                final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
+                final tempSorted = List.from(snapshot.data ?? []);
+                if (tempSorted.isNotEmpty) {
+                  tempSorted.sort((a, b) => (a.date ?? DateTime.now()).compareTo(b.date ?? DateTime.now()));
+                }
 
-                final closestEvent = tempSorted.firstOrNull;
+                final closestEvent = tempSorted.lastOrNull;
 
-                log('here we have a closest event $closestEvent and tempSorted ${tempSorted.length}',name: 'PlaceComponent');
+                log('here we have a closest event $closestEvent and tempSorted ${tempSorted.length}',
+                    name: 'PlaceComponent');
 
-                final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
+                final Duration daysToEvent = (closestEvent?.date ?? DateTime.now()).difference(DateTime.now());
 
                 return [
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
-                      value: S.current.WithInDays(daysToEvent.inDays),
+                      value: closestEvent == null
+                          ? 'none'
+                          : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
                       group: group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
-                      action: () {
-                        if (closestEvent != null) {
-                          onEventTap?.call(closestEvent!);
-                        } else {
-                          buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                              ComponentBuilder(child: EventComponent(event: closestEvent!)));
-                        }
-                      },
+                      action: closestEvent == null
+                          ? null
+                          : () {
+                              if (onEventTap != null) {
+                                onEventTap?.call(closestEvent!);
+                              }
+                              // else {
+                              //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                              //       ComponentBuilder(child: EventComponent(event: closestEvent!)));
+                              // }
+                            },
                     ),
                   ),
                   SpacingFoundation.horizontalSpace8,
                   Expanded(
                     child: PointBalancePlaceActionCard(
-                      value: '2 650',
-                      group: group,
-                      rasterIconAsset: GraphicsFoundation.instance.png.money,
-                      action: () {
-                        log('balance was pressed');
-                      },
-                    ),
+                        value: '0', group: group, rasterIconAsset: GraphicsFoundation.instance.png.money, action: null
+                        //     () {
+                        //   log('balance was pressed');
+                        // },
+                        ),
                   ),
                 ];
               }(),

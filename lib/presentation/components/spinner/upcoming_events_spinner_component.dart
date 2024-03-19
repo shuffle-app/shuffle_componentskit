@@ -27,12 +27,15 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
   factory UpcomingEventsSpinnerComponent.simple(
       {required List<UiEventModel> events, Function? onEventTap, Function? onFavoriteTap, Function? favoriteStream}) {
     final PagingController<int, UiEventModel> itemsController =
-        PagingController<int, UiEventModel>(firstPageKey: 1, invisibleItemsThreshold: 1);
+    PagingController<int, UiEventModel>(firstPageKey: 1, invisibleItemsThreshold: 1);
     final PagingController<int, String> categoriesController =
-        PagingController<int, String>(firstPageKey: 1, invisibleItemsThreshold: 1);
-    categoriesController.appendLastPage(events.map((event) => event.eventType ?? 'category').toList());
-    itemsController
-        .appendLastPage(events.where((element) => element.eventType == categoriesController.itemList?.first).toList());
+    PagingController<int, String>(firstPageKey: 1, invisibleItemsThreshold: 1);
+    Future.delayed(const Duration(seconds: 1), () {
+      categoriesController.appendLastPage(events.map((event) => event.eventType ?? 'category').toList());
+      itemsController
+          .appendLastPage(
+          events.where((element) => element.eventType == categoriesController.itemList?.first).toList());
+    });
     final cardsScroll = ScrollController();
     final UiUpcomingEventsSpinnerModel uiModel = UiUpcomingEventsSpinnerModel(
         categoriesScrollController: ScrollController(),
@@ -130,26 +133,29 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
 
               return StreamBuilder(
                 stream: favoriteStream?.call(item.id),
-                builder: (_, favoriteValue) => UiKitSpinnerCard(
-                  availableHeight: cardsListHeight,
-                  title: item.title,
-                  scheduleString: item.scheduleString?.replaceAll('\n', ', '),
-                  favourite: favoriteValue.data as bool? ?? item.favorite,
-                  photoLink: item.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                  ownerTileTitle: item.owner?.name,
-                  ownerPhotoLink: item.owner?.logo,
-                  ownerTileSubtitle: item.owner?.username,
-                  ownerTileTitleTrailing: ownerTrailing,
-                  onTap: () => onEventTap?.call(item.id),
-                  onFavoriteTap: () => onFavoriteTap?.call(item.id),
-                ).paddingOnly(
-                  left: centerSingleItem
-                      ? 0.125.sw
-                      : index == 0
+                builder: (_, favoriteValue) =>
+                    UiKitSpinnerCard(
+                      availableHeight: cardsListHeight,
+                      title: item.title,
+                      scheduleString: item.scheduleString?.replaceAll('\n', ', '),
+                      favourite: favoriteValue.data as bool? ?? item.favorite,
+                      photoLink: item.media
+                          .firstWhere((element) => element.type == UiKitMediaType.image)
+                          .link,
+                      ownerTileTitle: item.owner?.name,
+                      ownerPhotoLink: item.owner?.logo,
+                      ownerTileSubtitle: item.owner?.username,
+                      ownerTileTitleTrailing: ownerTrailing,
+                      onTap: () => onEventTap?.call(item.id),
+                      onFavoriteTap: () => onFavoriteTap?.call(item.id),
+                    ).paddingOnly(
+                      left: centerSingleItem
+                          ? 0.125.sw
+                          : index == 0
                           ? SpacingFoundation.horizontalSpacing16
                           : 0,
-                  right: centerSingleItem ? 0.125.sw : SpacingFoundation.horizontalSpacing16,
-                ),
+                      right: centerSingleItem ? 0.125.sw : SpacingFoundation.horizontalSpacing16,
+                    ),
               );
             },
           ),

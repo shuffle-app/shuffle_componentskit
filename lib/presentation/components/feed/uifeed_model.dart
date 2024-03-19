@@ -4,12 +4,14 @@ import '../../../shuffle_components_kit.dart';
 
 class UiFeedModel {
   final UiEventModel? recommendedEvent;
+  final List<UiEventModel>? recommendedBusinessEvents;
   final bool showHowItWorksTitle;
   final bool showHowItWorksBody;
   final bool isHealthKitEnabled;
   // final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
+  final List<UiKitTag>? niches;
   // final List<BusinessGlobalEventUiModel>? globalEvents;
 
   UiFeedModel({
@@ -21,6 +23,8 @@ class UiFeedModel {
     this.recommendedEvent,
     this.showHowItWorksTitle = false,
     // this.mixedItems
+    this.recommendedBusinessEvents,
+    this.niches,
   });
 }
 
