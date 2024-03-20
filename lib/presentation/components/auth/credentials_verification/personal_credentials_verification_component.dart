@@ -57,7 +57,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
           title: S.current.LoginWith('google').toUpperCase(),
           onTap: () => widget.onSocialsLogin?.call(
             SocialsLoginModel(
-              provider: 'google',
+              provider: 'Google',
               clientType: clientType,
             ),
           ),

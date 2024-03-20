@@ -19,6 +19,7 @@ class PlacePreview extends StatelessWidget {
   final DateTime? updatedAt;
   final DateTime? shouldVisitAt;
   final ValueNotifier<LottieAnimation?> _animationNotifier = ValueNotifier<LottieAnimation?>(null);
+  final Widget? reviewsIndicator;
 
   PlacePreview({
     Key? key,
@@ -33,6 +34,7 @@ class PlacePreview extends StatelessWidget {
     this.showFavoriteBtn = false,
     this.showFavoriteHint = false,
     this.isFavorite,
+    this.reviewsIndicator,
   }) : super(key: key);
 
   PlacePreview.eventPreview(
@@ -45,6 +47,7 @@ class PlacePreview extends StatelessWidget {
       this.updatedAt,
       this.shouldVisitAt,
       this.status,
+      this.reviewsIndicator,
       this.showFavoriteBtn = false,
       this.showFavoriteHint = false,
       this.isFavorite})
@@ -178,6 +181,11 @@ class PlacePreview extends StatelessWidget {
                               ),
                             ),
                           ),
+                        if(reviewsIndicator!=null)
+                          Positioned(
+                              bottom: -8.h,
+                              left: 10.w,
+                              child: reviewsIndicator!)
                       ],
                     ),
                   ))),
