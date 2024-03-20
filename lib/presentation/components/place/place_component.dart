@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -359,16 +358,16 @@ class _PlaceComponentState extends State<PlaceComponent> {
                       action: closestEvent == null
                           ? null
                           : () {
-                              if (onEventTap != null) {
+                              if (widget.onEventTap != null) {
                                 widget.onEventTap?.call(closestEvent!);
                               }
                               // else {
                               //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
                               //       ComponentBuilder(child: EventComponent(event: closestEvent!,
-                                feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
-                                reactionsLoaderCallback: widget.eventReactionLoaderCallback,
-                              ),
-                            ),);
+                              //   feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
+                              //   reactionsLoaderCallback: widget.eventReactionLoaderCallback,
+                              // ),
+                              // ),);
                               // }
                             },
                     ),
