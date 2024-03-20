@@ -14,8 +14,9 @@ class UiProfileModel {
   final VoidCallback? onFollow;
   final bool showSupportShuffle;
   final ValueChanged<int>? onDonate;
-  final List<String>? interests;
-  final List<String>? favorites;
+  final List<String>? allInterests;
+  final List<String>? favoriteTags;
+  final List<String>? tags;
   final List<String>? matchingInterests;
   final VoidCallback? onViewAllAchievements;
   final List<UiKitAchievementsModel> achievements;
@@ -35,7 +36,7 @@ class UiProfileModel {
       description: description,
       avatarUrl: avatarUrl,
       followers: followers,
-      interests: interests,
+      interests: allInterests,
       userTileType: userTileType,
       onFollow: onFollow,
       matchingInterests: matchingInterests,
@@ -76,15 +77,16 @@ class UiProfileModel {
     this.userCredo,
     this.name,
     this.description,
-    this.favorites,
+    this.favoriteTags,
     this.avatarUrl,
-    this.interests,
+    this.allInterests,
     this.userTileType = UserTileType.ordinary,
     this.followers,
     this.achievements = const [],
     this.onViewAllAchievements,
     this.socialLinks,
     this.specialization,
+    this.tags,
   });
 
   /// write [copyWith] method
@@ -107,6 +109,9 @@ class UiProfileModel {
     List<UiKitAchievementsModel>? achievements,
     UserTileType? userTileType,
     VoidCallback? onShare,
+    String? specialization,
+    List<String>? socialLinks,
+    List<String>? tags,
   }) =>
       UiProfileModel(
           onShare: onShare ?? this.onShare,
@@ -119,11 +124,14 @@ class UiProfileModel {
           onFollow: onFollow ?? this.onFollow,
           showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
           onDonate: onDonate ?? this.onDonate,
-          interests: interests ?? this.interests,
-          favorites: favorites ?? this.favorites,
+          allInterests: interests ?? this.allInterests,
+          favoriteTags: favorites ?? this.favoriteTags,
           matchingInterests: matchingInterests ?? this.matchingInterests,
           onViewAllAchievements: onViewAllAchievements ?? this.onViewAllAchievements,
           achievements: achievements ?? this.achievements,
           userTileType: userTileType ?? this.userTileType,
+          specialization: specialization ?? this.specialization,
+          socialLinks: socialLinks ?? this.socialLinks,
+          tags: tags ?? this.tags,
           mindsetId: mindsetId ?? this.mindsetId);
 }

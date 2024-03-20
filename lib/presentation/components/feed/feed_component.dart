@@ -24,6 +24,7 @@ class FeedComponent extends StatelessWidget {
   final Widget? progressIndicator;
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final PagingController<int, VideoReactionUiModel>? storiesPagingController;
+  final ValueChanged<int?>? onNichePressed;
 
   const FeedComponent({
     Key? key,
@@ -33,6 +34,7 @@ class FeedComponent extends StatelessWidget {
     this.storiesPagingController,
     this.onReactionTapped,
     this.mood,
+    this.onNichePressed,
     this.progressIndicator,
     this.preserveScrollPosition = false,
     this.onEventPressed,
@@ -169,6 +171,7 @@ class FeedComponent extends StatelessWidget {
                         iconLink: e.icon is String ? e.icon as String : '',
                         layoutDirection: Axis.vertical,
                         type: MessageCardType.wide,
+                        onPressed: ()=>onNichePressed?.call(e.id),
                       ).paddingOnly(left: padding);
                     },
                   ).toList() ??
