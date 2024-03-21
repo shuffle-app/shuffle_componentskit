@@ -9,7 +9,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
   final Future<UiMoodGameContentModel>? Function(String name) onTabChanged;
-  final Function? onPlacePressed;
+  final Function(int id, String type)? onPlacePressed;
+  final Function(int id, String type)? onCheckInPressed;
   final Function(String level)? onLevelActivated;
   final VoidCallback? onLevelComplited;
   final ScrollController controller;
@@ -21,6 +22,7 @@ class MoodComponent extends StatelessWidget {
     Key? key,
     required this.mood,
     this.onPlacePressed,
+    this.onCheckInPressed,
     required this.controller,
     required this.onTabChanged,
     this.onLevelComplited,
@@ -32,7 +34,8 @@ class MoodComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentMoodModel model = ComponentMoodModel.fromJson(config['mood']);
 
     final theme = context.uiKitTheme;
@@ -47,8 +50,8 @@ class MoodComponent extends StatelessWidget {
     String selectedLevel = mood.activatedLevel ?? 'easy';
 
     final AutoSizeGroup tabBarGroup = AutoSizeGroup();
-    
-    log('here we are building weather with value ${mood.descriptionItems}',name: 'MoodComponent');
+
+    log('here we are building weather with value ${mood.descriptionItems}', name: 'MoodComponent');
 
     return Stack(alignment: Alignment.bottomCenter, clipBehavior: Clip.none, children: [
       BlurredAppBarPage(
@@ -148,9 +151,8 @@ class MoodComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace24,
             StatefulBuilder(
               builder: (context, setState) {
-                final lvls = ['easy','fair', 'hardcore'];
-                final isIgnoringPointer =
-                    !(mood.activatedLevel == null || !lvls.contains(mood.activatedLevel!));
+                final lvls = ['easy', 'fair', 'hardcore'];
+                final isIgnoringPointer = !(mood.activatedLevel == null || !lvls.contains(mood.activatedLevel!));
 
                 return Column(
                   children: [
@@ -205,10 +207,11 @@ class MoodComponent extends StatelessWidget {
                                 PreviewCardsWrapper(
                                   cards: [
                                     PlacePreview(
-                                      onTap: onPlacePressed,
+                                      onTap: (id) => onPlacePressed?.call(id, todayContent.type),
+                                      onCheckIn: (id) => onCheckInPressed?.call(id, todayContent.type),
                                       isFavorite: todayContent.isFavorite,
                                       onFavoriteChanged: todayContent.onFavoriteChanged,
-                                      shouldVisitAt: DateTime.now(),
+                                      shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
                                       place: UiPlaceModel(
                                         id: todayContent.id,
                                         title: todayContent.title,
@@ -229,10 +232,12 @@ class MoodComponent extends StatelessWidget {
                                   cards: tomorrowContent
                                       .map(
                                         (content) => PlacePreview(
-                                          onTap: onPlacePressed,
+                                          onTap: (id) => onPlacePressed?.call(id, content.type),
+                                          onCheckIn: (id) => onCheckInPressed?.call(id, content.type),
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
-                                          shouldVisitAt: DateTime.now().add(const Duration(days: 1)),
+                                          shouldVisitAt:
+                                              content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 1)),
                                           place: UiPlaceModel(
                                             id: content.id,
                                             title: content.title,
@@ -254,10 +259,12 @@ class MoodComponent extends StatelessWidget {
                                   cards: dayAfterTomorrowContent
                                       .map(
                                         (content) => PlacePreview(
-                                          onTap: onPlacePressed,
+                                          onTap: (id) => onPlacePressed?.call(id, content.type),
+                                          onCheckIn: (id) => onCheckInPressed?.call(id, content.type),
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
-                                          shouldVisitAt: DateTime.now().add(const Duration(days: 2)),
+                                          shouldVisitAt:
+                                              content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 2)),
                                           place: UiPlaceModel(
                                             id: content.id,
                                             title: content.title,

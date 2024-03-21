@@ -42,6 +42,7 @@ class UiUniversalModel extends Advertisable {
   final String? location;
   final Stream<bool>? isFavorite;
   final VoidCallback? onFavoriteChanged;
+  DateTime? shouldVisitAt;
 
   UiUniversalModel({
     required this.id,
@@ -57,6 +58,7 @@ class UiUniversalModel extends Advertisable {
     this.title,
     this.isFavorite,
     this.onFavoriteChanged,
+    this.shouldVisitAt,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -73,5 +75,6 @@ class UiUniversalModel extends Advertisable {
     this.title,
     this.isFavorite,
     this.onFavoriteChanged,
+    this.shouldVisitAt,
   }) : super(isAdvertisement: true);
 }

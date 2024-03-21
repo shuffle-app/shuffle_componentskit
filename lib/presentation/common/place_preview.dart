@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PlacePreview extends StatelessWidget {
-  final Function? onTap;
+  final ValueChanged<int>? onTap;
   final UiPlaceModel place;
   final UiBaseModel model;
   final bool showFavoriteBtn;
@@ -20,6 +19,7 @@ class PlacePreview extends StatelessWidget {
   final DateTime? shouldVisitAt;
   final ValueNotifier<LottieAnimation?> _animationNotifier = ValueNotifier<LottieAnimation?>(null);
   final Widget? reviewsIndicator;
+  final ValueChanged<int>? onCheckIn;
 
   PlacePreview({
     Key? key,
@@ -35,6 +35,7 @@ class PlacePreview extends StatelessWidget {
     this.showFavoriteHint = false,
     this.isFavorite,
     this.reviewsIndicator,
+    this.onCheckIn,
   }) : super(key: key);
 
   PlacePreview.eventPreview(
@@ -50,6 +51,7 @@ class PlacePreview extends StatelessWidget {
       this.reviewsIndicator,
       this.showFavoriteBtn = false,
       this.showFavoriteHint = false,
+      this.onCheckIn,
       this.isFavorite})
       : place = UiPlaceModel(
             id: event.id,
@@ -160,7 +162,7 @@ class PlacePreview extends StatelessWidget {
                                   gradient: GradientFoundation.attentionCard,
                                   data: BaseUiKitButtonData(
                                       onPressed: () {
-                                        log('check in');
+                                        onCheckIn?.call(place.id);
                                       },
                                       text: S.of(context).CheckIn.toUpperCase()))),
                         if (status != null && status!.isNotEmpty)
