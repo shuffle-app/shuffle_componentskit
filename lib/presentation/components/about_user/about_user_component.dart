@@ -306,11 +306,11 @@ ImageWidget _getIconForGenderMock(UiKitTag gender) {
   }
 
   switch (gender.title) {
-    case 'male':
+    case 'Male':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.male);
-    case 'female':
+    case 'Female':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.female);
-    case 'other':
+    case 'Other':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.otherGender);
     default:
       return const ImageWidget();
