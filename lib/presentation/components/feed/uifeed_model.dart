@@ -4,13 +4,14 @@ import '../../../shuffle_components_kit.dart';
 
 class UiFeedModel {
   final UiEventModel? recommendedEvent;
+  final List<UiEventModel>? recommendedBusinessEvents;
   final bool showHowItWorksTitle;
   final bool showHowItWorksBody;
   final bool isHealthKitEnabled;
-  final List<UiMoodModel>? moods;
   // final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
+  final List<UiKitTag>? niches;
   // final List<BusinessGlobalEventUiModel>? globalEvents;
 
   UiFeedModel({
@@ -21,8 +22,9 @@ class UiFeedModel {
     this.isHealthKitEnabled = true,
     this.recommendedEvent,
     this.showHowItWorksTitle = false,
-    this.moods,
     // this.mixedItems
+    this.recommendedBusinessEvents,
+    this.niches,
   });
 }
 
@@ -40,6 +42,7 @@ class UiUniversalModel extends Advertisable {
   final String? location;
   final Stream<bool>? isFavorite;
   final VoidCallback? onFavoriteChanged;
+  DateTime? shouldVisitAt;
 
   UiUniversalModel({
     required this.id,
@@ -55,6 +58,7 @@ class UiUniversalModel extends Advertisable {
     this.title,
     this.isFavorite,
     this.onFavoriteChanged,
+    this.shouldVisitAt,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -71,5 +75,6 @@ class UiUniversalModel extends Advertisable {
     this.title,
     this.isFavorite,
     this.onFavoriteChanged,
+    this.shouldVisitAt,
   }) : super(isAdvertisement: true);
 }

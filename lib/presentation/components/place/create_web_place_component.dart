@@ -281,44 +281,45 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: S.of(context).OpeningHours,
-                        isRequired: true,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 3,
-                                child: UiKitTitledDescriptionWithDivider(
-                                  description: [
-                                    '${normalizedTi(_placeToEdit.openFrom)} - ${normalizedTi(_placeToEdit.openTo)}',
-                                    _placeToEdit.weekdays.join(', ')
-                                  ],
-                                  direction: Axis.horizontal,
-                                  // onTrailingTap: widget.onTimeEditTap,
-                                  title: '',
-                                )),
-                            context.smallOutlinedButton(
-                              data: BaseUiKitButtonData(
-                                  iconInfo: BaseUiKitButtonIconData(
-                                    iconData: ShuffleUiKitIcons.clock,
-                                  ),
-                                  onPressed: () async {
-                                    await showUiKitTimeFromToDialog(context, (from, to) {
-                                      setState(() {
-                                        _placeToEdit.openTo = to;
-                                        _placeToEdit.openFrom = from;
-                                      });
-                                    });
-
-                                    final weekdays = await showUiKitWeekdaySelector(context) ?? [];
-                                    setState(() {
-                                      _placeToEdit.weekdays = weekdays;
-                                    });
-                                  }),
-                            )
-                          ],
-                        ),
-                      ),
+                      //TODO restore editing schedules
+                      // WebFormField(
+                      //   title: S.of(context).OpeningHours,
+                      //   isRequired: true,
+                      //   child: Row(
+                      //     children: [
+                      //       Expanded(
+                      //           flex: 3,
+                      //           child: UiKitTitledDescriptionWithDivider(
+                      //             description: [
+                      //               '${normalizedTi(_placeToEdit.openFrom)} - ${normalizedTi(_placeToEdit.openTo)}',
+                      //               _placeToEdit.weekdays.join(', ')
+                      //             ],
+                      //             direction: Axis.horizontal,
+                      //             // onTrailingTap: widget.onTimeEditTap,
+                      //             title: '',
+                      //           )),
+                      //       context.smallOutlinedButton(
+                      //         data: BaseUiKitButtonData(
+                      //             iconInfo: BaseUiKitButtonIconData(
+                      //               iconData: ShuffleUiKitIcons.clock,
+                      //             ),
+                      //             onPressed: () async {
+                      //               await showUiKitTimeFromToDialog(context, (from, to) {
+                      //                 setState(() {
+                      //                   _placeToEdit.openTo = to;
+                      //                   _placeToEdit.openFrom = from;
+                      //                 });
+                      //               });
+                      //
+                      //               final weekdays = await showUiKitWeekdaySelector(context) ?? [];
+                      //               setState(() {
+                      //                 _placeToEdit.weekdays = weekdays;
+                      //               });
+                      //             }),
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: S.of(context).Description,

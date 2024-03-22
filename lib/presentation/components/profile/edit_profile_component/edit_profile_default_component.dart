@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class EditProfileDefaultComponent extends StatelessWidget {
   final List<String> selectedPreferences;
-  final UiKitMenuItem<String> activityItem;
+  final UiKitMenuItem<int>? activityItem;
   final VoidCallback? onProfileEditSubmitted;
   final GlobalKey? formKey;
   final VoidCallback? onPreferencesChangeRequested;
@@ -66,7 +66,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     required this.dateOfBirthController,
     required this.phoneController,
     required this.beInSearch,
-    required this.activityItem,
+    this.activityItem,
   }) : super(key: key);
 
   @override
@@ -314,13 +314,15 @@ class EditProfileDefaultComponent extends StatelessWidget {
               S.of(context).ActivityType,
               style: theme?.regularTextTheme.labelSmall,
             ),
-            SpacingFoundation.verticalSpace4,
-            UiKitMenuItemTile.custom(
-              paddingSymmetric: EdgeInsets.zero,
-              onTap: onActivityTileTap,
-              item: activityItem,
-              autoPopUp: false,
-            ),
+            if (activityItem != null) ...[
+              SpacingFoundation.verticalSpace4,
+              UiKitMenuItemTile.custom(
+                paddingSymmetric: EdgeInsets.zero,
+                onTap: onActivityTileTap,
+                item: activityItem!,
+                autoPopUp: false,
+              )
+            ],
             SpacingFoundation.verticalSpace16,
             UiKitTitledSelectionTile(
               onSelectionChanged: onPreferencesChangeRequested,

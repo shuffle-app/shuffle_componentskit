@@ -32,7 +32,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
       carouselSize: Size(1.sw - SpacingFoundation.verticalSpacing32, 0.3.sh),
     ),
     PlacePreview(
-      onTap: () {},
+      onTap: (id) {},
       place: UiPlaceModel(
         title: 'Center city club',
         id: 1,

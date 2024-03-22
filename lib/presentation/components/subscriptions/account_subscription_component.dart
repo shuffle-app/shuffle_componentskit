@@ -43,7 +43,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
           SpacingFoundation.verticalSpace16,
           context.userTile(
             data: BaseUiKitUserTileData(
-              username: Future.value(widget.uiModel.nickname),
+              username: widget.uiModel.nickname,
               avatarUrl: widget.uiModel.userAvatarUrl,
               name: widget.uiModel.userName,
               type: widget.uiModel.userType,

@@ -15,7 +15,7 @@ class ShuffleComponent extends StatelessWidget {
   final Function? onCardTap;
   final VoidCallback? onEnd;
   final VoidCallback? onHowItWorksPoped;
-  final List<String> favoriteTitles;
+  final List<int> favoriteIds;
   final ValueNotifier<int> indexNotifier;
   final ValueNotifier<String> backgroundImageNotifier;
 
@@ -26,7 +26,7 @@ class ShuffleComponent extends StatelessWidget {
     required this.indexNotifier,
     required this.backgroundImageNotifier,
     this.onLike,
-    this.favoriteTitles = const [],
+    this.favoriteIds = const [],
     this.onDislike,
     this.onHowItWorksPoped,
     this.onCardTap,
@@ -228,7 +228,7 @@ class ShuffleComponent extends StatelessWidget {
                               builder: (_, value, __) {
                                 return ImageWidget(
                                   iconData: shuffle.items.isNotEmpty &&
-                                          favoriteTitles.contains(shuffle.items[value % shuffle.items.length].title)
+                                          favoriteIds.contains(shuffle.items[value % shuffle.items.length].id)
                                       ? ShuffleUiKitIcons.starfill
                                       : ShuffleUiKitIcons.staroutline,
                                   color: Colors.white,

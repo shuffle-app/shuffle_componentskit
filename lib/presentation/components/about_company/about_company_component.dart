@@ -5,6 +5,9 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class AboutCompanyComponent extends StatelessWidget {
   final VoidCallback? onFinished;
   final UiAboutCompanyModel uiModel;
+  final List<UiKitMenuItem<int>> niches;
+  final List<String> priceSegments;
+  final List<String> targetAges;
   final TextEditingController nameController;
   final TextEditingController positionController;
   final GlobalKey<FormState> formKey;
@@ -12,7 +15,7 @@ class AboutCompanyComponent extends StatelessWidget {
   final String? Function(String?)? positionValidator;
   final ValueChanged<String>? onAgeRangesChanged;
   final ValueChanged<String>? onAudiencesChanged;
-  final ValueChanged<UiKitMenuItem<String>?>? onNicheChanged;
+  final ValueChanged<UiKitMenuItem<int>?>? onNicheChanged;
 
   const AboutCompanyComponent({
     super.key,
@@ -26,6 +29,9 @@ class AboutCompanyComponent extends StatelessWidget {
     this.onAudiencesChanged,
     this.nameValidator,
     this.positionValidator,
+    required this.niches,
+    required this.priceSegments,
+    required this.targetAges,
   });
 
   @override
@@ -33,23 +39,11 @@ class AboutCompanyComponent extends StatelessWidget {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
 
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_company']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-
-    final ageGroupsData = model
-            .content.body?[ContentItemType.additionalMultiSelect]?.body?[ContentItemType.multiSelect]?.properties?.entries
-            .toList() ??
-        [];
-    if (ageGroupsData.isNotEmpty) ageGroupsData.sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
-    List<String> ageGroups = ageGroupsData.map((e) => e.key).toList();
-    if (ageGroups.isEmpty) ageGroups.addAll(['13-17', '18-24', '25-34', '35-44', '45-54', '54+']);
-    List<String> audiences =
-        model.content.body?[ContentItemType.multiSelect]?.body?[ContentItemType.multiSelect]?.properties?.keys.toList() ?? [];
-    if (audiences.isEmpty) audiences = ['Luxury', 'Tourists', 'Middle class', 'Family friendly'];
-
-    final niches = model.content.body?[ContentItemType.singleDropdown]?.body?[ContentItemType.singleDropdown]?.properties;
 
     return SingleChildScrollView(
       child: Form(
@@ -140,41 +134,29 @@ class AboutCompanyComponent extends StatelessWidget {
               errorText: uiModel.errorSelectedMenuItem,
               hasError: uiModel.errorSelectedMenuItem != null,
               title: S.current.YourNiche,
-              child: UiKitMenu<String>(
+              child: UiKitMenu<int>(
                 tilesColor: Colors.transparent,
                 useCustomTiles: false,
                 onSelected: (item) => onNicheChanged?.call(item),
                 title: S.current.YourNiche,
                 selectedItem: uiModel.selectedMenuItem,
-                items: niches?.keys.map<UiKitMenuItem<String>>(
-                      (e) {
-                        final item = niches[e];
-
-                        return UiKitMenuItem<String>(
-                          title: e.toUpperCase(),
-                          value: item?.value,
-                          iconLink: item?.imageLink ?? '',
-                          type: item?.type == 'business' ? S.current.Business : S.current.Leisure,
-                        );
-                      },
-                    ).toList() ??
-                    [],
-              ),
+                items: niches,
+              ).paddingAll(EdgeInsetsFoundation.all4),
             ),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSection(
               errorText: uiModel.errorSelectedAudiences,
               hasError: uiModel.errorSelectedAudiences != null,
-              title: S.current.YourAudience,
+              title: S.current.YourPriceSegment,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  children: audiences
+                  children: priceSegments
                       .map(
                         (e) => UiKitOrdinaryChip(
                           title: e,
-                          selected: uiModel.selectedAudiences?.contains(e) ?? false,
+                          selected: uiModel.selectedPriceSegments?.contains(e) ?? false,
                           onPressed: () => onAudiencesChanged?.call(e),
                         ),
                       )
@@ -191,7 +173,7 @@ class AboutCompanyComponent extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  children: ageGroups
+                  children: targetAges
                       .map<Widget>(
                         (e) => UiKitOrdinaryChip(
                           title: e,

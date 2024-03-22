@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:collection/collection.dart';
 
 class SearchComponent extends StatelessWidget {
   final TextEditingController searchController;
@@ -437,7 +438,7 @@ class SearchComponent extends StatelessWidget {
                         order: search.places.indexOf(e) + 1,
                         rating: e.rating,
                         title: e.title,
-                        imageLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                        imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
                         onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
                     .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
                 .toList(),

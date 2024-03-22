@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiOwnerModel {
   final String name;
-  final Future<String>? username;
+  final String? username;
   final String? logo;
   final UserTileType type;
   final VoidCallback? onTap;
@@ -34,13 +32,15 @@ class UiOwnerModel {
     VoidCallback? onUnFollowTap,
     VoidCallback? onBlockTap,
   }) =>
-      FutureBuilder(
-          future: username,
-          builder: (context, snapshot) => UiKitPopUpMenuTile(
+       UiKitPopUpMenuTile(
                 title: name,
                 titleIcon: UiKitUserBadge(userType: type,),
-                subtitle: snapshot.hasData ? '@${snapshot.data}' : null,
-                leading: context.userAvatar(size: UserAvatarSize.x40x40, type: type, userName: name, imageUrl: logo),
+                subtitle: username!=null ? '@$username' : null,
+                leading:UiKitUserAvatar40x40(
+                  type: type,
+                  imageUrl: logo ?? '',
+                  userName: username ?? '',
+                ),
                 menuOptions: [
                   if (onBlockTap != null)
                     UiKitPopUpMenuButtonOption(
@@ -67,5 +67,5 @@ class UiOwnerModel {
                       onTap: onMessageTap,
                     ),
                 ],
-              ));
+              );
 }

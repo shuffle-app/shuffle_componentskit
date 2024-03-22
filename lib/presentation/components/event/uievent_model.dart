@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -8,12 +7,15 @@ class UiEventModel extends Advertisable {
   String? title;
   UiOwnerModel? owner;
   List<BaseUiKitMedia> media;
+  BaseUiKitMedia? verticalPreview;
   bool? favorite;
   bool isRecurrent;
+  String? scheduleString;
+
   DateTime? date;
-  DateTime? dateTo;
-  TimeOfDay? time;
-  TimeOfDay? timeTo;
+  // DateTime? dateTo;
+  // TimeOfDay? time;
+  // TimeOfDay? timeTo;
   String? description;
   String? location;
   String? eventType;
@@ -33,28 +35,28 @@ class UiEventModel extends Advertisable {
     this.favorite,
     this.owner,
     this.eventType,
-    this.date,
-    this.dateTo,
     this.media = const [],
     this.description,
     this.location,
+    this.verticalPreview,
     this.tags = const [],
     this.baseTags = const [],
     this.rating,
     this.price,
     this.phone,
     this.website,
-    this.time,
-    this.timeTo,
+    this.scheduleString,
     this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
+    this.date,
     bool? isAdvertisement,
   })  : descriptionItems = [
-          if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
+          if (scheduleString != null)
+            // if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
             UiDescriptionItemModel(
               title: S.current.DontMissIt,
-              description: formatDate(date, dateTo, time, timeTo, weekdays)!,
+              description: scheduleString,
             ),
           if (location != null && location.isNotEmpty)
             UiDescriptionItemModel(
@@ -67,11 +69,7 @@ class UiEventModel extends Advertisable {
               description: phone,
             ),
           if (website != null && website.isNotEmpty)
-            UiDescriptionItemModel(
-              title: S.current.Website,
-              description: title ?? '',
-              descriptionUrl: website
-            ),
+            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
         ],
         super(isAdvertisement: isAdvertisement ?? false);
 
@@ -81,15 +79,13 @@ class UiEventModel extends Advertisable {
     this.favorite,
     this.owner,
     this.date,
-    this.dateTo,
+    this.scheduleString,
     this.media = const [],
     this.description,
     this.location,
     this.tags = const [],
     this.baseTags = const [],
     this.rating,
-    this.time,
-    this.timeTo,
     this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
@@ -107,4 +103,26 @@ class UiEventModel extends Advertisable {
 
     return null;
   }
+
+  UiEventModel.empty()
+      : id = -1,
+        title = null,
+        owner = null,
+        media = const [],
+        favorite = false,
+        isRecurrent = false,
+        scheduleString = null,
+        description = null,
+        location = null,
+        eventType = null,
+        price = null,
+        website = null,
+        phone = null,
+        tags = const [],
+        baseTags = const [],
+        rating = null,
+        archived = false,
+        weekdays = const [],
+        descriptionItems = const [],
+        super(isAdvertisement: false);
 }
