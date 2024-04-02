@@ -10,24 +10,22 @@ import 'google_maps_api.dart';
 
 class LocationComponent extends StatefulWidget {
   final VoidCallback onLocationConfirmed;
-  final void Function({String address, double latitude, double longitude}) onGoogleLocationChanged;
-  final void Function(KnownLocation location)? onKnownLocationChanged;
+  final void Function({String address, double latitude, double longitude}) onLocationChanged;
   final ValueChanged<KnownLocation>? onKnownLocationConfirmed;
-  final Future<List<KnownLocation>?> Function(String placeName)? onPlacesCheck;
+  final Future<List<KnownLocation>?> Function(LatLng coordinates)? onPlacesCheck;
   final double? initialLatitude;
   final double? initialLongitude;
   final Future<LatLng?> Function()? onDetermineLocation;
 
   const LocationComponent({
     super.key,
-    required this.onGoogleLocationChanged,
+    required this.onLocationChanged,
     required this.onLocationConfirmed,
     this.onPlacesCheck,
     this.initialLatitude,
     this.initialLongitude,
     this.onDetermineLocation,
     this.onKnownLocationConfirmed,
-    this.onKnownLocationChanged,
   });
 
   @override
@@ -49,19 +47,6 @@ class _LocationComponentState extends State<LocationComponent> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialLongitude != null && widget.initialLatitude != null) {
-      setState(() {
-        mapMarkers = {
-          Marker(
-            markerId: MarkerId('1'),
-            position: LatLng(
-              widget.initialLatitude ?? 0,
-              widget.initialLongitude ?? 0,
-            ),
-          )
-        };
-      });
-    }
     cameraPosition = CameraPosition(
       target: LatLng(widget.initialLatitude ?? 25.276987, widget.initialLongitude ?? 55.296249),
       zoom: 14.4746,
@@ -130,28 +115,46 @@ class _LocationComponentState extends State<LocationComponent> {
         ),
       );
 
-      final marker = Marker(
-        markerId: const MarkerId('1'),
-        position: LatLng(
-          placeDetails?.locationDetails?.geometry?.location?.lat ?? 0,
-          placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
-        ),
+      final placeCoordinates = LatLng(
+        placeDetails?.locationDetails?.geometry?.location?.lat ?? 0,
+        placeDetails?.locationDetails?.geometry?.location?.lng ?? 0,
       );
 
-      await widget.onPlacesCheck?.call(placeDetails?.locationDetails?.name ?? '').then((places) {
-        if (places != null) {
-          log('places found: ${places.length}', name: 'LocationComponent');
-          locationDetailsSheetController.updateKnownLocations(places);
-          locationDetailsSheetController.updateSheetState(LocationDetailsSheetState.visible);
-          setState(() => _suggestionPlaces = places);
-        }
-      });
+      final marker = Marker(
+        markerId: const MarkerId('1'),
+        position: placeCoordinates,
+      );
+
+      await widget.onPlacesCheck
+          ?.call(placeCoordinates)
+          .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
+
+      final placeFromCoordinates = await GoogleMapsApi.fetchPlaceFromCoordinates(
+        latlng: '${placeCoordinates.latitude}, ${placeCoordinates.longitude}',
+      );
 
       setState(() {
-        mapMarkers.removeWhere((element) => element.markerId.value == marker.markerId.value);
-        mapMarkers.add(marker);
+        mapMarkers.clear();
+        mapMarkers = {marker};
         _newPlaceTapped = true;
       });
+
+      widget.onLocationChanged.call(
+        address: placeFromCoordinates?.results?.firstOrNull?.formattedAddress ?? suggestion.title,
+        latitude: placeCoordinates.latitude,
+        longitude: placeCoordinates.longitude,
+      );
+
+      setState(() => _suggestionPlaces = placeFromCoordinates?.results
+              ?.map(
+                (place) => KnownLocation(
+                  title: place.formattedAddress ?? '',
+                  latitude: place.geometry?.location?.lat,
+                  longitude: place.geometry?.location?.lon,
+                ),
+              )
+              .toList() ??
+          []);
     }
   }
 
@@ -201,20 +204,20 @@ class _LocationComponentState extends State<LocationComponent> {
       return;
     }
     final place = placeFromCoordinates?.results?.first;
-    String query = '';
-    if (place?.addressComponents?.isNotEmpty ?? false) query = place?.addressComponents?.first.shortName ?? '';
-    if ((place?.formattedAddress?.split(',').length ?? 0) > 2) {
-      query = place?.formattedAddress?.split(',').first ?? '';
-      if (query.contains('+')) query = place?.formattedAddress?.split(',')[1] ?? '';
-    }
+    await widget.onPlacesCheck
+        ?.call(latLng)
+        .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
 
-    await widget.onPlacesCheck?.call(query).then((places) {
-      if (places != null) {
-        log('places found: ${places.length}', name: 'LocationComponent');
-        locationDetailsSheetController.updateKnownLocations(places);
-        setState(() => _suggestionPlaces = places);
-      }
-    });
+    setState(() => _suggestionPlaces = placeFromCoordinates?.results
+            ?.map(
+              (place) => KnownLocation(
+                title: place.formattedAddress ?? '',
+                latitude: place.geometry?.location?.lat,
+                longitude: place.geometry?.location?.lon,
+              ),
+            )
+            .toList() ??
+        []);
 
     final newSuggestion = LocationSuggestion(
       title: place?.formattedAddress ?? '',
@@ -223,7 +226,8 @@ class _LocationComponentState extends State<LocationComponent> {
     );
     locationPickerSearchOverlayController.updateSelectedSuggestion(newSuggestion);
     locationDetailsSheetController.updateSheetState(LocationDetailsSheetState.placeSelected);
-    widget.onGoogleLocationChanged.call(
+    searchTextController.text = place?.formattedAddress ?? '';
+    widget.onLocationChanged.call(
       address: place?.formattedAddress ?? '',
       latitude: latLng.latitude,
       longitude: latLng.longitude,
@@ -236,10 +240,14 @@ class _LocationComponentState extends State<LocationComponent> {
       position: coordinates,
     );
     setState(() {
-      mapMarkers.removeWhere((element) => element.markerId.value == marker.markerId.value);
-      mapMarkers.add(marker);
+      mapMarkers.clear();
+      mapMarkers = {marker};
     });
     decodeCoordinates(coordinates);
+    widget.onPlacesCheck?.call(coordinates).then((places) => setState(() {
+          _newPlaceTapped = true;
+          _suggestionPlaces = places;
+        }));
   }
 
   @override
@@ -253,17 +261,7 @@ class _LocationComponentState extends State<LocationComponent> {
     return Theme(
       data: UiKitThemeFoundation.defaultTheme,
       child: UiKitLocationPicker(
-        onLocationChanged: (location) {
-          cameraPosition = CameraPosition(
-            target: LatLng(
-              location.latitude ?? cameraPosition.target.latitude,
-              location.longitude ?? cameraPosition.target.longitude,
-            ),
-            zoom: 14.4746,
-          );
-          setState(() {});
-          widget.onKnownLocationChanged?.call(location);
-        },
+        onLocationChanged: widget.onLocationChanged,
         newPlace: _newPlaceTapped,
         suggestionPlaces: _suggestionPlaces,
         onNewPlaceTap: (value) => setState(() => _newPlaceTapped = value),
