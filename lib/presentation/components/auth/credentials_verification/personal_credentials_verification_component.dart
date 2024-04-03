@@ -62,6 +62,16 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
             ),
           ),
         ),
+        ShortLogInButton(
+          link: GraphicsFoundation.instance.svg.appleLogo.path,
+          title: S.current.LoginWith('apple').toUpperCase(),
+          onTap: () => widget.onSocialsLogin?.call(
+            SocialsLoginModel(
+              provider: 'Apple',
+              clientType: clientType,
+            ),
+          ),
+        ),
       ];
   late final bool isSmallScreen;
   late final String clientType;
@@ -93,8 +103,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
-          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
-              '';
+          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
       authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
       // final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
       // socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
@@ -194,9 +203,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // const Spacer(flex: 1),
-                        if (widget.availableLocales != null &&
-                            widget.availableLocales!.isNotEmpty &&
-                            !keyboardVisible) ...[
+                        if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty && !keyboardVisible) ...[
                           UiKitCardWrapper(
                             color: colorScheme?.surface1,
                             borderRadius: BorderRadiusFoundation.max,
@@ -380,10 +387,9 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             context.button(
                               data: BaseUiKitButtonData(
                                 text: S.of(context).Next.toUpperCase(),
-                                onPressed:
-                                    widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
-                                        ? null
-                                        : widget.onSubmit,
+                                onPressed: widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
+                                    ? null
+                                    : widget.onSubmit,
                                 loading: widget.loading,
                                 fit: ButtonFit.fitWidth,
                               ),

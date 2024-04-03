@@ -59,17 +59,6 @@ class FeedComponent extends StatelessWidget {
     if (feedLeisureModel.content.body?[ContentItemType.advertisement]?.properties?.isNotEmpty ?? false) {
       advertisement = feedLeisureModel.content.body?[ContentItemType.advertisement]?.properties?.entries.first;
     }
-
-    // final nicheTitles = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties?.keys.toList();
-    // final nicheData = feedBusinessModel.content.body?[ContentItemType.horizontalList]?.properties;
-    // final upcomingGlobals = feedBusinessModel
-    //     .content.body?[ContentItemType.horizontalList]?.title?[ContentItemType.horizontalList]?.properties;
-    // nicheTitles?.sort((a, b) {
-    //   final aSortNumber = nicheData?[a]?.sortNumber ?? 0;
-    //   final bSortNumber = nicheData?[b]?.sortNumber ?? 0;
-    //
-    //   return aSortNumber.compareTo(bSortNumber);
-    // });
     final horizontalMargin = (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
@@ -371,43 +360,6 @@ class FeedComponent extends StatelessWidget {
                                 .toList()[index - 2];
                           }
                         }
-                        // child: Row(
-                        //   children: [
-                        //     RollingDiceButton(
-                        //         onPressed: (value) {
-                        //           final Set<String> list = {};
-                        //           for (int i in value) {
-                        //             list.add(feed.filterChips![i].title);
-                        //           }
-                        //
-                        //           onTagSortPressed?.call('Random', list);
-                        //         },
-                        //         length: feed.filterChips?.length ?? 0),
-                        //     UiKitTitledFilterChip(
-                        //       //const flag for showing favorites is 'Favorites'
-                        //       selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
-                        //       title: S.of(context).Favorites,
-                        //       onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
-                        //       icon: ShuffleUiKitIcons.starfill,
-                        //     ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8),
-                        //     Wrap(
-                        //       spacing: SpacingFoundation.verticalSpacing8,
-                        //       children: feed.filterChips!.map(
-                        //         (e) {
-                        //           double padding = 0;
-                        //           if (e == feed.filterChips?.last) padding = horizontalMargin;
-                        //
-                        //           return UiKitTitledFilterChip(
-                        //             selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
-                        //             title: e.title,
-                        //             onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                        //             icon: e.icon,
-                        //           ).paddingOnly(right: padding);
-                        //         },
-                        //       ).toList(),
-                        //     ),
-                        //   ],
-                        // ).paddingOnly(left: horizontalMargin),
                         ))).wrapSliverBox,
           ],
           SpacingFoundation.verticalSpace24.wrapSliverBox,

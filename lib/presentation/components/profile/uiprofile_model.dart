@@ -16,7 +16,9 @@ class UiProfileModel {
   final ValueChanged<int>? onDonate;
   final List<String>? allInterests;
   final List<String>? favoriteTags;
+  final List<int>? favoriteTagsIds;
   final List<String>? tags;
+  final List<int>? tagsIds;
   final List<String>? matchingInterests;
   final VoidCallback? onViewAllAchievements;
   final List<UiKitAchievementsModel> achievements;
@@ -87,6 +89,8 @@ class UiProfileModel {
     this.socialLinks,
     this.specialization,
     this.tags,
+    this.tagsIds,
+    this.favoriteTagsIds,
   });
 
   /// write [copyWith] method
@@ -102,8 +106,8 @@ class UiProfileModel {
     VoidCallback? onFollow,
     bool? showSupportShuffle,
     ValueChanged<int>? onDonate,
-    List<String>? interests,
-    List<String>? favorites,
+    List<String>? allInterests,
+    List<String>? favoriteTags,
     List<String>? matchingInterests,
     VoidCallback? onViewAllAchievements,
     List<UiKitAchievementsModel>? achievements,
@@ -112,6 +116,8 @@ class UiProfileModel {
     String? specialization,
     List<String>? socialLinks,
     List<String>? tags,
+    List<int>? tagsIds,
+    List<int>? favoriteTagsIds,
   }) =>
       UiProfileModel(
           onShare: onShare ?? this.onShare,
@@ -124,8 +130,8 @@ class UiProfileModel {
           onFollow: onFollow ?? this.onFollow,
           showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
           onDonate: onDonate ?? this.onDonate,
-          allInterests: interests ?? this.allInterests,
-          favoriteTags: favorites ?? this.favoriteTags,
+          allInterests: allInterests ?? this.allInterests,
+          favoriteTags: favoriteTags ?? this.favoriteTags,
           matchingInterests: matchingInterests ?? this.matchingInterests,
           onViewAllAchievements: onViewAllAchievements ?? this.onViewAllAchievements,
           achievements: achievements ?? this.achievements,
@@ -133,5 +139,7 @@ class UiProfileModel {
           specialization: specialization ?? this.specialization,
           socialLinks: socialLinks ?? this.socialLinks,
           tags: tags ?? this.tags,
-          mindsetId: mindsetId ?? this.mindsetId);
+          mindsetId: mindsetId ?? this.mindsetId,
+          tagsIds: tagsIds ?? this.tagsIds,
+          favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds);
 }

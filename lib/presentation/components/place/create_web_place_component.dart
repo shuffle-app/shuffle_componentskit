@@ -13,16 +13,26 @@ class CreateWebPlaceComponent extends StatefulWidget {
   final VoidCallback? onPlaceDeleted;
   final VoidCallback? onShowResult;
   final Future<String?> Function()? getLocation;
-  final Future<List<String>> Function(String)? onSuggest;
+  final Future<List<String>> Function(String) placeCategoriesLoader;
+  final ValueChanged<String> onCategorySelected;
+  final Future<List<String>> Function()? onBaseTagsAdded;
+  final Future<List<String>> Function()? onUniqueTagsAdded;
+  final ValueChanged<String>? onBaseTagRemoved;
+  final ValueChanged<String>? onUniqueTagRemoved;
 
   const CreateWebPlaceComponent({
     super.key,
     required this.onPlaceCreated,
+    required this.placeCategoriesLoader,
+    required this.onCategorySelected,
     this.placeToEdit,
     this.getLocation,
     this.onPlaceDeleted,
-    this.onSuggest,
     this.onShowResult,
+    this.onBaseTagsAdded,
+    this.onUniqueTagsAdded,
+    this.onBaseTagRemoved,
+    this.onUniqueTagRemoved,
   });
 
   @override
@@ -171,11 +181,14 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       WebFormField(
                         title: S.of(context).PlaceType,
                         isRequired: true,
-                        child: UiKitInputFieldNoIcon(
-                          controller: _placeTypeController,
-                          hintText: S.of(context).EnterInputType(S.of(context).PlaceType.toLowerCase()),
-                          fillColor: theme?.colorScheme.surface1,
-                          borderRadius: BorderRadiusFoundation.all12,
+                        child: UiKitSuggestionField(
+                          options: widget.placeCategoriesLoader,
+                          hintText: 'Enter place category',
+                          onFieldSubmitted: (value) {
+                            _placeToEdit.placeType = value;
+                            setState(() {});
+                            widget.onCategorySelected.call(value);
+                          },
                         ),
 
                         //TODO return when we will get a backend categories method
@@ -192,40 +205,74 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       WebFormField(
                         title: S.of(context).BaseProperties,
                         isRequired: true,
-                        child: UiKitTagSelector.darkBackground(
-                          borderRadius: BorderRadiusFoundation.all12,
-                          onNotFoundTagCallback: (value) {
-                            setState(() {
-                              _placeToEdit.baseTags = [
-                                ..._placeToEdit.baseTags,
-                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
-                              ];
-                            });
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final baseTags = await widget.onBaseTagsAdded?.call();
+                            if (baseTags != null) {
+                              setState(() {
+                                _placeToEdit.baseTags = baseTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
                           },
-                          tags: _placeToEdit.baseTags.map((e) => e.title).toList(),
-                          onRemoveTagCallback: (value) {
-                            _placeToEdit.baseTags.removeWhere((e) => e.title == value);
-                          },
+                          child: IgnorePointer(
+                            child: UiKitTagSelector.darkBackground(
+                              borderRadius: BorderRadiusFoundation.all12,
+                              onNotFoundTagCallback: (value) {
+                                setState(() {
+                                  _placeToEdit.baseTags = [
+                                    ..._placeToEdit.baseTags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ];
+                                });
+                              },
+                              tags: _placeToEdit.baseTags.map((e) => e.title).toList(),
+                              onRemoveTagCallback: (value) {
+                                _placeToEdit.baseTags.removeWhere((e) => e.title == value);
+                                setState(() {});
+                                widget.onBaseTagRemoved?.call(value);
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: S.of(context).UniqueProperties,
                         isRequired: true,
-                        child: UiKitTagSelector.darkBackground(
-                          borderRadius: BorderRadiusFoundation.all12,
-                          onNotFoundTagCallback: (value) {
-                            setState(() {
-                              _placeToEdit.tags = [
-                                ..._placeToEdit.tags,
-                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
-                              ];
-                            });
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final uniqueTags = await widget.onUniqueTagsAdded?.call();
+                            if (uniqueTags != null) {
+                              setState(() {
+                                _placeToEdit.tags = uniqueTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
                           },
-                          tags: _placeToEdit.tags.map((e) => e.title).toList(),
-                          onRemoveTagCallback: (value) {
-                            _placeToEdit.tags.removeWhere((e) => e.title == value);
-                          },
+                          child: IgnorePointer(
+                            child: UiKitTagSelector.darkBackground(
+                              borderRadius: BorderRadiusFoundation.all12,
+                              onNotFoundTagCallback: (value) {
+                                setState(() {
+                                  _placeToEdit.tags = [
+                                    ..._placeToEdit.tags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ];
+                                });
+                              },
+                              tags: _placeToEdit.tags.map((e) => e.title).toList(),
+                              onRemoveTagCallback: (value) {
+                                _placeToEdit.tags.removeWhere((e) => e.title == value);
+                                setState(() {});
+                                widget.onUniqueTagRemoved?.call(value);
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -346,6 +393,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           onTap: () async {
                             _addressController.text = await widget.getLocation?.call() ?? '';
                             _placeToEdit.location = _addressController.text;
+                            setState(() {});
                           },
                           child: IgnorePointer(
                             child: UiKitInputFieldRightIcon(
@@ -444,6 +492,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                         _placeToEdit.phone = _phoneController.text;
                                         _placeToEdit.description = _descriptionController.text;
                                         _placeToEdit.media = [..._photos, ..._videos];
+                                        setState(() {});
                                         widget.onPlaceCreated.call(_placeToEdit);
                                       },
                                     ),
