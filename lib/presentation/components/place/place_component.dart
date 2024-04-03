@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -16,7 +15,7 @@ class PlaceComponent extends StatefulWidget {
   final bool isCreateEventAvaliable;
   final VoidCallback? onEventCreate;
   final VoidCallback? onAddReactionTapped;
-  final FutureOr<List<UiEventModel>>? events;
+  final Future<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
   final VoidCallback? onSharePressed;
@@ -96,7 +95,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -141,27 +141,27 @@ class _PlaceComponentState extends State<PlaceComponent> {
           baseTags: widget.place.baseTags,
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
-          branches: model.showBranches ?? false
-              ? [
-                  /// mock branches
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                ]
-              : widget.place.branches,
+          branches: widget.place.branches
+          // ?? Future.value( [
+          //     /// mock branches
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //     HorizontalCaptionedImageData(
+          //       imageUrl: GraphicsFoundation.instance.png.place.path,
+          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
+          //     ),
+          //   ])
+          ,
           actions: [
             if (widget.complaintFormComponent != null)
               context.smallOutlinedButton(
@@ -241,7 +241,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         if (widget.isCreateEventAvaliable)
           FutureBuilder(
-            future: Future.value(widget.events ?? []),
+            future: widget.events,
             builder: (context, snapshot) => UiKitCardWrapper(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -250,7 +250,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   Text(S.of(context).UpcomingEvent, style: boldTextTheme?.subHeadline),
                   if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
                     SpacingFoundation.verticalSpace8,
-                    for (var event in snapshot.data!)
+                    for (UiEventModel event in snapshot.data!)
                       ListTile(
                         isThreeLine: true,
                         contentPadding: EdgeInsets.zero,
@@ -262,14 +262,22 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           event.title ?? '',
                           style: boldTextTheme?.caption1Bold,
                         ),
-                        subtitle: event.date != null
+                        subtitle: event.scheduleString != null
                             ? Text(
-                                DateFormat('MMMM d').format(event.date!),
+                                event.scheduleString!,
                                 style: boldTextTheme?.caption1Medium.copyWith(
                                   color: colorScheme?.darkNeutral500,
                                 ),
                               )
-                            : const SizedBox.shrink(),
+                            : null,
+                        // event.date != null
+                        //     ? Text(
+                        //         DateFormat('MMMM d').format(event.date!),
+                        //         style: theme?.boldTextTheme.caption1Medium.copyWith(
+                        //           color: theme.colorScheme.darkNeutral500,
+                        //         ),
+                        //       )
+                        //     : const SizedBox.shrink(),
                         trailing: context
                             .smallButton(
                               data: BaseUiKitButtonData(
@@ -320,53 +328,58 @@ class _PlaceComponentState extends State<PlaceComponent> {
           )
         else
           FutureBuilder(
-            future: Future.value(widget.events ?? []),
+            future: widget.events,
             builder: (context, snapshot) => Row(
               mainAxisSize: MainAxisSize.max,
               children: () {
                 final AutoSizeGroup group = AutoSizeGroup();
+                log('here we are building ${snapshot.data?.length ?? 0} events', name: 'PlaceComponent');
 
-                final tempSorted = List.from(snapshot.data ?? [])..sort((a, b) => a.date!.compareTo(b.date!));
+                final tempSorted = List.from(snapshot.data ?? []);
+                if (tempSorted.isNotEmpty) {
+                  tempSorted.sort((a, b) => (a.date ?? DateTime.now()).compareTo(b.date ?? DateTime.now()));
+                }
 
-                final closestEvent = tempSorted.firstOrNull;
+                final closestEvent = tempSorted.lastOrNull;
 
-                final Duration daysToEvent = closestEvent?.date?.difference(DateTime.now()) ?? const Duration(days: 2);
+                log('here we have a closest event $closestEvent and tempSorted ${tempSorted.length}',
+                    name: 'PlaceComponent');
+
+                final Duration daysToEvent = (closestEvent?.date ?? DateTime.now()).difference(DateTime.now());
 
                 return [
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
-                      value: S.current.WithInDays(daysToEvent.inDays),
+                      value: closestEvent == null
+                          ? 'none'
+                          : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
                       group: group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
-                      action: () {
-                        if (closestEvent != null) {
-                          widget.onEventTap?.call(closestEvent!);
-                        } else {
-                          buildComponent(
-                            context,
-                            ComponentEventModel.fromJson(config['event']),
-                            ComponentBuilder(
-                              child: EventComponent(
-                                event: closestEvent!,
-                                feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
-                                reactionsLoaderCallback: widget.eventReactionLoaderCallback,
-                              ),
-                            ),
-                          );
-                        }
-                      },
+                      action: closestEvent == null
+                          ? null
+                          : () {
+                              if (widget.onEventTap != null) {
+                                widget.onEventTap?.call(closestEvent!);
+                              }
+                              // else {
+                              //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                              //       ComponentBuilder(child: EventComponent(event: closestEvent!,
+                              //   feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
+                              //   reactionsLoaderCallback: widget.eventReactionLoaderCallback,
+                              // ),
+                              // ),);
+                              // }
+                            },
                     ),
                   ),
                   SpacingFoundation.horizontalSpace8,
                   Expanded(
                     child: PointBalancePlaceActionCard(
-                      value: '2 650',
-                      group: group,
-                      rasterIconAsset: GraphicsFoundation.instance.png.money,
-                      action: () {
-                        log('balance was pressed');
-                      },
-                    ),
+                        value: '0', group: group, rasterIconAsset: GraphicsFoundation.instance.png.money, action: null
+                        //     () {
+                        //   log('balance was pressed');
+                        // },
+                        ),
                   ),
                 ];
               }(),

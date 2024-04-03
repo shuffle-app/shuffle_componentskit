@@ -26,7 +26,7 @@ class ReactionViewComponent extends StatelessWidget {
           child: Container(
             width: 1.sw,
             height: kToolbarHeight,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               // color: Colors.black,
               gradient: GradientFoundation.blackLinearGradientInverted,
             ),
@@ -83,7 +83,7 @@ class ReactionViewComponent extends StatelessWidget {
                     ],
                   ),
                 ),
-              if (videoReactionModel.eventDate?.isBefore(DateTime.now()) ?? false) Expanded(child: Column()),
+              if (videoReactionModel.eventDate?.isBefore(DateTime.now()) ?? false) const Expanded(child: Column()),
               SpacingFoundation.horizontalSpace20,
               context.bouncingButton(
                 blurred: true,

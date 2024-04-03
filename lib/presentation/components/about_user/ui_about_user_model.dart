@@ -1,10 +1,10 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiAboutUserModel {
-  final UiKitMenuItem<String>? selectedPersonType;
-  final List<String>? selectedReligions;
+  final UiKitMenuItem<int>? selectedPersonType;
+  final List<int>? selectedReligionsIds;
 
-  final String? selectedGender;
+  final int? selectedGenderId;
   final int? selectedAge;
   String? errorPersonTypeMessage;
   String? errorGenderMessage;
@@ -12,10 +12,10 @@ class UiAboutUserModel {
 
   bool get checkFields {
     if (selectedPersonType != null &&
-        selectedGender != null &&
+        selectedGenderId != null &&
         selectedAge != null &&
-        selectedReligions != null &&
-        selectedReligions!.isNotEmpty) {
+        selectedReligionsIds != null &&
+        selectedReligionsIds!.isNotEmpty) {
       return true;
     }
 
@@ -24,8 +24,8 @@ class UiAboutUserModel {
 
   UiAboutUserModel({
     this.selectedPersonType,
-    this.selectedReligions,
-    this.selectedGender,
+    this.selectedReligionsIds,
+    this.selectedGenderId,
     this.selectedAge,
     this.errorReligionMessage,
     this.errorGenderMessage,
@@ -33,27 +33,27 @@ class UiAboutUserModel {
   });
 
   UiAboutUserModel copyWith({
-    UiKitMenuItem<String>? selectedPersonType,
-    List<String>? selectedReligions,
-    String? selectedGender,
+    UiKitMenuItem<int>? selectedPersonType,
+    List<int>? selectedReligionsIds,
+    int? selectedGenderId,
     int? selectedAge,
   }) =>
       UiAboutUserModel(
         selectedPersonType: selectedPersonType ?? this.selectedPersonType,
-        selectedReligions: selectedReligions ?? this.selectedReligions,
-        selectedGender: selectedGender ?? this.selectedGender,
+        selectedReligionsIds: selectedReligionsIds ?? this.selectedReligionsIds,
+        selectedGenderId: selectedGenderId ?? this.selectedGenderId,
         selectedAge: selectedAge ?? this.selectedAge,
       );
 
   UiAboutUserModel withErrors() => UiAboutUserModel(
         selectedPersonType: selectedPersonType,
-        selectedReligions: selectedReligions,
-        selectedGender: selectedGender,
+        selectedReligionsIds: selectedReligionsIds,
+        selectedGenderId: selectedGenderId,
         selectedAge: selectedAge,
       )
         ..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType
-        ..errorGenderMessage = selectedGender != null ? null : S.current.PleaseSelectGender
-        ..errorReligionMessage = (selectedReligions != null && selectedReligions!.isNotEmpty)
+        ..errorGenderMessage = selectedGenderId != null ? null : S.current.PleaseSelectGender
+        ..errorReligionMessage = (selectedReligionsIds != null && selectedReligionsIds!.isNotEmpty)
             ? null
             : S.current.PleaseSelectAtLeastNReligion(1);
 }

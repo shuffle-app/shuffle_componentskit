@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -17,19 +16,18 @@ class UiPlaceModel {
   String? status;
   String? logo;
   List<UiDescriptionItemModel>? descriptionItems;
-  TimeOfDay? openFrom;
-  TimeOfDay? openTo;
+  String? scheduleString;
   String? location;
   String? website;
   String? phone;
   String? price;
-  List<HorizontalCaptionedImageData>? branches;
+  Future<List<HorizontalCaptionedImageData>?>? branches;
+  Object? schedule;
 
   UiPlaceModel({
     required this.id,
     this.title,
-    this.openFrom,
-    this.openTo,
+    this.scheduleString,
     this.location,
     this.media = const [],
     this.logo,
@@ -52,10 +50,11 @@ class UiPlaceModel {
               descriptionUrl: website ?? ''),
           UiDescriptionItemModel(title: S.current.Phone, description: phone ?? ''),
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
-          if (formatDate(null, null, openFrom, openTo, weekdays) != null)
+          if (scheduleString != null)
             UiDescriptionItemModel(
               title: S.current.WorkHours,
-              description: formatDate(null, null, openFrom, openTo, weekdays)!,
+              description: scheduleString,
+              // description: formatDate(null, null, openFrom, openTo, weekdays)!,
             ),
         ];
 
@@ -76,4 +75,54 @@ class UiPlaceModel {
 
     return null;
   }
+
+  UiPlaceModel copyWith({
+    int? id,
+    List<BaseUiKitMedia>? media,
+    List<String>? weekdays,
+    String? description,
+    List<UiKitTag>? tags,
+    List<UiKitTag>? baseTags,
+    double? rating,
+    String? title,
+    String? source,
+    String? placeType,
+    String? status,
+    String? logo,
+    List<UiDescriptionItemModel>? descriptionItems,
+    String? scheduleString,
+    String? location,
+    String? website,
+    String? phone,
+    String? price,
+    Future<List<HorizontalCaptionedImageData>?>? branches,
+  }) =>
+      UiPlaceModel(
+        id: id ?? this.id,
+        media: media ?? this.media,
+        weekdays: weekdays ?? this.weekdays,
+        description: description ?? this.description,
+        tags: tags ?? this.tags,
+        baseTags: baseTags ?? this.baseTags,
+        rating: rating ?? this.rating,
+        title: title ?? this.title,
+        source: source ?? this.source,
+        placeType: placeType ?? this.placeType,
+        status: status ?? this.status,
+        logo: logo ?? this.logo,
+        scheduleString: scheduleString ?? this.scheduleString,
+        location: location ?? this.location,
+        website: website ?? this.website,
+        phone: phone ?? this.phone,
+        price: price ?? this.price,
+        branches: branches ?? this.branches,
+      );
+
+  UiPlaceModel.empty()
+      : id = -1,
+        media = [],
+        weekdays = [],
+        description = '',
+        tags = [],
+        baseTags = [];
 }

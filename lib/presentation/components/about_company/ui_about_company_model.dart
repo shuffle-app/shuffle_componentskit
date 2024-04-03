@@ -1,17 +1,17 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiAboutCompanyModel {
-  final UiKitMenuItem<String>? selectedMenuItem;
-  final List<String>? selectedAudiences;
+  final UiKitMenuItem<int>? selectedMenuItem;
+  final List<String>? selectedPriceSegments;
   final List<String>? selectedAgeRanges;
   String? errorSelectedMenuItem;
   String? errorSelectedAudiences;
   String? errorSelectedAgeRanges;
 
   bool get checkFields {
-    final hasNull = selectedMenuItem == null || selectedAudiences == null || selectedAgeRanges == null;
+    final hasNull = selectedMenuItem == null || selectedPriceSegments == null || selectedAgeRanges == null;
     final hasEmptySelection =
-        selectedMenuItem == null || (selectedAudiences?.isEmpty ?? false) || (selectedAgeRanges?.isEmpty ?? false);
+        selectedMenuItem == null || (selectedPriceSegments?.isEmpty ?? false) || (selectedAgeRanges?.isEmpty ?? false);
 
     if (hasNull || hasEmptySelection) {
       return false;
@@ -22,7 +22,7 @@ class UiAboutCompanyModel {
 
   UiAboutCompanyModel({
     this.selectedMenuItem,
-    this.selectedAudiences,
+    this.selectedPriceSegments,
     this.selectedAgeRanges,
     this.errorSelectedMenuItem,
     this.errorSelectedAudiences,
@@ -30,16 +30,16 @@ class UiAboutCompanyModel {
   });
 
   UiAboutCompanyModel copyWith({
-    UiKitMenuItem<String>? selectedMenuItem,
-    List<String>? selectedAudiences,
+    UiKitMenuItem<int>? selectedMenuItem,
+    List<String>? selectedPriceSegments,
     List<String>? selectedAgeRanges,
   }) {
     return UiAboutCompanyModel(
       selectedMenuItem: selectedMenuItem ?? this.selectedMenuItem,
-      selectedAudiences: selectedAudiences ?? this.selectedAudiences,
+      selectedPriceSegments: selectedPriceSegments ?? this.selectedPriceSegments,
       selectedAgeRanges: selectedAgeRanges ?? this.selectedAgeRanges,
       errorSelectedMenuItem: selectedMenuItem == null ? errorSelectedMenuItem : null,
-      errorSelectedAudiences: (selectedAudiences?.isEmpty ?? true) ? errorSelectedAudiences : null,
+      errorSelectedAudiences: (selectedPriceSegments?.isEmpty ?? true) ? errorSelectedAudiences : null,
       errorSelectedAgeRanges: (selectedAgeRanges?.isEmpty ?? true) ? errorSelectedAgeRanges : null,
     );
   }
@@ -47,11 +47,11 @@ class UiAboutCompanyModel {
   UiAboutCompanyModel withErrors() {
     return UiAboutCompanyModel(
       selectedMenuItem: selectedMenuItem,
-      selectedAudiences: selectedAudiences,
+      selectedPriceSegments: selectedPriceSegments,
       selectedAgeRanges: selectedAgeRanges,
       errorSelectedMenuItem: selectedMenuItem == null ? S.current.PleaseSelectANiche : null,
       errorSelectedAudiences:
-          (selectedAudiences?.isEmpty ?? true) ? S.current.PleaseSelectAtLeastOneTargetAudience : null,
+          (selectedPriceSegments?.isEmpty ?? true) ? S.current.PleaseSelectAtLeastOnePriceSegment : null,
       errorSelectedAgeRanges: (selectedAgeRanges?.isEmpty ?? true) ? S.current.PleaseSelectAtLeastOneAgeRange : null,
     );
   }

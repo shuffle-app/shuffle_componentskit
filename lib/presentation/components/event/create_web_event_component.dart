@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -14,15 +13,27 @@ class CreateWebEventComponent extends StatefulWidget {
   final VoidCallback? onEventDeleted;
   final VoidCallback? onShowResult;
   final Future<String?> Function()? getLocation;
-  final Future<List<String>> Function(String)? onSuggest;
+  final Future<List<String>> Function(String)? onSuggestCategories;
+  final Future<List<String>> Function()? onBaseTagsAdded;
+  final Future<List<String>> Function()? onUniqueTagsAdded;
+  final void Function(String)? onBaseTagSelected;
+  final void Function(String)? onBaseTagUnselected;
+  final void Function(String)? onUniqueTagSelected;
+  final void Function(String)? onUniqueTagUnselected;
 
   const CreateWebEventComponent({
     super.key,
     required this.onEventCreated,
+    this.onUniqueTagsAdded,
+    this.onBaseTagsAdded,
+    this.onBaseTagSelected,
+    this.onBaseTagUnselected,
+    this.onUniqueTagSelected,
+    this.onUniqueTagUnselected,
     this.eventToEdit,
     this.getLocation,
     this.onEventDeleted,
-    this.onSuggest,
+    this.onSuggestCategories,
     this.onShowResult,
   });
 
@@ -153,7 +164,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                         title: S.of(context).EventType,
                         isRequired: true,
                         child: UiKitSuggestionField(
-                          options: widget.onSuggest ?? (q) => Future.value([]),
+                          options: widget.onSuggestCategories ?? (q) => Future.value([]),
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,
                         ),
@@ -162,40 +173,74 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       WebFormField(
                         title: S.of(context).BaseProperties,
                         isRequired: true,
-                        child: UiKitTagSelector.darkBackground(
-                          borderRadius: BorderRadiusFoundation.all12,
-                          onNotFoundTagCallback: (value) {
-                            setState(() {
-                              _eventToEdit.baseTags = [
-                                ..._eventToEdit.baseTags,
-                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
-                              ];
-                            });
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final baseTags = await widget.onBaseTagsAdded?.call();
+                            if (baseTags != null) {
+                              setState(() {
+                                _eventToEdit.baseTags = baseTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
                           },
-                          tags: _eventToEdit.baseTags.map((e) => e.title).toList(),
-                          onRemoveTagCallback: (value) {
-                            _eventToEdit.baseTags.removeWhere((e) => e.title == value);
-                          },
+                          child: IgnorePointer(
+                            child: UiKitTagSelector.darkBackground(
+                              borderRadius: BorderRadiusFoundation.all12,
+                              onNotFoundTagCallback: (value) {
+                                setState(() {
+                                  _eventToEdit.baseTags = [
+                                    ..._eventToEdit.baseTags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ];
+                                });
+                              },
+                              tags: _eventToEdit.baseTags.map((e) => e.title).toList(),
+                              onRemoveTagCallback: (value) {
+                                _eventToEdit.baseTags.removeWhere((e) => e.title == value);
+                                setState(() {});
+                                widget.onBaseTagUnselected?.call(value);
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: S.of(context).UniqueProperties,
                         isRequired: true,
-                        child: UiKitTagSelector.darkBackground(
-                          borderRadius: BorderRadiusFoundation.all12,
-                          onNotFoundTagCallback: (value) {
-                            setState(() {
-                              _eventToEdit.tags = [
-                                ..._eventToEdit.tags,
-                                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
-                              ];
-                            });
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final uniqueTags = await widget.onUniqueTagsAdded?.call();
+                            if (uniqueTags != null) {
+                              setState(() {
+                                _eventToEdit.tags = uniqueTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
                           },
-                          tags: _eventToEdit.tags.map((e) => e.title).toList(),
-                          onRemoveTagCallback: (value) {
-                            _eventToEdit.tags.removeWhere((e) => e.title == value);
-                          },
+                          child: IgnorePointer(
+                            child: UiKitTagSelector.darkBackground(
+                              borderRadius: BorderRadiusFoundation.all12,
+                              onNotFoundTagCallback: (value) {
+                                setState(() {
+                                  _eventToEdit.tags = [
+                                    ..._eventToEdit.tags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ];
+                                });
+                              },
+                              tags: _eventToEdit.tags.map((e) => e.title).toList(),
+                              onRemoveTagCallback: (value) {
+                                _eventToEdit.tags.removeWhere((e) => e.title == value);
+                                setState(() {});
+                                widget.onUniqueTagUnselected?.call(value);
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
@@ -254,55 +299,56 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                         )
                       ]),
                       SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: S.of(context).OpeningHours,
-                        isRequired: true,
-                        child: Row(children: [
-                          Expanded(
-                              flex: 3,
-                              child: UiKitTitledDescriptionWithDivider(
-                                description: [
-                                  '${normalizedTi(_eventToEdit.time)} - ${normalizedTi(_eventToEdit.timeTo)}',
-                                  if (_eventToEdit.isRecurrent)
-                                    _eventToEdit.weekdays.join(', ')
-                                  else
-                                    '${_eventToEdit.date == null ? '' : DateFormat('MMM dd').format(_eventToEdit.date!)} - ${_eventToEdit.dateTo == null ? '' : DateFormat('MMM dd').format(_eventToEdit.dateTo!)}'
-                                ],
-                                direction: Axis.horizontal,
-                                // onTrailingTap: widget.onTimeEditTap,
-                                title: '',
-                              )),
-                          Transform.scale(
-                              scale: 0.6,
-                              child: context.smallOutlinedButton(
-                                data: BaseUiKitButtonData(
-                                    iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.clock,
-                                    ),
-                                    onPressed: () async {
-                                      await showUiKitTimeFromToDialog(context, (from, to) {
-                                        setState(() {
-                                          _eventToEdit.time = to;
-                                          _eventToEdit.timeTo = from;
-                                        });
-                                      });
-                                      if (_eventToEdit.isRecurrent) {
-                                        final weekdays = await showUiKitWeekdaySelector(context) ?? [];
-                                        setState(() {
-                                          _eventToEdit.weekdays = weekdays;
-                                        });
-                                      } else {
-                                        await showUiKitCalendarFromToDialog(context, (from, to) {
-                                          setState(() {
-                                            _eventToEdit.date = to;
-                                            _eventToEdit.dateTo = from;
-                                          });
-                                        });
-                                      }
-                                    }),
-                              ))
-                        ]),
-                      ),
+                      //TODO restore editing schedules
+                      // WebFormField(
+                      //   title: S.of(context).OpeningHours,
+                      //   isRequired: true,
+                      //   child: Row(children: [
+                      //     Expanded(
+                      //         flex: 3,
+                      //         child: UiKitTitledDescriptionWithDivider(
+                      //           description: [
+                      //             '${normalizedTi(_eventToEdit.time)} - ${normalizedTi(_eventToEdit.timeTo)}',
+                      //             if (_eventToEdit.isRecurrent)
+                      //               _eventToEdit.weekdays.join(', ')
+                      //             else
+                      //               '${_eventToEdit.date == null ? '' : DateFormat('MMM dd').format(_eventToEdit.date!)} - ${_eventToEdit.dateTo == null ? '' : DateFormat('MMM dd').format(_eventToEdit.dateTo!)}'
+                      //           ],
+                      //           direction: Axis.horizontal,
+                      //           // onTrailingTap: widget.onTimeEditTap,
+                      //           title: '',
+                      //         )),
+                      //     Transform.scale(
+                      //         scale: 0.6,
+                      //         child: context.smallOutlinedButton(
+                      //           data: BaseUiKitButtonData(
+                      //               iconInfo: BaseUiKitButtonIconData(
+                      //                 iconData: ShuffleUiKitIcons.clock,
+                      //               ),
+                      //               onPressed: () async {
+                      //                 await showUiKitTimeFromToDialog(context, (from, to) {
+                      //                   setState(() {
+                      //                     _eventToEdit.time = to;
+                      //                     _eventToEdit.timeTo = from;
+                      //                   });
+                      //                 });
+                      //                 if (_eventToEdit.isRecurrent) {
+                      //                   final weekdays = await showUiKitWeekdaySelector(context) ?? [];
+                      //                   setState(() {
+                      //                     _eventToEdit.weekdays = weekdays;
+                      //                   });
+                      //                 } else {
+                      //                   await showUiKitCalendarFromToDialog(context, (from, to) {
+                      //                     setState(() {
+                      //                       _eventToEdit.date = to;
+                      //                       _eventToEdit.dateTo = from;
+                      //                     });
+                      //                   });
+                      //                 }
+                      //               }),
+                      //         ))
+                      //   ]),
+                      // ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: S.of(context).Description,

@@ -7,7 +7,7 @@ class UiCompanyProfileModel {
   final String? contactPerson;
   final String? contactPersonPosition;
   final String? niche;
-  final List<String> audience;
+  final List<String> priceSegments;
   final List<String> ageRanges;
 
   UiCompanyProfileModel({
@@ -18,7 +18,7 @@ class UiCompanyProfileModel {
     this.email,
     this.contactPerson,
     this.ageRanges = const [],
-    this.audience = const [],
+    this.priceSegments = const [],
     this.niche,
     this.contactPersonPosition,
   });

@@ -50,6 +50,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   late final String decorationLink;
   late final String countrySelectorTitle;
   late final RegistrationType? authType;
+
   List<ShortLogInButton> get socials => [
         ShortLogInButton(
           link: GraphicsFoundation.instance.svg.googleLogo.path,
@@ -57,15 +58,27 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
           onTap: () => widget.onSocialsLogin?.call(
             SocialsLoginModel(
               provider: 'Google',
-              clientType: Platform.isIOS ? 'iOS' : 'Android',
+              clientType: clientType,
+            ),
+          ),
+        ),
+        ShortLogInButton(
+          link: GraphicsFoundation.instance.svg.appleLogo.path,
+          title: S.current.LoginWith('apple').toUpperCase(),
+          onTap: () => widget.onSocialsLogin?.call(
+            SocialsLoginModel(
+              provider: 'Apple',
+              clientType: clientType,
             ),
           ),
         ),
       ];
   late final bool isSmallScreen;
+  late final String clientType;
   final FocusNode credentialsFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   bool obscurePassword = true;
+
   List<UiKitCustomTab> get tabs => [
         UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
         UiKitCustomTab.small(title: S.current.Account.toUpperCase(), customValue: 'account'),
@@ -86,7 +99,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
 
       captionTexts.remove('image');
       captionTexts.remove('auth_type');
-
+      clientType = Platform.isIOS ? 'Ios' : 'Android';
       // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
       // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
@@ -107,6 +120,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       //       );
       //     }).toList() ??
       //     [];
+
       isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
       tabController.addListener(_tabListener);
       setState(() => inited = true);
@@ -217,7 +231,8 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             },
                           ),
                           SpacingFoundation.verticalSpace16,
-                        ],
+                        ] else
+                          isSmallScreen ? const SizedBox.shrink() : 20.h.heightBox
                       ],
                     ),
                   );
@@ -379,6 +394,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                                 fit: ButtonFit.fitWidth,
                               ),
                             ),
+                            SpacingFoundation.verticalSpace4,
                           ],
                         )
                       : !visible
@@ -386,7 +402,6 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                           : SpacingFoundation.none,
                 ),
               ),
-              SpacingFoundation.verticalSpace4,
             ],
           ).paddingSymmetric(
             horizontal: horizontalMargin,

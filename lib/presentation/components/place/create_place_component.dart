@@ -11,7 +11,8 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
 
-  const CreatePlaceComponent({super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
+  const CreatePlaceComponent(
+      {super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
 
   @override
   State<CreatePlaceComponent> createState() => _CreatePlaceComponentState();
@@ -146,7 +147,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -158,7 +160,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       title: S.of(context).Place,
       centerTitle: true,
       autoImplyLeading: true,
-      appBarTrailing: widget.placeToEdit != null
+      appBarTrailing: (widget.placeToEdit?.id ?? -1) > 0
           ? IconButton(
               icon: ImageWidget(
                   iconData: ShuffleUiKitIcons.trash,
@@ -217,63 +219,65 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ),
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        Row(
-          children: [
-            Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
-            const Spacer(),
-            Text(
-              _placeToEdit.openFrom == null
-                  ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-                  : normalizedTi(_placeToEdit.openFrom),
-              style: theme?.boldTextTheme.body,
-            ),
-            context.outlinedButton(
-              data: BaseUiKitButtonData(
-                onPressed: () async {
-                  final maybeTime = await showUiKitTimeDialog(context);
-                  if (maybeTime != null) {
-                    setState(() {
-                      _placeToEdit.openFrom = maybeTime;
-                    });
-                  }
-                },
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.clock,
-                  size: 16.h,
-                ),
-              ),
-            ),
-          ],
-        ).paddingSymmetric(horizontal: horizontalPadding),
+        //TODO restore editing schedules
+        // Row(
+        //   children: [
+        //     Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
+        //     const Spacer(),
+        //     Text(
+        //       _placeToEdit.openFrom == null
+        //           ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
+        //           : normalizedTi(_placeToEdit.openFrom),
+        //       style: theme?.boldTextTheme.body,
+        //     ),
+        //     context.outlinedButton(
+        //       data: BaseUiKitButtonData(
+        //         onPressed: () async {
+        //           final maybeTime = await showUiKitTimeDialog(context);
+        //           if (maybeTime != null) {
+        //             setState(() {
+        //               _placeToEdit.openFrom = maybeTime;
+        //             });
+        //           }
+        //         },
+        //         iconInfo: BaseUiKitButtonIconData(
+        //           iconData: ShuffleUiKitIcons.clock,
+        //           size: 16.h,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        Row(
-          children: [
-            Text(S.of(context).OpenTo, style: theme?.regularTextTheme.labelSmall),
-            const Spacer(),
-            Text(
-              _placeToEdit.openTo == null
-                  ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-                  : normalizedTi(_placeToEdit.openTo),
-              style: theme?.boldTextTheme.body,
-            ),
-            context.outlinedButton(
-              data: BaseUiKitButtonData(
-                onPressed: () async {
-                  final maybeTime = await showUiKitTimeDialog(context);
-                  if (maybeTime != null) {
-                    setState(() {
-                      _placeToEdit.openTo = maybeTime;
-                    });
-                  }
-                },
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.clock,
-                  size: 16.h,
-                ),
-              ),
-            ),
-          ],
-        ).paddingSymmetric(horizontal: horizontalPadding),
+        //TODO restore editing schedules
+        // Row(
+        //   children: [
+        //     Text(S.of(context).OpenTo, style: theme?.regularTextTheme.labelSmall),
+        //     const Spacer(),
+        //     Text(
+        //       _placeToEdit.openTo == null
+        //           ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
+        //           : normalizedTi(_placeToEdit.openTo),
+        //       style: theme?.boldTextTheme.body,
+        //     ),
+        //     context.outlinedButton(
+        //       data: BaseUiKitButtonData(
+        //         onPressed: () async {
+        //           final maybeTime = await showUiKitTimeDialog(context);
+        //           if (maybeTime != null) {
+        //             setState(() {
+        //               _placeToEdit.openTo = maybeTime;
+        //             });
+        //           }
+        //         },
+        //         iconInfo: BaseUiKitButtonIconData(
+        //           iconData: ShuffleUiKitIcons.clock,
+        //           size: 16.h,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         Row(children: [
           Text(S.of(context).DaysOfWeek, style: theme?.regularTextTheme.labelSmall),
