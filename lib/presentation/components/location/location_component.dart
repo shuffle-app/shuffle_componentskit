@@ -14,7 +14,8 @@ class LocationComponent extends StatefulWidget {
   final void Function(KnownLocation location)? onKnownLocationChanged;
   final ValueChanged<KnownLocation>? onKnownLocationConfirmed;
   final Future<List<KnownLocation>?> Function(String placeName)? onPlacesCheck;
-  final CameraPosition? initialPosition;
+  final double? initialLatitude;
+  final double? initialLongitude;
   final Future<LatLng?> Function()? onDetermineLocation;
 
   const LocationComponent({
@@ -22,7 +23,8 @@ class LocationComponent extends StatefulWidget {
     required this.onGoogleLocationChanged,
     required this.onLocationConfirmed,
     this.onPlacesCheck,
-    this.initialPosition,
+    this.initialLatitude,
+    this.initialLongitude,
     this.onDetermineLocation,
     this.onKnownLocationConfirmed,
     this.onKnownLocationChanged,
@@ -47,11 +49,23 @@ class _LocationComponentState extends State<LocationComponent> {
   @override
   void initState() {
     super.initState();
-    cameraPosition = widget.initialPosition ??
-        const CameraPosition(
-          target: LatLng(25.276987, 55.296249),
-          zoom: 14.4746,
-        );
+    if (widget.initialLongitude != null && widget.initialLatitude != null) {
+      setState(() {
+        mapMarkers = {
+          Marker(
+            markerId: MarkerId('1'),
+            position: LatLng(
+              widget.initialLatitude ?? 0,
+              widget.initialLongitude ?? 0,
+            ),
+          )
+        };
+      });
+    }
+    cameraPosition = CameraPosition(
+      target: LatLng(widget.initialLatitude ?? 25.276987, widget.initialLongitude ?? 55.296249),
+      zoom: 14.4746,
+    );
     searchTextController.addListener(_onSearchListener);
   }
 
@@ -128,6 +142,7 @@ class _LocationComponentState extends State<LocationComponent> {
         if (places != null) {
           log('places found: ${places.length}', name: 'LocationComponent');
           locationDetailsSheetController.updateKnownLocations(places);
+          locationDetailsSheetController.updateSheetState(LocationDetailsSheetState.visible);
           setState(() => _suggestionPlaces = places);
         }
       });
@@ -238,7 +253,17 @@ class _LocationComponentState extends State<LocationComponent> {
     return Theme(
       data: UiKitThemeFoundation.defaultTheme,
       child: UiKitLocationPicker(
-        onLocationChanged: (location) => widget.onKnownLocationChanged?.call(location),
+        onLocationChanged: (location) {
+          cameraPosition = CameraPosition(
+            target: LatLng(
+              location.latitude ?? cameraPosition.target.latitude,
+              location.longitude ?? cameraPosition.target.longitude,
+            ),
+            zoom: 14.4746,
+          );
+          setState(() {});
+          widget.onKnownLocationChanged?.call(location);
+        },
         newPlace: _newPlaceTapped,
         suggestionPlaces: _suggestionPlaces,
         onNewPlaceTap: (value) => setState(() => _newPlaceTapped = value),

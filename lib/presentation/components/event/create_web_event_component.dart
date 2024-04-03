@@ -14,8 +14,8 @@ class CreateWebEventComponent extends StatefulWidget {
   final VoidCallback? onShowResult;
   final Future<String?> Function()? getLocation;
   final Future<List<String>> Function(String)? onSuggestCategories;
-  final Future<List<String>> Function(String)? onSuggestBaseProperties;
-  final Future<List<String>> Function(String)? onSuggestUniqueProperties;
+  final Future<List<String>> Function()? onBaseTagsAdded;
+  final Future<List<String>> Function()? onUniqueTagsAdded;
   final void Function(String)? onBaseTagSelected;
   final void Function(String)? onBaseTagUnselected;
   final void Function(String)? onUniqueTagSelected;
@@ -24,8 +24,8 @@ class CreateWebEventComponent extends StatefulWidget {
   const CreateWebEventComponent({
     super.key,
     required this.onEventCreated,
-    this.onSuggestUniqueProperties,
-    this.onSuggestBaseProperties,
+    this.onUniqueTagsAdded,
+    this.onBaseTagsAdded,
     this.onBaseTagSelected,
     this.onBaseTagUnselected,
     this.onUniqueTagSelected,
@@ -173,22 +173,74 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       WebFormField(
                         title: S.of(context).BaseProperties,
                         isRequired: true,
-                        child: UiKitMultiSelectSuggestionField(
-                          options: widget.onSuggestBaseProperties ?? (q) => Future.value([]),
-                          borderRadius: BorderRadiusFoundation.all12,
-                          onOptionSelected: widget.onBaseTagSelected,
-                          onOptionUnselected: widget.onBaseTagUnselected,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final baseTags = await widget.onBaseTagsAdded?.call();
+                            if (baseTags != null) {
+                              setState(() {
+                                _eventToEdit.baseTags = baseTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
+                          },
+                          child: IgnorePointer(
+                            child: UiKitTagSelector.darkBackground(
+                              borderRadius: BorderRadiusFoundation.all12,
+                              onNotFoundTagCallback: (value) {
+                                setState(() {
+                                  _eventToEdit.baseTags = [
+                                    ..._eventToEdit.baseTags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ];
+                                });
+                              },
+                              tags: _eventToEdit.baseTags.map((e) => e.title).toList(),
+                              onRemoveTagCallback: (value) {
+                                _eventToEdit.baseTags.removeWhere((e) => e.title == value);
+                                setState(() {});
+                                widget.onBaseTagUnselected?.call(value);
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
                         title: S.of(context).UniqueProperties,
                         isRequired: true,
-                        child: UiKitMultiSelectSuggestionField(
-                          options: widget.onSuggestUniqueProperties ?? (q) => Future.value([]),
-                          borderRadius: BorderRadiusFoundation.all12,
-                          onOptionSelected: widget.onUniqueTagSelected,
-                          onOptionUnselected: widget.onUniqueTagUnselected,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final uniqueTags = await widget.onUniqueTagsAdded?.call();
+                            if (uniqueTags != null) {
+                              setState(() {
+                                _eventToEdit.tags = uniqueTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
+                          },
+                          child: IgnorePointer(
+                            child: UiKitTagSelector.darkBackground(
+                              borderRadius: BorderRadiusFoundation.all12,
+                              onNotFoundTagCallback: (value) {
+                                setState(() {
+                                  _eventToEdit.tags = [
+                                    ..._eventToEdit.tags,
+                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                  ];
+                                });
+                              },
+                              tags: _eventToEdit.tags.map((e) => e.title).toList(),
+                              onRemoveTagCallback: (value) {
+                                _eventToEdit.tags.removeWhere((e) => e.title == value);
+                                setState(() {});
+                                widget.onUniqueTagUnselected?.call(value);
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,

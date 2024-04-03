@@ -15,8 +15,8 @@ class CreateWebPlaceComponent extends StatefulWidget {
   final Future<String?> Function()? getLocation;
   final Future<List<String>> Function(String) placeCategoriesLoader;
   final ValueChanged<String> onCategorySelected;
-  final VoidCallback? onBaseTagsAdded;
-  final VoidCallback? onUniqueTagsAdded;
+  final Future<List<String>> Function()? onBaseTagsAdded;
+  final Future<List<String>> Function()? onUniqueTagsAdded;
   final ValueChanged<String>? onBaseTagRemoved;
   final ValueChanged<String>? onUniqueTagRemoved;
 
@@ -207,7 +207,16 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         isRequired: true,
                         child: GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: widget.onBaseTagsAdded,
+                          onTap: () async {
+                            final baseTags = await widget.onBaseTagsAdded?.call();
+                            if (baseTags != null) {
+                              setState(() {
+                                _placeToEdit.baseTags = baseTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
+                          },
                           child: IgnorePointer(
                             child: UiKitTagSelector.darkBackground(
                               borderRadius: BorderRadiusFoundation.all12,
@@ -235,7 +244,16 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         isRequired: true,
                         child: GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: widget.onUniqueTagsAdded,
+                          onTap: () async {
+                            final uniqueTags = await widget.onUniqueTagsAdded?.call();
+                            if (uniqueTags != null) {
+                              setState(() {
+                                _placeToEdit.tags = uniqueTags
+                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .toList();
+                              });
+                            }
+                          },
                           child: IgnorePointer(
                             child: UiKitTagSelector.darkBackground(
                               borderRadius: BorderRadiusFoundation.all12,
