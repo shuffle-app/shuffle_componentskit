@@ -49,8 +49,7 @@ class AboutUserComponent extends StatelessWidget {
     if (aboutUserModel.selectedAge == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
     }
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -278,18 +277,18 @@ ImageWidget _getIconForReligionMock(UiKitTag religion) {
     }
   }
 
-  switch (religion.title) {
-    case 'Hindu':
+  switch (religion.title.toLowerCase()) {
+    case 'hindu':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.hindu);
-    case 'Islam':
+    case 'islam':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.muslimFlag);
-    case 'Atheism':
+    case 'atheism':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.atheist);
-    case 'Buddism':
+    case 'buddism':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.buddismFlag);
-    case 'Judaism':
+    case 'judaism':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.judaism);
-    case 'Christianity':
+    case 'christianity':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.christianity);
     default:
       return const ImageWidget();
@@ -305,6 +304,8 @@ ImageWidget _getIconForGenderMock(UiKitTag gender) {
     }
   }
 
+  switch (gender.title.toLowerCase()) {
+    case 'male':
   switch (gender.title) {
     case 'Male':
       return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.male);
