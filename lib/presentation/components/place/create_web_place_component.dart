@@ -19,12 +19,16 @@ class CreateWebPlaceComponent extends StatefulWidget {
   final Future<List<String>> Function()? onUniqueTagsAdded;
   final ValueChanged<String>? onBaseTagRemoved;
   final ValueChanged<String>? onUniqueTagRemoved;
+  final VoidCallback? onDescriptionTapped;
+  final TextEditingController descriptionController;
 
   const CreateWebPlaceComponent({
     super.key,
     required this.onPlaceCreated,
     required this.placeCategoriesLoader,
     required this.onCategorySelected,
+    required this.descriptionController,
+    this.onDescriptionTapped,
     this.placeToEdit,
     this.getLocation,
     this.onPlaceDeleted,
@@ -43,7 +47,6 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _phoneController = TextEditingController();
   late final TextEditingController _websiteController = TextEditingController();
-  late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();
@@ -63,7 +66,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
     super.initState();
     _titleController.text = widget.placeToEdit?.title ?? '';
     _placeTypeController.text = widget.placeToEdit?.placeType ?? '';
-    _descriptionController.text = widget.placeToEdit?.description ?? '';
+    widget.descriptionController.text = widget.placeToEdit?.description ?? '';
     _addressController.text = widget.placeToEdit?.location ?? '';
     _placeToEdit = widget.placeToEdit ??
         UiPlaceModel(
@@ -74,13 +77,13 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
         );
     _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
-    _descriptionController.addListener(_checkDescriptionHeightConstraint);
+    widget.descriptionController.addListener(_checkDescriptionHeightConstraint);
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
   }
 
   _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / 0.6.sw > descriptionHeightConstraint / 50.h) {
+    if (widget.descriptionController.text.length * 5.8.w / 0.6.sw > descriptionHeightConstraint / 50.h) {
       setState(() {
         descriptionHeightConstraint += 35.h;
       });
@@ -140,7 +143,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
 
   @override
   void dispose() {
-    _descriptionController.removeListener(_checkDescriptionHeightConstraint);
+    widget.descriptionController.removeListener(_checkDescriptionHeightConstraint);
     super.dispose();
   }
 
@@ -368,17 +371,23 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                       //   ),
                       // ),
                       SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: S.of(context).Description,
-                        child: SizedBox(
-                          height: descriptionHeightConstraint,
-                          child: UiKitInputFieldNoIcon(
-                            controller: _descriptionController,
-                            minLines: 4,
-                            expands: true,
-                            hintText: S.of(context).EnterInputType(S.of(context).Description.toLowerCase()),
-                            fillColor: theme.colorScheme.surface1,
-                            borderRadius: BorderRadiusFoundation.all12,
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: widget.onDescriptionTapped,
+                        child: WebFormField(
+                          title: S.of(context).Description,
+                          child: SizedBox(
+                            height: descriptionHeightConstraint,
+                            child: IgnorePointer(
+                              child: UiKitInputFieldNoIcon(
+                                controller: widget.descriptionController,
+                                minLines: 4,
+                                expands: true,
+                                hintText: S.of(context).EnterInputType(S.of(context).Description.toLowerCase()),
+                                fillColor: theme.colorScheme.surface1,
+                                borderRadius: BorderRadiusFoundation.all12,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -490,7 +499,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                         _placeToEdit.title = _titleController.text;
                                         _placeToEdit.website = _websiteController.text;
                                         _placeToEdit.phone = _phoneController.text;
-                                        _placeToEdit.description = _descriptionController.text;
+                                        _placeToEdit.description = widget.descriptionController.text;
                                         _placeToEdit.media = [..._photos, ..._videos];
                                         setState(() {});
                                         widget.onPlaceCreated.call(_placeToEdit);
