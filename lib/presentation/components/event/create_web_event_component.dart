@@ -20,10 +20,13 @@ class CreateWebEventComponent extends StatefulWidget {
   final void Function(String)? onBaseTagUnselected;
   final void Function(String)? onUniqueTagSelected;
   final void Function(String)? onUniqueTagUnselected;
+  final VoidCallback? onDescriptionTapped;
+  final TextEditingController descriptionController;
 
   const CreateWebEventComponent({
     super.key,
     required this.onEventCreated,
+    required this.descriptionController,
     this.onUniqueTagsAdded,
     this.onBaseTagsAdded,
     this.onBaseTagSelected,
@@ -35,6 +38,7 @@ class CreateWebEventComponent extends StatefulWidget {
     this.onEventDeleted,
     this.onSuggestCategories,
     this.onShowResult,
+    this.onDescriptionTapped,
   });
 
   @override
@@ -44,7 +48,6 @@ class CreateWebEventComponent extends StatefulWidget {
 class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _addressController = TextEditingController();
-  late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
   final TextEditingController _personPhoneController = TextEditingController();
   final TextEditingController _personPositionController = TextEditingController();
@@ -61,7 +64,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   void initState() {
     super.initState();
     _titleController.text = widget.eventToEdit?.title ?? '';
-    _descriptionController.text = widget.eventToEdit?.description ?? '';
+    widget.descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ??
         UiEventModel(
           id: -1,
@@ -72,11 +75,11 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
     _addressController.text = widget.eventToEdit?.location ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
-    _descriptionController.addListener(_checkDescriptionHeightConstraint);
+    widget.descriptionController.addListener(_checkDescriptionHeightConstraint);
   }
 
   _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / 0.6.sw > descriptionHeightConstraint / 50.h) {
+    if (widget.descriptionController.text.length * 5.8.w / 0.6.sw > descriptionHeightConstraint / 50.h) {
       setState(() {
         descriptionHeightConstraint += 35.h;
       });
@@ -127,7 +130,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
 
   @override
   void dispose() {
-    _descriptionController.removeListener(_checkDescriptionHeightConstraint);
+    widget.descriptionController.removeListener(_checkDescriptionHeightConstraint);
     super.dispose();
   }
 
@@ -350,17 +353,23 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       //   ]),
                       // ),
                       SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        title: S.of(context).Description,
-                        child: SizedBox(
-                          height: descriptionHeightConstraint,
-                          child: UiKitInputFieldNoIcon(
-                            controller: _descriptionController,
-                            minLines: 4,
-                            expands: true,
-                            hintText: S.of(context).EnterInputType(S.of(context).Description.toLowerCase()),
-                            fillColor: theme.colorScheme.surface1,
-                            borderRadius: BorderRadiusFoundation.all12,
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: widget.onDescriptionTapped,
+                        child: WebFormField(
+                          title: S.of(context).Description,
+                          child: SizedBox(
+                            height: descriptionHeightConstraint,
+                            child: IgnorePointer(
+                              child: UiKitInputFieldNoIcon(
+                                controller: widget.descriptionController,
+                                minLines: 4,
+                                expands: true,
+                                hintText: S.of(context).EnterInputType(S.of(context).Description.toLowerCase()),
+                                fillColor: theme.colorScheme.surface1,
+                                borderRadius: BorderRadiusFoundation.all12,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -470,7 +479,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                         _eventToEdit.title = _titleController.text;
                                         // _eventToEdit.website = _websiteController.text;
                                         // _eventToEdit.phone = _phoneController.text;
-                                        _eventToEdit.description = _descriptionController.text;
+                                        _eventToEdit.description = widget.descriptionController.text;
                                         _eventToEdit.media = [..._photos, ..._videos];
                                         widget.onEventCreated.call(_eventToEdit);
                                       },
