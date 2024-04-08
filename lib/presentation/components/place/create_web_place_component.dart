@@ -21,6 +21,7 @@ class CreateWebPlaceComponent extends StatefulWidget {
   final ValueChanged<String>? onUniqueTagRemoved;
   final VoidCallback? onDescriptionTapped;
   final TextEditingController descriptionController;
+  final bool isLoading;
 
   const CreateWebPlaceComponent({
     super.key,
@@ -37,6 +38,7 @@ class CreateWebPlaceComponent extends StatefulWidget {
     this.onUniqueTagsAdded,
     this.onBaseTagRemoved,
     this.onUniqueTagRemoved,
+    this.isLoading = false,
   });
 
   @override
@@ -504,6 +506,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                         setState(() {});
                                         widget.onPlaceCreated.call(_placeToEdit);
                                       },
+                                      loading: widget.isLoading
                                     ),
                                   ),
                                 ),

@@ -22,6 +22,7 @@ class CreateWebEventComponent extends StatefulWidget {
   final void Function(String)? onUniqueTagUnselected;
   final VoidCallback? onDescriptionTapped;
   final TextEditingController descriptionController;
+  final bool isLoading;
 
   const CreateWebEventComponent({
     super.key,
@@ -39,6 +40,7 @@ class CreateWebEventComponent extends StatefulWidget {
     this.onSuggestCategories,
     this.onShowResult,
     this.onDescriptionTapped,
+    this.isLoading = false,
   });
 
   @override
@@ -483,6 +485,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                         _eventToEdit.media = [..._photos, ..._videos];
                                         widget.onEventCreated.call(_eventToEdit);
                                       },
+                                      loading: widget.isLoading,
                                     ),
                                   ),
                                 ),
