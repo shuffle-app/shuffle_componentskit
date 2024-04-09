@@ -68,15 +68,7 @@ class GlobalConfiguration {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
     Map<String, dynamic> configAsMap = (await _getFromUrl(
-        true
-            ? 'https://n8n.tools.horum.co/webhook/configs-shuffle'
-            // ? 'https://n8n.tools.horum.co/webhook/shuffle-stable-configs'
-        //ignore: dead_code
-            : 'http://${_configUrl}/api/v1/settings/config/$version',
-        queryParameters://TODO make working staging config
-            _languageCode != null ? {'lang': _languageCode!, 'version': version, 'configUrl': 'dev-api.elffuhs.com'} : null,
-        headers: ConfigConstants.configHeaders))['config'];
-    // print('got configAsMap $configAsMap');
+        'https://raw.githubusercontent.com/shuffle-app/app_configs/$version/config_$_languageCode.json'))['config'];
     final model = ConfigurationModel(updated: DateTime.now(), content: configAsMap, theme: configAsMap['theme_name']);
     unawaited(_saveToDocument());
 
