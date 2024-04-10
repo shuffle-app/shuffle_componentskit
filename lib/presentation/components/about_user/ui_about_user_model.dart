@@ -51,9 +51,9 @@ class UiAboutUserModel {
         selectedGenderId: selectedGenderId,
         selectedAge: selectedAge,
       )
-        ..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType
-        ..errorGenderMessage = selectedGenderId != null ? null : S.current.PleaseSelectGender
-        ..errorReligionMessage = (selectedReligionsIds != null && selectedReligionsIds!.isNotEmpty)
-            ? null
-            : S.current.PleaseSelectAtLeastNReligion(1);
+        ..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType;
+        // ..errorGenderMessage = selectedGenderId != null ? null : S.current.PleaseSelectGender
+        // ..errorReligionMessage = (selectedReligionsIds != null && selectedReligionsIds!.isNotEmpty)
+        //     ? null
+        //     : S.current.PleaseSelectAtLeastNReligion(1);
 }

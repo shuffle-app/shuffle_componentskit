@@ -45,12 +45,12 @@ class UiProfileModel {
       profileType: ProfileCardType.personal,
       showSupportShuffle: showSupportShuffle,
       onDonate: onDonate,
-      onViewAllAchievements: onViewAllAchievements,
-      achievements: achievements.where((element) => element.asset != null).toList(),
+      // onViewAllAchievements: onViewAllAchievements,
+      // achievements: achievements.where((element) => element.asset != null).toList(),
       profileStats: [
         UiKitStats(
           title: S.current.Balance,
-          value: '0\$',
+          value: '0',
           actionButton: SmallOrdinaryButton(
             text: S.current.Details.toUpperCase(),
             group: group,

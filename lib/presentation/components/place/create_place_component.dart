@@ -10,6 +10,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final VoidCallback? onPlaceDeleted;
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
+  // final ValueChanged<String?>? onCategoryChanged;
 
   const CreatePlaceComponent(
       {super.key, this.placeToEdit, this.getLocation, this.onPlaceDeleted, required this.onPlaceCreated});
@@ -198,18 +199,18 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ],
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        PhotoVideoSelector(
-          positionModel: model.positionModel,
-          videos: _videos,
-          photos: _photos,
-          onVideoAddRequested: _onVideoAddRequested,
-          onVideoDeleted: _onVideoDeleted,
-          onPhotoAddRequested: _onPhotoAddRequested,
-          onPhotoDeleted: _onPhotoDeleted,
-          onPhotoReorderRequested: _onPhotoReorderRequested,
-          onVideoReorderRequested: _onVideoReorderRequested,
-        ),
-        SpacingFoundation.verticalSpace24,
+        // PhotoVideoSelector(
+        //   positionModel: model.positionModel,
+        //   videos: _videos,
+        //   photos: _photos,
+        //   onVideoAddRequested: _onVideoAddRequested,
+        //   onVideoDeleted: _onVideoDeleted,
+        //   onPhotoAddRequested: _onPhotoAddRequested,
+        //   onPhotoDeleted: _onPhotoDeleted,
+        //   onPhotoReorderRequested: _onPhotoReorderRequested,
+        //   onVideoReorderRequested: _onVideoReorderRequested,
+        // ),
+        // SpacingFoundation.verticalSpace24,
         ConstrainedBox(
           constraints: BoxConstraints(maxHeight: descriptionHeightConstraint),
           child: UiKitInputFieldNoFill(
@@ -278,37 +279,37 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         //     ),
         //   ],
         // ).paddingSymmetric(horizontal: horizontalPadding),
-        SpacingFoundation.verticalSpace24,
-        Row(children: [
-          Text(S.of(context).DaysOfWeek, style: theme?.regularTextTheme.labelSmall),
-          const Spacer(),
-          Expanded(
-            child: Text(
-              _placeToEdit.weekdays.isEmpty
-                  ? S.of(context).SelectDays.toLowerCase()
-                  : _placeToEdit.weekdays.length == 7
-                      ? S.of(context).Daily
-                      : _placeToEdit.weekdays.join(', '),
-              style: theme?.boldTextTheme.body,
-            ),
-          ),
-          context.outlinedButton(
-            data: BaseUiKitButtonData(
-              onPressed: () async {
-                final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
-                if (maybeDaysOfWeek != null) {
-                  setState(() {
-                    _placeToEdit.weekdays = maybeDaysOfWeek;
-                  });
-                }
-              },
-              iconInfo: BaseUiKitButtonIconData(
-                iconData: ShuffleUiKitIcons.calendar,
-                size: 16.h,
-              ),
-            ),
-          ),
-        ]).paddingSymmetric(horizontal: horizontalPadding),
+        // SpacingFoundation.verticalSpace24,
+        // Row(children: [
+        //   Text(S.of(context).DaysOfWeek, style: theme?.regularTextTheme.labelSmall),
+        //   const Spacer(),
+        //   Expanded(
+        //     child: Text(
+        //       _placeToEdit.weekdays.isEmpty
+        //           ? S.of(context).SelectDays.toLowerCase()
+        //           : _placeToEdit.weekdays.length == 7
+        //               ? S.of(context).Daily
+        //               : _placeToEdit.weekdays.join(', '),
+        //       style: theme?.boldTextTheme.body,
+        //     ),
+        //   ),
+        //   context.outlinedButton(
+        //     data: BaseUiKitButtonData(
+        //       onPressed: () async {
+        //         final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
+        //         if (maybeDaysOfWeek != null) {
+        //           setState(() {
+        //             _placeToEdit.weekdays = maybeDaysOfWeek;
+        //           });
+        //         }
+        //       },
+        //       iconInfo: BaseUiKitButtonIconData(
+        //         iconData: ShuffleUiKitIcons.calendar,
+        //         size: 16.h,
+        //       ),
+        //     ),
+        //   ),
+        // ]).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         InkWell(
           onTap: () async {
