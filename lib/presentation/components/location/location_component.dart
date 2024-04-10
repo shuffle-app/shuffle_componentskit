@@ -47,11 +47,20 @@ class _LocationComponentState extends State<LocationComponent> {
   @override
   void initState() {
     super.initState();
-    cameraPosition = CameraPosition(
-      target: LatLng(widget.initialLatitude ?? 25.276987, widget.initialLongitude ?? 55.296249),
-      zoom: 14.4746,
-    );
-    searchTextController.addListener(_onSearchListener);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      cameraPosition = CameraPosition(
+        target: LatLng(widget.initialLatitude ?? 25.276987, widget.initialLongitude ?? 55.296249),
+        zoom: 14.4746,
+      );
+      mapMarkers = {
+        Marker(
+          markerId: const MarkerId('1'),
+          position: LatLng(widget.initialLatitude ?? 25.276987, widget.initialLongitude ?? 55.296249),
+        ),
+      };
+      searchTextController.addListener(_onSearchListener);
+      setState(() {});
+    });
   }
 
   _onSearchListener() {
