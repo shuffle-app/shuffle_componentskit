@@ -169,6 +169,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                         title: S.of(context).EventType,
                         isRequired: true,
                         child: UiKitSuggestionField(
+                          showAllOptions: true,
                           options: widget.onSuggestCategories ?? (q) => Future.value([]),
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,

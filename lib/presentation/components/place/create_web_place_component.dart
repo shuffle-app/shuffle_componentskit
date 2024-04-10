@@ -188,6 +188,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         isRequired: true,
                         child: UiKitSuggestionField(
                           options: widget.placeCategoriesLoader,
+                          showAllOptions: true,
                           hintText: 'Enter place category',
                           onFieldSubmitted: (value) {
                             _placeToEdit.placeType = value;
@@ -496,18 +497,17 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                 Expanded(
                                   child: context.gradientButton(
                                     data: BaseUiKitButtonData(
-                                      text: S.of(context).Save,
-                                      onPressed: () {
-                                        _placeToEdit.title = _titleController.text;
-                                        _placeToEdit.website = _websiteController.text;
-                                        _placeToEdit.phone = _phoneController.text;
-                                        _placeToEdit.description = widget.descriptionController.text;
-                                        _placeToEdit.media = [..._photos, ..._videos];
-                                        setState(() {});
-                                        widget.onPlaceCreated.call(_placeToEdit);
-                                      },
-                                      loading: widget.isLoading
-                                    ),
+                                        text: S.of(context).Save,
+                                        onPressed: () {
+                                          _placeToEdit.title = _titleController.text;
+                                          _placeToEdit.website = _websiteController.text;
+                                          _placeToEdit.phone = _phoneController.text;
+                                          _placeToEdit.description = widget.descriptionController.text;
+                                          _placeToEdit.media = [..._photos, ..._videos];
+                                          setState(() {});
+                                          widget.onPlaceCreated.call(_placeToEdit);
+                                        },
+                                        loading: widget.isLoading),
                                   ),
                                 ),
                                 if (widget.onShowResult != null) ...[
