@@ -132,7 +132,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
               color: colorScheme?.darkNeutral800,
             ),
           ),
-        ).paddingSymmetric(horizontal: horizontalMargin),
+        ),
         SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
           rating: widget.place.rating,

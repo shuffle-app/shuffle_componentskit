@@ -12,7 +12,7 @@ class LocationComponent extends StatefulWidget {
   final VoidCallback onLocationConfirmed;
   final void Function({String address, double latitude, double longitude}) onLocationChanged;
   final ValueChanged<KnownLocation>? onKnownLocationConfirmed;
-  final Future<List<KnownLocation>?> Function(LatLng coordinates)? onPlacesCheck;
+  final Future<List<KnownLocation>> Function(String? address)? onPlacesCheck;
   final double? initialLatitude;
   final double? initialLongitude;
   final Future<LatLng?> Function()? onDetermineLocation;
@@ -40,7 +40,8 @@ class _LocationComponentState extends State<LocationComponent> {
   Set<Marker> mapMarkers = {};
   List<KnownLocation>? _suggestionPlaces = [];
   bool _newPlaceTapped = true;
-  final LocationPickerSearchOverlayController locationPickerSearchOverlayController = LocationPickerSearchOverlayController();
+  final LocationPickerSearchOverlayController locationPickerSearchOverlayController =
+      LocationPickerSearchOverlayController();
   Timer? _debounceTimer;
   final LocationDetailsSheetController locationDetailsSheetController = LocationDetailsSheetController();
 
@@ -134,13 +135,13 @@ class _LocationComponentState extends State<LocationComponent> {
         position: placeCoordinates,
       );
 
-      await widget.onPlacesCheck
-          ?.call(placeCoordinates)
-          .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
-
       final placeFromCoordinates = await GoogleMapsApi.fetchPlaceFromCoordinates(
         latlng: '${placeCoordinates.latitude}, ${placeCoordinates.longitude}',
       );
+
+      await widget.onPlacesCheck
+          ?.call(placeFromCoordinates?.results?.firstOrNull?.formattedAddress)
+          .then((places) => places.isNotEmpty ? locationDetailsSheetController.updateKnownLocations(places) : null);
 
       setState(() {
         mapMarkers.clear();
@@ -214,8 +215,8 @@ class _LocationComponentState extends State<LocationComponent> {
     }
     final place = placeFromCoordinates?.results?.first;
     await widget.onPlacesCheck
-        ?.call(latLng)
-        .then((places) => places != null ? locationDetailsSheetController.updateKnownLocations(places) : null);
+        ?.call(placeFromCoordinates!.results!.first.formattedAddress)
+        .then((places) => places.isNotEmpty ? locationDetailsSheetController.updateKnownLocations(places) : null);
 
     setState(() => _suggestionPlaces = placeFromCoordinates?.results
             ?.map(
@@ -253,10 +254,6 @@ class _LocationComponentState extends State<LocationComponent> {
       mapMarkers = {marker};
     });
     decodeCoordinates(coordinates);
-    widget.onPlacesCheck?.call(coordinates).then((places) => setState(() {
-          _newPlaceTapped = true;
-          _suggestionPlaces = places;
-        }));
   }
 
   @override

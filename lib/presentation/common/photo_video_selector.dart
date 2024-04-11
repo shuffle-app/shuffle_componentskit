@@ -103,7 +103,7 @@ class PhotoVideoSelector extends StatelessWidget {
             ],
           ),
         ),
-        if (hideVideosSelection == false)
+        if (!hideVideosSelection)
           SizedBox(
             height: itemsSize.height * 1.2,
             width: double.infinity,

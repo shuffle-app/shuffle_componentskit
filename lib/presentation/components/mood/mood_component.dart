@@ -15,7 +15,6 @@ class MoodComponent extends StatelessWidget {
   final VoidCallback? onLevelComplited;
   final ScrollController controller;
   final ValueNotifier<bool> isVisibleButton;
-  final bool rewardIsUnderDev;
   final bool showHowItWorks;
 
   const MoodComponent({
@@ -28,7 +27,6 @@ class MoodComponent extends StatelessWidget {
     this.onLevelComplited,
     required this.isVisibleButton,
     this.onLevelActivated,
-    this.rewardIsUnderDev = false,
     this.showHowItWorks = false,
   }) : super(key: key);
 
@@ -159,7 +157,7 @@ class MoodComponent extends StatelessWidget {
                     IgnorePointer(
                       ignoring: isIgnoringPointer,
                       child: UiKitCustomTabBar(
-                        selectedTab: mood.activatedLevel?.toUpperCase(),
+                        selectedTab: mood.activatedLevel?.toLowerCase(),
                         onTappedTab: (index) {
                           setState(() {
                             selectedLevel = lvls[index];
@@ -319,17 +317,117 @@ class MoodComponent extends StatelessWidget {
               : const Border.fromBorderSide(BorderSide(color: UiKitColors.gradientGreyLight2, width: 2)),
           slidableChild: context.gradientButton(
               data: BaseUiKitButtonData(text: S.of(context).Go, onPressed: () {}, fit: ButtonFit.hugContent)),
-          onCompleted: () => onLevelActivated?.call(selectedLevel),
+          onCompleted: () {
+            showUiKitAlertDialog(
+                context,
+                AlertDialogData(
+                    title: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          S.current.YouCanGet,
+                          textAlign: TextAlign.center,
+                          style: theme?.boldTextTheme.title2.copyWith(color: theme.colorScheme.primary),
+                        )),
+                    defaultButtonText: '',
+                    additionalButton: context.button(
+                        data: BaseUiKitButtonData(
+                            text: S.current.OkayCool.toUpperCase(),
+                            fit: ButtonFit.fitWidth,
+                            onPressed: () => navigatorKey.currentState?.pop(),
+                            textColor: theme?.colorScheme.inversePrimary,
+                            backgroundColor: theme?.colorScheme.primary)),
+                    content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          S.current.DifferentNumberOfPoints,
+                          S.current.RealMoney,
+                          S.current.InventoryItems,
+                          S.current.DubaiEventTicket
+                        ]
+                            .map(
+                              (e) => Row(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GradientableWidget(
+                                    gradient: GradientFoundation.starLinearGradient,
+                                    child: ImageWidget(
+                                      iconData: ShuffleUiKitIcons.gradientStar,
+                                      color: Colors.white,
+                                      width: 0.0625.sw,
+                                      height: 0.0625.sw,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SpacingFoundation.horizontalSpace8,
+                                  Expanded(
+                                    child: Text(
+                                      e,
+                                      style: theme?.regularTextTheme.body.copyWith(color: theme.colorScheme.primary),
+                                    ),
+                                  ),
+                                ],
+                              ).paddingSymmetric(
+                                vertical: SpacingFoundation.verticalSpacing6,
+                              ),
+                            )
+                            .toList())));
+            onLevelActivated?.call(selectedLevel);
+          },
           onCompletedChild: GestureDetector(
-            onTap: rewardIsUnderDev
-                ? () => showUiKitGeneralFullScreenDialog(
-                      context,
-                      GeneralDialogData(
-                        topPadding: 0.5.sh,
-                        child: const UnderDevelopment().paddingOnly(top: 0.125.sh),
+            onTap: () {
+              showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              S.current.YouCanGet,
+                              style: theme?.boldTextTheme.title2,
+                            ),
+                          ),
+                          SpacingFoundation.verticalSpace8,
+                          ...[
+                            S.current.DifferentNumberOfPoints,
+                            S.current.RealMoney,
+                            S.current.InventoryItems,
+                            S.current.DubaiEventTicket
+                          ].map(
+                            (e) => Row(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GradientableWidget(
+                                  gradient: GradientFoundation.starLinearGradient,
+                                  child: ImageWidget(
+                                    iconData: ShuffleUiKitIcons.gradientStar,
+                                    color: Colors.white,
+                                    width: 0.0625.sw,
+                                    height: 0.0625.sw,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                SpacingFoundation.horizontalSpace8,
+                                Expanded(
+                                  child: Text(
+                                    e,
+                                    style: theme?.regularTextTheme.body,
+                                  ),
+                                ),
+                              ],
+                            ).paddingSymmetric(
+                                vertical: SpacingFoundation.verticalSpacing8,
+                                horizontal: SpacingFoundation.horizontalSpacing16),
+                          ),
+                          SpacingFoundation.verticalSpace8,
+                        ],
                       ),
-                    )
-                : null,
+                      topPadding: 0.6.sh));
+            },
             child: context.gradientButton(
               data: BaseUiKitButtonData(
                 text: S.of(context).GetReward,
@@ -342,4 +440,55 @@ class MoodComponent extends StatelessWidget {
       ).paddingOnly(bottom: MediaQuery.paddingOf(context).bottom),
     ]);
   }
+}
+
+showCongrats(int points) {
+  final theme = navigatorKey.currentContext!.uiKitTheme;
+
+  return showUiKitGeneralFullScreenDialog(
+      navigatorKey.currentContext!,
+      GeneralDialogData(
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
+            children: [
+              Positioned(
+                  top: 40.h,
+                  child: DecoratedBox(
+                    position: DecorationPosition.foreground,
+                    decoration:  BoxDecoration(gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      theme!.colorScheme.surface1.withOpacity(0.4),
+                      theme.colorScheme.surface1.withOpacity(0.6),
+                      theme.colorScheme.surface1.withOpacity(0.8),
+                      theme.colorScheme.surface1.withOpacity(1),
+                    ])),
+                    child: ImageWidget(
+                      svgAsset: GraphicsFoundation.instance.svg.logo,
+                      height: 90.h,
+                      fit: BoxFit.fitHeight
+                    ),
+                  )),
+              Column(children: [
+                Text(
+                  S.current.Congratulations,
+                  style: theme.boldTextTheme.title2,
+                ),
+                Text(
+                  S.current.YouReceived,
+                  style: theme?.boldTextTheme.title2,
+                ),
+                SpacingFoundation.verticalSpace24,
+                Text(
+                  '$points\n${S.current.Points}',
+                  textAlign: TextAlign.center,
+                  style: theme?.boldTextTheme.title2,
+                ),
+
+              ]),
+            ],
+          ),
+          topPadding: 0.65.sh));
 }
