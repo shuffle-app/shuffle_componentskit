@@ -41,7 +41,8 @@ class UiAboutUserModel {
       UiAboutUserModel(
         selectedPersonType: selectedPersonType ?? this.selectedPersonType,
         selectedReligionsIds: selectedReligionsIds ?? this.selectedReligionsIds,
-        selectedGenderId: selectedGenderId ?? this.selectedGenderId,
+        selectedGenderId:
+            selectedGenderId == this.selectedGenderId ? null : (selectedGenderId ?? this.selectedGenderId),
         selectedAge: selectedAge ?? this.selectedAge,
       );
 
@@ -50,10 +51,9 @@ class UiAboutUserModel {
         selectedReligionsIds: selectedReligionsIds,
         selectedGenderId: selectedGenderId,
         selectedAge: selectedAge,
-      )
-        ..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType;
-        // ..errorGenderMessage = selectedGenderId != null ? null : S.current.PleaseSelectGender
-        // ..errorReligionMessage = (selectedReligionsIds != null && selectedReligionsIds!.isNotEmpty)
-        //     ? null
-        //     : S.current.PleaseSelectAtLeastNReligion(1);
+      )..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType;
+// ..errorGenderMessage = selectedGenderId != null ? null : S.current.PleaseSelectGender
+// ..errorReligionMessage = (selectedReligionsIds != null && selectedReligionsIds!.isNotEmpty)
+//     ? null
+//     : S.current.PleaseSelectAtLeastNReligion(1);
 }

@@ -159,7 +159,7 @@ class MoodComponent extends StatelessWidget {
                     IgnorePointer(
                       ignoring: isIgnoringPointer,
                       child: UiKitCustomTabBar(
-                        selectedTab: mood.activatedLevel?.toUpperCase(),
+                        selectedTab: mood.activatedLevel?.toLowerCase(),
                         onTappedTab: (index) {
                           setState(() {
                             selectedLevel = lvls[index];

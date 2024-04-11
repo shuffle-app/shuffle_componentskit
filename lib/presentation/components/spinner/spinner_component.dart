@@ -89,7 +89,7 @@ class SpinnerComponent extends StatelessWidget {
                 spacing: SpacingFoundation.horizontalSpacing12,
                 shimmerLoadingChild: UiKitSpinnerCard(
                   availableHeight: size.maxHeight,
-                ),
+                ).paddingOnly(left: SpacingFoundation.horizontalSpacing16),
                 itemBuilder: (_, item, index) {
                   if (item.isAdvertisement && (ads?.entries.isNotEmpty ?? false)) {
                     final advertisement = ads?.entries.first;
