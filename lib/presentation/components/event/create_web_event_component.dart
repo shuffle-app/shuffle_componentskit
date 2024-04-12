@@ -16,6 +16,7 @@ class CreateWebEventComponent extends StatefulWidget {
   final Future<List<String>> Function(String)? onSuggestCategories;
   final Future<List<String>> Function()? onBaseTagsAdded;
   final Future<List<String>> Function()? onUniqueTagsAdded;
+  final void Function(String)? onCategorySelected;
   final void Function(String)? onBaseTagSelected;
   final void Function(String)? onBaseTagUnselected;
   final void Function(String)? onUniqueTagSelected;
@@ -29,6 +30,7 @@ class CreateWebEventComponent extends StatefulWidget {
     required this.onEventCreated,
     required this.descriptionController,
     this.onUniqueTagsAdded,
+    this.onCategorySelected,
     this.onBaseTagsAdded,
     this.onBaseTagSelected,
     this.onBaseTagUnselected,
@@ -173,6 +175,11 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           options: widget.onSuggestCategories ?? (q) => Future.value([]),
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,
+                          onFieldSubmitted: (value) {
+                            _eventToEdit.eventType = value;
+                            setState(() {});
+                            widget.onCategorySelected?.call(value);
+                          },
                         ),
                       ),
                       SpacingFoundation.verticalSpace24,
