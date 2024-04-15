@@ -11,11 +11,13 @@ class UiAboutUserModel {
   String? errorReligionMessage;
 
   bool get checkFields {
-    if (selectedPersonType != null &&
-        selectedGenderId != null &&
-        selectedAge != null &&
-        selectedReligionsIds != null &&
-        selectedReligionsIds!.isNotEmpty) {
+    if (selectedPersonType != null
+    // &&
+    // selectedGenderId != null &&
+    // selectedAge != null &&
+    // selectedReligionsIds != null &&
+    // selectedReligionsIds!.isNotEmpty
+    ) {
       return true;
     }
 
@@ -42,16 +44,18 @@ class UiAboutUserModel {
         selectedPersonType: selectedPersonType ?? this.selectedPersonType,
         selectedReligionsIds: selectedReligionsIds ?? this.selectedReligionsIds,
         selectedGenderId:
-            selectedGenderId == this.selectedGenderId ? null : (selectedGenderId ?? this.selectedGenderId),
+        selectedGenderId == this.selectedGenderId ? null : (selectedGenderId ?? this.selectedGenderId),
         selectedAge: selectedAge ?? this.selectedAge,
       );
 
-  UiAboutUserModel withErrors() => UiAboutUserModel(
+  UiAboutUserModel withErrors() =>
+      UiAboutUserModel(
         selectedPersonType: selectedPersonType,
         selectedReligionsIds: selectedReligionsIds,
         selectedGenderId: selectedGenderId,
         selectedAge: selectedAge,
-      )..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType;
+      )
+        ..errorPersonTypeMessage = selectedPersonType != null ? null : S.current.PleaseSelectOneType;
 // ..errorGenderMessage = selectedGenderId != null ? null : S.current.PleaseSelectGender
 // ..errorReligionMessage = (selectedReligionsIds != null && selectedReligionsIds!.isNotEmpty)
 //     ? null

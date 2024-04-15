@@ -206,7 +206,7 @@ class MoodComponent extends StatelessWidget {
                                   cards: [
                                     PlacePreview(
                                       onTap: (id) => onPlacePressed?.call(id, todayContent.type),
-                                      onCheckIn: (id) => onCheckInPressed?.call(id, todayContent.type),
+                                      onCheckIn:  mood.activatedLevel != null ? (id) => onCheckInPressed?.call(id, todayContent.type) : null,
                                       isFavorite: todayContent.isFavorite,
                                       onFavoriteChanged: todayContent.onFavoriteChanged,
                                       shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
@@ -223,7 +223,7 @@ class MoodComponent extends StatelessWidget {
                                       model: model,
                                     ),
                                   ],
-                                  shouldVisitAt: DateTime.now(),
+                                  shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
                                 ),
                               if (tomorrowContent != null)
                                 PreviewCardsWrapper(
@@ -231,7 +231,7 @@ class MoodComponent extends StatelessWidget {
                                       .map(
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
-                                          onCheckIn: (id) => onCheckInPressed?.call(id, content.type),
+                                          onCheckIn:  mood.activatedLevel != null ? (id) => onCheckInPressed?.call(id, content.type) : null,
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
                                           shouldVisitAt:
@@ -250,7 +250,7 @@ class MoodComponent extends StatelessWidget {
                                         ),
                                       )
                                       .toList(),
-                                  shouldVisitAt: DateTime.now().add(const Duration(days: 1)),
+                                  shouldVisitAt: tomorrowContent.first.shouldVisitAt ?? DateTime.now().add(const Duration(days: 1)),
                                 ),
                               if (dayAfterTomorrowContent != null)
                                 PreviewCardsWrapper(
@@ -258,7 +258,7 @@ class MoodComponent extends StatelessWidget {
                                       .map(
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
-                                          onCheckIn: (id) => onCheckInPressed?.call(id, content.type),
+                                          onCheckIn: mood.activatedLevel != null ? (id) => onCheckInPressed?.call(id, content.type) : null,
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
                                           shouldVisitAt:
@@ -277,7 +277,7 @@ class MoodComponent extends StatelessWidget {
                                         ),
                                       )
                                       .toList(),
-                                  shouldVisitAt: DateTime.now().add(const Duration(days: 2)),
+                                  shouldVisitAt: dayAfterTomorrowContent.first.shouldVisitAt ?? DateTime.now().add(const Duration(days: 2)),
                                 ),
                             ],
                           );
