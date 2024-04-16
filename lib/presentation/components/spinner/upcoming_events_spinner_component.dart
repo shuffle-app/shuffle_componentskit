@@ -31,7 +31,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
     final PagingController<int, String> categoriesController =
     PagingController<int, String>(firstPageKey: 1, invisibleItemsThreshold: 1);
     Future.delayed(const Duration(seconds: 1), () {
-      categoriesController.appendLastPage(events.map((event) => event.eventType ?? 'category').toList());
+      categoriesController.appendLastPage(events.map((event) => event.eventType ?? 'category').toSet().toList());
       itemsController
           .appendLastPage(
           events.where((element) => element.eventType == categoriesController.itemList?.first).toList());
@@ -81,7 +81,8 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
             pagingController: itemsController,
             scrollController: uiModel.cardsScrollController,
             spacing: SpacingFoundation.horizontalSpacing12,
-            shimmerLoadingChild: UiKitSpinnerCard(availableHeight: cardsListHeight).paddingOnly(left: 0.125.sw),
+            shimmerLoadingChild: UiKitSpinnerCard(availableHeight: cardsListHeight).paddingOnly(
+                left: SpacingFoundation.horizontalSpacing16),
             itemBuilder: (_, item, index) {
               final itemsCount = itemsController.itemList?.length;
               final centerSingleItem = itemsCount == 1 && !kIsWeb;

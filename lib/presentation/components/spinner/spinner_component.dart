@@ -33,7 +33,8 @@ class SpinnerComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spacing = SpacingFoundation.verticalSpace16;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final model = ComponentSpinnerModel.fromJson(config['spinner']);
     final ads = model.content.body?[ContentItemType.advertisement]?.properties;
 
@@ -112,7 +113,9 @@ class SpinnerComponent extends StatelessWidget {
                               )
                               .paddingOnly(
                                 left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
-                                right: itemsController.itemList?.length == index + 1 ? SpacingFoundation.horizontalSpacing16 : 0,
+                                right: itemsController.itemList?.length == index + 1
+                                    ? SpacingFoundation.horizontalSpacing16
+                                    : 0,
                               ),
                         ],
                       ),
@@ -144,7 +147,8 @@ class SpinnerComponent extends StatelessWidget {
                       title: item.title,
                       scheduleString: item.scheduleString?.replaceAll('\n', ', '),
                       favourite: favoriteValue.data as bool? ?? item.favorite,
-                      photoLink: item.verticalPreview?.link ?? item.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                      photoLink: item.verticalPreview?.link ??
+                          item.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
                       ownerTileTitle: item.owner?.name,
                       ownerPhotoLink: item.owner?.logo,
                       ownerTileSubtitle: item.owner?.username,
