@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/mood/widgets/preview_cards_wrapper.dart';
@@ -9,6 +9,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
   final Future<UiMoodGameContentModel>? Function(String name) onTabChanged;
+  final List<UiUniversalModel> passedCheckins;
   final Function(int id, String type)? onPlacePressed;
   final Function(int id, String type)? onCheckInPressed;
   final Function(String level)? onLevelActivated;
@@ -28,6 +29,7 @@ class MoodComponent extends StatelessWidget {
     required this.isVisibleButton,
     this.onLevelActivated,
     this.showHowItWorks = false,
+    this.passedCheckins = const [],
   }) : super(key: key);
 
   @override
@@ -152,6 +154,8 @@ class MoodComponent extends StatelessWidget {
                 final lvls = ['easy', 'fair', 'hardcore'];
                 final isIgnoringPointer = !(mood.activatedLevel == null || !lvls.contains(mood.activatedLevel!));
 
+                log('selected level is ${mood.activatedLevel}', name: 'MoodComponent');
+
                 return Column(
                   children: [
                     IgnorePointer(
@@ -206,7 +210,13 @@ class MoodComponent extends StatelessWidget {
                                   cards: [
                                     PlacePreview(
                                       onTap: (id) => onPlacePressed?.call(id, todayContent.type),
-                                      onCheckIn:  mood.activatedLevel != null ? (id) => onCheckInPressed?.call(id, todayContent.type) : null,
+                                      onCheckIn: mood.activatedLevel != null
+                                          ? (passedCheckins.firstWhereOrNull((el) =>
+                                                      el.id == todayContent.id && el.type == todayContent.type) !=
+                                                  null
+                                              ? null
+                                              : (id) => onCheckInPressed?.call(id, todayContent.type))
+                                          : null,
                                       isFavorite: todayContent.isFavorite,
                                       onFavoriteChanged: todayContent.onFavoriteChanged,
                                       shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
@@ -231,7 +241,13 @@ class MoodComponent extends StatelessWidget {
                                       .map(
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
-                                          onCheckIn:  mood.activatedLevel != null ? (id) => onCheckInPressed?.call(id, content.type) : null,
+                                          onCheckIn: mood.activatedLevel != null
+                                              ? (passedCheckins.firstWhereOrNull(
+                                                          (el) => el.id == content.id && el.type == content.type) !=
+                                                      null
+                                                  ? null
+                                                  : (id) => onCheckInPressed?.call(id, content.type))
+                                              : null,
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
                                           shouldVisitAt:
@@ -250,7 +266,8 @@ class MoodComponent extends StatelessWidget {
                                         ),
                                       )
                                       .toList(),
-                                  shouldVisitAt: tomorrowContent.first.shouldVisitAt ?? DateTime.now().add(const Duration(days: 1)),
+                                  shouldVisitAt: tomorrowContent.first.shouldVisitAt ??
+                                      DateTime.now().add(const Duration(days: 1)),
                                 ),
                               if (dayAfterTomorrowContent != null)
                                 PreviewCardsWrapper(
@@ -258,7 +275,13 @@ class MoodComponent extends StatelessWidget {
                                       .map(
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
-                                          onCheckIn: mood.activatedLevel != null ? (id) => onCheckInPressed?.call(id, content.type) : null,
+                                          onCheckIn: mood.activatedLevel != null
+                                              ? (passedCheckins.firstWhereOrNull(
+                                                          (el) => el.id == content.id && el.type == content.type) !=
+                                                      null
+                                                  ? null
+                                                  : (id) => onCheckInPressed?.call(id, content.type))
+                                              : null,
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
                                           shouldVisitAt:
@@ -277,7 +300,8 @@ class MoodComponent extends StatelessWidget {
                                         ),
                                       )
                                       .toList(),
-                                  shouldVisitAt: dayAfterTomorrowContent.first.shouldVisitAt ?? DateTime.now().add(const Duration(days: 2)),
+                                  shouldVisitAt: dayAfterTomorrowContent.first.shouldVisitAt ??
+                                      DateTime.now().add(const Duration(days: 2)),
                                 ),
                             ],
                           );
@@ -311,13 +335,7 @@ class MoodComponent extends StatelessWidget {
         builder: (context, value, child) =>
             AnimatedOpacity(duration: const Duration(milliseconds: 200), opacity: value ? 1 : 0, child: child!),
         child: SlidableButton(
-          isCompleted: mood.activatedLevel != null,
-          customBorder: mood.activatedLevel == null || onLevelComplited != null
-              ? null
-              : const Border.fromBorderSide(BorderSide(color: UiKitColors.gradientGreyLight2, width: 2)),
-          slidableChild: context.gradientButton(
-              data: BaseUiKitButtonData(text: S.of(context).Go, onPressed: () {}, fit: ButtonFit.hugContent)),
-          onCompleted: () {
+          onTap: () {
             showUiKitAlertDialog(
                 context,
                 AlertDialogData(
@@ -373,6 +391,14 @@ class MoodComponent extends StatelessWidget {
                               ),
                             )
                             .toList())));
+          },
+          isCompleted: mood.activatedLevel != null,
+          customBorder: mood.activatedLevel == null || onLevelComplited != null
+              ? null
+              : const Border.fromBorderSide(BorderSide(color: UiKitColors.gradientGreyLight2, width: 2)),
+          slidableChild: context.gradientButton(
+              data: BaseUiKitButtonData(text: S.of(context).Go, onPressed: () {}, fit: ButtonFit.hugContent)),
+          onCompleted: () {
             onLevelActivated?.call(selectedLevel);
           },
           onCompletedChild: GestureDetector(
@@ -456,20 +482,15 @@ showCongrats(int points) {
                   top: 40.h,
                   child: DecoratedBox(
                     position: DecorationPosition.foreground,
-                    decoration:  BoxDecoration(gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
                       theme!.colorScheme.surface1.withOpacity(0.4),
                       theme.colorScheme.surface1.withOpacity(0.6),
                       theme.colorScheme.surface1.withOpacity(0.8),
                       theme.colorScheme.surface1.withOpacity(1),
                     ])),
                     child: ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.logo,
-                      height: 90.h,
-                      fit: BoxFit.fitHeight
-                    ),
+                        svgAsset: GraphicsFoundation.instance.svg.logo, height: 90.h, fit: BoxFit.fitHeight),
                   )),
               Column(children: [
                 Text(
@@ -478,15 +499,14 @@ showCongrats(int points) {
                 ),
                 Text(
                   S.current.YouReceived,
-                  style: theme?.boldTextTheme.title2,
+                  style: theme.boldTextTheme.title2,
                 ),
                 SpacingFoundation.verticalSpace24,
                 Text(
                   '$points\n${S.current.Points}',
                   textAlign: TextAlign.center,
-                  style: theme?.boldTextTheme.title2,
+                  style: theme.boldTextTheme.title2,
                 ),
-
               ]),
             ],
           ),

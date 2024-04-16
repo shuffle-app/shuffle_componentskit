@@ -8,10 +8,12 @@ class UiFeedModel {
   final bool showHowItWorksTitle;
   final bool showHowItWorksBody;
   final bool isHealthKitEnabled;
+
   // final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
   final List<UiKitTag>? niches;
+
   // final List<BusinessGlobalEventUiModel>? globalEvents;
 
   UiFeedModel({
@@ -77,4 +79,26 @@ class UiUniversalModel extends Advertisable {
     this.onFavoriteChanged,
     this.shouldVisitAt,
   }) : super(isAdvertisement: true);
+
+  UiUniversalModel.checkIn({
+    required this.id,
+    required this.type,
+    this.media = const [],
+    this.description = '',
+    this.tags = const [],
+    this.baseTags,
+    this.website,
+    this.weekdays,
+    this.location,
+    this.source,
+    this.title,
+    this.isFavorite,
+    this.onFavoriteChanged,
+    this.shouldVisitAt,
+  }) : super(isAdvertisement: false);
+
+  @override
+  String toString() {
+    return 'UiUniversalModel(id: $id, type: $type, shouldVisitAt: $shouldVisitAt)';
+  }
 }
