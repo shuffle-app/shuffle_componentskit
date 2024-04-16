@@ -22,6 +22,10 @@ class CreateWebPlaceComponent extends StatefulWidget {
   final VoidCallback? onDescriptionTapped;
   final TextEditingController descriptionController;
   final bool isLoading;
+  final Uint8List? horizontalPreviewImageBytes;
+  final Uint8List? verticalPreviewImageBytes;
+  final VoidCallback? onAddHorizontalPreview;
+  final VoidCallback? onAddVerticalPreview;
 
   const CreateWebPlaceComponent({
     super.key,
@@ -39,6 +43,10 @@ class CreateWebPlaceComponent extends StatefulWidget {
     this.onBaseTagRemoved,
     this.onUniqueTagRemoved,
     this.isLoading = false,
+    this.horizontalPreviewImageBytes,
+    this.verticalPreviewImageBytes,
+    this.onAddHorizontalPreview,
+    this.onAddVerticalPreview,
   });
 
   @override
@@ -296,6 +304,69 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         onLogoAddRequested: _onLogoAddRequested,
                       ),
                       SpacingFoundation.verticalSpace24,
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              'Depiction 1',
+                              style: theme?.boldTextTheme.body,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SpacingFoundation.horizontalSpace16,
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              'Depiction 2',
+                              style: theme?.boldTextTheme.body,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SpacingFoundation.verticalSpace16,
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: widget.horizontalPreviewImageBytes != null
+                                ? ImageWidget(
+                                    imageBytes: widget.horizontalPreviewImageBytes,
+                                    height: 156,
+                                    width: 156 * 1.7495454545,
+                                  )
+                                : Center(
+                                    child: context.outlinedButton(
+                                      data: BaseUiKitButtonData(
+                                        iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.cameraplus),
+                                        onPressed: widget.onAddHorizontalPreview,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          SpacingFoundation.horizontalSpace16,
+                          Expanded(
+                            flex: 4,
+                            child: widget.verticalPreviewImageBytes != null
+                                ? ImageWidget(
+                                    imageBytes: widget.verticalPreviewImageBytes,
+                                    height: 156,
+                                    width: 156 * 1.7495454545,
+                                  )
+                                : Center(
+                                    child: context.outlinedButton(
+                                      data: BaseUiKitButtonData(
+                                        iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.cameraplus),
+                                        onPressed: widget.onAddVerticalPreview,
+                                      ),
+                                    ),
+                                  ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
