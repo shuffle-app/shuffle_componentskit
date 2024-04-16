@@ -25,12 +25,12 @@ class OnboardingComponent extends StatefulWidget {
         autoSwitchDuration: const Duration(milliseconds: 1500),
       ),
       OnBoardingPageItem(
-        imageLink: GraphicsFoundation.instance.png.onboardingMock2.path,
+        imageLink: GraphicsFoundation.instance.png.onboardingMock3.path,
         title: S.current.OnboardingSlide2,
         autoSwitchDuration: const Duration(milliseconds: 1500),
       ),
       OnBoardingPageItem(
-        imageLink: GraphicsFoundation.instance.png.onboardingMock3.path,
+        imageLink: GraphicsFoundation.instance.png.onboardingMock2.path,
         title: S.current.OnboardingSlide3,
         autoSwitchDuration: const Duration(milliseconds: 1500),
       ),

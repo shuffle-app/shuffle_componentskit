@@ -23,6 +23,8 @@ class UiPlaceModel {
   String? price;
   Future<List<HorizontalCaptionedImageData>?>? branches;
   Object? schedule;
+  String? niche;
+  String? contentType;
 
   UiPlaceModel({
     required this.id,
@@ -43,6 +45,9 @@ class UiPlaceModel {
     required this.tags,
     this.baseTags = const [],
     this.weekdays = const [],
+    this.schedule,
+    this.niche,
+    this.contentType,
   }) : descriptionItems = [
           UiDescriptionItemModel(
               title: S.current.Website,
@@ -96,6 +101,9 @@ class UiPlaceModel {
     String? phone,
     String? price,
     Future<List<HorizontalCaptionedImageData>?>? branches,
+    Object? schedule,
+    String? niche,
+    String? contentType,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -116,6 +124,9 @@ class UiPlaceModel {
         phone: phone ?? this.phone,
         price: price ?? this.price,
         branches: branches ?? this.branches,
+        schedule: schedule ?? this.schedule,
+        niche: niche ?? this.niche,
+        contentType: contentType ?? this.contentType,
       );
 
   UiPlaceModel.empty()
