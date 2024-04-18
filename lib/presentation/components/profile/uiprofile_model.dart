@@ -6,6 +6,7 @@ class UiProfileModel {
   final VoidCallback? onShare;
   final String? nickname;
   final String? name;
+  final String? email;
   final String? description;
   final String? avatarUrl;
   final String? userCredo;
@@ -25,6 +26,7 @@ class UiProfileModel {
   final UserTileType userTileType;
   final String? specialization;
   final List<String>? socialLinks;
+  final int? points;
 
   ProfileCard get cardWidget {
     AutoSizeGroup group = AutoSizeGroup();
@@ -58,7 +60,7 @@ class UiProfileModel {
         ),
         UiKitStats(
           title: S.current.Points,
-          value: '0',
+          value: points?.toString() ?? '0',
           actionButton: SmallOrdinaryButton(
             text: S.current.Spent.toUpperCase(),
             group: group,
@@ -91,6 +93,8 @@ class UiProfileModel {
     this.tags,
     this.tagsIds,
     this.favoriteTagsIds,
+    this.email,
+    this.points,
   });
 
   /// write [copyWith] method
@@ -118,6 +122,8 @@ class UiProfileModel {
     List<String>? tags,
     List<int>? tagsIds,
     List<int>? favoriteTagsIds,
+    String? email,
+    int? points,
   }) =>
       UiProfileModel(
           onShare: onShare ?? this.onShare,
@@ -141,5 +147,7 @@ class UiProfileModel {
           tags: tags ?? this.tags,
           mindsetId: mindsetId ?? this.mindsetId,
           tagsIds: tagsIds ?? this.tagsIds,
-          favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds);
+          email: email ?? this.email,
+          favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
+          points: points ?? this.points);
 }
