@@ -375,7 +375,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   SpacingFoundation.horizontalSpace8,
                   Expanded(
                     child: PointBalancePlaceActionCard(
-                        value: '0', group: group, rasterIconAsset: GraphicsFoundation.instance.png.money, action: null
+                        value: widget.place.userPoints?.toString() ?? '0', group: group, rasterIconAsset: GraphicsFoundation.instance.png.money, action: null
                         //     () {
                         //   log('balance was pressed');
                         // },
@@ -422,6 +422,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,
+          spacing: SpacingFoundation.horizontalSpacing8,
           children: widget.place.descriptionItems!
               .map(
                 (e) => GestureDetector(
@@ -438,7 +439,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   child: UiKitTitledDescriptionGridWidget(
                     title: e.title,
                     description: e.description,
-                    spacing: SpacingFoundation.horizontalSpacing8,
+                    spacing: (SpacingFoundation.horizontalSpacing4 + horizontalMargin)/2,
                   ),
                 ),
               )

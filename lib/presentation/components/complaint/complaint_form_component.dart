@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ComplaintFormComponent extends StatefulWidget {
@@ -12,6 +13,7 @@ class ComplaintFormComponent extends StatefulWidget {
     this.nameValidator,
     this.emailValidator,
     this.issueValidator,
+    this.getUserData
   });
 
   final TextEditingController nameController;
@@ -19,7 +21,7 @@ class ComplaintFormComponent extends StatefulWidget {
   final TextEditingController issueController;
   final GlobalKey<FormState> formKey;
   final VoidCallback onSend;
-
+  final UiProfileModel Function()? getUserData;
   final String? Function(String?)? nameValidator;
   final String? Function(String?)? emailValidator;
   final String? Function(String?)? issueValidator;
@@ -34,6 +36,11 @@ class _ComplaintFormComponentState extends State<ComplaintFormComponent> {
   @override
   void initState() {
     super.initState();
+    if(widget.getUserData!=null){
+      final data = widget.getUserData!();
+      widget.nameController.text = data.name ?? '';
+      widget.emailController.text = data.email ?? '';
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.nameController.addListener(_textControllersListener);
       widget.emailController.addListener(_textControllersListener);

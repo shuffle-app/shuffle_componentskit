@@ -25,6 +25,7 @@ class UiPlaceModel {
   Object? schedule;
   String? niche;
   String? contentType;
+  int? userPoints;
 
   UiPlaceModel({
     required this.id,
@@ -48,6 +49,7 @@ class UiPlaceModel {
     this.schedule,
     this.niche,
     this.contentType,
+    this.userPoints,
   }) : descriptionItems = [
           UiDescriptionItemModel(
               title: S.current.Website,
@@ -104,6 +106,7 @@ class UiPlaceModel {
     Object? schedule,
     String? niche,
     String? contentType,
+    int? userPoints,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -127,6 +130,7 @@ class UiPlaceModel {
         schedule: schedule ?? this.schedule,
         niche: niche ?? this.niche,
         contentType: contentType ?? this.contentType,
+        userPoints: userPoints ?? this.userPoints,
       );
 
   UiPlaceModel.empty()
