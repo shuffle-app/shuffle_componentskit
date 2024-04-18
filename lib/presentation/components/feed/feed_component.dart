@@ -95,6 +95,7 @@ class FeedComponent extends StatelessWidget {
                 children: feed.recommendedBusinessEvents
                         ?.map<Widget>(
                           (e) => UiKitImageWithDescriptionCard(
+                            onTap: () => onListItemPressed?.call(e.id, 'event'),
                             title: e.title ?? '',
                             imageUrl: e.verticalPreview?.link ??
                                 e.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link ??
