@@ -1,10 +1,13 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/mood/widgets/preview_cards_wrapper.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
@@ -89,7 +92,37 @@ class MoodComponent extends StatelessWidget {
                           height: smallCardHeight,
                         );
                       }(),
-                    SpacingFoundation.verticalSpacing8.heightBox,
+                    if (mood.descriptionItems!.first.active && Platform.isIOS)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Transform.translate(
+                              offset: Offset(0, -0.5.h),
+                              child: ImageWidget(
+                                svgAsset: GraphicsFoundation.instance.svg.appleLogo,
+                                height: 6.w,
+                                fit: BoxFit.fitHeight,
+                              )),
+                          RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: 'Weather, learn more about ', style: theme?.regularTextTheme.caption4Small),
+                              TextSpan(
+                                  text: 'data sources',
+                                  style: theme?.regularTextTheme.caption4Small
+                                      .copyWith(decoration: TextDecoration.underline),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launchUrlString(mood.weatherSourceUrl ??
+                                          'https://weather-data.apple.com/legal-attribution.html');
+                                    })
+                            ]),
+                          )
+                        ],
+                      ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4)
+                    else
+                      SpacingFoundation.verticalSpacing8.heightBox,
                     if (mood.descriptionItems != null && mood.descriptionItems!.length >= 2)
                       () {
                         final item = mood.descriptionItems!.last;
