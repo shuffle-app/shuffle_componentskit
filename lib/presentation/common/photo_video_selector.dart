@@ -7,14 +7,14 @@ class PhotoVideoSelector extends StatelessWidget {
   final List<BaseUiKitMedia> photos;
   final List<BaseUiKitMedia> videos;
   final VoidCallback onPhotoAddRequested;
-  final VoidCallback onVideoAddRequested;
+  final VoidCallback? onVideoAddRequested;
   final ReorderCallback onPhotoReorderRequested;
-  final ReorderCallback onVideoReorderRequested;
+  final ReorderCallback? onVideoReorderRequested;
   final PositionModel? positionModel;
   final GlobalKey<ReorderableListState> listPhotosKey = GlobalKey<ReorderableListState>();
   final GlobalKey<ReorderableListState> listVideosKey = GlobalKey<ReorderableListState>();
   final Function(int index) onPhotoDeleted;
-  final Function(int index) onVideoDeleted;
+  final Function(int index)? onVideoDeleted;
   final bool hideVideosSelection;
 
   PhotoVideoSelector({
@@ -23,11 +23,11 @@ class PhotoVideoSelector extends StatelessWidget {
     this.videos = const [],
     this.itemsSize = const Size(75, 75),
     required this.onPhotoAddRequested,
-    required this.onVideoAddRequested,
+     this.onVideoAddRequested,
     required this.onPhotoReorderRequested,
-    required this.onVideoReorderRequested,
+     this.onVideoReorderRequested,
     required this.onPhotoDeleted,
-    required this.onVideoDeleted,
+     this.onVideoDeleted,
     this.hideVideosSelection = false,
     this.positionModel,
   });
@@ -136,7 +136,7 @@ class PhotoVideoSelector extends StatelessWidget {
                             context.outlinedButton(
                               hideBorder: true,
                               data: BaseUiKitButtonData(
-                                onPressed: () => onVideoDeleted.call(index),
+                                onPressed: () => onVideoDeleted?.call(index),
                                 iconInfo: BaseUiKitButtonIconData(
                                   iconData: ShuffleUiKitIcons.x,
                                   size: 6,
@@ -146,7 +146,7 @@ class PhotoVideoSelector extends StatelessWidget {
                           ],
                         ),
                         itemCount: videos.length,
-                        onReorder: onVideoReorderRequested,
+                        onReorder: onVideoReorderRequested!,
                       ),
                     ),
                   ],
