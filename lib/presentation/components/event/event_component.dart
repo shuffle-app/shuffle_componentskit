@@ -176,7 +176,6 @@ class _EventComponentState extends State<EventComponent> {
                 media: widget.event.media,
                 onTap: null,
                 width: 1.sw - horizontalMargin * 2,
-                height: 156.h,
                 actions: [
                   if (widget.complaintFormComponent != null)
                     context.smallOutlinedButton(
