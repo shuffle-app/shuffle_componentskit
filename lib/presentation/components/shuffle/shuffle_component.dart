@@ -127,7 +127,7 @@ class ShuffleComponent extends StatelessWidget {
                 SpacingFoundation.verticalSpace12,
                 SizedBox(
                   height: 1.sh / 1.6,
-                  width: 1.sw - 24,
+                  width: 1.sw,
                   child: Stack(
                     fit: StackFit.passthrough,
                     children: [
@@ -153,7 +153,7 @@ class ShuffleComponent extends StatelessWidget {
                       ),
                       if (shuffle.items.isNotEmpty)
                         UiKitCardSwiper(
-                          size: Size(1.sw - 24, 1.sh / 1.6),
+                          size: Size(1.sw, 1.sh / 1.6),
                           likeController: shuffle.likeController,
                           dislikeController: shuffle.dislikeController,
                           onEnd: onEnd,
