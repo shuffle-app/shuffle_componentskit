@@ -6,6 +6,7 @@ class UiMoodModel {
   final String logo;
   final String? activatedLevel;
   final List<UiDescriptionItemModel>? descriptionItems;
+  final String? weatherSourceUrl;
 
   UiMoodModel({
     required this.id,
@@ -13,6 +14,7 @@ class UiMoodModel {
     required this.logo,
     this.activatedLevel,
     this.descriptionItems,
+    this.weatherSourceUrl,
   });
 
   UiMoodModel copyWith({
@@ -22,6 +24,7 @@ class UiMoodModel {
     String? activatedLevel,
     List<UiDescriptionItemModel>? descriptionItems,
     List<UiPlaceModel>? places,
+    String? weatherSourceUrl,
   }) =>
       UiMoodModel(
         id: id ?? this.id,
@@ -29,5 +32,6 @@ class UiMoodModel {
         logo: logo ?? this.logo,
         activatedLevel: activatedLevel ?? this.activatedLevel,
         descriptionItems: descriptionItems ?? this.descriptionItems,
+        weatherSourceUrl: weatherSourceUrl ?? this.weatherSourceUrl,
       );
 }
