@@ -119,7 +119,6 @@ class PlacePreview extends StatelessWidget {
                           media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
                           onTap: () => onTap?.call(place.id),
                           width: size.width - horizontalMargin * 2,
-                          height: cellSize?.height ?? 156.h,
                         ),
                         if (!showFavoriteBtn)
                           ListenableBuilder(
@@ -145,8 +144,7 @@ class PlacePreview extends StatelessWidget {
                               data: BaseUiKitButtonData(
                                 onPressed: onFavoriteChanged,
                                 iconInfo: BaseUiKitButtonIconData(
-                                  iconData:
-                                      (snapshot.data ?? false) ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
+                                  iconData: (snapshot.data ?? false) ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
                                   size: (snapshot.data ?? false) ? 15.w : null,
                                 ),
                               ),
@@ -183,18 +181,13 @@ class PlacePreview extends StatelessWidget {
                               ),
                             ),
                           ),
-                        if(reviewsIndicator!=null)
-                          Positioned(
-                              bottom: -8.h,
-                              left: 10.w,
-                              child: reviewsIndicator!)
+                        if (reviewsIndicator != null) Positioned(bottom: -8.h, left: 10.w, child: reviewsIndicator!)
                       ],
                     ),
                   ))),
           if (calculatedOpacity == 1) ...[
             SpacingFoundation.verticalSpace8,
-            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
-                .paddingSymmetric(horizontal: horizontalMargin),
+            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
               baseTags: place.baseTags,
