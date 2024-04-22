@@ -56,10 +56,12 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
             firstOption: CustomBackgroundSwitchOption(
               title: widget.uiModel.options.first.title,
               iconLink: widget.uiModel.options.first.iconLink,
+              value: widget.uiModel.options.first.value,
             ),
             secondOption: CustomBackgroundSwitchOption(
               title: widget.uiModel.options.last.title,
               iconLink: widget.uiModel.options.last.iconLink,
+              value: widget.uiModel.options.last.value,
             ),
             selectedOption: selectedOption,
             onChanged: (value) {
@@ -74,7 +76,7 @@ class _UserTypeSelectionComponentState extends State<UserTypeSelectionComponent>
             child: context.button(
               data: BaseUiKitButtonData(
                 text: S.of(context).Next.toUpperCase(),
-                onPressed: () => widget.onUserTypeSelected?.call(selectedOption.title.toLowerCase()),
+                onPressed: () => widget.onUserTypeSelected?.call(selectedOption.value.toLowerCase()),
               ),
             ),
           ),
