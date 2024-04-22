@@ -449,6 +449,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         behavior: HitTestBehavior.opaque,
                         onTap: widget.onDescriptionTapped,
                         child: WebFormField(
+                          isRequired: true,
                           title: S.of(context).Description,
                           child: SizedBox(
                             height: descriptionHeightConstraint,
