@@ -17,6 +17,8 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future<String?> Function()? onCategoryChanged;
   final Future<String?> Function()? onNicheChanged;
   final Future<List<String>> Function(String, String) propertiesOptions;
+  final List<UiScheduleModel> availableTimeTemplates;
+  final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
   const CreatePlaceComponent({
     super.key,
@@ -27,6 +29,8 @@ class CreatePlaceComponent extends StatefulWidget {
     required this.propertiesOptions,
     this.onCategoryChanged,
     this.onNicheChanged,
+    this.availableTimeTemplates = const [],
+    this.onTimeTemplateCreated,
   });
 
   @override
@@ -250,35 +254,43 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ),
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        //TODO restore editing schedules
-        // Row(
-        //   children: [
-        //     Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
-        //     const Spacer(),
-        //     Text(
-        //       _placeToEdit.openFrom == null
-        //           ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-        //           : normalizedTi(_placeToEdit.openFrom),
-        //       style: theme?.boldTextTheme.body,
-        //     ),
-        //     context.outlinedButton(
-        //       data: BaseUiKitButtonData(
-        //         onPressed: () async {
-        //           final maybeTime = await showUiKitTimeDialog(context);
-        //           if (maybeTime != null) {
-        //             setState(() {
-        //               _placeToEdit.openFrom = maybeTime;
-        //             });
-        //           }
-        //         },
-        //         iconInfo: BaseUiKitButtonIconData(
-        //           iconData: ShuffleUiKitIcons.clock,
-        //           size: 16.h,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ).paddingSymmetric(horizontal: horizontalPadding),
+        Row(
+          children: [
+            Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
+            const Spacer(),
+            Text(
+              _placeToEdit.scheduleString == null
+                  ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
+                  : _placeToEdit.scheduleString!,
+              style: theme?.boldTextTheme.body,
+            ),
+            context.outlinedButton(
+              data: BaseUiKitButtonData(
+                onPressed: () {
+                  context.push(CreateScheduleWidget(
+                    availableTemplates: widget.availableTimeTemplates,
+                    onTemplateCreated: widget.onTimeTemplateCreated,
+                    availableTypes: const [UiScheduleTimeModel.scheduleType],
+                    onScheduleCreated: (model) {
+                      if (model is UiScheduleTimeModel) {
+                        setState(() {
+                          _placeToEdit.schedule = model;
+                          _placeToEdit.scheduleString = model.weeklySchedule
+                              .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                              .join(', ');
+                        });
+                      }
+                    },
+                  ));
+                },
+                iconInfo: BaseUiKitButtonIconData(
+                  iconData: ShuffleUiKitIcons.clock,
+                  size: 16.h,
+                ),
+              ),
+            ),
+          ],
+        ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         //TODO restore editing schedules
         // Row(
@@ -465,7 +477,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
               )).paddingSymmetric(horizontal: horizontalPadding)),
           SpacingFoundation.verticalSpace24,
-
           Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace4,
