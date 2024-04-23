@@ -9,9 +9,18 @@ class CreateScheduleWidget extends StatefulWidget {
   final List<UiScheduleModel> availableTemplates;
   final ValueChanged<UiScheduleModel>? onTemplateCreated;
   final ValueChanged<UiScheduleModel>? onScheduleCreated;
+  final List<String> availableTypes;
 
   const CreateScheduleWidget(
-      {super.key, this.availableTemplates = const [], this.onTemplateCreated, this.onScheduleCreated});
+      {super.key,
+      this.availableTemplates = const [],
+      this.onTemplateCreated,
+      this.onScheduleCreated,
+      this.availableTypes = const [
+        UiScheduleTimeModel.scheduleType,
+        UiScheduleDatesModel.scheduleType,
+        UiScheduleDatesRangeModel.scheduleType
+      ]});
 
   @override
   State<CreateScheduleWidget> createState() => _CreateScheduleWidgetState();
@@ -45,7 +54,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final scheduleTypes = ['Time Range', 'Date – Time', 'Date Range – Time'];
+    final scheduleTypes = widget.availableTypes;
 
     return Stack(children: [
       BlurredAppBarPage(
@@ -123,7 +132,12 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
               context.gradientButton(
                 data: BaseUiKitButtonData(
                   text: S.current.Save,
-                  onPressed: scheduleModel != null ? () => widget.onScheduleCreated?.call(scheduleModel!) : null,
+                  onPressed: scheduleModel != null
+                      ? () {
+                          context.pop();
+                          widget.onScheduleCreated?.call(scheduleModel!);
+                        }
+                      : null,
                 ),
               ),
               SpacingFoundation.verticalSpace4,
@@ -227,6 +241,7 @@ abstract class UiScheduleModel {
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
+  static const String scheduleType = 'Time Range';
   final List<MapEntry<String, List<TimeOfDay>>> weeklySchedule = List.empty(growable: true)
     ..add(const MapEntry('', []));
 
@@ -309,6 +324,7 @@ class UiScheduleTimeModel extends UiScheduleModel {
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
+  static const String scheduleType = 'Date – Time';
   final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
   UiScheduleDatesModel();
@@ -416,6 +432,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
+  static const String scheduleType = 'Date Range - Time';
   final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
   UiScheduleDatesRangeModel();

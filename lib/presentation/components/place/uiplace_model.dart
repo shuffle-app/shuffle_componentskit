@@ -22,7 +22,7 @@ class UiPlaceModel {
   String? phone;
   String? price;
   Future<List<HorizontalCaptionedImageData>?>? branches;
-  Object? schedule;
+  dynamic schedule;
   String? niche;
   String? contentType;
   int? userPoints;
