@@ -571,12 +571,15 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                     data: BaseUiKitButtonData(
                                         text: S.of(context).Save,
                                         onPressed: () {
-                                          _placeToEdit.title = _titleController.text;
-                                          _placeToEdit.website = _websiteController.text;
-                                          _placeToEdit.phone = _phoneController.text;
-                                          _placeToEdit.description = widget.descriptionController.text;
-                                          _placeToEdit.media = [..._photos, ..._videos];
-                                          setState(() {});
+                                          setState(() {
+                                            _placeToEdit = _placeToEdit.copyWith(
+                                              title: _titleController.text,
+                                              website: _websiteController.text,
+                                              phone: _phoneController.text,
+                                              description: widget.descriptionController.text,
+                                              media: [..._photos, ..._videos],
+                                            );
+                                          });
                                           widget.onPlaceCreated.call(_placeToEdit);
                                         },
                                         loading: widget.isLoading),

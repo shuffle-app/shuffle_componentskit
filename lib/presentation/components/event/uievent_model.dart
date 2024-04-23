@@ -125,4 +125,50 @@ class UiEventModel extends Advertisable {
         weekdays = const [],
         descriptionItems = const [],
         super(isAdvertisement: false);
+
+  // copy with method
+
+  UiEventModel copyWith({
+    String? title,
+    UiOwnerModel? owner,
+    List<BaseUiKitMedia>? media,
+    BaseUiKitMedia? verticalPreview,
+    bool? favorite,
+    bool? isRecurrent,
+    String? scheduleString,
+    DateTime? date,
+    String? description,
+    String? location,
+    String? eventType,
+    String? price,
+    String? website,
+    String? phone,
+    List<UiKitTag>? tags,
+    List<UiKitTag>? baseTags,
+    double? rating,
+    bool? archived,
+    List<String>? weekdays,
+  }) =>
+      UiEventModel(
+        id: id,
+        title: title ?? this.title,
+        owner: owner ?? this.owner,
+        media: media ?? this.media,
+        verticalPreview: verticalPreview ?? this.verticalPreview,
+        favorite: favorite ?? this.favorite,
+        isRecurrent: isRecurrent ?? this.isRecurrent,
+        scheduleString: scheduleString ?? this.scheduleString,
+        date: date ?? this.date,
+        description: description ?? this.description,
+        location: location ?? this.location,
+        eventType: eventType ?? this.eventType,
+        price: price ?? this.price,
+        website: website ?? this.website,
+        phone: phone ?? this.phone,
+        tags: tags ?? this.tags,
+        baseTags: baseTags ?? this.baseTags,
+        rating: rating ?? this.rating,
+        archived: archived ?? this.archived,
+        weekdays: weekdays ?? this.weekdays,
+      );
 }
