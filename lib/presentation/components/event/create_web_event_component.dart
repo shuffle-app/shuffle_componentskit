@@ -558,11 +558,14 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                     data: BaseUiKitButtonData(
                                       text: S.of(context).Save,
                                       onPressed: () {
-                                        _eventToEdit.title = _titleController.text;
-                                        // _eventToEdit.website = _websiteController.text;
-                                        // _eventToEdit.phone = _phoneController.text;
-                                        _eventToEdit.description = widget.descriptionController.text;
-                                        _eventToEdit.media = [..._photos, ..._videos];
+                                        setState(() {
+                                          _eventToEdit = _eventToEdit.copyWith(
+                                            title: _titleController.text,
+                                            description: widget.descriptionController.text,
+                                            location: _addressController.text,
+                                            media: [..._photos, ..._videos],
+                                          );
+                                        });
                                         widget.onEventCreated.call(_eventToEdit);
                                       },
                                       loading: widget.isLoading,
