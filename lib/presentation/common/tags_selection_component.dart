@@ -26,7 +26,6 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.uiKitTheme;
     final horizontalPadding = widget.positionModel?.horizontalMargin?.toDouble() ?? 0;
     return Scaffold(
         bottomNavigationBar: _tags.isNotEmpty

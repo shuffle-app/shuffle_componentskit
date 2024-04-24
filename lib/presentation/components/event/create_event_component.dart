@@ -2,16 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../shuffle_components_kit.dart';
+import '../../common/photolist_editing_component.dart';
+import '../../common/tags_selection_component.dart';
 
 class CreateEventComponent extends StatefulWidget {
   final UiEventModel? eventToEdit;
   final VoidCallback? onEventDeleted;
   final Future Function(UiEventModel) onEventCreated;
   final Future<String?> Function()? getLocation;
+  final Future<String?> Function()? onCategoryChanged;
+  final Future<List<String>> Function(String, String) propertiesOptions;
 
-  const CreateEventComponent({super.key, this.eventToEdit, this.getLocation, this.onEventDeleted, required this.onEventCreated});
+  const CreateEventComponent({super.key, this.eventToEdit, this.getLocation, this.onEventDeleted, required this.onEventCreated, this.onCategoryChanged, required this.propertiesOptions});
 
   @override
   State<CreateEventComponent> createState() => _CreateEventComponentState();
@@ -66,12 +70,25 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final files = await ImagePicker().pickMultiImage();
-    if (files.isNotEmpty) {
-      setState(() {
-        _photos.addAll(files.map((file) => UiKitMediaPhoto(link: file.path)));
-      });
-    }
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentEventModel model = kIsWeb
+        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
+        : ComponentEventModel.fromJson(config['event_edit']);
+    final editedPhotos = await context.push(PhotoListEditingComponent(
+      photos: _photos,
+      positionModel: model.positionModel,
+    ));
+    setState(() {
+      _photos.clear();
+      _photos.addAll(editedPhotos);
+    });
+    // final files = await ImagePicker().pickMultiImage();
+    // if (files.isNotEmpty) {
+    //   setState(() {
+    //     _photos.addAll(files.map((file) => UiKitMediaPhoto(link: file.path)));
+    //   });
+    // }
   }
 
   _onVideoAddRequested() async {
@@ -128,6 +145,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
+    final AutoSizeGroup contentSelectionGroup = AutoSizeGroup();
 
     return Form(
       key: _formKey,
@@ -156,6 +174,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             positionModel: model.positionModel,
             videos: _videos,
             photos: _photos,
+            hideVideosSelection:true,
             onVideoAddRequested: _onVideoAddRequested,
             onVideoDeleted: _onVideoDeleted,
             onPhotoAddRequested: _onPhotoAddRequested,
@@ -170,45 +189,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               label: S.of(context).Description,
               controller: _descriptionController,
               expands: true,
-            ),
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
-          Text(
-            S.of(context).BaseProperties,
-            style: theme?.regularTextTheme.labelSmall,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace4,
-          UiKitTagSelector(
-            onNotFoundTagCallback: (value) => setState(
-              () => _eventToEdit.baseTags = [
-                ..._eventToEdit.baseTags,
-                UiKitTag(
-                  title: value,
-                  icon: GraphicsFoundation.instance.iconFromString(''),
-                )
-              ],
-            ),
-            tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-            onRemoveTagCallback: (value) => setState(
-              () => _eventToEdit.baseTags.removeWhere((element) => element.title == value),
-            ),
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
-          Text(
-            S.of(context).UniqueProperties,
-            style: theme?.regularTextTheme.labelSmall,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace4,
-          UiKitTagSelector(
-            onNotFoundTagCallback: (value) => setState(
-              () => _eventToEdit.tags = [
-                ..._eventToEdit.tags,
-                UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
-              ],
-            ),
-            tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-            onRemoveTagCallback: (value) => setState(
-              () => _eventToEdit.tags.removeWhere((element) => element.title == value),
             ),
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
@@ -326,8 +306,112 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             keyboardType: TextInputType.text,
             label: S.of(context).Category,
             controller: _typeController,
+            onTap: () {
+              widget.onCategoryChanged?.call().then((value) {
+                _typeController.text = value ?? '';
+                setState(() {
+                  _eventToEdit.eventType = value?? '';
+                });
+              });
+            },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
+          Text(
+            S.of(context).TypeOfContent,
+            style: theme?.regularTextTheme.labelSmall,
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace4,
+          UiKitCustomTabBar(
+            selectedTab: _eventToEdit.contentType,
+            onTappedTab: (index) {
+              setState(() {
+                _eventToEdit.contentType = ['leisure', 'business', 'both'][index];
+              });
+            },
+            tabs: [
+              UiKitCustomTab(
+                title: S.of(context).Leisure,
+                customValue: 'leisure',
+                group: contentSelectionGroup,
+              ),
+              UiKitCustomTab(title: S.of(context).Business, customValue: 'business', group: contentSelectionGroup),
+              UiKitCustomTab(title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
+            ],
+          ),
+          // if (_eventToEdit.contentType != 'leisure') ...[
+          //   SpacingFoundation.verticalSpace24,
+          //   Text(
+          //     S.of(context).PleaseSelectANiche,
+          //     style: theme?.regularTextTheme.labelSmall,
+          //   ).paddingSymmetric(horizontal: horizontalPadding),
+          //   SpacingFoundation.verticalSpace4,
+          //   UiKitInputFieldNoFill(
+          //     keyboardType: TextInputType.text,
+          //     label: S.of(context).Niche,
+          //     controller: _nicheController,
+          //     onTap: () {
+          //       widget.onNicheChanged?.call().then((value) {
+          //         _nicheController.text = value ?? '';
+          //         _placeToEdit.niche = value ?? '';
+          //       });
+          //     },
+          //   ).paddingSymmetric(horizontal: horizontalPadding),
+          // ],
+          SpacingFoundation.verticalSpace24,
+          Text(
+            S.of(context).BaseProperties,
+            style: theme?.regularTextTheme.labelSmall,
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace4,
+          GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                  title: S.of(context).BaseProperties,
+                  options: (String v) => widget.propertiesOptions(v, 'base'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _eventToEdit.baseTags.clear();
+                    _eventToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                  });
+                }
+              },
+              child: IgnorePointer(
+                  child: UiKitTagSelector(
+                    showTextField: false,
+                    tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                  )).paddingSymmetric(horizontal: horizontalPadding)),
+          SpacingFoundation.verticalSpace24,
+          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.isNotEmpty) ...[
+            Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
+                .paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace4,
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
+                    title: S.of(context).UniqueProperties,
+                    options: (String v) => widget.propertiesOptions(v, 'unique'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _eventToEdit.tags.clear();
+                      _eventToEdit.tags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    });
+                  }
+                },
+                child: IgnorePointer(
+                    child: UiKitTagSelector(
+                      showTextField: false,
+                      tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
+                    )).paddingSymmetric(horizontal: horizontalPadding)),
+            SpacingFoundation.verticalSpace24,
+          ],
           SafeArea(
             top: false,
             child: context.gradientButton(

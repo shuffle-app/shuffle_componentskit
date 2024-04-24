@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -74,6 +71,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
     _typeController.text = widget.placeToEdit?.placeType ?? '';
+    _nicheController.text = widget.placeToEdit?.niche?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -169,6 +167,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _typeController.text = widget.placeToEdit?.placeType ?? '';
       _titleController.text = widget.placeToEdit?.title ?? '';
       _locationController.text = widget.placeToEdit?.location ?? '';
+      _nicheController.text = widget.placeToEdit?.niche?? '';
     }
     super.didUpdateWidget(oldWidget);
   }
