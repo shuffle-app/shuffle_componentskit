@@ -48,7 +48,7 @@ class UiPlaceModel {
     this.weekdays = const [],
     this.schedule,
     this.niche,
-    this.contentType,
+    this.contentType = 'leisure',
     this.userPoints,
   }) : descriptionItems = [
           UiDescriptionItemModel(

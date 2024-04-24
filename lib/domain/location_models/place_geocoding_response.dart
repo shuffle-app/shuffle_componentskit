@@ -60,6 +60,11 @@ class AddressComponent {
   factory AddressComponent.fromJson(Map<String, dynamic> json) => _$AddressComponentFromJson(json);
 
   Map<String, dynamic> toJson() => _$AddressComponentToJson(this);
+
+  @override
+  String toString() {
+    return 'AddressComponent(longName: $longName, shortName: $shortName, types: $types)';
+  }
 }
 
 @JsonSerializable()
