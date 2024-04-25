@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/gestures.dart';
@@ -19,6 +20,7 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
   final String? Function(String?)? passwordValidator;
   final ValueChanged<SocialsLoginModel>? onSocialsLogin;
   final bool? loading;
+  final bool? hasPasswordError;
   final List<LocaleModel>? availableLocales;
 
   const PersonalCredentialsVerificationComponent({
@@ -34,6 +36,7 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
     this.onSocialsLogin,
     required this.credentialsController,
     required this.passwordController,
+    this.hasPasswordError,
   });
 
   @override
@@ -50,6 +53,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   late final String decorationLink;
   late final String countrySelectorTitle;
   late final RegistrationType? authType;
+  bool hasPasswordError = false;
 
   List<ShortLogInButton> get socials => [
         ShortLogInButton(
@@ -100,26 +104,10 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
       captionTexts.remove('image');
       captionTexts.remove('auth_type');
       clientType = Platform.isIOS ? 'Ios' : 'Android';
-      // final inputs = model.content.body?[ContentItemType.input]?.properties?.values.first;
-      // final inputHint = model.content.body?[ContentItemType.input]?.title?[ContentItemType.text]?.properties?.keys.first;
       countrySelectorTitle =
-          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
+          model.content.body?[ContentItemType.countrySelector]?.title?[ContentItemType.text]?.properties?.keys.first ??
+              '';
       authType = indentifyRegistrationType(model.content.properties?['auth_type']?.value ?? '');
-      // final socialsData = model.content.body?[ContentItemType.verticalList]?.properties;
-      // socialsData?.entries.toList().sort((a, b) => a.value.sortNumber?.compareTo(b.value.sortNumber ?? 0) ?? 0);
-      // socials = socialsData?.entries.where((element) => element.value.value != null).map<ShortLogInButton>((element) {
-      //       return ShortLogInButton(
-      //         link: element.value.imageLink ?? '',
-      //         title: element.key,
-      //         onTap: () => widget.onSocialsLogin?.call(
-      //           SocialsLoginModel(
-      //             provider: element.value.type!,
-      //             clientType: clientType,
-      //           ),
-      //         ),
-      //       );
-      //     }).toList() ??
-      //     [];
 
       isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
       tabController.addListener(_tabListener);
@@ -132,6 +120,22 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
     setState(() {
       _selectedTab = tabs.elementAt(tabController.index).customValue;
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant PersonalCredentialsVerificationComponent oldWidget) {
+    if (oldWidget.hasPasswordError != widget.hasPasswordError) {
+      setState(() {
+        hasPasswordError = widget.hasPasswordError ?? false;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    hasPasswordError = widget.hasPasswordError ?? false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -180,13 +184,36 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                 style: textTheme?.subHeadline,
               ),
               KeyboardVisibilityBuilder(builder: (context, visibility) {
+                late final double height;
+                if (visibility) {
+                  if (isSmallScreen) {
+                    if (hasPasswordError) {
+                      height = SpacingFoundation.verticalSpacing8;
+                    } else {
+                      height = SpacingFoundation.verticalSpacing16;
+                    }
+                  } else {
+                    if (hasPasswordError) {
+                      height = SpacingFoundation.verticalSpacing12;
+                    } else {
+                      height = SpacingFoundation.verticalSpacing24*2;
+                    }
+                  }
+                } else {
+                  if (isSmallScreen) {
+                    height = 0.05.sh;
+                  } else {
+                    if (hasPasswordError) {
+                      height = 0.17.sh;
+                    } else {
+                      height = 0.2.sh;
+                    }
+                  }
+                }
+
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  height: visibility
-                      ? SpacingFoundation.verticalSpacing16
-                      : isSmallScreen
-                          ? 0.05.sh
-                          : 0.2.sh,
+                  height: height,
                 );
               }),
               KeyboardVisibilityBuilder(
@@ -203,7 +230,9 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // const Spacer(flex: 1),
-                        if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty && !keyboardVisible) ...[
+                        if (widget.availableLocales != null &&
+                            widget.availableLocales!.isNotEmpty &&
+                            !keyboardVisible) ...[
                           UiKitCardWrapper(
                             color: colorScheme?.surface1,
                             borderRadius: BorderRadiusFoundation.max,
@@ -387,9 +416,10 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             context.button(
                               data: BaseUiKitButtonData(
                                 text: S.of(context).Next.toUpperCase(),
-                                onPressed: widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
-                                    ? null
-                                    : widget.onSubmit,
+                                onPressed:
+                                    widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
+                                        ? null
+                                        : widget.onSubmit,
                                 loading: widget.loading,
                                 fit: ButtonFit.fitWidth,
                               ),
