@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,7 +10,13 @@ import 'google_maps_api.dart';
 
 class LocationComponent extends StatefulWidget {
   final VoidCallback onLocationConfirmed;
-  final void Function({String address, double latitude, double longitude}) onLocationChanged;
+  final void Function(
+      {String address,
+      double latitude,
+      double longitude,
+      String? cityName,
+      String? countryName,
+      String? countryCode}) onLocationChanged;
   final ValueChanged<KnownLocation>? onKnownLocationConfirmed;
   final Future<List<KnownLocation>> Function(String? address)? onPlacesCheck;
   final double? initialLatitude;
@@ -149,11 +155,22 @@ class _LocationComponentState extends State<LocationComponent> {
         _newPlaceTapped = true;
       });
 
+      final place = placeFromCoordinates?.results?.firstOrNull;
+
       widget.onLocationChanged.call(
-        address: placeFromCoordinates?.results?.firstOrNull?.formattedAddress ?? suggestion.title,
-        latitude: placeCoordinates.latitude,
-        longitude: placeCoordinates.longitude,
-      );
+          address: placeFromCoordinates?.results?.firstOrNull?.formattedAddress ?? suggestion.title,
+          latitude: placeCoordinates.latitude,
+          longitude: placeCoordinates.longitude,
+          cityName: place?.addressComponents
+              ?.firstWhereOrNull((element) =>
+                  element.types!.contains(cityGoogleType) || element.types!.contains(cityAdditionalGoogleType))
+              ?.longName,
+          countryName: place?.addressComponents
+              ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+              ?.longName,
+          countryCode: place?.addressComponents
+              ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+              ?.shortName);
 
       setState(() => _suggestionPlaces = placeFromCoordinates?.results
               ?.map(
@@ -161,6 +178,16 @@ class _LocationComponentState extends State<LocationComponent> {
                   title: place.formattedAddress ?? '',
                   latitude: place.geometry?.location?.lat,
                   longitude: place.geometry?.location?.lon,
+                  cityName: place.addressComponents
+                      ?.firstWhereOrNull((element) =>
+                          element.types!.contains(cityGoogleType) || element.types!.contains(cityAdditionalGoogleType))
+                      ?.longName,
+                  countryName: place.addressComponents
+                      ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+                      ?.longName,
+                  countryCode: place.addressComponents
+                      ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+                      ?.shortName,
                 ),
               )
               .toList() ??
@@ -221,10 +248,19 @@ class _LocationComponentState extends State<LocationComponent> {
     setState(() => _suggestionPlaces = placeFromCoordinates?.results
             ?.map(
               (place) => KnownLocation(
-                title: place.formattedAddress ?? '',
-                latitude: place.geometry?.location?.lat,
-                longitude: place.geometry?.location?.lon,
-              ),
+                  title: place.formattedAddress ?? '',
+                  latitude: place.geometry?.location?.lat,
+                  longitude: place.geometry?.location?.lon,
+                  cityName: place.addressComponents
+                      ?.firstWhereOrNull((element) =>
+                          element.types!.contains(cityGoogleType) || element.types!.contains(cityAdditionalGoogleType))
+                      ?.longName,
+                  countryName: place.addressComponents
+                      ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+                      ?.longName,
+                  countryCode: place.addressComponents
+                      ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+                      ?.shortName),
             )
             .toList() ??
         []);
@@ -238,10 +274,19 @@ class _LocationComponentState extends State<LocationComponent> {
     locationDetailsSheetController.updateSheetState(LocationDetailsSheetState.placeSelected);
     searchTextController.text = place?.formattedAddress ?? '';
     widget.onLocationChanged.call(
-      address: place?.formattedAddress ?? '',
-      latitude: latLng.latitude,
-      longitude: latLng.longitude,
-    );
+        address: place?.formattedAddress ?? '',
+        latitude: latLng.latitude,
+        longitude: latLng.longitude,
+        cityName: place?.addressComponents
+            ?.firstWhereOrNull((element) =>
+                element.types!.contains(cityGoogleType) || element.types!.contains(cityAdditionalGoogleType))
+            ?.longName,
+        countryName: place?.addressComponents
+            ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+            ?.longName,
+        countryCode: place?.addressComponents
+            ?.firstWhereOrNull((element) => element.types!.contains(countryGoogleType))
+            ?.shortName);
   }
 
   void onMapTapped(LatLng coordinates) {
@@ -300,4 +345,8 @@ class _LocationComponentState extends State<LocationComponent> {
       ),
     );
   }
+
+  static const String cityGoogleType = 'locality';
+  static const String cityAdditionalGoogleType = 'administrative_area_level_1';
+  static const String countryGoogleType = 'country';
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +15,8 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future<String?> Function()? onCategoryChanged;
   final Future<String?> Function()? onNicheChanged;
   final Future<List<String>> Function(String, String) propertiesOptions;
+  final List<UiScheduleModel> availableTimeTemplates;
+  final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
   const CreatePlaceComponent({
     super.key,
@@ -27,6 +27,8 @@ class CreatePlaceComponent extends StatefulWidget {
     required this.propertiesOptions,
     this.onCategoryChanged,
     this.onNicheChanged,
+    this.availableTimeTemplates = const [],
+    this.onTimeTemplateCreated,
   });
 
   @override
@@ -69,6 +71,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
     _typeController.text = widget.placeToEdit?.placeType ?? '';
+    _nicheController.text = widget.placeToEdit?.niche?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -164,6 +167,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _typeController.text = widget.placeToEdit?.placeType ?? '';
       _titleController.text = widget.placeToEdit?.title ?? '';
       _locationController.text = widget.placeToEdit?.location ?? '';
+      _nicheController.text = widget.placeToEdit?.niche?? '';
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -250,102 +254,49 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ),
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        //TODO restore editing schedules
-        // Row(
-        //   children: [
-        //     Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
-        //     const Spacer(),
-        //     Text(
-        //       _placeToEdit.openFrom == null
-        //           ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-        //           : normalizedTi(_placeToEdit.openFrom),
-        //       style: theme?.boldTextTheme.body,
-        //     ),
-        //     context.outlinedButton(
-        //       data: BaseUiKitButtonData(
-        //         onPressed: () async {
-        //           final maybeTime = await showUiKitTimeDialog(context);
-        //           if (maybeTime != null) {
-        //             setState(() {
-        //               _placeToEdit.openFrom = maybeTime;
-        //             });
-        //           }
-        //         },
-        //         iconInfo: BaseUiKitButtonIconData(
-        //           iconData: ShuffleUiKitIcons.clock,
-        //           size: 16.h,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ).paddingSymmetric(horizontal: horizontalPadding),
+        Row(
+          children: [
+            Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
+
+            Expanded(
+                child: Text(
+                  _placeToEdit.scheduleString == null
+                      ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
+                      : _placeToEdit.scheduleString!,
+                  style: theme?.boldTextTheme.body,
+                  textAlign: TextAlign.center,
+                )),
+            context.outlinedButton(
+              data: BaseUiKitButtonData(
+                onPressed: () {
+                  context.push(CreateScheduleWidget(
+                    availableTemplates: widget.availableTimeTemplates,
+                    onTemplateCreated: widget.onTimeTemplateCreated,
+                    availableTypes: const [UiScheduleTimeModel.scheduleType],
+                    onScheduleCreated: (model) {
+                      if (model is UiScheduleTimeModel) {
+                        setState(() {
+                          _placeToEdit.schedule = model;
+                          _placeToEdit.scheduleString = model.weeklySchedule
+                              .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                              .join(', ');
+                        });
+                      }
+                    },
+                  ));
+                },
+                iconInfo: BaseUiKitButtonIconData(
+                  iconData: ShuffleUiKitIcons.clock,
+                  size: 16.h,
+                ),
+              ),
+            ),
+          ],
+        ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
-        //TODO restore editing schedules
-        // Row(
-        //   children: [
-        //     Text(S.of(context).OpenTo, style: theme?.regularTextTheme.labelSmall),
-        //     const Spacer(),
-        //     Text(
-        //       _placeToEdit.openTo == null
-        //           ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-        //           : normalizedTi(_placeToEdit.openTo),
-        //       style: theme?.boldTextTheme.body,
-        //     ),
-        //     context.outlinedButton(
-        //       data: BaseUiKitButtonData(
-        //         onPressed: () async {
-        //           final maybeTime = await showUiKitTimeDialog(context);
-        //           if (maybeTime != null) {
-        //             setState(() {
-        //               _placeToEdit.openTo = maybeTime;
-        //             });
-        //           }
-        //         },
-        //         iconInfo: BaseUiKitButtonIconData(
-        //           iconData: ShuffleUiKitIcons.clock,
-        //           size: 16.h,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ).paddingSymmetric(horizontal: horizontalPadding),
-        // SpacingFoundation.verticalSpace24,
-        // Row(children: [
-        //   Text(S.of(context).DaysOfWeek, style: theme?.regularTextTheme.labelSmall),
-        //   const Spacer(),
-        //   Expanded(
-        //     child: Text(
-        //       _placeToEdit.weekdays.isEmpty
-        //           ? S.of(context).SelectDays.toLowerCase()
-        //           : _placeToEdit.weekdays.length == 7
-        //               ? S.of(context).Daily
-        //               : _placeToEdit.weekdays.join(', '),
-        //       style: theme?.boldTextTheme.body,
-        //     ),
-        //   ),
-        //   context.outlinedButton(
-        //     data: BaseUiKitButtonData(
-        //       onPressed: () async {
-        //         final maybeDaysOfWeek = await showUiKitWeekdaySelector(context);
-        //         if (maybeDaysOfWeek != null) {
-        //           setState(() {
-        //             _placeToEdit.weekdays = maybeDaysOfWeek;
-        //           });
-        //         }
-        //       },
-        //       iconInfo: BaseUiKitButtonIconData(
-        //         iconData: ShuffleUiKitIcons.calendar,
-        //         size: 16.h,
-        //       ),
-        //     ),
-        //   ),
-        // ]).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         InkWell(
           onTap: () async {
-            // SnackBarUtils.show(
-            //     message: 'in development', context: context);
-
             _locationController.text = await widget.getLocation?.call() ?? '';
             _placeToEdit.location = _locationController.text;
           },
@@ -437,35 +388,34 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ).paddingSymmetric(horizontal: horizontalPadding),
         ],
         SpacingFoundation.verticalSpace24,
-        if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
-          Text(
-            S.of(context).BaseProperties,
-            style: theme?.regularTextTheme.labelSmall,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace4,
-          GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
-                  title: S.of(context).BaseProperties,
-                  options: (String v) => widget.propertiesOptions(v, 'base'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _placeToEdit.baseTags.clear();
-                    _placeToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                  });
-                }
-              },
-              child: IgnorePointer(
-                  child: UiKitTagSelector(
-                showTextField: false,
+        Text(
+          S.of(context).BaseProperties,
+          style: theme?.regularTextTheme.labelSmall,
+        ).paddingSymmetric(horizontal: horizontalPadding),
+        SpacingFoundation.verticalSpace4,
+        GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () async {
+              final newTags = await context.push(TagsSelectionComponent(
+                positionModel: model.positionModel,
                 tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
-              )).paddingSymmetric(horizontal: horizontalPadding)),
-          SpacingFoundation.verticalSpace24,
-
+                title: S.of(context).BaseProperties,
+                options: (String v) => widget.propertiesOptions(v, 'base'),
+              ));
+              if (newTags != null) {
+                setState(() {
+                  _placeToEdit.baseTags.clear();
+                  _placeToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                });
+              }
+            },
+            child: IgnorePointer(
+                child: UiKitTagSelector(
+              showTextField: false,
+              tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
+            )).paddingSymmetric(horizontal: horizontalPadding)),
+        SpacingFoundation.verticalSpace24,
+        if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
           Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace4,

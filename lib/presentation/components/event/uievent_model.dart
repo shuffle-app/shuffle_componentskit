@@ -11,6 +11,7 @@ class UiEventModel extends Advertisable {
   bool? favorite;
   bool isRecurrent;
   String? scheduleString;
+  String? contentType;
 
   DateTime? date;
   // DateTime? dateTo;
@@ -44,6 +45,7 @@ class UiEventModel extends Advertisable {
     this.rating,
     this.price,
     this.phone,
+    this.contentType,
     this.website,
     this.scheduleString,
     this.weekdays = const [],
@@ -79,6 +81,7 @@ class UiEventModel extends Advertisable {
     this.favorite,
     this.owner,
     this.date,
+    this.contentType,
     this.scheduleString,
     this.media = const [],
     this.description,
