@@ -131,40 +131,40 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
 
     final List<Widget> featureTexts = [
       Text(
-        'You can declare yourself and show your expertise in one of the areas of social life of the city or the world',
+        S.of(context).InfluencerSubscriptionFeature1,
         style: regularTextTheme?.body,
       ),
       Text(
-        'You can gather your own new or supplement an existing audience',
+        S.of(context).InfluencerSubscriptionFeature2,
         style: regularTextTheme?.body,
       ),
       RichText(
           text: TextSpan(
         children: [
-          const TextSpan(text: 'Get a set of tools for working with '),
+           TextSpan(text: S.of(context).InfluencerSubscriptionFeature3),
           TextSpan(
             text: 'Shuffle',
             style: regularTextTheme?.body.copyWith(fontWeight: FontWeight.bold),
           ),
-          const TextSpan(text: ' content and interacting with your audience'),
+           TextSpan(text: S.of(context).InfluencerSubscriptionFeature3v1),
         ],
         style: regularTextTheme?.body,
       )),
       Text(
-        'Become a thought leader in your field and earn a reputation',
+        S.of(context).InfluencerSubscriptionFeature4,
         style: regularTextTheme?.body,
       ),
       Text(
-        'Influence people\'s choices and enhance the significance of places and events',
+        S.of(context).InfluencerSubscriptionFeature5,
         style: regularTextTheme?.body,
       ),
       Text(
-        'Monetization',
+        S.of(context).InfluencerSubscriptionFeature6,
         style: regularTextTheme?.body,
       ),
     ];
 
-    return AnimatedSize(
+    return AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         curve: Curves.bounceIn,
         child: UiKitCardWrapper(
@@ -199,12 +199,13 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
                   ],
                 ),
                 SpacingFoundation.verticalSpace16,
-                AnimatedSwitcher(
-                    reverseDuration: Duration.zero,
-                    switchInCurve: Curves.bounceIn,
-                    switchOutCurve: Curves.bounceIn,
-                    duration: const Duration(milliseconds: 500),
-                    child: _features[featureIndex % totalFeatureCount]),
+                // AnimatedSwitcher(
+                //     reverseDuration: Duration.zero,
+                //     switchInCurve: Curves.bounceIn,
+                //     switchOutCurve: Curves.bounceIn,
+                //     duration: const Duration(milliseconds: 200),
+                //     child: _features[featureIndex % totalFeatureCount]),
+                _features[featureIndex % totalFeatureCount],
                 SpacingFoundation.verticalSpace16,
                 Row(
                   mainAxisSize: MainAxisSize.max,

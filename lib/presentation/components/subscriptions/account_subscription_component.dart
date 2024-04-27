@@ -112,6 +112,10 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               ).toList(),
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
+          if (widget.uiModel.additionalInfo != null) ...[
+            SpacingFoundation.verticalSpace24,
+            widget.uiModel.additionalInfo!
+          ],
           SpacingFoundation.verticalSpace24,
           context.gradientButton(
             data: BaseUiKitButtonData(
@@ -119,7 +123,9 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               text: S
                   .of(context)
                   .UpgradeForNmoney(
-                    _selectedOffer == null ? '' : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
+                    _selectedOffer == null
+                        ? ''
+                        : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
                   )
                   .toUpperCase(),
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
