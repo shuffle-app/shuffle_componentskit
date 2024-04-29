@@ -6,23 +6,29 @@ class UiMoodGameContentModel {
   final List<UiUniversalModel>? dayAfterTomorrowGameContent;
   final bool isVerifiedToRecieveReward;
   final String? activatedLevel;
+  List<UiUniversalModel> passedCheckins;
 
-  const UiMoodGameContentModel({this.todayGameContent,
-    this.tomorrowGameContent,
-    this.activatedLevel,
-    this.dayAfterTomorrowGameContent,
-    this.isVerifiedToRecieveReward = false});
+  UiMoodGameContentModel(
+      {this.todayGameContent,
+      this.tomorrowGameContent,
+      this.activatedLevel,
+      this.dayAfterTomorrowGameContent,
+      this.passedCheckins = const [],
+      this.isVerifiedToRecieveReward = false});
 
-  UiMoodGameContentModel copyWith({UiUniversalModel? todayGameContent,
-    List<UiUniversalModel>? tomorrowGameContent,
-    List<UiUniversalModel>? dayAfterTomorrowGameContent,
-    bool? isVerifiedToRecieveReward,
-    String? activatedLevel}) {
+  UiMoodGameContentModel copyWith(
+      {UiUniversalModel? todayGameContent,
+      List<UiUniversalModel>? tomorrowGameContent,
+      List<UiUniversalModel>? dayAfterTomorrowGameContent,
+      bool? isVerifiedToRecieveReward,
+      List<UiUniversalModel>? passedCheckins,
+      String? activatedLevel}) {
     return UiMoodGameContentModel(
         todayGameContent: todayGameContent ?? this.todayGameContent,
         tomorrowGameContent: tomorrowGameContent ?? this.tomorrowGameContent,
         dayAfterTomorrowGameContent: dayAfterTomorrowGameContent ?? this.dayAfterTomorrowGameContent,
         isVerifiedToRecieveReward: isVerifiedToRecieveReward ?? this.isVerifiedToRecieveReward,
+        passedCheckins: passedCheckins ?? this.passedCheckins,
         activatedLevel: activatedLevel ?? this.activatedLevel);
   }
 

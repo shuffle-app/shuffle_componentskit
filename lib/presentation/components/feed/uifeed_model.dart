@@ -101,4 +101,12 @@ class UiUniversalModel extends Advertisable {
   String toString() {
     return 'UiUniversalModel(id: $id, type: $type, shouldVisitAt: $shouldVisitAt)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UiUniversalModel && other.id == id && other.type == type;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ type.hashCode;
 }

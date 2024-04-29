@@ -25,7 +25,7 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final PagingController<int, VideoReactionUiModel>? storiesPagingController;
   final ValueChanged<int?>? onNichePressed;
-final bool hasFavourites;
+  final bool hasFavourites;
 
   const FeedComponent({
     Key? key,
@@ -163,7 +163,7 @@ final bool hasFavourites;
                         iconLink: e.icon is String ? e.icon as String : '',
                         layoutDirection: Axis.vertical,
                         type: MessageCardType.wide,
-                        onPressed: ()=>onNichePressed?.call(e.id),
+                        onPressed: () => onNichePressed?.call(e.id),
                       ).paddingOnly(left: padding);
                     },
                   ).toList() ??
@@ -190,7 +190,9 @@ final bool hasFavourites;
             SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
           if (storiesPagingController != null) ...[
-            Text(S.current.YouMissedALot, style: themeTitleStyle).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+            Text(S.current.YouMissedALot, style: themeTitleStyle)
+                .paddingSymmetric(horizontal: horizontalMargin)
+                .wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
             SizedBox(
               height: 0.26.sh,
@@ -344,14 +346,18 @@ final bool hasFavourites;
                                   onTagSortPressed?.call('Random', list);
                                 },
                                 length: feed.filterChips?.length ?? 0);
-                          } else if (index == 1 && hasFavourites) {
-                            return UiKitTitledFilterChip(
-                              //const flag for showing favorites is 'Favorites'
-                              selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
-                              title: S.of(context).Favorites,
-                              onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
-                              icon: ShuffleUiKitIcons.starfill,
-                            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
+                          } else if (index == 1) {
+                            if (hasFavourites) {
+                              return UiKitTitledFilterChip(
+                                //const flag for showing favorites is 'Favorites'
+                                selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
+                                title: S.of(context).Favorites,
+                                onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                                icon: ShuffleUiKitIcons.starfill,
+                              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
+                            } else {
+                              return SpacingFoundation.horizontalSpace8;
+                            }
                           } else {
                             return feed.filterChips!
                                 .map((e) => UiKitTitledFilterChip(
@@ -360,10 +366,9 @@ final bool hasFavourites;
                                       onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                                       icon: e.icon,
                                     ).paddingOnly(right: horizontalMargin))
-                                .toList()[index - (hasFavourites ?2:1)];
+                                .toList()[index - (hasFavourites ? 2 : 1)];
                           }
-                        }
-                        ))).wrapSliverBox,
+                        }))).wrapSliverBox,
           ],
           SpacingFoundation.verticalSpace24.wrapSliverBox,
           PagedSliverList.separated(

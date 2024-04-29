@@ -12,7 +12,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 class MoodComponent extends StatelessWidget {
   final UiMoodModel mood;
   final Future<UiMoodGameContentModel>? Function(String name) onTabChanged;
-  final List<UiUniversalModel> passedCheckins;
   final Function(int id, String type)? onPlacePressed;
   final Function(int id, String type)? onCheckInPressed;
   final Function(String level)? onLevelActivated;
@@ -32,7 +31,6 @@ class MoodComponent extends StatelessWidget {
     required this.isVisibleButton,
     this.onLevelActivated,
     this.showHowItWorks = false,
-    this.passedCheckins = const [],
   }) : super(key: key);
 
   @override
@@ -244,8 +242,8 @@ class MoodComponent extends StatelessWidget {
                                     PlacePreview(
                                       onTap: (id) => onPlacePressed?.call(id, todayContent.type),
                                       onCheckIn: mood.activatedLevel != null
-                                          ? (passedCheckins.firstWhereOrNull((el) =>
-                                                      el.id == todayContent.id && el.type == todayContent.type) !=
+                                          ? (snapshot.data?.passedCheckins
+                                                      .firstWhereOrNull((el) => el == todayContent) !=
                                                   null
                                               ? null
                                               : (id) => onCheckInPressed?.call(id, todayContent.type))
@@ -275,8 +273,8 @@ class MoodComponent extends StatelessWidget {
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
                                           onCheckIn: mood.activatedLevel != null
-                                              ? (passedCheckins.firstWhereOrNull(
-                                                          (el) => el.id == content.id && el.type == content.type) !=
+                                              ? (snapshot.data?.passedCheckins
+                                                          .firstWhereOrNull((el) => el == content) !=
                                                       null
                                                   ? null
                                                   : (id) => onCheckInPressed?.call(id, content.type))
@@ -309,8 +307,8 @@ class MoodComponent extends StatelessWidget {
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
                                           onCheckIn: mood.activatedLevel != null
-                                              ? (passedCheckins.firstWhereOrNull(
-                                                          (el) => el.id == content.id && el.type == content.type) !=
+                                              ? (snapshot.data?.passedCheckins
+                                                          .firstWhereOrNull((el) => el == content) !=
                                                       null
                                                   ? null
                                                   : (id) => onCheckInPressed?.call(id, content.type))
