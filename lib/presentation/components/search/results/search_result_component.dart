@@ -63,8 +63,6 @@ class SearchResultComponent extends StatelessWidget {
           },
           child: resultBody.paddingOnly(
             bottom: verticalMargin,
-            left: horizontalMargin,
-            right: horizontalMargin,
           ),
         ),
       ],
