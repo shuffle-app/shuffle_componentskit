@@ -25,6 +25,7 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final PagingController<int, VideoReactionUiModel>? storiesPagingController;
   final ValueChanged<int?>? onNichePressed;
+final bool hasFavourites;
 
   const FeedComponent({
     Key? key,
@@ -33,6 +34,7 @@ class FeedComponent extends StatelessWidget {
     required this.showBusinessContent,
     this.storiesPagingController,
     this.onReactionTapped,
+    this.hasFavourites = false,
     this.mood,
     this.onNichePressed,
     this.progressIndicator,
@@ -342,7 +344,7 @@ class FeedComponent extends StatelessWidget {
                                   onTagSortPressed?.call('Random', list);
                                 },
                                 length: feed.filterChips?.length ?? 0);
-                          } else if (index == 1) {
+                          } else if (index == 1 && hasFavourites) {
                             return UiKitTitledFilterChip(
                               //const flag for showing favorites is 'Favorites'
                               selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
@@ -358,7 +360,7 @@ class FeedComponent extends StatelessWidget {
                                       onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                                       icon: e.icon,
                                     ).paddingOnly(right: horizontalMargin))
-                                .toList()[index - 2];
+                                .toList()[index - (hasFavourites ?2:1)];
                           }
                         }
                         ))).wrapSliverBox,
