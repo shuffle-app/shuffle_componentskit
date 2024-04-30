@@ -58,8 +58,6 @@ class AboutUserComponent extends StatelessWidget {
     final subHeadline = theme?.boldTextTheme.subHeadline;
     final titleAlignment = model.positionModel?.titleAlignment;
 
-    final AutoSizeGroup genderGroup = AutoSizeGroup();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -242,7 +240,6 @@ class AboutUserComponent extends StatelessWidget {
                               selected: aboutUserModel.selectedGenderId == e.id,
                               caption: e.title,
                               sign: _getIconForGenderMock(e),
-                              autoSizeGroup: genderGroup,
                               onTap: () => onGenderChanged?.call(e.id),
                             ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
                           ))
