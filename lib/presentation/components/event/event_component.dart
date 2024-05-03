@@ -114,7 +114,7 @@ class _EventComponentState extends State<EventComponent> {
                       : AlignmentDirectional.topStart,
                   children: [
                     SizedBox(
-                      width: 1.sw - (56.w),
+                      width: 1.sw - (horizontalMargin + 28.w),
                       child: AutoSizeText(
                         widget.event.title!,
                         minFontSize: 18.w,
@@ -130,11 +130,14 @@ class _EventComponentState extends State<EventComponent> {
                         right: 0,
                         child: IconButton(
                           icon: ImageWidget(
-                              iconData: ShuffleUiKitIcons.pencil, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                              iconData: ShuffleUiKitIcons.pencil,
+                              color: Colors.white,
+                              height: 20.h,
+                              fit: BoxFit.fitHeight),
                           onPressed: () => widget.onEditPressed?.call(),
                         ),
-                      ),
-                    if (widget.onSharePressed != null)
+                      )
+                    else if (widget.onSharePressed != null)
                       Positioned(
                         right: 0,
                         bottom: 0,
@@ -147,8 +150,8 @@ class _EventComponentState extends State<EventComponent> {
                         ),
                       ),
                   ],
-                ),
-              ).paddingSymmetric(horizontal: horizontalMargin),
+                ).paddingSymmetric(horizontal: horizontalMargin),
+              ),
               SpacingFoundation.verticalSpace8,
             ],
             if (widget.event.archived) ...[
