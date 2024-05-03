@@ -181,7 +181,7 @@ class PlacePreview extends StatelessWidget {
                               ),
                             ),
                           ),
-                        if (reviewsIndicator != null) Positioned(bottom: -8.h, left: 10.w, child: reviewsIndicator!)
+                        if (reviewsIndicator != null) Positioned(bottom: -8.h, left: 0, child: reviewsIndicator!)
                       ],
                     ),
                   ))),

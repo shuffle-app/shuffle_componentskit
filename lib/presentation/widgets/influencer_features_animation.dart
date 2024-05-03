@@ -32,6 +32,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
       carouselSize: Size(1.sw - SpacingFoundation.verticalSpacing32, 0.3.sh),
     ),
     PlacePreview(
+      cellSize: Size(1.sw - 44.w, 156.h),
       onTap: (id) {},
       place: UiPlaceModel(
         title: 'Center city club',
@@ -141,12 +142,12 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
       RichText(
           text: TextSpan(
         children: [
-           TextSpan(text: S.of(context).InfluencerSubscriptionFeature3),
+          TextSpan(text: S.of(context).InfluencerSubscriptionFeature3),
           TextSpan(
             text: 'Shuffle',
             style: regularTextTheme?.body.copyWith(fontWeight: FontWeight.bold),
           ),
-           TextSpan(text: S.of(context).InfluencerSubscriptionFeature3v1),
+          TextSpan(text: S.of(context).InfluencerSubscriptionFeature3v1),
         ],
         style: regularTextTheme?.body,
       )),
@@ -164,69 +165,66 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
       ),
     ];
 
-    return AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.bounceIn,
-        child: UiKitCardWrapper(
-            // height: 0.5.sh,
-            padding: EdgeInsets.all(SpacingFoundation.verticalSpacing16),
-            gradient: theme?.themeMode == ThemeMode.light
-                ? GradientFoundation.lightShunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.3)
-                : GradientFoundation.shunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.3),
-            child: Column(
+    return UiKitCardWrapper(
+        height: 0.55.sh,
+        padding: EdgeInsets.all(SpacingFoundation.verticalSpacing16),
+        gradient: theme?.themeMode == ThemeMode.light
+            ? GradientFoundation.lightShunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.3)
+            : GradientFoundation.shunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.3),
+        child: Column(
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GradientableWidget(
-                      gradient: GradientFoundation.starLinearGradient,
-                      child: ImageWidget(
-                        iconData: ShuffleUiKitIcons.gradientStar,
-                        color: Colors.white,
-                        width: 0.0625.sw,
-                        height: 0.0625.sw,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SpacingFoundation.horizontalSpace8,
-                    Expanded(
-                      child: Text(
-                        'Ability to become an influencer',
-                        style: regularTextTheme?.body,
-                      ),
-                    ),
-                  ],
+                GradientableWidget(
+                  gradient: GradientFoundation.starLinearGradient,
+                  child: ImageWidget(
+                    iconData: ShuffleUiKitIcons.gradientStar,
+                    color: Colors.white,
+                    width: 0.0625.sw,
+                    height: 0.0625.sw,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                SpacingFoundation.verticalSpace16,
-                // AnimatedSwitcher(
-                //     reverseDuration: Duration.zero,
-                //     switchInCurve: Curves.bounceIn,
-                //     switchOutCurve: Curves.bounceIn,
-                //     duration: const Duration(milliseconds: 200),
-                //     child: _features[featureIndex % totalFeatureCount]),
-                _features[featureIndex % totalFeatureCount],
-                SpacingFoundation.verticalSpace16,
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GradientableWidget(
-                      gradient: GradientFoundation.fameLinearGradient,
-                      child: ImageWidget(
-                        iconData: ShuffleUiKitIcons.gradientStar,
-                        color: Colors.white,
-                        width: 0.0625.sw,
-                        height: 0.0625.sw,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SpacingFoundation.horizontalSpace8,
-                    Expanded(child: featureTexts[featureIndex % totalFeatureCount]),
-                  ],
-                )
+                SpacingFoundation.horizontalSpace8,
+                Expanded(
+                  child: Text(
+                    'Ability to become an influencer',
+                    style: regularTextTheme?.body,
+                  ),
+                ),
               ],
-            )));
+            ),
+            SpacingFoundation.verticalSpace16,
+            AnimatedSwitcher(
+                reverseDuration: Duration.zero,
+                switchInCurve: Curves.bounceIn,
+                switchOutCurve: Curves.bounceIn,
+                duration: const Duration(milliseconds: 200),
+                child: _features[featureIndex % totalFeatureCount]),
+            // _features[featureIndex % totalFeatureCount],
+            SpacingFoundation.verticalSpace16,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GradientableWidget(
+                  gradient: GradientFoundation.fameLinearGradient,
+                  child: ImageWidget(
+                    iconData: ShuffleUiKitIcons.gradientStar,
+                    color: Colors.white,
+                    width: 0.0625.sw,
+                    height: 0.0625.sw,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace8,
+                Expanded(child: featureTexts[featureIndex % totalFeatureCount]),
+              ],
+            )
+          ],
+        ));
   }
 }
 

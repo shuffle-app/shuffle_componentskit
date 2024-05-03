@@ -23,11 +23,11 @@ class PhotoVideoSelector extends StatelessWidget {
     this.videos = const [],
     this.itemsSize = const Size(75, 75),
     required this.onPhotoAddRequested,
-     this.onVideoAddRequested,
+    this.onVideoAddRequested,
     required this.onPhotoReorderRequested,
-     this.onVideoReorderRequested,
+    this.onVideoReorderRequested,
     required this.onPhotoDeleted,
-     this.onVideoDeleted,
+    this.onVideoDeleted,
     this.hideVideosSelection = false,
     this.positionModel,
   });
@@ -36,6 +36,8 @@ class PhotoVideoSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final horizontalPadding = positionModel?.horizontalMargin?.toDouble() ?? 0;
+
+    final List<BaseUiKitMedia> covers = photos.where((element) => element.previewType != null).toList();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -81,6 +83,13 @@ class PhotoVideoSelector extends StatelessWidget {
                               ),
                             ),
                           ),
+                          if (photos[index].previewType != null)
+                            Positioned(
+                                right: 0,
+                                bottom: 10,
+                                left: 0,
+                                child: Text('cover'.toUpperCase(), textAlign: TextAlign.center,
+                                    style: theme?.regularTextTheme.caption2.copyWith(color: Colors.white)))
                         ],
                       ),
                       itemCount: photos.length,

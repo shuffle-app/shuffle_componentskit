@@ -236,7 +236,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           hideVideosSelection: true,
           positionModel: model.positionModel,
           // videos: _videos,
-          photos: _photos.where((element) => element.previewType == null).toList(),
+          photos: _photos,
           // onVideoAddRequested: _onVideoAddRequested,
           // onVideoDeleted: _onVideoDeleted,
           onPhotoAddRequested: _onPhotoAddRequested,

@@ -242,15 +242,15 @@ class MoodComponent extends StatelessWidget {
                                     PlacePreview(
                                       onTap: (id) => onPlacePressed?.call(id, todayContent.type),
                                       onCheckIn: mood.activatedLevel != null
-                                          ? (snapshot.data?.passedCheckins
-                                                      .firstWhereOrNull((el) => el == todayContent) !=
-                                                  null
-                                              ? null
-                                              : (id) => onCheckInPressed?.call(id, todayContent.type))
+                                          ? (id) => onCheckInPressed?.call(id, todayContent.type)
                                           : null,
                                       isFavorite: todayContent.isFavorite,
                                       onFavoriteChanged: todayContent.onFavoriteChanged,
-                                      shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
+                                      shouldVisitAt:
+                                          snapshot.data?.passedCheckins.firstWhereOrNull((el) => el == todayContent) !=
+                                                  null
+                                              ? null
+                                              : (todayContent.shouldVisitAt ?? DateTime.now()),
                                       place: UiPlaceModel(
                                         id: todayContent.id,
                                         title: todayContent.title,
@@ -273,16 +273,15 @@ class MoodComponent extends StatelessWidget {
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
                                           onCheckIn: mood.activatedLevel != null
-                                              ? (snapshot.data?.passedCheckins
-                                                          .firstWhereOrNull((el) => el == content) !=
-                                                      null
-                                                  ? null
-                                                  : (id) => onCheckInPressed?.call(id, content.type))
+                                              ? (id) => onCheckInPressed?.call(id, content.type)
                                               : null,
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
-                                          shouldVisitAt:
-                                              content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 1)),
+                                          shouldVisitAt: snapshot.data?.passedCheckins
+                                                      .firstWhereOrNull((el) => el == content) !=
+                                                  null
+                                              ? null
+                                              : (content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 1))),
                                           place: UiPlaceModel(
                                             id: content.id,
                                             title: content.title,
@@ -307,16 +306,15 @@ class MoodComponent extends StatelessWidget {
                                         (content) => PlacePreview(
                                           onTap: (id) => onPlacePressed?.call(id, content.type),
                                           onCheckIn: mood.activatedLevel != null
-                                              ? (snapshot.data?.passedCheckins
-                                                          .firstWhereOrNull((el) => el == content) !=
-                                                      null
-                                                  ? null
-                                                  : (id) => onCheckInPressed?.call(id, content.type))
+                                              ? (id) => onCheckInPressed?.call(id, content.type)
                                               : null,
                                           isFavorite: content.isFavorite,
                                           onFavoriteChanged: content.onFavoriteChanged,
-                                          shouldVisitAt:
-                                              content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 2)),
+                                          shouldVisitAt: snapshot.data?.passedCheckins
+                                                      .firstWhereOrNull((el) => el == content) !=
+                                                  null
+                                              ? null
+                                              : (content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 2))),
                                           place: UiPlaceModel(
                                             id: content.id,
                                             title: content.title,
