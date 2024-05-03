@@ -48,22 +48,22 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                 if (tag != null) tag!,
               ],
               interests: interests,
-              badge: DynamicGradientPlate(
-                content: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      S.of(context).Shuffle,
-                      style: textTheme?.caption1Bold.copyWith(color: Colors.black),
-                    ),
-                    const ImageWidget(
-                      iconData: ShuffleUiKitIcons.memeberGradientStar,
-                    ),
-                  ],
-                ),
-              ),
+              // badge: DynamicGradientPlate(
+              //   content: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: [
+              //       Text(
+              //         S.of(context).Shuffle,
+              //         style: textTheme?.caption1Bold.copyWith(color: Colors.black),
+              //       ),
+              //       const ImageWidget(
+              //         iconData: ShuffleUiKitIcons.memeberGradientStar,
+              //       ),
+              //     ],
+              //   ),
+              // ),
               profileType: ProfileCardType.company,
-              avatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+              // avatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
               profileStats: profileStats,
             ),
             SpacingFoundation.verticalSpace24,
