@@ -366,7 +366,7 @@ class FeedComponent extends StatelessWidget {
                                       onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                                       icon: e.icon,
                                     ).paddingOnly(right: horizontalMargin))
-                                .toList()[index - (hasFavourites ? 2 : 1)];
+                                .toList()[index - 2];
                           }
                         }))).wrapSliverBox,
           ],
