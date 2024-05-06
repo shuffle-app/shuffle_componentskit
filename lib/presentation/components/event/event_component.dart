@@ -114,7 +114,7 @@ class _EventComponentState extends State<EventComponent> {
                       : AlignmentDirectional.topStart,
                   children: [
                     SizedBox(
-                      width: 1.sw - (horizontalMargin + 28.w),
+                      width: 1.sw - (horizontalMargin*2 + 35.w),
                       child: AutoSizeText(
                         widget.event.title!,
                         minFontSize: 18.w,
