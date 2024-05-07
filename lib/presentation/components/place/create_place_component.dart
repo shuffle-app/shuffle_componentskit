@@ -71,7 +71,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
     _typeController.text = widget.placeToEdit?.placeType ?? '';
-    _nicheController.text = widget.placeToEdit?.niche?? '';
+    _nicheController.text = widget.placeToEdit?.niche ?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -167,7 +167,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _typeController.text = widget.placeToEdit?.placeType ?? '';
       _titleController.text = widget.placeToEdit?.title ?? '';
       _locationController.text = widget.placeToEdit?.location ?? '';
-      _nicheController.text = widget.placeToEdit?.niche?? '';
+      _nicheController.text = widget.placeToEdit?.niche ?? '';
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -257,15 +257,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         Row(
           children: [
             Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
-
             Expanded(
                 child: Text(
-                  _placeToEdit.scheduleString == null
-                      ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-                      : _placeToEdit.scheduleString!,
-                  style: theme?.boldTextTheme.body,
-                  textAlign: TextAlign.center,
-                )),
+              _placeToEdit.scheduleString == null
+                  ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
+                  : _placeToEdit.scheduleString!,
+              style: theme?.boldTextTheme.body,
+              textAlign: TextAlign.center,
+            )),
             context.outlinedButton(
               data: BaseUiKitButtonData(
                 onPressed: () {
@@ -355,17 +354,21 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           selectedTab: _placeToEdit.contentType,
           onTappedTab: (index) {
             setState(() {
-              _placeToEdit.contentType = ['leisure', 'business', 'both'][index];
+              _placeToEdit.contentType = [
+                'both',
+                'leisure',
+                'business',
+              ][index];
             });
           },
           tabs: [
+            UiKitCustomTab(title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
             UiKitCustomTab(
               title: S.of(context).Leisure,
               customValue: 'leisure',
               group: contentSelectionGroup,
             ),
             UiKitCustomTab(title: S.of(context).Business, customValue: 'business', group: contentSelectionGroup),
-            UiKitCustomTab(title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
           ],
         ),
         if (_placeToEdit.contentType != 'leisure') ...[

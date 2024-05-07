@@ -21,6 +21,9 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
   @override
   void initState() {
     _tags.addAll(widget.tags);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusManager.instance.primaryFocus?.requestFocus();
+    });
     super.initState();
   }
 
@@ -38,53 +41,47 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
                         })),
               )
             : null,
-        body: WillPopScope(
-            onWillPop: () async {
-              context.pop(result: _tags);
-              return true;
-            },
-            child: BlurredAppBarPage(
-                autoImplyLeading: true,
-                centerTitle: true,
-                title: widget.title,
-                childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                children: [
-                  SpacingFoundation.verticalSpace16,
-                  Wrap(
-                    spacing: SpacingFoundation.horizontalSpacing8,
-                    runSpacing: SpacingFoundation.verticalSpacing8,
-                    children: _tags
-                        .map<Widget>(
-                          (e) =>
-                          UiKitCompactTextCard(
-                            showRemoveButton: true,
-                            text: e,
-                            onTap: () {
-                              setState(() {
-                                _tags.remove(e);
-                              });
-                            },
-                          ),
+        body: BlurredAppBarPage(
+            autoImplyLeading: true,
+            centerTitle: true,
+            title: widget.title,
+            childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            children: [
+              SpacingFoundation.verticalSpace16,
+              Wrap(
+                spacing: SpacingFoundation.horizontalSpacing8,
+                runSpacing: SpacingFoundation.verticalSpacing8,
+                children: _tags
+                    .map<Widget>(
+                      (e) => UiKitCompactTextCard(
+                        showRemoveButton: true,
+                        text: e,
+                        onTap: () {
+                          setState(() {
+                            _tags.remove(e);
+                          });
+                        },
+                      ),
                     )
-                        .toList(),
-                  ),
-                  SpacingFoundation.verticalSpace16,
-                  UiKitMultiSelectSuggestionField(
-                    initialOptions: _tags.toList(),
-                    borderRadius: BorderRadiusFoundation.all16,
-                    options: widget.options,
-                    onOptionSelected: (value) {
-                      setState(() {
-                        _tags.add(value);
-                      });
-                    },
-                    onOptionUnselected: (value) {
-                      setState(() {
-                        _tags.remove(value);
-                      });
-                    },
-                  ),
-                  0.7.sh.heightBox
-                ])));
+                    .toList(),
+              ),
+              SpacingFoundation.verticalSpace16,
+              UiKitMultiSelectSuggestionField(
+                initialOptions: _tags.toList(),
+                borderRadius: BorderRadiusFoundation.all16,
+                options: widget.options,
+                onOptionSelected: (value) {
+                  setState(() {
+                    _tags.add(value);
+                  });
+                },
+                onOptionUnselected: (value) {
+                  setState(() {
+                    _tags.remove(value);
+                  });
+                },
+              ),
+              0.7.sh.heightBox
+            ]));
   }
 }

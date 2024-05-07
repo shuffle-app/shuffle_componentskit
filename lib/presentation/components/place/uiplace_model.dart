@@ -48,7 +48,7 @@ class UiPlaceModel {
     this.weekdays = const [],
     this.schedule,
     this.niche,
-    this.contentType = 'leisure',
+    this.contentType = 'both',
     this.userPoints,
   }) : descriptionItems = [
           if (website != null && website.isNotEmpty)
@@ -137,6 +137,7 @@ class UiPlaceModel {
         media = [],
         weekdays = [],
         description = '',
+        contentType = 'both',
         tags = [],
         baseTags = [];
 }
