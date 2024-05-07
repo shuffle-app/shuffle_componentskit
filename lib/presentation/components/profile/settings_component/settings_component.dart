@@ -66,7 +66,7 @@ class SettingsComponent extends StatelessWidget {
               .expand((element) => element)
               .toList(),
         ).paddingSymmetric(horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0),
-        if (proControlExpansionTileButtons != null)
+        if (proControlExpansionTileButtons != null) ...[
           UiKitExpansionTile(
             leadingIconData: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.label),
             title: S.current.ProTools.toUpperCase(),
@@ -76,6 +76,9 @@ class SettingsComponent extends StatelessWidget {
                     ))
                 .toList(),
           ),
+          divider,
+          SpacingFoundation.verticalSpace16,
+        ],
         UiKitExpansionTile(
           leadingIconData: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.tool),
           title: S.current.Control.toUpperCase(),
