@@ -47,6 +47,11 @@ class UiProfileModel {
       profileType: ProfileCardType.personal,
       showSupportShuffle: showSupportShuffle,
       onDonate: onDonate,
+      badge: userTileType == UserTileType.pro
+          ? const ProMemberPlate()
+          : userTileType == UserTileType.premium
+              ? const PremiumMemberPlate()
+              : null,
       // onViewAllAchievements: onViewAllAchievements,
       // achievements: achievements.where((element) => element.asset != null).toList(),
       profileStats: [

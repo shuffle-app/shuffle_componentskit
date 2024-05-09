@@ -58,10 +58,6 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    // print(config.containsKey('upcoming_events_spinner'));
-    // final model = ComponentSpinnerModel.fromJson(config['upcoming_events_spinner']);
-    // final ads = model.content.body?[ContentItemType.advertisement]?.properties;
     final spinnerWheelHeight = 0.25.sh;
     final cardsListHeight = 1.sh -
         (context.uiKitTheme?.customAppBapTheme.toolbarHeight ?? 0) -
@@ -86,33 +82,6 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
             itemBuilder: (_, item, index) {
               final itemsCount = itemsController.itemList?.length;
               final centerSingleItem = itemsCount == 1 && !kIsWeb;
-              // if (item.isAdvertisement && (ads?.entries.isNotEmpty ?? false)) {
-              //   final advertisement = ads?.entries.first;
-              //
-              //   return Align(
-              //     alignment: Alignment.topCenter,
-              //     child: Column(
-              //       children: [
-              //         SpacingFoundation.verticalSpace8,
-              //         context
-              //             .advertisementBanner(
-              //               data: BaseUiKitAdvertisementBannerData(
-              //                 availableWidth: 0.75.sw,
-              //                 customHeight: size.maxHeight * 0.76,
-              //                 imageLink: item.bannerPicture,
-              //                 title: advertisement?.key ?? '',
-              //                 onPressed: onAdvertisementTap,
-              //                 size: AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
-              //               ),
-              //             )
-              //             .paddingOnly(
-              //               left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
-              //               right: itemsController.itemList?.length == index + 1 ? SpacingFoundation.horizontalSpacing16 : 0,
-              //             ),
-              //       ],
-              //     ),
-              //   );
-              // }
 
               late final Widget? ownerTrailing;
               switch (item.owner?.type ?? UserTileType.ordinary) {

@@ -8,6 +8,7 @@ class SettingsComponent extends StatelessWidget {
   final List<UiKitCustomTab>? tabs;
   final List<BaseUiKitButtonData> btnDataList;
   final List<BaseUiKitButtonData> controlExpansionTileButtons;
+  final List<BaseUiKitButtonData>? proControlExpansionTileButtons;
 
   const SettingsComponent({
     Key? key,
@@ -16,6 +17,7 @@ class SettingsComponent extends StatelessWidget {
     this.tabs,
     required this.btnDataList,
     required this.controlExpansionTileButtons,
+    this.proControlExpansionTileButtons,
   }) : super(key: key);
 
   @override
@@ -64,6 +66,19 @@ class SettingsComponent extends StatelessWidget {
               .expand((element) => element)
               .toList(),
         ).paddingSymmetric(horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0),
+        if (proControlExpansionTileButtons != null) ...[
+          UiKitExpansionTile(
+            leadingIconData: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.label),
+            title: S.current.ProTools.toUpperCase(),
+            children: proControlExpansionTileButtons!
+                .map((e) => UiKitInlineButton(
+                      data: e,
+                    ))
+                .toList(),
+          ),
+          divider,
+          SpacingFoundation.verticalSpace16,
+        ],
         UiKitExpansionTile(
           leadingIconData: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.tool),
           title: S.current.Control.toUpperCase(),
