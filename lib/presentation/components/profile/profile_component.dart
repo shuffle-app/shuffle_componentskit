@@ -21,6 +21,7 @@ class ProfileComponent extends StatelessWidget {
   final VoidCallback? onSettingsPressed;
   final VoidCallback? onMessagePressed;
   final VoidCallback? onRecommendedUserMessagePressed;
+  final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
 
   const ProfileComponent({
     Key? key,
@@ -39,12 +40,14 @@ class ProfileComponent extends StatelessWidget {
     this.onRecommendedUserMessagePressed,
     this.favoriteEvents = const [],
     this.favoritePlaces = const [],
+    this.onRecommendedUserAvatarPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -132,6 +135,7 @@ class ProfileComponent extends StatelessWidget {
                 userPoints: user?.userPointsBalance ?? 0,
                 sameInterests: user?.commonInterests ?? 0,
                 userTileType: user?.userTileType ?? UserTileType.ordinary,
+                onAvatarTapped: () => onRecommendedUserAvatarPressed?.call(user!),
                 onMessage: () {
                   onRecommendedUserMessagePressed?.call();
                   // buildComponent(
