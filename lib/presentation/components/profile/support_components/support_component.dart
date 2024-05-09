@@ -14,10 +14,12 @@ class SupportComponent extends StatelessWidget {
   final ContentBaseModel content;
   final ValueChanged<bool> onSupportSubmitted;
   final bool isSupportActive;
+  final String? versionText;
 
   SupportComponent({
     super.key,
     this.position,
+    this.versionText,
     this.isSupportActive = false,
     required this.onSupportSubmitted,
     required this.daysFocusNode,
@@ -43,6 +45,7 @@ class SupportComponent extends StatelessWidget {
         centerTitle: true,
         autoImplyLeading: true,
         title: S.of(context).Support,
+        appBarTrailing: versionText!= null ?Text(versionText!,style: textTheme?.caption1Bold,) :null,
         childrenPadding: EdgeInsets.symmetric(
           horizontal: position?.horizontalMargin?.toDouble() ?? 0,
         ),

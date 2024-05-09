@@ -121,6 +121,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
+                if(onPremiumAccountRequested!=null)
                 Expanded(
                   child: context.smallButton(
                     blurred: false,
@@ -135,6 +136,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   ),
                 ),
                 SpacingFoundation.horizontalSpace16,
+                if(onProAccountRequested!=null)
                 Expanded(
                   child: context.smallButton(
                     blurred: false,

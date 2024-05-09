@@ -201,7 +201,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
                 reverseDuration: Duration.zero,
                 switchInCurve: Curves.bounceIn,
                 switchOutCurve: Curves.bounceIn,
-                duration: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 400),
                 child: _features[featureIndex % totalFeatureCount]),
             // _features[featureIndex % totalFeatureCount],
             SpacingFoundation.verticalSpace16,
