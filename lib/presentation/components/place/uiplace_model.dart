@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -26,6 +27,9 @@ class UiPlaceModel {
   String? niche;
   String? contentType;
   int? userPoints;
+  String? currency;
+  TextEditingController houseNumberController;
+  TextEditingController apartmentNumberController;
 
   UiPlaceModel({
     required this.id,
@@ -50,7 +54,8 @@ class UiPlaceModel {
     this.niche,
     this.contentType = 'both',
     this.userPoints,
-  }) : descriptionItems = [
+    this.currency,
+  })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website ?? ''),
           if (phone != null && phone.isNotEmpty)
@@ -62,7 +67,9 @@ class UiPlaceModel {
               description: scheduleString,
               // description: formatDate(null, null, openFrom, openTo, weekdays)!,
             ),
-        ];
+        ],
+        houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController();
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
@@ -106,6 +113,9 @@ class UiPlaceModel {
     String? niche,
     String? contentType,
     int? userPoints,
+    String? currency,
+    TextEditingController? houseNumberController,
+    TextEditingController? apartmentNumberController,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -139,5 +149,7 @@ class UiPlaceModel {
         description = '',
         contentType = 'both',
         tags = [],
+        houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController(),
         baseTags = [];
 }

@@ -5,6 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../../../shuffle_components_kit.dart';
 import '../../common/photolist_editing_component.dart';
+import '../../common/price_selector_component.dart';
 import '../../common/tags_selection_component.dart';
 
 class CreatePlaceComponent extends StatefulWidget {
@@ -206,6 +207,38 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           : null,
       children: [
         SpacingFoundation.verticalSpace16,
+        InkWell(
+          onTap: () async {
+            _locationController.text = await widget.getLocation?.call() ?? '';
+            _placeToEdit.location = _locationController.text;
+          },
+          child: IgnorePointer(
+            child: UiKitInputFieldNoFill(
+              label: S.of(context).Address,
+              controller: _locationController,
+              icon: ImageWidget(
+                iconData: ShuffleUiKitIcons.landmark,
+                color: theme?.colorScheme.inversePrimary,
+                height: 16.h,
+                width: 16.h,
+              ),
+            ).paddingSymmetric(horizontal: horizontalPadding),
+          ),
+        ),
+        SpacingFoundation.verticalSpace12,
+        Row(
+          children: [
+            UiKitInputFieldNoFill(
+              label: S.of(context).BuildingNumber,
+              controller: _placeToEdit.houseNumberController,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            UiKitInputFieldNoFill(
+              label: S.of(context).OfficeAppartmentNumber,
+              controller: _placeToEdit.apartmentNumberController,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+          ],
+        ),
+        SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           label: S.of(context).Title,
           controller: _titleController,
@@ -292,26 +325,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalPadding),
-        SpacingFoundation.verticalSpace24,
-        SpacingFoundation.verticalSpace24,
-        InkWell(
-          onTap: () async {
-            _locationController.text = await widget.getLocation?.call() ?? '';
-            _placeToEdit.location = _locationController.text;
-          },
-          child: IgnorePointer(
-            child: UiKitInputFieldNoFill(
-              label: S.of(context).Address,
-              controller: _locationController,
-              icon: ImageWidget(
-                iconData: ShuffleUiKitIcons.landmark,
-                color: theme?.colorScheme.inversePrimary,
-                height: 16.h,
-                width: 16.h,
-              ),
-            ).paddingSymmetric(horizontal: horizontalPadding),
-          ),
-        ),
+        // SpacingFoundation.verticalSpace24,
+
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.url,
@@ -326,10 +341,21 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
-          keyboardType: TextInputType.text,
-          label: S.of(context).Price,
-          controller: _priceController,
-        ).paddingSymmetric(horizontal: horizontalPadding),
+                keyboardType: TextInputType.text,
+                label: S.of(context).Price,
+                controller: _priceController,
+                onTap: () {
+                  context.push(PriceSelectorComponent(onSubmit: (price1,price2,currency){
+                    setState(() {
+                      _priceController.text = price1;
+                      if(price2.isNotEmpty){
+                        _priceController.text += '-$price2';
+                      }
+                      _placeToEdit.currency = currency;
+                    });
+                  },));
+                })
+            .paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.text,
