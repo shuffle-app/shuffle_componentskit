@@ -1,5 +1,6 @@
-import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter/material.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
+
 import '../../../shuffle_components_kit.dart';
 
 class UiFeedModel {

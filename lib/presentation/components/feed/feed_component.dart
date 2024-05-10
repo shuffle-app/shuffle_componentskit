@@ -1,9 +1,11 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:collection/collection.dart';
 
 class FeedComponent extends StatelessWidget {
   final UiFeedModel feed;
@@ -380,9 +382,11 @@ class FeedComponent extends StatelessWidget {
               itemBuilder: (_, item, index) {
                 item as UiUniversalModel;
                 if (item.isAdvertisement && advertisement != null) {
+                  final randomNumber = Random().nextInt(100);
+                  if (randomNumber.isOdd) return item.smallTextAdBanner;
                   return context
-                      .advertisementBanner(
-                        data: BaseUiKitAdvertisementBannerData(
+                      .advertisementImageBanner(
+                        data: BaseUiKitAdvertisementImageBannerData(
                           availableWidth: 1.sw - (horizontalMargin * 2),
                           onPressed: onAdvertisementPressed,
                           imageLink: item.bannerPicture,
