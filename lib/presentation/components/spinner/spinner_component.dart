@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -96,29 +98,33 @@ class SpinnerComponent extends StatelessWidget {
                     itemBuilder: (_, item, index) {
                       if (item.isAdvertisement && (ads?.entries.isNotEmpty ?? false)) {
                         final advertisement = ads?.entries.first;
+                        final randomNumber = Random().nextInt(100);
 
                         return Align(
                           alignment: Alignment.topCenter,
                           child: Column(
                             children: [
                               SpacingFoundation.verticalSpace8,
-                              context
-                                  .advertisementBanner(
-                                    data: BaseUiKitAdvertisementBannerData(
-                                      availableWidth: 0.75.sw,
-                                      customHeight: size.maxHeight * 0.76,
-                                      imageLink: item.bannerPicture,
-                                      title: advertisement?.key ?? '',
-                                      onPressed: onAdvertisementTap,
-                                      size: AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
+                              if (randomNumber.isOdd) item.spinnerTextBanner(size.maxHeight * 0.76),
+                              if (randomNumber.isEven)
+                                context
+                                    .advertisementImageBanner(
+                                      data: BaseUiKitAdvertisementImageBannerData(
+                                        availableWidth: 0.75.sw,
+                                        customHeight: size.maxHeight * 0.76,
+                                        imageLink: item.bannerPicture,
+                                        title: advertisement?.key ?? '',
+                                        onPressed: onAdvertisementTap,
+                                        size:
+                                            AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
+                                      ),
+                                    )
+                                    .paddingOnly(
+                                      left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
+                                      right: itemsController.itemList?.length == index + 1
+                                          ? SpacingFoundation.horizontalSpacing16
+                                          : 0,
                                     ),
-                                  )
-                                  .paddingOnly(
-                                    left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
-                                    right: itemsController.itemList?.length == index + 1
-                                        ? SpacingFoundation.horizontalSpacing16
-                                        : 0,
-                                  ),
                             ],
                           ),
                         );
