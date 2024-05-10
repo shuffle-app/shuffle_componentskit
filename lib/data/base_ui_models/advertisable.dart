@@ -7,29 +7,28 @@ abstract class Advertisable {
   final bool isAdvertisement;
   late final String bannerPicture = _randomBannerPicture;
   late final UiKitSwiperAdCard largeTextBanner = _randomLargeTextBanner;
-  late final Widget mediumTextBanner = _randomMediumTextBanner;
   late final Widget smallTextAdBanner = _randomSmallTextAdBanner;
 
   Advertisable({
     required this.isAdvertisement,
   });
 
-  UiKitSwiperAdCard get _randomLargeTextBanner {
+  Widget spinnerTextBanner(double customHeight) {
     final randomNumber = Random().nextInt(3) + 1;
-    if (randomNumber == 1) return LargeTextAdBanner1();
-    if (randomNumber == 2) return LargeTextAdBanner2();
-    if (randomNumber == 3) return LargeTextAdBanner3();
-    if (randomNumber == 4) return LargeTextAdBanner4();
-    return LargeTextAdBanner1();
+    if (randomNumber == 1) return MediumTextAdBanner1(customHeight: customHeight);
+    if (randomNumber == 2) return MediumTextAdBanner2(customHeight: customHeight);
+    if (randomNumber == 3) return MediumTextAdBanner3(customHeight: customHeight);
+    if (randomNumber == 4) return MediumTextAdBanner4(customHeight: customHeight);
+    return const SizedBox();
   }
 
-  Widget get _randomMediumTextBanner {
+  UiKitSwiperAdCard get _randomLargeTextBanner {
     final randomNumber = Random().nextInt(3) + 1;
-    if (randomNumber == 1) return const MediumTextAdBanner1();
-    if (randomNumber == 2) return const MediumTextAdBanner2();
-    if (randomNumber == 3) return const MediumTextAdBanner3();
-    if (randomNumber == 4) return const MediumTextAdBanner4();
-    return const SizedBox();
+    if (randomNumber == 1) return LargeTextAdBanner1(customHeight: (1.sh / 1.6) * 0.9);
+    if (randomNumber == 2) return LargeTextAdBanner2(customHeight: (1.sh / 1.6) * 0.9);
+    if (randomNumber == 3) return LargeTextAdBanner3(customHeight: (1.sh / 1.6) * 0.9);
+    if (randomNumber == 4) return LargeTextAdBanner4(customHeight: (1.sh / 1.6) * 0.9);
+    return LargeTextAdBanner1(customHeight: (1.sh / 1.6) * 0.9);
   }
 
   Widget get _randomSmallTextAdBanner {

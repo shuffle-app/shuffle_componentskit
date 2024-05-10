@@ -105,7 +105,7 @@ class SpinnerComponent extends StatelessWidget {
                           child: Column(
                             children: [
                               SpacingFoundation.verticalSpace8,
-                              if (randomNumber.isOdd) item.mediumTextBanner,
+                              if (randomNumber.isOdd) item.spinnerTextBanner(size.maxHeight * 0.76),
                               if (randomNumber.isEven)
                                 context
                                     .advertisementImageBanner(
