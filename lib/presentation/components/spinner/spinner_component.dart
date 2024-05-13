@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -98,21 +96,21 @@ class SpinnerComponent extends StatelessWidget {
                     itemBuilder: (_, item, index) {
                       if (item.isAdvertisement && (ads?.entries.isNotEmpty ?? false)) {
                         final advertisement = ads?.entries.first;
-                        final randomNumber = Random().nextInt(100);
 
                         return Align(
                           alignment: Alignment.topCenter,
                           child: Column(
                             children: [
                               SpacingFoundation.verticalSpace8,
-                              if (randomNumber.isOdd) item.spinnerTextBanner(size.maxHeight * 0.76),
-                              if (randomNumber.isEven)
+                              if (item.bannerType == AdvertisementBannerType.text)
+                                item.spinnerTextBanner(size.maxHeight * 0.76),
+                              if (item.bannerType == AdvertisementBannerType.picture)
                                 context
                                     .advertisementImageBanner(
                                       data: BaseUiKitAdvertisementImageBannerData(
                                         availableWidth: 0.75.sw,
                                         customHeight: size.maxHeight * 0.76,
-                                        imageLink: item.bannerPicture,
+                                        imageLink: item.mediumBannerImage,
                                         title: advertisement?.key ?? '',
                                         onPressed: onAdvertisementTap,
                                         size:

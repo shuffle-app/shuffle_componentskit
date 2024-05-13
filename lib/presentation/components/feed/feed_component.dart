@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -382,21 +380,23 @@ class FeedComponent extends StatelessWidget {
               itemBuilder: (_, item, index) {
                 item as UiUniversalModel;
                 if (item.isAdvertisement && advertisement != null) {
-                  final randomNumber = Random().nextInt(100);
-                  if (randomNumber.isOdd) return item.smallTextAdBanner;
-                  return context
-                      .advertisementImageBanner(
-                        data: BaseUiKitAdvertisementImageBannerData(
-                          availableWidth: 1.sw - (horizontalMargin * 2),
-                          onPressed: onAdvertisementPressed,
-                          imageLink: item.bannerPicture,
-                          title: advertisement.key,
-                          size: AdvertisementBannerSize.values.byName(
-                            advertisement.value.type ?? S.of(context).Small.toLowerCase(),
+                  if (item.bannerType == AdvertisementBannerType.text) {
+                    return item.smallTextBanner ?? const SizedBox();
+                  } else {
+                    return context
+                        .advertisementImageBanner(
+                          data: BaseUiKitAdvertisementImageBannerData(
+                            availableWidth: 1.sw - (horizontalMargin * 2),
+                            onPressed: onAdvertisementPressed,
+                            imageLink: item.smallBannerImage,
+                            title: advertisement.key,
+                            size: AdvertisementBannerSize.values.byName(
+                              advertisement.value.type ?? S.of(context).Small.toLowerCase(),
+                            ),
                           ),
-                        ),
-                      )
-                      .paddingSymmetric(horizontal: horizontalMargin);
+                        )
+                        .paddingSymmetric(horizontal: horizontalMargin);
+                  }
                 }
 
                 return PlacePreview(
