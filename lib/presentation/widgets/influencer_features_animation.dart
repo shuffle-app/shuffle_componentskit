@@ -199,8 +199,8 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
             SpacingFoundation.verticalSpace16,
             AnimatedSwitcher(
                 reverseDuration: Duration.zero,
-                switchInCurve: Curves.bounceIn,
-                switchOutCurve: Curves.bounceIn,
+                switchInCurve: Curves.linearToEaseOut,
+                switchOutCurve: Curves.linearToEaseOut,
                 duration: const Duration(milliseconds: 400),
                 child: _features[featureIndex % totalFeatureCount]),
             // _features[featureIndex % totalFeatureCount],
