@@ -1,3 +1,5 @@
+import 'package:shuffle_components_kit/presentation/utils/extentions/number_converters.dart';
+
 class SubscriptionOfferModel {
   final String name;
   final double price;
@@ -6,9 +8,9 @@ class SubscriptionOfferModel {
   final int? savings;
   final String storePurchaseId;
 
-  String get formattedPriceWithPeriod => '$currency${price.toStringAsFixed(2)}/$periodName';
+  String get formattedPriceWithPeriod => '$currency${price.nanOrTwoTrailingZeros}/$periodName';
 
-  String get formattedPriceNoPeriod => '$currency${price.toStringAsFixed(2)}';
+  String get formattedPriceNoPeriod => '$currency${price.nanOrTwoTrailingZeros}';
 
   SubscriptionOfferModel({
     this.savings,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/common/subscription_offer_widget.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -8,6 +10,7 @@ class AccountSubscriptionComponent extends StatefulWidget {
   final ValueChanged<SubscriptionOfferModel>? onSubscribe;
   final ComponentModel configModel;
   final String title;
+  final bool isLoading;
 
   const AccountSubscriptionComponent({
     Key? key,
@@ -15,6 +18,7 @@ class AccountSubscriptionComponent extends StatefulWidget {
     required this.configModel,
     required this.title,
     this.onSubscribe,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -23,6 +27,18 @@ class AccountSubscriptionComponent extends StatefulWidget {
 
 class _AccountSubscriptionComponentState extends State<AccountSubscriptionComponent> {
   SubscriptionOfferModel? _selectedOffer;
+  bool _isLoading = false;
+
+  @override
+  void didUpdateWidget(covariant AccountSubscriptionComponent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget.isLoading!=oldWidget.isLoading) {
+      setState(() {
+        _isLoading = oldWidget.isLoading;
+      });
+    }
+    log('here we got did update widget with loading $_isLoading',name: 'AccountSubscriptionComponent');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +135,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
           SpacingFoundation.verticalSpace24,
           context.gradientButton(
             data: BaseUiKitButtonData(
+              loading: _isLoading,
               fit: ButtonFit.fitWidth,
               text: S
                   .of(context)
