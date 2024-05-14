@@ -7,6 +7,7 @@ class SearchResultComponent extends StatelessWidget {
   final String heroSearchTag;
   final String? errorText;
   final ValueChanged<String>? onFieldSubmitted;
+  final ValueChanged<String>? onSearchValueChanged;
   final TextEditingController searchController;
   final bool autofocus;
 
@@ -16,6 +17,7 @@ class SearchResultComponent extends StatelessWidget {
     required this.heroSearchTag,
     required this.searchController,
     this.onFieldSubmitted,
+    this.onSearchValueChanged,
     this.autofocus = true,
     this.errorText,
   });
@@ -40,6 +42,7 @@ class SearchResultComponent extends StatelessWidget {
         autofocus: autofocus,
         fillColor: colorScheme?.surface3,
         hintText: S.of(context).Search.toUpperCase(),
+        onChanged: onSearchValueChanged,
         controller: searchController,
         icon: searchController.text.isEmpty
             ? ImageWidget(
