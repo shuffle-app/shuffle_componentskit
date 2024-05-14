@@ -10,6 +10,7 @@ class SearchResultComponent extends StatelessWidget {
   final ValueChanged<String>? onSearchValueChanged;
   final TextEditingController searchController;
   final bool autofocus;
+  final FocusNode? searchFocusNode;
 
   const SearchResultComponent({
     super.key,
@@ -18,6 +19,7 @@ class SearchResultComponent extends StatelessWidget {
     required this.searchController,
     this.onFieldSubmitted,
     this.onSearchValueChanged,
+    this.searchFocusNode,
     this.autofocus = true,
     this.errorText,
   });
@@ -39,6 +41,7 @@ class SearchResultComponent extends StatelessWidget {
       customToolbarHeight: 170.0,
       canFoldAppBar: false,
       appBarBody: UiKitInputFieldRightIcon(
+        focusNode: searchFocusNode,
         autofocus: autofocus,
         fillColor: colorScheme?.surface3,
         hintText: S.of(context).Search.toUpperCase(),
