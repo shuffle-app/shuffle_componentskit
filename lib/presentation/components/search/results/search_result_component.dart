@@ -3,7 +3,6 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SearchResultComponent extends StatelessWidget {
-  final Widget resultBody;
   final String heroSearchTag;
   final String? errorText;
   final ValueChanged<String>? onFieldSubmitted;
@@ -11,12 +10,13 @@ class SearchResultComponent extends StatelessWidget {
   final TextEditingController searchController;
   final bool autofocus;
   final FocusNode? searchFocusNode;
+  final List<Widget> searchResults;
 
   const SearchResultComponent({
     super.key,
-    required this.resultBody,
     required this.heroSearchTag,
     required this.searchController,
+    required this.searchResults,
     this.onFieldSubmitted,
     this.onSearchValueChanged,
     this.searchFocusNode,
@@ -40,6 +40,7 @@ class SearchResultComponent extends StatelessWidget {
       autoImplyLeading: true,
       customToolbarHeight: 170.0,
       canFoldAppBar: false,
+      childrenPadding: EdgeInsets.only(bottom: EdgeInsetsFoundation.vertical16),
       appBarBody: UiKitInputFieldRightIcon(
         focusNode: searchFocusNode,
         autofocus: autofocus,
@@ -59,19 +60,7 @@ class SearchResultComponent extends StatelessWidget {
         },
         onFieldSubmitted: onFieldSubmitted,
       ),
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (searchController.text.isEmpty) {
-              FocusManager.instance.primaryFocus?.unfocus();
-              context.pop();
-            }
-          },
-          child: resultBody.paddingOnly(
-            bottom: verticalMargin,
-          ),
-        ),
-      ],
+      children: searchResults,
     );
   }
 }
