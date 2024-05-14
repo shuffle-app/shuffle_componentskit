@@ -226,8 +226,10 @@ class ProfileComponent extends StatelessWidget {
           ),
         ],
         SpacingFoundation.verticalSpace24,
-        if (events != null) ...[
-          MyEventsComponent(title: S.of(context).MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
+        if (events != null && events!.isNotEmpty) ...[
+          MyEventsComponent(title: S
+              .of(context)
+              .MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
           SpacingFoundation.verticalSpace24,
         ],
         SizedBox(

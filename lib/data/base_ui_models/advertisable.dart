@@ -12,7 +12,7 @@ abstract class Advertisable {
   late final String mediumBannerImage = _randomMediumBannerPicture;
   late final String largeBannerImage = _randomLargeBannerPicture;
   late final Widget smallTextBanner = _randomSmallTextAdBanner;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false,includeToJson: false)
   late final AdvertisementBannerType bannerType;
 
   Advertisable({

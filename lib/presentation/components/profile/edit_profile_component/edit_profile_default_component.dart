@@ -17,7 +17,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final List<LocaleModel>? availableLocales;
   final ValueChanged<bool>? onIsLightThemeChanged;
   final String? avatarUrl;
-
+  final UserTileType userType;
   final List<String> socialLinks;
   final ValueChanged<List<String>>? onPreferencesChanged;
   final ValueChanged<List<String>>? onSocialLinksChanged;
@@ -67,6 +67,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     required this.phoneController,
     required this.beInSearch,
     this.activityItem,
+    this.userType = UserTileType.ordinary,
   }) : super(key: key);
 
   @override
@@ -121,32 +122,32 @@ class EditProfileDefaultComponent extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                if(onPremiumAccountRequested!=null)
-                Expanded(
-                  child: context.smallButton(
-                    blurred: false,
-                    data: BaseUiKitButtonData(
-                      fit: ButtonFit.fitWidth,
-                      text: S.of(context).Premium.toUpperCase(),
-                      iconInfo: BaseUiKitButtonIconData(
-                        iconData: ShuffleUiKitIcons.star2,
+                if (onPremiumAccountRequested != null)
+                  Expanded(
+                    child: context.smallButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        fit: ButtonFit.fitWidth,
+                        text: S.of(context).Premium.toUpperCase(),
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.star2,
+                        ),
+                        onPressed: onPremiumAccountRequested,
                       ),
-                      onPressed: onPremiumAccountRequested,
                     ),
                   ),
-                ),
                 SpacingFoundation.horizontalSpace16,
-                if(onProAccountRequested!=null)
-                Expanded(
-                  child: context.smallButton(
-                    blurred: false,
-                    data: BaseUiKitButtonData(
-                      fit: ButtonFit.fitWidth,
-                      text: S.of(context).Pro.toUpperCase(),
-                      onPressed: onProAccountRequested,
+                if (onProAccountRequested != null)
+                  Expanded(
+                    child: context.smallButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        fit: ButtonFit.fitWidth,
+                        text: S.of(context).Pro.toUpperCase(),
+                        onPressed: onProAccountRequested,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
             SpacingFoundation.verticalSpace16,
@@ -268,25 +269,27 @@ class EditProfileDefaultComponent extends StatelessWidget {
               validator: emailValidator,
               keyboardType: TextInputType.emailAddress,
             ),
-            SpacingFoundation.verticalSpace16,
-            Row(
-              children: [
-                Text(
-                  'Links',
-                  style: theme?.regularTextTheme.labelSmall,
-                ),
-                const Spacer(),
-                context.smallOutlinedButton(
-                    data: BaseUiKitButtonData(
-                        onPressed: () async {
-                          final newLinks = await socialLinksEditBuilder(context, socialLinks: socialLinks);
-                          if (newLinks.isNotEmpty) {
-                            onSocialLinksChanged?.call(newLinks);
-                          }
-                        },
-                        iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.plus, color: Colors.white)))
-              ],
-            ),
+            if (userType == UserTileType.influencer) ...[
+              SpacingFoundation.verticalSpace16,
+              Row(
+                children: [
+                  Text(
+                    'Links',
+                    style: theme?.regularTextTheme.labelSmall,
+                  ),
+                  const Spacer(),
+                  context.smallOutlinedButton(
+                      data: BaseUiKitButtonData(
+                          onPressed: () async {
+                            final newLinks = await socialLinksEditBuilder(context, socialLinks: socialLinks);
+                            if (newLinks.isNotEmpty) {
+                              onSocialLinksChanged?.call(newLinks);
+                            }
+                          },
+                          iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.plus, color: Colors.white)))
+                ],
+              )
+            ],
             if (socialLinks.isNotEmpty)
               ...socialLinks.map((e) => Row(
                     children: [
