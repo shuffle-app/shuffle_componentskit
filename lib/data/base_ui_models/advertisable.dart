@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:shuffle_components_kit/presentation/utils/ad_banner_lists.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -11,6 +12,7 @@ abstract class Advertisable {
   late final String mediumBannerImage = _randomMediumBannerPicture;
   late final String largeBannerImage = _randomLargeBannerPicture;
   late final Widget smallTextBanner = _randomSmallTextAdBanner;
+  @JsonKey(ignore: true)
   late final AdvertisementBannerType bannerType;
 
   Advertisable({
@@ -39,7 +41,7 @@ abstract class Advertisable {
     if (randomNumber == 2) return LargeTextAdBanner2(customHeight: (1.sh / 1.6) * 0.91);
     if (randomNumber == 3) return LargeTextAdBanner3(customHeight: (1.sh / 1.6) * 0.91);
     if (randomNumber == 4) return LargeTextAdBanner4(customHeight: (1.sh / 1.6) * 0.91);
-    return LargeTextAdBanner1(customHeight: (1.sh / 1.6) * 0.9);
+    return LargeTextAdBanner1(customHeight: (1.sh / 1.6) * 0.91);
   }
 
   Widget get _randomSmallTextAdBanner {

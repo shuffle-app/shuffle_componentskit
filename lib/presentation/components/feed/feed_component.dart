@@ -381,7 +381,7 @@ class FeedComponent extends StatelessWidget {
                 item as UiUniversalModel;
                 if (item.isAdvertisement && advertisement != null) {
                   if (item.bannerType == AdvertisementBannerType.text) {
-                    return item.smallTextBanner ?? const SizedBox();
+                    return item.smallTextBanner.paddingSymmetric(horizontal: horizontalMargin);
                   } else {
                     return context
                         .advertisementImageBanner(
