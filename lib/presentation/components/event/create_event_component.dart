@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -386,11 +388,17 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   title: S.of(context).BaseProperties,
                   options: (String v) => widget.propertiesOptions(v, 'base'),
                 ));
+                log('here we have baseTags $newTags');
                 if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.baseTags.clear();
-                    _eventToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                  });
+                  try {
+                    setState(() {
+                      _eventToEdit.baseTags.clear();
+                      _eventToEdit.baseTags.addAll(
+                          (newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    });
+                  } catch (e){
+                    log(e.toString());
+                  }
                 }
               },
               child: IgnorePointer(
@@ -412,6 +420,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     title: S.of(context).UniqueProperties,
                     options: (String v) => widget.propertiesOptions(v, 'unique'),
                   ));
+                  log('here we have uniqueTags $newTags');
                   if (newTags != null) {
                     setState(() {
                       _eventToEdit.tags.clear();

@@ -58,7 +58,6 @@ class UiEventModel extends Advertisable {
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
-            // if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
             UiDescriptionItemModel(
               title: S.current.DontMissIt,
               description: scheduleString,
@@ -78,7 +77,14 @@ class UiEventModel extends Advertisable {
         ],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
-        super(isAdvertisement: isAdvertisement ?? false);
+        super(isAdvertisement: isAdvertisement ?? false) {
+    if (baseTags.isEmpty) {
+      baseTags = List.empty(growable: true);
+    }
+    if (tags.isEmpty) {
+      tags = List.empty(growable: true);
+    }
+  }
 
   UiEventModel.advertisement({
     this.id = -1,
@@ -137,7 +143,14 @@ class UiEventModel extends Advertisable {
         descriptionItems = const [],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
-        super(isAdvertisement: false);
+        super(isAdvertisement: false) {
+    if (baseTags.isEmpty) {
+      baseTags = List.empty(growable: true);
+    }
+    if (tags.isEmpty) {
+      tags = List.empty(growable: true);
+    }
+  }
 
   // copy with method
 
