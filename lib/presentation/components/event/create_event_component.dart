@@ -285,14 +285,16 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace12,
           Row(
             children: [
-              UiKitInputFieldNoFill(
+              Expanded(
+                  child: UiKitInputFieldNoFill(
                 label: S.of(context).BuildingNumber,
                 controller: _eventToEdit.houseNumberController,
-              ).paddingSymmetric(horizontal: horizontalPadding),
-              UiKitInputFieldNoFill(
+              ).paddingSymmetric(horizontal: horizontalPadding)),
+              Expanded(
+                  child: UiKitInputFieldNoFill(
                 label: S.of(context).OfficeAppartmentNumber,
                 controller: _eventToEdit.apartmentNumberController,
-              ).paddingSymmetric(horizontal: horizontalPadding),
+              ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
           SpacingFoundation.verticalSpace24,

@@ -229,14 +229,16 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         SpacingFoundation.verticalSpace12,
         Row(
           children: [
-            UiKitInputFieldNoFill(
+            Expanded(
+                child: UiKitInputFieldNoFill(
               label: S.of(context).BuildingNumber,
               controller: _placeToEdit.houseNumberController,
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            UiKitInputFieldNoFill(
+            ).paddingSymmetric(horizontal: horizontalPadding)),
+            Expanded(
+                child: UiKitInputFieldNoFill(
               label: S.of(context).OfficeAppartmentNumber,
               controller: _placeToEdit.apartmentNumberController,
-            ).paddingSymmetric(horizontal: horizontalPadding),
+            ).paddingSymmetric(horizontal: horizontalPadding)),
           ],
         ),
         SpacingFoundation.verticalSpace24,
@@ -319,13 +321,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalPadding),
-        if(_placeToEdit.scheduleString != null) ...[
-        SpacingFoundation.verticalSpace24,
-         Text(
-               _placeToEdit.scheduleString!,
-              style: theme?.boldTextTheme.body,
-              textAlign: TextAlign.center,
-            )],
+        if (_placeToEdit.scheduleString != null) ...[
+          SpacingFoundation.verticalSpace24,
+          Text(
+            _placeToEdit.scheduleString!,
+            style: theme?.boldTextTheme.body,
+            textAlign: TextAlign.center,
+          )
+        ],
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.url,
@@ -340,21 +343,22 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
-                keyboardType: TextInputType.text,
-                label: S.of(context).Price,
-                controller: _priceController,
-                onTap: () {
-                  context.push(PriceSelectorComponent(onSubmit: (price1,price2,currency){
-                    setState(() {
-                      _priceController.text = price1;
-                      if(price2.isNotEmpty){
-                        _priceController.text += '-$price2';
-                      }
-                      _placeToEdit.currency = currency;
-                    });
-                  },));
-                })
-            .paddingSymmetric(horizontal: horizontalPadding),
+            keyboardType: TextInputType.text,
+            label: S.of(context).Price,
+            controller: _priceController,
+            onTap: () {
+              context.push(PriceSelectorComponent(
+                onSubmit: (price1, price2, currency) {
+                  setState(() {
+                    _priceController.text = price1;
+                    if (price2.isNotEmpty) {
+                      _priceController.text += '-$price2';
+                    }
+                    _placeToEdit.currency = currency;
+                  });
+                },
+              ));
+            }).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.text,
