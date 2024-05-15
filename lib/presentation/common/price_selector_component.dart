@@ -27,6 +27,7 @@ class PriceSelectorComponent extends StatelessWidget {
         title: S.of(context).Price,
         autoImplyLeading: true,
         centerTitle: true,
+        childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           SpacingFoundation.verticalSpace24,
           Row(
@@ -41,6 +42,7 @@ class PriceSelectorComponent extends StatelessWidget {
                   return GestureDetector(
                     onTap: () => showUiKitPopover(
                       context,
+                      customMinHeight: 35.h,
                       showButton: false,
                       title: Text(
                         S.of(context).HintAverageBill,
@@ -66,13 +68,20 @@ class PriceSelectorComponent extends StatelessWidget {
               Expanded(
                   child: UiKitInputFieldNoIcon(
                 controller: price1,
+                fillColor: theme?.colorScheme.surface3,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
               )),
               SpacingFoundation.horizontalSpace4,
-              const Text('–'),
+              Text(
+                '–',
+                style: theme?.boldTextTheme.title2,
+              ),
               SpacingFoundation.horizontalSpace4,
               Expanded(
                   child: UiKitInputFieldNoIcon(
                 controller: price2,
+                fillColor: theme?.colorScheme.surface3,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
               )),
             ],
           ),
@@ -98,7 +107,7 @@ class PriceSelectorComponent extends StatelessWidget {
                         title: _currencies.keys.toList()[index],
                         value: _currencies.keys.toList()[index],
                         iconLink: _currencies.values.toList()[index],
-                        enabled: _currencies.keys.toList()[index] == currency.value,
+                        // enabled: _currencies.keys.toList()[index] == currency.value,
                       ),
                     ),
                     onSelected: (menuItem) {
@@ -110,21 +119,25 @@ class PriceSelectorComponent extends StatelessWidget {
               })
         ],
       ),
-      bottomSheet: ListenableBuilder(
-          listenable: Listenable.merge([price1, price2, currency]),
-          builder: (context, _) {
-            if (price1.text.isNotEmpty) {
-              return context.gradientButton(
-                  data: BaseUiKitButtonData(
-                      fit: ButtonFit.fitWidth,
-                      text: S.of(context).Save.toUpperCase(),
-                      onPressed: () {
-                        onSubmit(price1.text, price2.text, currency.value);
-                        Navigator.of(context).pop();
-                      }));
-            }
-            return SizedBox.shrink();
-          }),
+      bottomNavigationBar: SizedBox(
+          height: 60.h,
+          child: ListenableBuilder(
+              listenable: Listenable.merge([price1, price2, currency]),
+              builder: (context, _) {
+                if (price1.text.isNotEmpty) {
+                  return context
+                      .gradientButton(
+                          data: BaseUiKitButtonData(
+                              fit: ButtonFit.fitWidth,
+                              text: S.of(context).Save.toUpperCase(),
+                              onPressed: () {
+                                onSubmit(price1.text, price2.text, currency.value);
+                                Navigator.of(context).pop();
+                              }))
+                      .paddingOnly(bottom: MediaQuery.viewPaddingOf(context).bottom);
+                }
+                return const SizedBox.shrink();
+              })),
     );
   }
 }

@@ -72,7 +72,7 @@ class AddReviewComponent extends StatelessWidget {
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
-              UiKitRatingBadge(rating: feedbackRating?.toDouble() ?? 0),
+              UiKitRatingBadge(rating: feedbackRating?.toInt() ?? 0),
             ],
           ),
           SpacingFoundation.verticalSpace24,

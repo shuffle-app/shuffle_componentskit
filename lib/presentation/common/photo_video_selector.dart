@@ -37,6 +37,19 @@ class PhotoVideoSelector extends StatelessWidget {
     final theme = context.uiKitTheme;
     final horizontalPadding = positionModel?.horizontalMargin?.toDouble() ?? 0;
 
+    //sorting photos array with preview type != null first and all others after
+    photos.sort((a, b) {
+      if (a.previewType == null && b.previewType == null) {
+        return 0;
+      } else if (a.previewType == null) {
+        return -1;
+      } else if (b.previewType == null) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
     final List<BaseUiKitMedia> covers = photos.where((element) => element.previewType != null).toList();
 
     return Column(

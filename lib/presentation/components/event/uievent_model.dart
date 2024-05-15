@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -12,11 +13,9 @@ class UiEventModel extends Advertisable {
   bool isRecurrent;
   String? scheduleString;
   String? contentType;
-
+  String? currency;
   DateTime? date;
-  // DateTime? dateTo;
-  // TimeOfDay? time;
-  // TimeOfDay? timeTo;
+  dynamic schedule;
   String? description;
   String? location;
   String? eventType;
@@ -29,6 +28,8 @@ class UiEventModel extends Advertisable {
   bool archived;
   List<String> weekdays;
   List<UiDescriptionItemModel>? descriptionItems;
+  TextEditingController houseNumberController;
+  TextEditingController apartmentNumberController;
 
   UiEventModel({
     required this.id,
@@ -52,6 +53,8 @@ class UiEventModel extends Advertisable {
     this.isRecurrent = false,
     this.archived = false,
     this.date,
+    this.currency,
+    this.schedule,
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
@@ -73,6 +76,8 @@ class UiEventModel extends Advertisable {
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
         ],
+        houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController(),
         super(isAdvertisement: isAdvertisement ?? false);
 
   UiEventModel.advertisement({
@@ -93,7 +98,9 @@ class UiEventModel extends Advertisable {
     this.isRecurrent = false,
     this.archived = false,
     this.descriptionItems = const [],
-  }) : super(isAdvertisement: true);
+  })  : houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController(),
+        super(isAdvertisement: true);
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
@@ -119,6 +126,7 @@ class UiEventModel extends Advertisable {
         location = null,
         eventType = null,
         price = null,
+        schedule = null,
         website = null,
         phone = null,
         tags = const [],
@@ -127,6 +135,8 @@ class UiEventModel extends Advertisable {
         archived = false,
         weekdays = const [],
         descriptionItems = const [],
+        houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController(),
         super(isAdvertisement: false);
 
   // copy with method
@@ -151,6 +161,8 @@ class UiEventModel extends Advertisable {
     double? rating,
     bool? archived,
     List<String>? weekdays,
+    String? currency,
+    dynamic schedule,
   }) =>
       UiEventModel(
         id: id,
@@ -173,5 +185,7 @@ class UiEventModel extends Advertisable {
         rating: rating ?? this.rating,
         archived: archived ?? this.archived,
         weekdays: weekdays ?? this.weekdays,
+        currency: currency ?? this.currency,
+        schedule: schedule ?? this.schedule,
       );
 }
