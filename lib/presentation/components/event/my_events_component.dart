@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -17,7 +18,7 @@ class MyEventsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = 0.9.sw * 0.65;
+    final height = (0.9.sw * 0.65) / (events.length == 1 ? 2 : 1);
     final theme = context.uiKitTheme;
 
     return UiKitCardWrapper(
@@ -37,7 +38,9 @@ class MyEventsComponent extends StatelessWidget {
                   isThreeLine: true,
                   contentPadding: EdgeInsets.zero,
                   leading: BorderedUserCircleAvatar(
-                    imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                    imageUrl: event.media
+                        .firstWhere((element) => element.type == UiKitMediaType.image)
+                        .link,
                     size: 40.w,
                   ),
                   title: Text(
@@ -45,14 +48,14 @@ class MyEventsComponent extends StatelessWidget {
                     style: theme?.boldTextTheme.caption1Bold,
                   ),
                   //TODO restore schedules
-                  // subtitle: event.date != null
-                  //     ? Text(
-                  //         DateFormat('MMMM d').format(event.date!),
-                  //         style: theme?.boldTextTheme.caption1Medium.copyWith(
-                  //           color: theme.colorScheme.darkNeutral500,
-                  //         ),
-                  //       )
-                  //     : const SizedBox.shrink(),
+                  subtitle: event.date != null
+                      ? Text(
+                    DateFormat('MMMM d').format(event.date!),
+                    style: theme?.boldTextTheme.caption1Medium.copyWith(
+                      color: theme.colorScheme.darkNeutral500,
+                    ),
+                  )
+                      : const SizedBox.shrink(),
                   trailing: context.smallButton(
                     data: BaseUiKitButtonData(
                       onPressed: onTap(event),

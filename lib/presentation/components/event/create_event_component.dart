@@ -42,6 +42,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
+  final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -62,6 +64,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
+    _websiteController.text = widget.eventToEdit?.website?? '';
+    _phoneController.text = widget.eventToEdit?.phone?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -136,6 +140,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _locationController.text = widget.eventToEdit?.location ?? '';
       _priceController.text = widget.eventToEdit?.price ?? '';
       _typeController.text = widget.eventToEdit?.eventType ?? '';
+      _websiteController.text = widget.eventToEdit?.website?? '';
+      _phoneController.text = widget.eventToEdit?.phone?? '';
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
@@ -267,11 +273,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           InkWell(
             onTap: () async {
-              // SnackBarUtils.show(
-              //     message: 'in development', context: context);
-
               _locationController.text = await widget.getLocation?.call() ?? '';
               _eventToEdit.location = _locationController.text;
+
+              FocusManager.instance.primaryFocus?.unfocus();
             },
             child: IgnorePointer(
               child: UiKitInputFieldNoFill(
@@ -299,6 +304,19 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
+
+          SpacingFoundation.verticalSpace24,
+          UiKitInputFieldNoFill(
+            keyboardType: TextInputType.url,
+            label: S.of(context).Website,
+            controller: _websiteController,
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
+          UiKitInputFieldNoFill(
+            keyboardType: TextInputType.phone,
+            label: S.of(context).Phone,
+            controller: _phoneController,
+          ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
               keyboardType: TextInputType.text,
@@ -314,6 +332,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                       }
                       _eventToEdit.currency = currency;
                     });
+
+                    FocusManager.instance.primaryFocus?.unfocus();
                   },
                 ));
               }).paddingSymmetric(horizontal: horizontalPadding),
@@ -328,6 +348,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 setState(() {
                   _eventToEdit.eventType = value ?? '';
                 });
+                FocusManager.instance.primaryFocus?.unfocus();
               });
             },
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -390,15 +411,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 ));
                 log('here we have baseTags $newTags');
                 if (newTags != null) {
-                  try {
-                    setState(() {
-                      _eventToEdit.baseTags.clear();
-                      _eventToEdit.baseTags.addAll(
-                          (newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                    });
-                  } catch (e){
-                    log(e.toString());
-                  }
+                  setState(() {
+                    _eventToEdit.baseTags.clear();
+                    _eventToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                  });
                 }
               },
               child: IgnorePointer(
@@ -445,6 +461,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.title = _titleController.text;
                   _eventToEdit.description = _descriptionController.text;
                   _eventToEdit.media = [..._photos, ..._videos];
+                  _eventToEdit.website = _websiteController.text;
+                  _eventToEdit.phone = _phoneController.text;
                   widget.onEventCreated.call(_eventToEdit);
                 },
               ),

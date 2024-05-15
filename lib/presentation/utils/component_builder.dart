@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart' as kit;
 
-buildComponent(BuildContext context, UiBaseModel configuration, ComponentBuilder componentWidgets) {
+Future buildComponent(BuildContext context, UiBaseModel configuration, ComponentBuilder componentWidgets) {
   //TODO romancores: add later flavors
   log(
     'Building ${configuration.pageBuilderType} v${configuration.version}',
