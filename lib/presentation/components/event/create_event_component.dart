@@ -64,8 +64,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
-    _websiteController.text = widget.eventToEdit?.website?? '';
-    _phoneController.text = widget.eventToEdit?.phone?? '';
+    _websiteController.text = widget.eventToEdit?.website ?? '';
+    _phoneController.text = widget.eventToEdit?.phone ?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -140,8 +140,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _locationController.text = widget.eventToEdit?.location ?? '';
       _priceController.text = widget.eventToEdit?.price ?? '';
       _typeController.text = widget.eventToEdit?.eventType ?? '';
-      _websiteController.text = widget.eventToEdit?.website?? '';
-      _phoneController.text = widget.eventToEdit?.phone?? '';
+      _websiteController.text = widget.eventToEdit?.website ?? '';
+      _phoneController.text = widget.eventToEdit?.phone ?? '';
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
@@ -240,7 +240,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     context.push(CreateScheduleWidget(
                       availableTemplates: widget.availableTimeTemplates,
                       onTemplateCreated: widget.onTimeTemplateCreated,
-                      availableTypes: const [UiScheduleDatesModel.scheduleType],
+                      availableTypes: const [UiScheduleDatesModel.scheduleType, UiScheduleDatesRangeModel.scheduleType],
                       onScheduleCreated: (model) {
                         if (model is UiScheduleDatesModel) {
                           setState(() {
@@ -324,6 +324,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               controller: _priceController,
               onTap: () {
                 context.push(PriceSelectorComponent(
+                  initialPrice1: _priceController.text.split('-').first,
+                  initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                  initialCurrency: _eventToEdit.currency,
                   onSubmit: (price1, price2, currency) {
                     setState(() {
                       _priceController.text = price1;

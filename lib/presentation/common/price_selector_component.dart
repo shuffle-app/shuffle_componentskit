@@ -3,12 +3,19 @@ import 'package:shuffle_components_kit/services/navigation_service/navigation_ke
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PriceSelectorComponent extends StatelessWidget {
+  final String? initialPrice1;
+  final String? initialPrice2;
+  final String? initialCurrency;
   final Function(String price1, String price2, String currency) onSubmit;
 
-  PriceSelectorComponent({super.key, required this.onSubmit});
+  PriceSelectorComponent({super.key, required this.onSubmit, this.initialPrice1, this.initialPrice2, this.initialCurrency, this.price1, this.price2}) {
+    price1 = TextEditingController(text: initialPrice1);
+    price2 = TextEditingController(text: initialPrice2);
+    currency.value = initialCurrency?? 'AED';
+  }
 
-  final price1 = TextEditingController();
-  final price2 = TextEditingController();
+  late final price1;
+  late final price2;
 
   final ValueNotifier<String> currency = ValueNotifier('AED');
 

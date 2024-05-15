@@ -348,6 +348,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             controller: _priceController,
             onTap: () {
               context.push(PriceSelectorComponent(
+                initialPrice1: _priceController.text.split('-').first,
+                initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                initialCurrency: _placeToEdit.currency,
                 onSubmit: (price1, price2, currency) {
                   setState(() {
                     _priceController.text = price1;
