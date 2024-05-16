@@ -71,6 +71,8 @@ export 'spinner/ui_upcoming_event_spinner_model.dart';
 export 'spinner/uispinner_model.dart';
 export 'spinner/upcoming_events_spinner_component.dart';
 export 'subscriptions/account_subscription_component.dart';
+export 'subscriptions/company_subscription_component.dart';
+export 'subscriptions/company_subscription_model.dart';
 export 'subscriptions/ui_subscription_model.dart';
 export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
