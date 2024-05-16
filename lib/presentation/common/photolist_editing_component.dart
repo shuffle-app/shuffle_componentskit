@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:collection/collection.dart';
+
 import '../../data/position/position_model.dart';
 
 class PhotoListEditingComponent extends StatefulWidget {
@@ -334,6 +336,7 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       originalImageBytes = widget.imageBytes;
+      controller.addListener(_imageViewFinderListener);
       setState(() {});
     });
   }
@@ -344,8 +347,13 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
     setState(() {});
   }
 
+  void _imageViewFinderListener() {
+    setState(() {});
+  }
+
   @override
   void dispose() {
+    controller.removeListener(_imageViewFinderListener);
     controller.dispose();
     super.dispose();
   }
@@ -404,6 +412,7 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
                 text: 'CONFIRM',
                 fit: ButtonFit.fitWidth,
                 onPressed: () => controller.cropImage(),
+                loading: controller.state == UiKitViewFinderState.cropping,
               ),
             ),
           ],
