@@ -18,8 +18,9 @@ class MyEventsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = (0.9.sw * 0.65) / (events.length == 1 ? 2 : 1);
+    final height = (events.length >= 2 ? 110.h : events.length * 70.h) + 30.h;
     final theme = context.uiKitTheme;
+    debugPrint(events.map((e) => e.id).toString());
 
     return UiKitCardWrapper(
       height: height,
@@ -30,12 +31,13 @@ class MyEventsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           Expanded(
             child: ListView.separated(
+              padding: EdgeInsets.zero,
               itemCount: events.length,
               itemBuilder: (context, index) {
                 final event = events[index];
 
                 return ListTile(
-                  isThreeLine: true,
+                  // isThreeLine: true,
                   contentPadding: EdgeInsets.zero,
                   leading: BorderedUserCircleAvatar(
                     imageUrl: event.media
@@ -58,7 +60,7 @@ class MyEventsComponent extends StatelessWidget {
                       : const SizedBox.shrink(),
                   trailing: context.smallButton(
                     data: BaseUiKitButtonData(
-                      onPressed: onTap(event),
+                      onPressed: () => onTap(event),
                       iconInfo: BaseUiKitButtonIconData(
                         iconData: CupertinoIcons.right_chevron,
                         size: 20.w,
