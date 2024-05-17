@@ -11,15 +11,17 @@ class AccountSubscriptionComponent extends StatefulWidget {
   final ComponentModel configModel;
   final String title;
   final bool isLoading;
+  final VoidCallback? onRestorePurchase;
 
   const AccountSubscriptionComponent({
-    Key? key,
+    super.key,
     required this.uiModel,
     required this.configModel,
     required this.title,
     this.onSubscribe,
     this.isLoading = false,
-  }) : super(key: key);
+    this.onRestorePurchase,
+  });
 
   @override
   State<AccountSubscriptionComponent> createState() => _AccountSubscriptionComponentState();
@@ -148,6 +150,14 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),
+          SpacingFoundation.verticalSpace16,
+          TextButton(
+            onPressed: widget.onRestorePurchase,
+            child: Text(
+              S.current.RestorePurchase,
+            ),
+          ),
+
           SpacingFoundation.verticalSpace24,
         ],
       ).paddingSymmetric(

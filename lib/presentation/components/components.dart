@@ -48,6 +48,7 @@ export 'profile/public_profile/profile_stats.dart';
 export 'profile/public_profile/public_profile_component.dart';
 export 'profile/settings_component/settings_component.dart';
 export 'profile/support_components/faq_component.dart';
+export 'profile/pro_components/eventlist_component.dart';
 export 'profile/support_components/support_component.dart';
 export 'profile/support_components/web_content_component.dart';
 export 'profile/uiprofile_model.dart';

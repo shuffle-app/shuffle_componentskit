@@ -22,6 +22,7 @@ class UiEventModel extends Advertisable {
   String? price;
   String? website;
   String? phone;
+  String? reviewStatus;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
   double? rating;
@@ -46,6 +47,7 @@ class UiEventModel extends Advertisable {
     this.rating,
     this.price,
     this.phone,
+    this.reviewStatus,
     this.contentType,
     this.website,
     this.scheduleString,
@@ -92,6 +94,7 @@ class UiEventModel extends Advertisable {
     this.favorite,
     this.owner,
     this.date,
+    this.reviewStatus,
     this.contentType,
     this.scheduleString,
     this.media = const [],
@@ -131,6 +134,7 @@ class UiEventModel extends Advertisable {
         description = null,
         location = null,
         eventType = null,
+        reviewStatus = null,
         price = null,
         schedule = null,
         website = null,
@@ -175,6 +179,7 @@ class UiEventModel extends Advertisable {
     bool? archived,
     List<String>? weekdays,
     String? currency,
+    String? reviewStatus,
     dynamic schedule,
   }) =>
       UiEventModel(
@@ -200,5 +205,6 @@ class UiEventModel extends Advertisable {
         weekdays: weekdays ?? this.weekdays,
         currency: currency ?? this.currency,
         schedule: schedule ?? this.schedule,
+        reviewStatus: reviewStatus?? this.reviewStatus,
       );
 }
