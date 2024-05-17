@@ -12,12 +12,12 @@ class CompanySubscriptionComponent extends StatefulWidget {
   final bool isLoading;
 
   const CompanySubscriptionComponent({
-    Key? key,
+    super.key,
     required this.uiModel,
     this.onSubscribe,
     this.onRestorePurchase,
     this.isLoading = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CompanySubscriptionComponent> createState() => _CompanySubscriptionComponentState();
