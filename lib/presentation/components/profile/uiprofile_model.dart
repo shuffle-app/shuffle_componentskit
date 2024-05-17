@@ -27,6 +27,7 @@ class UiProfileModel {
   final String? specialization;
   final List<String>? socialLinks;
   final int? points;
+  final bool? beInSearch;
 
   ProfileCard get cardWidget {
     AutoSizeGroup group = AutoSizeGroup();
@@ -50,8 +51,8 @@ class UiProfileModel {
       badge: userTileType == UserTileType.pro
           ? const ProMemberPlate()
           : userTileType == UserTileType.premium
-              ? const PremiumMemberPlate()
-              : null,
+          ? const PremiumMemberPlate()
+          : null,
       // onViewAllAchievements: onViewAllAchievements,
       // achievements: achievements.where((element) => element.asset != null).toList(),
       profileStats: [
@@ -85,6 +86,7 @@ class UiProfileModel {
     this.nickname,
     this.userCredo,
     this.name,
+    this.beInSearch,
     this.description,
     this.favoriteTags,
     this.avatarUrl,
@@ -129,6 +131,7 @@ class UiProfileModel {
     List<int>? favoriteTagsIds,
     String? email,
     int? points,
+    bool? beInSearch
   }) =>
       UiProfileModel(
           onShare: onShare ?? this.onShare,
@@ -153,6 +156,7 @@ class UiProfileModel {
           mindsetId: mindsetId ?? this.mindsetId,
           tagsIds: tagsIds ?? this.tagsIds,
           email: email ?? this.email,
+          beInSearch: beInSearch ?? this.beInSearch,
           favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
           points: points ?? this.points);
 }
