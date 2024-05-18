@@ -72,7 +72,7 @@ class AddReviewComponent extends StatelessWidget {
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
-              UiKitRatingBadge(rating: feedbackRating ?? 0),
+              UiKitRatingBadge(rating: feedbackRating?.toInt() ?? 0),
             ],
           ),
           SpacingFoundation.verticalSpace24,
@@ -116,7 +116,7 @@ class AddReviewComponent extends StatelessWidget {
                       ),
                     ),
                   ).paddingSymmetric(
-                    horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical24),
+                    horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical24,),
           );
         },
       ),

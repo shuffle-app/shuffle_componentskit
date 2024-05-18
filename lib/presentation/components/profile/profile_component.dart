@@ -17,6 +17,7 @@ class ProfileComponent extends StatelessWidget {
   final List<UiEventModel> favoriteEvents;
   final List<UiPlaceModel> favoritePlaces;
   final Function(UiEventModel)? onEventTap;
+  final VoidCallback? onMyEventsPressed;
   final VoidCallback? onFulfillDream;
   final VoidCallback? onSettingsPressed;
   final VoidCallback? onMessagePressed;
@@ -31,6 +32,7 @@ class ProfileComponent extends StatelessWidget {
     this.businessContentEnabled = false,
     this.showRecommendedUsers = false,
     this.onHowItWorksPoped,
+    this.onMyEventsPressed,
     this.onFulfillDream,
     this.onInvite,
     this.events,
@@ -226,10 +228,12 @@ class ProfileComponent extends StatelessWidget {
           ),
         ],
         SpacingFoundation.verticalSpace24,
-        if (events != null && events!.isNotEmpty) ...[
-          MyEventsComponent(title: S
-              .of(context)
-              .MyEvents, onTap: onEventTap ?? (_) {}, events: events!),
+        if (profile.userTileType == UserTileType.pro) ...[
+          MyEventsComponent(
+              title: S.of(context).MyEvents,
+              onTap: onMyEventsPressed ?? () {},
+              onEventTap: onEventTap ?? (_) {},
+              events: events ?? []),
           SpacingFoundation.verticalSpace24,
         ],
         SizedBox(

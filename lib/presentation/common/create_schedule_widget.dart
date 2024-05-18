@@ -55,6 +55,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   @override
   Widget build(BuildContext context) {
     final scheduleTypes = widget.availableTypes;
+    final theme = context.uiKitTheme;
 
     return Stack(children: [
       BlurredAppBarPage(
@@ -79,11 +80,11 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                   }
                   setState(() {
                     selectedScheduleName = type;
-                    if (type == scheduleTypes[0]) {
+                    if (type == UiScheduleTimeModel.scheduleType) {
                       scheduleModel = UiScheduleTimeModel();
-                    } else if (type == scheduleTypes[1]) {
+                    } else if (type == UiScheduleDatesModel.scheduleType) {
                       scheduleModel = UiScheduleDatesModel();
-                    } else if (type == scheduleTypes[2]) {
+                    } else if (type == UiScheduleDatesRangeModel.scheduleType) {
                       scheduleModel = UiScheduleDatesRangeModel();
                     }
                   });
@@ -148,7 +149,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                       onPressed: scheduleModel == null
                           ? null
                           : () async {
-                              final textTheme = context.uiKitTheme?.boldTextTheme;
+                              final textTheme = theme?.boldTextTheme;
                               final controller = TextEditingController();
                               final name = await showUiKitAlertDialog<String?>(
                                   context,
@@ -158,17 +159,21 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                         style:
                                             textTheme?.title2.copyWith(color: UiKitColors.lightHeadingTypographyColor),
                                       ),
-                                      content: UiKitInputFieldNoFill(
+                                      content: UiKitInputFieldNoIcon(
+                                        hintText: 'Title',
                                         controller: controller,
                                         autofocus: true,
-                                        customInputTextColor: UiKitColors.lightHeadingTypographyColor,
+                                        textColor: UiKitColors.lightHeadingTypographyColor,
                                         customLabelColor: UiKitColors.lightBodyTypographyColor,
+                                        fillColor: UiKitColors.lightSurface1,
+                                        borderRadius: BorderRadiusFoundation.all12,
                                         label: 'Template name',
                                       ),
                                       actions: [
-                                        context.dialogButton(
-                                            dialogButtonType: DialogButtonType.buttonBlack,
+                                        context.button(
                                             data: BaseUiKitButtonData(
+                                                backgroundColor: theme?.colorScheme.primary,
+                                                textColor: theme?.colorScheme.inversePrimary,
                                                 text: 'Save',
                                                 fit: ButtonFit.fitWidth,
                                                 onPressed: () => context.pop(result: controller.text)))

@@ -22,11 +22,14 @@ class PreviewCardsWrapper extends StatelessWidget {
       Stack(
         alignment: Alignment.center,
         children: [
-          Opacity(
-              opacity: calculatedOpacity,
-              child: Column(
-                children: cards.map((e) => e.paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16)).toList(),
-              )),
+          IgnorePointer(
+              ignoring: calculatedOpacity == 1 ? false : true,
+              child: Opacity(
+                  opacity: calculatedOpacity,
+                  child: Column(
+                    children:
+                        cards.map((e) => e.paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16)).toList(),
+                  ))),
           if (shouldVisitAt != null && !shouldVisitAt!.isAtSameDay)
             UiKitCardWrapper(
               color: theme?.colorScheme.surface2.withOpacity(0.35),

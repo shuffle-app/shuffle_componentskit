@@ -16,6 +16,11 @@ class ComponentModel extends UiBaseModel {
     super.positionModel,
   });
 
+  factory ComponentModel.empty() => const ComponentModel(
+    version: '1',
+    pageBuilderType: PageBuilderType.page,
+  );
+
   factory ComponentModel.fromJson(Map<String, dynamic> json) => _$ComponentModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ComponentModelToJson(this);

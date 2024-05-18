@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -228,14 +229,16 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         SpacingFoundation.verticalSpace12,
         Row(
           children: [
-            UiKitInputFieldNoFill(
+            Expanded(
+                child: UiKitInputFieldNoFill(
               label: S.of(context).BuildingNumber,
               controller: _placeToEdit.houseNumberController,
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            UiKitInputFieldNoFill(
+            ).paddingSymmetric(horizontal: horizontalPadding)),
+            Expanded(
+                child: UiKitInputFieldNoFill(
               label: S.of(context).OfficeAppartmentNumber,
               controller: _placeToEdit.apartmentNumberController,
-            ).paddingSymmetric(horizontal: horizontalPadding),
+            ).paddingSymmetric(horizontal: horizontalPadding)),
           ],
         ),
         SpacingFoundation.verticalSpace24,
@@ -289,15 +292,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         SpacingFoundation.verticalSpace24,
         Row(
           children: [
-            Text(S.of(context).OpenFrom, style: theme?.regularTextTheme.labelSmall),
-            Expanded(
-                child: Text(
-              _placeToEdit.scheduleString == null
-                  ? S.of(context).SelectType(S.of(context).Time.toLowerCase()).toLowerCase()
-                  : _placeToEdit.scheduleString!,
-              style: theme?.boldTextTheme.body,
-              textAlign: TextAlign.center,
-            )),
+            Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
+            const Spacer(),
             context.outlinedButton(
               data: BaseUiKitButtonData(
                 onPressed: () {
@@ -318,15 +314,21 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   ));
                 },
                 iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.clock,
+                  iconData: CupertinoIcons.chevron_forward,
                   size: 16.h,
                 ),
               ),
             ),
           ],
         ).paddingSymmetric(horizontal: horizontalPadding),
-        // SpacingFoundation.verticalSpace24,
-
+        if (_placeToEdit.scheduleString != null) ...[
+          SpacingFoundation.verticalSpace24,
+          Text(
+            _placeToEdit.scheduleString!,
+            style: theme?.boldTextTheme.body,
+            textAlign: TextAlign.center,
+          )
+        ],
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.url,
@@ -341,25 +343,29 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
-                keyboardType: TextInputType.text,
-                label: S.of(context).Price,
-                controller: _priceController,
-                onTap: () {
-                  context.push(PriceSelectorComponent(onSubmit: (price1,price2,currency){
-                    setState(() {
-                      _priceController.text = price1;
-                      if(price2.isNotEmpty){
-                        _priceController.text += '-$price2';
-                      }
-                      _placeToEdit.currency = currency;
-                    });
-                  },));
-                })
-            .paddingSymmetric(horizontal: horizontalPadding),
+            keyboardType: TextInputType.text,
+            label: S.of(context).Price,
+            controller: _priceController,
+            onTap: () {
+              context.push(PriceSelectorComponent(
+                initialPrice1: _priceController.text.split('-').first,
+                initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                initialCurrency: _placeToEdit.currency,
+                onSubmit: (price1, price2, currency) {
+                  setState(() {
+                    _priceController.text = price1;
+                    if (price2.isNotEmpty) {
+                      _priceController.text += '-$price2';
+                    }
+                    _placeToEdit.currency = currency;
+                  });
+                },
+              ));
+            }).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.text,
-          label: S.of(context).Category,
+          label: S.of(context).PlaceType,
           controller: _typeController,
           onTap: () {
             widget.onCategoryChanged?.call().then((value) {

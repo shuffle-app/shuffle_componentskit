@@ -13,6 +13,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final VoidCallback? onPremiumAccountRequested;
   final VoidCallback? onProAccountRequested;
   final VoidCallback? onActivityTileTap;
+  final VoidCallback? onReligionTap;
+  final VoidCallback? onGenderTap;
   final ValueChanged<bool> onBeInSearchChanged;
   final List<LocaleModel>? availableLocales;
   final ValueChanged<bool>? onIsLightThemeChanged;
@@ -32,6 +34,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController dateOfBirthController;
   final TextEditingController phoneController;
+  final TextEditingController religionController;
+  final TextEditingController genderController;
   final bool isLightTheme;
   final bool beInSearch;
   final bool isLoading;
@@ -45,6 +49,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.onPhotoChangeRequested,
     this.onPreferencesChanged,
     this.onSocialLinksChanged,
+    this.onReligionTap,
+    this.onGenderTap,
     this.onLocaleUpdated,
     this.nameValidator,
     this.emailValidator,
@@ -65,6 +71,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
     required this.emailController,
     required this.dateOfBirthController,
     required this.phoneController,
+    required this.religionController,
+    required this.genderController,
     required this.beInSearch,
     this.activityItem,
     this.userType = UserTileType.ordinary,
@@ -254,6 +262,22 @@ class EditProfileDefaultComponent extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(
+              controller: religionController,
+              label: S.of(context).Religion,
+              hintText: S.of(context).Religion,
+              readOnly: true,
+              onTap: onReligionTap,
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
+              controller: genderController,
+              label: S.of(context).Gender,
+              hintText: S.of(context).Gender,
+              readOnly: true,
+              onTap: onGenderTap,
+            ),
+            SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
               controller: phoneController,
               label: S.of(context).Phone,
               hintText: S.of(context).Phone,
@@ -279,16 +303,18 @@ class EditProfileDefaultComponent extends StatelessWidget {
                   ),
                   const Spacer(),
                   context.smallOutlinedButton(
-                      data: BaseUiKitButtonData(
-                          onPressed: () async {
-                            final newLinks = await socialLinksEditBuilder(context, socialLinks: socialLinks);
-                            if (newLinks.isNotEmpty) {
-                              onSocialLinksChanged?.call(newLinks);
-                            }
-                          },
-                          iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.plus, color: Colors.white)))
+                    data: BaseUiKitButtonData(
+                      onPressed: () async {
+                        final newLinks = await socialLinksEditBuilder(context, socialLinks: socialLinks);
+                        if (newLinks.isNotEmpty) {
+                          onSocialLinksChanged?.call(newLinks);
+                        }
+                      },
+                      iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.plus, color: Colors.white),
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
             if (socialLinks.isNotEmpty)
               ...socialLinks.map((e) => Row(

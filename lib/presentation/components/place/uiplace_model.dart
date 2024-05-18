@@ -69,7 +69,14 @@ class UiPlaceModel {
             ),
         ],
         houseNumberController = TextEditingController(),
-        apartmentNumberController = TextEditingController();
+        apartmentNumberController = TextEditingController() {
+    if (baseTags.isEmpty) {
+      baseTags = List.empty(growable: true);
+    }
+    if (tags.isEmpty) {
+      tags = List.empty(growable: true);
+    }
+  }
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
@@ -144,12 +151,19 @@ class UiPlaceModel {
 
   UiPlaceModel.empty()
       : id = -1,
-        media = [],
-        weekdays = [],
+        media = const [],
+        weekdays = const [],
         description = '',
         contentType = 'both',
-        tags = [],
+        tags = const [],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
-        baseTags = [];
+        baseTags = const [] {
+    if (baseTags.isEmpty) {
+      baseTags = List.empty(growable: true);
+    }
+    if (tags.isEmpty) {
+      tags = List.empty(growable: true);
+    }
+  }
 }

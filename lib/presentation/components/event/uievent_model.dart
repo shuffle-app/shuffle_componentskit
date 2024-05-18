@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -12,23 +13,24 @@ class UiEventModel extends Advertisable {
   bool isRecurrent;
   String? scheduleString;
   String? contentType;
-
+  String? currency;
   DateTime? date;
-  // DateTime? dateTo;
-  // TimeOfDay? time;
-  // TimeOfDay? timeTo;
+  dynamic schedule;
   String? description;
   String? location;
   String? eventType;
   String? price;
   String? website;
   String? phone;
+  String? reviewStatus;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
   double? rating;
   bool archived;
   List<String> weekdays;
   List<UiDescriptionItemModel>? descriptionItems;
+  TextEditingController houseNumberController;
+  TextEditingController apartmentNumberController;
 
   UiEventModel({
     required this.id,
@@ -45,6 +47,7 @@ class UiEventModel extends Advertisable {
     this.rating,
     this.price,
     this.phone,
+    this.reviewStatus,
     this.contentType,
     this.website,
     this.scheduleString,
@@ -52,10 +55,11 @@ class UiEventModel extends Advertisable {
     this.isRecurrent = false,
     this.archived = false,
     this.date,
+    this.currency,
+    this.schedule,
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
-            // if (formatDate(date, dateTo, time, timeTo, weekdays) != null)
             UiDescriptionItemModel(
               title: S.current.DontMissIt,
               description: scheduleString,
@@ -73,7 +77,16 @@ class UiEventModel extends Advertisable {
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
         ],
-        super(isAdvertisement: isAdvertisement ?? false);
+        houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController(),
+        super(isAdvertisement: isAdvertisement ?? false) {
+    if (baseTags.isEmpty) {
+      baseTags = List.empty(growable: true);
+    }
+    if (tags.isEmpty) {
+      tags = List.empty(growable: true);
+    }
+  }
 
   UiEventModel.advertisement({
     this.id = -1,
@@ -81,6 +94,7 @@ class UiEventModel extends Advertisable {
     this.favorite,
     this.owner,
     this.date,
+    this.reviewStatus,
     this.contentType,
     this.scheduleString,
     this.media = const [],
@@ -93,7 +107,9 @@ class UiEventModel extends Advertisable {
     this.isRecurrent = false,
     this.archived = false,
     this.descriptionItems = const [],
-  }) : super(isAdvertisement: true);
+  })  : houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController(),
+        super(isAdvertisement: true);
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
@@ -118,7 +134,9 @@ class UiEventModel extends Advertisable {
         description = null,
         location = null,
         eventType = null,
+        reviewStatus = null,
         price = null,
+        schedule = null,
         website = null,
         phone = null,
         tags = const [],
@@ -127,7 +145,16 @@ class UiEventModel extends Advertisable {
         archived = false,
         weekdays = const [],
         descriptionItems = const [],
-        super(isAdvertisement: false);
+        houseNumberController = TextEditingController(),
+        apartmentNumberController = TextEditingController(),
+        super(isAdvertisement: false) {
+    if (baseTags.isEmpty) {
+      baseTags = List.empty(growable: true);
+    }
+    if (tags.isEmpty) {
+      tags = List.empty(growable: true);
+    }
+  }
 
   // copy with method
 
@@ -151,6 +178,9 @@ class UiEventModel extends Advertisable {
     double? rating,
     bool? archived,
     List<String>? weekdays,
+    String? currency,
+    String? reviewStatus,
+    dynamic schedule,
   }) =>
       UiEventModel(
         id: id,
@@ -173,5 +203,8 @@ class UiEventModel extends Advertisable {
         rating: rating ?? this.rating,
         archived: archived ?? this.archived,
         weekdays: weekdays ?? this.weekdays,
+        currency: currency ?? this.currency,
+        schedule: schedule ?? this.schedule,
+        reviewStatus: reviewStatus?? this.reviewStatus,
       );
 }
