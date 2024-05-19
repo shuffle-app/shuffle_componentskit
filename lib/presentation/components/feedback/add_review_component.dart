@@ -115,7 +115,8 @@ class AddReviewComponent extends StatelessWidget {
                         fit: ButtonFit.fitWidth,
                       ),
                     ),
-                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical24),
+                  ).paddingSymmetric(
+                    horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical24,),
           );
         },
       ),
