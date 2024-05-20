@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../../shuffle_components_kit.dart';
 
 class UiMoodGameContentModel {
@@ -6,14 +8,14 @@ class UiMoodGameContentModel {
   final List<UiUniversalModel>? dayAfterTomorrowGameContent;
   final bool isVerifiedToRecieveReward;
   final String? activatedLevel;
-  List<UiUniversalModel> passedCheckins;
+  final ValueNotifier<List<UiUniversalModel>> passedCheckins;
 
   UiMoodGameContentModel(
       {this.todayGameContent,
       this.tomorrowGameContent,
       this.activatedLevel,
       this.dayAfterTomorrowGameContent,
-      this.passedCheckins = const [],
+      required this.passedCheckins,
       this.isVerifiedToRecieveReward = false});
 
   UiMoodGameContentModel copyWith(
@@ -21,7 +23,7 @@ class UiMoodGameContentModel {
       List<UiUniversalModel>? tomorrowGameContent,
       List<UiUniversalModel>? dayAfterTomorrowGameContent,
       bool? isVerifiedToRecieveReward,
-      List<UiUniversalModel>? passedCheckins,
+        ValueNotifier<List<UiUniversalModel>>? passedCheckins,
       String? activatedLevel}) {
     return UiMoodGameContentModel(
         todayGameContent: todayGameContent ?? this.todayGameContent,

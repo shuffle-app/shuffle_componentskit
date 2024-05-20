@@ -232,108 +232,106 @@ class MoodComponent extends StatelessWidget {
                           final todayContent = snapshot.data?.todayGameContent;
                           final tomorrowContent = snapshot.data?.tomorrowGameContent;
                           final dayAfterTomorrowContent = snapshot.data?.dayAfterTomorrowGameContent;
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              if (todayContent != null)
-                                PreviewCardsWrapper(
-                                  cards: [
-                                    PlacePreview(
-                                      onTap: (id) => onPlacePressed?.call(id, todayContent.type),
-                                      onCheckIn: mood.activatedLevel != null
-                                          ? (id) => onCheckInPressed?.call(id, todayContent.type)
-                                          : null,
-                                      isFavorite: todayContent.isFavorite,
-                                      onFavoriteChanged: todayContent.onFavoriteChanged,
-                                      shouldVisitAt:
-                                          snapshot.data?.passedCheckins.firstWhereOrNull((el) => el == todayContent) !=
-                                                  null
-                                              ? null
-                                              : (todayContent.shouldVisitAt ?? DateTime.now()),
-                                      place: UiPlaceModel(
-                                        id: todayContent.id,
-                                        title: todayContent.title,
-                                        description: todayContent.description,
-                                        media: todayContent.media,
-                                        weekdays: todayContent.weekdays ?? [],
-                                        website: todayContent.website,
-                                        tags: todayContent.tags,
-                                        baseTags: todayContent.baseTags ?? [],
-                                      ),
-                                      model: model,
-                                    ),
-                                  ],
-                                  shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
-                                ),
-                              if (tomorrowContent != null)
-                                PreviewCardsWrapper(
-                                  cards: tomorrowContent
-                                      .map(
-                                        (content) => PlacePreview(
-                                          onTap: (id) => onPlacePressed?.call(id, content.type),
-                                          onCheckIn: mood.activatedLevel != null
-                                              ? (id) => onCheckInPressed?.call(id, content.type)
-                                              : null,
-                                          isFavorite: content.isFavorite,
-                                          onFavoriteChanged: content.onFavoriteChanged,
-                                          shouldVisitAt: snapshot.data?.passedCheckins
-                                                      .firstWhereOrNull((el) => el == content) !=
-                                                  null
-                                              ? null
-                                              : (content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 1))),
-                                          place: UiPlaceModel(
-                                            id: content.id,
-                                            title: content.title,
-                                            description: content.description,
-                                            media: content.media,
-                                            weekdays: content.weekdays ?? [],
-                                            website: content.website,
-                                            tags: content.tags,
-                                            baseTags: content.baseTags ?? [],
-                                          ),
-                                          model: model,
+                          return ValueListenableBuilder(
+                              valueListenable: snapshot.data!.passedCheckins,
+                              builder: (context, checkinValue, ch) => Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      if (todayContent != null)
+                                        PreviewCardsWrapper(
+                                          cards: [
+                                            PlacePreview(
+                                              isCheckedIn:
+                                                  checkinValue.firstWhereOrNull((el) => el == todayContent) != null,
+                                              onTap: (id) => onPlacePressed?.call(id, todayContent.type),
+                                              onCheckIn: mood.activatedLevel != null
+                                                  ? (id) => onCheckInPressed?.call(id, todayContent.type)
+                                                  : null,
+                                              isFavorite: todayContent.isFavorite,
+                                              onFavoriteChanged: todayContent.onFavoriteChanged,
+                                              shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
+                                              place: UiPlaceModel(
+                                                id: todayContent.id,
+                                                title: todayContent.title,
+                                                description: todayContent.description,
+                                                media: todayContent.media,
+                                                weekdays: todayContent.weekdays ?? [],
+                                                website: todayContent.website,
+                                                tags: todayContent.tags,
+                                                baseTags: todayContent.baseTags ?? [],
+                                              ),
+                                              model: model,
+                                            ),
+                                          ],
+                                          shouldVisitAt: todayContent.shouldVisitAt ?? DateTime.now(),
                                         ),
-                                      )
-                                      .toList(),
-                                  shouldVisitAt: tomorrowContent.first.shouldVisitAt ??
-                                      DateTime.now().add(const Duration(days: 1)),
-                                ),
-                              if (dayAfterTomorrowContent != null)
-                                PreviewCardsWrapper(
-                                  cards: dayAfterTomorrowContent
-                                      .map(
-                                        (content) => PlacePreview(
-                                          onTap: (id) => onPlacePressed?.call(id, content.type),
-                                          onCheckIn: mood.activatedLevel != null
-                                              ? (id) => onCheckInPressed?.call(id, content.type)
-                                              : null,
-                                          isFavorite: content.isFavorite,
-                                          onFavoriteChanged: content.onFavoriteChanged,
-                                          shouldVisitAt: snapshot.data?.passedCheckins
-                                                      .firstWhereOrNull((el) => el == content) !=
-                                                  null
-                                              ? null
-                                              : (content.shouldVisitAt ?? DateTime.now().add(const Duration(days: 2))),
-                                          place: UiPlaceModel(
-                                            id: content.id,
-                                            title: content.title,
-                                            description: content.description,
-                                            media: content.media,
-                                            weekdays: content.weekdays ?? [],
-                                            website: content.website,
-                                            tags: content.tags,
-                                            baseTags: content.baseTags ?? [],
-                                          ),
-                                          model: model,
+                                      if (tomorrowContent != null)
+                                        PreviewCardsWrapper(
+                                          cards: tomorrowContent
+                                              .map(
+                                                (content) => PlacePreview(
+                                                  isCheckedIn:
+                                                      checkinValue.firstWhereOrNull((el) => el == content) != null,
+                                                  onTap: (id) => onPlacePressed?.call(id, content.type),
+                                                  onCheckIn: mood.activatedLevel != null
+                                                      ? (id) => onCheckInPressed?.call(id, content.type)
+                                                      : null,
+                                                  isFavorite: content.isFavorite,
+                                                  onFavoriteChanged: content.onFavoriteChanged,
+                                                  shouldVisitAt: content.shouldVisitAt ??
+                                                      DateTime.now().add(const Duration(days: 1)),
+                                                  place: UiPlaceModel(
+                                                    id: content.id,
+                                                    title: content.title,
+                                                    description: content.description,
+                                                    media: content.media,
+                                                    weekdays: content.weekdays ?? [],
+                                                    website: content.website,
+                                                    tags: content.tags,
+                                                    baseTags: content.baseTags ?? [],
+                                                  ),
+                                                  model: model,
+                                                ),
+                                              )
+                                              .toList(),
+                                          shouldVisitAt: tomorrowContent.first.shouldVisitAt ??
+                                              DateTime.now().add(const Duration(days: 1)),
                                         ),
-                                      )
-                                      .toList(),
-                                  shouldVisitAt: dayAfterTomorrowContent.first.shouldVisitAt ??
-                                      DateTime.now().add(const Duration(days: 2)),
-                                ),
-                            ],
-                          );
+                                      if (dayAfterTomorrowContent != null)
+                                        PreviewCardsWrapper(
+                                          cards: dayAfterTomorrowContent
+                                              .map(
+                                                (content) => PlacePreview(
+                                                  isCheckedIn:
+                                                      checkinValue.firstWhereOrNull((el) => el == content) != null,
+                                                  onTap: (id) => onPlacePressed?.call(id, content.type),
+                                                  onCheckIn: mood.activatedLevel != null
+                                                      ? (id) => onCheckInPressed?.call(id, content.type)
+                                                      : null,
+                                                  isFavorite: content.isFavorite,
+                                                  onFavoriteChanged: content.onFavoriteChanged,
+                                                  shouldVisitAt: content.shouldVisitAt ??
+                                                      DateTime.now().add(const Duration(days: 2)),
+                                                  place: UiPlaceModel(
+                                                    id: content.id,
+                                                    title: content.title,
+                                                    description: content.description,
+                                                    media: content.media,
+                                                    weekdays: content.weekdays ?? [],
+                                                    website: content.website,
+                                                    tags: content.tags,
+                                                    baseTags: content.baseTags ?? [],
+                                                  ),
+                                                  model: model,
+                                                ),
+                                              )
+                                              .toList(),
+                                          shouldVisitAt: dayAfterTomorrowContent.first.shouldVisitAt ??
+                                              DateTime.now().add(const Duration(days: 2)),
+                                        ),
+                                    ],
+                                  ));
                         } else {
                           return UiKitShimmerProgressIndicator(
                             gradient: GradientFoundation.greyGradient,

@@ -20,9 +20,10 @@ class PlacePreview extends StatelessWidget {
   final ValueNotifier<LottieAnimation?> _animationNotifier = ValueNotifier<LottieAnimation?>(null);
   final Widget? reviewsIndicator;
   final ValueChanged<int>? onCheckIn;
+  final bool isCheckedIn;
 
-  PlacePreview({
-    Key? key,
+   PlacePreview({
+    super.key,
     required this.onTap,
     required this.place,
     required this.model,
@@ -36,7 +37,8 @@ class PlacePreview extends StatelessWidget {
     this.isFavorite,
     this.reviewsIndicator,
     this.onCheckIn,
-  }) : super(key: key);
+    this.isCheckedIn = false,
+  });
 
   PlacePreview.eventPreview(
       {super.key,
@@ -52,6 +54,7 @@ class PlacePreview extends StatelessWidget {
       this.showFavoriteBtn = false,
       this.showFavoriteHint = false,
       this.onCheckIn,
+      this.isCheckedIn = false,
       this.isFavorite})
       : place = UiPlaceModel(
             id: event.id,
@@ -144,7 +147,8 @@ class PlacePreview extends StatelessWidget {
                               data: BaseUiKitButtonData(
                                 onPressed: onFavoriteChanged,
                                 iconInfo: BaseUiKitButtonIconData(
-                                  iconData: (snapshot.data ?? false) ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
+                                  iconData:
+                                      (snapshot.data ?? false) ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
                                   size: (snapshot.data ?? false) ? 15.w : null,
                                 ),
                               ),
@@ -154,15 +158,10 @@ class PlacePreview extends StatelessWidget {
                           Positioned(
                               top: -10.h,
                               right: -5.w,
-                              child: context.smallOutlinedButton(
-                                  blurred: true,
-                                  color: Colors.white,
-                                  gradient: GradientFoundation.attentionCard,
-                                  data: BaseUiKitButtonData(
-                                      onPressed: () {
-                                        onCheckIn?.call(place.id);
-                                      },
-                                      text: S.of(context).CheckIn.toUpperCase()))),
+                              child: UiKitCheckInChip(
+                                onPressed: () => onCheckIn?.call(place.id),
+                                isChecked: isCheckedIn,
+                              )),
                         if (status != null && status!.isNotEmpty)
                           ClipRRect(
                             borderRadius: BorderRadiusFoundation.all24,
@@ -187,7 +186,8 @@ class PlacePreview extends StatelessWidget {
                   ))),
           if (calculatedOpacity == 1) ...[
             SpacingFoundation.verticalSpace8,
-            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(horizontal: horizontalMargin),
+            Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
+                .paddingSymmetric(horizontal: horizontalMargin),
             SpacingFoundation.verticalSpace4,
             UiKitTagsWidget(
               baseTags: place.baseTags,
