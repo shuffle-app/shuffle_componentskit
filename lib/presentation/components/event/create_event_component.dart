@@ -249,6 +249,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                 .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
                                 .join(', ');
                           });
+                        } else if (model is UiScheduleDatesRangeModel) {
+                          setState(() {
+                            _eventToEdit.schedule = model;
+                            _eventToEdit.scheduleString = model.dailySchedule
+                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                .join(', ');
+                          });
                         }
                       },
                     ));
