@@ -42,6 +42,7 @@ class SearchSocialSectionItemDetailsComponent extends StatelessWidget {
               context.smallOutlinedButton(
                 blurred: true,
                 data: BaseUiKitButtonData(
+                  backgroundColor: Colors.white.withOpacity(0.01),
                   iconInfo: BaseUiKitButtonIconData(
                     iconData: ShuffleUiKitIcons.alertcircle,
                     color: context.uiKitTheme?.colorScheme.darkNeutral800,
@@ -57,7 +58,6 @@ class SearchSocialSectionItemDetailsComponent extends StatelessWidget {
                     );
                   },
                 ),
-                color: Colors.white.withOpacity(0.01),
                 blurValue: 25,
               ),
           ],
