@@ -198,6 +198,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           options: widget.placeCategoriesLoader,
                           showAllOptions: true,
                           hintText: 'Enter place category',
+                          borderRadius: BorderRadiusFoundation.all12,
                           onFieldSubmitted: (value) {
                             _placeToEdit.placeType = value;
                             setState(() {});
