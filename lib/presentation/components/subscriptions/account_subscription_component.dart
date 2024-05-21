@@ -34,12 +34,12 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
   @override
   void didUpdateWidget(covariant AccountSubscriptionComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.isLoading!=oldWidget.isLoading) {
+    if (widget.isLoading != oldWidget.isLoading) {
       setState(() {
-        _isLoading = oldWidget.isLoading;
+        _isLoading = widget.isLoading;
       });
     }
-    log('here we got did update widget with loading $_isLoading',name: 'AccountSubscriptionComponent');
+    log('here we got did update widget with loading $_isLoading', name: 'AccountSubscriptionComponent');
   }
 
   @override
@@ -157,7 +157,6 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               S.current.RestorePurchase,
             ),
           ),
-
           SpacingFoundation.verticalSpace24,
         ],
       ).paddingSymmetric(

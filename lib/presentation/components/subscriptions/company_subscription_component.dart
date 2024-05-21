@@ -30,12 +30,11 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
   @override
   void didUpdateWidget(covariant CompanySubscriptionComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.isLoading != oldWidget.isLoading) {
+    if (widget.isLoading != oldWidget.isLoading) {
       setState(() {
-        _isLoading = oldWidget.isLoading;
+        _isLoading = widget.isLoading;
       });
     }
-    log('here we got did update widget with loading $_isLoading', name: 'AccountSubscriptionComponent');
   }
 
   @override
