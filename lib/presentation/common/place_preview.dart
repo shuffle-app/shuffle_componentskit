@@ -154,7 +154,7 @@ class PlacePreview extends StatelessWidget {
                               ),
                             ),
                           )
-                        else if (shouldVisitAt?.isAtSameDay ?? false)
+                        else if ((shouldVisitAt?.isAtSameDay ?? false) && onCheckIn!=null)
                           Positioned(
                               top: -10.h,
                               right: -5.w,
