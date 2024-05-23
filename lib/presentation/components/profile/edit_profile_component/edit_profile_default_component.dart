@@ -139,6 +139,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                         text: S.of(context).Premium.toUpperCase(),
                         iconInfo: BaseUiKitButtonIconData(
                           iconData: ShuffleUiKitIcons.star2,
+                          size: 15.w
                         ),
                         onPressed: onPremiumAccountRequested,
                       ),
