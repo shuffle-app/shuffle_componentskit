@@ -8,14 +8,14 @@ class PriceSelectorComponent extends StatelessWidget {
   final String? initialCurrency;
   final Function(String price1, String price2, String currency) onSubmit;
 
-  PriceSelectorComponent({super.key, required this.onSubmit, this.initialPrice1, this.initialPrice2, this.initialCurrency, this.price1, this.price2}) {
+  PriceSelectorComponent({super.key, required this.onSubmit, this.initialPrice1, this.initialPrice2, this.initialCurrency}) {
     price1 = TextEditingController(text: initialPrice1);
     price2 = TextEditingController(text: initialPrice2);
     currency.value = initialCurrency?? 'AED';
   }
 
-  late final price1;
-  late final price2;
+  late final TextEditingController price1;
+  late final TextEditingController price2;
 
   final ValueNotifier<String> currency = ValueNotifier('AED');
 

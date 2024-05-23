@@ -9,12 +9,12 @@ class SubscriptionOfferWidget extends StatelessWidget {
   final double? bottomInset;
 
   const SubscriptionOfferWidget({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.selected,
     required this.model,
     this.bottomInset,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

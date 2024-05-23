@@ -6,6 +6,7 @@ class UiCompanySubscriptionModel {
   final String nicheTitle;
   final String? companyLogoLink;
   final List<SubscriptionOfferModel> offers;
+  final SubscriptionOfferModel? selectedInitialOffer;
   final String? offersTitle;
 
   UiCompanySubscriptionModel({
@@ -15,5 +16,6 @@ class UiCompanySubscriptionModel {
     this.companyLogoLink,
     required this.offers,
     this.offersTitle,
+    this.selectedInitialOffer,
   });
 }

@@ -7,6 +7,7 @@ class SubscriptionOfferModel {
   final String periodName;
   final int? savings;
   final String storePurchaseId;
+  final int? trialDaysAvailable;
 
   String get formattedPriceWithPeriod => '$currency${price.nanOrTwoTrailingZeros}/$periodName';
 
@@ -19,5 +20,14 @@ class SubscriptionOfferModel {
     required this.price,
     required this.currency,
     required this.periodName,
+    this.trialDaysAvailable,
   });
+
+  @override
+  bool operator ==(Object other) {
+    return other is SubscriptionOfferModel && other.storePurchaseId == storePurchaseId;
+  }
+
+  @override
+  int get hashCode => storePurchaseId.hashCode;
 }

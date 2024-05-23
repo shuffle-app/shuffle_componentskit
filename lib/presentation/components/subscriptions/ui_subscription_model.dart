@@ -7,6 +7,7 @@ class UiSubscriptionModel {
   final String userAvatarUrl;
   final String nickname;
   final List<SubscriptionOfferModel> offers;
+  final SubscriptionOfferModel? selectedInitialOffer;
   final List<String> subscriptionFeatures;
   final UserTileType userType;
   final Widget? additionalInfo;
@@ -19,5 +20,6 @@ class UiSubscriptionModel {
     required this.offers,
     required this.userType,
     this.additionalInfo,
+    this.selectedInitialOffer,
   });
 }

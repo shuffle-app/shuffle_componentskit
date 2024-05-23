@@ -32,6 +32,12 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
   bool _isLoading = false;
 
   @override
+  void initState() {
+    _selectedOffer = widget.uiModel.selectedInitialOffer;
+    super.initState();
+  }
+
+  @override
   void didUpdateWidget(covariant AccountSubscriptionComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isLoading != oldWidget.isLoading) {
@@ -39,7 +45,11 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
         _isLoading = widget.isLoading;
       });
     }
-    log('here we got did update widget with loading $_isLoading', name: 'AccountSubscriptionComponent');
+    if (widget.uiModel.selectedInitialOffer != _selectedOffer) {
+      setState(() {
+        _selectedOffer = widget.uiModel.selectedInitialOffer;
+      });
+    }
   }
 
   @override
@@ -88,6 +98,34 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               ).toList(),
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
+          if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable! > 0) ...[
+            UiKitCardWrapper(
+                gradient: theme?.themeMode == ThemeMode.light
+                    ? GradientFoundation.lightShunyGreyGradient
+                    : GradientFoundation.shunyGreyGradient,
+                padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+                child: Stack(
+                  children: [
+                    Text(S.of(context).YouGetAccessToTrial, style: regularTextTheme?.body),
+                    GradientableWidget(
+                        gradient: GradientFoundation.attentionCard,
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                              text: S.of(context).YouGetAccessToTrial,
+                              style: boldTextTheme?.body.copyWith(color: Colors.transparent),
+                            ),
+                            TextSpan(
+                              text:
+                                  ' ${_selectedOffer!.trialDaysAvailable!} ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)} ${S.of(context).TrialPeriod.toLowerCase()}',
+                              style: regularTextTheme?.body.copyWith(color: Colors.white),
+                            )
+                          ]),
+                        ))
+                  ],
+                )),
+            SpacingFoundation.verticalSpace16,
+          ],
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
             gradient: theme?.themeMode == ThemeMode.light
@@ -144,7 +182,9 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                   .UpgradeForNmoney(
                     _selectedOffer == null
                         ? ''
-                        : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
+                        : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
+                            ? S.of(context).Free
+                            : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
                   )
                   .toUpperCase(),
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
