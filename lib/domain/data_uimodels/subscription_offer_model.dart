@@ -25,7 +25,10 @@ class SubscriptionOfferModel {
 
   @override
   bool operator ==(Object other) {
-    return other is SubscriptionOfferModel && other.storePurchaseId == storePurchaseId;
+    return other is SubscriptionOfferModel &&
+        other.storePurchaseId == storePurchaseId &&
+        name == other.name &&
+        price == other.price;
   }
 
   @override

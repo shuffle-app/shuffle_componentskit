@@ -198,8 +198,8 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
                     _selectedOffer == null
                         ? ''
                         : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
-                            ? S.of(context).Free
-                            : S.current.ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
+                            ? S.of(context).ForFormattedPrice(S.of(context).Free)
+                            : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
                   )
                   .toUpperCase(),
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),

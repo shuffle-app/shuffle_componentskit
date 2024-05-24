@@ -183,7 +183,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                     _selectedOffer == null
                         ? ''
                         : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
-                            ? S.of(context).Free
+                            ? S.of(context).ForFormattedPrice(S.of(context).Free)
                             : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
                   )
                   .toUpperCase(),

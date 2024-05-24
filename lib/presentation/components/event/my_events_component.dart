@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'package:collection/collection.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +78,7 @@ class MyEventsComponent extends StatelessWidget {
             Text(
               S.of(context).CreateYourEventAndInvitePeople,
               style: theme?.boldTextTheme.subHeadline,
-            )
+            ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16)
           else
             // ListView.separated(
             //                 padding: EdgeInsets.zero,
@@ -103,7 +103,7 @@ class MyEventsComponent extends StatelessWidget {
                   : ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: BorderedUserCircleAvatar(
-                        imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                        imageUrl: event.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
                         size: 40.w,
                       ),
                       title: Text(
