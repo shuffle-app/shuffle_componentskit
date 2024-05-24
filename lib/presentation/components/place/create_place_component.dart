@@ -208,24 +208,21 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           : null,
       children: [
         SpacingFoundation.verticalSpace16,
-        InkWell(
+        UiKitInputFieldNoFill(
+          label: S.of(context).Address,
           onTap: () async {
             _locationController.text = await widget.getLocation?.call() ?? '';
             _placeToEdit.location = _locationController.text;
           },
-          child: IgnorePointer(
-            child: UiKitInputFieldNoFill(
-              label: S.of(context).Address,
-              controller: _locationController,
-              icon: ImageWidget(
-                iconData: ShuffleUiKitIcons.landmark,
-                color: theme?.colorScheme.inversePrimary,
-                height: 16.h,
-                width: 16.h,
-              ),
-            ).paddingSymmetric(horizontal: horizontalPadding),
+          readOnly: true,
+          controller: _locationController,
+          icon: ImageWidget(
+            iconData: ShuffleUiKitIcons.landmark,
+            color: theme?.colorScheme.inversePrimary,
+            height: 16.h,
+            width: 16.h,
           ),
-        ),
+        ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace12,
         Row(
           children: [
@@ -345,6 +342,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         UiKitInputFieldNoFill(
             keyboardType: TextInputType.text,
             label: S.of(context).Price,
+            readOnly: true,
             controller: _priceController,
             onTap: () {
               context.push(PriceSelectorComponent(
@@ -367,6 +365,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           keyboardType: TextInputType.text,
           label: S.of(context).PlaceType,
           controller: _typeController,
+          readOnly: true,
           onTap: () {
             widget.onCategoryChanged?.call().then((value) {
               _typeController.text = value ?? '';
@@ -413,6 +412,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           UiKitInputFieldNoFill(
             keyboardType: TextInputType.text,
             label: S.of(context).Niche,
+            readOnly: true,
             controller: _nicheController,
             onTap: () {
               widget.onNicheChanged?.call().then((value) {
