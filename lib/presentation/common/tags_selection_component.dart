@@ -4,12 +4,14 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class TagsSelectionComponent extends StatefulWidget {
   final PositionModel? positionModel;
-  final List<String> tags;
+  final List<String> selectedTags;
+  final List<String> allTags;
   final String title;
-  final Future<List<String>> Function(String) options;
+
+  // final Future<List<String>> Function(String) options;
 
   const TagsSelectionComponent(
-      {super.key, this.positionModel, required this.tags, required this.title, required this.options});
+      {super.key, this.positionModel, required this.selectedTags, required this.title, required this.allTags});
 
   @override
   State<TagsSelectionComponent> createState() => _TagsSelectionComponentState();
@@ -20,7 +22,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
 
   @override
   void initState() {
-    _tags.addAll(widget.tags);
+    _tags.addAll(widget.selectedTags);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusManager.instance.primaryFocus?.requestFocus();
     });
@@ -51,37 +53,40 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
               Wrap(
                 spacing: SpacingFoundation.horizontalSpacing8,
                 runSpacing: SpacingFoundation.verticalSpacing8,
-                children: _tags
+                children: widget.allTags
                     .map<Widget>(
                       (e) => UiKitCompactTextCard(
-                        showRemoveButton: true,
+                        showRemoveButton: _tags.contains(e),
+                        showCheckedBackground: _tags.contains(e),
                         text: e,
                         onTap: () {
                           setState(() {
-                            _tags.remove(e);
+                            if (!_tags.remove(e)) {
+                              _tags.add(e);
+                            }
                           });
                         },
                       ),
                     )
                     .toList(),
               ),
-              SpacingFoundation.verticalSpace16,
-              UiKitMultiSelectSuggestionField(
-                initialOptions: _tags.toList(),
-                borderRadius: BorderRadiusFoundation.all16,
-                options: widget.options,
-                onOptionSelected: (value) {
-                  setState(() {
-                    _tags.add(value);
-                  });
-                },
-                onOptionUnselected: (value) {
-                  setState(() {
-                    _tags.remove(value);
-                  });
-                },
-              ),
-              0.7.sh.heightBox
+              // SpacingFoundation.verticalSpace16,
+              // UiKitMultiSelectSuggestionField(
+              //   initialOptions: _tags.toList(),
+              //   borderRadius: BorderRadiusFoundation.all16,
+              //   options: widget.options,
+              //   onOptionSelected: (value) {
+              //     setState(() {
+              //       _tags.add(value);
+              //     });
+              //   },
+              //   onOptionUnselected: (value) {
+              //     setState(() {
+              //       _tags.remove(value);
+              //     });
+              //   },
+              // ),
+              // 0.7.sh.heightBox
             ]));
   }
 }

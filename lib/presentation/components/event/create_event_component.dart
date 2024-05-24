@@ -18,7 +18,7 @@ class CreateEventComponent extends StatefulWidget {
   final Future<String?> Function()? getLocation;
   final Future<String?> Function()? onCategoryChanged;
   final Future<String?> Function()? onNicheChanged;
-  final Future<List<String>> Function(String, String) propertiesOptions;
+  final List<String> Function( String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
@@ -281,26 +281,22 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               textAlign: TextAlign.center,
             )
           ],
-
           SpacingFoundation.verticalSpace24,
-          InkWell(
+          UiKitInputFieldNoFill(
             onTap: () async {
               _locationController.text = await widget.getLocation?.call() ?? '';
               _eventToEdit.location = _locationController.text;
 
               FocusManager.instance.primaryFocus?.unfocus();
             },
-            child: IgnorePointer(
-              child: UiKitInputFieldNoFill(
-                label: S.of(context).Address,
-                controller: _locationController,
-                icon: ImageWidget(
-                  iconData: ShuffleUiKitIcons.landmark,
-                  color: theme?.colorScheme.inversePrimary,
-                ),
-              ).paddingSymmetric(horizontal: horizontalPadding),
+            label: S.of(context).Address,
+            readOnly: true,
+            controller: _locationController,
+            icon: ImageWidget(
+              iconData: ShuffleUiKitIcons.landmark,
+              color: theme?.colorScheme.inversePrimary,
             ),
-          ),
+          ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace12,
           Row(
             children: [
@@ -316,7 +312,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
-
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
             keyboardType: TextInputType.url,
@@ -333,6 +328,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitInputFieldNoFill(
               keyboardType: TextInputType.text,
               label: S.of(context).Price,
+              readOnly: true,
               controller: _priceController,
               onTap: () {
                 context.push(PriceSelectorComponent(
@@ -357,6 +353,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             keyboardType: TextInputType.text,
             label: S.of(context).EventType,
             controller: _typeController,
+            readOnly: true,
             onTap: () {
               widget.onCategoryChanged?.call().then((value) {
                 _typeController.text = value ?? '';
@@ -400,6 +397,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             UiKitInputFieldNoFill(
               keyboardType: TextInputType.text,
               label: S.of(context).Niche,
+              readOnly: true,
               controller: _nicheController,
               onTap: () {
                 widget.onNicheChanged?.call().then((value) {
@@ -420,9 +418,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               onTap: () async {
                 final newTags = await context.push(TagsSelectionComponent(
                   positionModel: model.positionModel,
-                  tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                  selectedTags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
                   title: S.of(context).BaseProperties,
-                  options: (String v) => widget.propertiesOptions(v, 'base'),
+                  allTags:  widget.propertiesOptions( 'base'),
                 ));
                 log('here we have baseTags $newTags');
                 if (newTags != null) {
@@ -447,9 +445,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 onTap: () async {
                   final newTags = await context.push(TagsSelectionComponent(
                     positionModel: model.positionModel,
-                    tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
+                    selectedTags: _eventToEdit.tags.map((tag) => tag.title).toList(),
                     title: S.of(context).UniqueProperties,
-                    options: (String v) => widget.propertiesOptions(v, 'unique'),
+                    allTags: widget.propertiesOptions( 'unique'),
                   ));
                   log('here we have uniqueTags $newTags');
                   if (newTags != null) {

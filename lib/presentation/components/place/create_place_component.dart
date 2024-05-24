@@ -16,7 +16,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future<String?> Function()? getLocation;
   final Future<String?> Function()? onCategoryChanged;
   final Future<String?> Function()? onNicheChanged;
-  final Future<List<String>> Function(String, String) propertiesOptions;
+  final List<String> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
@@ -433,9 +433,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             onTap: () async {
               final newTags = await context.push(TagsSelectionComponent(
                 positionModel: model.positionModel,
-                tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
+                selectedTags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
                 title: S.of(context).BaseProperties,
-                options: (String v) => widget.propertiesOptions(v, 'base'),
+                allTags: widget.propertiesOptions('base'),
               ));
               if (newTags != null) {
                 setState(() {
@@ -459,9 +459,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               onTap: () async {
                 final newTags = await context.push(TagsSelectionComponent(
                   positionModel: model.positionModel,
-                  tags: _placeToEdit.tags.map((tag) => tag.title).toList(),
+                  selectedTags: _placeToEdit.tags.map((tag) => tag.title).toList(),
                   title: S.of(context).UniqueProperties,
-                  options: (String v) => widget.propertiesOptions(v, 'unique'),
+                  allTags: widget.propertiesOptions('unique'),
                 ));
                 if (newTags != null) {
                   setState(() {
