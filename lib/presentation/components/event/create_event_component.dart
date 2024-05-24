@@ -17,6 +17,7 @@ class CreateEventComponent extends StatefulWidget {
   final Future Function(UiEventModel) onEventCreated;
   final Future<String?> Function()? getLocation;
   final Future<String?> Function()? onCategoryChanged;
+  final Future<String?> Function()? onNicheChanged;
   final Future<List<String>> Function(String, String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
@@ -28,6 +29,7 @@ class CreateEventComponent extends StatefulWidget {
       this.onEventDeleted,
       required this.onEventCreated,
       this.onCategoryChanged,
+      this.onNicheChanged,
       required this.propertiesOptions,
       required this.availableTimeTemplates,
       this.onTimeTemplateCreated});
@@ -44,6 +46,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _nicheController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -66,6 +69,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _descriptionController.addListener(_checkDescriptionHeightConstraint);
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
+    _nicheController.text = widget.eventToEdit?.niche ?? '';
   }
 
   _checkDescriptionHeightConstraint() {
@@ -142,6 +146,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _typeController.text = widget.eventToEdit?.eventType ?? '';
       _websiteController.text = widget.eventToEdit?.website ?? '';
       _phoneController.text = widget.eventToEdit?.phone ?? '';
+      _nicheController.text = widget.eventToEdit?.niche ?? '';
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
@@ -385,25 +390,25 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               UiKitCustomTab(title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
             ],
           ),
-          // if (_eventToEdit.contentType != 'leisure') ...[
-          //   SpacingFoundation.verticalSpace24,
-          //   Text(
-          //     S.of(context).PleaseSelectANiche,
-          //     style: theme?.regularTextTheme.labelSmall,
-          //   ).paddingSymmetric(horizontal: horizontalPadding),
-          //   SpacingFoundation.verticalSpace4,
-          //   UiKitInputFieldNoFill(
-          //     keyboardType: TextInputType.text,
-          //     label: S.of(context).Niche,
-          //     controller: _nicheController,
-          //     onTap: () {
-          //       widget.onNicheChanged?.call().then((value) {
-          //         _nicheController.text = value ?? '';
-          //         _placeToEdit.niche = value ?? '';
-          //       });
-          //     },
-          //   ).paddingSymmetric(horizontal: horizontalPadding),
-          // ],
+          if (_eventToEdit.contentType != 'leisure') ...[
+            SpacingFoundation.verticalSpace24,
+            Text(
+              S.of(context).PleaseSelectANiche,
+              style: theme?.regularTextTheme.labelSmall,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace4,
+            UiKitInputFieldNoFill(
+              keyboardType: TextInputType.text,
+              label: S.of(context).Niche,
+              controller: _nicheController,
+              onTap: () {
+                widget.onNicheChanged?.call().then((value) {
+                  _nicheController.text = value ?? '';
+                  _eventToEdit.niche = value ?? '';
+                });
+              },
+            ).paddingSymmetric(horizontal: horizontalPadding),
+          ],
           SpacingFoundation.verticalSpace24,
           Text(
             S.of(context).BaseProperties,
@@ -473,6 +478,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.media = [..._photos, ..._videos];
                   _eventToEdit.website = _websiteController.text;
                   _eventToEdit.phone = _phoneController.text;
+                  _eventToEdit.price = _priceController.text;
                   widget.onEventCreated.call(_eventToEdit);
                 },
               ),
