@@ -53,8 +53,8 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     });
   }
 
-  selectHorizontalFormat() async {
-    final horizontal = await _getPhoto();
+  selectHorizontalFormat([preselected]) async {
+    final horizontal = preselected ?? await _getPhoto();
     if (horizontal == null) return;
     unawaited(showDialog(
         context: context,
@@ -70,11 +70,15 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                   _photos.add(UiKitMediaPhoto(link: file.path, previewType: UiKitPreviewType.horizontal));
                 });
               },
-            )));
+            )).then((_) {
+      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) == null) {
+        selectVerticalFormat(horizontal);
+      }
+    }));
   }
 
-  selectVerticalFormat() async {
-    final vertical = await _getPhoto();
+  selectVerticalFormat([preselected]) async {
+    final vertical = preselected ?? await _getPhoto();
     if (vertical == null) return;
     unawaited(showDialog(
         context: context,
@@ -90,7 +94,11 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                   _photos.add(UiKitMediaPhoto(link: file.path, previewType: UiKitPreviewType.vertical));
                 });
               },
-            )));
+            )).then((_) {
+      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) == null) {
+        selectHorizontalFormat(vertical);
+      }
+    }));
   }
 
   _getPhoto() async {

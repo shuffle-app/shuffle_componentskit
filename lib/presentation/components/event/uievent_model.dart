@@ -121,6 +121,10 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Description);
     } else if (media.isEmpty) {
       return S.current.XIsRequired(S.current.Photos);
+    } else if (phone == null || phone!.isEmpty) {
+      return S.current.XIsRequired(S.current.Phone);
+    } else if (website == null || website!.isEmpty) {
+      return S.current.XIsRequired(S.current.Website);
     }
 
     return null;

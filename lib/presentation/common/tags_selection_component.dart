@@ -19,6 +19,7 @@ class TagsSelectionComponent extends StatefulWidget {
 
 class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
   final Set<String> _tags = {};
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -49,6 +50,14 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
             title: widget.title,
             childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             children: [
+              SpacingFoundation.verticalSpace16,
+              UiKitInputFieldRightIcon(
+                controller: _controller,
+                hintText: S.of(context).Search,
+                icon: const ImageWidget(
+                  iconData: ShuffleUiKitIcons.search,
+                ),
+              ),
               SpacingFoundation.verticalSpace16,
               Wrap(
                 spacing: SpacingFoundation.horizontalSpacing8,

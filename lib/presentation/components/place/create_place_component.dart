@@ -402,7 +402,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             UiKitCustomTab(title: S.of(context).Business, customValue: 'business', group: contentSelectionGroup),
           ],
         ),
-        if (_placeToEdit.contentType != 'leisure') ...[
+        if (_placeToEdit.contentType == 'business') ...[
           SpacingFoundation.verticalSpace24,
           Text(
             S.of(context).PleaseSelectANiche,
@@ -488,6 +488,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 _placeToEdit.website = _websiteController.text;
                 _placeToEdit.phone = _phoneController.text;
                 _placeToEdit.description = _descriptionController.text;
+                _placeToEdit.price = _priceController.text;
                 _placeToEdit.media = [..._photos, ..._videos];
                 widget.onPlaceCreated.call(_placeToEdit);
               },

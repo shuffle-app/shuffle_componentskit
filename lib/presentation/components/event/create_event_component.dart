@@ -18,7 +18,7 @@ class CreateEventComponent extends StatefulWidget {
   final Future<String?> Function()? getLocation;
   final Future<String?> Function()? onCategoryChanged;
   final Future<String?> Function()? onNicheChanged;
-  final List<String> Function( String) propertiesOptions;
+  final List<String> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
@@ -102,10 +102,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       photos: _photos,
       positionModel: model.positionModel,
     ));
-    setState(() {
-      _photos.clear();
-      _photos.addAll(editedPhotos);
-    });
+    if (editedPhotos != null) {
+      setState(() {
+        _photos.clear();
+        _photos.addAll(editedPhotos);
+      });
+    }
     // final files = await ImagePicker().pickMultiImage();
     // if (files.isNotEmpty) {
     //   setState(() {
@@ -219,69 +221,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ),
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          UiKitCustomTabBar(
-            tabs: const [UiKitCustomTab(title: 'Single'), UiKitCustomTab(title: 'Cyclic')],
-            onTappedTab: (int index) {
-              setState(() {
-                switch (index) {
-                  case 0:
-                    _eventToEdit.isRecurrent = false;
-                    break;
-                  case 1:
-                    _eventToEdit.isRecurrent = true;
-                    break;
-                }
-              });
-            },
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
-          Row(
-            children: [
-              Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
-              const Spacer(),
-              context.outlinedButton(
-                data: BaseUiKitButtonData(
-                  onPressed: () {
-                    context.push(CreateScheduleWidget(
-                      availableTemplates: widget.availableTimeTemplates,
-                      onTemplateCreated: widget.onTimeTemplateCreated,
-                      availableTypes: const [UiScheduleDatesModel.scheduleType, UiScheduleDatesRangeModel.scheduleType],
-                      onScheduleCreated: (model) {
-                        if (model is UiScheduleDatesModel) {
-                          setState(() {
-                            _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join(', ');
-                          });
-                        } else if (model is UiScheduleDatesRangeModel) {
-                          setState(() {
-                            _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join(', ');
-                          });
-                        }
-                      },
-                    ));
-                  },
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: CupertinoIcons.chevron_forward,
-                    size: 16.h,
-                  ),
-                ),
-              ),
-            ],
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          if (_eventToEdit.scheduleString != null) ...[
-            SpacingFoundation.verticalSpace24,
-            Text(
-              _eventToEdit.scheduleString!,
-              style: theme?.boldTextTheme.body,
-              textAlign: TextAlign.center,
-            )
-          ],
-          SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
             onTap: () async {
               _locationController.text = await widget.getLocation?.call() ?? '';
@@ -374,20 +313,23 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             selectedTab: _eventToEdit.contentType,
             onTappedTab: (index) {
               setState(() {
-                _eventToEdit.contentType = ['leisure', 'business', 'both'][index];
+                _eventToEdit.contentType = ['both', 'leisure', 'business'][index];
               });
             },
             tabs: [
               UiKitCustomTab(
+                  height: 20.h, title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
+              UiKitCustomTab(
+                height: 20.h,
                 title: S.of(context).Leisure,
                 customValue: 'leisure',
                 group: contentSelectionGroup,
               ),
-              UiKitCustomTab(title: S.of(context).Business, customValue: 'business', group: contentSelectionGroup),
-              UiKitCustomTab(title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
+              UiKitCustomTab(
+                  height: 20.h, title: S.of(context).Business, customValue: 'business', group: contentSelectionGroup),
             ],
           ),
-          if (_eventToEdit.contentType != 'leisure') ...[
+          if (_eventToEdit.contentType == 'business') ...[
             SpacingFoundation.verticalSpace24,
             Text(
               S.of(context).PleaseSelectANiche,
@@ -420,7 +362,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   positionModel: model.positionModel,
                   selectedTags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
                   title: S.of(context).BaseProperties,
-                  allTags:  widget.propertiesOptions( 'base'),
+                  allTags: widget.propertiesOptions('base'),
                 ));
                 log('here we have baseTags $newTags');
                 if (newTags != null) {
@@ -447,7 +389,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     positionModel: model.positionModel,
                     selectedTags: _eventToEdit.tags.map((tag) => tag.title).toList(),
                     title: S.of(context).UniqueProperties,
-                    allTags: widget.propertiesOptions( 'unique'),
+                    allTags: widget.propertiesOptions('unique'),
                   ));
                   log('here we have uniqueTags $newTags');
                   if (newTags != null) {
@@ -461,9 +403,75 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     child: UiKitTagSelector(
                   showTextField: false,
                   tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-                )).paddingSymmetric(horizontal: horizontalPadding)),
-            SpacingFoundation.verticalSpace24,
+                )).paddingSymmetric(horizontal: horizontalPadding))
           ],
+          SpacingFoundation.verticalSpace24,
+          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
+              .paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace16,
+          UiKitCustomTabBar(
+            tabs: [UiKitCustomTab(height: 20.h, title: 'Single'), UiKitCustomTab(height: 20.h, title: 'Cyclic')],
+            onTappedTab: (int index) {
+              setState(() {
+                switch (index) {
+                  case 0:
+                    _eventToEdit.isRecurrent = false;
+                    break;
+                  case 1:
+                    _eventToEdit.isRecurrent = true;
+                    break;
+                }
+              });
+            },
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
+          Row(
+            children: [
+              Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
+              const Spacer(),
+              context.outlinedButton(
+                data: BaseUiKitButtonData(
+                  onPressed: () {
+                    context.push(CreateScheduleWidget(
+                      availableTemplates: widget.availableTimeTemplates,
+                      onTemplateCreated: widget.onTimeTemplateCreated,
+                      availableTypes: const [UiScheduleDatesModel.scheduleType, UiScheduleDatesRangeModel.scheduleType],
+                      onScheduleCreated: (model) {
+                        if (model is UiScheduleDatesModel) {
+                          setState(() {
+                            _eventToEdit.schedule = model;
+                            _eventToEdit.scheduleString = model.dailySchedule
+                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                .join(', ');
+                          });
+                        } else if (model is UiScheduleDatesRangeModel) {
+                          setState(() {
+                            _eventToEdit.schedule = model;
+                            _eventToEdit.scheduleString = model.dailySchedule
+                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                .join(', ');
+                          });
+                        }
+                      },
+                    ));
+                  },
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: CupertinoIcons.chevron_forward,
+                    size: 16.h,
+                  ),
+                ),
+              ),
+            ],
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          if (_eventToEdit.scheduleString != null) ...[
+            SpacingFoundation.verticalSpace24,
+            Text(
+              _eventToEdit.scheduleString!,
+              style: theme?.boldTextTheme.body,
+              textAlign: TextAlign.center,
+            )
+          ],
+          SpacingFoundation.verticalSpace24,
           SafeArea(
             top: false,
             child: context.gradientButton(

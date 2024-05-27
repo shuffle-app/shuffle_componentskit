@@ -8,10 +8,11 @@ class PriceSelectorComponent extends StatelessWidget {
   final String? initialCurrency;
   final Function(String price1, String price2, String currency) onSubmit;
 
-  PriceSelectorComponent({super.key, required this.onSubmit, this.initialPrice1, this.initialPrice2, this.initialCurrency}) {
+  PriceSelectorComponent(
+      {super.key, required this.onSubmit, this.initialPrice1, this.initialPrice2, this.initialCurrency}) {
     price1 = TextEditingController(text: initialPrice1);
     price2 = TextEditingController(text: initialPrice2);
-    currency.value = initialCurrency?? 'AED';
+    currency.value = initialCurrency ?? 'AED';
   }
 
   late final TextEditingController price1;
@@ -74,6 +75,7 @@ class PriceSelectorComponent extends StatelessWidget {
             children: [
               Expanded(
                   child: UiKitInputFieldNoIcon(
+                hintText: 'N/A',
                 controller: price1,
                 fillColor: theme?.colorScheme.surface3,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -86,6 +88,7 @@ class PriceSelectorComponent extends StatelessWidget {
               SpacingFoundation.horizontalSpace4,
               Expanded(
                   child: UiKitInputFieldNoIcon(
+                hintText: 'N/A',
                 controller: price2,
                 fillColor: theme?.colorScheme.surface3,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -99,7 +102,7 @@ class PriceSelectorComponent extends StatelessWidget {
                 return UiKitMenu<String>(
                     useCustomTiles: true,
                     separator: SpacingFoundation.verticalSpace16,
-                    title: S.of(context).SelectLanguage,
+                    title: S.of(context).SelectCurrency,
                     borderRadius: BorderRadiusFoundation.max,
                     tilesColor: context.uiKitTheme?.colorScheme.surface1,
                     selectedItem: UiKitMenuItem<String>(
@@ -127,7 +130,7 @@ class PriceSelectorComponent extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: SizedBox(
-          height: 60.h,
+          height: 55.h,
           child: ListenableBuilder(
               listenable: Listenable.merge([price1, price2, currency]),
               builder: (context, _) {
@@ -144,7 +147,7 @@ class PriceSelectorComponent extends StatelessWidget {
                       .paddingOnly(bottom: MediaQuery.viewPaddingOf(context).bottom);
                 }
                 return const SizedBox.shrink();
-              })),
+              })).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
     );
   }
 }

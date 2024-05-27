@@ -91,6 +91,8 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Phone);
     } else if (location == null || location!.isEmpty) {
       return S.current.XIsRequired(S.current.Location);
+    } else if (website == null || website!.isEmpty) {
+      return S.current.XIsRequired(S.current.Website);
     }
 
     return null;

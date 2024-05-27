@@ -42,9 +42,9 @@ class PhotoVideoSelector extends StatelessWidget {
       if (a.previewType == null && b.previewType == null) {
         return 0;
       } else if (a.previewType == null) {
-        return -1;
-      } else if (b.previewType == null) {
         return 1;
+      } else if (b.previewType == null) {
+        return -1;
       } else {
         return 0;
       }
@@ -84,7 +84,14 @@ class PhotoVideoSelector extends StatelessWidget {
                                 borderRadius: BorderRadiusFoundation.all8,
                               ),
                             ),
-                            child: photos[index].widget(itemsSize),
+                            child: photos[index].widget(photos[index].previewType != null
+                                ? Size(
+                                    photos[index].previewType == UiKitPreviewType.horizontal
+                                        ? itemsSize.width * 1.2
+                                        : itemsSize.width / 1.2,
+                                    itemsSize.height)
+                                : itemsSize),
+                            // child: photos[index].widget(itemsSize),
                           ).paddingAll(4),
                           context.outlinedButton(
                             hideBorder: true,
@@ -101,8 +108,11 @@ class PhotoVideoSelector extends StatelessWidget {
                                 right: 0,
                                 bottom: 10,
                                 left: 0,
-                                child: Text('cover'.toUpperCase(), textAlign: TextAlign.center,
-                                    style: theme?.regularTextTheme.caption2.copyWith(color: Colors.white)))
+                                child: ColoredBox(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    child: Text('cover'.toUpperCase(),
+                                        textAlign: TextAlign.center,
+                                        style: theme?.regularTextTheme.caption2.copyWith(color: Colors.white))))
                         ],
                       ),
                       itemCount: photos.length,
