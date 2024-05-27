@@ -99,6 +99,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
           if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable! > 0) ...[
+            SpacingFoundation.verticalSpace16,
             UiKitCardWrapper(
                 gradient: theme?.themeMode == ThemeMode.light
                     ? GradientFoundation.lightShunyGreyGradient
@@ -124,7 +125,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                         ))
                   ],
                 )),
-            SpacingFoundation.verticalSpace16,
+
           ],
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
