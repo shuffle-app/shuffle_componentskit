@@ -51,7 +51,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   late UiEventModel _eventToEdit;
 
-  double descriptionHeightConstraint = 50.h;
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
 
@@ -66,18 +65,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _typeController.text = widget.eventToEdit?.eventType ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
-    _descriptionController.addListener(_checkDescriptionHeightConstraint);
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _nicheController.text = widget.eventToEdit?.niche ?? '';
-  }
-
-  _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / (kIsWeb ? 390 : 0.9.sw) > descriptionHeightConstraint / 50.h) {
-      setState(() {
-        descriptionHeightConstraint += 30.h;
-      });
-    }
   }
 
   _onVideoDeleted(int index) {
@@ -153,14 +143,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
-      _descriptionController.addListener(_checkDescriptionHeightConstraint);
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    _descriptionController.removeListener(_checkDescriptionHeightConstraint);
     super.dispose();
   }
 
@@ -174,7 +162,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
-    final AutoSizeGroup contentSelectionGroup = AutoSizeGroup();
 
     return Form(
       key: _formKey,
@@ -212,8 +199,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             onVideoReorderRequested: _onVideoReorderRequested,
           ),
           SpacingFoundation.verticalSpace24,
-          ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: descriptionHeightConstraint),
+          IntrinsicHeight(
             child: UiKitInputFieldNoFill(
               label: S.of(context).Description,
               controller: _descriptionController,
@@ -318,15 +304,20 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             },
             tabs: [
               UiKitCustomTab(
-                  height: 20.h, title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
+                height: 20.h,
+                title: S.of(context).Both,
+                customValue: 'both',
+              ),
               UiKitCustomTab(
                 height: 20.h,
                 title: S.of(context).Leisure,
                 customValue: 'leisure',
-                group: contentSelectionGroup,
               ),
               UiKitCustomTab(
-                  height: 20.h, title: S.of(context).Business, customValue: 'business', group: contentSelectionGroup),
+                height: 20.h,
+                title: S.of(context).Business,
+                customValue: 'business',
+              ),
             ],
           ),
           if (_eventToEdit.contentType == 'business') ...[

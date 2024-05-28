@@ -71,7 +71,8 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 });
               },
             )).then((_) {
-      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) == null) {
+      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) != null &&
+          _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) == null) {
         selectVerticalFormat(horizontal);
       }
     }));
@@ -95,7 +96,8 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 });
               },
             )).then((_) {
-      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) == null) {
+      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) != null &&
+          _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) == null) {
         selectHorizontalFormat(vertical);
       }
     }));
@@ -106,13 +108,14 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
         context: context,
         builder: (context) {
           return Dialog(
-              backgroundColor: context.uiKitTheme?.colorScheme.surface,
+              backgroundColor: context.uiKitTheme?.colorScheme.surface3,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusFoundation.all16,
+                borderRadius: BorderRadiusFoundation.all24,
               ),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Text(
-                  'select a photo to set preview',
+                  'Select a photo to set preview',
+                  textAlign: TextAlign.center,
                   style: context.uiKitTheme?.boldTextTheme.title2,
                 ),
                 16.h.heightBox,
@@ -138,7 +141,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 16.h.heightBox,
                 context.button(
                   data: BaseUiKitButtonData(
-                      text: 'Select from gallery',
+                      text: 'From gallery',
                       onPressed: () async {
                         final res = await ImagePicker().pickImage(source: ImageSource.gallery);
                         if (res != null) {
@@ -368,11 +371,12 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
+    final theme = context.uiKitTheme;
+    final boldTextTheme = theme?.boldTextTheme;
 
     return Dialog(
       insetPadding: EdgeInsets.zero,
-      backgroundColor: ColorsFoundation.surface1,
+      backgroundColor: theme?.colorScheme.surface3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all24),
       child: SizedBox(
         height: 0.8.sh,

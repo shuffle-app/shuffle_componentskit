@@ -11,11 +11,11 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final VoidCallback? onPriceSegmentChangeRequested;
   final VoidCallback? onAgeRangesChangeRequested;
   final VoidCallback? onPhotoChangeRequested;
-  final VoidCallback? onNicheChangeRequested;
   final ValueChanged<String>? onLanguageChanged;
   final ValueChanged<bool>? onIsLightThemeChanged;
   final String? avatarUrl;
-  final String selectedNiche;
+  final UiKitMenuItem<int> selectedNiche;
+  final VoidCallback? onNicheChanged;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
   final List<LocaleModel>? availableLocales;
@@ -36,13 +36,12 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final bool isLightTheme;
 
   const CompanyProfileEditComponent({
-    Key? key,
+    super.key,
     required this.selectedPriceSegments,
     required this.selectedAgeRanges,
     required this.selectedNiche,
     this.onLanguageChanged,
     this.onProfileEditSubmitted,
-    this.onNicheChangeRequested,
     this.formKey,
     this.onPhotoChangeRequested,
     this.onPreferencesChanged,
@@ -62,14 +61,18 @@ class CompanyProfileEditComponent extends StatelessWidget {
     this.onIsLightThemeChanged,
     this.isLoading = false,
     this.isLightTheme = false,
-  }) : super(key: key);
+    this.onNicheChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
+    final regularTextTheme = context.uiKitTheme?.regularTextTheme;
+    final colorScheme = context.uiKitTheme?.colorScheme;
 
     return Scaffold(
       body: Form(
@@ -171,11 +174,16 @@ class CompanyProfileEditComponent extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
             ),
             SpacingFoundation.verticalSpace16,
-            UiKitTitledSelectionTile(
-              onSelectionChanged: onNicheChangeRequested,
-              selectedItems: [selectedNiche],
-              title: S.of(context).YourNiche,
+            Text(
+              S.current.YourNiche,
+              style: regularTextTheme?.labelSmall,
             ),
+            UiKitMenuItemTile.custom(
+              paddingSymmetric: EdgeInsets.zero,
+              autoPopUp: false,
+              onTap: onNicheChanged,
+              item: selectedNiche,
+            ).paddingAll(EdgeInsetsFoundation.all4),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSelectionTile(
               onSelectionChanged: onPriceSegmentChangeRequested,

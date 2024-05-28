@@ -19,15 +19,33 @@ class TagsSelectionComponent extends StatefulWidget {
 
 class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
   final Set<String> _tags = {};
+  final Set<String> _allTags = {};
   final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     _tags.addAll(widget.selectedTags);
+    _allTags.addAll(widget.allTags);
+    _controller.addListener(_checkEmpty);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusManager.instance.primaryFocus?.requestFocus();
     });
     super.initState();
+  }
+
+  _checkEmpty() {
+    if(_controller.text.isEmpty) {
+      setState(() {
+        _allTags.addAll(widget.allTags);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_checkEmpty);
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,15 +72,23 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
               UiKitInputFieldRightIcon(
                 controller: _controller,
                 hintText: S.of(context).Search,
-                icon: const ImageWidget(
-                  iconData: ShuffleUiKitIcons.search,
-                ),
+                onChanged: (value) {
+                  setState(() {
+                    _allTags.addAll(widget.allTags);
+                    _allTags.retainWhere((e) => e.toLowerCase().contains(value.toLowerCase()));
+                  });
+                },
+                icon: _controller.text.isEmpty
+                    ? const ImageWidget(
+                        iconData: Icons.search,
+                      )
+                    : null,
               ),
               SpacingFoundation.verticalSpace16,
               Wrap(
                 spacing: SpacingFoundation.horizontalSpacing8,
                 runSpacing: SpacingFoundation.verticalSpacing8,
-                children: widget.allTags
+                children: _allTags
                     .map<Widget>(
                       (e) => UiKitCompactTextCard(
                         showRemoveButton: _tags.contains(e),

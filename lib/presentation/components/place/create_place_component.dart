@@ -49,7 +49,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   late UiPlaceModel _placeToEdit;
 
-  double descriptionHeightConstraint = 50.h;
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
 
@@ -68,20 +67,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         );
     _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
-    _descriptionController.addListener(_checkDescriptionHeightConstraint);
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
     _typeController.text = widget.placeToEdit?.placeType ?? '';
     _nicheController.text = widget.placeToEdit?.niche ?? '';
-  }
-
-  _checkDescriptionHeightConstraint() {
-    if (_descriptionController.text.length * 5.8.w / (kIsWeb ? 390 : 0.9.sw) > descriptionHeightConstraint / 50.h) {
-      setState(() {
-        descriptionHeightConstraint += 35.h;
-      });
-    }
   }
 
   _onVideoDeleted(int index) {
@@ -176,7 +166,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   void dispose() {
-    _descriptionController.removeListener(_checkDescriptionHeightConstraint);
     super.dispose();
   }
 
@@ -190,7 +179,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
-    final AutoSizeGroup contentSelectionGroup = AutoSizeGroup();
 
     return BlurredAppBarPage(
       title: S.of(context).Place,
@@ -278,8 +266,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           // onVideoReorderRequested: _onVideoReorderRequested,
         ),
         SpacingFoundation.verticalSpace24,
-        ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: descriptionHeightConstraint),
+        IntrinsicHeight(
           child: UiKitInputFieldNoFill(
             label: S.of(context).Description,
             controller: _descriptionController,
@@ -393,13 +380,18 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             });
           },
           tabs: [
-            UiKitCustomTab(title: S.of(context).Both, customValue: 'both', group: contentSelectionGroup),
+            UiKitCustomTab(
+              title: S.of(context).Both,
+              customValue: 'both',
+            ),
             UiKitCustomTab(
               title: S.of(context).Leisure,
               customValue: 'leisure',
-              group: contentSelectionGroup,
             ),
-            UiKitCustomTab(title: S.of(context).Business, customValue: 'business', group: contentSelectionGroup),
+            UiKitCustomTab(
+              title: S.of(context).Business,
+              customValue: 'business',
+            ),
           ],
         ),
         if (_placeToEdit.contentType == 'business') ...[
