@@ -12,14 +12,14 @@ abstract class Advertisable {
   late final String mediumBannerImage = _randomMediumBannerPicture;
   late final String largeBannerImage = _randomLargeBannerPicture;
   late final Widget smallTextBanner = _randomSmallTextAdBanner;
-  @JsonKey(includeFromJson: false,includeToJson: false)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   late final AdvertisementBannerType bannerType;
 
   Advertisable({
     required this.isAdvertisement,
   }) {
-    final randomNumber = Random().nextInt(100);
-    if (randomNumber.isOdd) {
+    final chance = Random().nextDouble();
+    if (chance < 0.25) {
       bannerType = AdvertisementBannerType.text;
     } else {
       bannerType = AdvertisementBannerType.picture;
@@ -45,11 +45,12 @@ abstract class Advertisable {
   }
 
   Widget get _randomSmallTextAdBanner {
-    final randomNumber = Random().nextInt(3) + 1;
+    final randomNumber = Random().nextInt(4) + 1;
     if (randomNumber == 1) return const SmallTextAdBanner1();
     if (randomNumber == 2) return const SmallTextAdBanner2();
     if (randomNumber == 3) return const SmallTextAdBanner3();
     if (randomNumber == 4) return const SmallTextAdBanner4();
+    if (randomNumber == 5) return const SmallTextAdBanner5();
     return const SmallTextAdBanner1();
   }
 
