@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+
 import '../../../shuffle_components_kit.dart';
 import '../../common/photolist_editing_component.dart';
 import '../../common/price_selector_component.dart';
@@ -83,8 +85,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -154,8 +155,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -254,6 +254,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               keyboardType: TextInputType.text,
               label: S.of(context).Price,
               readOnly: true,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
+              ],
               controller: _priceController,
               onTap: () {
                 context.push(PriceSelectorComponent(
@@ -397,8 +400,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 )).paddingSymmetric(horizontal: horizontalPadding))
           ],
           SpacingFoundation.verticalSpace24,
-          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
-              .paddingSymmetric(horizontal: horizontalPadding),
+          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
             tabs: [UiKitCustomTab(height: 20.h, title: 'Single'), UiKitCustomTab(height: 20.h, title: 'Cyclic')],
