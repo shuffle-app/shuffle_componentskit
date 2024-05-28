@@ -1,9 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+
 import '../../../shuffle_components_kit.dart';
 import '../../common/photolist_editing_component.dart';
 import '../../common/price_selector_component.dart';
@@ -97,8 +99,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -182,8 +183,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -344,6 +344,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             label: S.of(context).Price,
             readOnly: true,
             controller: _priceController,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
+            ],
             onTap: () {
               context.push(PriceSelectorComponent(
                 initialPrice1: _priceController.text.split('-').first,

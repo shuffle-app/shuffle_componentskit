@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -8,8 +9,7 @@ class PriceSelectorComponent extends StatelessWidget {
   final String? initialCurrency;
   final Function(String price1, String price2, String currency) onSubmit;
 
-  PriceSelectorComponent(
-      {super.key, required this.onSubmit, this.initialPrice1, this.initialPrice2, this.initialCurrency}) {
+  PriceSelectorComponent({super.key, required this.onSubmit, this.initialPrice1, this.initialPrice2, this.initialCurrency}) {
     price1 = TextEditingController(text: initialPrice1);
     price2 = TextEditingController(text: initialPrice2);
     currency.value = initialCurrency ?? 'AED';
@@ -78,6 +78,9 @@ class PriceSelectorComponent extends StatelessWidget {
                 hintText: 'N/A',
                 controller: price1,
                 fillColor: theme?.colorScheme.surface3,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
+                ],
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               )),
               SpacingFoundation.horizontalSpace4,
@@ -90,6 +93,9 @@ class PriceSelectorComponent extends StatelessWidget {
                   child: UiKitInputFieldNoIcon(
                 hintText: 'N/A',
                 controller: price2,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
+                ],
                 fillColor: theme?.colorScheme.surface3,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               )),
