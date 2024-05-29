@@ -57,7 +57,8 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     final scheduleTypes = widget.availableTypes;
     final theme = context.uiKitTheme;
 
-    return Stack(children: [
+    return Scaffold(
+        body: Stack(children: [
       BlurredAppBarPage(
         autoImplyLeading: true,
         title: 'Work schedule',
@@ -188,7 +189,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                 ),
             ],
           ))
-    ]);
+    ]));
   }
 }
 
