@@ -394,6 +394,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             UiKitCustomTab(
               title: S.of(context).Business,
               customValue: 'business',
+              group: AutoSizeGroup(),
             ),
           ],
         ),

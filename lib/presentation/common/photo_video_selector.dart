@@ -21,7 +21,7 @@ class PhotoVideoSelector extends StatelessWidget {
     super.key,
     this.photos = const [],
     this.videos = const [],
-    this.itemsSize = const Size(75, 120),
+    this.itemsSize = const Size(120, 75),
     required this.onPhotoAddRequested,
     this.onVideoAddRequested,
     required this.onPhotoReorderRequested,
@@ -87,8 +87,8 @@ class PhotoVideoSelector extends StatelessWidget {
                             child: photos[index].widget(photos[index].previewType != null
                                 ? Size(
                                     photos[index].previewType == UiKitPreviewType.horizontal
-                                        ? itemsSize.width
-                                        : itemsSize.width / 1.5,
+                                        ? itemsSize.width /1.2
+                                        : itemsSize.width /2,
                                     itemsSize.height)
                                 : itemsSize),
                             // child: photos[index].widget(itemsSize),
@@ -112,7 +112,7 @@ class PhotoVideoSelector extends StatelessWidget {
                                     color: Colors.black.withOpacity(0.5),
                                     child: Text('cover'.toUpperCase(),
                                         textAlign: TextAlign.center,
-                                        style: theme?.regularTextTheme.caption3.copyWith(color: Colors.white)).paddingOnly(top: 4)))
+                                        style: theme?.boldTextTheme.caption3Medium.copyWith(color: Colors.white)).paddingOnly(top: 4)))
                         ],
                       ),
                       itemCount: photos.length,

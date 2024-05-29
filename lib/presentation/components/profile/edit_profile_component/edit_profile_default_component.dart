@@ -41,7 +41,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final bool isLoading;
 
   const EditProfileDefaultComponent({
-    Key? key,
+    super.key,
     this.onProfileEditSubmitted,
     this.onPremiumAccountRequested,
     this.onProAccountRequested,
@@ -76,7 +76,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     required this.beInSearch,
     this.activityItem,
     this.userType = UserTileType.ordinary,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +374,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
               data: BaseUiKitButtonData(
                 text: S.of(context).Save.toUpperCase(),
                 loading: isLoading,
-                onPressed: onProfileEditSubmitted?.call,
+                onPressed: onProfileEditSubmitted,
               ),
             )
             .paddingOnly(

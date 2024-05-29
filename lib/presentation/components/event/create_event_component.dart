@@ -320,6 +320,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 height: 20.h,
                 title: S.of(context).Business,
                 customValue: 'business',
+                group: AutoSizeGroup(),
               ),
             ],
           ),
