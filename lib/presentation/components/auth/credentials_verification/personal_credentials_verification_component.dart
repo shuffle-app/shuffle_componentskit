@@ -196,7 +196,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                     if (hasPasswordError) {
                       height = SpacingFoundation.verticalSpacing12;
                     } else {
-                      height = SpacingFoundation.verticalSpacing24*2;
+                      height = SpacingFoundation.verticalSpacing24 * 2;
                     }
                   }
                 } else {
@@ -369,7 +369,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                       child: child,
                     ),
                   ),
-                  child: tabController.index < 1 && !visible
+                  child: !visible
                       ? Column(
                           children: [
                             RichText(
@@ -413,16 +413,21 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                               ),
                             ),
                             SpacingFoundation.verticalSpace16,
-                            context.button(
-                              data: BaseUiKitButtonData(
-                                text: S.of(context).Next.toUpperCase(),
-                                onPressed:
-                                    widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
-                                        ? null
-                                        : widget.onSubmit,
-                                loading: widget.loading,
-                                fit: ButtonFit.fitWidth,
-                              ),
+                            AnimatedOpacity(
+                              opacity:  tabController.index < 1 ? 1 : 0,
+                              duration: const Duration(milliseconds: 500),
+                              child:
+                                   context.button(
+                                      data: BaseUiKitButtonData(
+                                      text: S.of(context).Next.toUpperCase(),
+                                      onPressed: widget.passwordController.text.isEmpty ||
+                                              widget.credentialsController.text.isEmpty
+                                          ? null
+                                          : widget.onSubmit,
+                                      loading: widget.loading,
+                                      fit: ButtonFit.fitWidth,
+                                    ))
+                                  ,
                             ),
                             SpacingFoundation.verticalSpace4,
                           ],

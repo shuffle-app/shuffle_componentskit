@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/common/subscription_offer_widget.dart';
@@ -205,7 +206,6 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),
-          SpacingFoundation.verticalSpace16,
           TextButton(
             onPressed: widget.onRestorePurchase,
             child: Text(
@@ -213,24 +213,32 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
             ),
           ),
           if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0) ...[
-            SpacingFoundation.verticalSpace8,
-            Text('Cancel any time in ${Platform.isIOS ? 'AppStore' : 'Play Store'}', style: regularTextTheme?.caption3)
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Cancel any time in ${Platform.isIOS ? 'AppStore' : 'Play Store'}',
+                    style: regularTextTheme?.caption3))
           ],
-          SpacingFoundation.verticalSpace16,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                  onTap: () => launchUrlString(widget.uiModel.termsOfServiceUrl),
-                  child: Text(S.of(context).TermsOfService.toLowerCase(),
-                      style: regularTextTheme?.caption3.copyWith(decoration: TextDecoration.underline))),
-              SpacingFoundation.horizontalSpace8,
-              GestureDetector(
-                  onTap: () => launchUrlString(widget.uiModel.privacyPolicyUrl),
-                  child: Text(S.of(context).PrivacyPolicy.toLowerCase(),
-                      style: regularTextTheme?.caption3.copyWith(decoration: TextDecoration.underline))),
-            ],
-          ),
+          Align(
+              alignment: Alignment.centerLeft,
+              child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: S.of(context).TermsOfService,
+                          style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => launchUrlString(widget.uiModel.termsOfServiceUrl)),
+                      TextSpan(
+                        text: S.of(context).AndWithWhitespaces.toLowerCase(),
+                        style: regularTextTheme?.caption3,
+                      ),
+                      TextSpan(
+                          text: S.of(context).PrivacyPolicy,
+                          style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => launchUrlString(widget.uiModel.privacyPolicyUrl)),
+                    ],
+                  ))),
           SpacingFoundation.verticalSpace24,
         ],
       ).paddingAll(EdgeInsetsFoundation.all16),
