@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -92,8 +91,8 @@ class MyEventsComponent extends StatelessWidget {
                   ? DecoratedBox(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadiusFoundation.all24,
-                          gradient: LinearGradient(
-                              colors: [theme!.colorScheme.inversePrimary.withOpacity(0.3), Colors.transparent])),
+                          gradient:
+                              LinearGradient(colors: [theme!.colorScheme.inversePrimary.withOpacity(0.3), Colors.transparent])),
                       child: Center(
                         child: Text(
                           event.reviewStatus!,
@@ -111,9 +110,9 @@ class MyEventsComponent extends StatelessWidget {
                         style: theme?.boldTextTheme.caption1Bold,
                       ),
                       //TODO restore schedules
-                      subtitle: event.date != null
+                      subtitle: event.startDate != null
                           ? Text(
-                              DateFormat('MMMM d').format(event.date!),
+                              DateFormat('MMMM d').format(event.startDate!),
                               style: theme?.boldTextTheme.caption1Medium.copyWith(
                                 color: theme.colorScheme.darkNeutral500,
                               ),
@@ -135,8 +134,7 @@ class MyEventsComponent extends StatelessWidget {
           //               ),
           //       ),
           context.gradientButton(
-            data: BaseUiKitButtonData(
-                onPressed: onTap, text: buttonText ?? S.of(context).CreateEvent, fit: ButtonFit.fitWidth),
+            data: BaseUiKitButtonData(onPressed: onTap, text: buttonText ?? S.of(context).CreateEvent, fit: ButtonFit.fitWidth),
           ),
         ],
       ).paddingAll(EdgeInsetsFoundation.all16),

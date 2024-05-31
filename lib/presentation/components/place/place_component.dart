@@ -95,8 +95,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -183,7 +182,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
                     );
                   },
                 ),
-
                 blurValue: 25,
               ),
           ],
@@ -338,22 +336,20 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
                 final tempSorted = List.from(snapshot.data ?? []);
                 if (tempSorted.isNotEmpty) {
-                  tempSorted.sort((a, b) => (a.date ?? DateTime.now()).compareTo(b.date ?? DateTime.now()));
+                  tempSorted.sort((a, b) => (a.startDate ?? DateTime.now()).compareTo(b.startDate ?? DateTime.now()));
                 }
 
                 final closestEvent = tempSorted.lastOrNull;
 
-                log('here we have a closest event $closestEvent and tempSorted ${tempSorted.length}',
-                    name: 'PlaceComponent');
+                log('here we have a closest event $closestEvent and tempSorted ${tempSorted.length}', name: 'PlaceComponent');
 
-                final Duration daysToEvent = (closestEvent?.date ?? DateTime.now()).difference(DateTime.now());
+                final Duration daysToEvent = (closestEvent?.startDate ?? DateTime.now()).difference(DateTime.now());
 
                 return [
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
-                      value: closestEvent == null
-                          ? 'none'
-                          : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
+                      value:
+                          closestEvent == null ? 'none' : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
                       group: group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
                       action: closestEvent == null
@@ -376,7 +372,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   SpacingFoundation.horizontalSpace8,
                   Expanded(
                     child: PointBalancePlaceActionCard(
-                        value: widget.place.userPoints?.toString() ?? '0', group: group, rasterIconAsset: GraphicsFoundation.instance.png.money, action: null
+                        value: widget.place.userPoints?.toString() ?? '0',
+                        group: group,
+                        rasterIconAsset: GraphicsFoundation.instance.png.money,
+                        action: null
                         //     () {
                         //   log('balance was pressed');
                         // },
@@ -440,7 +439,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   child: UiKitTitledDescriptionGridWidget(
                     title: e.title,
                     description: e.description,
-                    spacing: (SpacingFoundation.horizontalSpacing4 + horizontalMargin)/2,
+                    spacing: (SpacingFoundation.horizontalSpacing4 + horizontalMargin) / 2,
                   ),
                 ),
               )

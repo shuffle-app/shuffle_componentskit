@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:shuffle_components_kit/presentation/utils/extentions/date_range_extension.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -64,7 +66,10 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   final TextEditingController _personPhoneController = TextEditingController();
   final TextEditingController _personPositionController = TextEditingController();
   final TextEditingController _personEmailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _websiteController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
+  DateTimeRange _selectedDateRange = DateTimeRange(start: DateTime.now(), end: DateTime.now().add(const Duration(days: 31)));
 
   late UiEventModel _eventToEdit;
 
@@ -87,6 +92,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
     _addressController.text = widget.eventToEdit?.location ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
+    _phoneController.text = widget.eventToEdit?.phone ?? '';
+    _websiteController.text = widget.eventToEdit?.website ?? '';
     widget.descriptionController.addListener(_checkDescriptionHeightConstraint);
   }
 
@@ -143,6 +150,14 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   @override
   void dispose() {
     widget.descriptionController.removeListener(_checkDescriptionHeightConstraint);
+    _titleController.dispose();
+    _addressController.dispose();
+    _personNameController.dispose();
+    _personPhoneController.dispose();
+    _personPositionController.dispose();
+    _personEmailController.dispose();
+    _phoneController.dispose();
+    _websiteController.dispose();
     super.dispose();
   }
 
@@ -384,6 +399,73 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ]),
                       SpacingFoundation.verticalSpace24,
                       //TODO restore editing schedules
+                      Row(
+                        children: [
+                          Expanded(
+                            child: WebFormField(
+                              isRequired: true,
+                              title: 'Start date',
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      DateFormat('MMM dd, yyyy').format(_selectedDateRange.start),
+                                      style: theme.boldTextTheme.body,
+                                    ),
+                                  ),
+                                  SpacingFoundation.horizontalSpace8,
+                                  context.iconButtonNoPadding(
+                                    data: BaseUiKitButtonData(
+                                      iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.clock),
+                                      onPressed: () async {
+                                        final date = await showUiKitCalendarDialog(context, firstDate: _selectedDateRange.start);
+                                        if (date != null) {
+                                          setState(() {
+                                            _selectedDateRange = _selectedDateRange.copyWith(start: date);
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SpacingFoundation.horizontalSpace16,
+                          Expanded(
+                            child: WebFormField(
+                              isRequired: true,
+                              title: 'End date',
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      DateFormat('MMM dd, yyyy').format(_selectedDateRange.end),
+                                      style: theme.boldTextTheme.body,
+                                    ),
+                                  ),
+                                  SpacingFoundation.horizontalSpace8,
+                                  context.iconButtonNoPadding(
+                                    data: BaseUiKitButtonData(
+                                      iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.clock),
+                                      onPressed: () async {
+                                        final date = await showUiKitCalendarDialog(context, firstDate: _selectedDateRange.end);
+                                        if (date != null) {
+                                          setState(() {
+                                            _selectedDateRange = _selectedDateRange.copyWith(end: date);
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       // WebFormField(
                       //   title: S.of(context).OpeningHours,
                       //   isRequired: true,
@@ -477,26 +559,28 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           ),
                         ),
                       ),
-                      // SpacingFoundation.verticalSpace24,
-                      // WebFormField(
-                      //   title: 'Phone',
-                      //   child: UiKitInputFieldNoIcon(
-                      //     controller: _phoneController,
-                      //     hintText: 'Enter phone',
-                      //     fillColor: theme.colorScheme.surface1,
-                      //     borderRadius: BorderRadiusFoundation.all12,
-                      //   ),
-                      // ),
-                      // SpacingFoundation.verticalSpace24,
-                      // WebFormField(
-                      //   title: 'Website',
-                      //   child: UiKitInputFieldNoIcon(
-                      //     controller: _websiteController,
-                      //     hintText: 'Enter website',
-                      //     fillColor: theme.colorScheme.surface1,
-                      //     borderRadius: BorderRadiusFoundation.all12,
-                      //   ),
-                      // ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        isRequired: true,
+                        title: 'Phone',
+                        child: UiKitInputFieldNoIcon(
+                          controller: _phoneController,
+                          hintText: 'Enter phone',
+                          fillColor: theme.colorScheme.surface1,
+                          borderRadius: BorderRadiusFoundation.all12,
+                        ),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      WebFormField(
+                        isRequired: true,
+                        title: 'Website',
+                        child: UiKitInputFieldNoIcon(
+                          controller: _websiteController,
+                          hintText: 'Enter website',
+                          fillColor: theme.colorScheme.surface1,
+                          borderRadius: BorderRadiusFoundation.all12,
+                        ),
+                      ),
                       SpacingFoundation.verticalSpace24,
                       SizedBox(
                         height: 1,
@@ -563,6 +647,10 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                             title: _titleController.text,
                                             description: widget.descriptionController.text,
                                             location: _addressController.text,
+                                            startDate: _selectedDateRange.start,
+                                            endDate: _selectedDateRange.end,
+                                            website: _websiteController.text,
+                                            phone: _phoneController.text,
                                             media: [..._photos, ..._videos],
                                           );
                                         });

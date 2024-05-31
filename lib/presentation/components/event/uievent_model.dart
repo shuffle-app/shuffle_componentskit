@@ -14,7 +14,8 @@ class UiEventModel extends Advertisable {
   String? scheduleString;
   String? contentType;
   String? currency;
-  DateTime? date;
+  DateTime? startDate;
+  DateTime? endDate;
   dynamic schedule;
   String? description;
   String? location;
@@ -55,7 +56,8 @@ class UiEventModel extends Advertisable {
     this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
-    this.date,
+    this.startDate,
+    this.endDate,
     this.niche,
     this.currency,
     this.schedule,
@@ -95,7 +97,7 @@ class UiEventModel extends Advertisable {
     this.title,
     this.favorite,
     this.owner,
-    this.date,
+    this.startDate,
     this.reviewStatus,
     this.contentType,
     this.scheduleString,
@@ -174,7 +176,8 @@ class UiEventModel extends Advertisable {
     bool? favorite,
     bool? isRecurrent,
     String? scheduleString,
-    DateTime? date,
+    DateTime? startDate,
+    DateTime? endDate,
     String? description,
     String? location,
     String? eventType,
@@ -200,7 +203,8 @@ class UiEventModel extends Advertisable {
         favorite: favorite ?? this.favorite,
         isRecurrent: isRecurrent ?? this.isRecurrent,
         scheduleString: scheduleString ?? this.scheduleString,
-        date: date ?? this.date,
+        startDate: startDate ?? this.startDate,
+        endDate: endDate ?? this.endDate,
         description: description ?? this.description,
         location: location ?? this.location,
         eventType: eventType ?? this.eventType,
@@ -215,6 +219,6 @@ class UiEventModel extends Advertisable {
         weekdays: weekdays ?? this.weekdays,
         currency: currency ?? this.currency,
         schedule: schedule ?? this.schedule,
-        reviewStatus: reviewStatus?? this.reviewStatus,
+        reviewStatus: reviewStatus ?? this.reviewStatus,
       );
 }

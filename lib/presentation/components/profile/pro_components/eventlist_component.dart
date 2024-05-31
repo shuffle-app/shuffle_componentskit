@@ -10,8 +10,7 @@ class EventlistComponent extends StatelessWidget {
   final Function(UiEventModel) onDelete;
   final bool isArchive;
 
-  EventlistComponent(
-      {super.key, required this.events, required this.onTap, required this.onDelete, this.isArchive = false});
+  EventlistComponent({super.key, required this.events, required this.onTap, required this.onDelete, this.isArchive = false});
 
   final GlobalKey<AnimatedListState> _animatedListKey = GlobalKey<AnimatedListState>();
 
@@ -27,8 +26,8 @@ class EventlistComponent extends StatelessWidget {
       childrenCount: events.isEmpty ? 1 : events.length,
       childrenBuilder: (context, index) {
         if (events.isEmpty) {
-          return Text(S.of(context).NothingFound, style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(
-              horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8);
+          return Text(S.of(context).NothingFound, style: theme?.boldTextTheme.caption1Bold)
+              .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8);
         }
 
         final event = events[index];
@@ -70,9 +69,9 @@ class EventlistComponent extends StatelessWidget {
                               event.title ?? '',
                               style: theme?.boldTextTheme.caption1Bold,
                             ),
-                            subtitle: event.date != null
+                            subtitle: event.startDate != null
                                 ? Text(
-                                    DateFormat('MMMM d').format(event.date!),
+                                    DateFormat('MMMM d').format(event.startDate!),
                                     style: theme?.boldTextTheme.caption1Medium.copyWith(
                                       color: theme.colorScheme.darkNeutral500,
                                     ),
