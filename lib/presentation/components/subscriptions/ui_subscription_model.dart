@@ -11,6 +11,8 @@ class UiSubscriptionModel {
   final List<String> subscriptionFeatures;
   final UserTileType userType;
   final Widget? additionalInfo;
+  final String termsOfServiceUrl;
+  final String privacyPolicyUrl;
 
   UiSubscriptionModel({
     required this.userName,
@@ -21,5 +23,7 @@ class UiSubscriptionModel {
     required this.userType,
     this.additionalInfo,
     this.selectedInitialOffer,
+    required this.termsOfServiceUrl,
+    required this.privacyPolicyUrl,
   });
 }

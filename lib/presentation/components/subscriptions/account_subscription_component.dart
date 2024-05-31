@@ -1,5 +1,5 @@
-import 'dart:developer';
-
+import 'dart:io';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/common/subscription_offer_widget.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -125,7 +125,6 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                         ))
                   ],
                 )),
-
           ],
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
@@ -197,6 +196,25 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
             child: Text(
               S.current.RestorePurchase,
             ),
+          ),
+          if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0) ...[
+            SpacingFoundation.verticalSpace8,
+            Text('Cancel any time in ${Platform.isIOS ? 'AppStore' : 'Play Store'}', style: regularTextTheme?.caption3)
+          ],
+          SpacingFoundation.verticalSpace16,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                  onTap: () => launchUrlString(widget.uiModel.termsOfServiceUrl),
+                  child: Text(S.of(context).TermsOfService.toLowerCase(),
+                      style: regularTextTheme?.caption3.copyWith(decoration: TextDecoration.underline))),
+              SpacingFoundation.horizontalSpace8,
+              GestureDetector(
+                  onTap: () => launchUrlString(widget.uiModel.privacyPolicyUrl),
+                  child: Text(S.of(context).PrivacyPolicy.toLowerCase(),
+                      style: regularTextTheme?.caption3.copyWith(decoration: TextDecoration.underline))),
+            ],
           ),
           SpacingFoundation.verticalSpace24,
         ],

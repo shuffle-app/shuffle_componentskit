@@ -8,6 +8,8 @@ class UiCompanySubscriptionModel {
   final List<SubscriptionOfferModel> offers;
   final SubscriptionOfferModel? selectedInitialOffer;
   final String? offersTitle;
+  final String termsOfServiceUrl;
+  final String privacyPolicyUrl;
 
   UiCompanySubscriptionModel({
     required this.companyName,
@@ -17,5 +19,7 @@ class UiCompanySubscriptionModel {
     required this.offers,
     this.offersTitle,
     this.selectedInitialOffer,
+    required this.termsOfServiceUrl,
+    required this.privacyPolicyUrl,
   });
 }
