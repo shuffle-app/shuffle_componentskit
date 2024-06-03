@@ -48,7 +48,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _typeController = TextEditingController();
   late final TextEditingController _nicheController = TextEditingController();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UiPlaceModel _placeToEdit;
 
   final List<BaseUiKitMedia> _videos = [];
@@ -182,7 +182,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
     final theme = context.uiKitTheme;
 
-    return BlurredAppBarPage(
+    return Form(
+        key: _formKey,
+        child: BlurredAppBarPage(
       title: S.of(context).Place,
       centerTitle: true,
       autoImplyLeading: true,
@@ -231,6 +233,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           label: S.of(context).Title,
+          validator: titleValidator,
           controller: _titleController,
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
@@ -271,6 +274,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         IntrinsicHeight(
           child: UiKitInputFieldNoFill(
             label: S.of(context).Description,
+            validator: descriptionValidator,
             controller: _descriptionController,
             expands: true,
           ),
@@ -319,12 +323,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.url,
           label: S.of(context).Website,
+          validator: websiteValidator,
           controller: _websiteController,
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.phone,
           label: S.of(context).Phone,
+          validator: phoneNumberValidator,
           controller: _phoneController,
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
@@ -495,6 +501,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               fit: ButtonFit.fitWidth,
               text: S.of(context).Save.toUpperCase(),
               onPressed: () {
+                _formKey.currentState?.validate();
                 _placeToEdit.title = _titleController.text;
                 _placeToEdit.website = _websiteController.text;
                 _placeToEdit.phone = _phoneController.text;
@@ -507,6 +514,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ),
         ).paddingSymmetric(horizontal: horizontalPadding)
       ],
-    );
+    ));
   }
 }

@@ -50,7 +50,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _nicheController = TextEditingController();
-  late final GlobalKey _formKey = GlobalKey<FormState>();
+  late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
 
@@ -187,6 +187,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitInputFieldNoFill(
             label: S.of(context).Title,
             controller: _titleController,
+            validator: titleValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
@@ -207,6 +208,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               label: S.of(context).Description,
               controller: _descriptionController,
               expands: true,
+              validator: descriptionValidator,
             ),
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
@@ -245,12 +247,14 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             keyboardType: TextInputType.url,
             label: S.of(context).Website,
             controller: _websiteController,
+            validator: websiteValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
             keyboardType: TextInputType.phone,
             label: S.of(context).Phone,
             controller: _phoneController,
+            validator: phoneNumberValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
@@ -480,7 +484,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               _eventToEdit.scheduleString!,
               style: theme?.boldTextTheme.body,
               textAlign: TextAlign.center,
-            )
+            ).paddingSymmetric(horizontal: horizontalPadding)
           ],
           SpacingFoundation.verticalSpace24,
           SafeArea(
@@ -490,6 +494,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 text: S.of(context).Save.toUpperCase(),
                 fit: ButtonFit.fitWidth,
                 onPressed: () {
+                  _formKey.currentState?.validate();
                   _eventToEdit.title = _titleController.text;
                   _eventToEdit.description = _descriptionController.text;
                   _eventToEdit.media = [..._photos, ..._videos];
