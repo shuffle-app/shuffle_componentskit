@@ -81,14 +81,12 @@ class _EventComponentState extends State<EventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
             version: '0',
             pageBuilderType: PageBuilderType.page,
-            positionModel:
-                PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
+            positionModel: PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
@@ -98,7 +96,7 @@ class _EventComponentState extends State<EventComponent> {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return ListView(
-      physics: const ClampingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       addAutomaticKeepAlives: false,
       children: [
         SpacingFoundation.verticalSpace8,
@@ -116,7 +114,7 @@ class _EventComponentState extends State<EventComponent> {
                       : AlignmentDirectional.topStart,
                   children: [
                     SizedBox(
-                      width: 1.sw - (horizontalMargin*2 + 35.w),
+                      width: 1.sw - (horizontalMargin * 2 + 35.w),
                       child: AutoSizeText(
                         widget.event.title!,
                         minFontSize: 18.w,
@@ -132,10 +130,7 @@ class _EventComponentState extends State<EventComponent> {
                         right: 0,
                         child: IconButton(
                           icon: ImageWidget(
-                              iconData: ShuffleUiKitIcons.pencil,
-                              color: Colors.white,
-                              height: 20.h,
-                              fit: BoxFit.fitHeight),
+                              iconData: ShuffleUiKitIcons.pencil, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
                           onPressed: () => widget.onEditPressed?.call(),
                         ),
                       )
@@ -202,7 +197,6 @@ class _EventComponentState extends State<EventComponent> {
                           );
                         },
                       ),
-
                       blurValue: 25,
                     ),
                 ],
@@ -219,8 +213,7 @@ class _EventComponentState extends State<EventComponent> {
         SpacingFoundation.verticalSpace14,
         if (widget.event.description != null) ...[
           RepaintBoundary(
-              child: DescriptionWidget(description: widget.event.description!)
-                  .paddingSymmetric(horizontal: horizontalMargin)),
+              child: DescriptionWidget(description: widget.event.description!).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16
         ],
         SpacingFoundation.verticalSpace16,
