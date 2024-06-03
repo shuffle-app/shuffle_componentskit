@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter/material.dart';
@@ -177,6 +178,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
           context.gradientButton(
             data: BaseUiKitButtonData(
               loading: _isLoading,
+              autoSizeGroup: AutoSizeGroup(),
               fit: ButtonFit.fitWidth,
               text: S
                   .of(context)
@@ -191,7 +193,6 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),
-          // SpacingFoundation.verticalSpace16,
           TextButton(
             onPressed: widget.onRestorePurchase,
             child: Text(
