@@ -5,23 +5,23 @@ import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class AddInfluencerFeedbackComponent extends StatefulWidget {
-  final UiProfileModel uiProfileModel;
+  final UiUniversalModel? uiUniversalModel;
+  final UserTileType userTileType;
   final TextEditingController feedbackTextController;
   final TextEditingController topTitleTextController;
   final ValueChanged<ReviewUiModel>? onConfirm;
-  final ReviewUiModel? reviewUiModel;
   final bool? personalRespectToggled;
   final bool? addToPersonalTopToggled;
 
   const AddInfluencerFeedbackComponent({
     Key? key,
-    required this.uiProfileModel,
-    this.reviewUiModel,
     required this.feedbackTextController,
     required this.topTitleTextController,
     this.onConfirm,
     this.personalRespectToggled,
     this.addToPersonalTopToggled,
+    this.uiUniversalModel,
+    required this.userTileType,
   }) : super(key: key);
 
   @override
@@ -31,20 +31,17 @@ class AddInfluencerFeedbackComponent extends StatefulWidget {
 
 class _AddInfluencerFeedbackComponentState
     extends State<AddInfluencerFeedbackComponent> {
-  late bool personalRespectToggled;
-  late bool addToPersonalTopToggled;
+  bool? personalRespectToggled;
+  bool? addToPersonalTopToggled;
   int rating = 0;
-  ValueChanged<int>? onRatingChanged;
 
   @override
   void initState() {
-    personalRespectToggled = widget.personalRespectToggled ?? false;
-    addToPersonalTopToggled = widget.addToPersonalTopToggled ?? false;
-    onRatingChanged = (value) {
-      setState(() {
-        rating = value;
-      });
-    };
+    if (widget.userTileType == UserTileType.influencer) {
+      personalRespectToggled = widget.personalRespectToggled ?? false;
+      addToPersonalTopToggled = widget.addToPersonalTopToggled ?? false;
+    }
+
     super.initState();
   }
 
@@ -67,20 +64,25 @@ class _AddInfluencerFeedbackComponentState
               context.userAvatar(
                 size: UserAvatarSize.x40x40,
                 type: UserTileType.ordinary,
-                userName: widget.uiProfileModel.name ?? 'At.mosphere',
-                imageUrl: widget.uiProfileModel.avatarUrl ??
-                    GraphicsFoundation.instance.png.place.path,
+                userName: widget.uiUniversalModel?.title ?? '',
+                imageUrl: widget.uiUniversalModel?.media.isNotEmpty ?? false
+                    ? widget.uiUniversalModel?.media.first.link
+                    : null,
               ),
               SpacingFoundation.horizontalSpace12,
               Text(
-                widget.uiProfileModel.name ?? 'At.mosphere',
+                widget.uiUniversalModel?.title ?? '',
                 style: boldTextTheme?.title2,
               ),
             ],
           ),
           SpacingFoundation.verticalSpace24,
           UiKitRatingBarWithStars(
-            onRatingChanged: onRatingChanged,
+            onRatingChanged: (value) {
+              setState(() {
+                rating = value;
+              });
+            },
           ),
           SpacingFoundation.verticalSpace24,
           UiKitTitledWrappedInput(
@@ -95,85 +97,87 @@ class _AddInfluencerFeedbackComponentState
             popOverMessage: S.current.AddInfluencerFeedbackPopOverText,
           ),
           SpacingFoundation.verticalSpace24,
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Text(
-                  S.current.PersonalRespect,
-                  style: boldTextTheme?.caption1Medium,
+          if (widget.userTileType == UserTileType.influencer) ...[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Text(
+                    S.current.PersonalRespect,
+                    style: boldTextTheme?.caption1Medium,
+                  ),
                 ),
-              ),
-              SpacingFoundation.horizontalSpace12,
-              UiKitGradientSwitch(
-                switchedOn: personalRespectToggled,
-                onChanged: (value) {
-                  setState(() {
-                    personalRespectToggled = value;
-                  });
-                },
-              ),
-            ],
-          ),
-          SpacingFoundation.verticalSpace24,
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Text(
-                  S.current.AddToPersonalTop,
-                  style: boldTextTheme?.caption1Medium,
+                SpacingFoundation.horizontalSpace12,
+                UiKitGradientSwitch(
+                  switchedOn: personalRespectToggled ?? false,
+                  onChanged: (value) {
+                    setState(() {
+                      personalRespectToggled = value;
+                    });
+                  },
                 ),
-              ),
-              SpacingFoundation.horizontalSpace12,
-              UiKitGradientSwitch(
-                switchedOn: addToPersonalTopToggled,
-                onChanged: (value) {
-                  if (value) {
-                    showUiKitGeneralFullScreenDialog(
-                      context,
-                      GeneralDialogData(
-                        isWidgetScrollable: false,
-                        topPadding: 0.6.sh,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              S.current.TitleYourTop,
-                              style: boldTextTheme?.subHeadline,
-                            ),
-                            SpacingFoundation.verticalSpace24,
-                            UiKitSymbolsCounterInputField(
-                                hintText: S.current.Title,
-                                controller: widget.topTitleTextController,
-                                enabled: true,
-                                obscureText: false,
-                                minLines: 1,
-                                maxLines: 1,
-                                maxSymbols: 100),
-                            SpacingFoundation.verticalSpace24,
-                            context.gradientButton(
-                              data: BaseUiKitButtonData(
-                                fit: ButtonFit.fitWidth,
-                                text: S.current.Confirm,
-                                onPressed: () {
-                                  context.pop();
-                                },
+              ],
+            ),
+            SpacingFoundation.verticalSpace24,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Text(
+                    S.current.AddToPersonalTop,
+                    style: boldTextTheme?.caption1Medium,
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace12,
+                UiKitGradientSwitch(
+                  switchedOn: addToPersonalTopToggled ?? false,
+                  onChanged: (value) {
+                    if (value) {
+                      showUiKitGeneralFullScreenDialog(
+                        context,
+                        GeneralDialogData(
+                          isWidgetScrollable: false,
+                          topPadding: 0.6.sh,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                S.current.TitleYourTop,
+                                style: boldTextTheme?.subHeadline,
                               ),
-                            )
-                          ],
-                        ).paddingAll(16),
-                      ),
-                    );
-                  }
-                  setState(() {
-                    addToPersonalTopToggled = value;
-                  });
-                },
-              ),
-            ],
-          ),
-          SpacingFoundation.verticalSpace24,
+                              SpacingFoundation.verticalSpace24,
+                              UiKitSymbolsCounterInputField(
+                                  hintText: S.current.Title,
+                                  controller: widget.topTitleTextController,
+                                  enabled: true,
+                                  obscureText: false,
+                                  minLines: 1,
+                                  maxLines: 1,
+                                  maxSymbols: 100),
+                              SpacingFoundation.verticalSpace24,
+                              context.gradientButton(
+                                data: BaseUiKitButtonData(
+                                  fit: ButtonFit.fitWidth,
+                                  text: S.current.Confirm,
+                                  onPressed: () {
+                                    context.pop();
+                                  },
+                                ),
+                              )
+                            ],
+                          ).paddingAll(16),
+                        ),
+                      );
+                    }
+                    setState(() {
+                      addToPersonalTopToggled = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            SpacingFoundation.verticalSpace24,
+          ]
         ],
       ),
       bottomNavigationBar: KeyboardVisibilityBuilder(
@@ -202,15 +206,15 @@ class _AddInfluencerFeedbackComponentState
                                 widget.onConfirm?.call(
                                   ReviewUiModel(
                                     isAddToPersonalTop: addToPersonalTopToggled,
-                                    personalTopTitle: addToPersonalTopToggled
-                                        ? widget.topTitleTextController.text
-                                        : null,
+                                    personalTopTitle:
+                                        (addToPersonalTopToggled ?? false)
+                                            ? widget.topTitleTextController.text
+                                            : null,
                                     isPersonalRespect: personalRespectToggled,
                                     rating: rating,
                                     reviewDescription:
                                         widget.feedbackTextController.text,
                                     reviewTime: DateTime.now(),
-                                    userType: UserTileType.influencer,
                                   ),
                                 );
                               }

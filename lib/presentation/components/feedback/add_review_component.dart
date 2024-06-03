@@ -5,22 +5,19 @@ import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class AddReviewComponent extends StatelessWidget {
-  final ValueChanged<ReviewUiModel>? onConfirm;
+  final ValueChanged<ReviewUiModel> onConfirm;
   final UiProfileModel profileModel;
-  final ReviewUiModel? reviewUiModel;
-  final String? feedbackDate;
-  final int? rating;
-  final UserTileType feedbackOwnerType;
+  final String feedbackDate;
+  final int rating;
   final TextEditingController reviewController;
 
   const AddReviewComponent({
     Key? key,
-    required this.feedbackOwnerType,
+
     required this.reviewController,
-    this.onConfirm,
-    required this.profileModel,
-    this.feedbackDate,
-    this.reviewUiModel,
+  required  this.onConfirm,
+    required this.profileModel,required
+    this.feedbackDate,required
     this.rating,
   }) : super(key: key);
 
@@ -28,12 +25,15 @@ class AddReviewComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     Widget feedbackOwnerAccountMark = const SizedBox.shrink();
-    if (feedbackOwnerType == UserTileType.influencer)
+    if (profileModel.userTileType == UserTileType.influencer) {
       feedbackOwnerAccountMark = InfluencerAccountMark();
-    if (feedbackOwnerType == UserTileType.pro)
+    }
+    if (profileModel.userTileType == UserTileType.pro) {
       feedbackOwnerAccountMark = ProAccountMark();
-    if (feedbackOwnerType == UserTileType.premium)
+    }
+    if (profileModel.userTileType == UserTileType.premium) {
       feedbackOwnerAccountMark = PremiumAccountMark();
+    }
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -72,14 +72,14 @@ class AddReviewComponent extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      feedbackDate ?? '',
+                      feedbackDate ,
                       style: boldTextTheme?.caption1Medium,
                     ),
                   ],
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
-              UiKitRatingBadge(rating: rating ?? 0),
+              UiKitRatingBadge(rating: rating ),
             ],
           ),
           SpacingFoundation.verticalSpace24,
@@ -120,12 +120,11 @@ class AddReviewComponent extends StatelessWidget {
                         text: S.current.Confirm,
                         onPressed: reviewController.text.isNotEmpty
                             ? () {
-                                onConfirm?.call(
+                                onConfirm.call(
                                   ReviewUiModel(
-                                    rating: rating ?? 0,
+                                    rating: rating ,
                                     reviewDescription: reviewController.text,
                                     reviewTime: DateTime.now(),
-                                    userType: feedbackOwnerType,
                                   ),
                                 );
                               }

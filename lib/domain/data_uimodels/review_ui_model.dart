@@ -1,10 +1,7 @@
-import 'package:shuffle_uikit/shuffle_uikit.dart';
-
 class ReviewUiModel {
   final int rating;
   final String reviewDescription;
   final DateTime reviewTime;
-  final UserTileType userType;
   final bool? isPersonalRespect;
   final bool? isAddToPersonalTop;
   final String? personalTopTitle;
@@ -14,7 +11,6 @@ class ReviewUiModel {
     required this.rating,
     required this.reviewDescription,
     required this.reviewTime,
-    required this.userType,
     this.isPersonalRespect,
     this.isAddToPersonalTop,
     this.personalTopTitle,
@@ -28,7 +24,6 @@ class ReviewUiModel {
     rating: $rating,
     reviewDescription: $reviewDescription,
     reviewTime: $reviewTime,
-    userType: $userType,
     isPersonalRespect: $isPersonalRespect,
     isAddToPersonalTop: $isAddToPersonalTop,
     personalTopTitle: $personalTopTitle
