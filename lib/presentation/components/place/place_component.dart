@@ -239,7 +239,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
           },
         ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         if (widget.isCreateEventAvaliable)
-          FutureBuilder(
+          FutureBuilder<List<UiEventModel>>(
             future: widget.events,
             builder: (context, snapshot) => UiKitCardWrapper(
               child: Column(
@@ -326,7 +326,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
             ),
           )
         else
-          FutureBuilder(
+          FutureBuilder<List<UiEventModel>>(
             future: widget.events,
             builder: (context, snapshot) => Row(
               mainAxisSize: MainAxisSize.max,
@@ -334,22 +334,21 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 final AutoSizeGroup group = AutoSizeGroup();
                 log('here we are building ${snapshot.data?.length ?? 0} events', name: 'PlaceComponent');
 
-                final tempSorted = List.from(snapshot.data ?? []);
+                final List<UiEventModel> tempSorted = List.from(snapshot.data ?? []);
                 if (tempSorted.isNotEmpty) {
                   tempSorted.sort((a, b) => (a.startDate ?? DateTime.now()).compareTo(b.startDate ?? DateTime.now()));
                 }
 
-                final closestEvent = tempSorted.lastOrNull;
-
-                log('here we have a closest event $closestEvent and tempSorted ${tempSorted.length}', name: 'PlaceComponent');
+                final closestEvent = tempSorted.firstOrNull;
 
                 final Duration daysToEvent = (closestEvent?.startDate ?? DateTime.now()).difference(DateTime.now());
 
                 return [
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
-                      value:
-                          closestEvent == null ? 'none' : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
+                      value: closestEvent == null
+                          ? 'none'
+                          : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
                       group: group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
                       action: closestEvent == null
