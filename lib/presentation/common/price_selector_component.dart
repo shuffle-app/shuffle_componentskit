@@ -66,7 +66,7 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
       widget.priceRangeController1.text,
       widget.priceRangeController2.text,
       _currency.value,
-      _averageIsSelected,
+      !_averageIsSelected,
     );
   }
 
@@ -110,12 +110,12 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
             Row(
               children: [
                 GestureDetector(
-                  child: UiKitRadio(selected: _averageIsSelected),
+                  child: UiKitRadio(selected: !_averageIsSelected),
                   onTap: () {
                     _priceRangeController2IsLess();
 
                     setState(() {
-                      _averageIsSelected = true;
+                      _averageIsSelected = false;
                     });
                     _submit();
                   },
@@ -132,8 +132,8 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
               children: [
                 Expanded(
                   child: UiKitInputFieldNoIcon(
-                    enabled: _averageIsSelected,
-                    textColor: _inputTextColor(_averageIsSelected, theme),
+                    enabled: !_averageIsSelected,
+                    textColor: _inputTextColor(!_averageIsSelected, theme),
                     hintText: _getHintText(widget.initialPriceRange1),
                     controller: widget.priceAverageController,
                     fillColor: theme?.colorScheme.surface3,
@@ -149,10 +149,10 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
             Row(
               children: [
                 GestureDetector(
-                  child: UiKitRadio(selected: !_averageIsSelected),
+                  child: UiKitRadio(selected: _averageIsSelected),
                   onTap: () {
                     setState(() {
-                      _averageIsSelected = false;
+                      _averageIsSelected = true;
                     });
                     _submit();
                   },
@@ -170,8 +170,8 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
               children: [
                 Expanded(
                   child: UiKitInputFieldNoIcon(
-                    textColor: _inputTextColor(!_averageIsSelected, theme),
-                    enabled: !_averageIsSelected,
+                    textColor: _inputTextColor(_averageIsSelected, theme),
+                    enabled: _averageIsSelected,
                     hintText: _getHintText(widget.initialPriceRange2),
                     controller: widget.priceRangeController1,
                     fillColor: theme?.colorScheme.surface3,
@@ -201,8 +201,8 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
                   child: Form(
                     key: _formKey,
                     child: UiKitInputFieldNoIcon(
-                      textColor: _inputTextColor(!_averageIsSelected, theme),
-                      enabled: !_averageIsSelected,
+                      textColor: _inputTextColor(_averageIsSelected, theme),
+                      enabled: _averageIsSelected,
                       hintText: widget.initialPriceRange2 ?? '500',
                       controller: widget.priceRangeController2,
                       inputFormatters: [_textInputFormaterPriceSelector],

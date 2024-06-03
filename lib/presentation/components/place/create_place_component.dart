@@ -49,8 +49,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _typeController = TextEditingController();
   late final TextEditingController _nicheController = TextEditingController();
 
-  late bool _averagePriceSelected;
-
   late UiPlaceModel _placeToEdit;
 
   final List<BaseUiKitMedia> _videos = [];
@@ -76,7 +74,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _priceController.text = widget.placeToEdit?.price ?? '';
     _typeController.text = widget.placeToEdit?.placeType ?? '';
     _nicheController.text = widget.placeToEdit?.niche ?? '';
-    _averagePriceSelected = _priceController.text.contains('-');
   }
 
   _onVideoDeleted(int index) {
@@ -346,7 +343,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
                   useRootNavigator: false,
                   child: PriceSelectorComponent(
-                    averagePriceSelected: _averagePriceSelected,
+                    averagePriceSelected: _priceController.text.contains('-'),
                     initialPriceRange1: _priceController.text.split('-').first,
                     initialPriceRange2:
                         _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
@@ -362,7 +359,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           }
                           _placeToEdit.currency = currency;
                         }
-                        _averagePriceSelected = averageSelected;
                       });
                     },
                   ),

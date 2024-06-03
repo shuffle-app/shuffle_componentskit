@@ -52,8 +52,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _nicheController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
-  late bool _averagePriceSelected;
-
   late UiEventModel _eventToEdit;
 
   final List<BaseUiKitMedia> _videos = [];
@@ -73,7 +71,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _nicheController.text = widget.eventToEdit?.niche ?? '';
-    _averagePriceSelected = _priceController.text.contains('-');
   }
 
   _onVideoDeleted(int index) {
@@ -271,7 +268,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
                     useRootNavigator: false,
                     child: PriceSelectorComponent(
-                      averagePriceSelected: _averagePriceSelected,
+                      averagePriceSelected: _priceController.text.contains('-'),
                       initialPriceRange1: _priceController.text.split('-').first,
                       initialPriceRange2:
                           _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
@@ -287,11 +284,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                             }
                             _eventToEdit.currency = currency;
                           }
-                          _averagePriceSelected = averageSelected;
                         });
 
                         FocusManager.instance.primaryFocus?.unfocus();
-                        _averagePriceSelected = averageSelected;
                       },
                     ),
                   ),
