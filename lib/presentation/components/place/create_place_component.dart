@@ -89,7 +89,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -172,7 +173,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -335,20 +337,33 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
             ],
             onTap: () {
-              context.push(PriceSelectorComponent(
-                initialPrice1: _priceController.text.split('-').first,
-                initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                initialCurrency: _placeToEdit.currency,
-                onSubmit: (price1, price2, currency) {
-                  setState(() {
-                    _priceController.text = price1;
-                    if (price2.isNotEmpty) {
-                      _priceController.text += '-$price2';
-                    }
-                    _placeToEdit.currency = currency;
-                  });
-                },
-              ));
+              showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    isPriceRangeSelected: _priceController.text.contains('-'),
+                    initialPriceRange1: _priceController.text.split('-').first,
+                    initialPriceRange2:
+                        _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                    initialCurrency: _placeToEdit.currency,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                      setState(() {
+                        if (averageSelected) {
+                          _priceController.text = averagePrice;
+                        } else {
+                          _priceController.text = rangePrice1;
+                          if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                            _priceController.text += '-$rangePrice2';
+                          }
+                          _placeToEdit.currency = currency;
+                        }
+                      });
+                    },
+                  ),
+                ),
+              );
             }).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(

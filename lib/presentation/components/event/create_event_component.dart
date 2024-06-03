@@ -24,17 +24,18 @@ class CreateEventComponent extends StatefulWidget {
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
-  const CreateEventComponent(
-      {super.key,
-      this.eventToEdit,
-      this.getLocation,
-      this.onEventDeleted,
-      required this.onEventCreated,
-      this.onCategoryChanged,
-      this.onNicheChanged,
-      required this.propertiesOptions,
-      required this.availableTimeTemplates,
-      this.onTimeTemplateCreated});
+  const CreateEventComponent({
+    super.key,
+    this.eventToEdit,
+    this.getLocation,
+    this.onEventDeleted,
+    required this.onEventCreated,
+    this.onCategoryChanged,
+    this.onNicheChanged,
+    required this.propertiesOptions,
+    required this.availableTimeTemplates,
+    this.onTimeTemplateCreated,
+  });
 
   @override
   State<CreateEventComponent> createState() => _CreateEventComponentState();
@@ -85,7 +86,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -155,7 +157,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -259,22 +262,35 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               ],
               controller: _priceController,
               onTap: () {
-                context.push(PriceSelectorComponent(
-                  initialPrice1: _priceController.text.split('-').first,
-                  initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                  initialCurrency: _eventToEdit.currency,
-                  onSubmit: (price1, price2, currency) {
-                    setState(() {
-                      _priceController.text = price1;
-                      if (price2.isNotEmpty) {
-                        _priceController.text += '-$price2';
-                      }
-                      _eventToEdit.currency = currency;
-                    });
+                showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                    useRootNavigator: false,
+                    child: PriceSelectorComponent(
+                      isPriceRangeSelected: _priceController.text.contains('-'),
+                      initialPriceRange1: _priceController.text.split('-').first,
+                      initialPriceRange2:
+                          _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                      initialCurrency: _eventToEdit.currency,
+                      onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                        setState(() {
+                          if (averageSelected) {
+                            _priceController.text = averagePrice;
+                          } else {
+                            _priceController.text = rangePrice1;
+                            if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                              _priceController.text += '-$rangePrice2';
+                            }
+                            _eventToEdit.currency = currency;
+                          }
+                        });
 
-                    FocusManager.instance.primaryFocus?.unfocus();
-                  },
-                ));
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                    ),
+                  ),
+                );
               }).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
@@ -401,7 +417,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 )).paddingSymmetric(horizontal: horizontalPadding))
           ],
           SpacingFoundation.verticalSpace24,
-          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2).paddingSymmetric(horizontal: horizontalPadding),
+          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
+              .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
             tabs: [UiKitCustomTab(height: 20.h, title: 'Single'), UiKitCustomTab(height: 20.h, title: 'Cyclic')],
