@@ -1,41 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/review_ui_model.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class AddReviewComponent extends StatelessWidget {
-  final VoidCallback? onConfirm;
-  final int? feedbackRating;
-  final String feedbackOwnerName;
-  final String? feedbackOwnerImage;
+  final ValueChanged<ReviewUiModel>? onConfirm;
+  final UiProfileModel profileModel;
+  final ReviewUiModel? reviewUiModel;
   final String? feedbackDate;
+  final int? rating;
   final UserTileType feedbackOwnerType;
   final TextEditingController reviewController;
 
   const AddReviewComponent({
     Key? key,
-    required this.feedbackOwnerName,
     required this.feedbackOwnerType,
     required this.reviewController,
     this.onConfirm,
-    this.feedbackRating,
-    this.feedbackOwnerImage,
+    required this.profileModel,
     this.feedbackDate,
+    this.reviewUiModel,
+    this.rating,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     Widget feedbackOwnerAccountMark = const SizedBox.shrink();
-    if (feedbackOwnerType == UserTileType.influencer) feedbackOwnerAccountMark = InfluencerAccountMark();
-    if (feedbackOwnerType == UserTileType.pro) feedbackOwnerAccountMark = ProAccountMark();
-    if (feedbackOwnerType == UserTileType.premium) feedbackOwnerAccountMark = PremiumAccountMark();
+    if (feedbackOwnerType == UserTileType.influencer)
+      feedbackOwnerAccountMark = InfluencerAccountMark();
+    if (feedbackOwnerType == UserTileType.pro)
+      feedbackOwnerAccountMark = ProAccountMark();
+    if (feedbackOwnerType == UserTileType.premium)
+      feedbackOwnerAccountMark = PremiumAccountMark();
 
     return Scaffold(
       body: BlurredAppBarPage(
         autoImplyLeading: true,
         centerTitle: true,
         title: S.current.AddReview,
-        childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        childrenPadding:
+            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace24,
           Row(
@@ -44,8 +50,9 @@ class AddReviewComponent extends StatelessWidget {
               context.userAvatar(
                 size: UserAvatarSize.x24x24,
                 type: UserTileType.influencer,
-                userName: feedbackOwnerName,
-                imageUrl: feedbackOwnerImage,
+                userName: profileModel.name ?? 'Marry Alliance',
+                imageUrl: profileModel.avatarUrl ??
+                    GraphicsFoundation.instance.png.place.path,
               ),
               SpacingFoundation.horizontalSpace12,
               Expanded(
@@ -57,7 +64,7 @@ class AddReviewComponent extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          feedbackOwnerName,
+                          profileModel.name ?? 'Marry Alliance',
                           style: boldTextTheme?.caption1Bold,
                         ),
                         SpacingFoundation.horizontalSpace8,
@@ -72,7 +79,7 @@ class AddReviewComponent extends StatelessWidget {
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
-              UiKitRatingBadge(rating: feedbackRating?.toInt() ?? 0),
+              UiKitRatingBadge(rating: rating ?? 0),
             ],
           ),
           SpacingFoundation.verticalSpace24,
@@ -111,7 +118,18 @@ class AddReviewComponent extends StatelessWidget {
                     child: context.button(
                       data: BaseUiKitButtonData(
                         text: S.current.Confirm,
-                        onPressed: onConfirm,
+                        onPressed: reviewController.text.isNotEmpty
+                            ? () {
+                                onConfirm?.call(
+                                  ReviewUiModel(
+                                    rating: rating ?? 0,
+                                    reviewDescription: reviewController.text,
+                                    reviewTime: DateTime.now(),
+                                    userType: feedbackOwnerType,
+                                  ),
+                                );
+                              }
+                            : null,
                         fit: ButtonFit.fitWidth,
                       ),
                     ),

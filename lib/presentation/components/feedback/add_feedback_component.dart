@@ -1,22 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/review_ui_model.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class AddFeedbackComponent extends StatelessWidget {
-  final VoidCallback? onConfirm;
-  final String? placeTitle;
-  final String? placeImageUrl;
-  final ValueChanged<int>? onRatingChanged;
+class AddFeedbackComponent extends StatefulWidget {
+  final ValueChanged<ReviewUiModel>? onConfirm;
+  final ReviewUiModel? reviewUiModel;
   final TextEditingController feedbackTextController;
+  final UiProfileModel uiProfileModel;
+
+
 
   const AddFeedbackComponent({
-    Key? key,
+    super.key,
     required this.feedbackTextController,
     this.onConfirm,
-    this.placeImageUrl,
-    this.placeTitle,
-    this.onRatingChanged,
-  }) : super(key: key);
+    this.reviewUiModel,
+    required this.uiProfileModel
+  });
+
+  @override
+  State<AddFeedbackComponent> createState() => _AddFeedbackComponentState();
+}
+
+class _AddFeedbackComponentState extends State<AddFeedbackComponent> {
+  int rating = 0;
+  ValueChanged<int>? onRatingChanged;
+
+  @override
+  void initState() {
+    super.initState();
+    onRatingChanged = (value) {
+      setState(() {
+        rating = value;
+      });
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +45,8 @@ class AddFeedbackComponent extends StatelessWidget {
         centerTitle: true,
         autoImplyLeading: true,
         title: S.current.AddFeedback,
-        childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        childrenPadding:
+            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace24,
           Row(
@@ -34,12 +55,13 @@ class AddFeedbackComponent extends StatelessWidget {
               context.userAvatar(
                 size: UserAvatarSize.x40x40,
                 type: UserTileType.ordinary,
-                userName: placeTitle ?? 'At.mosphere',
-                imageUrl: placeImageUrl ?? GraphicsFoundation.instance.png.place.path,
+                userName: widget.uiProfileModel.name ?? 'At.mosphere',
+                imageUrl: widget.uiProfileModel.avatarUrl ??
+                    GraphicsFoundation.instance.png.place.path,
               ),
               SpacingFoundation.horizontalSpace12,
               Text(
-                placeTitle ?? 'At.mosphere',
+                widget.uiProfileModel.name ?? 'At.mosphere',
                 style: context.uiKitTheme?.boldTextTheme.title1,
               ),
             ],
@@ -52,7 +74,7 @@ class AddFeedbackComponent extends StatelessWidget {
           UiKitTitledWrappedInput(
             title: S.current.AddFeedbackFieldTitle,
             input: UiKitSymbolsCounterInputField(
-              controller: feedbackTextController,
+              controller: widget.feedbackTextController,
               enabled: true,
               hintText: S.current.AddFeedbackFieldHint.toUpperCase(),
               maxSymbols: 500,
@@ -82,11 +104,23 @@ class AddFeedbackComponent extends StatelessWidget {
                     child: context.button(
                       data: BaseUiKitButtonData(
                         text: S.current.Confirm,
-                        onPressed: onConfirm,
+                        onPressed: () {
+                          widget.onConfirm?.call(
+                            ReviewUiModel(
+                              rating: rating,
+                              reviewDescription:
+                                  widget.feedbackTextController.text,
+                              reviewTime: DateTime.now(),
+                              userType: UserTileType.ordinary,
+                            ),
+                          );
+                        },
                         fit: ButtonFit.fitWidth,
                       ),
                     ),
-                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical24),
+                  ).paddingSymmetric(
+                    horizontal: EdgeInsetsFoundation.horizontal16,
+                    vertical: EdgeInsetsFoundation.vertical24),
           );
         },
       ),
