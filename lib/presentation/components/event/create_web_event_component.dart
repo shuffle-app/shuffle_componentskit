@@ -66,7 +66,6 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   final TextEditingController _personPhoneController = TextEditingController();
   final TextEditingController _personPositionController = TextEditingController();
   final TextEditingController _personEmailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
   DateTimeRange _selectedDateRange = DateTimeRange(start: DateTime.now(), end: DateTime.now().add(const Duration(days: 31)));
@@ -92,7 +91,6 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
     _addressController.text = widget.eventToEdit?.location ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
-    _phoneController.text = widget.eventToEdit?.phone ?? '';
     _websiteController.text = widget.eventToEdit?.website ?? '';
     widget.descriptionController.addListener(_checkDescriptionHeightConstraint);
   }
@@ -156,7 +154,6 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
     _personPhoneController.dispose();
     _personPositionController.dispose();
     _personEmailController.dispose();
-    _phoneController.dispose();
     _websiteController.dispose();
     super.dispose();
   }
@@ -399,72 +396,44 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ]),
                       SpacingFoundation.verticalSpace24,
                       //TODO restore editing schedules
-                      Row(
-                        children: [
-                          Expanded(
-                            child: WebFormField(
-                              isRequired: true,
-                              title: 'Start date',
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      DateFormat('MMM dd, yyyy').format(_selectedDateRange.start),
-                                      style: theme.boldTextTheme.body,
-                                    ),
-                                  ),
-                                  SpacingFoundation.horizontalSpace8,
-                                  context.iconButtonNoPadding(
-                                    data: BaseUiKitButtonData(
-                                      iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.clock),
-                                      onPressed: () async {
-                                        final date = await showUiKitCalendarDialog(context, firstDate: _selectedDateRange.start);
-                                        if (date != null) {
-                                          setState(() {
-                                            _selectedDateRange = _selectedDateRange.copyWith(start: date);
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ],
+                      WebFormField(
+                        isRequired: true,
+                        title: 'Start date and End date',
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              DateFormat('MMM dd, yyyy').format(_selectedDateRange.start),
+                              style: theme.boldTextTheme.body,
+                            ),
+                            SpacingFoundation.horizontalSpace4,
+                            Text('-', style: theme.boldTextTheme.body),
+                            SpacingFoundation.horizontalSpace4,
+                            Text(
+                              DateFormat('MMM dd, yyyy').format(_selectedDateRange.end),
+                              style: theme.boldTextTheme.body,
+                            ),
+                            const Spacer(),
+                            context.iconButtonNoPadding(
+                              data: BaseUiKitButtonData(
+                                iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.clock),
+                                onPressed: () async {
+                                  await showUiKitCalendarFromToDialog(
+                                    context,
+                                    (from, to) {
+                                      if (from != null && to != null) {
+                                        setState(() {
+                                          _selectedDateRange = _selectedDateRange.copyWith(start: from, end: to);
+                                        });
+                                      }
+                                    },
+                                    lastDate: DateTime.now().add(const Duration(days: 3650)),
+                                  );
+                                },
                               ),
                             ),
-                          ),
-                          SpacingFoundation.horizontalSpace16,
-                          Expanded(
-                            child: WebFormField(
-                              isRequired: true,
-                              title: 'End date',
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      DateFormat('MMM dd, yyyy').format(_selectedDateRange.end),
-                                      style: theme.boldTextTheme.body,
-                                    ),
-                                  ),
-                                  SpacingFoundation.horizontalSpace8,
-                                  context.iconButtonNoPadding(
-                                    data: BaseUiKitButtonData(
-                                      iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.clock),
-                                      onPressed: () async {
-                                        final date = await showUiKitCalendarDialog(context, firstDate: _selectedDateRange.end);
-                                        if (date != null) {
-                                          setState(() {
-                                            _selectedDateRange = _selectedDateRange.copyWith(end: date);
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       // WebFormField(
                       //   title: S.of(context).OpeningHours,
@@ -561,18 +530,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
-                        isRequired: true,
-                        title: 'Phone',
-                        child: UiKitInputFieldNoIcon(
-                          controller: _phoneController,
-                          hintText: 'Enter phone',
-                          fillColor: theme.colorScheme.surface1,
-                          borderRadius: BorderRadiusFoundation.all12,
-                        ),
-                      ),
-                      SpacingFoundation.verticalSpace24,
-                      WebFormField(
-                        isRequired: true,
+                        isRequired: false,
                         title: 'Website',
                         child: UiKitInputFieldNoIcon(
                           controller: _websiteController,
@@ -650,7 +608,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                             startDate: _selectedDateRange.start,
                                             endDate: _selectedDateRange.end,
                                             website: _websiteController.text,
-                                            phone: _phoneController.text,
+                                            phone: _personPhoneController.text,
                                             media: [..._photos, ..._videos],
                                           );
                                         });
