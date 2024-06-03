@@ -49,6 +49,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _typeController = TextEditingController();
   late final TextEditingController _nicheController = TextEditingController();
 
+  bool _averagePriceSelected = true;
+
   late UiPlaceModel _placeToEdit;
 
   final List<BaseUiKitMedia> _videos = [];
@@ -90,9 +92,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   _onPhotoAddRequested() async {
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb
-        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
-        : ComponentEventModel.fromJson(config['event_edit']);
+    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
     final editedPhotos = await context.push(PhotoListEditingComponent(
       photos: _photos,
       positionModel: model.positionModel,
@@ -173,9 +173,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   @override
   Widget build(BuildContext context) {
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb
-        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
-        : ComponentEventModel.fromJson(config['event_edit']);
+    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
     final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
@@ -186,11 +184,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       autoImplyLeading: true,
       appBarTrailing: (widget.placeToEdit?.id ?? -1) > 0
           ? IconButton(
-              icon: ImageWidget(
-                  iconData: ShuffleUiKitIcons.trash,
-                  color: theme?.colorScheme.inversePrimary,
-                  height: 20.h,
-                  fit: BoxFit.fitHeight),
+              icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: theme?.colorScheme.inversePrimary, height: 20.h, fit: BoxFit.fitHeight),
               onPressed: widget.onPlaceDeleted,
             )
           : null,
@@ -289,9 +283,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       if (model is UiScheduleTimeModel) {
                         setState(() {
                           _placeToEdit.schedule = model;
-                          _placeToEdit.scheduleString = model.weeklySchedule
-                              .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                              .join(', ');
+                          _placeToEdit.scheduleString = model.weeklySchedule.map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}').join(', ');
                         });
                       }
                     },
@@ -335,20 +327,33 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
             ],
             onTap: () {
-              context.push(PriceSelectorComponent(
-                initialPrice1: _priceController.text.split('-').first,
-                initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                initialCurrency: _placeToEdit.currency,
-                onSubmit: (price1, price2, currency) {
-                  setState(() {
-                    _priceController.text = price1;
-                    if (price2.isNotEmpty) {
-                      _priceController.text += '-$price2';
-                    }
-                    _placeToEdit.currency = currency;
-                  });
-                },
-              ));
+              showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    averagePriceSelected: _averagePriceSelected,
+                    initialPriceRange1: _priceController.text.split('-').first,
+                    initialPriceRange2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                    initialCurrency: _placeToEdit.currency,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                      setState(() {
+                        if (averageSelected) {
+                          _priceController.text = averagePrice;
+                        } else {
+                          _priceController.text = rangePrice1;
+                          if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                            _priceController.text += '-$rangePrice2';
+                          }
+                          _placeToEdit.currency = currency;
+                        }
+                        _averagePriceSelected = averageSelected;
+                      });
+                    },
+                  ),
+                ),
+              );
             }).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
@@ -447,8 +452,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             )).paddingSymmetric(horizontal: horizontalPadding)),
         SpacingFoundation.verticalSpace24,
         if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
-          Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
-              .paddingSymmetric(horizontal: horizontalPadding),
+          Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace4,
           GestureDetector(
               behavior: HitTestBehavior.translucent,
