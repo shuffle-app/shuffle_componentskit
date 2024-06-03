@@ -8,20 +8,20 @@ class AddInfluencerFeedbackComponent extends StatefulWidget {
   final UiUniversalModel? uiUniversalModel;
   final UserTileType userTileType;
   final TextEditingController feedbackTextController;
-  final TextEditingController topTitleTextController;
   final ValueChanged<ReviewUiModel>? onConfirm;
-  final bool? personalRespectToggled;
-  final bool? addToPersonalTopToggled;
+  final ReviewUiModel? reviewUiModel;
+  final Future<bool> Function(bool value) onAddToPersonalTopToggled;
+  final Future<bool> Function(bool value) onPersonalRespectToggled;
 
   const AddInfluencerFeedbackComponent({
     Key? key,
     required this.feedbackTextController,
-    required this.topTitleTextController,
     this.onConfirm,
-    this.personalRespectToggled,
-    this.addToPersonalTopToggled,
     this.uiUniversalModel,
+    this.reviewUiModel,
     required this.userTileType,
+    required this.onAddToPersonalTopToggled,
+    required this.onPersonalRespectToggled,
   }) : super(key: key);
 
   @override
@@ -36,10 +36,28 @@ class _AddInfluencerFeedbackComponentState
   int rating = 0;
 
   @override
+  void didUpdateWidget(covariant AddInfluencerFeedbackComponent oldWidget) {
+    if (oldWidget.reviewUiModel != widget.reviewUiModel) {
+      rating = widget.reviewUiModel?.rating ?? 0;
+
+      personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
+      addToPersonalTopToggled =
+          widget.reviewUiModel?.isAddToPersonalTop ?? false;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void initState() {
+    if (widget.reviewUiModel != null) {
+      rating = widget.reviewUiModel?.rating ?? 0;
+      widget.feedbackTextController.text =
+          widget.reviewUiModel?.reviewDescription ?? '';
+    }
     if (widget.userTileType == UserTileType.influencer) {
-      personalRespectToggled = widget.personalRespectToggled ?? false;
-      addToPersonalTopToggled = widget.addToPersonalTopToggled ?? false;
+      personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
+      addToPersonalTopToggled =
+          widget.reviewUiModel?.isAddToPersonalTop ?? false;
     }
 
     super.initState();
@@ -111,9 +129,11 @@ class _AddInfluencerFeedbackComponentState
                 UiKitGradientSwitch(
                   switchedOn: personalRespectToggled ?? false,
                   onChanged: (value) {
-                    setState(() {
-                      personalRespectToggled = value;
-                    });
+                    widget.onAddToPersonalTopToggled(value).then(
+                          (v) => setState(() {
+                            personalRespectToggled = v;
+                          }),
+                        );
                   },
                 ),
               ],
@@ -132,46 +152,11 @@ class _AddInfluencerFeedbackComponentState
                 UiKitGradientSwitch(
                   switchedOn: addToPersonalTopToggled ?? false,
                   onChanged: (value) {
-                    if (value) {
-                      showUiKitGeneralFullScreenDialog(
-                        context,
-                        GeneralDialogData(
-                          isWidgetScrollable: false,
-                          topPadding: 0.6.sh,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                S.current.TitleYourTop,
-                                style: boldTextTheme?.subHeadline,
-                              ),
-                              SpacingFoundation.verticalSpace24,
-                              UiKitSymbolsCounterInputField(
-                                  hintText: S.current.Title,
-                                  controller: widget.topTitleTextController,
-                                  enabled: true,
-                                  obscureText: false,
-                                  minLines: 1,
-                                  maxLines: 1,
-                                  maxSymbols: 100),
-                              SpacingFoundation.verticalSpace24,
-                              context.gradientButton(
-                                data: BaseUiKitButtonData(
-                                  fit: ButtonFit.fitWidth,
-                                  text: S.current.Confirm,
-                                  onPressed: () {
-                                    context.pop();
-                                  },
-                                ),
-                              )
-                            ],
-                          ).paddingAll(16),
-                        ),
-                      );
-                    }
-                    setState(() {
-                      addToPersonalTopToggled = value;
-                    });
+                    widget.onAddToPersonalTopToggled(value).then(
+                          (v) => setState(() {
+                            addToPersonalTopToggled = v;
+                          }),
+                        );
                   },
                 ),
               ],
@@ -206,15 +191,13 @@ class _AddInfluencerFeedbackComponentState
                                 widget.onConfirm?.call(
                                   ReviewUiModel(
                                     isAddToPersonalTop: addToPersonalTopToggled,
-                                    personalTopTitle:
-                                        (addToPersonalTopToggled ?? false)
-                                            ? widget.topTitleTextController.text
-                                            : null,
                                     isPersonalRespect: personalRespectToggled,
                                     rating: rating,
                                     reviewDescription:
                                         widget.feedbackTextController.text,
-                                    reviewTime: DateTime.now(),
+                                    reviewTime:
+                                        widget.reviewUiModel?.reviewTime ??
+                                            DateTime.now(),
                                   ),
                                 );
                               }

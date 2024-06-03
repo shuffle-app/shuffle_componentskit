@@ -200,13 +200,18 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           description: 'description',
                           tags: tags,
                           title: "COMPANY"),
-                      topTitleTextController: TextEditingController(),
+                      onAddToPersonalTopToggled: (value) async {
+                        return value;
+                      },
+                      onPersonalRespectToggled: (value) async {
+                        return value;
+                      },
                       feedbackTextController: TextEditingController(),
                       onConfirm: (value) {
                         debugPrint(value.toString());
                         context.pop();
                       },
-                      userTileType: UserTileType.pro),
+                      userTileType: UserTileType.influencer),
                 ),
               ),
             ),
