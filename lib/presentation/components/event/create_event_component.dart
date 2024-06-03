@@ -268,7 +268,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
                     useRootNavigator: false,
                     child: PriceSelectorComponent(
-                      averagePriceSelected: _priceController.text.contains('-'),
+                      isPriceRangeSelected: _priceController.text.contains('-'),
                       initialPriceRange1: _priceController.text.split('-').first,
                       initialPriceRange2:
                           _priceController.text.contains('-') ? _priceController.text.split('-').last : null,

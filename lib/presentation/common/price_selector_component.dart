@@ -4,7 +4,7 @@ import 'package:shuffle_components_kit/services/navigation_service/navigation_ke
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PriceSelectorComponent extends StatefulWidget {
-  final bool averagePriceSelected;
+  final bool isPriceRangeSelected;
   final String? initialPriceRange1;
   final String? initialPriceRange2;
   final String? initialCurrency;
@@ -19,7 +19,7 @@ class PriceSelectorComponent extends StatefulWidget {
   PriceSelectorComponent({
     super.key,
     required this.onSubmit,
-    required this.averagePriceSelected,
+    required this.isPriceRangeSelected,
     this.initialPriceRange1,
     this.initialPriceRange2,
     this.initialCurrency,
@@ -57,7 +57,7 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
   void initState() {
     super.initState();
     _currency.value = widget.initialCurrency ?? 'AED';
-    _averageIsSelected = widget.averagePriceSelected;
+    _averageIsSelected = widget.isPriceRangeSelected;
   }
 
   void _submit() {
