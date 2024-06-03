@@ -24,17 +24,18 @@ class CreateEventComponent extends StatefulWidget {
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
-  const CreateEventComponent(
-      {super.key,
-      this.eventToEdit,
-      this.getLocation,
-      this.onEventDeleted,
-      required this.onEventCreated,
-      this.onCategoryChanged,
-      this.onNicheChanged,
-      required this.propertiesOptions,
-      required this.availableTimeTemplates,
-      this.onTimeTemplateCreated});
+  const CreateEventComponent({
+    super.key,
+    this.eventToEdit,
+    this.getLocation,
+    this.onEventDeleted,
+    required this.onEventCreated,
+    this.onCategoryChanged,
+    this.onNicheChanged,
+    required this.propertiesOptions,
+    required this.availableTimeTemplates,
+    this.onTimeTemplateCreated,
+  });
 
   @override
   State<CreateEventComponent> createState() => _CreateEventComponentState();
@@ -50,6 +51,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _nicheController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
+
+  bool _averagePriceSelected = true;
 
   late UiEventModel _eventToEdit;
 
@@ -86,9 +89,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   _onPhotoAddRequested() async {
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb
-        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
-        : ComponentEventModel.fromJson(config['event_edit']);
+    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
     final editedPhotos = await context.push(PhotoListEditingComponent(
       photos: _photos,
       positionModel: model.positionModel,
@@ -156,9 +157,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   Widget build(BuildContext context) {
     final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb
-        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
-        : ComponentEventModel.fromJson(config['event_edit']);
+    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
     final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
@@ -171,11 +170,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         autoImplyLeading: true,
         appBarTrailing: (widget.eventToEdit?.id ?? -1) > 0
             ? IconButton(
-                icon: ImageWidget(
-                    iconData: ShuffleUiKitIcons.trash,
-                    color: theme?.colorScheme.inversePrimary,
-                    height: 20.h,
-                    fit: BoxFit.fitHeight),
+                icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: theme?.colorScheme.inversePrimary, height: 20.h, fit: BoxFit.fitHeight),
                 onPressed: widget.onEventDeleted,
               )
             : null,
@@ -259,22 +254,36 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               ],
               controller: _priceController,
               onTap: () {
-                context.push(PriceSelectorComponent(
-                  initialPrice1: _priceController.text.split('-').first,
-                  initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                  initialCurrency: _eventToEdit.currency,
-                  onSubmit: (price1, price2, currency) {
-                    setState(() {
-                      _priceController.text = price1;
-                      if (price2.isNotEmpty) {
-                        _priceController.text += '-$price2';
-                      }
-                      _eventToEdit.currency = currency;
-                    });
+                showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                    useRootNavigator: false,
+                    child: PriceSelectorComponent(
+                      averagePriceSelected: _averagePriceSelected,
+                      initialPriceRange1: _priceController.text.split('-').first,
+                      initialPriceRange2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                      initialCurrency: _eventToEdit.currency,
+                      onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                        setState(() {
+                          if (averageSelected) {
+                            _priceController.text = averagePrice;
+                          } else {
+                            _priceController.text = rangePrice1;
+                            if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                              _priceController.text += '-$rangePrice2';
+                            }
+                            _eventToEdit.currency = currency;
+                          }
+                          _averagePriceSelected = averageSelected;
+                        });
 
-                    FocusManager.instance.primaryFocus?.unfocus();
-                  },
-                ));
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        _averagePriceSelected = averageSelected;
+                      },
+                    ),
+                  ),
+                );
               }).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
@@ -374,8 +383,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               )).paddingSymmetric(horizontal: horizontalPadding)),
           SpacingFoundation.verticalSpace24,
           if (_eventToEdit.eventType != null && _eventToEdit.eventType!.isNotEmpty) ...[
-            Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
-                .paddingSymmetric(horizontal: horizontalPadding),
+            Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -434,16 +442,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         if (model is UiScheduleDatesModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join(', ');
+                            _eventToEdit.scheduleString = model.dailySchedule.map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}').join(', ');
                           });
                         } else if (model is UiScheduleDatesRangeModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join(', ');
+                            _eventToEdit.scheduleString = model.dailySchedule.map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}').join(', ');
                           });
                         }
                       },
