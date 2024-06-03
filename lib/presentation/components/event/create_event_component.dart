@@ -52,7 +52,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _nicheController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
 
-  bool _averagePriceSelected = true;
+  late bool _averagePriceSelected;
 
   late UiEventModel _eventToEdit;
 
@@ -73,6 +73,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _nicheController.text = widget.eventToEdit?.niche ?? '';
+    _averagePriceSelected = _priceController.text.contains('-');
   }
 
   _onVideoDeleted(int index) {
@@ -88,8 +89,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentEventModel model = kIsWeb
+        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
+        : ComponentEventModel.fromJson(config['event_edit']);
     final editedPhotos = await context.push(PhotoListEditingComponent(
       photos: _photos,
       positionModel: model.positionModel,
@@ -156,8 +160,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentEventModel model = kIsWeb
+        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
+        : ComponentEventModel.fromJson(config['event_edit']);
     final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
@@ -170,7 +177,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         autoImplyLeading: true,
         appBarTrailing: (widget.eventToEdit?.id ?? -1) > 0
             ? IconButton(
-                icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: theme?.colorScheme.inversePrimary, height: 20.h, fit: BoxFit.fitHeight),
+                icon: ImageWidget(
+                    iconData: ShuffleUiKitIcons.trash,
+                    color: theme?.colorScheme.inversePrimary,
+                    height: 20.h,
+                    fit: BoxFit.fitHeight),
                 onPressed: widget.onEventDeleted,
               )
             : null,
@@ -262,7 +273,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                     child: PriceSelectorComponent(
                       averagePriceSelected: _averagePriceSelected,
                       initialPriceRange1: _priceController.text.split('-').first,
-                      initialPriceRange2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                      initialPriceRange2:
+                          _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
                       initialCurrency: _eventToEdit.currency,
                       onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
                         setState(() {
@@ -383,7 +395,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               )).paddingSymmetric(horizontal: horizontalPadding)),
           SpacingFoundation.verticalSpace24,
           if (_eventToEdit.eventType != null && _eventToEdit.eventType!.isNotEmpty) ...[
-            Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall).paddingSymmetric(horizontal: horizontalPadding),
+            Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
+                .paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -409,7 +422,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 )).paddingSymmetric(horizontal: horizontalPadding))
           ],
           SpacingFoundation.verticalSpace24,
-          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2).paddingSymmetric(horizontal: horizontalPadding),
+          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
+              .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
             tabs: [UiKitCustomTab(height: 20.h, title: 'Single'), UiKitCustomTab(height: 20.h, title: 'Cyclic')],
@@ -442,12 +456,16 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         if (model is UiScheduleDatesModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule.map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}').join(', ');
+                            _eventToEdit.scheduleString = model.dailySchedule
+                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                .join(', ');
                           });
                         } else if (model is UiScheduleDatesRangeModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule.map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}').join(', ');
+                            _eventToEdit.scheduleString = model.dailySchedule
+                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                .join(', ');
                           });
                         }
                       },

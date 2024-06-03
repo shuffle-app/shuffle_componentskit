@@ -49,7 +49,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _typeController = TextEditingController();
   late final TextEditingController _nicheController = TextEditingController();
 
-  bool _averagePriceSelected = true;
+  late bool _averagePriceSelected;
 
   late UiPlaceModel _placeToEdit;
 
@@ -76,6 +76,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _priceController.text = widget.placeToEdit?.price ?? '';
     _typeController.text = widget.placeToEdit?.placeType ?? '';
     _nicheController.text = widget.placeToEdit?.niche ?? '';
+    _averagePriceSelected = _priceController.text.contains('-');
   }
 
   _onVideoDeleted(int index) {
@@ -91,8 +92,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentEventModel model = kIsWeb
+        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
+        : ComponentEventModel.fromJson(config['event_edit']);
     final editedPhotos = await context.push(PhotoListEditingComponent(
       photos: _photos,
       positionModel: model.positionModel,
@@ -172,8 +176,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentEventModel model = kIsWeb ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page) : ComponentEventModel.fromJson(config['event_edit']);
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentEventModel model = kIsWeb
+        ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
+        : ComponentEventModel.fromJson(config['event_edit']);
     final horizontalPadding = model.positionModel?.horizontalMargin?.toDouble() ?? 0;
 
     final theme = context.uiKitTheme;
@@ -184,7 +191,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       autoImplyLeading: true,
       appBarTrailing: (widget.placeToEdit?.id ?? -1) > 0
           ? IconButton(
-              icon: ImageWidget(iconData: ShuffleUiKitIcons.trash, color: theme?.colorScheme.inversePrimary, height: 20.h, fit: BoxFit.fitHeight),
+              icon: ImageWidget(
+                  iconData: ShuffleUiKitIcons.trash,
+                  color: theme?.colorScheme.inversePrimary,
+                  height: 20.h,
+                  fit: BoxFit.fitHeight),
               onPressed: widget.onPlaceDeleted,
             )
           : null,
@@ -283,7 +294,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       if (model is UiScheduleTimeModel) {
                         setState(() {
                           _placeToEdit.schedule = model;
-                          _placeToEdit.scheduleString = model.weeklySchedule.map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}').join(', ');
+                          _placeToEdit.scheduleString = model.weeklySchedule
+                              .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                              .join(', ');
                         });
                       }
                     },
@@ -335,7 +348,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   child: PriceSelectorComponent(
                     averagePriceSelected: _averagePriceSelected,
                     initialPriceRange1: _priceController.text.split('-').first,
-                    initialPriceRange2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                    initialPriceRange2:
+                        _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
                     initialCurrency: _placeToEdit.currency,
                     onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
                       setState(() {
@@ -452,7 +466,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             )).paddingSymmetric(horizontal: horizontalPadding)),
         SpacingFoundation.verticalSpace24,
         if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
-          Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall).paddingSymmetric(horizontal: horizontalPadding),
+          Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
+              .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace4,
           GestureDetector(
               behavior: HitTestBehavior.translucent,
