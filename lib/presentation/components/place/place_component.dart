@@ -117,7 +117,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
     return ListView(
       addAutomaticKeepAlives: false,
-      physics: const ClampingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       children: [
         SpacingFoundation.verticalSpace16,
         TitleWithAvatar(
