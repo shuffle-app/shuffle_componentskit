@@ -11,7 +11,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -67,7 +68,10 @@ class _MyAppState extends State<MyApp> {
               home: configuration.isLoaded
                   ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
                   : Builder(builder: (c) {
-                      configuration.load(version: '1.0.18').then((_) => Future.delayed(const Duration(seconds: 1))).then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
+                      configuration
+                          .load(version: '1.0.18')
+                          .then((_) => Future.delayed(const Duration(seconds: 1)))
+                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
                       return const Scaffold(body: Center(child: LoadingWidget()));
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
@@ -149,14 +153,17 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
+        title:
+            'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
         // centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SpacingFoundation.verticalSpace16,
-            context.button(data: BaseUiKitButtonData(text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
             SpacingFoundation.verticalSpace16,
             OrdinaryButton(
               text: 'show invite Bottom Sheet',
@@ -475,7 +482,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
                               ],
                               title: 'lorem ipsum dolor sit amet',
-                              description: 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              description:
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
                               baseTags: [
                                 UiKitTag(
                                   title: 'Cheap',
@@ -585,7 +593,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
                               ],
                               title: 'lorem ipsum dolor sit amet',
-                              description: 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              description:
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
                               baseTags: [
                                 UiKitTag(
                                   title: 'Cheap',
@@ -776,7 +785,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                             UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
                           ],
                           title: 'lorem ipsum dolor sit amet',
-                          description: 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                          description:
+                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
                           baseTags: [
                             UiKitTag(
                               title: 'Cheap',
@@ -859,7 +869,13 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
               ),
             ),
             SpacingFoundation.verticalSpace16,
-            context.button(data: BaseUiKitButtonData(text: 'show onboarding', onPressed: () => buildComponent(context, ComponentModel.fromJson(configuration.appConfig.content['onboarding']), ComponentBuilder(child: Scaffold(body: OnboardingComponent()))))),
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show onboarding',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
+                        ComponentBuilder(child: Scaffold(body: OnboardingComponent()))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -979,7 +995,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               profile: UiProfileModel(
                             name: 'Marry Williams',
                             nickname: '@marywill',
-                            description: 'Just walking here and there trying to find something unique and interesting to show you!',
+                            description:
+                                'Just walking here and there trying to find something unique and interesting to show you!',
                             avatarUrl: 'assets/images/png/profile_avatar.png',
                             // interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
                             // followers: 2650,
@@ -1165,7 +1182,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               profile: UiProfileModel(
                             name: 'Marry Williams',
                             nickname: '@marywill',
-                            description: 'Just walking here and there trying to find something unique and interesting to show you!',
+                            description:
+                                'Just walking here and there trying to find something unique and interesting to show you!',
                             avatarUrl: 'assets/images/png/profile_avatar.png',
                             // interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
                             // followers: 2650,
@@ -1406,14 +1424,14 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             ),
             SpacingFoundation.verticalSpace16,
             OrdinaryButton(
-              text: 'show complaint bottom sheet',
+              text: 'show price selector component bottom sheet',
               onPressed: () => showUiKitGeneralFullScreenDialog(
                 context,
                 GeneralDialogData(
                   topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
                   useRootNavigator: false,
                   child: PriceSelectorComponent(
-                    averagePriceSelected: true,
+                    isPriceRangeSelected: false,
                     initialPriceRange1: '100',
                     initialPriceRange2: '500',
                     initialCurrency: null,
