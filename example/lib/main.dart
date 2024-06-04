@@ -1440,6 +1440,38 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show price selector component bottom sheet',
+              onPressed: () => showUiKitAlertDialog(
+                context,
+                AlertDialogData(
+                  insetPadding: EdgeInsets.zero,
+                  defaultButtonSmall: true,
+                  customBackgroundColor: context.uiKitTheme?.colorScheme.surface3,
+                  title: Column(
+                    children: [
+                      Container(
+                        alignment: FractionalOffset.topRight,
+                        child: context.iconButtonNoPadding(
+                          data: BaseUiKitButtonData(
+                            iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.search, size: 16.0),
+                            onPressed: () => context.pop(),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        //TODO S.SelectPriceAndCurrency
+                        'Select price and currency',
+                        style: context.uiKitTheme?.regularTextTheme.titleLarge,
+                      ),
+                    ],
+                  ),
+                  defaultButtonText: '',
+                  content: PriceSelectorAdminComponent(),
+                ),
+              ),
+            ),
           ],
         ),
       ),

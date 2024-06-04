@@ -7,3 +7,4 @@ export 'web_view_screen.dart';
 export 'web_form_field.dart';
 export 'create_schedule_widget.dart';
 export 'price_selector_component.dart';
+export 'price_selector_admin_component.dart';
