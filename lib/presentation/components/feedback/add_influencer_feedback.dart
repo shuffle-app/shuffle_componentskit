@@ -40,9 +40,12 @@ class _AddInfluencerFeedbackComponentState
     if (oldWidget.reviewUiModel != widget.reviewUiModel) {
       rating = widget.reviewUiModel?.rating ?? 0;
 
-      personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
-      addToPersonalTopToggled =
-          widget.reviewUiModel?.isAddToPersonalTop ?? false;
+      if (widget.reviewUiModel != null) {
+        personalRespectToggled =
+            widget.reviewUiModel?.isPersonalRespect ?? false;
+        addToPersonalTopToggled =
+            widget.reviewUiModel?.isAddToPersonalTop ?? false;
+      }
     }
     super.didUpdateWidget(oldWidget);
   }
