@@ -48,7 +48,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _typeController = TextEditingController();
   late final TextEditingController _nicheController = TextEditingController();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UiPlaceModel _placeToEdit;
 
   final List<BaseUiKitMedia> _videos = [];
@@ -89,7 +89,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _onPhotoAddRequested() async {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -172,7 +173,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -180,7 +182,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
     final theme = context.uiKitTheme;
 
-    return BlurredAppBarPage(
+    return Form(
+        key: _formKey,
+        child: BlurredAppBarPage(
       title: S.of(context).Place,
       centerTitle: true,
       autoImplyLeading: true,
@@ -229,6 +233,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           label: S.of(context).Title,
+          validator: titleValidator,
           controller: _titleController,
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
@@ -269,6 +274,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         IntrinsicHeight(
           child: UiKitInputFieldNoFill(
             label: S.of(context).Description,
+            validator: descriptionValidator,
             controller: _descriptionController,
             expands: true,
           ),
@@ -317,12 +323,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.url,
           label: S.of(context).Website,
+          validator: websiteValidator,
           controller: _websiteController,
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
           keyboardType: TextInputType.phone,
           label: S.of(context).Phone,
+          validator: phoneNumberValidator,
           controller: _phoneController,
         ).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
@@ -335,20 +343,33 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
             ],
             onTap: () {
-              context.push(PriceSelectorComponent(
-                initialPrice1: _priceController.text.split('-').first,
-                initialPrice2: _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                initialCurrency: _placeToEdit.currency,
-                onSubmit: (price1, price2, currency) {
-                  setState(() {
-                    _priceController.text = price1;
-                    if (price2.isNotEmpty) {
-                      _priceController.text += '-$price2';
-                    }
-                    _placeToEdit.currency = currency;
-                  });
-                },
-              ));
+              showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    isPriceRangeSelected: _priceController.text.contains('-'),
+                    initialPriceRange1: _priceController.text.split('-').first,
+                    initialPriceRange2:
+                        _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                    initialCurrency: _placeToEdit.currency,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                      setState(() {
+                        if (averageSelected) {
+                          _priceController.text = averagePrice;
+                        } else {
+                          _priceController.text = rangePrice1;
+                          if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                            _priceController.text += '-$rangePrice2';
+                          }
+                          _placeToEdit.currency = currency;
+                        }
+                      });
+                    },
+                  ),
+                ),
+              );
             }).paddingSymmetric(horizontal: horizontalPadding),
         SpacingFoundation.verticalSpace24,
         UiKitInputFieldNoFill(
@@ -480,6 +501,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               fit: ButtonFit.fitWidth,
               text: S.of(context).Save.toUpperCase(),
               onPressed: () {
+                _formKey.currentState?.validate();
                 _placeToEdit.title = _titleController.text;
                 _placeToEdit.website = _websiteController.text;
                 _placeToEdit.phone = _phoneController.text;
@@ -492,6 +514,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           ),
         ).paddingSymmetric(horizontal: horizontalPadding)
       ],
-    );
+    ));
   }
 }

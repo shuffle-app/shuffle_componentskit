@@ -105,7 +105,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
                     )
                     .toList(),
               ),
-              // SpacingFoundation.verticalSpace16,
+              SpacingFoundation.verticalSpace16,
               // UiKitMultiSelectSuggestionField(
               //   initialOptions: _tags.toList(),
               //   borderRadius: BorderRadiusFoundation.all16,
