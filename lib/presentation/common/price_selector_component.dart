@@ -86,6 +86,16 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
     _submit();
   }
 
+  bool _priceRangeController2IsLessBool() {
+    if (_formKey.currentState != null) {
+      debugPrint('_formKey.currentState!.validate() ${!_formKey.currentState!.validate()}');
+      return !_formKey.currentState!.validate();
+    } else {
+      debugPrint('!_formKey.currentState!.validate() =  flase');
+      return false;
+    }
+  }
+
   String _getHintText(String? initialPriceRange) {
     if (initialPriceRange != null) {
       return initialPriceRange.isNotEmpty ? widget.initialPriceRange1! : '100';
@@ -103,7 +113,8 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
           children: [
             SpacingFoundation.verticalSpace16,
             Text(
-              'Enter price',
+              S.of(context).EnterPrice,
+              // 'Enter price',
               style: theme?.boldTextTheme.title2,
             ),
             SpacingFoundation.verticalSpace16,
@@ -159,73 +170,86 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
                 ),
                 SpacingFoundation.horizontalSpace12,
                 Text(
-                  'Price range',
+                  S.of(context).PriceRange,
                   style: theme?.boldTextTheme.subHeadline,
                 ),
               ],
             ),
             SpacingFoundation.verticalSpace16,
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Column(
               children: [
-                Expanded(
-                  child: UiKitInputFieldNoIcon(
-                    textColor: _inputTextColor(_averageIsSelected, theme),
-                    enabled: _averageIsSelected,
-                    hintText: _getHintText(widget.initialPriceRange2),
-                    controller: widget.priceRangeController1,
-                    fillColor: theme?.colorScheme.surface3,
-                    inputFormatters: [_textInputFormaterPriceSelector],
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    onTapOutside: (_) => _priceRangeController2IsLess(),
-                    onSubmitted: (_) => _priceRangeController2IsLess(),
-                    onTap: () => _priceRangeController2IsLess(),
-                    onChanged: (value) {
-                      _priceRangeController2IsLess();
-                      _submit();
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: SpacingFoundation.verticalSpacing20,
-                    horizontal: SpacingFoundation.horizontalSpacing8,
-                  ),
-                  child: ImageWidget(
-                    iconData: ShuffleUiKitIcons.minus,
-                    width: 20.w,
-                    color: theme?.colorScheme.inversePrimary,
-                  ),
-                ),
-                Expanded(
-                  child: Form(
-                    key: _formKey,
-                    child: UiKitInputFieldNoIcon(
-                      textColor: _inputTextColor(_averageIsSelected, theme),
-                      enabled: _averageIsSelected,
-                      hintText: widget.initialPriceRange2 ?? '500',
-                      controller: widget.priceRangeController2,
-                      inputFormatters: [_textInputFormaterPriceSelector],
-                      fillColor: theme?.colorScheme.surface3,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      onTapOutside: (_) => _priceRangeController2IsLess(),
-                      onSubmitted: (_) => _priceRangeController2IsLess(),
-                      validator: (value) {
-                        if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
-                          if (int.parse(value) < int.parse(widget.priceRangeController1.text)) {
-                            return 'Error';
-                          }
-                          return null;
-                        } else {
-                          return null;
-                        }
-                      },
-                      onChanged: (value) {
-                        _formKey.currentState!.validate();
-                      },
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: UiKitInputFieldNoIcon(
+                        textColor: _inputTextColor(_averageIsSelected, theme),
+                        enabled: _averageIsSelected,
+                        hintText: _getHintText(widget.initialPriceRange2),
+                        controller: widget.priceRangeController1,
+                        fillColor: theme?.colorScheme.surface3,
+                        inputFormatters: [_textInputFormaterPriceSelector],
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        onTapOutside: (_) => _priceRangeController2IsLess(),
+                        onSubmitted: (_) => _priceRangeController2IsLess(),
+                        onTap: () => _priceRangeController2IsLess(),
+                        onChanged: (value) {
+                          _priceRangeController2IsLess();
+                          _submit();
+                        },
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: SpacingFoundation.verticalSpacing20,
+                        horizontal: SpacingFoundation.horizontalSpacing8,
+                      ),
+                      child: ImageWidget(
+                        iconData: ShuffleUiKitIcons.minus,
+                        width: 20.w,
+                        color: theme?.colorScheme.inversePrimary,
+                      ),
+                    ),
+                    Expanded(
+                      child: Form(
+                        key: _formKey,
+                        child: UiKitInputFieldNoIcon(
+                          textColor: _inputTextColor(_averageIsSelected, theme),
+                          enabled: _averageIsSelected,
+                          hintText: widget.initialPriceRange2 ?? '500',
+                          controller: widget.priceRangeController2,
+                          inputFormatters: [_textInputFormaterPriceSelector],
+                          fillColor: theme?.colorScheme.surface3,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          onTapOutside: (_) => _priceRangeController2IsLess(),
+                          onSubmitted: (_) => _priceRangeController2IsLess(),
+                          validator: (value) {
+                            if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
+                              if (int.parse(value) < int.parse(widget.priceRangeController1.text)) {
+                                return '';
+                              }
+                              return null;
+                            } else {
+                              return null;
+                            }
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              _priceRangeController2IsLessBool();
+                            });
+                            _formKey.currentState!.validate();
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                _priceRangeController2IsLessBool()
+                    ? Text(
+                        S.of(context).RangeEndValueIsLessThanBeginingOne,
+                        style: theme?.regularTextTheme.caption1.copyWith(color: ColorsFoundation.error),
+                      )
+                    : SpacingFoundation.none
               ],
             ),
             SpacingFoundation.verticalSpace24,
