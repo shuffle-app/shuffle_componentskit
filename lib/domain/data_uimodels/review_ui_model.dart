@@ -1,5 +1,5 @@
 class ReviewUiModel {
-  final int rating;
+  final int? rating;
   final String reviewDescription;
   final DateTime reviewTime;
   final bool? isPersonalRespect;
@@ -8,7 +8,7 @@ class ReviewUiModel {
 
 
   ReviewUiModel({
-    required this.rating,
+    this.rating,
     required this.reviewDescription,
     required this.reviewTime,
     this.isPersonalRespect,

@@ -10,19 +10,19 @@ class AddInfluencerFeedbackComponent extends StatefulWidget {
   final TextEditingController feedbackTextController;
   final ValueChanged<ReviewUiModel>? onConfirm;
   final ReviewUiModel? reviewUiModel;
-  final Future<bool> Function(bool value) onAddToPersonalTopToggled;
-  final Future<bool> Function(bool value) onPersonalRespectToggled;
+  final Future<bool> Function(bool value)? onAddToPersonalTopToggled;
+  final Future<bool> Function(bool value)? onPersonalRespectToggled;
 
   const AddInfluencerFeedbackComponent({
-    Key? key,
+    super.key,
     required this.feedbackTextController,
     this.onConfirm,
     this.uiUniversalModel,
     this.reviewUiModel,
     required this.userTileType,
-    required this.onAddToPersonalTopToggled,
-    required this.onPersonalRespectToggled,
-  }) : super(key: key);
+     this.onAddToPersonalTopToggled,
+     this.onPersonalRespectToggled,
+  });
 
   @override
   State<AddInfluencerFeedbackComponent> createState() =>
@@ -132,7 +132,7 @@ class _AddInfluencerFeedbackComponentState
                 UiKitGradientSwitch(
                   switchedOn: personalRespectToggled ?? false,
                   onChanged: (value) {
-                    widget.onAddToPersonalTopToggled(value).then(
+                    widget.onAddToPersonalTopToggled?.call(value).then(
                           (v) => setState(() {
                             personalRespectToggled = v;
                           }),
@@ -155,7 +155,7 @@ class _AddInfluencerFeedbackComponentState
                 UiKitGradientSwitch(
                   switchedOn: addToPersonalTopToggled ?? false,
                   onChanged: (value) {
-                    widget.onAddToPersonalTopToggled(value).then(
+                    widget.onAddToPersonalTopToggled?.call(value).then(
                           (v) => setState(() {
                             addToPersonalTopToggled = v;
                           }),

@@ -8,19 +8,19 @@ class AddReviewComponent extends StatefulWidget {
   final ValueChanged<ReviewUiModel> onConfirm;
   final UiProfileModel profileModel;
   final String feedbackDate;
-  final int rating;
+  final int? rating;
   final TextEditingController reviewController;
   final ReviewUiModel? reviewUiModel;
 
   const AddReviewComponent({
-    Key? key,
+    super.key,
     required this.reviewController,
     required this.onConfirm,
     required this.profileModel,
     required this.feedbackDate,
     this.reviewUiModel,
-    required this.rating,
-  }) : super(key: key);
+    this.rating,
+  });
 
   @override
   State<AddReviewComponent> createState() => _AddReviewComponentState();
@@ -94,7 +94,8 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
-              UiKitRatingBadge(rating: widget.rating),
+              if(widget.rating!=null)
+              UiKitRatingBadge(rating: widget.rating!),
             ],
           ),
           SpacingFoundation.verticalSpace24,
@@ -137,7 +138,7 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
                             ? () {
                                 widget.onConfirm.call(
                                   ReviewUiModel(
-                                    rating: widget.rating,
+                                    // rating: widget.rating,
                                     reviewDescription:
                                         widget.reviewController.text,
                                     reviewTime:
