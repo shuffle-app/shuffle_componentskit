@@ -1,41 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/review_ui_model.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class AddReviewComponent extends StatelessWidget {
-  final VoidCallback? onConfirm;
-  final int? feedbackRating;
-  final String feedbackOwnerName;
-  final String? feedbackOwnerImage;
-  final String? feedbackDate;
-  final UserTileType feedbackOwnerType;
+class AddReviewComponent extends StatefulWidget {
+  final ValueChanged<ReviewUiModel> onConfirm;
+  final UiProfileModel profileModel;
+  final String feedbackDate;
+  final int rating;
   final TextEditingController reviewController;
+  final ReviewUiModel? reviewUiModel;
 
   const AddReviewComponent({
     Key? key,
-    required this.feedbackOwnerName,
-    required this.feedbackOwnerType,
     required this.reviewController,
-    this.onConfirm,
-    this.feedbackRating,
-    this.feedbackOwnerImage,
-    this.feedbackDate,
+    required this.onConfirm,
+    required this.profileModel,
+    required this.feedbackDate,
+    this.reviewUiModel,
+    required this.rating,
   }) : super(key: key);
+
+  @override
+  State<AddReviewComponent> createState() => _AddReviewComponentState();
+}
+
+class _AddReviewComponentState extends State<AddReviewComponent> {
+  @override
+  void initState() {
+    if (widget.reviewUiModel != null) {
+      widget.reviewController.text =
+          widget.reviewUiModel?.reviewDescription ?? '';
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     Widget feedbackOwnerAccountMark = const SizedBox.shrink();
-    if (feedbackOwnerType == UserTileType.influencer) feedbackOwnerAccountMark = InfluencerAccountMark();
-    if (feedbackOwnerType == UserTileType.pro) feedbackOwnerAccountMark = ProAccountMark();
-    if (feedbackOwnerType == UserTileType.premium) feedbackOwnerAccountMark = PremiumAccountMark();
+    if (widget.profileModel.userTileType == UserTileType.influencer) {
+      feedbackOwnerAccountMark = InfluencerAccountMark();
+    }
+    if (widget.profileModel.userTileType == UserTileType.pro) {
+      feedbackOwnerAccountMark = ProAccountMark();
+    }
+    if (widget.profileModel.userTileType == UserTileType.premium) {
+      feedbackOwnerAccountMark = PremiumAccountMark();
+    }
 
     return Scaffold(
       body: BlurredAppBarPage(
         autoImplyLeading: true,
         centerTitle: true,
         title: S.current.AddReview,
-        childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        childrenPadding:
+            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace24,
           Row(
@@ -44,8 +65,9 @@ class AddReviewComponent extends StatelessWidget {
               context.userAvatar(
                 size: UserAvatarSize.x24x24,
                 type: UserTileType.influencer,
-                userName: feedbackOwnerName,
-                imageUrl: feedbackOwnerImage,
+                userName: widget.profileModel.name ?? 'Marry Alliance',
+                imageUrl: widget.profileModel.avatarUrl ??
+                    GraphicsFoundation.instance.png.place.path,
               ),
               SpacingFoundation.horizontalSpace12,
               Expanded(
@@ -57,7 +79,7 @@ class AddReviewComponent extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          feedbackOwnerName,
+                          widget.profileModel.name ?? 'Marry Alliance',
                           style: boldTextTheme?.caption1Bold,
                         ),
                         SpacingFoundation.horizontalSpace8,
@@ -65,20 +87,20 @@ class AddReviewComponent extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      feedbackDate ?? '',
+                      widget.feedbackDate,
                       style: boldTextTheme?.caption1Medium,
                     ),
                   ],
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
-              UiKitRatingBadge(rating: feedbackRating?.toInt() ?? 0),
+              UiKitRatingBadge(rating: widget.rating),
             ],
           ),
           SpacingFoundation.verticalSpace24,
           UiKitTitledWrappedInput(
             input: UiKitSymbolsCounterInputField(
-              controller: reviewController,
+              controller: widget.reviewController,
               maxLines: 5,
               hintText: S.current.AddReviewFieldHint,
               enabled: true,
@@ -111,7 +133,20 @@ class AddReviewComponent extends StatelessWidget {
                     child: context.button(
                       data: BaseUiKitButtonData(
                         text: S.current.Confirm,
-                        onPressed: onConfirm,
+                        onPressed: widget.reviewController.text.isNotEmpty
+                            ? () {
+                                widget.onConfirm.call(
+                                  ReviewUiModel(
+                                    rating: widget.rating,
+                                    reviewDescription:
+                                        widget.reviewController.text,
+                                    reviewTime:
+                                        widget.reviewUiModel?.reviewTime ??
+                                            DateTime.now(),
+                                  ),
+                                );
+                              }
+                            : null,
                         fit: ButtonFit.fitWidth,
                       ),
                     ),
