@@ -88,10 +88,8 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
 
   bool _priceRangeController2IsLessBool() {
     if (_formKey.currentState != null) {
-      debugPrint('_formKey.currentState!.validate() ${!_formKey.currentState!.validate()}');
       return !_formKey.currentState!.validate();
     } else {
-      debugPrint('!_formKey.currentState!.validate() =  flase');
       return false;
     }
   }
@@ -114,7 +112,6 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
             SpacingFoundation.verticalSpace16,
             Text(
               S.of(context).EnterPrice,
-              // 'Enter price',
               style: theme?.boldTextTheme.title2,
             ),
             SpacingFoundation.verticalSpace16,
