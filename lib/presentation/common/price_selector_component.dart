@@ -105,196 +105,195 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     return Form(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-        child: Column(
-          children: [
-            SpacingFoundation.verticalSpace16,
-            Text(
-              S.of(context).EnterPrice,
-              style: theme?.boldTextTheme.title2,
-            ),
-            SpacingFoundation.verticalSpace16,
-            Row(
-              children: [
-                GestureDetector(
-                  child: UiKitRadio(selected: !_averageIsSelected),
-                  onTap: () {
-                    _priceRangeController2IsLess();
+      child: Column(
+        children: [
+          SpacingFoundation.verticalSpace16,
+          Text(
+            S.of(context).EnterPrice,
+            style: theme?.boldTextTheme.title2,
+          ),
+          SpacingFoundation.verticalSpace16,
+          Row(
+            children: [
+              GestureDetector(
+                child: UiKitRadio(selected: !_averageIsSelected),
+                onTap: () {
+                  _priceRangeController2IsLess();
 
-                    setState(() {
-                      _averageIsSelected = false;
-                    });
-                    _submit();
-                  },
+                  setState(() {
+                    _averageIsSelected = false;
+                  });
+                  _submit();
+                },
+              ),
+              SpacingFoundation.horizontalSpace12,
+              Text(
+                S.of(context).AverageBill,
+                style: theme?.boldTextTheme.subHeadline,
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace16,
+          Row(
+            children: [
+              Expanded(
+                child: UiKitInputFieldNoIcon(
+                  enabled: !_averageIsSelected,
+                  textColor: _inputTextColor(!_averageIsSelected, theme),
+                  hintText: _getHintText(widget.initialPriceRange1),
+                  controller: widget.priceAverageController,
+                  fillColor: theme?.colorScheme.surface3,
+                  inputFormatters: [_textInputFormaterPriceSelector],
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  onTapOutside: (_) => _priceRangeController2IsLess(),
+                  onChanged: (value) => _submit(),
                 ),
-                SpacingFoundation.horizontalSpace12,
-                Text(
-                  S.of(context).AverageBill,
-                  style: theme?.boldTextTheme.subHeadline,
-                ),
-              ],
-            ),
-            SpacingFoundation.verticalSpace16,
-            Row(
-              children: [
-                Expanded(
-                  child: UiKitInputFieldNoIcon(
-                    enabled: !_averageIsSelected,
-                    textColor: _inputTextColor(!_averageIsSelected, theme),
-                    hintText: _getHintText(widget.initialPriceRange1),
-                    controller: widget.priceAverageController,
-                    fillColor: theme?.colorScheme.surface3,
-                    inputFormatters: [_textInputFormaterPriceSelector],
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    onTapOutside: (_) => _priceRangeController2IsLess(),
-                    onChanged: (value) => _submit(),
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace24,
+          Row(
+            children: [
+              GestureDetector(
+                child: UiKitRadio(selected: _averageIsSelected),
+                onTap: () {
+                  setState(() {
+                    _averageIsSelected = true;
+                  });
+                  _submit();
+                },
+              ),
+              SpacingFoundation.horizontalSpace12,
+              Text(
+                S.of(context).PriceRange,
+                style: theme?.boldTextTheme.subHeadline,
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace16,
+          Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: UiKitInputFieldNoIcon(
+                      textColor: _inputTextColor(_averageIsSelected, theme),
+                      enabled: _averageIsSelected,
+                      hintText: _getHintText(widget.initialPriceRange2),
+                      controller: widget.priceRangeController1,
+                      fillColor: theme?.colorScheme.surface3,
+                      inputFormatters: [_textInputFormaterPriceSelector],
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      onTapOutside: (_) => _priceRangeController2IsLess(),
+                      onSubmitted: (_) => _priceRangeController2IsLess(),
+                      onTap: () => _priceRangeController2IsLess(),
+                      onChanged: (value) {
+                        setState(() {
+                          _priceRangeController2IsLessBool();
+                        });
+                        _submit();
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SpacingFoundation.verticalSpace24,
-            Row(
-              children: [
-                GestureDetector(
-                  child: UiKitRadio(selected: _averageIsSelected),
-                  onTap: () {
-                    setState(() {
-                      _averageIsSelected = true;
-                    });
-                    _submit();
-                  },
-                ),
-                SpacingFoundation.horizontalSpace12,
-                Text(
-                  S.of(context).PriceRange,
-                  style: theme?.boldTextTheme.subHeadline,
-                ),
-              ],
-            ),
-            SpacingFoundation.verticalSpace16,
-            Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: SpacingFoundation.verticalSpacing20,
+                      horizontal: SpacingFoundation.horizontalSpacing8,
+                    ),
+                    child: ImageWidget(
+                      iconData: ShuffleUiKitIcons.minus,
+                      width: 20.w,
+                      color: theme?.colorScheme.inversePrimary,
+                    ),
+                  ),
+                  Expanded(
+                    child: Form(
+                      key: _formKey,
                       child: UiKitInputFieldNoIcon(
                         textColor: _inputTextColor(_averageIsSelected, theme),
                         enabled: _averageIsSelected,
-                        hintText: _getHintText(widget.initialPriceRange2),
-                        controller: widget.priceRangeController1,
-                        fillColor: theme?.colorScheme.surface3,
+                        hintText: widget.initialPriceRange2 ?? '500',
+                        controller: widget.priceRangeController2,
                         inputFormatters: [_textInputFormaterPriceSelector],
+                        fillColor: theme?.colorScheme.surface3,
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         onTapOutside: (_) => _priceRangeController2IsLess(),
                         onSubmitted: (_) => _priceRangeController2IsLess(),
-                        onTap: () => _priceRangeController2IsLess(),
+                        validator: (value) {
+                          if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
+                            if (int.parse(value) < int.parse(widget.priceRangeController1.text)) {
+                              return '';
+                            }
+                            return null;
+                          } else {
+                            return null;
+                          }
+                        },
                         onChanged: (value) {
-                          _priceRangeController2IsLess();
-                          _submit();
+                          setState(() {
+                            _priceRangeController2IsLessBool();
+                          });
+                          _formKey.currentState!.validate();
                         },
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: SpacingFoundation.verticalSpacing20,
-                        horizontal: SpacingFoundation.horizontalSpacing8,
-                      ),
-                      child: ImageWidget(
-                        iconData: ShuffleUiKitIcons.minus,
-                        width: 20.w,
-                        color: theme?.colorScheme.inversePrimary,
-                      ),
-                    ),
-                    Expanded(
-                      child: Form(
-                        key: _formKey,
-                        child: UiKitInputFieldNoIcon(
-                          textColor: _inputTextColor(_averageIsSelected, theme),
-                          enabled: _averageIsSelected,
-                          hintText: widget.initialPriceRange2 ?? '500',
-                          controller: widget.priceRangeController2,
-                          inputFormatters: [_textInputFormaterPriceSelector],
-                          fillColor: theme?.colorScheme.surface3,
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          onTapOutside: (_) => _priceRangeController2IsLess(),
-                          onSubmitted: (_) => _priceRangeController2IsLess(),
-                          validator: (value) {
-                            if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
-                              if (int.parse(value) < int.parse(widget.priceRangeController1.text)) {
-                                return '';
-                              }
-                              return null;
-                            } else {
-                              return null;
-                            }
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              _priceRangeController2IsLessBool();
-                            });
-                            _formKey.currentState!.validate();
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                _priceRangeController2IsLessBool()
-                    ? Text(
-                        S.of(context).RangeEndValueIsLessThanBeginingOne,
-                        style: theme?.regularTextTheme.caption1.copyWith(color: ColorsFoundation.error),
-                      )
-                    : SpacingFoundation.none
-              ],
-            ),
-            SpacingFoundation.verticalSpace24,
-            Row(
-              children: [
-                Text(
-                  S.of(context).SelectCurrency,
-                  style: theme?.boldTextTheme.subHeadline,
-                ),
-              ],
-            ),
-            SpacingFoundation.verticalSpace16,
-            ListenableBuilder(
-              listenable: _currency,
-              builder: (context, _) {
-                return UiKitMenu<String>(
-                  useCustomTiles: true,
-                  separator: SpacingFoundation.verticalSpace16,
-                  title: S.of(context).SelectCurrency,
-                  borderRadius: BorderRadiusFoundation.max,
-                  tilesColor: context.uiKitTheme?.colorScheme.surface1,
-                  selectedItem: UiKitMenuItem<String>(
-                    title: _currency.value,
-                    value: _currency.value,
-                    iconLink: _currencies[_currency.value],
                   ),
-                  customTopPadding: 0.3.sh,
-                  items: List.generate(
-                    _currencies.length,
-                    (index) => UiKitMenuItem(
-                      title: _currencies.keys.toList()[index],
-                      value: _currencies.keys.toList()[index],
-                      iconLink: _currencies.values.toList()[index],
-                    ),
+                ],
+              ),
+              _priceRangeController2IsLessBool()
+                  ? Text(
+                      S.of(context).RangeEndValueIsLessThanBeginingOne,
+                      style: theme?.regularTextTheme.caption1.copyWith(color: ColorsFoundation.error),
+                    )
+                  : SpacingFoundation.none
+            ],
+          ),
+          SpacingFoundation.verticalSpace24,
+          Row(
+            children: [
+              Text(
+                S.of(context).SelectCurrency,
+                style: theme?.boldTextTheme.subHeadline,
+              ),
+            ],
+          ),
+          SpacingFoundation.verticalSpace16,
+          ListenableBuilder(
+            listenable: _currency,
+            builder: (context, _) {
+              return UiKitMenu<String>(
+                useCustomTiles: true,
+                separator: SpacingFoundation.verticalSpace16,
+                title: S.of(context).SelectCurrency,
+                borderRadius: BorderRadiusFoundation.max,
+                tilesColor: context.uiKitTheme?.colorScheme.surface1,
+                selectedItem: UiKitMenuItem<String>(
+                  title: _currency.value,
+                  value: _currency.value,
+                  iconLink: _currencies[_currency.value],
+                ),
+                customTopPadding: 0.3.sh,
+                items: List.generate(
+                  _currencies.length,
+                  (index) => UiKitMenuItem(
+                    title: _currencies.keys.toList()[index],
+                    value: _currencies.keys.toList()[index],
+                    iconLink: _currencies.values.toList()[index],
                   ),
-                  onSelected: (menuItem) {
-                    if (menuItem.value != null) {
-                      _currency.value = menuItem.value!;
-                      navigatorKey.currentState?.pop();
-                      _submit();
-                    }
-                  },
-                );
-              },
-            ),
-          ],
-        ),
+                ),
+                onSelected: (menuItem) {
+                  if (menuItem.value != null) {
+                    _currency.value = menuItem.value!;
+                    navigatorKey.currentState?.pop();
+                    _submit();
+                  }
+                },
+              );
+            },
+          ),
+        ],
       ),
-    );
+    ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16);
   }
 }
