@@ -13,8 +13,6 @@ class MyHttpOverrides extends HttpOverrides {
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
       ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -54,31 +52,6 @@ class _MyAppState extends State<MyApp> {
             onLocaleUpdated: (locale) => setState(() => _locale = locale),
             child: WidgetsFactory(
                 child: MaterialApp(
-              locale: _locale,
-              localizationsDelegates: const [
-                S.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: S.delegate.supportedLocales,
-              title: 'Shuffle Demo',
-              debugShowCheckedModeBanner: false,
-              navigatorKey: navigatorKey,
-              theme: _theme ?? UiKitThemeFoundation.defaultTheme,
-              //TODO: think about it
-              home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
-                  : Builder(builder: (c) {
-                      configuration
-                          .load(version: '1.0.18')
-                          .then((_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(body: Center(child: LoadingWidget()));
-                    }),
-              // onGenerateRoute: AppRouter.onGenerateRoute,
-              // initialRoute: AppRoutes.initial,
-            )));
                   locale: _locale,
                   localizationsDelegates: const [
                     S.delegate,
@@ -189,9 +162,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
         child: Column(
           children: [
             SpacingFoundation.verticalSpace16,
-            context.button(
-                data: BaseUiKitButtonData(
-                    text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
+            context.button(data: BaseUiKitButtonData(
+                text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
             SpacingFoundation.verticalSpace16,
             OrdinaryButton(
               text: 'show invite Bottom Sheet',
@@ -1340,6 +1312,19 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             ),
             SpacingFoundation.verticalSpace16,
             OrdinaryButton(
+              text: 'show price selector component bottom sheet',
+              onPressed: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    isPriceRangeSelected: false,
+                    initialPriceRange1: '100',
+                    initialPriceRange2: '500',
+                    initialCurrency: null,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {},
+
               text: 'show complaint bottom sheet',
               onPressed: () =>
                   showUiKitGeneralFullScreenDialog(
@@ -1356,24 +1341,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       ),
                     ),
                   ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            OrdinaryButton(
-              text: 'show price selector component bottom sheet',
-              onPressed: () => showUiKitGeneralFullScreenDialog(
-                context,
-                GeneralDialogData(
-                  topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
-                  useRootNavigator: false,
-                  child: PriceSelectorComponent(
-                    isPriceRangeSelected: false,
-                    initialPriceRange1: '100',
-                    initialPriceRange2: '500',
-                    initialCurrency: null,
-                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {},
-                  ),
-                ),
-              ),
             ),
             SpacingFoundation.verticalSpace16,
             OrdinaryButton(
@@ -1415,6 +1382,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
+
           ],
         ),
       ),
