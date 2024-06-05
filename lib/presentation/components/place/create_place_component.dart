@@ -362,7 +362,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   showUiKitGeneralFullScreenDialog(
                     context,
                     GeneralDialogData(
-                      topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                      topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
                       useRootNavigator: false,
                       child: PriceSelectorComponent(
                         isPriceRangeSelected: _priceController.text.contains('-'),
@@ -437,6 +437,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ),
             if (_placeToEdit.contentType == 'business') ...[
               SpacingFoundation.verticalSpace24,
+              SpacingFoundation.verticalSpace24,
               UiKitFieldWithTagList(
                 listUiKitTags: [
                   UiKitTag(
@@ -448,7 +449,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
-
               UiKitFieldWithTagList(
                 listUiKitTags: [
                   UiKitTag(
@@ -460,7 +460,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
-
               UiKitFieldWithTagList(
                 listUiKitTags: [
                   UiKitTag(
@@ -484,7 +483,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
-
               UiKitFieldWithTagList(
                 listUiKitTags: [
                   UiKitTag(
@@ -511,24 +509,24 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 title: 'Unique properties',
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-              SpacingFoundation.verticalSpace24,
-              // Text(
-              //   S.of(context).PleaseSelectANiche,
-              //   style: theme?.regularTextTheme.labelSmall,
-              // ).paddingSymmetric(horizontal: horizontalPadding),
-              // SpacingFoundation.verticalSpace4,
-              // UiKitInputFieldNoFill(
-              //   keyboardType: TextInputType.text,
-              //   label: S.of(context).Niche,
-              //   readOnly: true,
-              //   controller: _nicheController,
-              //   onTap: () {
-              //     widget.onNicheChanged?.call().then((value) {
-              //       _nicheController.text = value ?? '';
-              //       _placeToEdit.niche = value ?? '';
-              //     });
-              //   },
-              // ).paddingSymmetric(horizontal: horizontalPadding),
+
+              //   Text(
+              //     S.of(context).PleaseSelectANiche,
+              //     style: theme?.regularTextTheme.labelSmall,
+              //   ).paddingSymmetric(horizontal: horizontalPadding),
+              //   SpacingFoundation.verticalSpace4,
+              //   UiKitInputFieldNoFill(
+              //     keyboardType: TextInputType.text,
+              //     label: S.of(context).Niche,
+              //     readOnly: true,
+              //     controller: _nicheController,
+              //     onTap: () {
+              //       widget.onNicheChanged?.call().then((value) {
+              //         _nicheController.text = value ?? '';
+              //         _placeToEdit.niche = value ?? '';
+              //       });
+              //     },
+              //   ).paddingSymmetric(horizontal: horizontalPadding),
             ],
             SpacingFoundation.verticalSpace24,
             Text(
