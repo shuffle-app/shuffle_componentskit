@@ -2,45 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/suggest_place/ui_suggest_place_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class SuggestPlaceComponent extends StatefulWidget {
+class SuggestPlaceComponent extends StatelessWidget {
   const SuggestPlaceComponent(
       {super.key,
-      this.uiSuggestPlaceModel,
       required this.locationController,
       required this.titleController,
       required this.descriptionController,
       required this.onLocationTap,
       required this.onConfirm});
 
-  final UiSuggestPlaceModel? uiSuggestPlaceModel;
   final TextEditingController locationController;
   final TextEditingController titleController;
   final TextEditingController descriptionController;
   final VoidCallback onLocationTap;
   final ValueChanged<UiSuggestPlaceModel> onConfirm;
-
-  @override
-  State<SuggestPlaceComponent> createState() => _SuggestPlaceComponentState();
-}
-
-class _SuggestPlaceComponentState extends State<SuggestPlaceComponent> {
-  late TextEditingController locationController;
-  late TextEditingController titleController;
-  late TextEditingController descriptionController;
-
-  @override
-  void initState() {
-    locationController = widget.locationController;
-    titleController = widget.titleController;
-    descriptionController = widget.descriptionController;
-    if (widget.uiSuggestPlaceModel != null) {
-      locationController.text = widget.uiSuggestPlaceModel?.location ?? '';
-      titleController.text = widget.uiSuggestPlaceModel?.title ?? '';
-      descriptionController.text =
-          widget.uiSuggestPlaceModel?.description ?? '';
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +33,8 @@ class _SuggestPlaceComponentState extends State<SuggestPlaceComponent> {
             controller: locationController,
             label: S.current.Location,
             hintText: S.current.EnterLocation,
-            onChanged: (value) {
-              setState(() {});
-            },
             icon: InkWell(
-              onTap: widget.onLocationTap,
+              onTap: onLocationTap,
               child: const Icon(
                 ShuffleUiKitIcons.landmark,
                 color: ColorsFoundation.darkBodyTypographyColor,
@@ -85,9 +57,6 @@ class _SuggestPlaceComponentState extends State<SuggestPlaceComponent> {
           UiKitInputFieldNoFill(
             controller: titleController,
             label: S.current.Title,
-            onChanged: (value) {
-              setState(() {});
-            },
             hintText: S.current.EnterTitle,
             customEnabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
@@ -107,9 +76,6 @@ class _SuggestPlaceComponentState extends State<SuggestPlaceComponent> {
             controller: descriptionController,
             label: S.current.WhyDoYouLoveIt,
             hintText: S.current.WhyDoYouLoveIt,
-            onChanged: (value) {
-              setState(() {});
-            },
             maxLines: 10,
             minLines: 1,
             customEnabledBorder: UnderlineInputBorder(
@@ -126,13 +92,15 @@ class _SuggestPlaceComponentState extends State<SuggestPlaceComponent> {
             ),
           ),
           SpacingFoundation.verticalSpace24,
-          context.gradientButton(
-            data: BaseUiKitButtonData(
-              onPressed: (titleController.text.isNotEmpty &&
-                      locationController.text.isNotEmpty &&
-                      descriptionController.text.isNotEmpty)
-                  ? () {
-                      widget.onConfirm.call(
+          ListenableBuilder(
+            builder: (context, child) {
+              if (titleController.text.isNotEmpty &&
+                  locationController.text.isNotEmpty &&
+                  descriptionController.text.isNotEmpty) {
+                return context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    onPressed: () {
+                      onConfirm.call(
                         UiSuggestPlaceModel(
                             title: titleController.text,
                             location: locationController.text,
@@ -140,10 +108,24 @@ class _SuggestPlaceComponentState extends State<SuggestPlaceComponent> {
                             dateTime: DateTime.now()),
                       );
                       context.pop();
-                    }
-                  : null,
-              text: S.current.Submit,
-            ),
+                    },
+                    text: S.current.Submit,
+                  ),
+                );
+              } else {
+               return context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    onPressed: null,
+                    text: S.current.Submit,
+                  ),
+                );
+              }
+            },
+            listenable: Listenable.merge([
+              titleController,
+              locationController,
+              descriptionController,
+            ]),
           )
         ],
       ).paddingAll(EdgeInsetsFoundation.all16),
