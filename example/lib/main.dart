@@ -1455,20 +1455,28 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         alignment: FractionalOffset.topRight,
                         child: context.iconButtonNoPadding(
                           data: BaseUiKitButtonData(
-                            iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.search, size: 16.0),
+                            iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.x, size: 16.0),
                             onPressed: () => context.pop(),
                           ),
                         ),
                       ),
                       Text(
-                        //TODO S.SelectPriceAndCurrency
-                        'Select price and currency',
+                        S.of(context).SelectPriceAndCurrency,
                         style: context.uiKitTheme?.regularTextTheme.titleLarge,
                       ),
                     ],
                   ),
                   defaultButtonText: '',
-                  content: PriceSelectorAdminComponent(),
+                  content: PriceSelectorAdminComponent(
+                    isPriceRangeSelected: false,
+                    initialPriceRange1: '100',
+                    initialPriceRange2: '500',
+                    initialCurrency: null,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, priceRangeSelected) {
+                      debugPrint(
+                          'averagePrice - $averagePrice, rangePrice1 - $rangePrice1, rangePrice2 - $rangePrice2, currency - $currency, averageSelected - $priceRangeSelected');
+                    },
+                  ),
                 ),
               ),
             ),
