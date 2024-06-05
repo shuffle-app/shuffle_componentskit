@@ -883,21 +883,21 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             // context.button(
             //     data: BaseUiKitButtonData(
             //         text: 'show about user step 1',
-                    // onPressed: () =>
-                    //     buildComponent(
-                    //         context,
-                    //         ComponentModel.fromJson(configuration.appConfig.content['about_user']),
-                    //         ComponentBuilder(
-                    //             child: Scaffold(
-                    //               body: SafeArea(
-                    //                 child: SingleChildScrollView(
-                    //                     child: AboutUserComponent(
-                    //                       nameController: TextEditingController(),
-                    //                       nickNameController: TextEditingController(),
-                    //                       aboutUserModel: UiAboutUserModel(),
-                    //                     )),
-                    //               ),
-                    //             ))))),
+            // onPressed: () =>
+            //     buildComponent(
+            //         context,
+            //         ComponentModel.fromJson(configuration.appConfig.content['about_user']),
+            //         ComponentBuilder(
+            //             child: Scaffold(
+            //               body: SafeArea(
+            //                 child: SingleChildScrollView(
+            //                     child: AboutUserComponent(
+            //                       nameController: TextEditingController(),
+            //                       nickNameController: TextEditingController(),
+            //                       aboutUserModel: UiAboutUserModel(),
+            //                     )),
+            //               ),
+            //             ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1312,6 +1312,19 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             ),
             SpacingFoundation.verticalSpace16,
             OrdinaryButton(
+              text: 'show price selector component bottom sheet',
+              onPressed: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    isPriceRangeSelected: false,
+                    initialPriceRange1: '100',
+                    initialPriceRange2: '500',
+                    initialCurrency: null,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {},
+
               text: 'show complaint bottom sheet',
               onPressed: () =>
                   showUiKitGeneralFullScreenDialog(
@@ -1330,6 +1343,46 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
             ),
             SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show price selector component bottom sheet',
+              onPressed: () => showUiKitAlertDialog(
+                context,
+                AlertDialogData(
+                  insetPadding: EdgeInsets.zero,
+                  defaultButtonSmall: true,
+                  customBackgroundColor: context.uiKitTheme?.colorScheme.surface3,
+                  title: Column(
+                    children: [
+                      Container(
+                        alignment: FractionalOffset.topRight,
+                        child: context.iconButtonNoPadding(
+                          data: BaseUiKitButtonData(
+                            iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.x, size: 16.0),
+                            onPressed: () => context.pop(),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        S.of(context).SelectPriceAndCurrency,
+                        style: context.uiKitTheme?.regularTextTheme.titleLarge,
+                      ),
+                    ],
+                  ),
+                  defaultButtonText: '',
+                  content: PriceSelectorAdminComponent(
+                    isPriceRangeSelected: false,
+                    initialPriceRange1: '100',
+                    initialPriceRange2: '500',
+                    initialCurrency: null,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, priceRangeSelected) {
+                      debugPrint(
+                          'averagePrice - $averagePrice, rangePrice1 - $rangePrice1, rangePrice2 - $rangePrice2, currency - $currency, averageSelected - $priceRangeSelected');
+                    },
+                  ),
+                ),
+              ),
+            ),
+
           ],
         ),
       ),

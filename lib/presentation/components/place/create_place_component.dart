@@ -437,7 +437,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ),
             if (_placeToEdit.contentType == 'business') ...[
               SpacingFoundation.verticalSpace24,
-              SpacingFoundation.verticalSpace24,
               UiKitFieldWithTagList(
                 listUiKitTags: [
                   UiKitTag(

@@ -7,6 +7,7 @@ class SettingsComponent extends StatelessWidget {
   final String? selectedContentType;
   final List<UiKitCustomTab>? tabs;
   final List<BaseUiKitButtonData> btnDataList;
+  final VoidCallback? onSubmitContent;
   final List<BaseUiKitButtonData> controlExpansionTileButtons;
   final List<BaseUiKitButtonData>? proControlExpansionTileButtons;
 
@@ -15,6 +16,7 @@ class SettingsComponent extends StatelessWidget {
     this.onTabSwitched,
     this.selectedContentType,
     this.tabs,
+    this.onSubmitContent,
     required this.btnDataList,
     required this.controlExpansionTileButtons,
     this.proControlExpansionTileButtons,
@@ -47,9 +49,26 @@ class SettingsComponent extends StatelessWidget {
             selectedTab: selectedContentType,
             onTappedTab: (index) => onTabSwitched?.call(index),
             tabs: tabs!,
-          ).paddingSymmetric(horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0),
+          ).paddingSymmetric(
+              horizontal:
+                  model.positionModel?.horizontalMargin?.toDouble() ?? 0),
           SpacingFoundation.verticalSpace12,
         ],
+        if (onSubmitContent != null)
+          UiKitShadowWrapper(
+            backgroundColor: context.uiKitTheme?.colorScheme.primary,
+            borderRadius: BorderRadiusFoundation.all24,
+            color: ColorsFoundation.lightSurface1.withOpacity(0.6),
+            child: context.outlinedButton(
+              data: BaseUiKitButtonData(
+                text: S.current.SubmitContent,
+                onPressed: () {},
+                backgroundColor: context.uiKitTheme?.colorScheme.primary,
+              ),
+            ),
+          ).paddingSymmetric(
+              horizontal: EdgeInsetsFoundation.horizontal16,
+              vertical: EdgeInsetsFoundation.vertical12),
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: bodyAligment.crossAxisAlignment,
@@ -65,10 +84,12 @@ class SettingsComponent extends StatelessWidget {
               )
               .expand((element) => element)
               .toList(),
-        ).paddingSymmetric(horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0),
+        ).paddingSymmetric(
+            horizontal: model.positionModel?.horizontalMargin?.toDouble() ?? 0),
         if (proControlExpansionTileButtons != null) ...[
           UiKitExpansionTile(
-            leadingIconData: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.label),
+            leadingIconData:
+                BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.label),
             title: S.current.ProTools.toUpperCase(),
             children: proControlExpansionTileButtons!
                 .map((e) => UiKitInlineButton(
@@ -80,7 +101,8 @@ class SettingsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
         ],
         UiKitExpansionTile(
-          leadingIconData: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.tool),
+          leadingIconData:
+              BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.tool),
           title: S.current.Control.toUpperCase(),
           children: controlExpansionTileButtons
               .map((e) => UiKitInlineButton(

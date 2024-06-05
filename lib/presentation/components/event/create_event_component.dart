@@ -269,7 +269,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 showUiKitGeneralFullScreenDialog(
                   context,
                   GeneralDialogData(
-                    topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                    topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
                     useRootNavigator: false,
                     child: PriceSelectorComponent(
                       isPriceRangeSelected: _priceController.text.contains('-'),
