@@ -883,21 +883,21 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             // context.button(
             //     data: BaseUiKitButtonData(
             //         text: 'show about user step 1',
-                    // onPressed: () =>
-                    //     buildComponent(
-                    //         context,
-                    //         ComponentModel.fromJson(configuration.appConfig.content['about_user']),
-                    //         ComponentBuilder(
-                    //             child: Scaffold(
-                    //               body: SafeArea(
-                    //                 child: SingleChildScrollView(
-                    //                     child: AboutUserComponent(
-                    //                       nameController: TextEditingController(),
-                    //                       nickNameController: TextEditingController(),
-                    //                       aboutUserModel: UiAboutUserModel(),
-                    //                     )),
-                    //               ),
-                    //             ))))),
+            // onPressed: () =>
+            //     buildComponent(
+            //         context,
+            //         ComponentModel.fromJson(configuration.appConfig.content['about_user']),
+            //         ComponentBuilder(
+            //             child: Scaffold(
+            //               body: SafeArea(
+            //                 child: SingleChildScrollView(
+            //                     child: AboutUserComponent(
+            //                       nameController: TextEditingController(),
+            //                       nickNameController: TextEditingController(),
+            //                       aboutUserModel: UiAboutUserModel(),
+            //                     )),
+            //               ),
+            //             ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
