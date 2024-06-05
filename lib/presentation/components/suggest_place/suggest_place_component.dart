@@ -25,7 +25,7 @@ class SuggestPlaceComponent extends StatelessWidget {
         children: [
           SpacingFoundation.verticalSpace16,
           Text(
-            'Submit Content',
+            S.current.SubmitContent,
             style: context.uiKitTheme?.boldTextTheme.title1,
           ),
           SpacingFoundation.verticalSpace16,
