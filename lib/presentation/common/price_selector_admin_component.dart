@@ -12,7 +12,7 @@ class PriceSelectorAdminComponent extends StatefulWidget {
     String rangePrice1,
     String rangePrice2,
     String currency,
-    bool averageSelected,
+    bool priceRangeSelected,
   ) onSubmit;
 
   PriceSelectorAdminComponent({
@@ -41,10 +41,10 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
   final GlobalKey _keySelectoption = GlobalKey();
   final MenuController _menuController = MenuController();
 
-  late bool _averageIsSelected;
+  late bool _priceRageIsSelected;
   bool _selectOptionIsOpen = false;
 
-  double? _wightSelecetOption;
+  double? _wightItemSelecetOption;
 
   late final List<Color?>? listColor;
 
@@ -62,12 +62,12 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
   @override
   void initState() {
     super.initState();
-    _averageIsSelected = widget.isPriceRangeSelected;
+    _priceRageIsSelected = widget.isPriceRangeSelected;
   }
 
   void _getWightSelecetOption() {
     final renderObject = _keySelectoption.currentContext?.findRenderObject() as RenderBox;
-    _wightSelecetOption = renderObject.size.width;
+    _wightItemSelecetOption = renderObject.size.width;
   }
 
   void _generateListColorItemCurrencies(UiKitThemeData? theme) {
@@ -85,20 +85,11 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
       return BorderRadiusFoundation.all12;
     }
     if (index == 0) {
-      //TODO onlyTopt12
-      return const BorderRadius.only(
-        topLeft: Radius.circular(12.0),
-        topRight: Radius.circular(12.0),
-      );
+      return BorderRadiusFoundation.onlyTopt12;
     }
     if (index == _currencies.length - 1) {
-      //TODO onlyBottom12
-      return const BorderRadius.only(
-        bottomLeft: Radius.circular(12.0),
-        bottomRight: Radius.circular(12.0),
-      );
+      return BorderRadiusFoundation.onlyBottom12;
     }
-
     return null;
   }
 
@@ -132,7 +123,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
       widget.priceRangeController1.text,
       widget.priceRangeController2.text,
       _currency.value ?? 'AED',
-      !_averageIsSelected,
+      _priceRageIsSelected,
     );
   }
 
@@ -170,10 +161,10 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
         Row(
           children: [
             GestureDetector(
-              child: UiKitRadio(selected: !_averageIsSelected),
+              child: UiKitRadio(selected: !_priceRageIsSelected),
               onTap: () {
                 setState(() {
-                  _averageIsSelected = false;
+                  _priceRageIsSelected = false;
                 });
                 _submit();
               },
@@ -191,11 +182,11 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
             Expanded(
               child: UiKitInputFieldNoIcon(
                 borderRadius: BorderRadiusFoundation.all12,
-                textColor: _inputTextColor(!_averageIsSelected, theme),
-                enabled: !_averageIsSelected,
-                hintText: '100',
-                controller: widget.priceAverageController,
+                textColor: _inputTextColor(!_priceRageIsSelected, theme),
+                enabled: !_priceRageIsSelected,
                 fillColor: theme?.colorScheme.surface,
+                hintText: _getHintText(widget.initialPriceRange1),
+                controller: widget.priceAverageController,
                 inputFormatters: [_textInputFormaterPriceSelector],
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (value) => _submit(),
@@ -207,10 +198,10 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
         Row(
           children: [
             GestureDetector(
-              child: UiKitRadio(selected: _averageIsSelected),
+              child: UiKitRadio(selected: _priceRageIsSelected),
               onTap: () {
                 setState(() {
-                  _averageIsSelected = true;
+                  _priceRageIsSelected = true;
                 });
                 _submit();
               },
@@ -231,10 +222,10 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                 Expanded(
                   child: UiKitInputFieldNoIcon(
                     borderRadius: BorderRadiusFoundation.all12,
-                    textColor: _inputTextColor(_averageIsSelected, theme),
-                    enabled: _averageIsSelected,
+                    textColor: _inputTextColor(_priceRageIsSelected, theme),
+                    enabled: _priceRageIsSelected,
                     fillColor: theme?.colorScheme.surface,
-                    hintText: _getHintText(widget.initialPriceRange2),
+                    hintText: _getHintText(widget.initialPriceRange1),
                     controller: widget.priceRangeController1,
                     inputFormatters: [_textInputFormaterPriceSelector],
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -249,34 +240,31 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                     },
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: SpacingFoundation.verticalSpacing20,
-                    horizontal: SpacingFoundation.horizontalSpacing8,
-                  ),
-                  child: ImageWidget(
-                    iconData: ShuffleUiKitIcons.minus,
-                    width: 20.w,
-                    color: theme?.colorScheme.inversePrimary,
-                  ),
+                ImageWidget(
+                  iconData: ShuffleUiKitIcons.minus,
+                  width: 20.w,
+                  color: theme?.colorScheme.inversePrimary,
+                ).paddingSymmetric(
+                  vertical: SpacingFoundation.verticalSpacing20,
+                  horizontal: SpacingFoundation.horizontalSpacing8,
                 ),
                 Expanded(
                   child: Form(
                     key: _formKey,
                     child: UiKitInputFieldNoIcon(
                       borderRadius: BorderRadiusFoundation.all12,
-                      textColor: _inputTextColor(_averageIsSelected, theme),
-                      enabled: _averageIsSelected,
+                      textColor: _inputTextColor(_priceRageIsSelected, theme),
+                      enabled: _priceRageIsSelected,
+                      fillColor: theme?.colorScheme.surface,
                       hintText: widget.initialPriceRange2 ?? '500',
                       controller: widget.priceRangeController2,
                       inputFormatters: [_textInputFormaterPriceSelector],
-                      fillColor: theme?.colorScheme.surface,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       onTapOutside: (_) => _priceRangeController2IsLess(),
                       onSubmitted: (_) => _priceRangeController2IsLess(),
                       validator: (value) {
                         if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
-                          if (int.parse(value) < int.parse(widget.priceRangeController1.text)) {
+                          if (double.parse(value) < double.parse(widget.priceRangeController1.text)) {
                             return '';
                           }
                           return null;
@@ -340,7 +328,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                         color: listColor?[index],
                         borderRadius: _getBorderRadiusSelectedItem(index),
                       ),
-                      width: _wightSelecetOption,
+                      width: _wightItemSelecetOption,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
