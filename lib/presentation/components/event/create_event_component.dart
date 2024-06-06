@@ -130,6 +130,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     });
   }
 
+  _selectCategoriForContent(ComponentEventModel model) {
+    widget.onNicheChanged?.call().then((value) {
+      _nicheController.text = value ?? '';
+      _eventToEdit.niche = value ?? '';
+    });
+  }
+
   @override
   void didUpdateWidget(covariant CreateEventComponent oldWidget) {
     if (oldWidget.eventToEdit != widget.eventToEdit) {
@@ -346,23 +353,29 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ),
           if (_eventToEdit.contentType == 'business') ...[
             SpacingFoundation.verticalSpace24,
-            Text(
-              S.of(context).PleaseSelectANiche,
-              style: theme?.regularTextTheme.labelSmall,
-            ).paddingSymmetric(horizontal: horizontalPadding),
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.baseTags,
+              title: S.of(context).Nich,
+              onTap: () => _selectCategoriForContent(model),
+            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
             SpacingFoundation.verticalSpace4,
-            UiKitInputFieldNoFill(
-              keyboardType: TextInputType.text,
-              label: S.of(context).Niche,
-              readOnly: true,
-              controller: _nicheController,
-              onTap: () {
-                widget.onNicheChanged?.call().then((value) {
-                  _nicheController.text = value ?? '';
-                  _eventToEdit.niche = value ?? '';
-                });
-              },
-            ).paddingSymmetric(horizontal: horizontalPadding),
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.baseTags,
+              title: S.of(context).PlaceType,
+              onTap: () => _selectCategoriForContent(model),
+            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+            SpacingFoundation.verticalSpace4,
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.baseTags,
+              title: S.of(context).BaseProperties,
+              onTap: () => _selectCategoriForContent(model),
+            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+            SpacingFoundation.verticalSpace4,
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.baseTags,
+              title: S.of(context).UniqueProperties,
+              onTap: () => _selectCategoriForContent(model),
+            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           ],
           SpacingFoundation.verticalSpace24,
           Text(

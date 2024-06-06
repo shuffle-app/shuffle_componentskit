@@ -438,94 +438,28 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             if (_placeToEdit.contentType == 'business') ...[
               SpacingFoundation.verticalSpace24,
               UiKitFieldWithTagList(
-                listUiKitTags: [
-                  UiKitTag(
-                    title: 'CATERING',
-                    icon: null,
-                  )
-                ],
-                title: 'Nich',
+                listUiKitTags: _placeToEdit.baseTags,
+                title: S.of(context).Nich,
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
               UiKitFieldWithTagList(
-                listUiKitTags: [
-                  UiKitTag(
-                    title: 'Restaurant',
-                    icon: ShuffleUiKitIcons.cutlery,
-                  )
-                ],
-                title: 'Place type',
+                listUiKitTags: _placeToEdit.baseTags,
+                title: S.of(context).PlaceType,
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
               UiKitFieldWithTagList(
-                listUiKitTags: [
-                  UiKitTag(
-                    title: '7 min',
-                    icon: ShuffleUiKitIcons.route,
-                  ),
-                  UiKitTag(
-                    title: 'Cheap',
-                    icon: ShuffleUiKitIcons.label,
-                  ),
-                  UiKitTag(
-                    title: 'Club',
-                    icon: ShuffleUiKitIcons.cocktail,
-                  ),
-                  UiKitTag(
-                    title: 'Club',
-                    icon: ShuffleUiKitIcons.cocktail,
-                  ),
-                ],
-                title: 'Base properties',
+                listUiKitTags: _placeToEdit.baseTags,
+                title: S.of(context).BaseProperties,
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
               UiKitFieldWithTagList(
-                listUiKitTags: [
-                  UiKitTag(
-                    title: '7 min',
-                    icon: ShuffleUiKitIcons.route,
-                    unique: true,
-                  ),
-                  UiKitTag(
-                    title: 'Cheap',
-                    icon: ShuffleUiKitIcons.label,
-                    unique: true,
-                  ),
-                  UiKitTag(
-                    title: 'Club',
-                    icon: ShuffleUiKitIcons.cocktail,
-                    unique: true,
-                  ),
-                  UiKitTag(
-                    title: 'Club',
-                    icon: ShuffleUiKitIcons.cocktail,
-                    unique: true,
-                  ),
-                ],
-                title: 'Unique properties',
+                listUiKitTags: _placeToEdit.baseTags,
+                title: S.of(context).UniqueProperties,
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-
-              //   Text(
-              //     S.of(context).PleaseSelectANiche,
-              //     style: theme?.regularTextTheme.labelSmall,
-              //   ).paddingSymmetric(horizontal: horizontalPadding),
-              //   SpacingFoundation.verticalSpace4,
-              //   UiKitInputFieldNoFill(
-              //     keyboardType: TextInputType.text,
-              //     label: S.of(context).Niche,
-              //     readOnly: true,
-              //     controller: _nicheController,
-              //     onTap: () {
-              //       widget.onNicheChanged?.call().then((value) {
-              //         _nicheController.text = value ?? '';
-              //         _placeToEdit.niche = value ?? '';
-              //       });
-              //     },
-              //   ).paddingSymmetric(horizontal: horizontalPadding),
             ],
             SpacingFoundation.verticalSpace24,
             Text(
