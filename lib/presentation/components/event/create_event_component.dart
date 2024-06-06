@@ -289,8 +289,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                             _eventToEdit.currency = currency;
                           }
                         });
-
-                        FocusManager.instance.primaryFocus?.unfocus();
                       },
                     ),
                   ),
