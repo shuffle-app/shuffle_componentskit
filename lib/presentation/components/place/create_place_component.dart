@@ -352,8 +352,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       child: PriceSelectorComponent(
                         isPriceRangeSelected: _priceController.text.contains('-'),
                         initialPriceRange1: _priceController.text.split('-').first,
-                        initialPriceRange2:
-                            _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                        initialPriceRange2: _priceController.text.contains('-')
+                            ? _priceController.text.split('-').last.replaceAll(' ', '')
+                            : null,
                         initialCurrency: _placeToEdit.currency,
                         onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
                           setState(() {
