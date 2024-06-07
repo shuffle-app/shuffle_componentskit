@@ -4,11 +4,9 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class TagsSelectionComponent extends StatefulWidget {
   final PositionModel? positionModel;
-  final List<String> selectedTags;
-  final List<String> allTags;
+  final List<UiKitTag> selectedTags;
+  final List<UiKitTag> allTags;
   final String title;
-
-  // final Future<List<String>> Function(String) options;
 
   const TagsSelectionComponent(
       {super.key, this.positionModel, required this.selectedTags, required this.title, required this.allTags});
@@ -18,8 +16,8 @@ class TagsSelectionComponent extends StatefulWidget {
 }
 
 class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
-  final Set<String> _tags = {};
-  final Set<String> _allTags = {};
+  final Set<UiKitTag> _tags = {};
+  final Set<UiKitTag> _allTags = {};
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -75,7 +73,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
                 onChanged: (value) {
                   setState(() {
                     _allTags.addAll(widget.allTags);
-                    _allTags.retainWhere((e) => e.toLowerCase().contains(value.toLowerCase()));
+                    _allTags.retainWhere((e) => e.title.toLowerCase().contains(value.toLowerCase()));
                   });
                 },
                 icon: _controller.text.isEmpty
@@ -93,7 +91,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
                       (e) => UiKitCompactTextCard(
                         showRemoveButton: _tags.contains(e),
                         showCheckedBackground: _tags.contains(e),
-                        text: e,
+                        text: e.title,
                         onTap: () {
                           setState(() {
                             if (!_tags.remove(e)) {

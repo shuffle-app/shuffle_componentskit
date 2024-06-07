@@ -18,7 +18,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final Future<String?> Function()? getLocation;
   final Future<String?> Function()? onCategoryChanged;
   final Future<String?> Function()? onNicheChanged;
-  final List<String> Function(String) propertiesOptions;
+  final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
@@ -418,7 +418,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ],
             ),
             SpacingFoundation.verticalSpace24,
-            if (_placeToEdit.contentType == 'business') ...[
+            if (_placeToEdit.contentType == 'business')
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.niche != null ? [UiKitTag(title: _placeToEdit.niche!, icon: '')] : null,
                 title: S.of(context).PleaseSelectANiche,
@@ -430,48 +430,46 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   });
                 },
               ).paddingSymmetric(horizontal: horizontalPadding),
-              SpacingFoundation.verticalSpace24,
+            SpacingFoundation.verticalSpace24,
+            UiKitFieldWithTagList(
+              listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
+              title: S.of(context).BaseProperties,
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  selectedTags: _placeToEdit.baseTags,
+                  title: S.of(context).BaseProperties,
+                  allTags: widget.propertiesOptions('base'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _placeToEdit.baseTags.clear();
+                    _placeToEdit.baseTags.addAll(newTags );
+                  });
+                }
+              },
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace4,
+            if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
               UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
-                title: S.of(context).BaseProperties,
+                listUiKitTags: _placeToEdit.tags.isNotEmpty ? _placeToEdit.tags : null,
+                title: S.of(context).UniqueProperties,
                 onTap: () async {
                   final newTags = await context.push(TagsSelectionComponent(
                     positionModel: model.positionModel,
-                    selectedTags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
-                    title: S.of(context).BaseProperties,
-                    allTags: widget.propertiesOptions('base'),
+                    selectedTags: _placeToEdit.tags,
+                    title: S.of(context).UniqueProperties,
+                    allTags: widget.propertiesOptions('unique'),
                   ));
                   if (newTags != null) {
                     setState(() {
-                      _placeToEdit.baseTags.clear();
-                      _placeToEdit.baseTags
-                          .addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                      _placeToEdit.tags.clear();
+                      _placeToEdit.tags.addAll(newTags );
                     });
                   }
                 },
               ).paddingSymmetric(horizontal: horizontalPadding),
-              SpacingFoundation.verticalSpace4,
-              if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
-                UiKitFieldWithTagList(
-                  listUiKitTags: _placeToEdit.tags.isNotEmpty ? _placeToEdit.tags : null,
-                  title: S.of(context).UniqueProperties,
-                  onTap: () async {
-                    final newTags = await context.push(TagsSelectionComponent(
-                      positionModel: model.positionModel,
-                      selectedTags: _placeToEdit.tags.map((tag) => tag.title).toList(),
-                      title: S.of(context).UniqueProperties,
-                      allTags: widget.propertiesOptions('unique'),
-                    ));
-                    if (newTags != null) {
-                      setState(() {
-                        _placeToEdit.tags.clear();
-                        _placeToEdit.tags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                      });
-                    }
-                  },
-                ).paddingSymmetric(horizontal: horizontalPadding),
-                SpacingFoundation.verticalSpace24,
-              ],
+              SpacingFoundation.verticalSpace24,
             ],
             SafeArea(
               top: false,
