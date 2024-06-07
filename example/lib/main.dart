@@ -53,36 +53,36 @@ class _MyAppState extends State<MyApp> {
             onLocaleUpdated: (locale) => setState(() => _locale = locale),
             child: WidgetsFactory(
                 child: MaterialApp(
-                  locale: _locale,
-                  localizationsDelegates: const [
-                    S.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: S.delegate.supportedLocales,
-                  title: 'Shuffle Demo',
-                  debugShowCheckedModeBanner: false,
-                  navigatorKey: navigatorKey,
-                  theme: _theme ?? UiKitThemeFoundation.defaultTheme,
-                  //TODO: think about it
-                  home: configuration.isLoaded
-                      ? GlobalComponent(
+              locale: _locale,
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+              title: 'Shuffle Demo',
+              debugShowCheckedModeBanner: false,
+              navigatorKey: navigatorKey,
+              theme: _theme ?? UiKitThemeFoundation.defaultTheme,
+              //TODO: think about it
+              home: configuration.isLoaded
+                  ? GlobalComponent(
                       globalConfiguration: configuration,
                       child: const ComponentsTestPage())
-                      : Builder(builder: (c) {
-                    configuration
-                        .load(version: '1.0.18')
-                        .then(
-                            (_) => Future.delayed(const Duration(seconds: 1)))
-                        .then((_) => UiKitTheme.of(c).onThemeUpdated(
-                        themeMatcher(configuration.appConfig.theme)));
-                    return const Scaffold(
-                        body: Center(child: LoadingWidget()));
-                  }),
-                  // onGenerateRoute: AppRouter.onGenerateRoute,
-                  // initialRoute: AppRoutes.initial,
-                )));
+                  : Builder(builder: (c) {
+                      configuration
+                          .load(version: '1.0.18')
+                          .then(
+                              (_) => Future.delayed(const Duration(seconds: 1)))
+                          .then((_) => UiKitTheme.of(c).onThemeUpdated(
+                              themeMatcher(configuration.appConfig.theme)));
+                      return const Scaffold(
+                          body: Center(child: LoadingWidget()));
+                    }),
+              // onGenerateRoute: AppRouter.onGenerateRoute,
+              // initialRoute: AppRoutes.initial,
+            )));
       },
     );
   }
@@ -161,12 +161,26 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
     return Scaffold(
       appBar: CustomAppBar(
         title:
-        'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
+            'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
         // centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite create folder',
+                onPressed: () => context.push(
+                  FavoriteCreateFolderComponent(
+                    titleController: TextEditingController(),
+                    onConfirm: () {
+                      context.pop();
+                    },
+                  ),
+                ),
+              ),
+            ),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -184,13 +198,13 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   child: InviteComponent(
                     persons: List.generate(
                       15,
-                          (_) => UiInvitePersonModel(
+                      (_) => UiInvitePersonModel(
                         date: DateTime.now(),
                         name: 'Marry Williams',
                         rating: 4,
                         handshake: true,
                         avatarLink:
-                        GraphicsFoundation.instance.png.mockUserAvatar.path,
+                            GraphicsFoundation.instance.png.mockUserAvatar.path,
                         description: 'Any cheerful person can invite me',
                         id: 0,
                       ),
@@ -232,7 +246,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ],
                         userName: 'userName',
                         userAvatarUrl:
-                        GraphicsFoundation.instance.png.mockAvatar.path,
+                            GraphicsFoundation.instance.png.mockAvatar.path,
                         nickname: 'nickname',
                         offers: [
                           SubscriptionOfferModel(
@@ -286,7 +300,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         userType: UserTileType.premium,
                         userName: 'userName',
                         userAvatarUrl:
-                        GraphicsFoundation.instance.png.mockAvatar.path,
+                            GraphicsFoundation.instance.png.mockAvatar.path,
                         nickname: 'nickname',
                         offers: [
                           SubscriptionOfferModel(
@@ -338,64 +352,64 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         scrollController: ScrollController(),
                         messageController: TextEditingController(),
                         pagingController:
-                        PagingController<int, ChatMessageUiModel>(
+                            PagingController<int, ChatMessageUiModel>(
                           firstPageKey: 1,
                         )..appendLastPage(
-                          [
-                            ChatMessageUiModel(
-                              messageType: MessageType.message,
-                              senderIsMe: false,
-                              timeSent: DateTime.now(),
-                              message:
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-                            ),
-                            ChatMessageUiModel(
-                              messageType: MessageType.message,
-                              senderIsMe: true,
-                              timeSent: DateTime.now(),
-                              message:
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-                            ),
-                            ChatMessageUiModel(
-                              messageType: MessageType.invitation,
-                              senderIsMe: true,
-                              timeSent: DateTime.now(),
-                              message:
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-                              invitationData: ChatMessageInvitationData(
-                                username: '@araratjan',
-                                placeId: 1,
-                                placeName: 'Burj Khalifa 122nd Floor',
-                                placeImagePath: GraphicsFoundation
-                                    .instance.png.place.path,
-                                invitedPeopleAvatarPaths: [
-                                  GraphicsFoundation
-                                      .instance.png.inviteMock1.path,
-                                  GraphicsFoundation
-                                      .instance.png.inviteMock2.path,
-                                  GraphicsFoundation
-                                      .instance.png.inviteMock3.path,
-                                  GraphicsFoundation
-                                      .instance.png.inviteMock4.path,
-                                ],
-                                tags: [
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
+                                [
+                                  ChatMessageUiModel(
+                                    messageType: MessageType.message,
+                                    senderIsMe: false,
+                                    timeSent: DateTime.now(),
+                                    message:
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
                                   ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
+                                  ChatMessageUiModel(
+                                    messageType: MessageType.message,
+                                    senderIsMe: true,
+                                    timeSent: DateTime.now(),
+                                    message:
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
                                   ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
+                                  ChatMessageUiModel(
+                                    messageType: MessageType.invitation,
+                                    senderIsMe: true,
+                                    timeSent: DateTime.now(),
+                                    message:
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                    invitationData: ChatMessageInvitationData(
+                                      username: '@araratjan',
+                                      placeId: 1,
+                                      placeName: 'Burj Khalifa 122nd Floor',
+                                      placeImagePath: GraphicsFoundation
+                                          .instance.png.place.path,
+                                      invitedPeopleAvatarPaths: [
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock1.path,
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock2.path,
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock3.path,
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock4.path,
+                                      ],
+                                      tags: [
+                                        UiKitTag(
+                                          title: 'Cheap',
+                                          icon: ShuffleUiKitIcons.cutlery,
+                                        ),
+                                        UiKitTag(
+                                          title: 'Cheap',
+                                          icon: ShuffleUiKitIcons.cutlery,
+                                        ),
+                                        UiKitTag(
+                                          title: 'Cheap',
+                                          icon: ShuffleUiKitIcons.cutlery,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   );
@@ -418,14 +432,14 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ..appendPage(
                           List<ChatItemUiModel>.generate(
                             10,
-                                (index) => ChatItemUiModel(
+                            (index) => ChatItemUiModel(
                               id: index,
                               userType: UserTileType.ordinary,
                               username: 'Araratjan $index',
                               nickname: '@arajan',
                               avatarUrl: '',
                               lastMessage:
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
                               lastMessageTime: DateTime.now()
                                   .subtract(Duration(hours: 6 * index)),
                               unreadMessageCount: index % 2 == 0 ? index : null,
@@ -453,7 +467,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                       body: FeedComponent(
                         showBusinessContent: true,
                         controller:
-                        PagingController<int, dynamic>(firstPageKey: 1),
+                            PagingController<int, dynamic>(firstPageKey: 1),
                         feed: UiFeedModel(
                           recommendedEvent: event,
                           // moods: List.generate(
@@ -489,7 +503,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           heroSearchTag: 'heroSearchTag',
                           places: List.generate(
                             10,
-                                (index) => UiPlaceModel(
+                            (index) => UiPlaceModel(
                               id: index + 1,
                               rating: 4 + (index / 10),
                               media: [
@@ -508,7 +522,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                               ],
                               title: 'lorem ipsum dolor sit amet',
                               description:
-                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
                               baseTags: [
                                 UiKitTag(
                                   title: 'Cheap',
@@ -609,7 +623,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           heroSearchTag: 'heroSearchBusinessTag',
                           places: List.generate(
                             10,
-                                (index) => UiPlaceModel(
+                            (index) => UiPlaceModel(
                               id: index + 1,
                               rating: 4 + (index / 10),
                               media: [
@@ -628,7 +642,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                               ],
                               title: 'lorem ipsum dolor sit amet',
                               description:
-                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
                               baseTags: [
                                 UiKitTag(
                                   title: 'Cheap',
@@ -753,12 +767,12 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     onPressed: () {
                       context.push(Scaffold(
                           body: CreateEventComponent(
-                            onEventCreated: (UiEventModel model) async {},
-                            propertiesOptions: (String) {
-                              return [];
-                            },
-                            availableTimeTemplates: [],
-                          )));
+                        onEventCreated: (UiEventModel model) async {},
+                        propertiesOptions: (String) {
+                          return [];
+                        },
+                        availableTimeTemplates: [],
+                      )));
                     })),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -767,11 +781,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     onPressed: () {
                       context.push(Scaffold(
                           body: CreatePlaceComponent(
-                            onPlaceCreated: (UiPlaceModel model) async {},
-                            propertiesOptions: (String) {
-                              return [];
-                            },
-                          )));
+                        onPlaceCreated: (UiPlaceModel model) async {},
+                        propertiesOptions: (String) {
+                          return [];
+                        },
+                      )));
                     })),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -810,25 +824,25 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                       name: 'Name asads',
                       places: List.generate(
                         2,
-                            (index) => UiPlaceModel(
+                        (index) => UiPlaceModel(
                           id: index + 1,
                           media: [
                             UiKitMediaPhoto(
                                 link:
-                                GraphicsFoundation.instance.png.place.path),
+                                    GraphicsFoundation.instance.png.place.path),
                             UiKitMediaPhoto(
                                 link:
-                                GraphicsFoundation.instance.png.place.path),
+                                    GraphicsFoundation.instance.png.place.path),
                             UiKitMediaPhoto(
                                 link:
-                                GraphicsFoundation.instance.png.place.path),
+                                    GraphicsFoundation.instance.png.place.path),
                             UiKitMediaPhoto(
                                 link:
-                                GraphicsFoundation.instance.png.place.path),
+                                    GraphicsFoundation.instance.png.place.path),
                           ],
                           title: 'lorem ipsum dolor sit amet',
                           description:
-                          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
                           baseTags: [
                             UiKitTag(
                               title: 'Cheap',
@@ -931,8 +945,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ComponentBuilder(
                             child: Scaffold(
                                 body: WelcomeComponent(
-                                  onFinished: () => context.pop(),
-                                )))))),
+                          onFinished: () => context.pop(),
+                        )))))),
             SpacingFoundation.verticalSpace16,
             // context.button(
             //     data: BaseUiKitButtonData(
@@ -963,60 +977,60 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ComponentBuilder(
                             child: Scaffold(
                                 body: PreferencesComponent(
-                                  preferences: UiPreferencesModel([
-                                    UiKitImportanceChip(
-                                      title: 'Electronic\nMusic',
-                                      importance: ImportanceChip.high,
-                                      id: 0,
-                                    ),
-                                    UiKitImportanceChip(
-                                        title: 'Swimming',
-                                        importance: ImportanceChip.medium,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Theme\nParks',
-                                        importance: ImportanceChip.none,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Hookah',
-                                        importance: ImportanceChip.high,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Electronic\nMusic',
-                                        importance: ImportanceChip.high,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Swimming',
-                                        importance: ImportanceChip.medium,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Theme\nParks',
-                                        importance: ImportanceChip.none,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Hookah',
-                                        importance: ImportanceChip.high,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Electronic\nMusic',
-                                        importance: ImportanceChip.high,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Swimming',
-                                        importance: ImportanceChip.medium,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Theme\nParks',
-                                        importance: ImportanceChip.none,
-                                        id: 0),
-                                    UiKitImportanceChip(
-                                        title: 'Hookah',
-                                        importance: ImportanceChip.high,
-                                        id: 0),
-                                  ], TextEditingController()),
-                                  onSubmit: () {},
-                                  onSelect: () {},
-                                )))))),
+                          preferences: UiPreferencesModel([
+                            UiKitImportanceChip(
+                              title: 'Electronic\nMusic',
+                              importance: ImportanceChip.high,
+                              id: 0,
+                            ),
+                            UiKitImportanceChip(
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Hookah',
+                                importance: ImportanceChip.high,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Hookah',
+                                importance: ImportanceChip.high,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none,
+                                id: 0),
+                            UiKitImportanceChip(
+                                title: 'Hookah',
+                                importance: ImportanceChip.high,
+                                id: 0),
+                          ], TextEditingController()),
+                          onSubmit: () {},
+                          onSelect: () {},
+                        )))))),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1027,17 +1041,17 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             configuration.appConfig.content['profile']),
                         ComponentBuilder(
                             child: Scaffold(
-                              body: ProfileComponent(
-                                  profile: UiProfileModel(
-                                    name: 'Marry Williams',
-                                    nickname: '@marywill',
-                                    description:
-                                    'Just walking here and there trying to find something unique and interesting to show you!',
-                                    avatarUrl: 'assets/images/png/profile_avatar.png',
-                                    // interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
-                                    // followers: 2650,
-                                  )),
-                            ))))),
+                          body: ProfileComponent(
+                              profile: UiProfileModel(
+                            name: 'Marry Williams',
+                            nickname: '@marywill',
+                            description:
+                                'Just walking here and there trying to find something unique and interesting to show you!',
+                            avatarUrl: 'assets/images/png/profile_avatar.png',
+                            // interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
+                            // followers: 2650,
+                          )),
+                        ))))),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -1056,15 +1070,15 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           dislikeController: dislikeController,
                           items: List.generate(
                             4,
-                                (index) => UiKitSwiperCard(
+                            (index) => UiKitSwiperCard(
                               id: 0,
                               title: 'Dance Again',
                               subtitle: 'Unique place for unique people',
                               imageLink: index == 0
                                   ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
                                   : index == 1
-                                  ? 'https://www.trutravels.com/blog/finns-beach-club.png'
-                                  : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
+                                      ? 'https://www.trutravels.com/blog/finns-beach-club.png'
+                                      : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
                               tags: [
                                 const UiKitTagWidget(
                                   title: 'Club',
@@ -1074,28 +1088,28 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                                   title: 'Club',
                                   icon: ShuffleUiKitIcons.cocktail,
                                   customSpace:
-                                  SpacingFoundation.horizontalSpace8,
+                                      SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
                                 UiKitTagWidget(
                                   title: 'Club',
                                   icon: ShuffleUiKitIcons.cocktail,
                                   customSpace:
-                                  SpacingFoundation.horizontalSpace8,
+                                      SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
                                 UiKitTagWidget(
                                   title: 'Club',
                                   icon: ShuffleUiKitIcons.cocktail,
                                   customSpace:
-                                  SpacingFoundation.horizontalSpace8,
+                                      SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
                                 UiKitTagWidget(
                                   title: 'Club',
                                   icon: ShuffleUiKitIcons.cocktail,
                                   customSpace:
-                                  SpacingFoundation.horizontalSpace8,
+                                      SpacingFoundation.horizontalSpace8,
                                   showSpacing: true,
                                 ),
                               ],
@@ -1245,9 +1259,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             ),
                             bottomBar: BottomBookingBar(
                                 model: ComponentPlaceModel.fromJson(
-                                    configuration
-                                        .appConfig.content['place'])
-                                    .bookingElementModel ??
+                                            configuration
+                                                .appConfig.content['place'])
+                                        .bookingElementModel ??
                                     BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -1269,9 +1283,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             ),
                             bottomBar: BottomBookingBar(
                                 model: ComponentPlaceModel.fromJson(
-                                    configuration
-                                        .appConfig.content['event'])
-                                    .bookingElementModel ??
+                                            configuration
+                                                .appConfig.content['event'])
+                                        .bookingElementModel ??
                                     BookingElementModel(version: '0')))))),
             SpacingFoundation.verticalSpace16,
             context.button(
@@ -1389,7 +1403,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     sum: 900,
                     topDayUsers: List.generate(
                       7,
-                          (index) => UiDonationUserModel(
+                      (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
                         username: '@misswow2022',
@@ -1400,7 +1414,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     ),
                     topMonthUsers: List.generate(
                       7,
-                          (index) => UiDonationUserModel(
+                      (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
                         username: '@misswow2022',
@@ -1411,7 +1425,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     ),
                     topYearUsers: List.generate(
                       7,
-                          (index) => UiDonationUserModel(
+                      (index) => UiDonationUserModel(
                         position: index + 1,
                         sum: '3640',
                         username: '@misswow2022',
@@ -1469,7 +1483,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   insetPadding: EdgeInsets.zero,
                   defaultButtonSmall: true,
                   customBackgroundColor:
-                  context.uiKitTheme?.colorScheme.surface3,
+                      context.uiKitTheme?.colorScheme.surface3,
                   title: Column(
                     children: [
                       Container(
