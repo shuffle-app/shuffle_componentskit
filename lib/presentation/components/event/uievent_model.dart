@@ -27,6 +27,8 @@ class UiEventModel extends Advertisable {
   String? reviewStatus;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
+  List<UiKitTag> nicheTags;
+  List<UiKitTag> uniquePropertirsTags;
   double? rating;
   bool archived;
   List<String> weekdays;
@@ -46,6 +48,8 @@ class UiEventModel extends Advertisable {
     this.verticalPreview,
     this.tags = const [],
     this.baseTags = const [],
+    this.nicheTags = const [],
+    this.uniquePropertirsTags = const [],
     this.rating,
     this.price,
     this.phone,
@@ -107,6 +111,8 @@ class UiEventModel extends Advertisable {
     this.niche,
     this.tags = const [],
     this.baseTags = const [],
+    this.nicheTags = const [],
+    this.uniquePropertirsTags = const [],
     this.rating,
     this.weekdays = const [],
     this.isRecurrent = false,
@@ -127,9 +133,9 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Phone);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
-    } else if(eventType == null || eventType!.isEmpty) {
+    } else if (eventType == null || eventType!.isEmpty) {
       return S.current.XIsRequired(S.current.EventType);
-    } else if(scheduleString == null || scheduleString!.isEmpty) {
+    } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
     }
 
@@ -155,6 +161,8 @@ class UiEventModel extends Advertisable {
         niche = null,
         tags = const [],
         baseTags = const [],
+        nicheTags = const [],
+        uniquePropertirsTags = const [],
         rating = null,
         archived = false,
         weekdays = const [],
@@ -167,6 +175,12 @@ class UiEventModel extends Advertisable {
     }
     if (tags.isEmpty) {
       tags = List.empty(growable: true);
+    }
+    if (nicheTags.isEmpty) {
+      nicheTags = List.empty(growable: true);
+    }
+    if (uniquePropertirsTags.isEmpty) {
+      uniquePropertirsTags = List.empty(growable: true);
     }
   }
 
@@ -191,6 +205,8 @@ class UiEventModel extends Advertisable {
     String? phone,
     List<UiKitTag>? tags,
     List<UiKitTag>? baseTags,
+    List<UiKitTag>? nicheTags,
+    List<UiKitTag>? uniquePropertirsTags,
     double? rating,
     bool? archived,
     List<String>? weekdays,
@@ -216,6 +232,8 @@ class UiEventModel extends Advertisable {
         website: website ?? this.website,
         phone: phone ?? this.phone,
         tags: tags ?? this.tags,
+        nicheTags: nicheTags ?? this.nicheTags,
+        uniquePropertirsTags: uniquePropertirsTags ?? this.uniquePropertirsTags,
         niche: niche ?? this.niche,
         baseTags: baseTags ?? this.baseTags,
         rating: rating ?? this.rating,

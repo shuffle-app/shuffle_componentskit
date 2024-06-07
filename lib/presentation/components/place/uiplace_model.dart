@@ -10,6 +10,8 @@ class UiPlaceModel {
   String description;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
+  List<UiKitTag> nicheTags;
+  List<UiKitTag> uniquePropertirsTags;
   double? rating;
   String? title;
   String? source;
@@ -48,6 +50,8 @@ class UiPlaceModel {
     this.placeType,
     this.branches,
     required this.tags,
+    this.nicheTags = const [],
+    this.uniquePropertirsTags = const [],
     this.baseTags = const [],
     this.weekdays = const [],
     this.schedule,
@@ -93,7 +97,7 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Location);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
-    } else if(placeType == null || placeType!.isEmpty) {
+    } else if (placeType == null || placeType!.isEmpty) {
       return S.current.XIsRequired(S.current.PlaceType);
     }
 
@@ -107,6 +111,8 @@ class UiPlaceModel {
     String? description,
     List<UiKitTag>? tags,
     List<UiKitTag>? baseTags,
+    List<UiKitTag>? nicheTags,
+    List<UiKitTag>? uniquePropertirsTags,
     double? rating,
     String? title,
     String? source,
@@ -134,6 +140,8 @@ class UiPlaceModel {
         weekdays: weekdays ?? this.weekdays,
         description: description ?? this.description,
         tags: tags ?? this.tags,
+        nicheTags: nicheTags ?? this.nicheTags,
+        uniquePropertirsTags: uniquePropertirsTags ?? this.uniquePropertirsTags,
         baseTags: baseTags ?? this.baseTags,
         rating: rating ?? this.rating,
         title: title ?? this.title,
@@ -160,6 +168,8 @@ class UiPlaceModel {
         description = '',
         contentType = 'both',
         tags = const [],
+        nicheTags = const [],
+        uniquePropertirsTags = const [],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         baseTags = const [] {
@@ -168,6 +178,12 @@ class UiPlaceModel {
     }
     if (tags.isEmpty) {
       tags = List.empty(growable: true);
+    }
+    if (nicheTags.isEmpty) {
+      nicheTags = List.empty(growable: true);
+    }
+    if (uniquePropertirsTags.isEmpty) {
+      nicheTags = List.empty(growable: true);
     }
   }
 }

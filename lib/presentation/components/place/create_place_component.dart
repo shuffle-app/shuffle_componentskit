@@ -30,9 +30,9 @@ class CreatePlaceComponent extends StatefulWidget {
     required this.onPlaceCreated,
     required this.propertiesOptions,
     this.onCategoryChanged,
-    this.onNicheChanged,
     this.availableTimeTemplates = const [],
     this.onTimeTemplateCreated,
+    this.onNicheChanged,
   });
 
   @override
@@ -138,21 +138,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     setState(() {
       _videos.insert(newIndex, _videos.removeAt(oldIndex));
     });
-  }
-
-  _selectCategoriForContent(ComponentEventModel model) async {
-    final newTags = await context.push(TagsSelectionComponent(
-      positionModel: model.positionModel,
-      selectedTags: _placeToEdit.tags.map((tag) => tag.title).toList(),
-      title: S.of(context).UniqueProperties,
-      allTags: widget.propertiesOptions('unique'),
-    ));
-    if (newTags != null) {
-      setState(() {
-        _placeToEdit.tags.clear();
-        _placeToEdit.tags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-      });
-    }
   }
 
   @override
@@ -438,37 +423,28 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             if (_placeToEdit.contentType == 'business') ...[
               SpacingFoundation.verticalSpace24,
               UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.baseTags,
+                listUiKitTags: _placeToEdit.nicheTags,
                 title: S.of(context).Niche,
-                onTap: () => _selectCategoriForContent(model),
-              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-              SpacingFoundation.verticalSpace4,
-              UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.baseTags,
-                title: S.of(context).PlaceType,
-                onTap: () => _selectCategoriForContent(model),
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    selectedTags: _placeToEdit.nicheTags.map((tag) => tag.title).toList(),
+                    title: S.of(context).Niche,
+                    allTags: widget.propertiesOptions('base'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _placeToEdit.nicheTags.clear();
+                      _placeToEdit.nicheTags
+                          .addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    });
+                  }
+                },
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.baseTags,
                 title: S.of(context).BaseProperties,
-                onTap: () => _selectCategoriForContent(model),
-              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-              SpacingFoundation.verticalSpace4,
-              UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.baseTags,
-                title: S.of(context).UniqueProperties,
-                onTap: () => _selectCategoriForContent(model),
-              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-            ],
-            SpacingFoundation.verticalSpace24,
-            Text(
-              S.of(context).BaseProperties,
-              style: theme?.regularTextTheme.labelSmall,
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace4,
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
                 onTap: () async {
                   final newTags = await context.push(TagsSelectionComponent(
                     positionModel: model.positionModel,
@@ -484,10 +460,55 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     });
                   }
                 },
+              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+              SpacingFoundation.verticalSpace4,
+              UiKitFieldWithTagList(
+                listUiKitTags: _placeToEdit.uniquePropertirsTags,
+                title: S.of(context).UniqueProperties,
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    selectedTags: _placeToEdit.uniquePropertirsTags.map((tag) => tag.title).toList(),
+                    title: S.of(context).UniqueProperties,
+                    allTags: widget.propertiesOptions('unique'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _placeToEdit.uniquePropertirsTags.clear();
+                      _placeToEdit.uniquePropertirsTags
+                          .addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    });
+                  }
+                },
+              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+            ],
+            SpacingFoundation.verticalSpace24,
+            Text(
+              S.of(context).BaseProperties,
+              style: theme?.regularTextTheme.labelSmall,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace4,
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    selectedTags: _placeToEdit.nicheTags.map((tag) => tag.title).toList(),
+                    title: S.of(context).BaseProperties,
+                    allTags: widget.propertiesOptions('base'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _placeToEdit.nicheTags.clear();
+                      _placeToEdit.nicheTags
+                          .addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    });
+                  }
+                },
                 child: IgnorePointer(
                     child: UiKitTagSelector(
                   showTextField: false,
-                  tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
+                  tags: _placeToEdit.nicheTags.map((tag) => tag.title).toList(),
                 )).paddingSymmetric(horizontal: horizontalPadding)),
             SpacingFoundation.verticalSpace24,
             if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[

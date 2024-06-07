@@ -130,13 +130,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     });
   }
 
-  _selectCategoriForContent(ComponentEventModel model) {
-    widget.onNicheChanged?.call().then((value) {
-      _nicheController.text = value ?? '';
-      _eventToEdit.niche = value ?? '';
-    });
-  }
-
   @override
   void didUpdateWidget(covariant CreateEventComponent oldWidget) {
     if (oldWidget.eventToEdit != widget.eventToEdit) {
@@ -354,27 +347,61 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           if (_eventToEdit.contentType == 'business') ...[
             SpacingFoundation.verticalSpace24,
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.baseTags,
-              title: S.of(context).Nich,
-              onTap: () => _selectCategoriForContent(model),
-            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-            SpacingFoundation.verticalSpace4,
-            UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.baseTags,
-              title: S.of(context).PlaceType,
-              onTap: () => _selectCategoriForContent(model),
+              listUiKitTags: _eventToEdit.nicheTags,
+              title: S.of(context).Niche,
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  selectedTags: _eventToEdit.nicheTags.map((tag) => tag.title).toList(),
+                  title: S.of(context).Niche,
+                  allTags: widget.propertiesOptions('base'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _eventToEdit.nicheTags.clear();
+                    _eventToEdit.nicheTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                  });
+                }
+              },
             ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
             SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.baseTags,
               title: S.of(context).BaseProperties,
-              onTap: () => _selectCategoriForContent(model),
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  selectedTags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                  title: S.of(context).BaseProperties,
+                  allTags: widget.propertiesOptions('base'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _eventToEdit.baseTags.clear();
+                    _eventToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                  });
+                }
+              },
             ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
             SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.baseTags,
+              listUiKitTags: _eventToEdit.uniquePropertirsTags,
               title: S.of(context).UniqueProperties,
-              onTap: () => _selectCategoriForContent(model),
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  selectedTags: _eventToEdit.uniquePropertirsTags.map((tag) => tag.title).toList(),
+                  title: S.of(context).UniqueProperties,
+                  allTags: widget.propertiesOptions('unique'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _eventToEdit.uniquePropertirsTags.clear();
+                    _eventToEdit.uniquePropertirsTags
+                        .addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                  });
+                }
+              },
             ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           ],
           SpacingFoundation.verticalSpace24,
