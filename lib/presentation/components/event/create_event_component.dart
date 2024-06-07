@@ -343,14 +343,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ),
           if (_eventToEdit.contentType == 'business') ...[
             SpacingFoundation.verticalSpace24,
-            Text(
-              S.of(context).PleaseSelectANiche,
-              style: theme?.regularTextTheme.labelSmall,
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.niche != null ? [UiKitTag(title: _eventToEdit.niche!, icon: '')] : null,
-              title: S.of(context).Niche,
+              title: S.of(context).PleaseSelectANiche,
               onTap: () {
                 setState(() {
                   widget.onNicheChanged?.call().then((value) {
@@ -361,7 +356,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
-                listUiKitTags: _eventToEdit.baseTags,
+                listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
                 title: S.of(context).BaseProperties,
                 onTap: () async {
                   final newTags = await context.push(TagsSelectionComponent(
@@ -380,7 +375,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 }).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.tags,
+              listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
               title: S.of(context).UniqueProperties,
               onTap: () async {
                 final newTags = await context.push(TagsSelectionComponent(

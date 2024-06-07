@@ -419,13 +419,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ),
             if (_placeToEdit.contentType == 'business') ...[
               SpacingFoundation.verticalSpace24,
-              Text(
-                S.of(context).PleaseSelectANiche,
-                style: theme?.regularTextTheme.labelSmall,
-              ).paddingSymmetric(horizontal: horizontalPadding),
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.niche != null ? [UiKitTag(title: _placeToEdit.niche!, icon: '')] : null,
-                title: S.of(context).Niche,
+                title: S.of(context).PleaseSelectANiche,
                 onTap: () {
                   setState(() {
                     widget.onNicheChanged?.call().then((value) {
@@ -436,7 +432,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
               UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.baseTags,
+                listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
                 title: S.of(context).BaseProperties,
                 onTap: () async {
                   final newTags = await context.push(TagsSelectionComponent(
@@ -456,7 +452,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
               UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.tags,
+                listUiKitTags: _placeToEdit.tags.isNotEmpty ? _placeToEdit.tags : null,
                 title: S.of(context).UniqueProperties,
                 onTap: () async {
                   final newTags = await context.push(TagsSelectionComponent(
