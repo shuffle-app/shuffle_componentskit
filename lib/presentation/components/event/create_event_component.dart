@@ -49,7 +49,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _nicheController = TextEditingController();
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -70,7 +69,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
-    _nicheController.text = widget.eventToEdit?.niche ?? '';
   }
 
   _onVideoDeleted(int index) {
@@ -141,7 +139,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _typeController.text = widget.eventToEdit?.eventType ?? '';
       _websiteController.text = widget.eventToEdit?.website ?? '';
       _phoneController.text = widget.eventToEdit?.phone ?? '';
-      _nicheController.text = widget.eventToEdit?.niche ?? '';
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
@@ -346,119 +343,60 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ),
           if (_eventToEdit.contentType == 'business') ...[
             SpacingFoundation.verticalSpace24,
+            Text(
+              S.of(context).PleaseSelectANiche,
+              style: theme?.regularTextTheme.labelSmall,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.nicheTags,
+              listUiKitTags: _eventToEdit.niche != null ? [UiKitTag(title: _eventToEdit.niche!, icon: '')] : null,
               title: S.of(context).Niche,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.nicheTags.map((tag) => tag.title).toList(),
-                  title: S.of(context).Niche,
-                  allTags: widget.propertiesOptions('base'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.nicheTags.clear();
-                    _eventToEdit.nicheTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+              onTap: () {
+                setState(() {
+                  widget.onNicheChanged?.call().then((value) {
+                    _eventToEdit.niche = value ?? '';
                   });
-                }
+                });
               },
-            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+            ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.baseTags,
-              title: S.of(context).BaseProperties,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-                  title: S.of(context).BaseProperties,
-                  allTags: widget.propertiesOptions('base'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.baseTags.clear();
-                    _eventToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                  });
-                }
-              },
-            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                listUiKitTags: _eventToEdit.baseTags,
+                title: S.of(context).BaseProperties,
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    selectedTags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                    title: S.of(context).BaseProperties,
+                    allTags: widget.propertiesOptions('base'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _eventToEdit.baseTags.clear();
+                      _eventToEdit.baseTags
+                          .addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    });
+                  }
+                }).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.uniquePropertirsTags,
+              listUiKitTags: _eventToEdit.tags,
               title: S.of(context).UniqueProperties,
               onTap: () async {
                 final newTags = await context.push(TagsSelectionComponent(
                   positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.uniquePropertirsTags.map((tag) => tag.title).toList(),
+                  selectedTags: _eventToEdit.tags.map((tag) => tag.title).toList(),
                   title: S.of(context).UniqueProperties,
                   allTags: widget.propertiesOptions('unique'),
                 ));
                 if (newTags != null) {
                   setState(() {
-                    _eventToEdit.uniquePropertirsTags.clear();
-                    _eventToEdit.uniquePropertirsTags
-                        .addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    _eventToEdit.tags.clear();
+                    _eventToEdit.tags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
                   });
                 }
               },
-            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-          ],
-          SpacingFoundation.verticalSpace24,
-          Text(
-            S.of(context).BaseProperties,
-            style: theme?.regularTextTheme.labelSmall,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace4,
-          GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-                  title: S.of(context).BaseProperties,
-                  allTags: widget.propertiesOptions('base'),
-                ));
-                log('here we have baseTags $newTags');
-                if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.baseTags.clear();
-                    _eventToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                  });
-                }
-              },
-              child: IgnorePointer(
-                  child: UiKitTagSelector(
-                showTextField: false,
-                tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-              )).paddingSymmetric(horizontal: horizontalPadding)),
-          SpacingFoundation.verticalSpace24,
-          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.isNotEmpty) ...[
-            Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
-                .paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace4,
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () async {
-                  final newTags = await context.push(TagsSelectionComponent(
-                    positionModel: model.positionModel,
-                    selectedTags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-                    title: S.of(context).UniqueProperties,
-                    allTags: widget.propertiesOptions('unique'),
-                  ));
-                  log('here we have uniqueTags $newTags');
-                  if (newTags != null) {
-                    setState(() {
-                      _eventToEdit.tags.clear();
-                      _eventToEdit.tags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                    });
-                  }
-                },
-                child: IgnorePointer(
-                    child: UiKitTagSelector(
-                  showTextField: false,
-                  tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-                )).paddingSymmetric(horizontal: horizontalPadding))
+            ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
           Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
