@@ -106,7 +106,7 @@ class CompanyAnswerFeedback extends StatelessWidget {
                 .paddingSymmetric(
                     horizontal: EdgeInsetsFoundation.horizontal16),
             title: S.current.WriteTheAnswer,
-          )
+          ).paddingOnly(bottom: kBottomNavigationBarHeight)
         ],
       ),
       bottomNavigationBar: KeyboardVisibilityBuilder(

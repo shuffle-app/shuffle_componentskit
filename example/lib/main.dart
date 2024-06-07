@@ -180,6 +180,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                       6,
                       (index) {
                         return FeedbackResponseUiModel(
+                          id: index,
                           timeSent: DateTime.now(),
                           senderIsMe: index.isOdd,
                           helpfulCount: index.isEven ? 10 : null,

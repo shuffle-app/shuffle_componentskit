@@ -5,8 +5,10 @@ class FeedbackResponseUiModel {
   final String senderName;
   final String? senderImagePath;
   final int? helpfulCount;
+  final int id;
 
-  FeedbackResponseUiModel({
+  FeedbackResponseUiModel( {
+    required this.id,
     required this.timeSent,
     this.message,
     required this.senderIsMe,
