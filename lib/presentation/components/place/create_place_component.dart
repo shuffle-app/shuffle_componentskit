@@ -439,7 +439,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               SpacingFoundation.verticalSpace24,
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.baseTags,
-                title: S.of(context).Nich,
+                title: S.of(context).Niche,
                 onTap: () => _selectCategoriForContent(model),
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace4,
