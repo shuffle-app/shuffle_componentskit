@@ -30,9 +30,9 @@ class CreatePlaceComponent extends StatefulWidget {
     required this.onPlaceCreated,
     required this.propertiesOptions,
     this.onCategoryChanged,
-    this.onNicheChanged,
     this.availableTimeTemplates = const [],
     this.onTimeTemplateCreated,
+    this.onNicheChanged,
   });
 
   @override
@@ -46,8 +46,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _locationController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   late final TextEditingController _priceController = TextEditingController();
-  late final TextEditingController _typeController = TextEditingController();
-  late final TextEditingController _nicheController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UiPlaceModel _placeToEdit;
 
@@ -72,8 +70,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
-    _typeController.text = widget.placeToEdit?.placeType ?? '';
-    _nicheController.text = widget.placeToEdit?.niche ?? '';
   }
 
   _onVideoDeleted(int index) {
@@ -158,10 +154,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _websiteController.text = widget.placeToEdit?.website ?? '';
       _phoneController.text = widget.placeToEdit?.phone ?? '';
       _priceController.text = widget.placeToEdit?.price ?? '';
-      _typeController.text = widget.placeToEdit?.placeType ?? '';
       _titleController.text = widget.placeToEdit?.title ?? '';
       _locationController.text = widget.placeToEdit?.location ?? '';
-      _nicheController.text = widget.placeToEdit?.niche ?? '';
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -335,52 +329,55 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               controller: _phoneController,
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
-            UiKitInputFieldNoFill(
-                keyboardType: TextInputType.text,
-                label: S.of(context).Price,
-                readOnly: true,
-                controller: _priceController,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
-                ],
-                onTap: () {
-                  showUiKitGeneralFullScreenDialog(
-                    context,
-                    GeneralDialogData(
-                      topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
-                      useRootNavigator: false,
-                      child: PriceSelectorComponent(
-                        isPriceRangeSelected: _priceController.text.contains('-'),
-                        initialPriceRange1: _priceController.text.split('-').first,
-                        initialPriceRange2:
-                            _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                        initialCurrency: _placeToEdit.currency,
-                        onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
-                          setState(() {
-                            if (averageSelected) {
-                              _priceController.text = averagePrice;
-                            } else {
-                              _priceController.text = rangePrice1;
-                              if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
-                                _priceController.text += '-$rangePrice2';
-                              }
-                              _placeToEdit.currency = currency;
+            UiKitFieldWithTagList(
+              listUiKitTags: [
+                UiKitTag(
+                  updateTitle: false,
+                  title: _priceController.text.isNotEmpty
+                      ? '${_placeToEdit.currency ?? ''} ${_priceController.text}'
+                      : '0',
+                  icon: ShuffleUiKitIcons.label,
+                ),
+              ],
+              title: S.of(context).Price,
+              onTap: () {
+                showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
+                    useRootNavigator: false,
+                    child: PriceSelectorComponent(
+                      isPriceRangeSelected: _priceController.text.contains('-'),
+                      initialPriceRange1: _priceController.text.split('-').first,
+                      initialPriceRange2:
+                          _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                      initialCurrency: _placeToEdit.currency,
+                      onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                        setState(() {
+                          if (averageSelected) {
+                            _priceController.text = averagePrice;
+                          } else {
+                            _priceController.text = rangePrice1;
+                            if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                              _priceController.text += '-$rangePrice2';
                             }
-                          });
-                        },
-                      ),
+                          }
+                          _placeToEdit.currency = currency;
+                        });
+                      },
                     ),
-                  );
-                }).paddingSymmetric(horizontal: horizontalPadding),
+                  ),
+                );
+              },
+            ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
-            UiKitInputFieldNoFill(
-              keyboardType: TextInputType.text,
-              label: S.of(context).PlaceType,
-              controller: _typeController,
-              readOnly: true,
+            UiKitFieldWithTagList(
+              title: S.of(context).PlaceType,
+              listUiKitTags: [
+                UiKitTag(title: _placeToEdit.placeType ?? '', icon: null),
+              ],
               onTap: () {
                 widget.onCategoryChanged?.call().then((value) {
-                  _typeController.text = value ?? '';
                   setState(() {
                     _placeToEdit.placeType = value ?? '';
                   });
@@ -420,34 +417,23 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 ),
               ],
             ),
+            SpacingFoundation.verticalSpace24,
             if (_placeToEdit.contentType == 'business') ...[
-              SpacingFoundation.verticalSpace24,
-              Text(
-                S.of(context).PleaseSelectANiche,
-                style: theme?.regularTextTheme.labelSmall,
-              ).paddingSymmetric(horizontal: horizontalPadding),
-              SpacingFoundation.verticalSpace4,
-              UiKitInputFieldNoFill(
-                keyboardType: TextInputType.text,
-                label: S.of(context).Niche,
-                readOnly: true,
-                controller: _nicheController,
+              UiKitFieldWithTagList(
+                listUiKitTags: _placeToEdit.niche != null ? [UiKitTag(title: _placeToEdit.niche!, icon: '')] : null,
+                title: S.of(context).PleaseSelectANiche,
                 onTap: () {
-                  widget.onNicheChanged?.call().then((value) {
-                    _nicheController.text = value ?? '';
-                    _placeToEdit.niche = value ?? '';
+                  setState(() {
+                    widget.onNicheChanged?.call().then((value) {
+                      _placeToEdit.niche = value ?? '';
+                    });
                   });
                 },
               ).paddingSymmetric(horizontal: horizontalPadding),
-            ],
-            SpacingFoundation.verticalSpace24,
-            Text(
-              S.of(context).BaseProperties,
-              style: theme?.regularTextTheme.labelSmall,
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace4,
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
+              SpacingFoundation.verticalSpace24,
+              UiKitFieldWithTagList(
+                listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
+                title: S.of(context).BaseProperties,
                 onTap: () async {
                   final newTags = await context.push(TagsSelectionComponent(
                     positionModel: model.positionModel,
@@ -463,18 +449,12 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     });
                   }
                 },
-                child: IgnorePointer(
-                    child: UiKitTagSelector(
-                  showTextField: false,
-                  tags: _placeToEdit.baseTags.map((tag) => tag.title).toList(),
-                )).paddingSymmetric(horizontal: horizontalPadding)),
-            SpacingFoundation.verticalSpace24,
-            if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
-              Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
-                  .paddingSymmetric(horizontal: horizontalPadding),
+              ).paddingSymmetric(horizontal: horizontalPadding),
               SpacingFoundation.verticalSpace4,
-              GestureDetector(
-                  behavior: HitTestBehavior.translucent,
+              if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
+                UiKitFieldWithTagList(
+                  listUiKitTags: _placeToEdit.tags.isNotEmpty ? _placeToEdit.tags : null,
+                  title: S.of(context).UniqueProperties,
                   onTap: () async {
                     final newTags = await context.push(TagsSelectionComponent(
                       positionModel: model.positionModel,
@@ -489,12 +469,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                       });
                     }
                   },
-                  child: IgnorePointer(
-                      child: UiKitTagSelector(
-                    showTextField: false,
-                    tags: _placeToEdit.tags.map((tag) => tag.title).toList(),
-                  )).paddingSymmetric(horizontal: horizontalPadding)),
-              SpacingFoundation.verticalSpace24,
+                ).paddingSymmetric(horizontal: horizontalPadding),
+                SpacingFoundation.verticalSpace24,
+              ],
             ],
             SafeArea(
               top: false,
