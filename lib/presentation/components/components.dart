@@ -79,3 +79,4 @@ export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
 export 'suggest_place/suggest_place_component.dart';
 export 'feedback/company_answer_feedback.dart';
+export 'feedback/feedback_response_component.dart';

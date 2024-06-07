@@ -170,6 +170,34 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show company feedback chat',
+                onPressed: () => context.push(
+                  FeedbackResponseComponent(
+                    rating: 5,
+                    uiProfileModel: UiProfileModel(name: 'Marry Alliance'),
+                    onMessageTap: (){},
+                    feedBacks: List.generate(
+                      6,
+                      (index) {
+                        return FeedbackResponseUiModel(
+                          timeSent: DateTime.now(),
+                          senderIsMe: index.isOdd,
+                          helpfulCount: index.isEven ? 10 : null,
+                          message: index.isOdd
+                              ? 'Good thanks'
+                              : 'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
+                          senderName:
+                              index.isOdd ? 'Burj Khalifa' : 'Marry Alliance',
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show company feedback',
                 onPressed: () => context.push(
                   CompanyAnswerFeedback(

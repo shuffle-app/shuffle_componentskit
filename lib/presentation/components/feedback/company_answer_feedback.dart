@@ -98,12 +98,15 @@ class CompanyAnswerFeedback extends StatelessWidget {
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
           UiKitTitledWrappedInput(
-              input: UiKitSymbolsCounterInputField(
-                  controller: TextEditingController(),
-                  enabled: true,
-                  obscureText: false,
-                  maxSymbols: 500),
-              title: 'Write the Answer')
+            input: UiKitSymbolsCounterInputField(
+                    controller: feedbackTextController,
+                    enabled: true,
+                    obscureText: false,
+                    maxSymbols: 500)
+                .paddingSymmetric(
+                    horizontal: EdgeInsetsFoundation.horizontal16),
+            title: 'Write the Answer',
+          )
         ],
       ),
       bottomNavigationBar: KeyboardVisibilityBuilder(
