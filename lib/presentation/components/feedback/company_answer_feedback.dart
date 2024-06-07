@@ -29,7 +29,7 @@ class CompanyAnswerFeedback extends StatelessWidget {
         centerTitle: true,
         customTitle: Expanded(
           child: Text(
-            'Reply ${uiProfileModel.name}',
+            '${S.current.Reply} ${uiProfileModel.name}',
             style: context.uiKitTheme?.boldTextTheme.title1,
             maxLines: 2,
             textAlign: TextAlign.center,
@@ -105,7 +105,7 @@ class CompanyAnswerFeedback extends StatelessWidget {
                     maxSymbols: 500)
                 .paddingSymmetric(
                     horizontal: EdgeInsetsFoundation.horizontal16),
-            title: 'Write the Answer',
+            title: S.current.WriteTheAnswer,
           )
         ],
       ),

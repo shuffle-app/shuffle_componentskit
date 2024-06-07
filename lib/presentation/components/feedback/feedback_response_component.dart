@@ -27,7 +27,7 @@ class FeedbackResponseComponent extends StatelessWidget {
         autoImplyLeading: true,
         centerTitle: true,
         wrapSliverBox: false,
-        title: 'Feedback',
+        title: S.current.Feedback,
         childrenPadding: EdgeInsets.all(EdgeInsetsFoundation.all16),
         children: [
           UiKitCardWrapper(
