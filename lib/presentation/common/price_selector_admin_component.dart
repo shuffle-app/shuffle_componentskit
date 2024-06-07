@@ -54,7 +54,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
 
   final _currencies = {
     'RUB': GraphicsFoundation.instance.svg.russia.path,
-    'USD': GraphicsFoundation.instance.svg.unitedKingdom.path,
+    'USD': GraphicsFoundation.instance.svg.usFlag.path,
     // 'hi' : GraphicsFoundation.instance.svg.india.path,
     'AED': GraphicsFoundation.instance.svg.arabic.path,
   };

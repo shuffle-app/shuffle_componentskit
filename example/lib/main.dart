@@ -33,7 +33,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GlobalConfiguration configuration = GlobalConfiguration(null, 'en');
+  final GlobalConfiguration configuration = GlobalConfiguration(null,'en');
   ThemeData? _theme;
   Locale? _locale;
 
@@ -95,8 +95,7 @@ class ComponentsTestPage extends StatefulWidget {
   State<ComponentsTestPage> createState() => _ComponentsTestPageState();
 }
 
-class _ComponentsTestPageState extends State<ComponentsTestPage>
-    with TickerProviderStateMixin {
+class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProviderStateMixin {
   late final likeController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 1, milliseconds: 500),
@@ -161,13 +160,68 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
     return Scaffold(
       appBar: CustomAppBar(
         title:
-            'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
+        'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated
+            .month} with ${configuration.appConfig.content['version']}',
         // centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company feedback chat',
+                onPressed: () => context.push(
+                  FeedbackResponseComponent(
+                    rating: 5,
+                    uiProfileModel: UiProfileModel(name: 'Marry Alliance'),
+                    onMessageTap: (){},
+                    feedBacks: List.generate(
+                      6,
+                      (index) {
+                        return FeedbackResponseUiModel(
+                          id: index,
+                          timeSent: DateTime.now(),
+                          senderIsMe: index.isOdd,
+                          helpfulCount: index.isEven ? 10 : null,
+                          message: index.isOdd
+                              ? 'Good thanks'
+                              : 'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
+                          senderName:
+                              index.isOdd ? 'Burj Khalifa' : 'Marry Alliance',
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company feedback',
+                onPressed: () => context.push(
+                  CompanyAnswerFeedback(
+                    uiProfileModel: UiProfileModel(
+                      name: 'Marry Alliance',
+                    ),
+                    reviewUiModel: ReviewUiModel(
+                      reviewDescription:
+                          'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
+                      reviewTime: DateTime.now(),
+                    ),
+                    feedbackTextController: TextEditingController(),
+                    onConfirm: () {},
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show create schedule',
+                    onPressed: () =>
+                        context.push(const CreateScheduleWidget()))),
             context.button(
               data: BaseUiKitButtonData(
                 text: 'show favorite create folder',
