@@ -47,7 +47,7 @@ class FeedbackResponseItemComponent extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            '${e.timeSent.day.toString()} days ago',
+                            formatDifference(e.timeSent),
                             style: boldTextTheme?.caption1Medium
                                 .copyWith(color: ColorsFoundation.mutedText),
                           ),

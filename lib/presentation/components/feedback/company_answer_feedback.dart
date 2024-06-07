@@ -66,7 +66,7 @@ class CompanyAnswerFeedback extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            '${reviewUiModel.reviewTime.day.toString()} days ago',
+                           formatDifference(reviewUiModel.reviewTime),
                             style: boldTextTheme?.caption1Medium
                                 .copyWith(color: ColorsFoundation.mutedText),
                           ),
