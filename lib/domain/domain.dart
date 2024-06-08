@@ -32,3 +32,4 @@ export 'data_uimodels/video_reaction_ui_model.dart';
 export 'location_models/location_details_response.dart';
 export 'location_models/location_search_autocomplete_response.dart';
 export 'location_models/place_geocoding_response.dart';
+export 'data_uimodels/feedback_response_ui_model.dart';

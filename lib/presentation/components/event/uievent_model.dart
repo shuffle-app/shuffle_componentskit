@@ -127,9 +127,9 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Phone);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
-    } else if(eventType == null || eventType!.isEmpty) {
+    } else if (eventType == null || eventType!.isEmpty) {
       return S.current.XIsRequired(S.current.EventType);
-    } else if(scheduleString == null || scheduleString!.isEmpty) {
+    } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
     }
 
