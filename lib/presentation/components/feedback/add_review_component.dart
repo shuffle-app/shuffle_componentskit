@@ -30,8 +30,7 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
   @override
   void initState() {
     if (widget.reviewUiModel != null) {
-      widget.reviewController.text =
-          widget.reviewUiModel?.reviewDescription ?? '';
+      widget.reviewController.text = widget.reviewUiModel?.reviewDescription ?? '';
     }
     super.initState();
   }
@@ -55,8 +54,7 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
         autoImplyLeading: true,
         centerTitle: true,
         title: S.current.AddReview,
-        childrenPadding:
-            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace24,
           Row(
@@ -66,8 +64,7 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
                 size: UserAvatarSize.x24x24,
                 type: UserTileType.influencer,
                 userName: widget.profileModel.name ?? 'Marry Alliance',
-                imageUrl: widget.profileModel.avatarUrl ??
-                    GraphicsFoundation.instance.png.place.path,
+                imageUrl: widget.profileModel.avatarUrl ?? GraphicsFoundation.instance.png.place.path,
               ),
               SpacingFoundation.horizontalSpace12,
               Expanded(
@@ -94,8 +91,7 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
                 ),
               ),
               SpacingFoundation.horizontalSpace12,
-              if(widget.rating!=null)
-              UiKitRatingBadge(rating: widget.rating!),
+              if (widget.rating != null) UiKitRatingBadge(rating: widget.rating!),
             ],
           ),
           SpacingFoundation.verticalSpace24,
@@ -139,11 +135,8 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
                                 widget.onConfirm.call(
                                   ReviewUiModel(
                                     // rating: widget.rating,
-                                    reviewDescription:
-                                        widget.reviewController.text,
-                                    reviewTime:
-                                        widget.reviewUiModel?.reviewTime ??
-                                            DateTime.now(),
+                                    reviewDescription: widget.reviewController.text,
+                                    reviewTime: widget.reviewUiModel?.reviewTime ?? DateTime.now(),
                                   ),
                                 );
                               }

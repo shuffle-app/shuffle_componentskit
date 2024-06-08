@@ -5,7 +5,7 @@ class FeedbackUiModel {
   final String? feedbackAuthorPhoto;
   final DateTime? feedbackDateTime;
   final String feedbackText;
-  final double? feedbackRating;
+  final int? feedbackRating;
   final UserTileType? feedbackAuthorType;
   final bool empty;
 
