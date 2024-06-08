@@ -360,6 +360,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             _priceController.text = rangePrice1;
                             if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
                               _priceController.text += '-$rangePrice2';
+
                             }
                           }
                           _placeToEdit.currency = currency;

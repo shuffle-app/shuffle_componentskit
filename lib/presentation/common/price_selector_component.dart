@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -24,9 +23,18 @@ class PriceSelectorComponent extends StatefulWidget {
     this.initialPriceRange2,
     this.initialCurrency,
   }) {
-    priceAverageController = TextEditingController(text: initialPriceRange1);
-    priceRangeController1 = TextEditingController(text: initialPriceRange1);
-    priceRangeController2 = TextEditingController(text: initialPriceRange2);
+    priceAverageController = TextEditingController(
+        text: initialPriceRange1 != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange1!)
+            : initialPriceRange1);
+    priceRangeController1 = TextEditingController(
+        text: initialPriceRange1 != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange1!)
+            : initialPriceRange1);
+    priceRangeController2 = TextEditingController(
+        text: initialPriceRange2 != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange2!)
+            : initialPriceRange2);
   }
 
   late final TextEditingController priceAverageController;
@@ -50,8 +58,6 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late bool _averageIsSelected;
-
-  final _textInputFormaterPriceSelector = FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$'));
 
   @override
   void initState() {
@@ -96,7 +102,7 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
 
   String _getHintText(String? initialPriceRange) {
     if (initialPriceRange != null) {
-      return initialPriceRange.isNotEmpty ? widget.initialPriceRange1! : '100';
+      return initialPriceRange.isNotEmpty ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange) : '100';
     }
     return '100';
   }
@@ -143,7 +149,7 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
                   hintText: _getHintText(widget.initialPriceRange1),
                   controller: widget.priceAverageController,
                   fillColor: theme?.colorScheme.surface3,
-                  inputFormatters: [_textInputFormaterPriceSelector],
+                  inputFormatters: [PriceWithSpacesFormatter()],
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   onTapOutside: (_) => _priceRangeController2IsLess(),
                   onChanged: (value) => _submit(),
@@ -180,10 +186,10 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
                     child: UiKitInputFieldNoIcon(
                       textColor: _inputTextColor(_averageIsSelected, theme),
                       enabled: _averageIsSelected,
-                      hintText: _getHintText(widget.initialPriceRange2),
+                      hintText: _getHintText(widget.initialPriceRange1),
                       controller: widget.priceRangeController1,
                       fillColor: theme?.colorScheme.surface3,
-                      inputFormatters: [_textInputFormaterPriceSelector],
+                      inputFormatters: [PriceWithSpacesFormatter()],
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       onTapOutside: (_) => _priceRangeController2IsLess(),
                       onSubmitted: (_) => _priceRangeController2IsLess(),
@@ -215,14 +221,16 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
                         enabled: _averageIsSelected,
                         hintText: widget.initialPriceRange2 ?? '500',
                         controller: widget.priceRangeController2,
-                        inputFormatters: [_textInputFormaterPriceSelector],
+                        inputFormatters: [PriceWithSpacesFormatter()],
                         fillColor: theme?.colorScheme.surface3,
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         onTapOutside: (_) => _priceRangeController2IsLess(),
                         onSubmitted: (_) => _priceRangeController2IsLess(),
                         validator: (value) {
                           if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
-                            if (int.parse(value) < int.parse(widget.priceRangeController1.text)) {
+                            final newValue = double.parse(value.replaceAll(' ', ''));
+
+                            if (newValue < double.parse(widget.priceRangeController1.text.replaceAll(' ', ''))) {
                               return '';
                             }
                             return null;

@@ -32,6 +32,7 @@ class AccountSubscriptionComponent extends StatefulWidget {
 class _AccountSubscriptionComponentState extends State<AccountSubscriptionComponent> {
   SubscriptionOfferModel? _selectedOffer;
   bool _isLoading = false;
+  final _autoSizeGroup = AutoSizeGroup();
 
   @override
   void initState() {
@@ -91,6 +92,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                   if (e != widget.uiModel.offers.last) padding = EdgeInsetsFoundation.vertical16;
 
                   return SubscriptionOfferWidget(
+                    autoSizeGroup: _autoSizeGroup,
                     selected: _selectedOffer == e,
                     onTap: () => setState(() => _selectedOffer = e),
                     model: e,
