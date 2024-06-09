@@ -164,6 +164,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       key: _formKey,
       child: BlurredAppBarPage(
         title: S.of(context).Event,
+        onIWidgetInfoString: S.current.ContentQualityNotice,
         centerTitle: true,
         autoImplyLeading: true,
         appBarTrailing: (widget.eventToEdit?.id ?? -1) > 0
