@@ -16,6 +16,7 @@ class EventComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> feedbackLoaderCallback;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
+  final VoidCallback? onAddFeedbackTapped;
 
   const EventComponent({
     Key? key,
@@ -23,6 +24,7 @@ class EventComponent extends StatefulWidget {
     required this.reactionsLoaderCallback,
     required this.feedbackLoaderCallback,
     this.complaintFormComponent,
+    this.onAddFeedbackTapped,
     this.isEligibleForEdit = false,
     this.onEditPressed,
     this.onSharePressed,
@@ -51,7 +53,7 @@ class _EventComponentState extends State<EventComponent> {
   }
 
   Future<void> _onReactionsPageRequest(int page) async {
-    final data = await widget.reactionsLoaderCallback(page);
+    final data = await widget.reactionsLoaderCallback(page, widget.event.id);
 
     if (data.isEmpty) {
       reactionsPagingController.appendLastPage(data);
@@ -66,7 +68,7 @@ class _EventComponentState extends State<EventComponent> {
   }
 
   Future<void> _onFeedbackPageRequest(int page) async {
-    final data = await widget.feedbackLoaderCallback(page);
+    final data = await widget.feedbackLoaderCallback(page, widget.event.id);
     if (data.isEmpty) {
       feedbackPagingController.appendLastPage(data);
       return;
@@ -81,12 +83,14 @@ class _EventComponentState extends State<EventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
             version: '0',
             pageBuilderType: PageBuilderType.page,
-            positionModel: PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
+            positionModel:
+                PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
@@ -130,7 +134,10 @@ class _EventComponentState extends State<EventComponent> {
                         right: 0,
                         child: IconButton(
                           icon: ImageWidget(
-                              iconData: ShuffleUiKitIcons.pencil, color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                              iconData: ShuffleUiKitIcons.pencil,
+                              color: Colors.white,
+                              height: 20.h,
+                              fit: BoxFit.fitHeight),
                           onPressed: () => widget.onEditPressed?.call(),
                         ),
                       )
@@ -213,7 +220,8 @@ class _EventComponentState extends State<EventComponent> {
         SpacingFoundation.verticalSpace14,
         if (widget.event.description != null) ...[
           RepaintBoundary(
-              child: DescriptionWidget(description: widget.event.description!).paddingSymmetric(horizontal: horizontalMargin)),
+              child: DescriptionWidget(description: widget.event.description!)
+                  .paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16
         ],
         SpacingFoundation.verticalSpace16,
@@ -292,42 +300,53 @@ class _EventComponentState extends State<EventComponent> {
         //     }
         //   },
         // ),
-        // SpacingFoundation.verticalSpace24,
-        // ValueListenableBuilder(
-        //   valueListenable: feedbackPagingController,
-        //   builder: (context, value, child) {
-        //     if (feedbackPagingController.itemList?.isNotEmpty ?? false) {
-        //       return UiKitColoredAccentBlock(
-        //         contentHeight: 0.28.sh,
-        //         color: colorScheme?.surface1,
-        //         title: Text(
-        //           S.current.ReactionsByCritics,
-        //           style: boldTextTheme?.body,
-        //         ),
-        //         content: UiKitHorizontalScrollableList<FeedbackUiModel>(
-        //           leftPadding: horizontalMargin,
-        //           spacing: SpacingFoundation.horizontalSpacing8,
-        //           shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
-        //           itemBuilder: (context, feedback, index) {
-        //             return SizedBox(
-        //               width: 0.85.sw,
-        //               child: UiKitFeedbackCard(
-        //                 title: feedback.feedbackAuthorName,
-        //                 avatarUrl: feedback.feedbackAuthorPhoto,
-        //                 datePosted: feedback.feedbackDateTime,
-        //                 companyAnswered: false,
-        //                 text: feedback.feedbackText,
-        //               ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
-        //             );
-        //           },
-        //           pagingController: feedbackPagingController,
-        //         ),
-        //       );
-        //     } else {
-        //       return const SizedBox.shrink();
-        //     }
-        //   },
-        // ),
+        SpacingFoundation.verticalSpace24,
+        ValueListenableBuilder(
+          valueListenable: feedbackPagingController,
+          builder: (context, value, child) {
+            if (feedbackPagingController.itemList?.isNotEmpty ?? false) {
+              return UiKitColoredAccentBlock(
+                contentHeight: 0.28.sh,
+                color: colorScheme?.surface1,
+                title: Text(
+                  S.current.ReactionsByCritics,
+                  style: boldTextTheme?.body,
+                ),
+                action: context
+                    .smallOutlinedButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.plus,
+                        ),
+                        onPressed: widget.onAddFeedbackTapped,
+                      ),
+                    )
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                content: UiKitHorizontalScrollableList<FeedbackUiModel>(
+                  leftPadding: horizontalMargin,
+                  spacing: SpacingFoundation.horizontalSpacing8,
+                  shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
+                  itemBuilder: (context, feedback, index) {
+                    return SizedBox(
+                      width: 0.85.sw,
+                      child: UiKitFeedbackCard(
+                        title: feedback.feedbackAuthorName,
+                        avatarUrl: feedback.feedbackAuthorPhoto,
+                        datePosted: feedback.feedbackDateTime,
+                        companyAnswered: false,
+                        text: feedback.feedbackText,
+                      ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
+                    );
+                  },
+                  pagingController: feedbackPagingController,
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+        ),
         (kBottomNavigationBarHeight * 1.5).heightBox
       ],
     ).paddingSymmetric(

@@ -12,25 +12,25 @@ class AddInfluencerFeedbackComponent extends StatefulWidget {
   final ReviewUiModel? reviewUiModel;
   final Future<bool> Function(bool value)? onAddToPersonalTopToggled;
   final Future<bool> Function(bool value)? onPersonalRespectToggled;
+  final bool? loading;
 
   const AddInfluencerFeedbackComponent({
     super.key,
     required this.feedbackTextController,
-    this.onConfirm,
-    this.uiUniversalModel,
-    this.reviewUiModel,
     required this.userTileType,
-     this.onAddToPersonalTopToggled,
-     this.onPersonalRespectToggled,
+    this.uiUniversalModel,
+    this.onConfirm,
+    this.reviewUiModel,
+    this.onAddToPersonalTopToggled,
+    this.onPersonalRespectToggled,
+    this.loading,
   });
 
   @override
-  State<AddInfluencerFeedbackComponent> createState() =>
-      _AddInfluencerFeedbackComponentState();
+  State<AddInfluencerFeedbackComponent> createState() => _AddInfluencerFeedbackComponentState();
 }
 
-class _AddInfluencerFeedbackComponentState
-    extends State<AddInfluencerFeedbackComponent> {
+class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackComponent> {
   bool? personalRespectToggled;
   bool? addToPersonalTopToggled;
   int rating = 0;
@@ -41,10 +41,8 @@ class _AddInfluencerFeedbackComponentState
       rating = widget.reviewUiModel?.rating ?? 0;
 
       if (widget.reviewUiModel != null) {
-        personalRespectToggled =
-            widget.reviewUiModel?.isPersonalRespect ?? false;
-        addToPersonalTopToggled =
-            widget.reviewUiModel?.isAddToPersonalTop ?? false;
+        personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
+        addToPersonalTopToggled = widget.reviewUiModel?.isAddToPersonalTop ?? false;
       }
     }
     super.didUpdateWidget(oldWidget);
@@ -54,13 +52,11 @@ class _AddInfluencerFeedbackComponentState
   void initState() {
     if (widget.reviewUiModel != null) {
       rating = widget.reviewUiModel?.rating ?? 0;
-      widget.feedbackTextController.text =
-          widget.reviewUiModel?.reviewDescription ?? '';
+      widget.feedbackTextController.text = widget.reviewUiModel?.reviewDescription ?? '';
     }
     if (widget.userTileType == UserTileType.influencer) {
       personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
-      addToPersonalTopToggled =
-          widget.reviewUiModel?.isAddToPersonalTop ?? false;
+      addToPersonalTopToggled = widget.reviewUiModel?.isAddToPersonalTop ?? false;
     }
 
     super.initState();
@@ -75,8 +71,7 @@ class _AddInfluencerFeedbackComponentState
         autoImplyLeading: true,
         centerTitle: true,
         title: S.current.AddFeedback,
-        childrenPadding:
-            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace16,
           Row(
@@ -91,9 +86,11 @@ class _AddInfluencerFeedbackComponentState
                     : null,
               ),
               SpacingFoundation.horizontalSpace12,
-              Text(
-                widget.uiUniversalModel?.title ?? '',
-                style: boldTextTheme?.title2,
+              Expanded(
+                child: Text(
+                  widget.uiUniversalModel?.title ?? '',
+                  style: boldTextTheme?.title2,
+                ),
               ),
             ],
           ),
@@ -188,6 +185,7 @@ class _AddInfluencerFeedbackComponentState
                     height: kBottomNavigationBarHeight,
                     child: context.button(
                       data: BaseUiKitButtonData(
+                        loading: widget.loading,
                         text: S.current.Confirm,
                         onPressed: widget.feedbackTextController.text.isNotEmpty
                             ? () {
@@ -196,11 +194,8 @@ class _AddInfluencerFeedbackComponentState
                                     isAddToPersonalTop: addToPersonalTopToggled,
                                     isPersonalRespect: personalRespectToggled,
                                     rating: rating,
-                                    reviewDescription:
-                                        widget.feedbackTextController.text,
-                                    reviewTime:
-                                        widget.reviewUiModel?.reviewTime ??
-                                            DateTime.now(),
+                                    reviewDescription: widget.feedbackTextController.text,
+                                    reviewTime: widget.reviewUiModel?.reviewTime ?? DateTime.now(),
                                   ),
                                 );
                               }
@@ -209,8 +204,7 @@ class _AddInfluencerFeedbackComponentState
                       ),
                     ),
                   ).paddingSymmetric(
-                    horizontal: EdgeInsetsFoundation.horizontal16,
-                    vertical: EdgeInsetsFoundation.vertical24),
+                    horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical24),
           );
         },
       ),
