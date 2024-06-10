@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 class VideoPreviewUiModel {
-  final String? id;
+  final String id;
   final String? title;
   final Duration? _duration;
   final Widget? previewImage;
 
   VideoPreviewUiModel({
-    this.id,
+    required this.id,
     this.title,
     Duration? duration,
     this.previewImage,
