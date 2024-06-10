@@ -312,17 +312,17 @@ class _EventComponentState extends State<EventComponent> {
                   S.current.ReactionsByCritics,
                   style: boldTextTheme?.body,
                 ),
-                // action: context
-                //     .smallOutlinedButton(
-                //       blurred: false,
-                //       data: BaseUiKitButtonData(
-                //         iconInfo: BaseUiKitButtonIconData(
-                //           iconData: ShuffleUiKitIcons.plus,
-                //         ),
-                //         onPressed: widget.onAddFeedbackTapped,
-                //       ),
-                //     )
-                //     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                action: context
+                    .smallOutlinedButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.plus,
+                        ),
+                        onPressed: widget.onAddFeedbackTapped,
+                      ),
+                    )
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: UiKitHorizontalScrollableList<FeedbackUiModel>(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
