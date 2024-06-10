@@ -28,7 +28,6 @@ class _SelectYourSpecialtyComponentState extends State<SelectYourSpecialtyCompon
     return Scaffold(
       body: BlurredAppBarPage(
         controller: _scrollController,
-        // TODO: Select your specialty in localization
         customToolbarBaseHeight: 0.13.sh,
         customTitle: Expanded(
           child: Row(
