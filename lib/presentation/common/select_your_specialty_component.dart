@@ -16,7 +16,7 @@ class SelectYourSpecialtyComponent extends StatefulWidget {
 }
 
 class _SelectYourSpecialtyComponentState extends State<SelectYourSpecialtyComponent> {
-  String selectedTab = 'Leisure';
+  String selectedTab = 'leisure';
   String description = '';
 
   final ScrollController _scrollController = ScrollController();
@@ -28,7 +28,7 @@ class _SelectYourSpecialtyComponentState extends State<SelectYourSpecialtyCompon
     return Scaffold(
       body: BlurredAppBarPage(
         controller: _scrollController,
-        customToolbarBaseHeight: 0.13.sh,
+        customToolbarBaseHeight: 1.sw <= 380 ? 0.18.sh : 0.13.sh,
         customTitle: Expanded(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +52,7 @@ class _SelectYourSpecialtyComponentState extends State<SelectYourSpecialtyCompon
             onTappedTab: (index) {
               setState(() {
                 selectedTab = [
-                  'Leisure',
+                  'leisure',
                   'business',
                 ][index];
               });
@@ -60,7 +60,7 @@ class _SelectYourSpecialtyComponentState extends State<SelectYourSpecialtyCompon
             tabs: [
               UiKitCustomTab(
                 title: S.of(context).Leisure,
-                customValue: 'Leisure',
+                customValue: 'leisure',
               ),
               UiKitCustomTab(
                 title: S.of(context).Business,
@@ -73,7 +73,7 @@ class _SelectYourSpecialtyComponentState extends State<SelectYourSpecialtyCompon
             style: theme?.regularTextTheme.caption1,
           ).paddingSymmetric(
               horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing16),
-          if (selectedTab == 'Leisure') ...[
+          if (selectedTab == 'leisure') ...[
             SpecialtyGridView(
               listSelectSpecialty: widget.leisureSpecialtyList,
               scrollController: _scrollController,
