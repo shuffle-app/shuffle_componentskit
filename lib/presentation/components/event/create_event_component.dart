@@ -20,7 +20,7 @@ class CreateEventComponent extends StatefulWidget {
   final Future<String?> Function()? getLocation;
   final Future<String?> Function()? onCategoryChanged;
   final Future<String?> Function()? onNicheChanged;
-  final List<String> Function(String) propertiesOptions;
+  final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
 
@@ -46,10 +46,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   late final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _typeController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _nicheController = TextEditingController();
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -65,12 +63,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
     _locationController.text = widget.eventToEdit?.location ?? '';
     _priceController.text = widget.eventToEdit?.price ?? '';
-    _typeController.text = widget.eventToEdit?.eventType ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
-    _nicheController.text = widget.eventToEdit?.niche ?? '';
   }
 
   _onVideoDeleted(int index) {
@@ -138,10 +134,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
       _locationController.text = widget.eventToEdit?.location ?? '';
       _priceController.text = widget.eventToEdit?.price ?? '';
-      _typeController.text = widget.eventToEdit?.eventType ?? '';
       _websiteController.text = widget.eventToEdit?.website ?? '';
       _phoneController.text = widget.eventToEdit?.phone ?? '';
-      _nicheController.text = widget.eventToEdit?.niche ?? '';
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
@@ -257,58 +251,57 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             validator: phoneNumberValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          UiKitInputFieldNoFill(
-              keyboardType: TextInputType.text,
-              label: S.of(context).Price,
-              readOnly: true,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$')),
-              ],
-              controller: _priceController,
-              onTap: () {
-                showUiKitGeneralFullScreenDialog(
-                  context,
-                  GeneralDialogData(
-                    topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
-                    useRootNavigator: false,
-                    child: PriceSelectorComponent(
-                      isPriceRangeSelected: _priceController.text.contains('-'),
-                      initialPriceRange1: _priceController.text.split('-').first,
-                      initialPriceRange2:
-                          _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                      initialCurrency: _eventToEdit.currency,
-                      onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
-                        setState(() {
-                          if (averageSelected) {
-                            _priceController.text = averagePrice;
-                          } else {
-                            _priceController.text = rangePrice1;
-                            if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
-                              _priceController.text += '-$rangePrice2';
-                            }
-                            _eventToEdit.currency = currency;
+          UiKitFieldWithTagList(
+            listUiKitTags: [
+              UiKitTag(
+                updateTitle: false,
+                title:
+                    _priceController.text.isNotEmpty ? '${_eventToEdit.currency ?? ''} ${_priceController.text}' : '0',
+                icon: ShuffleUiKitIcons.label,
+              ),
+            ],
+            title: S.of(context).Price,
+            onTap: () {
+              showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    isPriceRangeSelected: _priceController.text.contains('-'),
+                    initialPriceRange1: _priceController.text.split('-').first,
+                    initialPriceRange2:
+                        _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                    initialCurrency: _eventToEdit.currency,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                      setState(() {
+                        if (averageSelected) {
+                          _priceController.text = averagePrice;
+                        } else {
+                          _priceController.text = rangePrice1;
+                          if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                            _priceController.text += '-$rangePrice2';
                           }
-                        });
-
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                    ),
+                        }
+                        _eventToEdit.currency = currency;
+                      });
+                    },
                   ),
-                );
-              }).paddingSymmetric(horizontal: horizontalPadding),
+                ),
+              );
+            },
+          ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          UiKitInputFieldNoFill(
-            keyboardType: TextInputType.text,
-            label: S.of(context).EventType,
-            controller: _typeController,
-            readOnly: true,
+          UiKitFieldWithTagList(
+            title: S.of(context).PlaceType,
+            listUiKitTags: [
+              UiKitTag(title: _eventToEdit.eventType ?? '', icon: ''),
+            ],
             onTap: () {
               widget.onCategoryChanged?.call().then((value) {
-                _typeController.text = value ?? '';
                 setState(() {
                   _eventToEdit.eventType = value ?? '';
                 });
-                FocusManager.instance.primaryFocus?.unfocus();
               });
             },
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -344,83 +337,59 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               ),
             ],
           ),
-          if (_eventToEdit.contentType == 'business') ...[
-            SpacingFoundation.verticalSpace24,
-            Text(
-              S.of(context).PleaseSelectANiche,
-              style: theme?.regularTextTheme.labelSmall,
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace4,
-            UiKitInputFieldNoFill(
-              keyboardType: TextInputType.text,
-              label: S.of(context).Niche,
-              readOnly: true,
-              controller: _nicheController,
+          SpacingFoundation.verticalSpace24,
+          if (_eventToEdit.contentType == 'business')
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.niche != null ? [UiKitTag(title: _eventToEdit.niche!, icon: '')] : null,
+              title: S.of(context).PleaseSelectANiche,
               onTap: () {
-                widget.onNicheChanged?.call().then((value) {
-                  _nicheController.text = value ?? '';
-                  _eventToEdit.niche = value ?? '';
+                setState(() {
+                  widget.onNicheChanged?.call().then((value) {
+                    _eventToEdit.niche = value ?? '';
+                  });
                 });
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
-          ],
           SpacingFoundation.verticalSpace24,
-          Text(
-            S.of(context).BaseProperties,
-            style: theme?.regularTextTheme.labelSmall,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace4,
-          GestureDetector(
-              behavior: HitTestBehavior.translucent,
+          UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
+              title: S.of(context).BaseProperties,
               onTap: () async {
                 final newTags = await context.push(TagsSelectionComponent(
                   positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
+                  selectedTags: _eventToEdit.baseTags,
                   title: S.of(context).BaseProperties,
                   allTags: widget.propertiesOptions('base'),
                 ));
-                log('here we have baseTags $newTags');
                 if (newTags != null) {
                   setState(() {
                     _eventToEdit.baseTags.clear();
-                    _eventToEdit.baseTags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
+                    _eventToEdit.baseTags.addAll(newTags);
+                  });
+                }
+              }).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
+          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.isNotEmpty) ...[
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
+              title: S.of(context).UniqueProperties,
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  selectedTags: _eventToEdit.tags,
+                  title: S.of(context).UniqueProperties,
+                  allTags: widget.propertiesOptions('unique'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _eventToEdit.tags.clear();
+                    _eventToEdit.tags.addAll(newTags);
                   });
                 }
               },
-              child: IgnorePointer(
-                  child: UiKitTagSelector(
-                showTextField: false,
-                tags: _eventToEdit.baseTags.map((tag) => tag.title).toList(),
-              )).paddingSymmetric(horizontal: horizontalPadding)),
-          SpacingFoundation.verticalSpace24,
-          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.isNotEmpty) ...[
-            Text(S.of(context).UniqueProperties, style: theme?.regularTextTheme.labelSmall)
-                .paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace4,
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () async {
-                  final newTags = await context.push(TagsSelectionComponent(
-                    positionModel: model.positionModel,
-                    selectedTags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-                    title: S.of(context).UniqueProperties,
-                    allTags: widget.propertiesOptions('unique'),
-                  ));
-                  log('here we have uniqueTags $newTags');
-                  if (newTags != null) {
-                    setState(() {
-                      _eventToEdit.tags.clear();
-                      _eventToEdit.tags.addAll((newTags as List<String>).map((e) => UiKitTag(title: e, icon: null)));
-                    });
-                  }
-                },
-                child: IgnorePointer(
-                    child: UiKitTagSelector(
-                  showTextField: false,
-                  tags: _eventToEdit.tags.map((tag) => tag.title).toList(),
-                )).paddingSymmetric(horizontal: horizontalPadding))
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
           ],
-          SpacingFoundation.verticalSpace24,
           Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,

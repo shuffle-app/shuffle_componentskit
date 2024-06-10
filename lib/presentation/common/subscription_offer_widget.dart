@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/subscription_offer_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -7,12 +8,14 @@ class SubscriptionOfferWidget extends StatelessWidget {
   final bool selected;
   final SubscriptionOfferModel model;
   final double? bottomInset;
+  final AutoSizeGroup autoSizeGroup;
 
   const SubscriptionOfferWidget({
     super.key,
     required this.onTap,
     required this.selected,
     required this.model,
+    required this.autoSizeGroup,
     this.bottomInset,
   });
 
@@ -30,12 +33,14 @@ class SubscriptionOfferWidget extends StatelessWidget {
           UiKitRadio(selected: selected),
           SpacingFoundation.horizontalSpace12,
           Expanded(
-            child: Text(
+            child: AutoSizeText(
+              textAlign: TextAlign.start,
               model.name,
+              maxLines: 1,
               style: boldTextTheme?.caption1UpperCaseMedium,
+              group: autoSizeGroup,
             ),
           ),
-          SpacingFoundation.horizontalSpace12,
           if (model.savings != null) ...[
             Container(
               decoration: BoxDecoration(
@@ -53,11 +58,17 @@ class SubscriptionOfferWidget extends StatelessWidget {
                 vertical: EdgeInsetsFoundation.vertical2,
               ),
             ),
-            SpacingFoundation.horizontalSpace12,
           ],
-          Text(
-            model.formattedPriceWithPeriod,
-            style: boldTextTheme?.caption1UpperCaseMedium,
+          SpacingFoundation.horizontalSpace12,
+          Expanded(
+            child: AutoSizeText(
+              minFontSize: 11.0,
+              textAlign: TextAlign.right,
+              maxLines: 1,
+              model.formattedPriceWithPeriod,
+              style: boldTextTheme?.caption1UpperCaseMedium,
+              group: autoSizeGroup,
+            ),
           ),
         ],
       ).paddingOnly(bottom: bottomInset ?? 0),
