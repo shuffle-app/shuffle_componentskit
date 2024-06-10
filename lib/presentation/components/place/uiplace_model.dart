@@ -93,7 +93,7 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Location);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
-    } else if(placeType == null || placeType!.isEmpty) {
+    } else if (placeType == null || placeType!.isEmpty) {
       return S.current.XIsRequired(S.current.PlaceType);
     }
 

@@ -28,6 +28,7 @@ class CompanySubscriptionComponent extends StatefulWidget {
 class _CompanySubscriptionComponentState extends State<CompanySubscriptionComponent> {
   SubscriptionOfferModel? _selectedOffer;
   bool _isLoading = false;
+  final _autoSizeGroup = AutoSizeGroup();
 
   @override
   void initState() {
@@ -149,6 +150,7 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
                     if (e != widget.uiModel.offers.last) padding = EdgeInsetsFoundation.vertical16;
 
                     return SubscriptionOfferWidget(
+                      autoSizeGroup: _autoSizeGroup,
                       selected: _selectedOffer == e,
                       onTap: () => setState(() => _selectedOffer = e),
                       model: e,
@@ -224,23 +226,23 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
               alignment: Alignment.centerLeft,
               child: RichText(
                   text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: S.of(context).TermsOfService,
-                          style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => launchUrlString(widget.uiModel.termsOfServiceUrl)),
-                      TextSpan(
-                        text: S.of(context).AndWithWhitespaces.toLowerCase(),
-                        style: regularTextTheme?.caption3,
-                      ),
-                      TextSpan(
-                          text: S.of(context).PrivacyPolicy,
-                          style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => launchUrlString(widget.uiModel.privacyPolicyUrl)),
-                    ],
-                  ))),
+                children: [
+                  TextSpan(
+                      text: S.of(context).TermsOfService,
+                      style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => launchUrlString(widget.uiModel.termsOfServiceUrl)),
+                  TextSpan(
+                    text: S.of(context).AndWithWhitespaces.toLowerCase(),
+                    style: regularTextTheme?.caption3,
+                  ),
+                  TextSpan(
+                      text: S.of(context).PrivacyPolicy,
+                      style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => launchUrlString(widget.uiModel.privacyPolicyUrl)),
+                ],
+              ))),
           SpacingFoundation.verticalSpace24,
         ],
       ).paddingAll(EdgeInsetsFoundation.all16),

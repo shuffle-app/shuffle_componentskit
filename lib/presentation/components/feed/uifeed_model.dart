@@ -98,6 +98,24 @@ class UiUniversalModel extends Advertisable {
     this.shouldVisitAt,
   }) : super(isAdvertisement: false);
 
+  factory UiUniversalModel.fromPlaceUiModel(UiPlaceModel placeModel) => UiUniversalModel(
+        id: placeModel.id,
+        type: 'place',
+        media: placeModel.media,
+        description: placeModel.description,
+        tags: placeModel.tags,
+        title: placeModel.title,
+      );
+
+  factory UiUniversalModel.fromEventUiModel(UiEventModel eventModel) => UiUniversalModel(
+        id: eventModel.id,
+        type: 'event',
+        media: eventModel.media,
+        description: eventModel.description ?? '',
+        tags: eventModel.tags,
+        title: eventModel.title,
+      );
+
   @override
   String toString() {
     return 'UiUniversalModel(id: $id, type: $type, shouldVisitAt: $shouldVisitAt)';

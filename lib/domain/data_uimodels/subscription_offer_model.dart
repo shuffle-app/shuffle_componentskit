@@ -1,4 +1,5 @@
 import 'package:shuffle_components_kit/presentation/utils/extentions/number_converters.dart';
+import 'package:shuffle_uikit/utils/utils.dart';
 
 class SubscriptionOfferModel {
   final String name;
@@ -9,9 +10,11 @@ class SubscriptionOfferModel {
   final String storePurchaseId;
   final int? trialDaysAvailable;
 
-  String get formattedPriceWithPeriod => '$currency${price.nanOrTwoTrailingZeros}/$periodName';
+  String get formattedPriceWithPeriod =>
+      '$currency${PriceWithSpacesFormatter().formatStringUpdate(price.nanOrTwoTrailingZeros)}/$periodName';
 
-  String get formattedPriceNoPeriod => '$currency${price.nanOrTwoTrailingZeros}';
+  String get formattedPriceNoPeriod =>
+      '$currency${PriceWithSpacesFormatter().formatStringUpdate(price.nanOrTwoTrailingZeros)}';
 
   SubscriptionOfferModel({
     this.savings,
