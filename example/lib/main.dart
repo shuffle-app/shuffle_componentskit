@@ -1360,16 +1360,16 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ComponentBuilder(
                             child: PlaceComponent(
                               place: place,
-                              placeReactionLoaderCallback: (int page) async {
+                              placeReactionLoaderCallback: (int page,int contentId) async {
                                 return [];
                               },
-                              eventReactionLoaderCallback: (int page) async {
+                              eventReactionLoaderCallback: (int page,int contentId) async {
                                 return [];
                               },
-                              placeFeedbackLoaderCallback: (int page) async {
+                              placeFeedbackLoaderCallback:(int page,int contentId) async {
                                 return [];
                               },
-                              eventFeedbackLoaderCallback: (int page) async {
+                              eventFeedbackLoaderCallback: (int page,int contentId) async {
                                 return [];
                               },
                             ),
@@ -1390,10 +1390,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ComponentBuilder(
                             child: EventComponent(
                               event: event,
-                              reactionsLoaderCallback: (int page) async {
+                              reactionsLoaderCallback: (int page,int contentId) async {
                                 return [];
                               },
-                              feedbackLoaderCallback: (int page) async {
+                              feedbackLoaderCallback: (int page,int contentId) async {
                                 return [];
                               },
                             ),
