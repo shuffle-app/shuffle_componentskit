@@ -81,3 +81,4 @@ export 'suggest_place/suggest_place_component.dart';
 export 'feedback/company_answer_feedback.dart';
 export 'feedback/feedback_response_component.dart';
 export 'profile/favorites_component/favorite_create_folder_component.dart';
+export 'profile/favorites_component/favorite_folders_component.dart';

@@ -33,7 +33,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GlobalConfiguration configuration = GlobalConfiguration(null,'en');
+  final GlobalConfiguration configuration = GlobalConfiguration(null, 'en');
   ThemeData? _theme;
   Locale? _locale;
 
@@ -95,7 +95,8 @@ class ComponentsTestPage extends StatefulWidget {
   State<ComponentsTestPage> createState() => _ComponentsTestPageState();
 }
 
-class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProviderStateMixin {
+class _ComponentsTestPageState extends State<ComponentsTestPage>
+    with TickerProviderStateMixin {
   late final likeController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 1, milliseconds: 500),
@@ -160,8 +161,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
     return Scaffold(
       appBar: CustomAppBar(
         title:
-        'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated
-            .month} with ${configuration.appConfig.content['version']}',
+            'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
         // centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -170,12 +170,86 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show favorite create folder',
+                onPressed: () => context.push(
+                  FavoriteCreateFolderComponent(
+                    titleController: TextEditingController(),
+                    onConfirm: () {
+                      context.pop();
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite folders',
+                onPressed: () => context.push(
+                  FavoriteFoldersComponent(
+                    places: List.generate(
+                      4,
+                      (index) => PlacePreview(
+                        onTap: (value) {},
+                        place: UiPlaceModel(
+                          id: index + 1,
+                          media: [
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation.instance.png.place.path),
+                          ],
+                          title: 'lorem ipsum dolor sit amet',
+                          description:
+                          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                          baseTags: [
+                            UiKitTag(
+                              title: 'Club',
+                              icon: ShuffleUiKitIcons.club,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Free',
+                              icon: ShuffleUiKitIcons.discount,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Closed',
+                              icon: ShuffleUiKitIcons.clock,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: '7 min',
+                              icon: ShuffleUiKitIcons.route,
+                              unique: false,
+                            ),
+                          ],
+                          tags: [],
+                        ),
+                        isFavorite: Stream<bool>.value(true),
+                        showFavoriteBtn: true,
+                        model: const ComponentModel(
+                            pageBuilderType: PageBuilderType.page,
+                            version: '1.0.18'),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show company feedback chat',
                 onPressed: () => context.push(
                   FeedbackResponseComponent(
                     rating: 5,
                     uiProfileModel: UiProfileModel(name: 'Marry Alliance'),
-                    onMessageTap: (){},
+                    onMessageTap: () {},
                     feedBacks: List.generate(
                       6,
                       (index) {
@@ -222,19 +296,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     text: 'show create schedule',
                     onPressed: () =>
                         context.push(const CreateScheduleWidget()))),
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show favorite create folder',
-                onPressed: () => context.push(
-                  FavoriteCreateFolderComponent(
-                    titleController: TextEditingController(),
-                    onConfirm: () {
-                      context.pop();
-                    },
-                  ),
-                ),
-              ),
-            ),
+
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
