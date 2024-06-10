@@ -170,6 +170,143 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show favorite merge component',
+                onPressed: () => context.push(
+                  FavoritesMergeComponent(
+                    theBestParties: List.generate(
+                      3,
+                      (index) => UiModelFavoritesMergeComponent(
+                        imageUrl: GraphicsFoundation.instance.png.place.path,
+                        title: 'La Vue Citytel Group',
+                        tags: [
+                          UiKitTag(
+                            title: 'Club',
+                            icon: ShuffleUiKitIcons.club,
+                            unique: false,
+                          ),
+                          UiKitTag(
+                            title: 'Free',
+                            icon: ShuffleUiKitIcons.discount,
+                            unique: false,
+                          ),
+                          UiKitTag(
+                            title: 'Closed',
+                            icon: ShuffleUiKitIcons.clock,
+                            unique: false,
+                          ),
+                          UiKitTag(
+                            title: '7 min',
+                            icon: ShuffleUiKitIcons.route,
+                            unique: false,
+                          ),
+                        ],
+                      ),
+                    ),
+                    techConfList: List.generate(
+                     4,
+                          (index) => UiModelFavoritesMergeComponent(
+                        imageUrl: GraphicsFoundation.instance.png.place.path,
+                        title: 'La Vue Citytel Group',
+                        tags: [
+                          UiKitTag(
+                            title: 'Club',
+                            icon: ShuffleUiKitIcons.club,
+                            unique: false,
+                          ),
+                          UiKitTag(
+                            title: 'Free',
+                            icon: ShuffleUiKitIcons.discount,
+                            unique: false,
+                          ),
+                          UiKitTag(
+                            title: 'Closed',
+                            icon: ShuffleUiKitIcons.clock,
+                            unique: false,
+                          ),
+                          UiKitTag(
+                            title: '7 min',
+                            icon: ShuffleUiKitIcons.route,
+                            unique: false,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite folder bottom sheet',
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    child: FavoriteFoldersBottomSheetComponent(
+                      places: List.generate(
+                        4,
+                        (index) => PlacePreview(
+                          onTap: (value) {},
+                          place: UiPlaceModel(
+                            id: index + 1,
+                            media: [
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                            ],
+                            title: 'lorem ipsum dolor sit amet',
+                            description:
+                                'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                            baseTags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.club,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                            tags: [],
+                          ),
+                          isFavorite: Stream<bool>.value(true),
+                          showFavoriteBtn: true,
+                          model: const ComponentModel(
+                              pageBuilderType: PageBuilderType.page,
+                              version: '1.0.18'),
+                        ),
+                      ),
+                      onAddToMyFavorites: () {},
+                      personName: 'Kaiya Garcia',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show favorite create folder',
                 onPressed: () => context.push(
                   FavoriteCreateFolderComponent(
@@ -195,17 +332,21 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           id: index + 1,
                           media: [
                             UiKitMediaPhoto(
-                                link: GraphicsFoundation.instance.png.place.path),
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
                             UiKitMediaPhoto(
-                                link: GraphicsFoundation.instance.png.place.path),
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
                             UiKitMediaPhoto(
-                                link: GraphicsFoundation.instance.png.place.path),
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
                             UiKitMediaPhoto(
-                                link: GraphicsFoundation.instance.png.place.path),
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
                           ],
                           title: 'lorem ipsum dolor sit amet',
                           description:
-                          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
                           baseTags: [
                             UiKitTag(
                               title: 'Club',
@@ -237,6 +378,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             version: '1.0.18'),
                       ),
                     ),
+                    onShareTap: () {},
                   ),
                 ),
               ),
@@ -1360,16 +1502,20 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ComponentBuilder(
                             child: PlaceComponent(
                               place: place,
-                              placeReactionLoaderCallback: (int page,int contentId) async {
+                              placeReactionLoaderCallback:
+                                  (int page, int contentId) async {
                                 return [];
                               },
-                              eventReactionLoaderCallback: (int page,int contentId) async {
+                              eventReactionLoaderCallback:
+                                  (int page, int contentId) async {
                                 return [];
                               },
-                              placeFeedbackLoaderCallback:(int page,int contentId) async {
+                              placeFeedbackLoaderCallback:
+                                  (int page, int contentId) async {
                                 return [];
                               },
-                              eventFeedbackLoaderCallback: (int page,int contentId) async {
+                              eventFeedbackLoaderCallback:
+                                  (int page, int contentId) async {
                                 return [];
                               },
                             ),
@@ -1390,10 +1536,12 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ComponentBuilder(
                             child: EventComponent(
                               event: event,
-                              reactionsLoaderCallback: (int page,int contentId) async {
+                              reactionsLoaderCallback:
+                                  (int page, int contentId) async {
                                 return [];
                               },
-                              feedbackLoaderCallback: (int page,int contentId) async {
+                              feedbackLoaderCallback:
+                                  (int page, int contentId) async {
                                 return [];
                               },
                             ),

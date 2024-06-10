@@ -82,3 +82,8 @@ export 'feedback/company_answer_feedback.dart';
 export 'feedback/feedback_response_component.dart';
 export 'profile/favorites_component/favorite_create_folder_component.dart';
 export 'profile/favorites_component/favorite_folders_component.dart';
+export 'profile/favorites_component/favorite_folders_bottom_sheet_component.dart';
+export 'profile/favorites_component/favorites_merge_component.dart';
+export 'profile/favorites_component/ui_model_favorites_merge_component.dart';
+
+

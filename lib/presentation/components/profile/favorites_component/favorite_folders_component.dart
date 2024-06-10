@@ -30,7 +30,7 @@ class FavoriteFoldersComponent extends StatelessWidget {
         ),
         customTitle: Expanded(
           child: Text(
-            'The best tech conf',
+            S.current.TheBestTechConf,
             style: context.uiKitTheme?.boldTextTheme.title1,
             maxLines: 2,
             textAlign: TextAlign.center,
