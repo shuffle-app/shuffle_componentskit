@@ -1326,6 +1326,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     //         ),
                     //       ),
                     //     ),
+
                   ),
                 ),
               ),
@@ -1371,6 +1372,41 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
               ),
             ),
             SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'Select your specialty component',
+                onPressed: () => context.push(
+                  SelectYourSpecialtyComponent(
+                    businessSpecialtyList: [
+                      SelectSpecialty(
+                        name: 'name',
+                        description: 'description',
+                        isSelected: true,
+                      ),
+                      SelectSpecialty(
+                        name: 'name',
+                        description: 'description',
+                        isSelected: false,
+                      ),
+                      SelectSpecialty(
+                        name: 'name',
+                        description: 'description',
+                        isSelected: true,
+                      ),
+                    ],
+                    leisureSpecialtyList: [
+                      SelectSpecialty(
+                        name: 'name',
+                        description: 'description',
+                        isSelected: false,
+                      ),
+                      SelectSpecialty(
+                        name: 'name',
+                        description: 'description',
+                        isSelected: false,
+                      ),
+                    ],
+
             OrdinaryButton(
               text: 'To become an influencer you need to do:',
               onPressed: () => showGeneralDialog(
@@ -1384,6 +1420,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   child: const ProgressBecomingInfluencerComponent(
                     reviewsProgress: 15,
                     videoReactionProgress: 45,
+
                   ),
                 ),
               ),
