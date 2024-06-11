@@ -1326,7 +1326,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     //         ),
                     //       ),
                     //     ),
-
                   ),
                 ),
               ),
@@ -1406,7 +1405,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         isSelected: false,
                       ),
                     ],
-
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
             OrdinaryButton(
               text: 'To become an influencer you need to do:',
               onPressed: () => showGeneralDialog(
@@ -1418,9 +1421,59 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 pageBuilder: (context, animation1, animation2) => FadeTransition(
                   opacity: animation1,
                   child: const ProgressBecomingInfluencerComponent(
-                    reviewsProgress: 15,
-                    videoReactionProgress: 45,
-
+                    reviewsProgress: 47,
+                    videoReactionProgress: 50,
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show new tool component',
+              onPressed: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  useRootNavigator: false,
+                  child: InfluencerToolsComponent(
+                    onTap: () {},
+                    influencerUiModelList: [
+                      InfluencerUiModel(
+                        title: S.of(context).CountReviews(''),
+                        progress: 100,
+                        actualProgress: 50,
+                      ),
+                      InfluencerUiModel(
+                        title: S.of(context).CountVideoReaction(''),
+                        progress: 100,
+                        actualProgress: 50,
+                      ),
+                      InfluencerUiModel(
+                        title: S.of(context).News,
+                        progress: 50,
+                        actualProgress: 0,
+                      ),
+                      InfluencerUiModel(
+                        title: S.of(context).Voices,
+                        progress: 50,
+                        actualProgress: 0,
+                      ),
+                      InfluencerUiModel(
+                        title: S.of(context).Photos,
+                        progress: 50,
+                        actualProgress: 0,
+                      ),
+                      InfluencerUiModel(
+                        title: S.of(context).IdealRoute,
+                        progress: 5,
+                        actualProgress: 0,
+                      ),
+                    ],
+                    newToolsInfluncerList: [
+                      S.of(context).Photos,
+                      S.of(context).Voices,
+                      S.of(context).News,
+                      S.of(context).IdealRoute,
+                    ],
                   ),
                 ),
               ),
