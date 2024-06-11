@@ -23,9 +23,18 @@ class PriceSelectorAdminComponent extends StatefulWidget {
     this.initialPriceRange2,
     this.initialCurrency,
   }) {
-    priceAverageController = TextEditingController();
-    priceRangeController1 = TextEditingController();
-    priceRangeController2 = TextEditingController();
+    priceAverageController = TextEditingController(
+        text: initialPriceRange1 != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange1!)
+            : initialPriceRange1);
+    priceRangeController1 = TextEditingController(
+        text: initialPriceRange1 != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange1!)
+            : initialPriceRange1);
+    priceRangeController2 = TextEditingController(
+        text: initialPriceRange2 != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange2!)
+            : initialPriceRange2);
   }
 
   late final TextEditingController priceAverageController;
@@ -47,8 +56,6 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
   double? _wightItemSelecetOption;
 
   late final List<Color?>? listColor;
-
-  final _textInputFormaterPriceSelector = FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d*)$'));
 
   final ValueNotifier<String?> _currency = ValueNotifier(null);
 
@@ -119,9 +126,9 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
 
   void _submit() {
     widget.onSubmit(
-      widget.priceAverageController.text,
-      widget.priceRangeController1.text,
-      widget.priceRangeController2.text,
+      widget.priceAverageController.text.removeTrailingDecimal(),
+      widget.priceRangeController1.text.removeTrailingDecimal(),
+      widget.priceRangeController2.text.removeTrailingDecimal(),
       _currency.value ?? 'AED',
       _priceRageIsSelected,
     );
@@ -187,7 +194,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                 fillColor: theme?.colorScheme.surface,
                 hintText: _getHintText(widget.initialPriceRange1),
                 controller: widget.priceAverageController,
-                inputFormatters: [_textInputFormaterPriceSelector],
+                inputFormatters: [PriceWithSpacesFormatter()],
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (value) => _submit(),
               ),
@@ -227,7 +234,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                     fillColor: theme?.colorScheme.surface,
                     hintText: _getHintText(widget.initialPriceRange1),
                     controller: widget.priceRangeController1,
-                    inputFormatters: [_textInputFormaterPriceSelector],
+                    inputFormatters: [PriceWithSpacesFormatter()],
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     onTapOutside: (_) => _priceRangeController2IsLess(),
                     onSubmitted: (_) => _priceRangeController2IsLess(),
@@ -258,13 +265,15 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                       fillColor: theme?.colorScheme.surface,
                       hintText: widget.initialPriceRange2 ?? '500',
                       controller: widget.priceRangeController2,
-                      inputFormatters: [_textInputFormaterPriceSelector],
+                      inputFormatters: [PriceWithSpacesFormatter()],
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       onTapOutside: (_) => _priceRangeController2IsLess(),
                       onSubmitted: (_) => _priceRangeController2IsLess(),
                       validator: (value) {
                         if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
-                          if (double.parse(value) < double.parse(widget.priceRangeController1.text)) {
+                          final newValue = double.parse(value.replaceAll(' ', ''));
+
+                          if (newValue < double.parse(widget.priceRangeController1.text.replaceAll(' ', ''))) {
                             return '';
                           }
                           return null;

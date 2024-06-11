@@ -68,9 +68,9 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
 
   void _submit() {
     widget.onSubmit(
-      widget.priceAverageController.text,
-      widget.priceRangeController1.text,
-      widget.priceRangeController2.text,
+      widget.priceAverageController.text.removeTrailingDecimal(),
+      widget.priceRangeController1.text.removeTrailingDecimal(),
+      widget.priceRangeController2.text.removeTrailingDecimal(),
       _currency.value,
       !_averageIsSelected,
     );
