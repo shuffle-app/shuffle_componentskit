@@ -29,7 +29,7 @@ class InfluencerToolsComponent extends StatelessWidget {
           ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
           SpacingFoundation.verticalSpace4,
           Text(
-            S.of(context).YourNewTools,
+            '${S.of(context).YourNewTools}:',
             style: theme?.boldTextTheme.subHeadline,
           ),
           SpacingFoundation.verticalSpace16,
@@ -73,7 +73,7 @@ class InfluencerToolsComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace24,
           Text(
-            S.of(context).ToOpenTheNextSetOfToolsYouNeedToDo,
+            '${S.of(context).ToOpenTheNextSetOfToolsYouNeedToDo}:',
             style: theme?.boldTextTheme.subHeadline,
           ),
           SpacingFoundation.verticalSpace16,
