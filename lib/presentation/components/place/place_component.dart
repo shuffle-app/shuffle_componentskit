@@ -25,6 +25,8 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
+  final VoidCallback? onAddFeedbackTapped;
+  final bool canLeaveFeedback;
 
   const PlaceComponent({
     Key? key,
@@ -35,6 +37,7 @@ class PlaceComponent extends StatefulWidget {
     required this.eventFeedbackLoaderCallback,
     this.onFeedbackTap,
     this.onReactionTap,
+    this.onAddFeedbackTapped,
     this.complaintFormComponent,
     this.isCreateEventAvaliable = false,
     this.onEventCreate,
@@ -42,6 +45,7 @@ class PlaceComponent extends StatefulWidget {
     this.onEventTap,
     this.onSharePressed,
     this.events,
+    this.canLeaveFeedback = false,
   }) : super(key: key);
 
   @override
@@ -65,7 +69,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   }
 
   void _reactionsListener(int page) async {
-    final data = await widget.placeReactionLoaderCallback(page);
+    final data = await widget.placeReactionLoaderCallback(page, widget.place.id);
 
     if (data.isEmpty) {
       reactionsPagingController.appendLastPage(data);
@@ -80,7 +84,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   }
 
   void _feedbacksListener(int page) async {
-    final data = await widget.placeFeedbackLoaderCallback(page);
+    final data = await widget.placeFeedbackLoaderCallback(page, widget.place.id);
     if (data.isEmpty) {
       feedbacksPagedController.appendLastPage(data);
       return;
@@ -95,7 +99,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -395,6 +400,17 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   S.current.ReactionsByCritics,
                   style: boldTextTheme?.body,
                 ),
+                action: context
+                    .smallOutlinedButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.plus,
+                        ),
+                        onPressed: widget.onAddFeedbackTapped,
+                      ),
+                    )
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: UiKitHorizontalScrollableList(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
@@ -407,6 +423,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                         avatarUrl: feedback.feedbackAuthorPhoto,
                         datePosted: feedback.feedbackDateTime,
                         companyAnswered: false,
+                        rating: feedback.feedbackRating,
                         text: feedback.feedbackText,
                       ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
                     );
