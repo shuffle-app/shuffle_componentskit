@@ -62,7 +62,7 @@ class SettingsComponent extends StatelessWidget {
             child: context.outlinedButton(
               data: BaseUiKitButtonData(
                 text: S.current.SubmitContent,
-                onPressed: () {},
+                onPressed: onSubmitContent,
                 backgroundColor: context.uiKitTheme?.colorScheme.primary,
               ),
             ),
