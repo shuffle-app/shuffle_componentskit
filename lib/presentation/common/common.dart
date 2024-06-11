@@ -9,3 +9,4 @@ export 'video_cutter_component.dart';
 export 'web_form_field.dart';
 export 'web_photo_video_selector.dart';
 export 'web_view_screen.dart';
+export 'select_your_specialty_component.dart';
