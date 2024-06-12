@@ -163,8 +163,262 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite merge component',
+                onPressed: () => context.push(
+                  FavoritesMergeComponent(
+                    contentsList: List.generate(
+                      3,
+                      (index) {
+                        return UiModelFavoritesMergeContentList(
+                            title: 'The Best Parties $index',
+                            contents: List.generate(
+                              3,
+                              (index) => UiModelFavoritesMergeComponent(
+                                imageUrl:
+                                    GraphicsFoundation.instance.png.place.path,
+                                title: 'La Vue Citytel Group',
+                                tags: [
+                                  UiKitTag(
+                                    title: 'Club',
+                                    icon: ShuffleUiKitIcons.club,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Free',
+                                    icon: ShuffleUiKitIcons.discount,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Closed',
+                                    icon: ShuffleUiKitIcons.clock,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: '7 min',
+                                    icon: ShuffleUiKitIcons.route,
+                                    unique: false,
+                                  ),
+                                ],
+                              ),
+                            ));
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite folder bottom sheet',
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    child: FavoriteFoldersBottomSheetComponent(
+                      places: List.generate(
+                        4,
+                        (index) => PlacePreview(
+                          onTap: (value) {},
+                          place: UiPlaceModel(
+                            id: index + 1,
+                            media: [
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                            ],
+                            title: 'lorem ipsum dolor sit amet',
+                            description:
+                                'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                            baseTags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.club,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                            tags: [],
+                          ),
+                          isFavorite: Stream<bool>.value(true),
+                          showFavoriteBtn: true,
+                          model: const ComponentModel(
+                              pageBuilderType: PageBuilderType.page,
+                              version: '1.0.18'),
+                        ),
+                      ),
+                      onAddToMyFavorites: () {},
+                      personName: 'Kaiya Garcia',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite create folder',
+                onPressed: () => context.push(
+                  FavoriteCreateFolderComponent(
+                    titleController: TextEditingController(),
+                    onConfirm: () {
+                      context.pop();
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite folders',
+                onPressed: () => context.push(
+                  FavoriteFoldersComponent(
+                    places: List.generate(
+                      4,
+                      (index) => PlacePreview(
+                        onTap: (value) {},
+                        place: UiPlaceModel(
+                          id: index + 1,
+                          media: [
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                          ],
+                          title: 'lorem ipsum dolor sit amet',
+                          description:
+                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                          baseTags: [
+                            UiKitTag(
+                              title: 'Club',
+                              icon: ShuffleUiKitIcons.club,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Free',
+                              icon: ShuffleUiKitIcons.discount,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Closed',
+                              icon: ShuffleUiKitIcons.clock,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: '7 min',
+                              icon: ShuffleUiKitIcons.route,
+                              unique: false,
+                            ),
+                          ],
+                          tags: [],
+                        ),
+                        isFavorite: Stream<bool>.value(true),
+                        showFavoriteBtn: true,
+                        model: const ComponentModel(
+                            pageBuilderType: PageBuilderType.page,
+                            version: '1.0.18'),
+                      ),
+                    ),
+                    onShareTap: () {},
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company feedback chat',
+                onPressed: () => context.push(
+                  FeedbackResponseComponent(
+                    rating: 5,
+                    uiProfileModel: UiProfileModel(name: 'Marry Alliance'),
+                    onMessageTap: () {},
+                    feedBacks: List.generate(
+                      6,
+                      (index) {
+                        return FeedbackResponseUiModel(
+                          id: index,
+                          timeSent: DateTime.now(),
+                          senderIsMe: index.isOdd,
+                          helpfulCount: index.isEven ? 10 : null,
+                          message: index.isOdd
+                              ? 'Good thanks'
+                              : 'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
+                          senderName:
+                              index.isOdd ? 'Burj Khalifa' : 'Marry Alliance',
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company feedback',
+                onPressed: () => context.push(
+                  CompanyAnswerFeedback(
+                    uiProfileModel: UiProfileModel(
+                      name: 'Marry Alliance',
+                    ),
+                    reviewUiModel: ReviewUiModel(
+                      reviewDescription:
+                          'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
+                      reviewTime: DateTime.now(),
+                    ),
+                    feedbackTextController: TextEditingController(),
+                    onConfirm: () {},
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
+                    text: 'show create schedule',
+                    onPressed: () =>
+                        context.push(const CreateScheduleWidget()))),
+
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show create schedule',
+                    onPressed: () =>
+                        context.push(const CreateScheduleWidget()))),
             SpacingFoundation.verticalSpace16,
             OrdinaryButton(
               text: 'show invite Bottom Sheet',
@@ -1119,6 +1373,22 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: PlaceComponent(
                               place: place,
+                              placeReactionLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                              eventReactionLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                              placeFeedbackLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                              eventFeedbackLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
                               placeReactionLoaderCallback: (page, conentId) => [] as Future<List<VideoReactionUiModel>>,
                               eventReactionLoaderCallback: (int page, conentId) =>
                                   [] as Future<List<VideoReactionUiModel>>,
@@ -1139,6 +1409,14 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: EventComponent(
                               event: event,
+                              reactionsLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                              feedbackLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
                               feedbackLoaderCallback: (page, conentId) => [] as Future<List<FeedbackUiModel>>,
                               reactionsLoaderCallback: (page, conentId) => [] as Future<List<VideoReactionUiModel>>,
                             ),
