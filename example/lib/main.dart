@@ -173,63 +173,42 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 text: 'show favorite merge component',
                 onPressed: () => context.push(
                   FavoritesMergeComponent(
-                    theBestParties: List.generate(
+                    contentsList: List.generate(
                       3,
-                      (index) => UiModelFavoritesMergeComponent(
-                        imageUrl: GraphicsFoundation.instance.png.place.path,
-                        title: 'La Vue Citytel Group',
-                        tags: [
-                          UiKitTag(
-                            title: 'Club',
-                            icon: ShuffleUiKitIcons.club,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: 'Free',
-                            icon: ShuffleUiKitIcons.discount,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: 'Closed',
-                            icon: ShuffleUiKitIcons.clock,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: '7 min',
-                            icon: ShuffleUiKitIcons.route,
-                            unique: false,
-                          ),
-                        ],
-                      ),
-                    ),
-                    techConfList: List.generate(
-                     4,
-                          (index) => UiModelFavoritesMergeComponent(
-                        imageUrl: GraphicsFoundation.instance.png.place.path,
-                        title: 'La Vue Citytel Group',
-                        tags: [
-                          UiKitTag(
-                            title: 'Club',
-                            icon: ShuffleUiKitIcons.club,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: 'Free',
-                            icon: ShuffleUiKitIcons.discount,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: 'Closed',
-                            icon: ShuffleUiKitIcons.clock,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: '7 min',
-                            icon: ShuffleUiKitIcons.route,
-                            unique: false,
-                          ),
-                        ],
-                      ),
+                      (index) {
+                        return UiModelFavoritesMergeContentList(
+                            title: 'The Best Parties $index',
+                            contents: List.generate(
+                              3,
+                              (index) => UiModelFavoritesMergeComponent(
+                                imageUrl:
+                                    GraphicsFoundation.instance.png.place.path,
+                                title: 'La Vue Citytel Group',
+                                tags: [
+                                  UiKitTag(
+                                    title: 'Club',
+                                    icon: ShuffleUiKitIcons.club,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Free',
+                                    icon: ShuffleUiKitIcons.discount,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Closed',
+                                    icon: ShuffleUiKitIcons.clock,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: '7 min',
+                                    icon: ShuffleUiKitIcons.route,
+                                    unique: false,
+                                  ),
+                                ],
+                              ),
+                            ));
+                      },
                     ),
                   ),
                 ),

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/favorites_component/ui_model_favorites_merge_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FavoritesMergeComponent extends StatelessWidget {
-  const FavoritesMergeComponent({
-    super.key,
-    required this.theBestParties,
-    required this.techConfList,
-  });
+  const FavoritesMergeComponent({super.key, required this.contentsList});
 
-  final List<UiModelFavoritesMergeComponent> theBestParties;
-  final List<UiModelFavoritesMergeComponent> techConfList;
+  final List<UiModelFavoritesMergeContentList> contentsList;
 
   @override
   Widget build(BuildContext context) {
@@ -43,31 +39,30 @@ class FavoritesMergeComponent extends StatelessWidget {
                         color: ColorsFoundation.lightHeadingTypographyColor),
                   ),
                   SpacingFoundation.verticalSpace12,
-                  Text(
-                    S.current.TheBestParties,
-                    style: theme?.regularTextTheme.caption1.copyWith(color: ColorsFoundation.mutedText),
-                  ),
-                  SpacingFoundation.verticalSpace12,
-                  ...theBestParties.map((e){
-                    return UiKitExtendedInfluencerFeedbackCardWithoutBottom(
-                      imageUrl: e.imageUrl,
-                      title: e.title,
-                      tags: e.tags,
-                    ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical4);
-                  }),
-                  SpacingFoundation.verticalSpace12,
-                  Text(
-                    S.current.TheBestParties,
-                    style: theme?.regularTextTheme.caption1.copyWith(color: ColorsFoundation.mutedText),
-                  ),
-                  SpacingFoundation.verticalSpace12,
-                  ...techConfList.map((e){
-                    return UiKitExtendedInfluencerFeedbackCardWithoutBottom(
-                      imageUrl: e.imageUrl,
-                      title: e.title,
-                      tags: e.tags,
-                    ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical4);
-                  }),
+                  ...List.generate(
+                    contentsList.length,
+                    (index) {
+                      return Column(
+                        children: [
+                          Text(
+                            contentsList[index].title,
+                            style: theme?.regularTextTheme.caption1
+                                .copyWith(color: ColorsFoundation.mutedText),
+                          ),
+                          SpacingFoundation.verticalSpace12,
+                          ...contentsList[index].contents.map((e) {
+                            return UiKitExtendedInfluencerFeedbackCardWithoutBottom(
+                              imageUrl: e.imageUrl,
+                              title: e.title,
+                              tags: e.tags,
+                            ).paddingSymmetric(
+                                vertical: EdgeInsetsFoundation.vertical4);
+                          }),
+                          SpacingFoundation.verticalSpace12,
+                        ],
+                      );
+                    },
+                  )
                 ],
               ).paddingAll(EdgeInsetsFoundation.all16),
             ),
