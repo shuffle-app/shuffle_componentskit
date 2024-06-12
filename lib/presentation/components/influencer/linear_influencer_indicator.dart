@@ -15,7 +15,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
 
   late final double _indicatorWidth = width ?? 256.w;
 
-  double get _progressPosition => _indicatorWidth * (_progressValue / 100);
+  double get _progressPosition => _indicatorWidth * (_progressValue / 120);
   double get _progressValue => ((actualSum / sum) * 100);
 
   double _getCurrentPosition(double currentPosition) {
@@ -36,7 +36,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
         alignment: Alignment.centerLeft,
         children: [
           ColoredBox(
-            color: colorScheme?.darkNeutral200 ?? Colors.white,
+            color: colorScheme?.surface3 ?? Colors.white,
             child: SizedBox(
               height: 6.h,
               width: _indicatorWidth,

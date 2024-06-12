@@ -3,13 +3,12 @@ import 'package:shuffle_components_kit/presentation/components/suggest_place/ui_
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SuggestPlaceComponent extends StatelessWidget {
-  const SuggestPlaceComponent(
-      {super.key,
-      required this.locationController,
-      required this.titleController,
-      required this.descriptionController,
-      required this.onLocationTap,
-      required this.onConfirm});
+  const SuggestPlaceComponent({super.key,
+    required this.locationController,
+    required this.titleController,
+    required this.descriptionController,
+    required this.onLocationTap,
+    required this.onConfirm});
 
   final TextEditingController locationController;
   final TextEditingController titleController;
@@ -32,13 +31,13 @@ class SuggestPlaceComponent extends StatelessWidget {
           UiKitInputFieldNoFill(
             controller: locationController,
             label: S.current.Location,
+            onTap: onLocationTap,
+            readOnly: true,
             hintText: S.current.EnterLocation,
-            icon: InkWell(
-              onTap: onLocationTap,
-              child: const Icon(
-                ShuffleUiKitIcons.landmark,
-                color: ColorsFoundation.darkBodyTypographyColor,
-              ),
+            icon: const Icon(
+              ShuffleUiKitIcons.landmark,
+              color: ColorsFoundation.darkBodyTypographyColor,
+
             ),
             customEnabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
@@ -113,7 +112,7 @@ class SuggestPlaceComponent extends StatelessWidget {
                   ),
                 );
               } else {
-               return context.gradientButton(
+                return context.gradientButton(
                   data: BaseUiKitButtonData(
                     onPressed: null,
                     text: S.current.Submit,

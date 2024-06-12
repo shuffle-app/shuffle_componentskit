@@ -28,10 +28,14 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentModel model = ComponentModel.fromJson(config['company_home']);
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+            GlobalConfiguration().appConfig.content;
+    final ComponentModel model =
+        ComponentModel.fromJson(config['company_home']);
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin =
+        (model.positionModel?.verticalMargin ?? 0).toDouble();
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Scaffold(
@@ -99,14 +103,17 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                     status: creationStats[item.id],
                   );
                 },
-                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
+                separatorBuilder: (context, index) =>
+                    SpacingFoundation.verticalSpace24,
                 itemCount: places.length,
               ),
             if (places.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
               context.gradientButton(
                 data: BaseUiKitButtonData(
-                    text: S.of(context).CreatePlace, onPressed: onCreatePlace, fit: ButtonFit.fitWidth),
+                    text: S.of(context).CreatePlace,
+                    onPressed: onCreatePlace,
+                    fit: ButtonFit.fitWidth),
               ),
             ],
             SpacingFoundation.verticalSpace24,
