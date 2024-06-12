@@ -64,6 +64,7 @@ class ProgressBecomingInfluencerComponent extends StatelessWidget {
               LinearInfluencerIndicator(
                 sum: 50,
                 actualSum: reviewsProgress,
+                width: 1.sw,
               ),
               SpacingFoundation.verticalSpace16,
               Text(
@@ -88,6 +89,7 @@ class ProgressBecomingInfluencerComponent extends StatelessWidget {
               LinearInfluencerIndicator(
                 sum: 50,
                 actualSum: videoReactionProgress,
+                width: 1.sw,
               ),
             ],
           ).paddingAll(EdgeInsetsFoundation.all24),
