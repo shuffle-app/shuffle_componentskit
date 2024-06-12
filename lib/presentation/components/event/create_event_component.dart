@@ -164,6 +164,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       key: _formKey,
       child: BlurredAppBarPage(
         title: S.of(context).Event,
+        onIWidgetInfoString: S.current.ContentQualityNotice,
         centerTitle: true,
         autoImplyLeading: true,
         appBarTrailing: (widget.eventToEdit?.id ?? -1) > 0
@@ -269,8 +270,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   useRootNavigator: false,
                   child: PriceSelectorComponent(
                     isPriceRangeSelected: _priceController.text.contains('-'),
-                    initialPriceRange1: _priceController.text.split('-').first,
-                    initialPriceRange2:
+                    initialPriceRangeStart: _priceController.text.split('-').first,
+                    initialPriceRangeEnd:
                         _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
                     initialCurrency: _eventToEdit.currency,
                     onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {

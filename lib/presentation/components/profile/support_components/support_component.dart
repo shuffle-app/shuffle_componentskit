@@ -16,6 +16,8 @@ class SupportComponent extends StatelessWidget {
   final bool isSupportActive;
   final String? versionText;
 
+  final VoidCallback? onSupportRequestPressed;
+
   SupportComponent({
     super.key,
     this.position,
@@ -28,6 +30,7 @@ class SupportComponent extends StatelessWidget {
     TextEditingController? emailController,
     TextEditingController? textController,
     TextEditingController? daysCountController,
+    this.onSupportRequestPressed
   })  : _nameController = nameController ?? TextEditingController(),
         _emailController = emailController ?? TextEditingController(),
         _textController = textController ?? TextEditingController(),
@@ -185,10 +188,7 @@ class SupportComponent extends StatelessWidget {
           .gradientButton(
             data: BaseUiKitButtonData(
               text: S.of(context).Send.toLowerCase(),
-              onPressed: () => SnackBarUtils.show(
-                message: S.of(context).WillBeImplementedSoon.toLowerCase(),
-                context: context,
-              ),
+              onPressed: onSupportRequestPressed
             ),
           )
           .paddingOnly(
