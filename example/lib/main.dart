@@ -1437,32 +1437,32 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   child: InfluencerToolsComponent(
                     onTap: () {},
                     influencerUiModelList: [
-                      InfluencerUiModel(
+                      InfluencerToolUiModel(
                         title: S.of(context).CountReviews(''),
                         progress: 100,
                         actualProgress: 50,
                       ),
-                      InfluencerUiModel(
+                      InfluencerToolUiModel(
                         title: S.of(context).CountVideoReaction(''),
                         progress: 100,
                         actualProgress: 50,
                       ),
-                      InfluencerUiModel(
+                      InfluencerToolUiModel(
                         title: S.of(context).News,
                         progress: 50,
                         actualProgress: 0,
                       ),
-                      InfluencerUiModel(
+                      InfluencerToolUiModel(
                         title: S.of(context).Voices,
                         progress: 50,
                         actualProgress: 0,
                       ),
-                      InfluencerUiModel(
+                      InfluencerToolUiModel(
                         title: S.of(context).Photos,
                         progress: 50,
                         actualProgress: 0,
                       ),
-                      InfluencerUiModel(
+                      InfluencerToolUiModel(
                         title: S.of(context).IdealRoute,
                         progress: 5,
                         actualProgress: 0,

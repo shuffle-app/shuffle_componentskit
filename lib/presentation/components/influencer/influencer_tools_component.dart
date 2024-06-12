@@ -4,7 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class InfluencerToolsComponent extends StatelessWidget {
   final List<String> newToolsInfluncerList;
-  final List<InfluencerUiModel> influencerUiModelList;
+  final List<InfluencerToolUiModel> influencerUiModelList;
   final Function() onTap;
 
   const InfluencerToolsComponent({
@@ -137,12 +137,12 @@ class InfluencerToolsComponent extends StatelessWidget {
   }
 }
 
-class InfluencerUiModel {
+class InfluencerToolUiModel {
   final String title;
   final int progress;
   final int actualProgress;
 
-  InfluencerUiModel({
+  InfluencerToolUiModel({
     required this.title,
     required this.progress,
     required this.actualProgress,
