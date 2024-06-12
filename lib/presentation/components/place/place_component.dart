@@ -27,6 +27,7 @@ class PlaceComponent extends StatefulWidget {
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
   final VoidCallback? onAddFeedbackTapped;
   final bool canLeaveFeedback;
+  final bool canLeaveVideoReaction;
 
   const PlaceComponent({
     Key? key,
@@ -46,6 +47,7 @@ class PlaceComponent extends StatefulWidget {
     this.onSharePressed,
     this.events,
     this.canLeaveFeedback = false,
+    this.canLeaveVideoReaction = false,
   }) : super(key: key);
 
   @override
@@ -214,9 +216,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   spacing: SpacingFoundation.horizontalSpacing8,
                   shimmerLoadingChild: const UiKitReactionPreview(imagePath: ''),
                   itemBuilder: (context, reaction, index) {
-                    if (index == 0) {
+                    if (index == 0 && widget.canLeaveVideoReaction) {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped),
                           SpacingFoundation.horizontalSpace8,

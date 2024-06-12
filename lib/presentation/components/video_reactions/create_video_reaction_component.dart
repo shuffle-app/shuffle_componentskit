@@ -33,6 +33,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
       autoImplyLeading: true,
       centerTitle: true,
       title: S.current.AddReactions,
+      customToolbarBaseHeight: 0.15.sh,
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
@@ -69,7 +70,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
           ],
         ).paddingAll(EdgeInsetsFoundation.all16),
         SizedBox(
-          height: 1.sh - kToolbarHeight - 148,
+          height: 1.sh - kToolbarHeight - 172,
           width: 1.sw,
           child: PagedGridView(
             pagingController: videosPagingController,

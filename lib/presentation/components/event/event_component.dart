@@ -17,6 +17,7 @@ class EventComponent extends StatefulWidget {
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final VoidCallback? onAddFeedbackTapped;
+  final bool canLeaveVideoReaction;
 
   const EventComponent({
     Key? key,
@@ -30,6 +31,7 @@ class EventComponent extends StatefulWidget {
     this.onSharePressed,
     this.onReactionTap,
     this.onAddReactionTapped,
+    this.canLeaveVideoReaction = true,
   }) : super(key: key);
 
   @override
