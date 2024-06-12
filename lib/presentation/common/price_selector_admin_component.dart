@@ -4,8 +4,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PriceSelectorAdminComponent extends StatefulWidget {
   final bool isPriceRangeSelected;
-  final String? initialPriceRange1;
-  final String? initialPriceRange2;
+  final String? initialPriceRangeStart;
+  final String? initialPriceRangeEnd;
   final String? initialCurrency;
   final Function(
     String averagePrice,
@@ -19,27 +19,27 @@ class PriceSelectorAdminComponent extends StatefulWidget {
     super.key,
     required this.onSubmit,
     required this.isPriceRangeSelected,
-    this.initialPriceRange1,
-    this.initialPriceRange2,
+    this.initialPriceRangeStart,
+    this.initialPriceRangeEnd,
     this.initialCurrency,
   }) {
     priceAverageController = TextEditingController(
-        text: initialPriceRange1 != null
-            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange1!)
-            : initialPriceRange1);
-    priceRangeController1 = TextEditingController(
-        text: initialPriceRange1 != null
-            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange1!)
-            : initialPriceRange1);
-    priceRangeController2 = TextEditingController(
-        text: initialPriceRange2 != null
-            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRange2!)
-            : initialPriceRange2);
+        text: initialPriceRangeStart != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRangeStart!)
+            : initialPriceRangeStart);
+    priceRangeControllerStart = TextEditingController(
+        text: initialPriceRangeStart != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRangeStart!)
+            : initialPriceRangeStart);
+    priceRangeControllerEnd = TextEditingController(
+        text: initialPriceRangeEnd != null
+            ? PriceWithSpacesFormatter().formatStringUpdate(initialPriceRangeEnd!)
+            : initialPriceRangeEnd);
   }
 
   late final TextEditingController priceAverageController;
-  late final TextEditingController priceRangeController1;
-  late final TextEditingController priceRangeController2;
+  late final TextEditingController priceRangeControllerStart;
+  late final TextEditingController priceRangeControllerEnd;
 
   @override
   State<PriceSelectorAdminComponent> createState() => _PriceSelectorAdminComponentState();
@@ -127,8 +127,8 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
   void _submit() {
     widget.onSubmit(
       widget.priceAverageController.text.removeTrailingDecimal(),
-      widget.priceRangeController1.text.removeTrailingDecimal(),
-      widget.priceRangeController2.text.removeTrailingDecimal(),
+      widget.priceRangeControllerStart.text.removeTrailingDecimal(),
+      widget.priceRangeControllerEnd.text.removeTrailingDecimal(),
       _currency.value ?? 'AED',
       _priceRageIsSelected,
     );
@@ -137,7 +137,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
   void _priceRangeController2IsLess() {
     if (_formKey.currentState != null) {
       if (!_formKey.currentState!.validate()) {
-        widget.priceRangeController2.text = '';
+        widget.priceRangeControllerEnd.text = '';
       }
     }
     _submit();
@@ -153,7 +153,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
 
   String _getHintText(String? initialPriceRange) {
     if (initialPriceRange != null) {
-      return initialPriceRange.isNotEmpty ? widget.initialPriceRange1! : '100';
+      return initialPriceRange.isNotEmpty ? widget.initialPriceRangeStart! : '100';
     }
     return '100';
   }
@@ -192,7 +192,7 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                 textColor: _inputTextColor(!_priceRageIsSelected, theme),
                 enabled: !_priceRageIsSelected,
                 fillColor: theme?.colorScheme.surface,
-                hintText: _getHintText(widget.initialPriceRange1),
+                hintText: _getHintText(widget.initialPriceRangeStart),
                 controller: widget.priceAverageController,
                 inputFormatters: [PriceWithSpacesFormatter()],
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -232,8 +232,8 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                     textColor: _inputTextColor(_priceRageIsSelected, theme),
                     enabled: _priceRageIsSelected,
                     fillColor: theme?.colorScheme.surface,
-                    hintText: _getHintText(widget.initialPriceRange1),
-                    controller: widget.priceRangeController1,
+                    hintText: _getHintText(widget.initialPriceRangeStart),
+                    controller: widget.priceRangeControllerStart,
                     inputFormatters: [PriceWithSpacesFormatter()],
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     onTapOutside: (_) => _priceRangeController2IsLess(),
@@ -263,17 +263,17 @@ class _PriceSelectorAdminComponentState extends State<PriceSelectorAdminComponen
                       textColor: _inputTextColor(_priceRageIsSelected, theme),
                       enabled: _priceRageIsSelected,
                       fillColor: theme?.colorScheme.surface,
-                      hintText: widget.initialPriceRange2 ?? '500',
-                      controller: widget.priceRangeController2,
+                      hintText: widget.initialPriceRangeEnd ?? '500',
+                      controller: widget.priceRangeControllerEnd,
                       inputFormatters: [PriceWithSpacesFormatter()],
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       onTapOutside: (_) => _priceRangeController2IsLess(),
                       onSubmitted: (_) => _priceRangeController2IsLess(),
                       validator: (value) {
-                        if ((value != null && value.isNotEmpty) && (widget.priceRangeController1.text != '')) {
+                        if ((value != null && value.isNotEmpty) && (widget.priceRangeControllerStart.text != '')) {
                           final newValue = double.parse(value.replaceAll(' ', ''));
 
-                          if (newValue < double.parse(widget.priceRangeController1.text.replaceAll(' ', ''))) {
+                          if (newValue < double.parse(widget.priceRangeControllerStart.text.replaceAll(' ', ''))) {
                             return '';
                           }
                           return null;

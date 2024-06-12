@@ -348,8 +348,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     useRootNavigator: false,
                     child: PriceSelectorComponent(
                       isPriceRangeSelected: _priceController.text.contains('-'),
-                      initialPriceRange1: _priceController.text.split('-').first,
-                      initialPriceRange2:
+                      initialPriceRangeStart: _priceController.text.split('-').first,
+                      initialPriceRangeEnd:
                           _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
                       initialCurrency: _placeToEdit.currency,
                       onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
@@ -360,7 +360,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             _priceController.text = rangePrice1;
                             if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
                               _priceController.text += '-$rangePrice2';
-
                             }
                           }
                           _placeToEdit.currency = currency;
@@ -445,7 +444,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 if (newTags != null) {
                   setState(() {
                     _placeToEdit.baseTags.clear();
-                    _placeToEdit.baseTags.addAll(newTags );
+                    _placeToEdit.baseTags.addAll(newTags);
                   });
                 }
               },
@@ -465,7 +464,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   if (newTags != null) {
                     setState(() {
                       _placeToEdit.tags.clear();
-                      _placeToEdit.tags.addAll(newTags );
+                      _placeToEdit.tags.addAll(newTags);
                     });
                   }
                 },
