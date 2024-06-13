@@ -63,6 +63,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   List<int> likedReviews = List<int>.empty(growable: true);
 
+  final ScrollController listViewController = ScrollController();
+
   @override
   void initState() {
     super.initState();
