@@ -252,7 +252,7 @@ class ProfileComponent extends StatelessWidget {
                 color: colorScheme?.surface1,
                 contentHeight: _noVideoReactions ? 0.15.sh : 0.26.sh,
                 title: Text(
-                  S.current.MyReactions,
+                  "S.current.MyReactions",
                   style: textTheme?.title1,
                 ),
                 action: context
@@ -268,7 +268,7 @@ class ProfileComponent extends StatelessWidget {
                     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: _noVideoReactions
                     ? Text(
-                        S.current.NoVideoReactionsYet,
+                        "S.current.NoVideoReactionsYet",
                         style: textTheme?.subHeadline,
                       ).paddingAll(EdgeInsetsFoundation.all16)
                     : UiKitHorizontalScrollableList<VideoReactionUiModel>(
@@ -291,7 +291,7 @@ class ProfileComponent extends StatelessWidget {
               builder: (context, value, child) {
                 return UiKitColoredAccentBlock(
                   title: Text(
-                    S.current.MyFeedback,
+                  "  S.current.MyFeedback",
                     style: textTheme?.title1,
                   ),
                   color: colorScheme?.surface1,
@@ -309,7 +309,8 @@ class ProfileComponent extends StatelessWidget {
                       .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                   content: _noFeedbacks
                       ? Text(
-                          S.current.NoFeedbacksYet,
+                    //TODO comment
+                          "S.current.NoFeedbacksYet",
                           style: textTheme?.subHeadline,
                         ).paddingAll(EdgeInsetsFoundation.all16)
                       : UiKitHorizontalScrollableList<FeedbackUiModel>(
