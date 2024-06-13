@@ -27,6 +27,8 @@ class PlaceComponent extends StatefulWidget {
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
   final VoidCallback? onAddFeedbackTapped;
   final bool canLeaveFeedback;
+  final ValueChanged<int>? onLikedFeedback;
+  final ValueChanged<int>? onDislikedFeedback;
 
   const PlaceComponent({
     Key? key,
@@ -46,6 +48,8 @@ class PlaceComponent extends StatefulWidget {
     this.onSharePressed,
     this.events,
     this.canLeaveFeedback = false,
+    this.onLikedFeedback,
+    this.onDislikedFeedback,
   }) : super(key: key);
 
   @override
@@ -56,6 +60,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 0);
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 0);
+
+  List<int> likedReviews = List<int>.empty(growable: true);
 
   @override
   void initState() {
@@ -80,6 +86,19 @@ class _PlaceComponentState extends State<PlaceComponent> {
       reactionsPagingController.appendLastPage(data);
     } else {
       reactionsPagingController.appendPage(data, page + 1);
+    }
+  }
+
+  void _updateFeedbackList(int feedbackId, int addValue) {
+    final updatedFeedbackIndex = feedbacksPagedController.itemList?.indexWhere((element) => element.id == feedbackId);
+    if (updatedFeedbackIndex != null && updatedFeedbackIndex >= 0) {
+      final updatedFeedback = feedbacksPagedController.itemList?.removeAt(updatedFeedbackIndex);
+      if (updatedFeedback != null) {
+        feedbacksPagedController.itemList?.insert(
+          updatedFeedbackIndex,
+          updatedFeedback.copyWith(helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
+        );
+      }
     }
   }
 
@@ -400,17 +419,19 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   S.current.ReactionsByCritics,
                   style: boldTextTheme?.body,
                 ),
-                action: context
-                    .smallOutlinedButton(
-                      blurred: false,
-                      data: BaseUiKitButtonData(
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.plus,
-                        ),
-                        onPressed: widget.onAddFeedbackTapped,
-                      ),
-                    )
-                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                action: widget.canLeaveFeedback
+                    ? context
+                        .smallOutlinedButton(
+                          blurred: false,
+                          data: BaseUiKitButtonData(
+                            iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.plus,
+                            ),
+                            onPressed: widget.onAddFeedbackTapped,
+                          ),
+                        )
+                        .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
+                    : null,
                 content: UiKitHorizontalScrollableList(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
@@ -425,6 +446,20 @@ class _PlaceComponentState extends State<PlaceComponent> {
                         companyAnswered: false,
                         rating: feedback.feedbackRating,
                         text: feedback.feedbackText,
+                        helpfulCount: feedback.helpfulCount,
+                        onLike: () {
+                          final feedbackId = feedback.id;
+                          if (likedReviews.contains(feedbackId)) {
+                            likedReviews.remove(feedbackId);
+                            widget.onDislikedFeedback?.call(feedbackId);
+                            _updateFeedbackList(feedbackId, -1);
+                          } else {
+                            likedReviews.add(feedbackId);
+                            widget.onLikedFeedback?.call(feedbackId);
+                            _updateFeedbackList(feedbackId, 1);
+                          }
+                          setState(() {});
+                        },
                       ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
                     );
                   },
