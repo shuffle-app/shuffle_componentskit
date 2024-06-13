@@ -57,13 +57,9 @@ class PlaceComponent extends StatefulWidget {
 }
 
 class _PlaceComponentState extends State<PlaceComponent> {
-  final reactionsPagingController =
-      PagingController<int, VideoReactionUiModel>(firstPageKey: 0);
+  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 0);
 
-  final feedbacksPagedController =
-      PagingController<int, FeedbackUiModel>(firstPageKey: 0);
-
-  final ScrollController listViewController = ScrollController();
+  final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 0);
 
   List<int> likedReviews = List<int>.empty(growable: true);
 
@@ -79,8 +75,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   }
 
   void _reactionsListener(int page) async {
-    final data =
-        await widget.placeReactionLoaderCallback(page, widget.place.id);
+    final data = await widget.placeReactionLoaderCallback(page, widget.place.id);
 
     if (data.isEmpty) {
       reactionsPagingController.appendLastPage(data);
@@ -95,24 +90,20 @@ class _PlaceComponentState extends State<PlaceComponent> {
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
-    final updatedFeedbackIndex = feedbacksPagedController.itemList
-        ?.indexWhere((element) => element.id == feedbackId);
+    final updatedFeedbackIndex = feedbacksPagedController.itemList?.indexWhere((element) => element.id == feedbackId);
     if (updatedFeedbackIndex != null && updatedFeedbackIndex >= 0) {
-      final updatedFeedback =
-          feedbacksPagedController.itemList?.removeAt(updatedFeedbackIndex);
+      final updatedFeedback = feedbacksPagedController.itemList?.removeAt(updatedFeedbackIndex);
       if (updatedFeedback != null) {
         feedbacksPagedController.itemList?.insert(
           updatedFeedbackIndex,
-          updatedFeedback.copyWith(
-              helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
+          updatedFeedback.copyWith(helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
         );
       }
     }
   }
 
   void _feedbacksListener(int page) async {
-    final data =
-        await widget.placeFeedbackLoaderCallback(page, widget.place.id);
+    final data = await widget.placeFeedbackLoaderCallback(page, widget.place.id);
     if (data.isEmpty) {
       feedbacksPagedController.appendLastPage(data);
       return;
@@ -128,8 +119,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -142,10 +132,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
             ),
           )
         : ComponentPlaceModel.fromJson(config['place']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     final theme = context.uiKitTheme;
     final colorScheme = theme?.colorScheme;
@@ -278,6 +266,58 @@ class _PlaceComponentState extends State<PlaceComponent> {
             }
           },
         ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
+        // ValueListenableBuilder(
+        //   valueListenable: reactionsPagingController,
+        //   builder: (context, value, child) {
+        //     if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
+        //       return UiKitColoredAccentBlock(
+        //         color: colorScheme?.surface1,
+        //         title: Row(
+        //           mainAxisSize: MainAxisSize.max,
+        //           children: [
+        //             Text(
+        //               S.current.ReactionsBy,
+        //               style: boldTextTheme?.body,
+        //             ),
+        //             SpacingFoundation.horizontalSpace12,
+        //             const Expanded(child: MemberPlate()),
+        //           ],
+        //         ),
+        //         contentHeight: 0.2605.sh,
+        //         content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
+        //           leftPadding: horizontalMargin,
+        //           spacing: SpacingFoundation.horizontalSpacing8,
+        //           shimmerLoadingChild: const UiKitReactionPreview(imagePath: ''),
+        //           itemBuilder: (context, reaction, index) {
+        //             if (index == 0) {
+        //               return Row(
+        //                 mainAxisSize: MainAxisSize.min,
+        //                 children: [
+        //                   UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped),
+        //                   SpacingFoundation.horizontalSpace8,
+        //                   UiKitReactionPreview(
+        //                     imagePath: reaction.previewImageUrl ?? '',
+        //                     viewed: false,
+        //                     onTap: () => widget.onReactionTap?.call(reaction),
+        //                   ),
+        //                 ],
+        //               );
+        //             }
+        //
+        //             return UiKitReactionPreview(
+        //               imagePath: reaction.previewImageUrl ?? '',
+        //               viewed: false,
+        //               onTap: () => widget.onReactionTap?.call(reaction),
+        //             );
+        //           },
+        //           pagingController: reactionsPagingController,
+        //         ),
+        //       );
+        //     } else {
+        //       return const SizedBox.shrink();
+        //     }
+        //   },
+        // ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         if (widget.isCreateEventAvaliable)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
@@ -286,8 +326,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.of(context).UpcomingEvent,
-                      style: boldTextTheme?.subHeadline),
+                  Text(S.of(context).UpcomingEvent, style: boldTextTheme?.subHeadline),
                   if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
                     SpacingFoundation.verticalSpace8,
                     for (UiEventModel event in snapshot.data!)
@@ -295,10 +334,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                         isThreeLine: true,
                         contentPadding: EdgeInsets.zero,
                         leading: BorderedUserCircleAvatar(
-                          imageUrl: event.media
-                              .firstWhere((element) =>
-                                  element.type == UiKitMediaType.image)
-                              .link,
+                          imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
                           size: 40.w,
                         ),
                         title: Text(
@@ -330,15 +366,12 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                   } else {
                                     buildComponent(
                                       context,
-                                      ComponentEventModel.fromJson(
-                                          config['event']),
+                                      ComponentEventModel.fromJson(config['event']),
                                       ComponentBuilder(
                                         child: EventComponent(
                                           event: event,
-                                          feedbackLoaderCallback: widget
-                                              .eventFeedbackLoaderCallback,
-                                          reactionsLoaderCallback: widget
-                                              .eventReactionLoaderCallback,
+                                          feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
+                                          reactionsLoaderCallback: widget.eventReactionLoaderCallback,
                                         ),
                                       ),
                                     );
@@ -351,8 +384,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                 ),
                               ),
                             )
-                            .paddingOnly(
-                                top: SpacingFoundation.verticalSpacing4),
+                            .paddingOnly(top: SpacingFoundation.verticalSpacing4),
                       ),
                   ],
                   SpacingFoundation.verticalSpace4,
@@ -380,36 +412,30 @@ class _PlaceComponentState extends State<PlaceComponent> {
               mainAxisSize: MainAxisSize.max,
               children: () {
                 final AutoSizeGroup group = AutoSizeGroup();
-                log('here we are building ${snapshot.data?.length ?? 0} events',
-                    name: 'PlaceComponent');
+                log('here we are building ${snapshot.data?.length ?? 0} events', name: 'PlaceComponent');
 
-                final List<UiEventModel> tempSorted =
-                    List.from(snapshot.data ?? []);
+                final List<UiEventModel> tempSorted = List.from(snapshot.data ?? []);
                 if (tempSorted.isNotEmpty) {
-                  tempSorted.sort((a, b) => (a.startDate ?? DateTime.now())
-                      .compareTo(b.startDate ?? DateTime.now()));
+                  tempSorted.sort((a, b) => (a.startDate ?? DateTime.now()).compareTo(b.startDate ?? DateTime.now()));
                 }
 
                 final closestEvent = tempSorted.firstOrNull;
 
-                final Duration daysToEvent =
-                    (closestEvent?.startDate ?? DateTime.now())
-                        .difference(DateTime.now());
+                final Duration daysToEvent = (closestEvent?.startDate ?? DateTime.now()).difference(DateTime.now());
 
                 return [
                   Expanded(
                     child: UpcomingEventPlaceActionCard(
                       value: closestEvent == null
                           ? 'none'
-                          : S.current.WithInDays(
-                              daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
+                          : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
                       group: group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
                       action: closestEvent == null
                           ? null
                           : () {
                               if (widget.onEventTap != null) {
-                                widget.onEventTap?.call(closestEvent);
+                                widget.onEventTap?.call(closestEvent!);
                               }
                               // else {
                               //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
@@ -437,9 +463,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 ];
               }(),
             ),
-          ).paddingSymmetric(
-              horizontal: horizontalMargin,
-              vertical: EdgeInsetsFoundation.vertical8),
+          ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical8),
         ValueListenableBuilder(
           valueListenable: feedbacksPagedController,
           builder: (context, value, child) {
@@ -462,14 +486,12 @@ class _PlaceComponentState extends State<PlaceComponent> {
                             onPressed: widget.onAddFeedbackTapped,
                           ),
                         )
-                        .paddingOnly(
-                            right: SpacingFoundation.horizontalSpacing16)
+                        .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
                     : null,
                 content: UiKitHorizontalScrollableList(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: SizedBox(
-                      width: 0.85.sw, child: const UiKitFeedbackCard()),
+                  shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
                   itemBuilder: (context, feedback, index) {
                     return SizedBox(
                       width: 0.85.sw,
@@ -516,11 +538,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
                     if (url.startsWith('http')) {
                       launchUrlString(url);
-                    } else if (url
-                        .replaceAll(RegExp(r'[0-9]'), '')
-                        .replaceAll('+', '')
-                        .trim()
-                        .isEmpty) {
+                    } else if (url.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
                       log('launching $url', name: 'PlaceComponent');
                       launchUrlString('tel:${url}');
                     }
@@ -528,9 +546,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   child: UiKitTitledDescriptionGridWidget(
                     title: e.title,
                     description: e.description,
-                    spacing: (SpacingFoundation.horizontalSpacing4 +
-                            horizontalMargin) /
-                        2,
+                    spacing: (SpacingFoundation.horizontalSpacing4 + horizontalMargin) / 2,
                   ),
                 ),
               )

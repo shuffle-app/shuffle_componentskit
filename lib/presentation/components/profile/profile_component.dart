@@ -32,7 +32,7 @@ class ProfileComponent extends StatelessWidget {
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
 
   const ProfileComponent({
-    Key? key,
+    super.key,
     required this.profile,
     this.videoReactionsPagingController,
     this.feedbackPagingController,
@@ -55,7 +55,7 @@ class ProfileComponent extends StatelessWidget {
     this.favoriteEvents = const [],
     this.favoritePlaces = const [],
     this.onRecommendedUserAvatarPressed,
-  }) : super(key: key);
+  });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
@@ -157,8 +157,7 @@ class ProfileComponent extends StatelessWidget {
               final user = recommendedUsers?[index];
 
               return UiKitFindSomeoneCard(
-                avatarUrl: user?.userAvatar ??
-                    GraphicsFoundation.instance.png.mockUserAvatar.path,
+                avatarUrl: user?.userAvatar,
                 userNickName: user?.userNickname ?? '',
                 userName: user?.userName ?? '',
                 userPoints: user?.userPointsBalance ?? 0,
@@ -357,60 +356,60 @@ class ProfileComponent extends StatelessWidget {
               events: events ?? []),
           SpacingFoundation.verticalSpace24,
         ],
-        SizedBox(
-          width: double.infinity,
-          child: Stack(
-            children: [
-              Text(
-                S.of(context).AskOrSupport,
-                style: textTheme?.title1,
-              ),
-              if (showHowItWorks)
-                HowItWorksWidget(
-                  title: S.current.ProfileAskOrSupportHiwTitle,
-                  subtitle: S.current.ProfileAskOrSupportHiwSubtitle,
-                  hintTiles: [
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(0),
-                      imageUrl: GraphicsFoundation.instance.png.donat.path,
-                    ),
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(1),
-                      imageUrl: GraphicsFoundation.instance.png.shoot.path,
-                    ),
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(2),
-                      imageUrl: GraphicsFoundation.instance.png.honest.path,
-                    ),
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(3),
-                      imageUrl: GraphicsFoundation.instance.png.help.path,
-                    ),
-                  ],
-                  onPop: onHowItWorksPoped,
-                  customOffset:
+        // SizedBox(
+        //   width: double.infinity,
+        //   child: Stack(
+        //     children: [
+        //       Text(
+        //         S.of(context).AskOrSupport,
+        //         style: textTheme?.title1,
+        //       ),
+        //       if (showHowItWorks)
+        //         HowItWorksWidget(
+        //           title: S.current.ProfileAskOrSupportHiwTitle,
+        //           subtitle: S.current.ProfileAskOrSupportHiwSubtitle,
+        //           hintTiles: [
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(0),
+        //               imageUrl: GraphicsFoundation.instance.png.donat.path,
+        //             ),
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(1),
+        //               imageUrl: GraphicsFoundation.instance.png.shoot.path,
+        //             ),
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(2),
+        //               imageUrl: GraphicsFoundation.instance.png.honest.path,
+        //             ),
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(3),
+        //               imageUrl: GraphicsFoundation.instance.png.help.path,
+        //             ),
+        //           ],
+        //           onPop: onHowItWorksPoped,
+        //           customOffset:
                       Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
-                ),
-            ],
-          ).paddingSymmetric(horizontal: horizontalMargin),
-        ),
-        SpacingFoundation.verticalSpace16,
-        Text(
-          S.of(context).AcceptDonations,
-          style: context.uiKitTheme?.boldTextTheme.caption1Medium,
-        ).paddingSymmetric(horizontal: horizontalMargin),
-        SpacingFoundation.verticalSpace16,
-        GradientableWidget(
-          gradient: GradientFoundation.attentionCard,
-          child: context.outlinedGradientButton(
-            gradient: GradientFoundation.touchIdgradientBorder,
-            data: BaseUiKitButtonData(
-              fit: ButtonFit.fitWidth,
-              text: S.of(context).FulfillTheDream.toUpperCase(),
-              onPressed: () => onFulfillDream?.call(),
-            ),
-          ),
-        ).paddingSymmetric(horizontal: horizontalMargin),
+        //         ),
+        //     ],
+        //   ).paddingSymmetric(horizontal: horizontalMargin),
+        // ),
+        // SpacingFoundation.verticalSpace16,
+        // Text(
+        //   S.of(context).AcceptDonations,
+        //   style: context.uiKitTheme?.boldTextTheme.caption1Medium,
+        // ).paddingSymmetric(horizontal: horizontalMargin),
+        // SpacingFoundation.verticalSpace16,
+        // GradientableWidget(
+        //   gradient: GradientFoundation.attentionCard,
+        //   child: context.outlinedGradientButton(
+        //     gradient: GradientFoundation.touchIdgradientBorder,
+        //     data: BaseUiKitButtonData(
+        //       fit: ButtonFit.fitWidth,
+        //       text: S.of(context).FulfillTheDream.toUpperCase(),
+        //       onPressed: () => onFulfillDream?.call(),
+        //     ),
+        //   ),
+        // ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace24,
         kBottomNavigationBarHeight.heightBox,
       ],

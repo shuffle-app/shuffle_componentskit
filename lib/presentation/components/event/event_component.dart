@@ -22,7 +22,7 @@ class EventComponent extends StatefulWidget {
   final ValueChanged<int>? onDislikedFeedback;
 
   const EventComponent({
-    Key? key,
+    super.key,
     required this.event,
     required this.reactionsLoaderCallback,
     required this.feedbackLoaderCallback,
@@ -36,7 +36,7 @@ class EventComponent extends StatefulWidget {
     this.canLeaveFeedback = false,
     this.onLikedFeedback,
     this.onDislikedFeedback,
-  }) : super(key: key);
+  });
 
   @override
   State<EventComponent> createState() => _EventComponentState();
