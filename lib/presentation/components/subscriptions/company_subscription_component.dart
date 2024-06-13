@@ -1,11 +1,12 @@
 import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/common/subscription_offer_widget.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CompanySubscriptionComponent extends StatefulWidget {
   final UiCompanySubscriptionModel uiModel;
@@ -59,6 +60,7 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
     final colorScheme = theme?.colorScheme;
 
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

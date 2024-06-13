@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/domain/config_models/profile/component_profile_model.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -21,12 +22,19 @@ class ProfileComponent extends StatelessWidget {
   final VoidCallback? onFulfillDream;
   final VoidCallback? onSettingsPressed;
   final VoidCallback? onMessagePressed;
+  final VoidCallback? onAllVideoReactionsPressed;
+  final VoidCallback? onAllFeedbacksPressed;
+  final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
+  final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
+  final PagingController<int, FeedbackUiModel>? feedbackPagingController;
 
   const ProfileComponent({
     Key? key,
     required this.profile,
+    this.videoReactionsPagingController,
+    this.feedbackPagingController,
     this.recommendedUsers,
     this.showHowItWorks = false,
     this.businessContentEnabled = false,
@@ -34,6 +42,9 @@ class ProfileComponent extends StatelessWidget {
     this.onHowItWorksPoped,
     this.onMyEventsPressed,
     this.onFulfillDream,
+    this.onReactionTapped,
+    this.onAllVideoReactionsPressed,
+    this.onAllFeedbacksPressed,
     this.onInvite,
     this.events,
     this.onEventTap,
@@ -45,9 +56,14 @@ class ProfileComponent extends StatelessWidget {
     this.onRecommendedUserAvatarPressed,
   }) : super(key: key);
 
+  bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
+
+  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
+
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
+    final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
@@ -228,6 +244,95 @@ class ProfileComponent extends StatelessWidget {
           ),
         ],
         SpacingFoundation.verticalSpace24,
+        if (videoReactionsPagingController != null)
+          ValueListenableBuilder(
+            valueListenable: videoReactionsPagingController!,
+            builder: (context, value, child) {
+              return UiKitColoredAccentBlock(
+                color: colorScheme?.surface1,
+                contentHeight: _noVideoReactions ? 0.15.sh : 0.26.sh,
+                title: Text(
+                  S.current.MyReactions,
+                  style: textTheme?.title1,
+                ),
+                action: context
+                    .smallOutlinedButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.chevronright,
+                        ),
+                        onPressed: onAllVideoReactionsPressed,
+                      ),
+                    )
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                content: _noVideoReactions
+                    ? Text(
+                        S.current.NoVideoReactionsYet,
+                        style: textTheme?.subHeadline,
+                      ).paddingAll(EdgeInsetsFoundation.all16)
+                    : UiKitHorizontalScrollableList<VideoReactionUiModel>(
+                        itemBuilder: (context, reaction, index) {
+                          return UiKitReactionPreview(
+                            imagePath: reaction.previewImageUrl ?? '',
+                            viewed: false,
+                            onTap: () => onReactionTapped?.call(reaction),
+                          );
+                        },
+                        pagingController: videoReactionsPagingController!,
+                      ),
+              );
+            },
+          ),
+        if (videoReactionsPagingController != null) SpacingFoundation.verticalSpace24,
+        if (feedbackPagingController != null)
+          ValueListenableBuilder(
+              valueListenable: feedbackPagingController!,
+              builder: (context, value, child) {
+                return UiKitColoredAccentBlock(
+                  title: Text(
+                    S.current.MyFeedback,
+                    style: textTheme?.title1,
+                  ),
+                  color: colorScheme?.surface1,
+                  contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
+                  action: context
+                      .smallOutlinedButton(
+                        blurred: false,
+                        data: BaseUiKitButtonData(
+                          iconInfo: BaseUiKitButtonIconData(
+                            iconData: ShuffleUiKitIcons.chevronright,
+                          ),
+                          onPressed: onAllFeedbacksPressed,
+                        ),
+                      )
+                      .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                  content: _noFeedbacks
+                      ? Text(
+                          S.current.NoFeedbacksYet,
+                          style: textTheme?.subHeadline,
+                        ).paddingAll(EdgeInsetsFoundation.all16)
+                      : UiKitHorizontalScrollableList<FeedbackUiModel>(
+                          leftPadding: horizontalMargin,
+                          spacing: SpacingFoundation.horizontalSpacing8,
+                          shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
+                          itemBuilder: (context, feedback, index) {
+                            return SizedBox(
+                              width: 0.85.sw,
+                              child: UiKitFeedbackCard(
+                                title: feedback.feedbackAuthorName,
+                                avatarUrl: feedback.feedbackAuthorPhoto,
+                                datePosted: feedback.feedbackDateTime,
+                                companyAnswered: false,
+                                text: feedback.feedbackText,
+                              ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
+                            );
+                          },
+                          pagingController: feedbackPagingController!,
+                        ),
+                );
+              }),
+        if (feedbackPagingController != null) SpacingFoundation.verticalSpace24,
         if (profile.userTileType == UserTileType.pro) ...[
           MyEventsComponent(
               title: S.of(context).MyEvents,
