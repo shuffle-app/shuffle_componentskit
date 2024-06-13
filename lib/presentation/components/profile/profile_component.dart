@@ -55,7 +55,7 @@ class ProfileComponent extends StatelessWidget {
     this.favoriteEvents = const [],
     this.favoritePlaces = const [],
     this.onRecommendedUserAvatarPressed,
-  }) : super(key: key);
+  });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
