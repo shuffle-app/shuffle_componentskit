@@ -51,6 +51,10 @@ class _EventComponentState extends State<EventComponent> {
 
   List<int> likedReviews = List<int>.empty(growable: true);
 
+  bool isHide = true;
+  late double scrollPosition;
+  final ScrollController listViewController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -131,6 +135,7 @@ class _EventComponentState extends State<EventComponent> {
         (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return ListView(
+      controller: listViewController,
       physics: const BouncingScrollPhysics(),
       addAutomaticKeepAlives: false,
       children: [
@@ -256,8 +261,29 @@ class _EventComponentState extends State<EventComponent> {
         if (widget.event.description != null) ...[
           RepaintBoundary(
               child: DescriptionWidget(
-            description: 'D',
-            isHide: true,
+            description: widget.event.description!,
+            isHide: isHide,
+            onReadLess: () {
+              setState(() {
+                listViewController
+                    .animateTo(scrollPosition,
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.easeIn)
+                    .then(
+                  (value) {
+                    setState(() {
+                      isHide = true;
+                    });
+                  },
+                );
+              });
+            },
+            onReadMore: () {
+              setState(() {
+                isHide = false;
+                scrollPosition = listViewController.position.pixels;
+              });
+            },
           ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16
         ],

@@ -27,7 +27,8 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
-  final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
+  final PagingController<int, VideoReactionUiModel>?
+      videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
 
   const ProfileComponent({
@@ -58,17 +59,22 @@ class ProfileComponent extends StatelessWidget {
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
-  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
+  bool get _noVideoReactions =>
+      videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+            GlobalConfiguration().appConfig.content;
+    final ComponentProfileModel model =
+        ComponentProfileModel.fromJson(config['profile']);
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin =
+        (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return BlurredAppBarPage(
       centerTitle: true,
@@ -120,15 +126,18 @@ class ProfileComponent extends StatelessWidget {
                     hintTiles: [
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(0),
-                        imageUrl: GraphicsFoundation.instance.png.companions.path,
+                        imageUrl:
+                            GraphicsFoundation.instance.png.companions.path,
                       ),
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(1),
-                        imageUrl: GraphicsFoundation.instance.png.preferences.path,
+                        imageUrl:
+                            GraphicsFoundation.instance.png.preferences.path,
                       ),
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(2),
-                        imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
+                        imageUrl: GraphicsFoundation
+                            .instance.png.pointsReputation.path,
                       ),
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(3),
@@ -136,7 +145,8 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ],
                     onPop: onHowItWorksPoped,
-                    customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
+                    customOffset:
+                        Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
                   ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
@@ -147,13 +157,15 @@ class ProfileComponent extends StatelessWidget {
               final user = recommendedUsers?[index];
 
               return UiKitFindSomeoneCard(
-                avatarUrl: user?.userAvatar ?? GraphicsFoundation.instance.png.mockUserAvatar.path,
+                avatarUrl: user?.userAvatar ??
+                    GraphicsFoundation.instance.png.mockUserAvatar.path,
                 userNickName: user?.userNickname ?? '',
                 userName: user?.userName ?? '',
                 userPoints: user?.userPointsBalance ?? 0,
                 sameInterests: user?.commonInterests ?? 0,
                 userTileType: user?.userTileType ?? UserTileType.ordinary,
-                onAvatarTapped: () => onRecommendedUserAvatarPressed?.call(user!),
+                onAvatarTapped: () =>
+                    onRecommendedUserAvatarPressed?.call(user!),
                 onMessage: () {
                   onRecommendedUserMessagePressed?.call();
                   // buildComponent(
@@ -252,7 +264,7 @@ class ProfileComponent extends StatelessWidget {
                 color: colorScheme?.surface1,
                 contentHeight: _noVideoReactions ? 0.15.sh : 0.26.sh,
                 title: Text(
-                  "S.current.MyReactions",
+                  S.current.MyReactions,
                   style: textTheme?.title1,
                 ),
                 action: context
@@ -268,7 +280,7 @@ class ProfileComponent extends StatelessWidget {
                     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: _noVideoReactions
                     ? Text(
-                        "S.current.NoVideoReactionsYet",
+                        S.current.NoVideoReactionsYet,
                         style: textTheme?.subHeadline,
                       ).paddingAll(EdgeInsetsFoundation.all16)
                     : UiKitHorizontalScrollableList<VideoReactionUiModel>(
@@ -284,14 +296,15 @@ class ProfileComponent extends StatelessWidget {
               );
             },
           ),
-        if (videoReactionsPagingController != null) SpacingFoundation.verticalSpace24,
+        if (videoReactionsPagingController != null)
+          SpacingFoundation.verticalSpace24,
         if (feedbackPagingController != null)
           ValueListenableBuilder(
               valueListenable: feedbackPagingController!,
               builder: (context, value, child) {
                 return UiKitColoredAccentBlock(
                   title: Text(
-                  "  S.current.MyFeedback",
+                    S.current.MyFeedback,
                     style: textTheme?.title1,
                   ),
                   color: colorScheme?.surface1,
@@ -306,17 +319,18 @@ class ProfileComponent extends StatelessWidget {
                           onPressed: onAllFeedbacksPressed,
                         ),
                       )
-                      .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                      .paddingOnly(
+                          right: SpacingFoundation.horizontalSpacing16),
                   content: _noFeedbacks
                       ? Text(
-                    //TODO comment
-                          "S.current.NoFeedbacksYet",
+                          S.current.NoFeedbacksYet,
                           style: textTheme?.subHeadline,
                         ).paddingAll(EdgeInsetsFoundation.all16)
                       : UiKitHorizontalScrollableList<FeedbackUiModel>(
                           leftPadding: horizontalMargin,
                           spacing: SpacingFoundation.horizontalSpacing8,
-                          shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
+                          shimmerLoadingChild: SizedBox(
+                              width: 0.85.sw, child: const UiKitFeedbackCard()),
                           itemBuilder: (context, feedback, index) {
                             return SizedBox(
                               width: 0.85.sw,
@@ -326,7 +340,8 @@ class ProfileComponent extends StatelessWidget {
                                 datePosted: feedback.feedbackDateTime,
                                 companyAnswered: false,
                                 text: feedback.feedbackText,
-                              ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
+                              ).paddingOnly(
+                                  left: index == 0 ? horizontalMargin : 0),
                             );
                           },
                           pagingController: feedbackPagingController!,
@@ -373,7 +388,8 @@ class ProfileComponent extends StatelessWidget {
                     ),
                   ],
                   onPop: onHowItWorksPoped,
-                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
+                  customOffset:
+                      Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
                 ),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin),
