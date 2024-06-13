@@ -55,26 +55,21 @@ class ProfileComponent extends StatelessWidget {
     this.favoriteEvents = const [],
     this.favoritePlaces = const [],
     this.onRecommendedUserAvatarPressed,
-  });
+  }) : super(key: key);
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
-  bool get _noVideoReactions =>
-      videoReactionsPagingController?.itemList?.isEmpty ?? true;
+  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentProfileModel model =
-        ComponentProfileModel.fromJson(config['profile']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return BlurredAppBarPage(
       centerTitle: true,
@@ -126,18 +121,15 @@ class ProfileComponent extends StatelessWidget {
                     hintTiles: [
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(0),
-                        imageUrl:
-                            GraphicsFoundation.instance.png.companions.path,
+                        imageUrl: GraphicsFoundation.instance.png.companions.path,
                       ),
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(1),
-                        imageUrl:
-                            GraphicsFoundation.instance.png.preferences.path,
+                        imageUrl: GraphicsFoundation.instance.png.preferences.path,
                       ),
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(2),
-                        imageUrl: GraphicsFoundation
-                            .instance.png.pointsReputation.path,
+                        imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
                       ),
                       HintCardUiModel(
                         title: S.current.ProfileFindSomeoneHiwHint(3),
@@ -145,8 +137,7 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ],
                     onPop: onHowItWorksPoped,
-                    customOffset:
-                        Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
+                    customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
                   ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
@@ -157,14 +148,13 @@ class ProfileComponent extends StatelessWidget {
               final user = recommendedUsers?[index];
 
               return UiKitFindSomeoneCard(
-                avatarUrl: user?.userAvatar,
+                avatarUrl: user?.userAvatar ?? GraphicsFoundation.instance.png.mockUserAvatar.path,
                 userNickName: user?.userNickname ?? '',
                 userName: user?.userName ?? '',
                 userPoints: user?.userPointsBalance ?? 0,
                 sameInterests: user?.commonInterests ?? 0,
                 userTileType: user?.userTileType ?? UserTileType.ordinary,
-                onAvatarTapped: () =>
-                    onRecommendedUserAvatarPressed?.call(user!),
+                onAvatarTapped: () => onRecommendedUserAvatarPressed?.call(user!),
                 onMessage: () {
                   onRecommendedUserMessagePressed?.call();
                   // buildComponent(
@@ -295,8 +285,7 @@ class ProfileComponent extends StatelessWidget {
               );
             },
           ),
-        if (videoReactionsPagingController != null)
-          SpacingFoundation.verticalSpace24,
+        if (videoReactionsPagingController != null) SpacingFoundation.verticalSpace24,
         if (feedbackPagingController != null)
           ValueListenableBuilder(
               valueListenable: feedbackPagingController!,
@@ -318,8 +307,7 @@ class ProfileComponent extends StatelessWidget {
                           onPressed: onAllFeedbacksPressed,
                         ),
                       )
-                      .paddingOnly(
-                          right: SpacingFoundation.horizontalSpacing16),
+                      .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                   content: _noFeedbacks
                       ? Text(
                           S.current.NoFeedbacksYet,
@@ -328,8 +316,7 @@ class ProfileComponent extends StatelessWidget {
                       : UiKitHorizontalScrollableList<FeedbackUiModel>(
                           leftPadding: horizontalMargin,
                           spacing: SpacingFoundation.horizontalSpacing8,
-                          shimmerLoadingChild: SizedBox(
-                              width: 0.85.sw, child: const UiKitFeedbackCard()),
+                          shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
                           itemBuilder: (context, feedback, index) {
                             return SizedBox(
                               width: 0.85.sw,
@@ -339,8 +326,7 @@ class ProfileComponent extends StatelessWidget {
                                 datePosted: feedback.feedbackDateTime,
                                 companyAnswered: false,
                                 text: feedback.feedbackText,
-                              ).paddingOnly(
-                                  left: index == 0 ? horizontalMargin : 0),
+                              ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
                             );
                           },
                           pagingController: feedbackPagingController!,
@@ -356,60 +342,59 @@ class ProfileComponent extends StatelessWidget {
               events: events ?? []),
           SpacingFoundation.verticalSpace24,
         ],
-        // SizedBox(
-        //   width: double.infinity,
-        //   child: Stack(
-        //     children: [
-        //       Text(
-        //         S.of(context).AskOrSupport,
-        //         style: textTheme?.title1,
-        //       ),
-        //       if (showHowItWorks)
-        //         HowItWorksWidget(
-        //           title: S.current.ProfileAskOrSupportHiwTitle,
-        //           subtitle: S.current.ProfileAskOrSupportHiwSubtitle,
-        //           hintTiles: [
-        //             HintCardUiModel(
-        //               title: S.current.ProfileAskOrSupportHiwHint(0),
-        //               imageUrl: GraphicsFoundation.instance.png.donat.path,
-        //             ),
-        //             HintCardUiModel(
-        //               title: S.current.ProfileAskOrSupportHiwHint(1),
-        //               imageUrl: GraphicsFoundation.instance.png.shoot.path,
-        //             ),
-        //             HintCardUiModel(
-        //               title: S.current.ProfileAskOrSupportHiwHint(2),
-        //               imageUrl: GraphicsFoundation.instance.png.honest.path,
-        //             ),
-        //             HintCardUiModel(
-        //               title: S.current.ProfileAskOrSupportHiwHint(3),
-        //               imageUrl: GraphicsFoundation.instance.png.help.path,
-        //             ),
-        //           ],
-        //           onPop: onHowItWorksPoped,
-        //           customOffset:
-                      Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
-        //         ),
-        //     ],
-        //   ).paddingSymmetric(horizontal: horizontalMargin),
-        // ),
-        // SpacingFoundation.verticalSpace16,
-        // Text(
-        //   S.of(context).AcceptDonations,
-        //   style: context.uiKitTheme?.boldTextTheme.caption1Medium,
-        // ).paddingSymmetric(horizontal: horizontalMargin),
-        // SpacingFoundation.verticalSpace16,
-        // GradientableWidget(
-        //   gradient: GradientFoundation.attentionCard,
-        //   child: context.outlinedGradientButton(
-        //     gradient: GradientFoundation.touchIdgradientBorder,
-        //     data: BaseUiKitButtonData(
-        //       fit: ButtonFit.fitWidth,
-        //       text: S.of(context).FulfillTheDream.toUpperCase(),
-        //       onPressed: () => onFulfillDream?.call(),
-        //     ),
-        //   ),
-        // ).paddingSymmetric(horizontal: horizontalMargin),
+        SizedBox(
+          width: double.infinity,
+          child: Stack(
+            children: [
+              Text(
+                S.of(context).AskOrSupport,
+                style: textTheme?.title1,
+              ),
+              if (showHowItWorks)
+                HowItWorksWidget(
+                  title: S.current.ProfileAskOrSupportHiwTitle,
+                  subtitle: S.current.ProfileAskOrSupportHiwSubtitle,
+                  hintTiles: [
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(0),
+                      imageUrl: GraphicsFoundation.instance.png.donat.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(1),
+                      imageUrl: GraphicsFoundation.instance.png.shoot.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(2),
+                      imageUrl: GraphicsFoundation.instance.png.honest.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.ProfileAskOrSupportHiwHint(3),
+                      imageUrl: GraphicsFoundation.instance.png.help.path,
+                    ),
+                  ],
+                  onPop: onHowItWorksPoped,
+                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
+                ),
+            ],
+          ).paddingSymmetric(horizontal: horizontalMargin),
+        ),
+        SpacingFoundation.verticalSpace16,
+        Text(
+          S.of(context).AcceptDonations,
+          style: context.uiKitTheme?.boldTextTheme.caption1Medium,
+        ).paddingSymmetric(horizontal: horizontalMargin),
+        SpacingFoundation.verticalSpace16,
+        GradientableWidget(
+          gradient: GradientFoundation.attentionCard,
+          child: context.outlinedGradientButton(
+            gradient: GradientFoundation.touchIdgradientBorder,
+            data: BaseUiKitButtonData(
+              fit: ButtonFit.fitWidth,
+              text: S.of(context).FulfillTheDream.toUpperCase(),
+              onPressed: () => onFulfillDream?.call(),
+            ),
+          ),
+        ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace24,
         kBottomNavigationBarHeight.heightBox,
       ],
