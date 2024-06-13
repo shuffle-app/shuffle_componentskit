@@ -4,6 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class CompanyHomeScreenComponent extends StatelessWidget {
   final String name;
+  final String? avatarUrl;
   final List<String>? interests;
   final List<UiPlaceModel> places;
   final UiKitTag? tag;
@@ -16,6 +17,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     super.key,
     required this.name,
     required this.places,
+    this.avatarUrl,
     this.interests,
     this.tag,
     this.creationStats = const {},
@@ -49,6 +51,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
             ),
             ProfileCard(
               name: name,
+              avatarUrl: avatarUrl,
               tags: [
                 if (tag != null) tag!,
               ],

@@ -53,8 +53,8 @@ class UiProfileModel {
           : userTileType == UserTileType.premium
           ? const PremiumMemberPlate()
           : null,
-      // onViewAllAchievements: onViewAllAchievements,
-      // achievements: achievements.where((element) => element.asset != null).toList(),
+      onViewAllAchievements: onViewAllAchievements,
+      achievements: achievements.where((element) => element.asset != null || element.objectUrl != null).toList(),
       profileStats: [
         UiKitStats(
           title: S.current.Balance,

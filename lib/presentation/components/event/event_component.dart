@@ -18,9 +18,12 @@ class EventComponent extends StatefulWidget {
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final VoidCallback? onAddFeedbackTapped;
   final bool canLeaveVideoReaction;
+  final bool canLeaveFeedback;
+  final ValueChanged<int>? onLikedFeedback;
+  final ValueChanged<int>? onDislikedFeedback;
 
   const EventComponent({
-    Key? key,
+    super.key,
     required this.event,
     required this.reactionsLoaderCallback,
     required this.feedbackLoaderCallback,
@@ -32,16 +35,27 @@ class EventComponent extends StatefulWidget {
     this.onReactionTap,
     this.onAddReactionTapped,
     this.canLeaveVideoReaction = true,
-  }) : super(key: key);
+    this.canLeaveFeedback = false,
+    this.onLikedFeedback,
+    this.onDislikedFeedback,
+  });
 
   @override
   State<EventComponent> createState() => _EventComponentState();
 }
 
 class _EventComponentState extends State<EventComponent> {
-  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
+  final reactionsPagingController =
+      PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
-  final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
+  final feedbackPagingController =
+      PagingController<int, FeedbackUiModel>(firstPageKey: 1);
+
+  List<int> likedReviews = List<int>.empty(growable: true);
+
+  bool isHide = true;
+  late double scrollPosition;
+  final ScrollController listViewController = ScrollController();
 
   @override
   void initState() {
@@ -69,6 +83,22 @@ class _EventComponentState extends State<EventComponent> {
     }
   }
 
+  void _updateFeedbackList(int feedbackId, int addValue) {
+    final updatedFeedbackIndex = feedbackPagingController.itemList
+        ?.indexWhere((element) => element.id == feedbackId);
+    if (updatedFeedbackIndex != null && updatedFeedbackIndex >= 0) {
+      final updatedFeedback =
+          feedbackPagingController.itemList?.removeAt(updatedFeedbackIndex);
+      if (updatedFeedback != null) {
+        feedbackPagingController.itemList?.insert(
+          updatedFeedbackIndex,
+          updatedFeedback.copyWith(
+              helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
+        );
+      }
+    }
+  }
+
   Future<void> _onFeedbackPageRequest(int page) async {
     final data = await widget.feedbackLoaderCallback(page, widget.event.id);
     if (data.isEmpty) {
@@ -86,22 +116,28 @@ class _EventComponentState extends State<EventComponent> {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+            GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
             version: '0',
             pageBuilderType: PageBuilderType.page,
-            positionModel:
-                PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
+            positionModel: PositionModel(
+                bodyAlignment: Alignment.topLeft,
+                version: '',
+                horizontalMargin: 16,
+                verticalMargin: 10))
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
     final titleAlignment = model.positionModel?.titleAlignment;
     final colorScheme = theme?.colorScheme;
     final boldTextTheme = theme?.boldTextTheme;
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return ListView(
+      controller: listViewController,
       physics: const BouncingScrollPhysics(),
       addAutomaticKeepAlives: false,
       children: [
@@ -115,7 +151,8 @@ class _EventComponentState extends State<EventComponent> {
               SizedBox(
                 width: 1.sw,
                 child: Stack(
-                  alignment: titleAlignment.crossAxisAlignment == CrossAxisAlignment.center
+                  alignment: titleAlignment.crossAxisAlignment ==
+                          CrossAxisAlignment.center
                       ? Alignment.center
                       : AlignmentDirectional.topStart,
                   children: [
@@ -151,7 +188,8 @@ class _EventComponentState extends State<EventComponent> {
                           onTap: widget.onSharePressed,
                           child: ImageWidget(
                             iconData: ShuffleUiKitIcons.share,
-                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
+                            color:
+                                context.uiKitTheme?.colorScheme.darkNeutral800,
                           ),
                         ),
                       ),
@@ -167,7 +205,9 @@ class _EventComponentState extends State<EventComponent> {
               SpacingFoundation.verticalSpace4,
             ],
             if (widget.event.owner != null)
-              widget.event.owner!.buildUserTile(context).paddingSymmetric(horizontal: horizontalMargin)
+              widget.event.owner!
+                  .buildUserTile(context)
+                  .paddingSymmetric(horizontal: horizontalMargin)
           ],
         ),
         SpacingFoundation.verticalSpace16,
@@ -222,8 +262,31 @@ class _EventComponentState extends State<EventComponent> {
         SpacingFoundation.verticalSpace14,
         if (widget.event.description != null) ...[
           RepaintBoundary(
-              child: DescriptionWidget(description: widget.event.description!)
-                  .paddingSymmetric(horizontal: horizontalMargin)),
+              child: DescriptionWidget(
+            description: widget.event.description!,
+            isHide: isHide,
+            onReadLess: () {
+              setState(() {
+                listViewController
+                    .animateTo(scrollPosition,
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.easeIn)
+                    .then(
+                  (value) {
+                    setState(() {
+                      isHide = true;
+                    });
+                  },
+                );
+              });
+            },
+            onReadMore: () {
+              setState(() {
+                isHide = false;
+                scrollPosition = listViewController.position.pixels;
+              });
+            },
+          ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16
         ],
         SpacingFoundation.verticalSpace16,
@@ -236,7 +299,11 @@ class _EventComponentState extends State<EventComponent> {
                       launchUrlString(e.descriptionUrl!);
                     } else if (e.description.startsWith('http')) {
                       launchUrlString(e.description);
-                    } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                    } else if (e.description
+                        .replaceAll(RegExp(r'[0-9]'), '')
+                        .replaceAll('+', '')
+                        .trim()
+                        .isEmpty) {
                       launchUrlString('tel:${e.description}');
                     }
                   },
@@ -245,7 +312,9 @@ class _EventComponentState extends State<EventComponent> {
                     info: e.description,
                     showFullInfo: true,
                   ),
-                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
+                ).paddingSymmetric(
+                    vertical: SpacingFoundation.verticalSpacing4,
+                    horizontal: horizontalMargin),
               )
               .toList(),
         // SpacingFoundation.verticalSpace24,
@@ -314,21 +383,25 @@ class _EventComponentState extends State<EventComponent> {
                   S.current.ReactionsByCritics,
                   style: boldTextTheme?.body,
                 ),
-                action: context
-                    .smallOutlinedButton(
-                      blurred: false,
-                      data: BaseUiKitButtonData(
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.plus,
-                        ),
-                        onPressed: widget.onAddFeedbackTapped,
-                      ),
-                    )
-                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                action: widget.canLeaveFeedback
+                    ? context
+                        .smallOutlinedButton(
+                          blurred: false,
+                          data: BaseUiKitButtonData(
+                            iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.plus,
+                            ),
+                            onPressed: widget.onAddFeedbackTapped,
+                          ),
+                        )
+                        .paddingOnly(
+                            right: SpacingFoundation.horizontalSpacing16)
+                    : null,
                 content: UiKitHorizontalScrollableList<FeedbackUiModel>(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
+                  shimmerLoadingChild: SizedBox(
+                      width: 0.85.sw, child: const UiKitFeedbackCard()),
                   itemBuilder: (context, feedback, index) {
                     return SizedBox(
                       width: 0.85.sw,
@@ -338,6 +411,21 @@ class _EventComponentState extends State<EventComponent> {
                         datePosted: feedback.feedbackDateTime,
                         companyAnswered: false,
                         text: feedback.feedbackText,
+                        helpfulCount: feedback.helpfulCount,
+                        rating: feedback.feedbackRating,
+                        onLike: () {
+                          final feedbackId = feedback.id;
+                          if (likedReviews.contains(feedbackId)) {
+                            likedReviews.remove(feedbackId);
+                            widget.onDislikedFeedback?.call(feedbackId);
+                            _updateFeedbackList(feedbackId, -1);
+                          } else {
+                            likedReviews.add(feedbackId);
+                            widget.onLikedFeedback?.call(feedbackId);
+                            _updateFeedbackList(feedbackId, 1);
+                          }
+                          setState(() {});
+                        },
                       ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
                     );
                   },

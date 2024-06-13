@@ -409,10 +409,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             context.button(
                 data: BaseUiKitButtonData(
                     text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
-                    text: 'show create schedule',
-                    onPressed: () =>
-                        context.push(const CreateScheduleWidget()))),
-
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1389,11 +1385,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   (int page, int contentId) async {
                                 return [];
                               },
-                              placeReactionLoaderCallback: (page, conentId) => [] as Future<List<VideoReactionUiModel>>,
-                              eventReactionLoaderCallback: (int page, conentId) =>
-                                  [] as Future<List<VideoReactionUiModel>>,
-                              placeFeedbackLoaderCallback: (int page, conentId) => [] as Future<List<FeedbackUiModel>>,
-                              eventFeedbackLoaderCallback: (int page, conentId) => [] as Future<List<FeedbackUiModel>>,
                             ),
                             bottomBar: BottomBookingBar(
                                 model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
@@ -1409,14 +1400,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ComponentBuilder(
                             child: EventComponent(
                               event: event,
-                              reactionsLoaderCallback:
-                                  (int page, int contentId) async {
-                                return [];
-                              },
-                              feedbackLoaderCallback:
-                                  (int page, int contentId) async {
-                                return [];
-                              },
                               feedbackLoaderCallback: (page, conentId) => [] as Future<List<FeedbackUiModel>>,
                               reactionsLoaderCallback: (page, conentId) => [] as Future<List<VideoReactionUiModel>>,
                             ),
@@ -1583,8 +1566,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   useRootNavigator: false,
                   child: PriceSelectorComponent(
                     isPriceRangeSelected: false,
-                    initialPriceRange1: '100',
-                    initialPriceRange2: '500',
                     initialCurrency: null,
                     onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {},
 
@@ -1637,8 +1618,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   defaultButtonText: '',
                   content: PriceSelectorAdminComponent(
                     isPriceRangeSelected: false,
-                    initialPriceRange1: '100',
-                    initialPriceRange2: '500',
                     initialCurrency: null,
                     onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, priceRangeSelected) {
                       debugPrint(
