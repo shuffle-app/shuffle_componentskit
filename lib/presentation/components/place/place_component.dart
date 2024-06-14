@@ -32,7 +32,7 @@ class PlaceComponent extends StatefulWidget {
   final ValueChanged<int>? onDislikedFeedback;
 
   const PlaceComponent({
-    Key? key,
+    super.key,
     required this.place,
     required this.placeReactionLoaderCallback,
     required this.eventReactionLoaderCallback,
@@ -52,7 +52,7 @@ class PlaceComponent extends StatefulWidget {
     this.onLikedFeedback,
     this.onDislikedFeedback,
     this.canLeaveVideoReaction = false,
-  }) : super(key: key);
+  });
 
   @override
   State<PlaceComponent> createState() => _PlaceComponentState();
@@ -219,7 +219,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ValueListenableBuilder(
           valueListenable: reactionsPagingController,
           builder: (context, value, child) {
-            if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
+            // if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
               return UiKitColoredAccentBlock(
                 color: colorScheme?.surface1,
                 title: Row(
@@ -264,9 +264,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   pagingController: reactionsPagingController,
                 ),
               );
-            } else {
-              return const SizedBox.shrink();
-            }
+            // } else {
+            //   return const SizedBox.shrink();
+            // }
           },
         ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         if (widget.isCreateEventAvaliable)
@@ -418,7 +418,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ValueListenableBuilder(
           valueListenable: feedbacksPagedController,
           builder: (context, value, child) {
-            if (feedbacksPagedController.itemList?.isNotEmpty ?? false) {
+            // if (feedbacksPagedController.itemList?.isNotEmpty ?? false) {
               return UiKitColoredAccentBlock(
                 contentHeight: 0.28.sh,
                 color: colorScheme?.surface1,
@@ -473,9 +473,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   pagingController: feedbacksPagedController,
                 ),
               );
-            } else {
-              return const SizedBox.shrink();
-            }
+            // } else {
+            //   return const SizedBox.shrink();
+            // }
           },
         ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         Wrap(
