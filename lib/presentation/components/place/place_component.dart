@@ -59,13 +59,15 @@ class PlaceComponent extends StatefulWidget {
 }
 
 class _PlaceComponentState extends State<PlaceComponent> {
-  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 0);
+  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
-  final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 0);
+  final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
 
   List<int> likedReviews = List<int>.empty(growable: true);
 
   final ScrollController listViewController = ScrollController();
+
+  bool get _noFeedbacks => feedbacksPagedController.itemList?.isEmpty ?? true;
 
   @override
   void initState() {
@@ -89,7 +91,11 @@ class _PlaceComponentState extends State<PlaceComponent> {
       data.removeLast();
       reactionsPagingController.appendLastPage(data);
     } else {
-      reactionsPagingController.appendPage(data, page + 1);
+      if (data.length < 10) {
+        reactionsPagingController.appendLastPage(data);
+      } else {
+        reactionsPagingController.appendPage(data, page + 1);
+      }
     }
   }
 
@@ -116,8 +122,19 @@ class _PlaceComponentState extends State<PlaceComponent> {
       data.removeLast();
       feedbacksPagedController.appendLastPage(data);
     } else {
-      feedbacksPagedController.appendPage(data, page + 1);
+      if (data.length < 10) {
+        feedbacksPagedController.appendLastPage(data);
+      } else {
+        feedbacksPagedController.appendPage(data, page + 1);
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    reactionsPagingController.dispose();
+    feedbacksPagedController.dispose();
+    super.dispose();
   }
 
   @override
@@ -216,10 +233,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
           ],
         ),
-        ValueListenableBuilder(
-          valueListenable: reactionsPagingController,
-          builder: (context, value, child) {
-            if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
+        if (widget.canLeaveVideoReaction)
+          ValueListenableBuilder(
+            valueListenable: reactionsPagingController,
+            builder: (context, value, child) {
               return UiKitColoredAccentBlock(
                 color: colorScheme?.surface1,
                 title: Row(
@@ -237,20 +254,28 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: const UiKitReactionPreview(imagePath: ''),
+                  shimmerLoadingChild: UiKitReactionPreview(
+                    imagePath: GraphicsFoundation.instance.png.place.path,
+                  ).paddingOnly(
+                    left: EdgeInsetsFoundation.horizontal8,
+                  ),
+                  noItemsFoundIndicator: UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped)
+                      .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                   itemBuilder: (context, reaction, index) {
+                    print('reaction.previewImageUrl: ${reaction.previewImageUrl}');
+
                     if (index == 0 && widget.canLeaveVideoReaction) {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped),
-                          SpacingFoundation.horizontalSpace8,
+                          UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped)
+                              .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                           UiKitReactionPreview(
                             imagePath: reaction.previewImageUrl ?? '',
                             viewed: false,
                             onTap: () => widget.onReactionTap?.call(reaction),
-                          ),
+                          ).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                         ],
                       );
                     }
@@ -264,11 +289,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   pagingController: reactionsPagingController,
                 ),
               );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
+            },
+          ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         if (widget.isCreateEventAvaliable)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
@@ -415,34 +437,41 @@ class _PlaceComponentState extends State<PlaceComponent> {
               }(),
             ),
           ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical8),
-        ValueListenableBuilder(
-          valueListenable: feedbacksPagedController,
-          builder: (context, value, child) {
-            if (feedbacksPagedController.itemList?.isNotEmpty ?? false) {
+        if (widget.canLeaveFeedback)
+          ValueListenableBuilder(
+            valueListenable: feedbacksPagedController,
+            builder: (context, value, child) {
               return UiKitColoredAccentBlock(
-                contentHeight: 0.28.sh,
-                color: colorScheme?.surface1,
                 title: Text(
                   S.current.ReactionsByCritics,
                   style: boldTextTheme?.body,
                 ),
-                action: widget.canLeaveFeedback
-                    ? context
-                        .smallOutlinedButton(
-                          blurred: false,
-                          data: BaseUiKitButtonData(
-                            iconInfo: BaseUiKitButtonIconData(
-                              iconData: ShuffleUiKitIcons.plus,
-                            ),
-                            onPressed: widget.onAddFeedbackTapped,
-                          ),
-                        )
-                        .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
-                    : null,
-                content: UiKitHorizontalScrollableList(
+                color: colorScheme?.surface1,
+                contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
+                action: context
+                    .smallOutlinedButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.plus,
+                        ),
+                        onPressed: widget.onAddFeedbackTapped,
+                      ),
+                    )
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                content: UiKitHorizontalScrollableList<FeedbackUiModel>(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
                   shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
+                  noItemsFoundIndicator: SizedBox(
+                    width: 1.sw,
+                    child: Center(
+                      child: Text(
+                        S.current.NoFeedbacksYet,
+                        style: boldTextTheme?.subHeadline,
+                      ).paddingAll(EdgeInsetsFoundation.all16),
+                    ),
+                  ),
                   itemBuilder: (context, feedback, index) {
                     return SizedBox(
                       width: 0.85.sw,
@@ -473,11 +502,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   pagingController: feedbacksPagedController,
                 ),
               );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
+            },
+          ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,
           spacing: SpacingFoundation.horizontalSpacing8,
