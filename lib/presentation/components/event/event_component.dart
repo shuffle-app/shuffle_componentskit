@@ -11,12 +11,12 @@ class EventComponent extends StatefulWidget {
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
   final VoidCallback? onSharePressed;
-  final VoidCallback? onAddReactionTapped;
+  final AsyncCallback? onAddReactionTapped;
   final PagedLoaderCallback<VideoReactionUiModel> reactionsLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> feedbackLoaderCallback;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
-  final VoidCallback? onAddFeedbackTapped;
+  final AsyncCallback? onAddFeedbackTapped;
   final bool canLeaveVideoReaction;
   final bool canLeaveFeedback;
   final ValueChanged<int>? onLikedFeedback;
@@ -338,7 +338,9 @@ class _EventComponentState extends State<EventComponent> {
                   ).paddingOnly(
                     left: EdgeInsetsFoundation.horizontal8,
                   ),
-                  noItemsFoundIndicator: UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped)
+                  noItemsFoundIndicator: UiKitReactionPreview.empty(onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
+                    reactionsPagingController.refresh();
+                  })))
                       .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                   itemBuilder: (context, reaction, index) {
                     if (index == 0 && widget.canLeaveVideoReaction) {
@@ -346,7 +348,9 @@ class _EventComponentState extends State<EventComponent> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped)
+                          UiKitReactionPreview.empty(onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
+                            reactionsPagingController.refresh();
+                          })))
                               .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                           UiKitReactionPreview(
                             imagePath: reaction.previewImageUrl ?? '',
@@ -388,7 +392,9 @@ class _EventComponentState extends State<EventComponent> {
                             iconInfo: BaseUiKitButtonIconData(
                               iconData: ShuffleUiKitIcons.plus,
                             ),
-                            onPressed: widget.onAddFeedbackTapped,
+                            onPressed: onPressed: () => widget.onAddFeedbackTapped?.call().then((_) => setState(() {
+                  feedbackPagingController.refresh();
+                })),
                           ),
                         )
                         .paddingOnly(right: SpacingFoundation.horizontalSpacing16)

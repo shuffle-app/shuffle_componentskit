@@ -14,7 +14,7 @@ class PlaceComponent extends StatefulWidget {
   final UiPlaceModel place;
   final bool isCreateEventAvaliable;
   final VoidCallback? onEventCreate;
-  final VoidCallback? onAddReactionTapped;
+  final AsyncCallback? onAddReactionTapped;
   final Future<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
@@ -25,14 +25,14 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
-  final VoidCallback? onAddFeedbackTapped;
+  final AsyncCallback? onAddFeedbackTapped;
   final bool canLeaveFeedback;
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
 
   const PlaceComponent({
-    Key? key,
+    super.key,
     required this.place,
     required this.placeReactionLoaderCallback,
     required this.eventReactionLoaderCallback,
@@ -52,7 +52,7 @@ class PlaceComponent extends StatefulWidget {
     this.onLikedFeedback,
     this.onDislikedFeedback,
     this.canLeaveVideoReaction = false,
-  }) : super(key: key);
+  });
 
   @override
   State<PlaceComponent> createState() => _PlaceComponentState();
@@ -259,7 +259,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   ).paddingOnly(
                     left: EdgeInsetsFoundation.horizontal8,
                   ),
-                  noItemsFoundIndicator: UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped)
+                  noItemsFoundIndicator: UiKitReactionPreview.empty(onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
+                    reactionsPagingController.refresh();
+                  })))
                       .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                   itemBuilder: (context, reaction, index) {
                     print('reaction.previewImageUrl: ${reaction.previewImageUrl}');
@@ -269,7 +271,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped)
+                          UiKitReactionPreview.empty(onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
+                            reactionsPagingController.refresh();
+                          })))
                               .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                           UiKitReactionPreview(
                             imagePath: reaction.previewImageUrl ?? '',
@@ -448,17 +452,19 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 ),
                 color: colorScheme?.surface1,
                 contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
-                action: context
+                action: widget.canLeaveFeedback? context
                     .smallOutlinedButton(
                       blurred: false,
                       data: BaseUiKitButtonData(
                         iconInfo: BaseUiKitButtonIconData(
                           iconData: ShuffleUiKitIcons.plus,
                         ),
-                        onPressed: widget.onAddFeedbackTapped,
+                        onPressed: () => widget.onAddFeedbackTapped
+                            ?.call()
+                            .then((_) => setState(() => feedbacksPagedController.refresh()))
                       ),
                     )
-                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16):null,
                 content: UiKitHorizontalScrollableList<FeedbackUiModel>(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
