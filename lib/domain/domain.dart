@@ -25,6 +25,7 @@ export 'data_uimodels/search_social_card_ui_model.dart';
 export 'data_uimodels/socials_login_model.dart';
 export 'data_uimodels/subscription_offer_model.dart';
 export 'data_uimodels/uidescriptionitem_model.dart';
+export 'data_uimodels/upload_progress_ui_model.dart';
 export 'data_uimodels/review_ui_model.dart';
 export 'data_uimodels/uiowner_model.dart';
 export 'data_uimodels/video_preview_ui_model.dart';

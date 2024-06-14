@@ -14,14 +14,13 @@ class LinearInfluencerIndicator extends StatelessWidget {
   });
 
   late final double _indicatorWidth = width ?? 256.w;
-  final double _rightIndicatorEdge = 4.w;
 
   double get _progressPosition => _indicatorWidth * (_progressValue / 120);
   double get _progressValue => ((actualSum / sum) * 100);
 
   double _getCurrentPosition(double currentPosition) {
-    if (currentPosition > _indicatorWidth - _rightIndicatorEdge) {
-      return _indicatorWidth - _rightIndicatorEdge;
+    if (currentPosition > _indicatorWidth) {
+      return _indicatorWidth;
     }
 
     return currentPosition;

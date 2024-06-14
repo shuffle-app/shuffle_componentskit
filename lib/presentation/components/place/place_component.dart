@@ -27,6 +27,7 @@ class PlaceComponent extends StatefulWidget {
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
   final VoidCallback? onAddFeedbackTapped;
   final bool canLeaveFeedback;
+  final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
 
@@ -50,6 +51,7 @@ class PlaceComponent extends StatefulWidget {
     this.canLeaveFeedback = false,
     this.onLikedFeedback,
     this.onDislikedFeedback,
+    this.canLeaveVideoReaction = false,
   }) : super(key: key);
 
   @override
@@ -214,60 +216,59 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
           ],
         ),
-        // ValueListenableBuilder(
-        //   valueListenable: reactionsPagingController,
-        //   builder: (context, value, child) {
-        //     if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
-        //       return UiKitColoredAccentBlock(
-        //         color: colorScheme?.surface1,
-        //         title: Row(
-        //           mainAxisSize: MainAxisSize.max,
-        //           children: [
-        //             Text(
-        //               S.current.ReactionsBy,
-        //               style: boldTextTheme?.body,
-        //             ),
-        //             SpacingFoundation.horizontalSpace12,
-        //             const Expanded(child: MemberPlate()),
-        //           ],
-        //         ),
-        //         contentHeight: 0.2605.sh,
-        //         content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
-        //           leftPadding: horizontalMargin,
-        //           spacing: SpacingFoundation.horizontalSpacing8,
-        //           shimmerLoadingChild:
-        //               const UiKitReactionPreview(imagePath: ''),
-        //           itemBuilder: (context, reaction, index) {
-        //             if (index == 0) {
-        //               return Row(
-        //                 mainAxisSize: MainAxisSize.min,
-        //                 children: [
-        //                   UiKitReactionPreview.empty(
-        //                       onTap: widget.onAddReactionTapped),
-        //                   SpacingFoundation.horizontalSpace8,
-        //                   UiKitReactionPreview(
-        //                     imagePath: reaction.previewImageUrl ?? '',
-        //                     viewed: false,
-        //                     onTap: () => widget.onReactionTap?.call(reaction),
-        //                   ),
-        //                 ],
-        //               );
-        //             }
-        //
-        //             return UiKitReactionPreview(
-        //               imagePath: reaction.previewImageUrl ?? '',
-        //               viewed: false,
-        //               onTap: () => widget.onReactionTap?.call(reaction),
-        //             );
-        //           },
-        //           pagingController: reactionsPagingController,
-        //         ),
-        //       );
-        //     } else {
-        //       return const SizedBox.shrink();
-        //     }
-        //   },
-        // ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
+        ValueListenableBuilder(
+          valueListenable: reactionsPagingController,
+          builder: (context, value, child) {
+            if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
+              return UiKitColoredAccentBlock(
+                color: colorScheme?.surface1,
+                title: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      S.current.ReactionsBy,
+                      style: boldTextTheme?.body,
+                    ),
+                    SpacingFoundation.horizontalSpace12,
+                    const Expanded(child: MemberPlate()),
+                  ],
+                ),
+                contentHeight: 0.2605.sh,
+                content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
+                  leftPadding: horizontalMargin,
+                  spacing: SpacingFoundation.horizontalSpacing8,
+                  shimmerLoadingChild: const UiKitReactionPreview(imagePath: ''),
+                  itemBuilder: (context, reaction, index) {
+                    if (index == 0 && widget.canLeaveVideoReaction) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped),
+                          SpacingFoundation.horizontalSpace8,
+                          UiKitReactionPreview(
+                            imagePath: reaction.previewImageUrl ?? '',
+                            viewed: false,
+                            onTap: () => widget.onReactionTap?.call(reaction),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return UiKitReactionPreview(
+                      imagePath: reaction.previewImageUrl ?? '',
+                      viewed: false,
+                      onTap: () => widget.onReactionTap?.call(reaction),
+                    );
+                  },
+                  pagingController: reactionsPagingController,
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+        ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         if (widget.isCreateEventAvaliable)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
