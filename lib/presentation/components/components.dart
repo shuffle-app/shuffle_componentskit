@@ -88,5 +88,9 @@ export 'profile/favorites_component/favorite_folders_bottom_sheet_component.dart
 export 'profile/favorites_component/favorites_merge_component.dart';
 export 'profile/favorites_component/ui_model_favorites_merge_component.dart';
 export 'profile/favorites_component/ui_model_favorites_merge_components_list.dart';
+export 'view_history_point/view_history_point_component.dart';
+export 'view_history_point/view_history_activation_component.dart';
+export 'view_history_point/view_history_accrual_component.dart';
+export 'view_history_point/ui_model_view_history_accrual.dart';
 
 
