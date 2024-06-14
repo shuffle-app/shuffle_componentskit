@@ -11,6 +11,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
   final List<VideoPreviewUiModel> selectedVideos;
   final ValueChanged<VideoPreviewUiModel>? onVideoSelectionChanged;
   final PagingController<int, VideoPreviewUiModel> videosPagingController;
+  final bool multiSelectEnabled;
 
   const CreateVideoReactionComponent({
     Key? key,
@@ -21,6 +22,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
     this.selectedVideos = const [],
     this.initiallySelectedAlbum,
     this.onVideoSelectionChanged,
+    this.multiSelectEnabled = false,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
       autoImplyLeading: true,
       centerTitle: true,
       title: S.current.AddReactions,
+      customToolbarBaseHeight: 0.15.sh,
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
@@ -54,19 +57,20 @@ class CreateVideoReactionComponent extends StatelessWidget {
                   )
                   .toList(),
             ),
-            context.smallButton(
-              data: BaseUiKitButtonData(
-                text: S.current.GoNoExclamation,
-                onPressed: onGoPressed,
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.chevronright,
+            if (multiSelectEnabled)
+              context.smallButton(
+                data: BaseUiKitButtonData(
+                  text: S.current.GoNoExclamation,
+                  onPressed: onGoPressed,
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.chevronright,
+                  ),
                 ),
               ),
-            ),
           ],
         ).paddingAll(EdgeInsetsFoundation.all16),
         SizedBox(
-          height: 1.sh - kToolbarHeight - 148,
+          height: 1.sh - kToolbarHeight - 172,
           width: 1.sw,
           child: PagedGridView(
             pagingController: videosPagingController,
@@ -79,37 +83,41 @@ class CreateVideoReactionComponent extends StatelessWidget {
             ),
             builderDelegate: PagedChildBuilderDelegate<VideoPreviewUiModel>(
               itemBuilder: (context, item, index) {
-                return Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    item.previewImage ?? const SizedBox.shrink(),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 0.075.sh,
-                        decoration: const BoxDecoration(
-                          gradient: GradientFoundation.blackLinearGradient,
+                return GestureDetector(
+                  onTap: () => onVideoSelectionChanged?.call(item),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      item.previewImage ?? const SizedBox.shrink(),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 0.075.sh,
+                          decoration: const BoxDecoration(
+                            gradient: GradientFoundation.blackLinearGradient,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: EdgeInsetsFoundation.vertical4,
-                      right: EdgeInsetsFoundation.horizontal4,
-                      child: Text(
-                        item.duration,
-                        style: textTheme?.caption2Medium.copyWith(color: Colors.white),
+                      Positioned(
+                        bottom: EdgeInsetsFoundation.vertical4,
+                        right: EdgeInsetsFoundation.horizontal4,
+                        child: Text(
+                          item.duration,
+                          style: textTheme?.caption2Medium.copyWith(color: Colors.white),
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      top: EdgeInsetsFoundation.vertical4,
-                      right: EdgeInsetsFoundation.horizontal4,
-                      child: UiKitCheckbox(
-                        key: ValueKey(item.id),
-                        onChanged: () => onVideoSelectionChanged?.call(item),
-                        isActive: selectedVideos.contains(item),
-                      ),
-                    ),
-                  ],
+                      if (multiSelectEnabled)
+                        Positioned(
+                          top: EdgeInsetsFoundation.vertical4,
+                          right: EdgeInsetsFoundation.horizontal4,
+                          child: UiKitCheckbox(
+                            key: ValueKey(item.id),
+                            onChanged: () => onVideoSelectionChanged?.call(item),
+                            isActive: selectedVideos.contains(item),
+                          ),
+                        ),
+                    ],
+                  ),
                 );
               },
             ),

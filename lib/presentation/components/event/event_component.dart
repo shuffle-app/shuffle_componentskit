@@ -11,12 +11,13 @@ class EventComponent extends StatefulWidget {
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
   final VoidCallback? onSharePressed;
-  final VoidCallback? onAddReactionTapped;
+  final AsyncCallback? onAddReactionTapped;
   final PagedLoaderCallback<VideoReactionUiModel> reactionsLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> feedbackLoaderCallback;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
-  final VoidCallback? onAddFeedbackTapped;
+  final AsyncCallback? onAddFeedbackTapped;
+  final bool canLeaveVideoReaction;
   final bool canLeaveFeedback;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
@@ -33,6 +34,7 @@ class EventComponent extends StatefulWidget {
     this.onSharePressed,
     this.onReactionTap,
     this.onAddReactionTapped,
+    this.canLeaveVideoReaction = true,
     this.canLeaveFeedback = false,
     this.onLikedFeedback,
     this.onDislikedFeedback,
@@ -43,11 +45,9 @@ class EventComponent extends StatefulWidget {
 }
 
 class _EventComponentState extends State<EventComponent> {
-  final reactionsPagingController =
-      PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
+  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
-  final feedbackPagingController =
-      PagingController<int, FeedbackUiModel>(firstPageKey: 1);
+  final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
 
   List<int> likedReviews = List<int>.empty(growable: true);
 
@@ -82,16 +82,13 @@ class _EventComponentState extends State<EventComponent> {
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
-    final updatedFeedbackIndex = feedbackPagingController.itemList
-        ?.indexWhere((element) => element.id == feedbackId);
+    final updatedFeedbackIndex = feedbackPagingController.itemList?.indexWhere((element) => element.id == feedbackId);
     if (updatedFeedbackIndex != null && updatedFeedbackIndex >= 0) {
-      final updatedFeedback =
-          feedbackPagingController.itemList?.removeAt(updatedFeedbackIndex);
+      final updatedFeedback = feedbackPagingController.itemList?.removeAt(updatedFeedbackIndex);
       if (updatedFeedback != null) {
         feedbackPagingController.itemList?.insert(
           updatedFeedbackIndex,
-          updatedFeedback.copyWith(
-              helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
+          updatedFeedback.copyWith(helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
         );
       }
     }
@@ -114,25 +111,20 @@ class _EventComponentState extends State<EventComponent> {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(
             version: '0',
             pageBuilderType: PageBuilderType.page,
-            positionModel: PositionModel(
-                bodyAlignment: Alignment.topLeft,
-                version: '',
-                horizontalMargin: 16,
-                verticalMargin: 10))
+            positionModel:
+                PositionModel(bodyAlignment: Alignment.topLeft, version: '', horizontalMargin: 16, verticalMargin: 10))
         : ComponentEventModel.fromJson(config['event']);
 
     final theme = context.uiKitTheme;
     final titleAlignment = model.positionModel?.titleAlignment;
     final colorScheme = theme?.colorScheme;
     final boldTextTheme = theme?.boldTextTheme;
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
     return ListView(
       controller: listViewController,
@@ -149,8 +141,7 @@ class _EventComponentState extends State<EventComponent> {
               SizedBox(
                 width: 1.sw,
                 child: Stack(
-                  alignment: titleAlignment.crossAxisAlignment ==
-                          CrossAxisAlignment.center
+                  alignment: titleAlignment.crossAxisAlignment == CrossAxisAlignment.center
                       ? Alignment.center
                       : AlignmentDirectional.topStart,
                   children: [
@@ -186,8 +177,7 @@ class _EventComponentState extends State<EventComponent> {
                           onTap: widget.onSharePressed,
                           child: ImageWidget(
                             iconData: ShuffleUiKitIcons.share,
-                            color:
-                                context.uiKitTheme?.colorScheme.darkNeutral800,
+                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
                           ),
                         ),
                       ),
@@ -203,9 +193,7 @@ class _EventComponentState extends State<EventComponent> {
               SpacingFoundation.verticalSpace4,
             ],
             if (widget.event.owner != null)
-              widget.event.owner!
-                  .buildUserTile(context)
-                  .paddingSymmetric(horizontal: horizontalMargin)
+              widget.event.owner!.buildUserTile(context).paddingSymmetric(horizontal: horizontalMargin)
           ],
         ),
         SpacingFoundation.verticalSpace16,
@@ -266,9 +254,7 @@ class _EventComponentState extends State<EventComponent> {
             onReadLess: () {
               setState(() {
                 listViewController
-                    .animateTo(scrollPosition,
-                        duration: const Duration(milliseconds: 100),
-                        curve: Curves.easeIn)
+                    .animateTo(scrollPosition, duration: const Duration(milliseconds: 100), curve: Curves.easeIn)
                     .then(
                   (value) {
                     setState(() {
@@ -297,11 +283,7 @@ class _EventComponentState extends State<EventComponent> {
                       launchUrlString(e.descriptionUrl!);
                     } else if (e.description.startsWith('http')) {
                       launchUrlString(e.description);
-                    } else if (e.description
-                        .replaceAll(RegExp(r'[0-9]'), '')
-                        .replaceAll('+', '')
-                        .trim()
-                        .isEmpty) {
+                    } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
                       launchUrlString('tel:${e.description}');
                     }
                   },
@@ -310,129 +292,130 @@ class _EventComponentState extends State<EventComponent> {
                     info: e.description,
                     showFullInfo: true,
                   ),
-                ).paddingSymmetric(
-                    vertical: SpacingFoundation.verticalSpacing4,
-                    horizontal: horizontalMargin),
+                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
               )
               .toList(),
-        // SpacingFoundation.verticalSpace24,
-        // ValueListenableBuilder(
-        //   valueListenable: reactionsPagingController,
-        //   builder: (context, value, child) {
-        //     if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
-        //       return UiKitColoredAccentBlock(
-        //         color: colorScheme?.surface1,
-        //         title: Row(
-        //           mainAxisSize: MainAxisSize.max,
-        //           children: [
-        //             Text(
-        //               S.current.ReactionsBy,
-        //               style: boldTextTheme?.body,
-        //             ),
-        //             SpacingFoundation.horizontalSpace12,
-        //             const Expanded(child: MemberPlate()),
-        //           ],
-        //         ),
-        //         contentHeight: 0.2605.sh,
-        //         content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
-        //           leftPadding: horizontalMargin,
-        //           spacing: SpacingFoundation.horizontalSpacing8,
-        //           shimmerLoadingChild: const UiKitReactionPreview(imagePath: ''),
-        //           itemBuilder: (context, reaction, index) {
-        //             if (index == 0) {
-        //               return Row(
-        //                 mainAxisSize: MainAxisSize.min,
-        //                 children: [
-        //                   horizontalMargin.widthBox,
-        //                   UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped),
-        //                   SpacingFoundation.horizontalSpace12,
-        //                   UiKitReactionPreview(
-        //                     imagePath: reaction.previewImageUrl ?? '',
-        //                     viewed: false,
-        //                     onTap: () => widget.onReactionTap?.call(reaction),
-        //                   ),
-        //                 ],
-        //               );
-        //             }
-        //
-        //             return UiKitReactionPreview(
-        //               imagePath: reaction.previewImageUrl ?? '',
-        //               viewed: false,
-        //               onTap: () => widget.onReactionTap?.call(reaction),
-        //             ).paddingOnly(left: index == 0 ? horizontalMargin : 0);
-        //           },
-        //           pagingController: reactionsPagingController,
-        //         ),
-        //       );
-        //     } else {
-        //       return const SizedBox.shrink();
-        //     }
-        //   },
-        // ),
+        SpacingFoundation.verticalSpace24,
+        ValueListenableBuilder(
+          valueListenable: reactionsPagingController,
+          builder: (context, value, child) {
+            // if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
+            return UiKitColoredAccentBlock(
+              color: colorScheme?.surface1,
+              title: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    S.current.ReactionsBy,
+                    style: boldTextTheme?.body,
+                  ),
+                  SpacingFoundation.horizontalSpace12,
+                  const Expanded(child: MemberPlate()),
+                ],
+              ),
+              contentHeight: 0.2605.sh,
+              content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
+                leftPadding: horizontalMargin,
+                spacing: SpacingFoundation.horizontalSpacing8,
+                shimmerLoadingChild: const UiKitReactionPreview(imagePath: ''),
+                itemBuilder: (context, reaction, index) {
+                  if (index == 0) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        horizontalMargin.widthBox,
+                        UiKitReactionPreview.empty(
+                            onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
+                                  reactionsPagingController.refresh();
+                                }))),
+                        SpacingFoundation.horizontalSpace12,
+                        UiKitReactionPreview(
+                          imagePath: reaction.previewImageUrl ?? '',
+                          viewed: false,
+                          onTap: () => widget.onReactionTap?.call(reaction),
+                        ),
+                      ],
+                    );
+                  }
+
+                  return UiKitReactionPreview(
+                    imagePath: reaction.previewImageUrl ?? '',
+                    viewed: false,
+                    onTap: () => widget.onReactionTap?.call(reaction),
+                  ).paddingOnly(left: index == 0 ? horizontalMargin : 0);
+                },
+                pagingController: reactionsPagingController,
+              ),
+            );
+            // } else {
+            //   return const SizedBox.shrink();
+            // }
+          },
+        ),
         SpacingFoundation.verticalSpace24,
         ValueListenableBuilder(
           valueListenable: feedbackPagingController,
           builder: (context, value, child) {
-            if (feedbackPagingController.itemList?.isNotEmpty ?? false) {
-              return UiKitColoredAccentBlock(
-                contentHeight: 0.28.sh,
-                color: colorScheme?.surface1,
-                title: Text(
-                  S.current.ReactionsByCritics,
-                  style: boldTextTheme?.body,
-                ),
-                action: widget.canLeaveFeedback
-                    ? context
-                        .smallOutlinedButton(
-                          blurred: false,
-                          data: BaseUiKitButtonData(
-                            iconInfo: BaseUiKitButtonIconData(
-                              iconData: ShuffleUiKitIcons.plus,
-                            ),
-                            onPressed: widget.onAddFeedbackTapped,
+            // if (feedbackPagingController.itemList?.isNotEmpty ?? false) {
+            return UiKitColoredAccentBlock(
+              contentHeight: 0.28.sh,
+              color: colorScheme?.surface1,
+              title: Text(
+                S.current.ReactionsByCritics,
+                style: boldTextTheme?.body,
+              ),
+              action: widget.canLeaveFeedback
+                  ? context
+                      .smallOutlinedButton(
+                        blurred: false,
+                        data: BaseUiKitButtonData(
+                          iconInfo: BaseUiKitButtonIconData(
+                            iconData: ShuffleUiKitIcons.plus,
                           ),
-                        )
-                        .paddingOnly(
-                            right: SpacingFoundation.horizontalSpacing16)
-                    : null,
-                content: UiKitHorizontalScrollableList<FeedbackUiModel>(
-                  leftPadding: horizontalMargin,
-                  spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: SizedBox(
-                      width: 0.85.sw, child: const UiKitFeedbackCard()),
-                  itemBuilder: (context, feedback, index) {
-                    return SizedBox(
-                      width: 0.85.sw,
-                      child: UiKitFeedbackCard(
-                        title: feedback.feedbackAuthorName,
-                        avatarUrl: feedback.feedbackAuthorPhoto,
-                        datePosted: feedback.feedbackDateTime,
-                        companyAnswered: false,
-                        text: feedback.feedbackText,
-                        helpfulCount: feedback.helpfulCount,
-                        rating: feedback.feedbackRating,
-                        onLike: () {
-                          final feedbackId = feedback.id;
-                          if (likedReviews.contains(feedbackId)) {
-                            likedReviews.remove(feedbackId);
-                            widget.onDislikedFeedback?.call(feedbackId);
-                            _updateFeedbackList(feedbackId, -1);
-                          } else {
-                            likedReviews.add(feedbackId);
-                            widget.onLikedFeedback?.call(feedbackId);
-                            _updateFeedbackList(feedbackId, 1);
-                          }
-                          setState(() {});
-                        },
-                      ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
-                    );
-                  },
-                  pagingController: feedbackPagingController,
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
+                          onPressed: () => widget.onAddFeedbackTapped?.call().then((_) => setState(() {
+                                feedbackPagingController.refresh();
+                              })),
+                        ),
+                      )
+                      .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
+                  : null,
+              content: UiKitHorizontalScrollableList<FeedbackUiModel>(
+                leftPadding: horizontalMargin,
+                spacing: SpacingFoundation.horizontalSpacing8,
+                shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
+                itemBuilder: (context, feedback, index) {
+                  return SizedBox(
+                    width: 0.85.sw,
+                    child: UiKitFeedbackCard(
+                      title: feedback.feedbackAuthorName,
+                      avatarUrl: feedback.feedbackAuthorPhoto,
+                      datePosted: feedback.feedbackDateTime,
+                      companyAnswered: false,
+                      text: feedback.feedbackText,
+                      helpfulCount: feedback.helpfulCount,
+                      rating: feedback.feedbackRating,
+                      onLike: () {
+                        final feedbackId = feedback.id;
+                        if (likedReviews.contains(feedbackId)) {
+                          likedReviews.remove(feedbackId);
+                          widget.onDislikedFeedback?.call(feedbackId);
+                          _updateFeedbackList(feedbackId, -1);
+                        } else {
+                          likedReviews.add(feedbackId);
+                          widget.onLikedFeedback?.call(feedbackId);
+                          _updateFeedbackList(feedbackId, 1);
+                        }
+                        setState(() {});
+                      },
+                    ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
+                  );
+                },
+                pagingController: feedbackPagingController,
+              ),
+            );
+            // } else {
+            //   return const SizedBox.shrink();
+            // }
           },
         ),
         (kBottomNavigationBarHeight * 1.5).heightBox

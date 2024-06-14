@@ -107,7 +107,7 @@ class _InviteComponentState extends State<InviteComponent> {
           height: 0.5.sh - MediaQuery.viewInsetsOf(context).bottom,
           borderRadius: BorderRadius.zero,
           color: ColorsFoundation.surface1,
-          child: ListView.separated(
+          child: widget.persons.isEmpty ? Center(child:Text(S.of(context).NoPeopleAvailableToInvite,style: theme?.boldTextTheme.subHeadline,)) : ListView.separated(
             controller: scrollController,
             padding: EdgeInsets.symmetric(
               horizontal: EdgeInsetsFoundation.horizontal16,
@@ -223,6 +223,7 @@ class _InviteComponentState extends State<InviteComponent> {
                           },
                           iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
+                            color: theme?.colorScheme.inversePrimary
                           ),
                         ),
                       ),
