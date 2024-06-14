@@ -338,20 +338,20 @@ class _EventComponentState extends State<EventComponent> {
                   ).paddingOnly(
                     left: EdgeInsetsFoundation.horizontal8,
                   ),
-                  noItemsFoundIndicator: UiKitReactionPreview.empty(onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
-                    reactionsPagingController.refresh();
-                  })))
-                      .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
+                  noItemsFoundIndicator: UiKitReactionPreview.empty(
+                      onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
+                            reactionsPagingController.refresh();
+                          }))).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                   itemBuilder: (context, reaction, index) {
                     if (index == 0 && widget.canLeaveVideoReaction) {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          UiKitReactionPreview.empty(onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
-                            reactionsPagingController.refresh();
-                          })))
-                              .paddingOnly(left: EdgeInsetsFoundation.horizontal8),
+                          UiKitReactionPreview.empty(
+                              onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
+                                    reactionsPagingController.refresh();
+                                  }))).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                           UiKitReactionPreview(
                             imagePath: reaction.previewImageUrl ?? '',
                             viewed: false,
@@ -392,9 +392,9 @@ class _EventComponentState extends State<EventComponent> {
                             iconInfo: BaseUiKitButtonIconData(
                               iconData: ShuffleUiKitIcons.plus,
                             ),
-                            onPressed: onPressed: () => widget.onAddFeedbackTapped?.call().then((_) => setState(() {
-                  feedbackPagingController.refresh();
-                })),
+                            onPressed: () => widget.onAddFeedbackTapped?.call().then((_) => setState(() {
+                                  feedbackPagingController.refresh();
+                                })),
                           ),
                         )
                         .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
