@@ -27,8 +27,7 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
-  final PagingController<int, VideoReactionUiModel>?
-      videoReactionsPagingController;
+  final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
 
   const ProfileComponent({
@@ -256,17 +255,17 @@ class ProfileComponent extends StatelessWidget {
                   S.current.MyReactions,
                   style: textTheme?.title1,
                 ),
-                action: context
-                    .smallOutlinedButton(
-                      blurred: false,
-                      data: BaseUiKitButtonData(
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.chevronright,
-                        ),
-                        onPressed: onAllVideoReactionsPressed,
-                      ),
-                    )
-                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                // action: context
+                //     .smallOutlinedButton(
+                //       blurred: false,
+                //       data: BaseUiKitButtonData(
+                //         iconInfo: BaseUiKitButtonIconData(
+                //           iconData: ShuffleUiKitIcons.chevronright,
+                //         ),
+                //         onPressed: onAllVideoReactionsPressed,
+                //       ),
+                //     )
+                //     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: _noVideoReactions
                     ? Text(
                         S.current.NoVideoReactionsYet,
@@ -297,17 +296,17 @@ class ProfileComponent extends StatelessWidget {
                   ),
                   color: colorScheme?.surface1,
                   contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
-                  action: context
-                      .smallOutlinedButton(
-                        blurred: false,
-                        data: BaseUiKitButtonData(
-                          iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.chevronright,
-                          ),
-                          onPressed: onAllFeedbacksPressed,
-                        ),
-                      )
-                      .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                  // action: context
+                  //     .smallOutlinedButton(
+                  //       blurred: false,
+                  //       data: BaseUiKitButtonData(
+                  //         iconInfo: BaseUiKitButtonIconData(
+                  //           iconData: ShuffleUiKitIcons.chevronright,
+                  //         ),
+                  //         onPressed: onAllFeedbacksPressed,
+                  //       ),
+                  //     )
+                  //     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                   content: _noFeedbacks
                       ? Text(
                           S.current.NoFeedbacksYet,
