@@ -119,32 +119,34 @@ class FeedComponent extends StatelessWidget {
           if ((feedBusinessModel.showFeelings ?? true)) ...[
             Stack(
               children: [
-                Text(S.of(context).YourNiche, style: themeTitleStyle),
-                if (feed.showHowItWorksTitle)
-                  HowItWorksWidget(
-                    title: S.current.FeedNichesHiwTitle,
-                    subtitle: S.current.FeedNichesHiwSubtitle,
-                    hintTiles: [
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.selectNiche.path,
-                        title: S.current.FeedNichesHiwItems(0),
-                      ),
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.pressNiche.path,
-                        title: S.current.FeedNichesHiwItems(1),
-                      ),
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.getSelection.path,
-                        title: S.current.FeedNichesHiwItems(2),
-                      ),
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
-                        title: S.current.FeedNichesHiwItems(3),
-                      ),
-                    ],
-                    onPop: onHowItWorksPoped,
-                    customOffset: Offset(1.sw / 1.7, 0),
-                  ),
+                CustomTextWithWidget(
+                  text: Text(S.of(context).YourNiche, style: themeTitleStyle),
+                  widget: feed.showHowItWorksTitle
+                      ? HowItWorksWidget(
+                          title: S.current.FeedNichesHiwTitle,
+                          subtitle: S.current.FeedNichesHiwSubtitle,
+                          hintTiles: [
+                            HintCardUiModel(
+                              imageUrl: GraphicsFoundation.instance.png.selectNiche.path,
+                              title: S.current.FeedNichesHiwItems(0),
+                            ),
+                            HintCardUiModel(
+                              imageUrl: GraphicsFoundation.instance.png.pressNiche.path,
+                              title: S.current.FeedNichesHiwItems(1),
+                            ),
+                            HintCardUiModel(
+                              imageUrl: GraphicsFoundation.instance.png.getSelection.path,
+                              title: S.current.FeedNichesHiwItems(2),
+                            ),
+                            HintCardUiModel(
+                              imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
+                              title: S.current.FeedNichesHiwItems(3),
+                            ),
+                          ],
+                          onPop: onHowItWorksPoped,
+                        ).paddingOnly(left: SpacingFoundation.horizontalSpacing4)
+                      : const SizedBox(),
+                ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           ],
@@ -220,34 +222,33 @@ class FeedComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace16.wrapSliverBox,
           ],
           if ((feedLeisureModel.showFeelings ?? true)) ...[
-            Stack(
-              children: [
-                Text(feelingText, style: themeTitleStyle),
-                if (feed.showHowItWorksTitle)
-                  HowItWorksWidget(
-                    title: S.current.FeedFeelingsHiwTitle,
-                    subtitle: S.current.FeedFeelingsHiwSubtitle,
-                    hintTiles: [
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.map.path,
-                        title: S.current.FeedFeelingsHiwItems(0),
-                      ),
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.dart.path,
-                        title: S.current.FeedFeelingsHiwItems(1),
-                      ),
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.sunClouds.path,
-                        title: S.current.FeedFeelingsHiwItems(2),
-                      ),
-                      HintCardUiModel(
-                        imageUrl: GraphicsFoundation.instance.png.smileMood.path,
-                        title: S.current.FeedFeelingsHiwItems(3),
-                      ),
-                    ],
-                    onPop: onHowItWorksPoped,
-                  ),
-              ],
+            CustomTextWithWidget(
+              text: Text(feelingText, style: themeTitleStyle),
+              widget: feed.showHowItWorksBody
+                  ? HowItWorksWidget(
+                      title: S.current.FeedFeelingsHiwTitle,
+                      subtitle: S.current.FeedFeelingsHiwSubtitle,
+                      hintTiles: [
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.map.path,
+                          title: S.current.FeedFeelingsHiwItems(0),
+                        ),
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.dart.path,
+                          title: S.current.FeedFeelingsHiwItems(1),
+                        ),
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.sunClouds.path,
+                          title: S.current.FeedFeelingsHiwItems(2),
+                        ),
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.smileMood.path,
+                          title: S.current.FeedFeelingsHiwItems(3),
+                        ),
+                      ],
+                      onPop: onHowItWorksPoped,
+                    )
+                  : const SizedBox(),
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
             FingerprintSwitch(
@@ -284,13 +285,15 @@ class FeedComponent extends StatelessWidget {
         if ((feedLeisureModel.showPlaces ?? true)) ...[
           Stack(
             children: [
-              Text(
-                S.of(context).YouBetterCheckThisOut,
-                style: themeTitleStyle,
-                textAlign: TextAlign.left,
-              ),
-              if (feed.showHowItWorksBody)
-                HowItWorksWidget(
+              CustomTextWithWidget(
+                text: Text(
+                  //TODO
+                  S.of(context).YouBetterCheckThisOut,
+                  // 'To become an ',
+                  style: themeTitleStyle,
+                  textAlign: TextAlign.left,
+                ),
+                widget: HowItWorksWidget(
                   title: S.current.FeedRandomizerHiwTitle,
                   subtitle: S.current.FeedRandomizerHiwSubtitle,
                   hintTiles: [
@@ -313,8 +316,9 @@ class FeedComponent extends StatelessWidget {
                   ],
                   onPop: onHowItWorksPopedBody,
                 ),
+              ),
             ],
-          ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+          ).paddingOnly(left: horizontalMargin, right: horizontalMargin + 0.2.sw).wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
             SpacingFoundation.verticalSpace8.wrapSliverBox,
             NotificationListener(
