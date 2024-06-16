@@ -53,6 +53,8 @@ class _EventComponentState extends State<EventComponent> {
 
   bool get _noFeedbacks => feedbackPagingController.itemList?.isEmpty ?? true;
 
+  bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
+
   bool isHide = true;
   late double scrollPosition;
   final ScrollController listViewController = ScrollController();
@@ -61,6 +63,7 @@ class _EventComponentState extends State<EventComponent> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _onReactionsPageRequest(1);
       reactionsPagingController.addPageRequestListener(_onReactionsPageRequest);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
     });
@@ -289,28 +292,6 @@ class _EventComponentState extends State<EventComponent> {
           ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16
         ],
-        SpacingFoundation.verticalSpace16,
-        if (widget.event.descriptionItems != null)
-          ...widget.event.descriptionItems!
-              .map(
-                (e) => GestureDetector(
-                  onTap: () {
-                    if (e.descriptionUrl != null) {
-                      launchUrlString(e.descriptionUrl!);
-                    } else if (e.description.startsWith('http')) {
-                      launchUrlString(e.description);
-                    } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
-                      launchUrlString('tel:${e.description}');
-                    }
-                  },
-                  child: TitledAccentInfo(
-                    title: e.title,
-                    info: e.description,
-                    showFullInfo: true,
-                  ),
-                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
-              )
-              .toList(),
         SpacingFoundation.verticalSpace24,
         if (widget.canLeaveVideoReaction)
           ValueListenableBuilder(
@@ -321,27 +302,27 @@ class _EventComponentState extends State<EventComponent> {
                 title: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
-                      S.current.ReactionsBy,
-                      style: boldTextTheme?.body,
-                    ),
-                    SpacingFoundation.horizontalSpace12,
-                    const Expanded(child: MemberPlate()),
+                    _noReactions
+                        ? Expanded(child: Text(S.current.NoReactionsMessage, style: boldTextTheme?.body))
+                        : Text(S.current.ReactionsBy, style: boldTextTheme?.body),
+                    if (!_noReactions) SpacingFoundation.horizontalSpace12,
+                    if (!_noReactions) const Expanded(child: MemberPlate()),
                   ],
                 ),
-                contentHeight: 0.2605.sh,
+                contentHeight: 0.205.sh,
                 content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
                   shimmerLoadingChild: UiKitReactionPreview(
+                    customHeight: 0.205.sh,
                     imagePath: GraphicsFoundation.instance.png.place.path,
-                  ).paddingOnly(
-                    left: EdgeInsetsFoundation.horizontal8,
-                  ),
+                  ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                   noItemsFoundIndicator: UiKitReactionPreview.empty(
-                      onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
-                            reactionsPagingController.refresh();
-                          }))).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
+                    customHeight: 0.205.sh,
+                    onTap: () => widget.onAddReactionTapped
+                        ?.call()
+                        .then((_) => setState(() => reactionsPagingController.refresh())),
+                  ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                   itemBuilder: (context, reaction, index) {
                     if (index == 0 && widget.canLeaveVideoReaction) {
                       return Row(
@@ -349,10 +330,13 @@ class _EventComponentState extends State<EventComponent> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           UiKitReactionPreview.empty(
-                              onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
-                                    reactionsPagingController.refresh();
-                                  }))).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
+                            customHeight: 0.205.sh,
+                            onTap: () => widget.onAddReactionTapped
+                                ?.call()
+                                .then((_) => setState(() => reactionsPagingController.refresh())),
+                          ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                           UiKitReactionPreview(
+                            customHeight: 0.205.sh,
                             imagePath: reaction.previewImageUrl ?? '',
                             viewed: false,
                             onTap: () => widget.onReactionTap?.call(reaction),
@@ -362,6 +346,7 @@ class _EventComponentState extends State<EventComponent> {
                     }
 
                     return UiKitReactionPreview(
+                      customHeight: 0.205.sh,
                       imagePath: reaction.previewImageUrl ?? '',
                       viewed: false,
                       onTap: () => widget.onReactionTap?.call(reaction),
@@ -371,14 +356,13 @@ class _EventComponentState extends State<EventComponent> {
                 ),
               );
             },
-          ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
-        SpacingFoundation.verticalSpace24,
+          ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
         if (widget.canLeaveFeedback)
           ValueListenableBuilder(
             valueListenable: feedbackPagingController,
             builder: (context, value, child) {
               return UiKitColoredAccentBlock(
-                contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
+                contentHeight: _noFeedbacks ? 0 : 0.28.sh,
                 color: colorScheme?.surface1,
                 title: Text(
                   S.current.ReactionsByCritics,
@@ -402,7 +386,7 @@ class _EventComponentState extends State<EventComponent> {
                 content: UiKitHorizontalScrollableList<FeedbackUiModel>(
                   leftPadding: horizontalMargin,
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
+                  shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
                   noItemsFoundIndicator: SizedBox(
                     width: 1.sw,
                     child: Center(
@@ -414,7 +398,7 @@ class _EventComponentState extends State<EventComponent> {
                   ),
                   itemBuilder: (context, feedback, index) {
                     return SizedBox(
-                      width: 0.85.sw,
+                      width: 0.95.sw,
                       child: UiKitFeedbackCard(
                         title: feedback.feedbackAuthorName,
                         avatarUrl: feedback.feedbackAuthorPhoto,
@@ -443,7 +427,28 @@ class _EventComponentState extends State<EventComponent> {
                 ),
               );
             },
-          ),
+          ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        if (widget.event.descriptionItems != null)
+          ...widget.event.descriptionItems!
+              .map(
+                (e) => GestureDetector(
+                  onTap: () {
+                    if (e.descriptionUrl != null) {
+                      launchUrlString(e.descriptionUrl!);
+                    } else if (e.description.startsWith('http')) {
+                      launchUrlString(e.description);
+                    } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                      launchUrlString('tel:${e.description}');
+                    }
+                  },
+                  child: TitledAccentInfo(
+                    title: e.title,
+                    info: e.description,
+                    showFullInfo: true,
+                  ),
+                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
+              )
+              .toList(),
         (kBottomNavigationBarHeight * 1.5).heightBox
       ],
     ).paddingSymmetric(

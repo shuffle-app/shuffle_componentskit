@@ -33,7 +33,6 @@ class CreateVideoReactionComponent extends StatelessWidget {
       autoImplyLeading: true,
       centerTitle: true,
       title: S.current.AddReactions,
-      customToolbarBaseHeight: 0.15.sh,
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
