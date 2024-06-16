@@ -223,7 +223,6 @@ class _InviteComponentState extends State<InviteComponent> {
                           },
                           iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
-                            color: theme?.colorScheme.inversePrimary
                           ),
                         ),
                       ),
