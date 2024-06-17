@@ -378,22 +378,22 @@ class ProfileComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: horizontalMargin),
         ),
         SpacingFoundation.verticalSpace16,
-        Text(
-          S.of(context).AcceptDonations,
-          style: context.uiKitTheme?.boldTextTheme.caption1Medium,
-        ).paddingSymmetric(horizontal: horizontalMargin),
-        SpacingFoundation.verticalSpace16,
-        GradientableWidget(
-          gradient: GradientFoundation.attentionCard,
-          child: context.outlinedGradientButton(
-            gradient: GradientFoundation.touchIdgradientBorder,
-            data: BaseUiKitButtonData(
-              fit: ButtonFit.fitWidth,
-              text: S.of(context).FulfillTheDream.toUpperCase(),
-              onPressed: () => onFulfillDream?.call(),
-            ),
-          ),
-        ).paddingSymmetric(horizontal: horizontalMargin),
+        // Text(
+        //   S.of(context).AcceptDonations,
+        //   style: context.uiKitTheme?.boldTextTheme.caption1Medium,
+        // ).paddingSymmetric(horizontal: horizontalMargin),
+        // SpacingFoundation.verticalSpace16,
+        // GradientableWidget(
+        //   gradient: GradientFoundation.attentionCard,
+        //   child: context.outlinedGradientButton(
+        //     gradient: GradientFoundation.touchIdgradientBorder,
+        //     data: BaseUiKitButtonData(
+        //       fit: ButtonFit.fitWidth,
+        //       text: S.of(context).FulfillTheDream.toUpperCase(),
+        //       onPressed: () => onFulfillDream?.call(),
+        //     ),
+        //   ),
+        // ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace24,
         kBottomNavigationBarHeight.heightBox,
       ],

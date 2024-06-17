@@ -17,9 +17,29 @@ class ReactionViewComponent extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        ImageWidget(
-          link: videoReactionModel.previewImageUrl,
-          fit: BoxFit.cover,
+        UiKitFullScreenPortraitVideoPlayer(
+          videoUrl: videoReactionModel.videoUrl!,
+          coverImageUrl: videoReactionModel.previewImageUrl,
+        ),
+        Positioned(
+          top: 0,
+          child: Container(
+            height: 0.18.sh,
+            width: 1.sw,
+            decoration: const BoxDecoration(
+              gradient: GradientFoundation.blackLinearGradientInverted,
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: Container(
+            height: 0.18.sh,
+            width: 1.sw,
+            decoration: const BoxDecoration(
+              gradient: GradientFoundation.blackLinearGradient,
+            ),
+          ),
         ),
         Positioned(
           top: 0,
@@ -76,7 +96,9 @@ class ReactionViewComponent extends StatelessWidget {
                       ),
                       SpacingFoundation.verticalSpace16,
                       Text(
-                        videoReactionModel.eventName == null ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
+                        videoReactionModel.eventName == null
+                            ? S.current.MoreAboutThisPlace
+                            : S.current.MoreAboutThisEvent,
                         style: boldTextTheme?.body,
                         textAlign: TextAlign.center,
                       ),
