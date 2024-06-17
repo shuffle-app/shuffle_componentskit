@@ -175,45 +175,58 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 onPressed: () => context.push(
                   ViewHistoryPointComponent(
                     onTapBarCode: () {},
-                    activationList: List.generate(
-                      12,
-                      (index) => UiModelFavoritesMergeComponent(
-                        imageUrl: GraphicsFoundation.instance.png.place.path,
-                        title: 'La Vue Citytel Group',
-                        tags: [
-                          UiKitTag(
-                            title: 'Club',
-                            icon: ShuffleUiKitIcons.club,
-                            unique: false,
+                    onTabChange: (value) {},
+                    pagingController:
+                        PagingController<int, PointHistoryUniversalModel>(
+                      firstPageKey: 0,
+                    )..appendLastPage(
+                            //when the given List changes, the widget changes as well
+                            //// FOR ACCRUAL TAB
+                            // List.generate(
+                            //   10,
+                            //   (index) => PointHistoryUniversalModel(
+                            //     uiModelViewHistoryAccrual:
+                            //         UiModelViewHistoryAccrual(
+                            //       title: 'The Best Parties $index',
+                            //       date: DateTime.now(),
+                            //       points: index,
+                            //     ),
+                            //   ),
+                            // ),
+                            //// FOR ACTIVATION TAB
+                            List.generate(
+                              10,
+                              (index) => PointHistoryUniversalModel(
+                                  uiModelFavoritesMergeComponent:
+                                      UiModelFavoritesMergeComponent(
+                                imageUrl:
+                                    GraphicsFoundation.instance.png.place.path,
+                                title: 'La Vue Citytel Group',
+                                tags: [
+                                  UiKitTag(
+                                    title: 'Club',
+                                    icon: ShuffleUiKitIcons.club,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Free',
+                                    icon: ShuffleUiKitIcons.discount,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Closed',
+                                    icon: ShuffleUiKitIcons.clock,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: '7 min',
+                                    icon: ShuffleUiKitIcons.route,
+                                    unique: false,
+                                  ),
+                                ],
+                              )),
+                            ),
                           ),
-                          UiKitTag(
-                            title: 'Free',
-                            icon: ShuffleUiKitIcons.discount,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: 'Closed',
-                            icon: ShuffleUiKitIcons.clock,
-                            unique: false,
-                          ),
-                          UiKitTag(
-                            title: '7 min',
-                            icon: ShuffleUiKitIcons.route,
-                            unique: false,
-                          ),
-                        ],
-                      ),
-                    ),
-                    accrualList: List.generate(
-                      10,
-                      (index) {
-                        return UiModelViewHistoryAccrual(
-                          title: 'The Best Parties $index',
-                          date: DateTime.now(),
-                          points: index * 10,
-                        );
-                      },
-                    ),
                   ),
                 ),
               ),

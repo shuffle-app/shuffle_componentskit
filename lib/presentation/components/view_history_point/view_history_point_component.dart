@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/point_history_universal_model.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../components.dart';
+class ViewHistoryPointComponent extends StatelessWidget {
+  const ViewHistoryPointComponent({
+    super.key,
+    this.onTapBarCode,
+    required this.pagingController,
+    this.onTabChange,
+  });
 
-class ViewHistoryPointComponent extends StatefulWidget {
-  const ViewHistoryPointComponent(
-      {super.key,
-      this.activationList,
-      this.accrualList,
-       this.onTapBarCode});
-
-  final List<UiModelFavoritesMergeComponent>? activationList;
-  final List<UiModelViewHistoryAccrual>? accrualList;
+  final ValueChanged<int>? onTabChange;
   final VoidCallback? onTapBarCode;
-
-  @override
-  State<ViewHistoryPointComponent> createState() =>
-      _ViewHistoryPointComponentState();
-}
-
-class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
-  int tabBarIndex = 0;
+  final PagingController<int, PointHistoryUniversalModel> pagingController;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +28,7 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
         children: [
           UiKitCustomTabBar(
             onTappedTab: (value) {
-              setState(() {
-                tabBarIndex = value;
-              });
+              onTabChange?.call(value);
             },
             tabs: [
               UiKitCustomTab(
@@ -46,15 +38,31 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
                 title: S.current.Accrual,
               ),
             ],
-          ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical16),
-          tabBarIndex == 0
-              ? ViewHistoryActivationComponent(
-                  onTap: widget.onTapBarCode,
-                  activationList: widget.activationList,
-                )
-              : ViewHistoryAccrualComponent(
-                  accrualList: widget.accrualList,
-                ),
+          ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
+          SizedBox(
+            height: 0.75.sh,
+            child: PagedListView<int, PointHistoryUniversalModel>(
+              padding: EdgeInsets.symmetric(
+                  vertical: EdgeInsetsFoundation.vertical8),
+              pagingController: pagingController,
+              builderDelegate: PagedChildBuilderDelegate(
+                itemBuilder: (context, item, index) {
+                  return item.uiModelFavoritesMergeComponent != null
+                      ? ViewHistoryActivationComponent(
+                          onTap: onTapBarCode,
+                          activationModel: item.uiModelFavoritesMergeComponent,
+                        )
+                      : UiKitPointsHistoryTile(
+                          isLast: false,
+                          title: item.uiModelViewHistoryAccrual?.title ?? '',
+                          points: item.uiModelViewHistoryAccrual?.points ?? 0,
+                          dateTime: item.uiModelViewHistoryAccrual?.date ??
+                              DateTime.now(),
+                        );
+                },
+              ),
+            ),
+          )
         ],
       ),
     );
