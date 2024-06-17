@@ -296,8 +296,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             List.generate(
                               10,
                               (index) => PointHistoryUniversalModel(
-                                  uiModelFavoritesMergeComponent:
-                                      UiModelFavoritesMergeComponent(
+                                  contentShortUiModel:
+                                  ContentShortUiModel(
                                 imageUrl:
                                     GraphicsFoundation.instance.png.place.path,
                                 title: 'La Vue Citytel Group',

@@ -47,10 +47,10 @@ class ViewHistoryPointComponent extends StatelessWidget {
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate(
                 itemBuilder: (context, item, index) {
-                  return item.uiModelFavoritesMergeComponent != null
+                  return item.contentShortUiModel != null
                       ? ViewHistoryActivationComponent(
                           onTap: onTapBarCode,
-                          activationModel: item.uiModelFavoritesMergeComponent,
+                          activationModel: item.contentShortUiModel,
                         )
                       : UiKitPointsHistoryTile(
                           isLast: false,

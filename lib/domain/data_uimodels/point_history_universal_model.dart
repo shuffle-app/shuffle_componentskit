@@ -1,18 +1,19 @@
+import 'package:shuffle_components_kit/domain/data_uimodels/content_short_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 
 class PointHistoryUniversalModel {
-  final UiModelFavoritesMergeComponent? uiModelFavoritesMergeComponent;
+  final ContentShortUiModel? contentShortUiModel;
   final UiModelViewHistoryAccrual? uiModelViewHistoryAccrual;
 
   PointHistoryUniversalModel({
-    this.uiModelFavoritesMergeComponent,
+    this.contentShortUiModel,
     this.uiModelViewHistoryAccrual,
   });
 
   factory PointHistoryUniversalModel.fromFavoritesMergeComponent(
-      UiModelFavoritesMergeComponent uiModelFavoritesMergeComponent) {
+      ContentShortUiModel uiModelFavoritesMergeComponent) {
     return PointHistoryUniversalModel(
-        uiModelFavoritesMergeComponent: uiModelFavoritesMergeComponent);
+        contentShortUiModel: uiModelFavoritesMergeComponent);
   }
   factory PointHistoryUniversalModel.fromViewHistoryAccrual(
       UiModelViewHistoryAccrual uiModelViewHistoryAccrual) {
