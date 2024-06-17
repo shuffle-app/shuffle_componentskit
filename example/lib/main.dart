@@ -171,6 +171,105 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show spent point barcode component',
+                onPressed: () {
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      topPadding: 0.35.sh,
+                      child: SpentPointBarcodeComponent(
+                        discountTitle: 'Free coctails',
+                        uiModelDiscounts: UiModelDiscounts(
+                          buttonTitle: '30% discount '
+                              '(-1500)',
+                          barcode: '189576975672367',
+                          contentShortUiModel: ContentShortUiModel(
+                            imageUrl:
+                                GraphicsFoundation.instance.png.place.path,
+                            title: 'La Vue Citytel Group',
+                            tags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.club,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show spent points component',
+                onPressed: () => context.push(
+                  SpentPointsComponent(
+                    balance: 1234,
+                    onHistoryTap: () {},
+                    onDiscountTap: (value) {},
+                    discountsList: List.generate(
+                      6,
+                      (index) {
+                        return UiModelDiscounts(
+                          buttonTitle: '30% discount '
+                              '(-1500)',
+                          barcode: '189576975672367',
+                          contentShortUiModel: ContentShortUiModel(
+                            imageUrl:
+                                GraphicsFoundation.instance.png.place.path,
+                            title: 'La Vue Citytel Group',
+                            tags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.club,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show view history point',
                 onPressed: () => context.push(
                   ViewHistoryPointComponent(
@@ -244,7 +343,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             title: 'The Best Parties $index',
                             contents: List.generate(
                               3,
-                              (index) => UiModelFavoritesMergeComponent(
+                              (index) => ContentShortUiModel(
                                 imageUrl:
                                     GraphicsFoundation.instance.png.place.path,
                                 title: 'La Vue Citytel Group',

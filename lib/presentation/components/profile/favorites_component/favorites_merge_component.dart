@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
-import 'package:shuffle_components_kit/presentation/components/profile/favorites_component/ui_model_favorites_merge_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FavoritesMergeComponent extends StatelessWidget {
