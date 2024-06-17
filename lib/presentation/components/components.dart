@@ -86,7 +86,9 @@ export 'profile/favorites_component/favorite_create_folder_component.dart';
 export 'profile/favorites_component/favorite_folders_component.dart';
 export 'profile/favorites_component/favorite_folders_bottom_sheet_component.dart';
 export 'profile/favorites_component/favorites_merge_component.dart';
-export 'profile/favorites_component/ui_model_favorites_merge_component.dart';
 export 'profile/favorites_component/ui_model_favorites_merge_components_list.dart';
+export 'profile/spent_points/spent_points_component.dart';
+export 'profile/spent_points/ui_model_discounts.dart';
+export 'profile/spent_points/spent_point_barcode_component.dart';
 
 
