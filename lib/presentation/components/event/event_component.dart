@@ -381,48 +381,50 @@ class _EventComponentState extends State<EventComponent> {
                       )
                       .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
                   : null,
-              content: UiKitHorizontalScrollableList<FeedbackUiModel>(
-                leftPadding: horizontalMargin,
-                spacing: SpacingFoundation.horizontalSpacing8,
-                shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
-                noItemsFoundIndicator: SizedBox(
-                  width: 1.sw,
-                  child: Center(
-                    child: Text(
-                      S.current.NoFeedbacksYet,
-                      style: boldTextTheme?.subHeadline,
-                    ).paddingAll(EdgeInsetsFoundation.all16),
-                  ),
-                ),
-                itemBuilder: (context, feedback, index) {
-                  return SizedBox(
-                    width: 0.95.sw,
-                    child: UiKitFeedbackCard(
-                      title: feedback.feedbackAuthorName,
-                      avatarUrl: feedback.feedbackAuthorPhoto,
-                      datePosted: feedback.feedbackDateTime,
-                      companyAnswered: false,
-                      text: feedback.feedbackText,
-                      rating: feedback.feedbackRating,
-                      helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                      onLike: () {
-                        final feedbackId = feedback.id;
-                        if (likedReviews.contains(feedbackId)) {
-                          likedReviews.remove(feedbackId);
-                          widget.onDislikedFeedback?.call(feedbackId);
-                          _updateFeedbackList(feedbackId, -1);
-                        } else {
-                          likedReviews.add(feedbackId);
-                          widget.onLikedFeedback?.call(feedbackId);
-                          _updateFeedbackList(feedbackId, 1);
-                        }
-                        setState(() {});
+              content: _noFeedbacks
+                  ? null
+                  : UiKitHorizontalScrollableList<FeedbackUiModel>(
+                      leftPadding: horizontalMargin,
+                      spacing: SpacingFoundation.horizontalSpacing8,
+                      shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                      noItemsFoundIndicator: SizedBox(
+                        width: 1.sw,
+                        child: Center(
+                          child: Text(
+                            S.current.NoFeedbacksYet,
+                            style: boldTextTheme?.subHeadline,
+                          ).paddingAll(EdgeInsetsFoundation.all16),
+                        ),
+                      ),
+                      itemBuilder: (context, feedback, index) {
+                        return SizedBox(
+                          width: 0.95.sw,
+                          child: UiKitFeedbackCard(
+                            title: feedback.feedbackAuthorName,
+                            avatarUrl: feedback.feedbackAuthorPhoto,
+                            datePosted: feedback.feedbackDateTime,
+                            companyAnswered: false,
+                            text: feedback.feedbackText,
+                            rating: feedback.feedbackRating,
+                            helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                            onLike: () {
+                              final feedbackId = feedback.id;
+                              if (likedReviews.contains(feedbackId)) {
+                                likedReviews.remove(feedbackId);
+                                widget.onDislikedFeedback?.call(feedbackId);
+                                _updateFeedbackList(feedbackId, -1);
+                              } else {
+                                likedReviews.add(feedbackId);
+                                widget.onLikedFeedback?.call(feedbackId);
+                                _updateFeedbackList(feedbackId, 1);
+                              }
+                              setState(() {});
+                            },
+                          ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
+                        );
                       },
-                    ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
-                  );
-                },
-                pagingController: feedbackPagingController,
-              ),
+                      pagingController: feedbackPagingController,
+                    ),
             );
           },
         ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
