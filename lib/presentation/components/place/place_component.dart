@@ -398,7 +398,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
               contentHeight: 0.205.sh,
               content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
-                leftPadding: horizontalMargin,
                 spacing: SpacingFoundation.horizontalSpacing8,
                 shimmerLoadingChild: UiKitReactionPreview(
                   customHeight: 0.205.sh,
@@ -437,7 +436,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                     imagePath: reaction.previewImageUrl ?? '',
                     viewed: false,
                     onTap: () => widget.onReactionTap?.call(reaction),
-                  );
+                  ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0);
                 },
                 pagingController: reactionsPagingController,
               ),

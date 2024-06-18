@@ -12,6 +12,7 @@ class VideoReactionUiModel {
   final DateTime? eventDate;
   final int? answeredCompanyId;
   final String? placeName;
+  final int? placeId;
   final int authorId;
   final int id;
   final UserTileType authorType;
@@ -24,6 +25,7 @@ class VideoReactionUiModel {
     required this.parentContentType,
     required this.parentContentId,
     this.placeName,
+    this.placeId,
     this.videoUrl,
     this.previewImageUrl,
     this.authorName,
@@ -57,6 +59,7 @@ class VideoReactionUiModel {
     DateTime? videoReactionDateTime,
     DateTime? eventDate,
     int? answeredCompanyId,
+    int? placeId,
     String? placeName,
   }) {
     return VideoReactionUiModel(
@@ -64,6 +67,7 @@ class VideoReactionUiModel {
       authorId: authorId,
       parentContentType: parentContentType,
       parentContentId: parentContentId,
+      placeId: placeId ?? this.placeId,
       placeName: placeName ?? this.placeName,
       videoUrl: videoUrl ?? this.videoUrl,
       previewImageUrl: previewImageUrl ?? this.previewImageUrl,

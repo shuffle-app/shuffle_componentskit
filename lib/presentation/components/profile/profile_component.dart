@@ -250,71 +250,76 @@ class ProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace24,
         // if (videoReactionsPagingController != null)
         if (videoReactions != null)
-          UiKitColoredAccentBlock(
-              color: colorScheme?.surface1,
-              contentHeight: 0.205.sh,
-              titlePadding: EdgeInsetsFoundation.all16,
-              title: Text(
-                S.current.MyReactions,
-                style: textTheme?.title1,
-              ),
-              // action: context
-              //     .smallOutlinedButton(
-              //       blurred: false,
-              //       data: BaseUiKitButtonData(
-              //         iconInfo: BaseUiKitButtonIconData(
-              //           iconData: ShuffleUiKitIcons.chevronright,
-              //         ),
-              //         onPressed: onAllVideoReactionsPressed,
-              //       ),
-              //     )
-              //     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
-              content: _noVideoReactions
-                  ? Text(
-                      S.current.NoVideoReactionsYet,
-                      style: textTheme?.subHeadline,
-                    ).paddingAll(EdgeInsetsFoundation.all16)
-                  : ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final reaction = videoReactions!.elementAt(index);
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            child: videoReactions!.isEmpty
+                ? const SizedBox.shrink()
+                : UiKitColoredAccentBlock(
+                    color: colorScheme?.surface1,
+                    contentHeight: 0.205.sh,
+                    titlePadding: EdgeInsetsFoundation.all16,
+                    title: Text(
+                      S.current.MyReactions,
+                      style: textTheme?.title1,
+                    ),
+                    // action: context
+                    //     .smallOutlinedButton(
+                    //       blurred: false,
+                    //       data: BaseUiKitButtonData(
+                    //         iconInfo: BaseUiKitButtonIconData(
+                    //           iconData: ShuffleUiKitIcons.chevronright,
+                    //         ),
+                    //         onPressed: onAllVideoReactionsPressed,
+                    //       ),
+                    //     )
+                    //     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                    content: _noVideoReactions
+                        ? Text(
+                            S.current.NoVideoReactionsYet,
+                            style: textTheme?.subHeadline,
+                          ).paddingAll(EdgeInsetsFoundation.all16)
+                        : ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final reaction = videoReactions!.elementAt(index);
 
-                        return UiKitReactionPreview(
-                          customHeight: 0.205.sh,
-                          imagePath: reaction.previewImageUrl ?? '',
-                          viewed: false,
-                          onTap: () => onReactionTapped?.call(reaction),
-                        ).paddingOnly(
-                          left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
-                        );
-                      },
-                      separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
-                      itemCount: videoReactions!.length,
-                    )
-              // : UiKitHorizontalScrollableList<VideoReactionUiModel>(
-              //     spacing: SpacingFoundation.horizontalSpacing8,
-              //     shimmerLoadingChild: UiKitReactionPreview(
-              //       customHeight: 0.205.sh,
-              //       imagePath: GraphicsFoundation.instance.png.place.path,
-              //     ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
-              //     noItemsFoundIndicator: Text(
-              //       S.current.NoVideoReactionsYet,
-              //       style: textTheme?.subHeadline,
-              //     ).paddingAll(EdgeInsetsFoundation.all16),
-              //     itemBuilder: (context, reaction, index) {
-              //       return UiKitReactionPreview(
-              //         customHeight: 0.205.sh,
-              //         imagePath: reaction.previewImageUrl ?? '',
-              //         viewed: false,
-              //         onTap: () => onReactionTapped?.call(reaction),
-              //       ).paddingOnly(
-              //         left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
-              //       );
-              //     },
-              //     pagingController: videoReactionsPagingController!,
-              //   ),
-              ),
+                              return UiKitReactionPreview(
+                                customHeight: 0.205.sh,
+                                imagePath: reaction.previewImageUrl ?? '',
+                                viewed: false,
+                                onTap: () => onReactionTapped?.call(reaction),
+                              ).paddingOnly(
+                                left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
+                              );
+                            },
+                            separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                            itemCount: videoReactions!.length,
+                          )
+                    // : UiKitHorizontalScrollableList<VideoReactionUiModel>(
+                    //     spacing: SpacingFoundation.horizontalSpacing8,
+                    //     shimmerLoadingChild: UiKitReactionPreview(
+                    //       customHeight: 0.205.sh,
+                    //       imagePath: GraphicsFoundation.instance.png.place.path,
+                    //     ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                    //     noItemsFoundIndicator: Text(
+                    //       S.current.NoVideoReactionsYet,
+                    //       style: textTheme?.subHeadline,
+                    //     ).paddingAll(EdgeInsetsFoundation.all16),
+                    //     itemBuilder: (context, reaction, index) {
+                    //       return UiKitReactionPreview(
+                    //         customHeight: 0.205.sh,
+                    //         imagePath: reaction.previewImageUrl ?? '',
+                    //         viewed: false,
+                    //         onTap: () => onReactionTapped?.call(reaction),
+                    //       ).paddingOnly(
+                    //         left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
+                    //       );
+                    //     },
+                    //     pagingController: videoReactionsPagingController!,
+                    //   ),
+                    ),
+          ),
         if (videoReactions != null) SpacingFoundation.verticalSpace24,
         if (feedbackPagingController != null)
           ValueListenableBuilder(
