@@ -91,5 +91,5 @@ export 'profile/spent_points/spent_points_component.dart';
 export 'profile/spent_points/ui_model_discounts.dart';
 export 'profile/spent_points/spent_point_barcode_component.dart';
 export 'profile/hall_of_fame_component/animation_info.dart';
-
+export 'company_presentation/company_presentation_component.dart';
 
