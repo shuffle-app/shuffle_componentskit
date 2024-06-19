@@ -11,6 +11,7 @@ class SearchResultComponent extends StatelessWidget {
   final bool autofocus;
   final FocusNode? searchFocusNode;
   final List<Widget> searchResults;
+  final bool showSearchBar;
 
   const SearchResultComponent({
     super.key,
@@ -21,6 +22,7 @@ class SearchResultComponent extends StatelessWidget {
     this.onSearchValueChanged,
     this.searchFocusNode,
     this.autofocus = true,
+    this.showSearchBar = true,
     this.errorText,
   });
 
@@ -41,7 +43,7 @@ class SearchResultComponent extends StatelessWidget {
       customToolbarHeight: 170.0,
       canFoldAppBar: false,
       childrenPadding: EdgeInsets.only(bottom: EdgeInsetsFoundation.vertical16),
-      appBarBody: UiKitInputFieldRightIcon(
+      appBarBody: showSearchBar ? UiKitInputFieldRightIcon(
         focusNode: searchFocusNode,
         autofocus: autofocus,
         fillColor: colorScheme?.surface3,
@@ -59,7 +61,7 @@ class SearchResultComponent extends StatelessWidget {
           // context.pop();
         },
         onFieldSubmitted: onFieldSubmitted,
-      ),
+      ) : null,
       children: searchResults,
     );
   }
