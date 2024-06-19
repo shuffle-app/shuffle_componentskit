@@ -440,7 +440,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
               );
             },
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
-        if (!_noFeedbacks || widget.canLeaveFeedback)
+        if (!_noFeedbacks || (canLeaveFeedback ?? false))
           ValueListenableBuilder(
             valueListenable: feedbacksPagedController,
             builder: (context, value, child) {

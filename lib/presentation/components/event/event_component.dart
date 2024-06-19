@@ -369,7 +369,7 @@ class _EventComponentState extends State<EventComponent> {
               );
             },
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
-        if (!_noFeedbacks || canLeaveFeedback)
+        if (!_noFeedbacks || (canLeaveFeedback ?? false))
           ValueListenableBuilder(
             valueListenable: feedbackPagingController,
             builder: (context, value, child) {
