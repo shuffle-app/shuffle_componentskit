@@ -314,6 +314,69 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show view history point',
+                onPressed: () => context.push(
+                  ViewHistoryPointComponent(
+                    onTapBarCode: () {},
+                    onTabChange: (value) {},
+                    pagingController:
+                        PagingController<int, PointHistoryUniversalModel>(
+                      firstPageKey: 0,
+                    )..appendLastPage(
+                            //when the given List changes, the widget changes as well
+                            //// FOR ACCRUAL TAB
+                            List.generate(
+                              10,
+                              (index) => PointHistoryUniversalModel(
+                                uiModelViewHistoryAccrual:
+                                    UiModelViewHistoryAccrual(
+                                  title: 'The Best Parties $index',
+                                  date: DateTime.now(),
+                                  points: index,
+                                ),
+                              ),
+                            ),
+                            //// FOR ACTIVATION TAB
+                            // List.generate(
+                            //   10,
+                            //   (index) => PointHistoryUniversalModel(
+                            //       contentShortUiModel:
+                            //       ContentShortUiModel(
+                            //     imageUrl:
+                            //         GraphicsFoundation.instance.png.place.path,
+                            //     title: 'La Vue Citytel Group',
+                            //     tags: [
+                            //       UiKitTag(
+                            //         title: 'Club',
+                            //         icon: ShuffleUiKitIcons.club,
+                            //         unique: false,
+                            //       ),
+                            //       UiKitTag(
+                            //         title: 'Free',
+                            //         icon: ShuffleUiKitIcons.discount,
+                            //         unique: false,
+                            //       ),
+                            //       UiKitTag(
+                            //         title: 'Closed',
+                            //         icon: ShuffleUiKitIcons.clock,
+                            //         unique: false,
+                            //       ),
+                            //       UiKitTag(
+                            //         title: '7 min',
+                            //         icon: ShuffleUiKitIcons.route,
+                            //         unique: false,
+                            //       ),
+                            //     ],
+                            //   )),
+                            // ),
+                          ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show favorite merge component',
                 onPressed: () => context.push(
                   FavoritesMergeComponent(
