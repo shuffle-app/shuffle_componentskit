@@ -29,7 +29,7 @@ class AllReviewsComponent extends StatelessWidget {
         ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         SpacingFoundation.verticalSpace16,
         SizedBox(
-          height: 0.8.sh,
+          height: 0.75.sh,
           child: PagedListView.separated(
             padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             pagingController: feedbacksPagingController,
@@ -48,13 +48,7 @@ class AllReviewsComponent extends StatelessWidget {
                   child: const UiKitFeedbackCard(),
                 ),
               ),
-              firstPageProgressIndicatorBuilder: (c) => UiKitShimmerProgressIndicator(
-                gradient: GradientFoundation.greyGradient,
-                child: SizedBox(
-                  width: feedbackCardWidth,
-                  child: const UiKitFeedbackCard(),
-                ),
-              ),
+              firstPageProgressIndicatorBuilder: (c) => const Center(child: LoadingWidget()),
               firstPageErrorIndicatorBuilder: (context) => const SizedBox(),
               newPageErrorIndicatorBuilder: (context) => const SizedBox(),
               itemBuilder: (context, feedback, index) {

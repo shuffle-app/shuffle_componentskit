@@ -28,7 +28,7 @@ class AllVideoReactionsComponent extends StatelessWidget {
         ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         SpacingFoundation.verticalSpace16,
         SizedBox(
-          height: 0.8.sh,
+          height: 0.75.sh,
           child: PagedGridView(
             padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             pagingController: videoReactionsPagingController,
@@ -39,12 +39,13 @@ class AllVideoReactionsComponent extends StatelessWidget {
                   onTap: () => onReactionTapped(item),
                 );
               },
-              newPageProgressIndicatorBuilder: (c) => UiKitReactionPreview(
-                imagePath: GraphicsFoundation.instance.png.place.path,
-              ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
-              firstPageProgressIndicatorBuilder: (c) => UiKitReactionPreview(
-                imagePath: GraphicsFoundation.instance.png.place.path,
-              ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+              newPageProgressIndicatorBuilder: (c) => UiKitShimmerProgressIndicator(
+                gradient: GradientFoundation.greyGradient,
+                child: UiKitReactionPreview(
+                  imagePath: GraphicsFoundation.instance.png.place.path,
+                ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+              ),
+              firstPageProgressIndicatorBuilder: (c) => const Center(child: LoadingWidget()),
               noItemsFoundIndicatorBuilder: (c) => Center(
                 child: Text(
                   S.current.NoVideoReactionsYet,
