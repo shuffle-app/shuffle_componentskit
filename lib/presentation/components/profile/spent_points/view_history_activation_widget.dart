@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/domain.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class ViewHistoryActivationComponent extends StatelessWidget {
-  const ViewHistoryActivationComponent(
+class ViewHistoryActivationWidget extends StatelessWidget {
+  const ViewHistoryActivationWidget(
       {super.key, this.activationModel, required this.onTap});
 
   final ContentShortUiModel? activationModel;

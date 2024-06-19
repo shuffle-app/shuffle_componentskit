@@ -48,7 +48,7 @@ class ViewHistoryPointComponent extends StatelessWidget {
               builderDelegate: PagedChildBuilderDelegate(
                 itemBuilder: (context, item, index) {
                   return item.contentShortUiModel != null
-                      ? ViewHistoryActivationComponent(
+                      ? ViewHistoryActivationWidget(
                           onTap: onTapBarCode,
                           activationModel: item.contentShortUiModel,
                         )

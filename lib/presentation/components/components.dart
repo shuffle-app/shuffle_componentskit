@@ -92,7 +92,7 @@ export 'profile/spent_points/ui_model_discounts.dart';
 export 'profile/spent_points/spent_point_barcode_component.dart';
 export 'profile/hall_of_fame_component/animation_info.dart';
 export 'profile/spent_points/view_history_point_component.dart';
-export 'profile/spent_points/view_history_activation_component.dart';
+export 'profile/spent_points/view_history_activation_widget.dart';
 export 'profile/spent_points/ui_model_view_history_accrual.dart';
 
 
