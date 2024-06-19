@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/domain.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import '../../components.dart';
-
 class ViewHistoryActivationComponent extends StatelessWidget {
   const ViewHistoryActivationComponent(
       {super.key, this.activationModel, required this.onTap});
