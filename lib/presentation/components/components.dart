@@ -90,5 +90,6 @@ export 'profile/favorites_component/ui_model_favorites_merge_components_list.dar
 export 'profile/spent_points/spent_points_component.dart';
 export 'profile/spent_points/ui_model_discounts.dart';
 export 'profile/spent_points/spent_point_barcode_component.dart';
+export 'profile/hall_of_fame_component/animation_info.dart';
 
 

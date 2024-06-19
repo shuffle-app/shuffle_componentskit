@@ -151,7 +151,7 @@ class ProfileComponent extends StatelessWidget {
               final user = recommendedUsers?[index];
 
               return UiKitFindSomeoneCard(
-                avatarUrl: user?.userAvatar ?? GraphicsFoundation.instance.png.mockUserAvatar.path,
+                avatarUrl: user?.userAvatar,
                 userNickName: user?.userNickname ?? '',
                 userName: user?.userName ?? '',
                 userPoints: user?.userPointsBalance ?? 0,

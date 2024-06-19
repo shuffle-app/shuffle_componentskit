@@ -22,4 +22,12 @@ class UiInvitePersonModel extends UiInviteToFavoritePlacesModel {
     this.avatarLink,
     required this.description,
   });
+
+  @override
+  operator ==(Object other) {
+    return other is UiInvitePersonModel && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
