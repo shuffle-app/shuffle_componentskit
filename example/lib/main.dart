@@ -173,7 +173,138 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 data: BaseUiKitButtonData(
                     text: 'show company presentation component',
                     onPressed: () {
-                      context.push(CompanyPresentationComponent());
+                      context.push(CompanyPresentationComponent(
+                        place: UiPlaceModel(
+                          id:  1,
+                          rating: 4 ,
+                          media: [
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation
+                                    .instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation
+                                    .instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation
+                                    .instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link: GraphicsFoundation
+                                    .instance.png.place.path),
+                          ],
+                          title: 'L\'ETO The Wharf',
+                          logo: GraphicsFoundation.instance.png.place.path,
+                          description:
+                          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                          baseTags: [
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                          ],
+                          tags: [
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Duh',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Metal',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Heavy',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Club',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Cheaper',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                          ],
+                        ),
+                        onFeedbackShowMoreTap: (){},
+                        onFeedbackHelpfulTap: () {},
+                        motivationBannerTitle: 'Go ahead and grow your business',
+                        infoCardPagingController: PagingController<int, String>(
+                          firstPageKey: 0,
+                        )..appendLastPage(List.generate(
+                            10,
+                            (index) {
+                              return '''INDEXX ${index},
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.''';
+                            },
+                          )),
+                        feedbacksPagingController:
+                            PagingController<int, FeedbackUiModel>(
+                                firstPageKey: 0)
+                              ..appendLastPage(List.generate(
+                                6,
+                                (index) {
+                                  return FeedbackUiModel(
+                                    id: index,
+                                    feedbackAuthorName: 'Marry Jane',
+                                    feedbackAuthorPhoto:
+                                        'assets/images/png/place.png',
+                                    feedbackDateTime: DateTime.now(),
+                                    feedbackRating: index % 6,
+                                    feedbackText:
+                                        'I am very happy with the service. I will definitely use it againI am very happy with the service. I will definitely use it againI am very happy with the service. I will definitely use it againI am very happy with the service. I will definitely use it again',
+                                  );
+                                },
+                              )),
+                      ));
                     })),
             SpacingFoundation.verticalSpace16,
             context.button(
