@@ -55,7 +55,7 @@ class _EventComponentState extends State<EventComponent> {
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
 
-  bool get canLeaveFeedback=> !userHasLeftFeedback && widget.canLeaveFeedback;
+  bool get canLeaveFeedback => !userHasLeftFeedback && widget.canLeaveFeedback;
 
   bool userHasLeftFeedback = false;
 
@@ -76,7 +76,7 @@ class _EventComponentState extends State<EventComponent> {
 
   void _onReactionsPageRequest(int page) async {
     final data = await widget.reactionsLoaderCallback(page, widget.event.id);
-
+    if (data.any((e) => reactionsPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
     if (data.isEmpty) {
       reactionsPagingController.appendLastPage(data);
       return;
@@ -110,7 +110,7 @@ class _EventComponentState extends State<EventComponent> {
 
   void _onFeedbackPageRequest(int page) async {
     final data = await widget.feedbackLoaderCallback(page, widget.event.id);
-
+    if (data.any((e) => feedbackPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
     if (data.isEmpty) {
       feedbackPagingController.appendLastPage(data);
       return;
@@ -326,9 +326,10 @@ class _EventComponentState extends State<EventComponent> {
                   ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                   noItemsFoundIndicator: UiKitReactionPreview.empty(
                     customHeight: 0.205.sh,
-                    onTap: () => widget.onAddReactionTapped
-                        ?.call()
-                        .then((_) => setState(() => reactionsPagingController.refresh())),
+                    onTap: () => widget.onAddReactionTapped?.call().then((_) {
+                      reactionsPagingController.refresh();
+                      reactionsPagingController.notifyPageRequestListeners(1);
+                    }),
                   ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                   itemBuilder: (context, reaction, index) {
                     if (index == 0 && widget.canLeaveVideoReaction) {
@@ -338,9 +339,10 @@ class _EventComponentState extends State<EventComponent> {
                         children: [
                           UiKitReactionPreview.empty(
                             customHeight: 0.205.sh,
-                            onTap: () => widget.onAddReactionTapped
-                                ?.call()
-                                .then((_) => setState(() => reactionsPagingController.refresh())),
+                            onTap: () => widget.onAddReactionTapped?.call().then((_) {
+                              reactionsPagingController.refresh();
+                              reactionsPagingController.notifyPageRequestListeners(1);
+                            }),
                           ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                           UiKitReactionPreview(
                             customHeight: 0.205.sh,
@@ -384,14 +386,14 @@ class _EventComponentState extends State<EventComponent> {
                               iconData: ShuffleUiKitIcons.plus,
                             ),
                             onPressed: () => widget.onAddFeedbackTapped?.call().then((result) {
-                              if(result!=null){
+                              if (result != null) {
                                 setState(() {
                                   userHasLeftFeedback = result;
                                 });
                               }
-                              setState(() {
-                                feedbackPagingController.refresh();
-                              });
+
+                              feedbackPagingController.refresh();
+                              feedbackPagingController.notifyPageRequestListeners(1);
                             }),
                           ),
                         )
