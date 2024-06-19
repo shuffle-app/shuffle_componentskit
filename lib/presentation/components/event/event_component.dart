@@ -76,7 +76,7 @@ class _EventComponentState extends State<EventComponent> {
 
   void _onReactionsPageRequest(int page) async {
     final data = await widget.reactionsLoaderCallback(page, widget.event.id);
-
+    if (data.any((e) => reactionsPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
     if (data.isEmpty) {
       reactionsPagingController.appendLastPage(data);
       return;
@@ -91,6 +91,7 @@ class _EventComponentState extends State<EventComponent> {
         reactionsPagingController.appendPage(data, page + 1);
       }
     }
+    setState(() {});
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
@@ -104,11 +105,12 @@ class _EventComponentState extends State<EventComponent> {
         );
       }
     }
+    setState(() {});
   }
 
   void _onFeedbackPageRequest(int page) async {
     final data = await widget.feedbackLoaderCallback(page, widget.event.id);
-
+    if (data.any((e) => feedbackPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
     if (data.isEmpty) {
       feedbackPagingController.appendLastPage(data);
       return;
@@ -123,6 +125,7 @@ class _EventComponentState extends State<EventComponent> {
         feedbackPagingController.appendPage(data, page + 1);
       }
     }
+    setState(() {});
   }
 
   void _handleAddReactionTapped() async {
@@ -306,6 +309,7 @@ class _EventComponentState extends State<EventComponent> {
           ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16
         ],
+        if (!_noReactions || widget.canLeaveVideoReaction)
         ValueListenableBuilder(
           valueListenable: reactionsPagingController,
           builder: (context, value, child) {
@@ -365,6 +369,7 @@ class _EventComponentState extends State<EventComponent> {
             );
           },
         ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        if (!_noFeedbacks || canLeaveFeedback)
         ValueListenableBuilder(
           valueListenable: feedbackPagingController,
           builder: (context, value, child) {

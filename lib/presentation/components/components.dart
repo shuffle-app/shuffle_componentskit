@@ -92,3 +92,11 @@ export 'subscriptions/ui_subscription_model.dart';
 export 'suggest_place/suggest_place_component.dart';
 export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
+export 'suggest_place/suggest_place_component.dart';
+export 'profile/hall_of_fame_component/animation_info.dart';
+export 'profile/spent_points/view_history_point_component.dart';
+export 'profile/spent_points/view_history_activation_widget.dart';
+export 'profile/spent_points/ui_model_view_history_accrual.dart';
+export 'property_management/property_management_component.dart';
+export 'property_management/ui_model_property_type.dart';
+

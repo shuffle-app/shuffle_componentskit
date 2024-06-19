@@ -90,7 +90,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   void _reactionsListener(int page) async {
     final data = await widget.placeReactionLoaderCallback(page, widget.place.id);
-
+    if (data.any((e) => reactionsPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
     if (data.isEmpty) {
       reactionsPagingController.appendLastPage(data);
       return;
@@ -105,6 +105,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         reactionsPagingController.appendPage(data, page + 1);
       }
     }
+    setState(() {});
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
@@ -118,10 +119,12 @@ class _PlaceComponentState extends State<PlaceComponent> {
         );
       }
     }
+    setState(() {});
   }
 
   void _feedbacksListener(int page) async {
     final data = await widget.placeFeedbackLoaderCallback(page, widget.place.id);
+    if (data.any((e) => feedbacksPagedController.itemList?.any((el) => el.id == e.id) ?? false)) return;
     if (data.isEmpty) {
       feedbacksPagedController.appendLastPage(data);
       return;
@@ -136,6 +139,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         feedbacksPagedController.appendPage(data, page + 1);
       }
     }
+    setState(() {});
   }
 
   Future<void> _handleAddReactionTap() async {
@@ -204,27 +208,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
           baseTags: widget.place.baseTags,
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
-          branches: widget.place.branches
-          // ?? Future.value( [
-          //     /// mock branches
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //   ])
-          ,
+          branches: widget.place.branches,
           actions: [
             if (widget.complaintFormComponent != null)
               context.smallOutlinedButton(
@@ -369,7 +353,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           ? null
                           : () {
                               if (widget.onEventTap != null) {
-                                widget.onEventTap?.call(closestEvent!);
+                                widget.onEventTap?.call(closestEvent);
                               }
                               // else {
                               //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
@@ -398,6 +382,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
               }(),
             ),
           ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
+        if (!_noReactions || widget.canLeaveVideoReaction)
         ValueListenableBuilder(
           valueListenable: reactionsPagingController,
           builder: (context, value, child) {
@@ -454,6 +439,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
             );
           },
         ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        if (!_noFeedbacks || widget.canLeaveFeedback)
         ValueListenableBuilder(
           valueListenable: feedbacksPagedController,
           builder: (context, value, child) {
