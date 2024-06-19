@@ -63,9 +63,10 @@ class _EventComponentState extends State<EventComponent> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _onReactionsPageRequest(1);
       reactionsPagingController.addPageRequestListener(_onReactionsPageRequest);
+      reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
+      feedbackPagingController.notifyPageRequestListeners(1);
     });
   }
 
@@ -292,7 +293,6 @@ class _EventComponentState extends State<EventComponent> {
           ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace16
         ],
-        SpacingFoundation.verticalSpace24,
         ValueListenableBuilder(
           valueListenable: reactionsPagingController,
           builder: (context, value, child) {
@@ -349,7 +349,7 @@ class _EventComponentState extends State<EventComponent> {
                     imagePath: reaction.previewImageUrl ?? '',
                     viewed: false,
                     onTap: () => widget.onReactionTap?.call(reaction),
-                  );
+                  ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0);
                 },
                 pagingController: reactionsPagingController,
               ),

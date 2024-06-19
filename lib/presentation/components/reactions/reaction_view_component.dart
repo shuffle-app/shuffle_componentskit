@@ -108,7 +108,7 @@ class ReactionViewComponent extends StatelessWidget {
             authorType: videoReactionModel.authorType,
             reactionDate: videoReactionModel.videoReactionDateTime,
             placeName: videoReactionModel.placeName,
-            eventName: contentIsEvent ? content.title : null,
+            eventName: contentIsEvent && onSwipeUp != null ? content.title : null,
             eventDate: videoReactionModel.eventDate,
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         ),
