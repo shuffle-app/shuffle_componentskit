@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -65,7 +66,7 @@ class PropertyManagementComponent extends StatelessWidget {
                             ColorsFoundation.primary200.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
-                            size: 24.sp,
+                            size: kIsWeb ? 24 : 24.sp,
                             color: ColorsFoundation.primary200),
                       ),
                     )
@@ -74,17 +75,15 @@ class PropertyManagementComponent extends StatelessWidget {
                 child: Column(
                   children: [
                     SpacingFoundation.verticalSpace24,
-                    ...List.generate(
-                      propertyTypes?.length ?? 0,
-                      (index) {
-                        return PropertiesTypeAnimatedButton(
-                          title: propertyTypes?[index].title ?? '',
-                          onTap: () {
-                            onPropertyTypeTapped?.call(index);
-                          },
-                        );
-                      },
-                    )
+                    ...(propertyTypes ?? []).map((element) {
+                      return PropertiesTypeAnimatedButton(
+                        title: element.title ?? '',
+                        onTap: () {
+                          onPropertyTypeTapped
+                              ?.call(propertyTypes?.indexOf(element) ?? 0);
+                        },
+                      );
+                    })
                   ],
                 ),
               ),
@@ -110,7 +109,7 @@ class PropertyManagementComponent extends StatelessWidget {
                             ColorsFoundation.primary200.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.pencil,
-                            size: 16.sp,
+                            size: kIsWeb ? 16 : 16.sp,
                             color: ColorsFoundation.primary200),
                       ),
                     ),
@@ -122,7 +121,7 @@ class PropertyManagementComponent extends StatelessWidget {
                             ColorsFoundation.danger.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.trash,
-                            size: 16.sp,
+                            size: kIsWeb ? 16 : 16.sp,
                             color: ColorsFoundation.danger),
                       ),
                     ),
@@ -192,7 +191,7 @@ class PropertyManagementComponent extends StatelessWidget {
                         SpacingFoundation.horizontalSpace8,
                         Icon(
                           ShuffleUiKitIcons.arrowdown,
-                          size: 24.sp,
+                          size: kIsWeb ? 24 : 24.sp,
                           color: ColorsFoundation.mutedText,
                         ),
                       ],
@@ -204,24 +203,20 @@ class PropertyManagementComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace16,
                     UiKitPropertiesCloud(
                       child: Wrap(
-                        spacing: SpacingFoundation.horizontalSpacing12,
-                        runSpacing: SpacingFoundation.verticalSpacing12,
-                        children: List.generate(
-                          recentlyAddedProperties?.length ?? 0,
-                          (index) {
-                            return UiKitCloudChip(
-                              title:
-                                  recentlyAddedProperties?[index].title ?? '',
-                              onTap: () {
-                                onRecentlyAddedPropertyTapped?.call(
-                                  recentlyAddedProperties?[index] ??
-                                      UiModelPropertyType(title: '', id: 0),
+                              spacing: SpacingFoundation.horizontalSpacing12,
+                              runSpacing: SpacingFoundation.verticalSpacing12,
+                              children: (recentlyAddedProperties ?? [])
+                                  .map((element) {
+                                return UiKitCloudChip(
+                                  title: element.title,
+                                  onTap: () {
+                                    onRecentlyAddedPropertyTapped?.call(
+                                      element,
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          },
-                        ),
-                      ).paddingAll(EdgeInsetsFoundation.all24),
+                              }).toList())
+                          .paddingAll(EdgeInsetsFoundation.all24),
                     ),
                   ],
                 ),
