@@ -116,6 +116,18 @@ class UiUniversalModel extends Advertisable {
         title: eventModel.title,
       );
 
+  factory UiUniversalModel.empty() => UiUniversalModel(
+        id: -1,
+        type: 'empty',
+        media: [],
+        description: '',
+        tags: [],
+      );
+
+  bool get isEventContent => type == 'event';
+
+  bool get isPlaceContent => type == 'place';
+
   @override
   String toString() {
     return 'UiUniversalModel(id: $id, type: $type, shouldVisitAt: $shouldVisitAt)';

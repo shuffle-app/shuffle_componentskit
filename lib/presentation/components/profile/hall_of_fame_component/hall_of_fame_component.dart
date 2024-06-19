@@ -1,24 +1,35 @@
+import 'dart:developer';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'animation_info.dart';
 
 class HallOfFameComponent extends StatefulWidget {
   final List<UiKitAchievementsModel> items;
+  final List<AnimationInfo> animations;
   final String? modelUrl;
   final String? posterUrl;
 
-  const HallOfFameComponent({super.key, required this.items, this.modelUrl, this.posterUrl});
+  const HallOfFameComponent(
+      {super.key, required this.items, this.modelUrl, this.posterUrl, this.animations = const []});
 
   @override
   State<HallOfFameComponent> createState() => _HallOfFameComponentState();
 }
 
-class _HallOfFameComponentState extends State<HallOfFameComponent> {
+class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsBindingObserver {
   double? downloadProgress = 0;
   FileInfo? model;
   bool isLoading = false;
+  bool animationInProgress = false;
   WebViewController? controller;
+  late final JavascriptChannel _channel;
+  final math.Random random = math.Random();
 
   Key? viewerKey = UniqueKey();
 
@@ -39,7 +50,30 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> {
         });
       }
     });
+    _channel = JavascriptChannel('AnimationChannel', onMessageReceived: (JavaScriptMessage value) {
+      log('message recieived: ${value.message}', name: 'HallOfFameComponent|AnimationChannel');
+      Future.delayed(Duration(milliseconds: int.parse(value.message)), () {
+        log('returning animation back', name: 'HallOfFameComponent|AnimationChannel');
+        controller?.runJavaScript('''
+                      var viewer = document.querySelector('#model-viewer');
+                      viewer.setAttribute('animation-name', 'base');
+                      ''');
+        setState(() {
+          animationInProgress = false;
+        });
+      });
+    });
     super.initState();
+  }
+
+  @override
+  Future<bool> didPopRoute() {
+    if (mounted) {
+      setState(() {
+        viewerKey = UniqueKey();
+      });
+    }
+    return super.didPopRoute();
   }
 
   @override
@@ -49,7 +83,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> {
       SpacingFoundation.verticalSpace12,
       SizedBox(
           height: 0.394.sh,
-          child: Stack(alignment: Alignment.bottomCenter, children: [
+          child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.expand, children: [
             Positioned(
                 top: 20.h,
                 child: DecoratedBox(
@@ -74,29 +108,45 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> {
                     animationName: 'base',
                     localPath: model!.file.path,
                     autoPlay: true,
-
-                    // javascriptChannels: {javascriptChannel},
+                    javascriptChannels: {_channel},
                     // environmentImage: 'https://github.com/shuffle-app/test-images/raw/master/Interior%20Light%20HDRI.jpg',
-                    // onWebViewCreated: (WebViewController controller) {
-                    //   setState(() {
-                    //     this.controller = controller;
-                    //   });
-                    //   controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-                    //   log('webview created with controller $controller', name: 'ModelViewerScreen');
-
-                    //         this.controller?.runJavaScript('''
-                    // var viewer = document.querySelector('#model-viewer');
-                    // viewer.setAttribute('animation-name', '${animationsNames.first}');
-                    // ''').onErrorNullable(cb: (error, st) {
-                    //           log('error: $error', name: 'ModelViewerScreen');
-                    //         });
-                    // },
+                    onWebViewCreated: (WebViewController controller) {
+                      setState(() {
+                        this.controller = controller;
+                      });
+                      controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+                      log('webview created with controller $controller', name: 'HallOfFameComponent');
+                    },
                   ))
             else
               ImageWidget(
                 link: widget.posterUrl ??
                     'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/posters/prince-2.png',
-              )
+              ),
+            RawGestureDetector(
+                gestures: <Type, GestureRecognizerFactory>{
+                  CustomTapRecognizer: GestureRecognizerFactoryWithHandlers<CustomTapRecognizer>(
+                    () => CustomTapRecognizer(onTap: () {
+                      if (animationInProgress) return;
+                      final animationItem = widget.animations[random.nextInt(widget.animations.length)];
+                      log('tapped ${animationItem.animationName}', name: 'HallOfFameComponent');
+                      controller?.runJavaScript('''
+                    var viewer = document.querySelector('#model-viewer');
+                    viewer.setAttribute('animation-name', '${animationItem.animationName}');
+                    AnimationChannel.postMessage('${animationItem.durationInMs.round()}');
+                    ''');
+                      setState(() {
+                        animationInProgress = true;
+                      });
+                    },),
+                    (CustomTapRecognizer instance) {},
+                  )
+                },
+                // splashFactory: NoSplash.splashFactory,
+                // behavior: HitTestBehavior.translucent,
+
+               )
+            // child: const SizedBox.expand())
           ])),
       GridView.count(
         crossAxisCount: 3,
@@ -109,14 +159,55 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> {
         crossAxisSpacing: SpacingFoundation.verticalSpacing8,
         children: widget.items
             .map((e) => GridTitledItemWidget(
+                  preserveDarkTheme: true,
                   title: e.title,
-                  child: UiKitFameItem(
-                    uiModel: e,
-                  ),
+                  child: UiKitFameItem(uiModel: e, preserveDarkTheme: true),
                 ))
             .toList(),
       ),
       kBottomNavigationBarHeight.heightBox
     ]);
   }
+}
+
+class CustomTapRecognizer extends OneSequenceGestureRecognizer {
+  final void Function() onTap;
+  Offset pointerDownPosition = Offset.zero;
+
+  CustomTapRecognizer({required this.onTap});
+
+  @override
+  void addPointer(PointerEvent event) {
+    if (event is PointerDownEvent) {
+      startTrackingPointer(event.pointer);
+      pointerDownPosition = event.position;
+    } else {
+      stopTrackingPointer(event.pointer);
+    }
+  }
+
+  @override
+  void handleEvent(PointerEvent event) {
+    if (event is PointerUpEvent) {
+      Offset pointerUpPosition = event.position;
+      if (pointerUpPosition - pointerDownPosition == Offset.zero) {
+        resolve(GestureDisposition.accepted);
+      } else {
+        resolve(GestureDisposition.rejected);
+      }
+      stopTrackingPointer(event.pointer);
+    }
+  }
+
+  @override
+  void acceptGesture(int pointer) {
+    super.acceptGesture(pointer);
+    onTap();
+  }
+
+  @override
+  String get debugDescription => "tap";
+
+  @override
+  void didStopTrackingLastPointer(int pointer) {}
 }
