@@ -171,6 +171,136 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show video-reactions moderations',
+                onPressed: () {
+                  context.push(
+                    Scaffold(
+                      body: VideoReactionModeration(
+                        sortFunction: () {},
+                        deleteFunction: () {},
+                        reactionPreviewModelList: [
+                          ReactionPreviewUiModel(
+                            imagePath: 'assets/images/png/profile_story_1.png',
+                            viewed: false,
+                            onTap: () {},
+                          ),
+                          ReactionPreviewUiModel(
+                            imagePath: 'assets/images/png/profile_story_1.png',
+                            viewed: false,
+                            onTap: () {},
+                          ),
+                          ReactionPreviewUiModel(
+                            imagePath: 'assets/images/png/profile_story_1.png',
+                            viewed: false,
+                            onTap: () {},
+                          ),
+                          ReactionPreviewUiModel(
+                            imagePath: 'assets/images/png/profile_story_1.png',
+                            viewed: false,
+                            onTap: () {},
+                          ),
+                          ReactionPreviewUiModel(
+                            imagePath: 'assets/images/png/profile_story_1.png',
+                            viewed: false,
+                            onTap: () {},
+                          ),
+                          ReactionPreviewUiModel(
+                            imagePath: 'assets/images/png/profile_story_1.png',
+                            viewed: false,
+                            onTap: () {},
+                          ),
+                          ReactionPreviewUiModel(
+                            imagePath: 'assets/images/png/profile_story_1.png',
+                            viewed: false,
+                            onTap: () {},
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show Feedback',
+                onPressed: () {
+                  context.push(
+                    Scaffold(
+                      body: FeedBackModeration(
+                        sortFunction: () {},
+                        deleteFunction: () {},
+                        feedbackUiModelList: [
+                          FeedbackModerationUiModel(
+                            feedbackItemUiModel: FeedbackItemUiModel(
+                              title: 'Ryan Gosling',
+                              avatarUrl: GraphicsFoundation
+                                  .instance.png.atmosphere.path,
+                              datePosted: DateTime.now(),
+                              rating: 5,
+                              companyAnswered: false,
+                              helpfulCount: 1,
+                              text: 'Came for lunch with my sister. '
+                                  'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
+                                  'But the service was below average and the chips were too terrible to finish.',
+                              removeFunction: () {},
+                            ),
+                            companyFeedbackItemUiModel: [],
+                          ),
+                          FeedbackModerationUiModel(
+                            feedbackItemUiModel: FeedbackItemUiModel(
+                              title: 'Ryan Gosling',
+                              avatarUrl: GraphicsFoundation
+                                  .instance.png.atmosphere.path,
+                              datePosted: DateTime.now(),
+                              rating: 5,
+                              companyAnswered: false,
+                              helpfulCount: 1,
+                              text: 'Came for lunch with my sister. '
+                                  'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
+                                  'But the service was below average and the chips were too terrible to finish.',
+                              removeFunction: () {},
+                            ),
+                            companyFeedbackItemUiModel: [
+                              FeedbackItemUiModel(
+                                title: 'Ryan Gosling',
+                                avatarUrl: GraphicsFoundation
+                                    .instance.png.atmosphere.path,
+                                datePosted: DateTime.now(),
+                                rating: 5,
+                                companyAnswered: false,
+                                helpfulCount: 1,
+                                text: 'Came for lunch with my sister. '
+                                    'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
+                                    'But the service was below average and the chips were too terrible to finish.',
+                                removeFunction: () {},
+                              ),
+                              FeedbackItemUiModel(
+                                title: 'Ryan Gosling',
+                                avatarUrl: GraphicsFoundation
+                                    .instance.png.atmosphere.path,
+                                datePosted: DateTime.now(),
+                                rating: 5,
+                                companyAnswered: false,
+                                helpfulCount: 1,
+                                text: 'Came for lunch with my sister. '
+                                    'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
+                                    'But the service was below average and the chips were too terrible to finish.',
+                                removeFunction: () {},
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show spent point barcode component',
                 onPressed: () {
                   showUiKitGeneralFullScreenDialog(
