@@ -25,7 +25,7 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
-  final AsyncCallback? onAddFeedbackTapped;
+  final AsyncValueGetter? onAddFeedbackTapped;
   final bool canLeaveFeedback;
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
@@ -71,6 +71,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
 
+  bool get canLeaveFeedback=> !userHasLeftFeedback && widget.canLeaveFeedback;
+
+  bool userHasLeftFeedback = false;
+
   @override
   void initState() {
     super.initState();
@@ -99,6 +103,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         reactionsPagingController.appendPage(data, page + 1);
       }
     }
+    setState(() {});
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
@@ -112,6 +117,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         );
       }
     }
+    setState(() {});
   }
 
   void _feedbacksListener(int page) async {
@@ -130,6 +136,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         feedbacksPagedController.appendPage(data, page + 1);
       }
     }
+    setState(() {});
   }
 
   @override
@@ -381,7 +388,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
               }(),
             ),
           ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
-        ValueListenableBuilder(
+        if (!_noReactions || widget.canLeaveVideoReaction)
+          ValueListenableBuilder(
           valueListenable: reactionsPagingController,
           builder: (context, value, child) {
             return UiKitColoredAccentBlock(
@@ -443,6 +451,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
             );
           },
         ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        if(!_noFeedbacks || widget.canLeaveFeedback)
         ValueListenableBuilder(
           valueListenable: feedbacksPagedController,
           builder: (context, value, child) {
@@ -453,7 +462,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
               color: colorScheme?.surface1,
               contentHeight: _noFeedbacks ? 0 : 0.28.sh,
-              action: widget.canLeaveFeedback
+              action: canLeaveFeedback
                   ? context
                       .smallOutlinedButton(
                         blurred: false,
@@ -463,7 +472,12 @@ class _PlaceComponentState extends State<PlaceComponent> {
                             ),
                             onPressed: () => widget.onAddFeedbackTapped
                                 ?.call()
-                                .then((_) => setState(() => feedbacksPagedController.refresh()))),
+                                .then((result) {
+                                  if(result!=null){
+                                    setState(() => userHasLeftFeedback = result);
+                                  }
+                                    setState(() => feedbacksPagedController.refresh());
+                                  })),
                       )
                       .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
                   : null,
