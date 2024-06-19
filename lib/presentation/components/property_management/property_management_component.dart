@@ -144,23 +144,18 @@ class PropertyManagementComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
                       child: Wrap(
-                        spacing: SpacingFoundation.horizontalSpacing12,
-                        runSpacing: SpacingFoundation.verticalSpacing12,
-                        children: List.generate(
-                          selectedProperties?.length ?? 0,
-                          (index) {
-                            return UiKitCloudChip(
-                              title: selectedProperties?[index].title ?? '',
-                              onTap: () {
-                                onSelectedPropertyTapped?.call(
-                                  selectedProperties?[index] ??
-                                      UiModelPropertyType(title: '', id: 0),
+                              spacing: SpacingFoundation.horizontalSpacing12,
+                              runSpacing: SpacingFoundation.verticalSpacing12,
+                              children:
+                                  (selectedProperties ?? []).map((element) {
+                                return UiKitCloudChip(
+                                  title: element.title,
+                                  onTap: () {
+                                    onSelectedPropertyTapped?.call(element);
+                                  },
                                 );
-                              },
-                            );
-                          },
-                        ),
-                      ).paddingAll(EdgeInsetsFoundation.all24),
+                              }).toList())
+                          .paddingAll(EdgeInsetsFoundation.all24),
                     ),
                   ],
                 ),
