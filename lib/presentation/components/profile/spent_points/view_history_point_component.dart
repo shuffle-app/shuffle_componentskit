@@ -18,53 +18,51 @@ class ViewHistoryPointComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlurredAppBarPage(
-        autoImplyLeading: true,
-        centerTitle: true,
-        title: S.current.ViewHistory,
-        childrenPadding:
-            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-        children: [
-          UiKitCustomTabBar(
-            onTappedTab: (value) {
-              onTabChange?.call(value);
-            },
-            tabs: [
-              UiKitCustomTab(
-                title: S.current.Activation,
-              ),
-              UiKitCustomTab(
-                title: S.current.Accrual,
-              ),
-            ],
-          ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
-          SizedBox(
-            height: 0.75.sh,
-            child: PagedListView<int, PointHistoryUniversalModel>(
-              padding: EdgeInsets.symmetric(
-                  vertical: EdgeInsetsFoundation.vertical8),
-              pagingController: pagingController,
-              builderDelegate: PagedChildBuilderDelegate(
-                itemBuilder: (context, item, index) {
-                  return item.contentShortUiModel != null
-                      ? ViewHistoryActivationWidget(
-                          onTap: onTapBarCode,
-                          activationModel: item.contentShortUiModel,
-                        )
-                      : UiKitPointsHistoryTile(
-                          isLast: false,
-                          title: item.uiModelViewHistoryAccrual?.title ?? '',
-                          points: item.uiModelViewHistoryAccrual?.points ?? 0,
-                          dateTime: item.uiModelViewHistoryAccrual?.date ??
-                              DateTime.now(),
-                        );
-                },
-              ),
+    return BlurredAppBarPage(
+      autoImplyLeading: true,
+      centerTitle: true,
+      title: S.current.ViewHistory,
+      childrenPadding:
+      EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+      children: [
+        UiKitCustomTabBar(
+          onTappedTab: (value) {
+            onTabChange?.call(value);
+          },
+          tabs: [
+            UiKitCustomTab(
+              title: S.current.Activation,
             ),
-          )
-        ],
-      ),
+            UiKitCustomTab(
+              title: S.current.Accrual,
+            ),
+          ],
+        ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
+        SizedBox(
+          height: 0.75.sh,
+          child: PagedListView<int, PointHistoryUniversalModel>(
+            padding: EdgeInsets.symmetric(
+                vertical: EdgeInsetsFoundation.vertical8),
+            pagingController: pagingController,
+            builderDelegate: PagedChildBuilderDelegate(
+              itemBuilder: (context, item, index) {
+                return item.contentShortUiModel != null
+                    ? ViewHistoryActivationWidget(
+                  onTap: onTapBarCode,
+                  activationModel: item.contentShortUiModel,
+                )
+                    : UiKitPointsHistoryTile(
+                  isLast: index == pagingController.itemList!.length - 1,
+                  title: item.uiModelViewHistoryAccrual?.title ?? '',
+                  points: item.uiModelViewHistoryAccrual?.points ?? 0,
+                  dateTime: item.uiModelViewHistoryAccrual?.date ??
+                      DateTime.now(),
+                );
+              },
+            ),
+          ),
+        )
+      ],
     );
   }
 }
