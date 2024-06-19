@@ -14,7 +14,7 @@ class PlaceComponent extends StatefulWidget {
   final UiPlaceModel place;
   final bool isCreateEventAvaliable;
   final VoidCallback? onEventCreate;
-  final AsyncCallback? onAddReactionTapped;
+  final Future<bool> Function()? onAddReactionTapped;
   final Future<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
@@ -25,8 +25,9 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
-  final AsyncCallback? onAddFeedbackTapped;
-  final bool canLeaveFeedback;
+  final Future<bool> Function()? onAddFeedbackTapped;
+  final Future<bool> Function(int placeId) canLeaveFeedbackCallback;
+  final Future<bool> Function(int eventId) canLeaveFeedbackForEventCallback;
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
@@ -38,6 +39,8 @@ class PlaceComponent extends StatefulWidget {
     required this.eventReactionLoaderCallback,
     required this.placeFeedbackLoaderCallback,
     required this.eventFeedbackLoaderCallback,
+    required this.canLeaveFeedbackCallback,
+    required this.canLeaveFeedbackForEventCallback,
     this.onFeedbackTap,
     this.onReactionTap,
     this.onAddFeedbackTapped,
@@ -48,7 +51,6 @@ class PlaceComponent extends StatefulWidget {
     this.onEventTap,
     this.onSharePressed,
     this.events,
-    this.canLeaveFeedback = false,
     this.onLikedFeedback,
     this.onDislikedFeedback,
     this.canLeaveVideoReaction = false,
@@ -71,14 +73,18 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
 
+  bool? canLeaveFeedback;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _reactionsListener(1);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      canLeaveFeedback = await widget.canLeaveFeedbackCallback.call(widget.place.id);
       reactionsPagingController.addPageRequestListener(_reactionsListener);
-      _feedbacksListener(1);
       feedbacksPagedController.addPageRequestListener(_feedbacksListener);
+      reactionsPagingController.notifyPageRequestListeners(1);
+      feedbacksPagedController.notifyPageRequestListeners(1);
+      setState(() {});
     });
   }
 
@@ -129,6 +135,15 @@ class _PlaceComponentState extends State<PlaceComponent> {
       } else {
         feedbacksPagedController.appendPage(data, page + 1);
       }
+    }
+  }
+
+  Future<void> _handleAddReactionTap() async {
+    final addedReaction = await widget.onAddReactionTapped?.call();
+    if (addedReaction == true) {
+      setState(() {
+        reactionsPagingController.refresh();
+      });
     }
   }
 
@@ -287,6 +302,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                       ComponentBuilder(
                                         child: EventComponent(
                                           event: event,
+                                          canLeaveVideoReaction: widget.canLeaveVideoReaction,
+                                          canLeaveFeedback: widget.canLeaveFeedbackForEventCallback,
                                           feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
                                           reactionsLoaderCallback: widget.eventReactionLoaderCallback,
                                         ),
@@ -405,22 +422,16 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 ).paddingOnly(
                   left: EdgeInsetsFoundation.horizontal16,
                 ),
-                noItemsFoundIndicator: UiKitReactionPreview.empty(
-                    customHeight: 0.205.sh,
-                    onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
-                          reactionsPagingController.refresh();
-                        }))).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                noItemsFoundIndicator: UiKitReactionPreview.empty(customHeight: 0.205.sh, onTap: _handleAddReactionTap)
+                    .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                 itemBuilder: (context, reaction, index) {
                   if (index == 0 && widget.canLeaveVideoReaction) {
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        UiKitReactionPreview.empty(
-                            customHeight: 0.205.sh,
-                            onTap: () => widget.onAddReactionTapped?.call().then((_) => setState(() {
-                                  reactionsPagingController.refresh();
-                                }))).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                        UiKitReactionPreview.empty(customHeight: 0.205.sh, onTap: _handleAddReactionTap)
+                            .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                         UiKitReactionPreview(
                           customHeight: 0.205.sh,
                           imagePath: reaction.previewImageUrl ?? '',
@@ -453,20 +464,32 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
               color: colorScheme?.surface1,
               contentHeight: _noFeedbacks ? 0 : 0.28.sh,
-              action: widget.canLeaveFeedback
-                  ? context
-                      .smallOutlinedButton(
-                        blurred: false,
-                        data: BaseUiKitButtonData(
+              action: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: canLeaveFeedback ?? false
+                    ? context
+                        .smallOutlinedButton(
+                          blurred: false,
+                          data: BaseUiKitButtonData(
                             iconInfo: BaseUiKitButtonIconData(
                               iconData: ShuffleUiKitIcons.plus,
                             ),
-                            onPressed: () => widget.onAddFeedbackTapped
-                                ?.call()
-                                .then((_) => setState(() => feedbacksPagedController.refresh()))),
-                      )
-                      .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
-                  : null,
+                            onPressed: () {
+                              widget.onAddFeedbackTapped?.call().then((addedFeedback) {
+                                if (addedFeedback) {
+                                  setState(() {
+                                    canLeaveFeedback = false;
+                                    feedbacksPagedController.refresh();
+                                    feedbacksPagedController.notifyPageRequestListeners(1);
+                                  });
+                                }
+                              });
+                            },
+                          ),
+                        )
+                        .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
+                    : null,
+              ),
               content: _noFeedbacks
                   ? null
                   : UiKitHorizontalScrollableList<FeedbackUiModel>(

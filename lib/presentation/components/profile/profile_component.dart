@@ -27,17 +27,13 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
-  // final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
+  final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
-
-  /// todo bring back paging controller when there will be pagination on backend
-  final List<VideoReactionUiModel>? videoReactions;
 
   const ProfileComponent({
     super.key,
     required this.profile,
-    this.videoReactions,
-    // this.videoReactionsPagingController,
+    this.videoReactionsPagingController,
     this.feedbackPagingController,
     this.recommendedUsers,
     this.showHowItWorks = false,
@@ -62,7 +58,7 @@ class ProfileComponent extends StatelessWidget {
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
-  bool get _noVideoReactions => videoReactions?.isEmpty ?? true;
+  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
   @override
   Widget build(BuildContext context) {
@@ -249,78 +245,53 @@ class ProfileComponent extends StatelessWidget {
         ],
         SpacingFoundation.verticalSpace24,
         // if (videoReactionsPagingController != null)
-        if (videoReactions != null)
+        if (videoReactionsPagingController != null)
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
-            child: videoReactions!.isEmpty
-                ? const SizedBox.shrink()
-                : UiKitColoredAccentBlock(
-                    color: colorScheme?.surface1,
-                    contentHeight: 0.205.sh,
-                    titlePadding: EdgeInsetsFoundation.all16,
-                    title: Text(
-                      S.current.MyReactions,
-                      style: textTheme?.title1,
+            child: UiKitColoredAccentBlock(
+              color: colorScheme?.surface1,
+              contentHeight: 0.205.sh,
+              titlePadding: EdgeInsetsFoundation.all16,
+              title: Text(
+                S.current.MyReactions,
+                style: textTheme?.title1,
+              ),
+              action: context
+                  .smallOutlinedButton(
+                    blurred: false,
+                    data: BaseUiKitButtonData(
+                      iconInfo: BaseUiKitButtonIconData(
+                        iconData: ShuffleUiKitIcons.chevronright,
+                      ),
+                      onPressed: onAllVideoReactionsPressed,
                     ),
-                    // action: context
-                    //     .smallOutlinedButton(
-                    //       blurred: false,
-                    //       data: BaseUiKitButtonData(
-                    //         iconInfo: BaseUiKitButtonIconData(
-                    //           iconData: ShuffleUiKitIcons.chevronright,
-                    //         ),
-                    //         onPressed: onAllVideoReactionsPressed,
-                    //       ),
-                    //     )
-                    //     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
-                    content: _noVideoReactions
-                        ? Text(
-                            S.current.NoVideoReactionsYet,
-                            style: textTheme?.subHeadline,
-                          ).paddingAll(EdgeInsetsFoundation.all16)
-                        : ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              final reaction = videoReactions!.elementAt(index);
-
-                              return UiKitReactionPreview(
-                                customHeight: 0.205.sh,
-                                imagePath: reaction.previewImageUrl ?? '',
-                                viewed: false,
-                                onTap: () => onReactionTapped?.call(reaction),
-                              ).paddingOnly(
-                                left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
-                              );
-                            },
-                            separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
-                            itemCount: videoReactions!.length,
-                          )
-                    // : UiKitHorizontalScrollableList<VideoReactionUiModel>(
-                    //     spacing: SpacingFoundation.horizontalSpacing8,
-                    //     shimmerLoadingChild: UiKitReactionPreview(
-                    //       customHeight: 0.205.sh,
-                    //       imagePath: GraphicsFoundation.instance.png.place.path,
-                    //     ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
-                    //     noItemsFoundIndicator: Text(
-                    //       S.current.NoVideoReactionsYet,
-                    //       style: textTheme?.subHeadline,
-                    //     ).paddingAll(EdgeInsetsFoundation.all16),
-                    //     itemBuilder: (context, reaction, index) {
-                    //       return UiKitReactionPreview(
-                    //         customHeight: 0.205.sh,
-                    //         imagePath: reaction.previewImageUrl ?? '',
-                    //         viewed: false,
-                    //         onTap: () => onReactionTapped?.call(reaction),
-                    //       ).paddingOnly(
-                    //         left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
-                    //       );
-                    //     },
-                    //     pagingController: videoReactionsPagingController!,
-                    //   ),
-                    ),
+                  )
+                  .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+              content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
+                spacing: SpacingFoundation.horizontalSpacing8,
+                shimmerLoadingChild: UiKitReactionPreview(
+                  customHeight: 0.205.sh,
+                  imagePath: GraphicsFoundation.instance.png.place.path,
+                ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                noItemsFoundIndicator: Text(
+                  S.current.NoVideoReactionsYet,
+                  style: textTheme?.subHeadline,
+                ).paddingAll(EdgeInsetsFoundation.all16),
+                itemBuilder: (context, reaction, index) {
+                  return UiKitReactionPreview(
+                    customHeight: 0.205.sh,
+                    imagePath: reaction.previewImageUrl ?? '',
+                    viewed: false,
+                    onTap: () => onReactionTapped?.call(reaction),
+                  ).paddingOnly(
+                    left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
+                  );
+                },
+                pagingController: videoReactionsPagingController!,
+              ),
+            ),
           ),
-        if (videoReactions != null) SpacingFoundation.verticalSpace24,
+        if (videoReactionsPagingController != null) SpacingFoundation.verticalSpace24,
         if (feedbackPagingController != null)
           ValueListenableBuilder(
             valueListenable: feedbackPagingController!,
@@ -333,17 +304,17 @@ class ProfileComponent extends StatelessWidget {
                 titlePadding: EdgeInsetsFoundation.all16,
                 color: colorScheme?.surface1,
                 contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
-                // action: context
-                //     .smallOutlinedButton(
-                //       blurred: false,
-                //       data: BaseUiKitButtonData(
-                //         iconInfo: BaseUiKitButtonIconData(
-                //           iconData: ShuffleUiKitIcons.chevronright,
-                //         ),
-                //         onPressed: onAllFeedbacksPressed,
-                //       ),
-                //     )
-                //     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                action: context
+                    .smallOutlinedButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.chevronright,
+                        ),
+                        onPressed: onAllFeedbacksPressed,
+                      ),
+                    )
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: _noFeedbacks
                     ? Text(
                         S.current.NoFeedbacksYet,
