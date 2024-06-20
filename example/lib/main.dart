@@ -228,7 +228,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 onPressed: () {
                   context.push(
                     Scaffold(
-                      body: FeedBackModeration(
+                      body: FeedbackModeration(
                         sortFunction: () {},
                         deleteFunction: () {},
                         feedbackUiModelList: [
