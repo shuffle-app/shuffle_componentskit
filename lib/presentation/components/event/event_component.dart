@@ -125,6 +125,11 @@ class _EventComponentState extends State<EventComponent> {
         feedbackPagingController.appendPage(data, page + 1);
       }
     }
+    likedReviews.addAll(data
+        .where((element) => (element.helpfulForUser ?? false) && !likedReviews.any((id) => element.id == id))
+        .map((e) => e.id)
+        .toList());
+
     setState(() {});
   }
 
@@ -427,6 +432,7 @@ class _EventComponentState extends State<EventComponent> {
                               companyAnswered: false,
                               text: feedback.feedbackText,
                               rating: feedback.feedbackRating,
+                              isHelpful: feedback.helpfulForUser,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                               onLike: () {
                                 final feedbackId = feedback.id;

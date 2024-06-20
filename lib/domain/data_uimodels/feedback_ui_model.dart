@@ -9,12 +9,14 @@ class FeedbackUiModel {
   final UserTileType? feedbackAuthorType;
   final bool empty;
   final int? helpfulCount;
+  final bool? helpfulForUser;
   final int id;
 
   FeedbackUiModel({
     required this.feedbackAuthorName,
     required this.feedbackText,
     required this.id,
+    this.helpfulForUser,
     this.empty = false,
     this.feedbackAuthorPhoto,
     this.feedbackDateTime,
@@ -23,7 +25,13 @@ class FeedbackUiModel {
     this.helpfulCount,
   });
 
-  factory FeedbackUiModel.empty() => FeedbackUiModel(id: 0, empty: true, feedbackAuthorName: '', feedbackText: '');
+  factory FeedbackUiModel.empty() => FeedbackUiModel(
+        id: 0,
+        empty: true,
+        feedbackAuthorName: '',
+        feedbackText: '',
+        helpfulForUser: false,
+      );
 
   FeedbackUiModel copyWith({
     String? feedbackAuthorName,
@@ -32,6 +40,7 @@ class FeedbackUiModel {
     int? feedbackRating,
     UserTileType? feedbackAuthorType,
     int? helpfulCount,
+    bool? helpfulForUser,
   }) {
     return FeedbackUiModel(
       feedbackAuthorName: feedbackAuthorName ?? this.feedbackAuthorName,
@@ -40,6 +49,7 @@ class FeedbackUiModel {
       feedbackRating: feedbackRating ?? this.feedbackRating,
       feedbackAuthorType: feedbackAuthorType ?? this.feedbackAuthorType,
       helpfulCount: helpfulCount ?? this.helpfulCount,
+      helpfulForUser: helpfulForUser ?? this.helpfulForUser,
       feedbackText: feedbackText,
       empty: empty,
       id: id,
