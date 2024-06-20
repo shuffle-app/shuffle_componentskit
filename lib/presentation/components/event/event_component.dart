@@ -11,14 +11,14 @@ class EventComponent extends StatefulWidget {
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
   final VoidCallback? onSharePressed;
-  final AsyncCallback? onAddReactionTapped;
+  final Future<bool> Function()? onAddReactionTapped;
   final PagedLoaderCallback<VideoReactionUiModel> reactionsLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> feedbackLoaderCallback;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
-  final AsyncValueGetter? onAddFeedbackTapped;
+  final Future<bool> Function()? onAddFeedbackTapped;
+  final Future<bool> Function(int eventId) canLeaveFeedback;
   final bool canLeaveVideoReaction;
-  final bool canLeaveFeedback;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
 
@@ -27,6 +27,7 @@ class EventComponent extends StatefulWidget {
     required this.event,
     required this.reactionsLoaderCallback,
     required this.feedbackLoaderCallback,
+    required this.canLeaveFeedback,
     this.complaintFormComponent,
     this.onAddFeedbackTapped,
     this.isEligibleForEdit = false,
@@ -35,7 +36,6 @@ class EventComponent extends StatefulWidget {
     this.onReactionTap,
     this.onAddReactionTapped,
     this.canLeaveVideoReaction = true,
-    this.canLeaveFeedback = false,
     this.onLikedFeedback,
     this.onDislikedFeedback,
   });
@@ -55,9 +55,7 @@ class _EventComponentState extends State<EventComponent> {
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
 
-  bool get canLeaveFeedback => !userHasLeftFeedback && widget.canLeaveFeedback;
-
-  bool userHasLeftFeedback = false;
+  bool? canLeaveFeedback;
 
   bool isHide = true;
   late double scrollPosition;
@@ -66,11 +64,13 @@ class _EventComponentState extends State<EventComponent> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      canLeaveFeedback = await widget.canLeaveFeedback(widget.event.id);
       reactionsPagingController.addPageRequestListener(_onReactionsPageRequest);
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
+      setState(() {});
     });
   }
 
@@ -126,6 +126,15 @@ class _EventComponentState extends State<EventComponent> {
       }
     }
     setState(() {});
+  }
+
+  void _handleAddReactionTapped() async {
+    final addedReaction = await widget.onAddReactionTapped?.call();
+    if (addedReaction == true) {
+      setState(() {
+        reactionsPagingController.refresh();
+      });
+    }
   }
 
   @override
@@ -326,10 +335,7 @@ class _EventComponentState extends State<EventComponent> {
                   ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                   noItemsFoundIndicator: UiKitReactionPreview.empty(
                     customHeight: 0.205.sh,
-                    onTap: () => widget.onAddReactionTapped?.call().then((_) {
-                      reactionsPagingController.refresh();
-                      reactionsPagingController.notifyPageRequestListeners(1);
-                    }),
+                    onTap: _handleAddReactionTapped,
                   ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                   itemBuilder: (context, reaction, index) {
                     if (index == 0 && widget.canLeaveVideoReaction) {
@@ -339,10 +345,7 @@ class _EventComponentState extends State<EventComponent> {
                         children: [
                           UiKitReactionPreview.empty(
                             customHeight: 0.205.sh,
-                            onTap: () => widget.onAddReactionTapped?.call().then((_) {
-                              reactionsPagingController.refresh();
-                              reactionsPagingController.notifyPageRequestListeners(1);
-                            }),
+                            onTap: _handleAddReactionTapped,
                           ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                           UiKitReactionPreview(
                             customHeight: 0.205.sh,
@@ -366,7 +369,7 @@ class _EventComponentState extends State<EventComponent> {
               );
             },
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
-        if (!_noFeedbacks || widget.canLeaveFeedback)
+        if (!_noFeedbacks || (canLeaveFeedback ?? false))
           ValueListenableBuilder(
             valueListenable: feedbackPagingController,
             builder: (context, value, child) {
@@ -377,28 +380,28 @@ class _EventComponentState extends State<EventComponent> {
                   S.current.ReactionsByCritics,
                   style: boldTextTheme?.body,
                 ),
-                action: canLeaveFeedback
-                    ? context
-                        .smallOutlinedButton(
-                          blurred: false,
-                          data: BaseUiKitButtonData(
-                            iconInfo: BaseUiKitButtonIconData(
-                              iconData: ShuffleUiKitIcons.plus,
-                            ),
-                            onPressed: () => widget.onAddFeedbackTapped?.call().then((result) {
-                              if (result != null) {
+                action: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: canLeaveFeedback ?? false
+                      ? context
+                          .smallOutlinedButton(
+                            blurred: false,
+                            data: BaseUiKitButtonData(
+                              iconInfo: BaseUiKitButtonIconData(
+                                iconData: ShuffleUiKitIcons.plus,
+                              ),
+                              onPressed: () => widget.onAddFeedbackTapped?.call().then((addedFeedback) {
                                 setState(() {
-                                  userHasLeftFeedback = result;
+                                  canLeaveFeedback = false;
+                                  feedbackPagingController.refresh();
+                                  feedbackPagingController.notifyPageRequestListeners(1);
                                 });
-                              }
-
-                              feedbackPagingController.refresh();
-                              feedbackPagingController.notifyPageRequestListeners(1);
-                            }),
-                          ),
-                        )
-                        .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
-                    : null,
+                              }),
+                            ),
+                          )
+                          .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
+                      : null,
+                ),
                 content: _noFeedbacks
                     ? null
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
