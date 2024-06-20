@@ -49,7 +49,7 @@ class _EventComponentState extends State<EventComponent> {
 
   final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
 
-  List<int> likedReviews = List<int>.empty(growable: true);
+  Set<int> likedReviews = {};
 
   bool get _noFeedbacks => feedbackPagingController.itemList?.isEmpty ?? true;
 
@@ -101,7 +101,8 @@ class _EventComponentState extends State<EventComponent> {
       if (updatedFeedback != null) {
         feedbackPagingController.itemList?.insert(
           updatedFeedbackIndex,
-          updatedFeedback.copyWith(helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
+          updatedFeedback.copyWith(
+              helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue, helpfulForUser: addValue > 0),
         );
       }
     }
@@ -111,6 +112,7 @@ class _EventComponentState extends State<EventComponent> {
   void _onFeedbackPageRequest(int page) async {
     final data = await widget.feedbackLoaderCallback(page, widget.event.id);
     if (data.any((e) => feedbackPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
+    likedReviews.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
       feedbackPagingController.appendLastPage(data);
       return;
@@ -125,10 +127,6 @@ class _EventComponentState extends State<EventComponent> {
         feedbackPagingController.appendPage(data, page + 1);
       }
     }
-    likedReviews.addAll(data
-        .where((element) => (element.helpfulForUser ?? false) && !likedReviews.any((id) => element.id == id))
-        .map((e) => e.id)
-        .toList());
 
     setState(() {});
   }

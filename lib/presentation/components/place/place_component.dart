@@ -65,7 +65,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
 
-  List<int> likedReviews = List<int>.empty(growable: true);
+  Set<int> likedReviews = {};
 
   final ScrollController listViewController = ScrollController();
 
@@ -115,7 +115,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
       if (updatedFeedback != null) {
         feedbacksPagedController.itemList?.insert(
           updatedFeedbackIndex,
-          updatedFeedback.copyWith(helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue),
+          updatedFeedback.copyWith(
+              helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue, helpfulForUser: addValue > 0),
         );
       }
     }
@@ -125,6 +126,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   void _feedbacksListener(int page) async {
     final data = await widget.placeFeedbackLoaderCallback(page, widget.place.id);
     if (data.any((e) => feedbacksPagedController.itemList?.any((el) => el.id == e.id) ?? false)) return;
+    likedReviews.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
       feedbacksPagedController.appendLastPage(data);
       return;
@@ -139,10 +141,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
         feedbacksPagedController.appendPage(data, page + 1);
       }
     }
-    likedReviews.addAll(data
-        .where((element) => (element.helpfulForUser ?? false) && !likedReviews.any((id) => element.id == id))
-        .map((e) => e.id)
-        .toList());
     setState(() {});
   }
 

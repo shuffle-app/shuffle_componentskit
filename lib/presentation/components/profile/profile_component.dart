@@ -25,6 +25,7 @@ class ProfileComponent extends StatelessWidget {
   final VoidCallback? onAllVideoReactionsPressed;
   final VoidCallback? onAllFeedbacksPressed;
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
+  final ValueChanged<int>? onRecommendedUserCardChanged;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
   final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
@@ -54,6 +55,7 @@ class ProfileComponent extends StatelessWidget {
     this.favoriteEvents = const [],
     this.favoritePlaces = const [],
     this.onRecommendedUserAvatarPressed,
+    this.onRecommendedUserCardChanged,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
@@ -143,6 +145,7 @@ class ProfileComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace24,
           UiKitHorizontalScroll3D(
+            onItemChanged: onRecommendedUserCardChanged,
             itemBuilder: (BuildContext context, int index) {
               final user = recommendedUsers?[index];
 
