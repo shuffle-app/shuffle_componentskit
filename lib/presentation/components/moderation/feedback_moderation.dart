@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class FeedBackModeration extends StatefulWidget {
+class FeedbackModeration extends StatefulWidget {
   final Function() deleteFunction;
   final Function() sortFunction;
   final List<FeedbackModerationUiModel> feedbackUiModelList;
 
-  const FeedBackModeration({
+  const FeedbackModeration({
     super.key,
     required this.deleteFunction,
     required this.sortFunction,
@@ -15,10 +15,10 @@ class FeedBackModeration extends StatefulWidget {
   });
 
   @override
-  State<FeedBackModeration> createState() => _FeedBackModerationState();
+  State<FeedbackModeration> createState() => _FeedbackModerationState();
 }
 
-class _FeedBackModerationState extends State<FeedBackModeration> {
+class _FeedbackModerationState extends State<FeedbackModeration> {
   bool showCompanyItem = false;
 
   @override
