@@ -26,100 +26,89 @@ class _FeedbackModerationState extends State<FeedbackModeration> {
     final theme = context.uiKitTheme;
     final textTheme = theme?.boldTextTheme;
 
-    //TODO remove safeArea
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme?.colorScheme.surface,
-          borderRadius: BorderRadiusFoundation.all24,
-        ),
-        child: Column(
-          children: [
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(
-                  S.of(context).Feedback,
-                  style: textTheme?.title1,
-                ),
-                const Spacer(),
-                context.coloredButtonWithBorderRadius(
-                  data: BaseUiKitButtonData(
-                    fit: ButtonFit.hugContent,
-                    textColor: theme?.colorScheme.inversePrimary,
-                    backgroundColor:
-                        theme?.colorScheme.darkNeutral900.withOpacity(0.68),
-                    text: S.of(context).ShowDeleted,
-                    onPressed: widget.deleteFunction,
-                  ),
-                ),
-                SpacingFoundation.horizontalSpace12,
-                context.iconButtonNoPadding(
-                  data: BaseUiKitButtonData(
-                    onPressed: widget.sortFunction,
-                    iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.arrowssort,
-                    ),
-                  ),
-                )
-              ],
-            ).paddingAll(EdgeInsetsFoundation.all24),
-            Expanded(
-              child: ListView(
-                children: [
-                  ...List.generate(
-                    widget.feedbackUiModelList.length,
-                    (index) {
-                      final feedbackUiModel = widget.feedbackUiModelList[index];
-                      final bool companyFeedbackIsNotEmpty = widget
-                          .feedbackUiModelList[index]
-                          .companyFeedbackItemUiModel
-                          .isNotEmpty;
-
-                      return Column(
-                        children: [
-                          FeedbackItem(
-                            feedBackModel: feedbackUiModel.feedbackItemUiModel,
-                            showExpand: companyFeedbackIsNotEmpty,
-                            onSubmit: (showExpandIsTap) {
-                              setState(() {
-                                showCompanyItem = showExpandIsTap;
-                              });
-                            },
-                          ).paddingOnly(
-                            bottom: SpacingFoundation.verticalSpacing24,
-                            left: SpacingFoundation.horizontalSpacing24,
-                            right: SpacingFoundation.horizontalSpacing24,
-                          ),
-                          if (showCompanyItem) ...[
-                            Column(
-                              children: List.generate(
-                                feedbackUiModel
-                                    .companyFeedbackItemUiModel.length,
-                                (index) {
-                                  return FeedbackItem(
-                                    feedBackModel: feedbackUiModel
-                                        .companyFeedbackItemUiModel[index],
-                                    showExpand: false,
-                                  ).paddingOnly(
-                                    bottom: SpacingFoundation.verticalSpacing24,
-                                    left: SpacingFoundation.horizontalSpacing24,
-                                    right:
-                                        SpacingFoundation.horizontalSpacing24,
-                                  );
-                                },
-                              ),
-                            )
-                          ],
-                        ],
-                      );
-                    },
-                  )
-                ],
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme?.colorScheme.surface,
+        borderRadius: BorderRadiusFoundation.all24,
+      ),
+      child: Column(
+        children: [
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                S.of(context).Feedback,
+                style: textTheme?.title1,
               ),
-            )
-          ],
-        ),
+              const Spacer(),
+              context.coloredButtonWithBorderRadius(
+                data: BaseUiKitButtonData(
+                  fit: ButtonFit.hugContent,
+                  textColor: theme?.colorScheme.inversePrimary,
+                  backgroundColor:
+                      theme?.colorScheme.darkNeutral900.withOpacity(0.68),
+                  text: S.of(context).ShowDeleted,
+                  onPressed: widget.deleteFunction,
+                ),
+              ),
+              SpacingFoundation.horizontalSpace12,
+              context.iconButtonNoPadding(
+                data: BaseUiKitButtonData(
+                  onPressed: widget.sortFunction,
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.arrowssort,
+                  ),
+                ),
+              )
+            ],
+          ).paddingAll(EdgeInsetsFoundation.all24),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsetsDirectional.zero,
+              itemCount: widget.feedbackUiModelList.length,
+              itemBuilder: (context, index) {
+                final feedbackUiModel = widget.feedbackUiModelList[index];
+                final bool companyFeedbackIsNotEmpty = widget
+                    .feedbackUiModelList[index]
+                    .companyFeedbackItemUiModel
+                    .isNotEmpty;
+
+                return Column(
+                  children: [
+                    FeedbackItem(
+                      feedBackModel: feedbackUiModel.feedbackItemUiModel,
+                      showExpand: companyFeedbackIsNotEmpty,
+                      onSubmit: (showExpandIsTap) {
+                        setState(() {
+                          showCompanyItem = showExpandIsTap;
+                        });
+                      },
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing24,
+                    ),
+                    if (showCompanyItem) ...[
+                      Column(
+                        children: List.generate(
+                          feedbackUiModel.companyFeedbackItemUiModel.length,
+                          (index) {
+                            return FeedbackItem(
+                              feedBackModel: feedbackUiModel
+                                  .companyFeedbackItemUiModel[index],
+                              showExpand: false,
+                            ).paddingOnly(
+                              bottom: SpacingFoundation.verticalSpacing24,
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ],
+                );
+              },
+            ).paddingSymmetric(
+                horizontal: SpacingFoundation.horizontalSpacing24),
+          )
+        ],
       ),
     );
   }
