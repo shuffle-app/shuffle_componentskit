@@ -30,7 +30,6 @@ class UiProfileModel {
   final bool? beInSearch;
 
   ProfileCard get cardWidget {
-    AutoSizeGroup group = AutoSizeGroup();
 
     return ProfileCard(
       onShare: onShare,
@@ -61,7 +60,7 @@ class UiProfileModel {
           value: '0',
           actionButton: SmallOrdinaryButton(
             text: S.current.Details.toUpperCase(),
-            group: group,
+            group: _statsConstGroup,
           ),
         ),
         UiKitStats(
@@ -69,7 +68,7 @@ class UiProfileModel {
           value: points?.toString() ?? '0',
           actionButton: SmallOrdinaryButton(
             text: S.current.Spent.toUpperCase(),
-            group: group,
+            group: _statsConstGroup,
           ),
         ),
       ],
@@ -160,3 +159,5 @@ class UiProfileModel {
           favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
           points: points ?? this.points);
 }
+
+final AutoSizeGroup _statsConstGroup = AutoSizeGroup();
