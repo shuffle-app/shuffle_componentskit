@@ -19,70 +19,68 @@ class VideoReactionModeration extends StatelessWidget {
     final theme = context.uiKitTheme;
     final textTheme = theme?.boldTextTheme;
 
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme?.colorScheme.surface,
-          borderRadius: BorderRadiusFoundation.all24,
-        ),
-        child: Column(
-          children: [
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(
-                  S.of(context).VideoReactions,
-                  style: textTheme?.title1,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme?.colorScheme.surface,
+        borderRadius: BorderRadiusFoundation.all24,
+      ),
+      child: Column(
+        children: [
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                S.of(context).VideoReactions,
+                style: textTheme?.title1,
+              ),
+              const Spacer(),
+              context.coloredButtonWithBorderRadius(
+                data: BaseUiKitButtonData(
+                  fit: ButtonFit.hugContent,
+                  textColor: theme?.colorScheme.inversePrimary,
+                  backgroundColor:
+                      theme?.colorScheme.darkNeutral900.withOpacity(0.68),
+                  text: S.of(context).ShowDeleted,
+                  onPressed: deleteFunction,
                 ),
-                const Spacer(),
-                context.coloredButtonWithBorderRadius(
-                  data: BaseUiKitButtonData(
-                    fit: ButtonFit.hugContent,
-                    textColor: theme?.colorScheme.inversePrimary,
-                    backgroundColor:
-                        theme?.colorScheme.darkNeutral900.withOpacity(0.68),
-                    text: S.of(context).ShowDeleted,
-                    onPressed: deleteFunction,
+              ),
+              SpacingFoundation.horizontalSpace12,
+              context.iconButtonNoPadding(
+                data: BaseUiKitButtonData(
+                  onPressed: sortFunction,
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.arrowssort,
                   ),
                 ),
-                SpacingFoundation.horizontalSpace12,
-                context.iconButtonNoPadding(
-                  data: BaseUiKitButtonData(
-                    onPressed: sortFunction,
-                    iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.arrowssort,
-                    ),
-                  ),
-                )
-              ],
-            ).paddingAll(EdgeInsetsFoundation.all24),
-            Expanded(
-              child: GridView.builder(
-                itemCount: reactionPreviewModelList.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisSpacing: SpacingFoundation.horizontalSpacing24,
-                  mainAxisSpacing: SpacingFoundation.horizontalSpacing24,
-                  crossAxisCount: 3,
-                  mainAxisExtent: 0.7.sh,
-                ),
-                itemBuilder: (context, index) {
-                  final reactionPreviewModelItem =
-                      reactionPreviewModelList[index];
+              )
+            ],
+          ).paddingAll(EdgeInsetsFoundation.all24),
+          Expanded(
+            child: GridView.builder(
+              itemCount: reactionPreviewModelList.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: SpacingFoundation.horizontalSpacing24,
+                mainAxisSpacing: SpacingFoundation.horizontalSpacing24,
+                crossAxisCount: 3,
+                mainAxisExtent: 0.7.sh,
+              ),
+              itemBuilder: (context, index) {
+                final reactionPreviewModelItem =
+                    reactionPreviewModelList[index];
 
-                  return UiKitReactionPreview(
-                    customHeight: reactionPreviewModelItem.customHeight,
-                    customWidth: reactionPreviewModelItem.customWidth,
-                    isEmpty: reactionPreviewModelItem.isEmpty,
-                    imagePath: reactionPreviewModelItem.imagePath,
-                    viewed: reactionPreviewModelItem.viewed,
-                    onTap: reactionPreviewModelItem.onTap,
-                  );
-                },
-              ).paddingSymmetric(
-                  horizontal: SpacingFoundation.horizontalSpacing24),
-            )
-          ],
-        ),
+                return UiKitReactionPreview(
+                  customHeight: reactionPreviewModelItem.customHeight,
+                  customWidth: reactionPreviewModelItem.customWidth,
+                  isEmpty: reactionPreviewModelItem.isEmpty,
+                  imagePath: reactionPreviewModelItem.imagePath,
+                  viewed: reactionPreviewModelItem.viewed,
+                  onTap: reactionPreviewModelItem.onTap,
+                );
+              },
+            ).paddingSymmetric(
+                horizontal: SpacingFoundation.horizontalSpacing24),
+          )
+        ],
       ),
     );
   }
