@@ -125,6 +125,11 @@ class _EventComponentState extends State<EventComponent> {
         feedbackPagingController.appendPage(data, page + 1);
       }
     }
+    likedReviews.addAll(data
+        .where((element) => (element.helpfulForUser ?? false) && !likedReviews.any((id) => element.id == id))
+        .map((e) => e.id)
+        .toList());
+
     setState(() {});
   }
 
