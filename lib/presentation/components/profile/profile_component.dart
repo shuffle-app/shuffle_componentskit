@@ -332,6 +332,7 @@ class ProfileComponent extends StatelessWidget {
                               datePosted: feedback.feedbackDateTime,
                               companyAnswered: false,
                               text: feedback.feedbackText,
+                              isHelpful: feedback.helpfulForUser,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                             ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
                           );
