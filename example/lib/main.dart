@@ -171,6 +171,50 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                  onPressed: () {
+                    showGeneralDialog(
+                      context: context,
+
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return PropertyManagementCreateTitleDialog(
+                          isBusiness: false,
+                          titleController: TextEditingController(),
+                          onCancelTap: (){},
+                          onCreateTap: (value) {
+
+                          },
+                          onCloseTap: () {
+                            context.pop();
+                          },
+                        );
+                      },
+                    );
+                  },
+                  text: 'Property management create title dialog'),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                  onPressed: () {
+                    showGeneralDialog(
+                      context: context,
+                      
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return PropertyManagementAddCategoryDialog(
+                          onBusinessTap: () {},
+                          onEntertainmentTap: () {},
+                          onCloseTap: () {
+                            context.pop();
+                          },
+                        );
+                      },
+                    );
+                  },
+                  text: 'Property management add category dialog'),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 onPressed: () => context.push(CategoriesCreateComponent(
                   businessCategories: List.generate(
                     4,

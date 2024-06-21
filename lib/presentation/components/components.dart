@@ -101,3 +101,5 @@ export 'welcome/welcome_component.dart';
 export 'property_management/categories_create_component.dart';
 export 'property_management/ui_model_category_create.dart';
 export 'property_management/ui_model_related_properties.dart';
+export 'property_management_dialogs/property_management_add_category_dialog.dart';
+export 'property_management_dialogs/property_management_create_title_dialog.dart';
