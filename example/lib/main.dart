@@ -420,15 +420,12 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show favorite folder bottom sheet',
-                onPressed: () => showUiKitGeneralFullScreenDialog(
-                  context,
-                  GeneralDialogData(
-                    child: FavoriteFoldersBottomSheetComponent(
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show favorite folders',
+                  onPressed: () => context.push(
+                    FavoriteFoldersComponent(
                       places: List.generate(
                         4,
                         (index) => PlacePreview(
@@ -436,18 +433,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           place: UiPlaceModel(
                             id: index + 1,
                             media: [
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
+                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
+                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
                             ],
                             title: 'lorem ipsum dolor sit amet',
                             description:
@@ -478,142 +467,154 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           ),
                           isFavorite: Stream<bool>.value(true),
                           showFavoriteBtn: true,
-                          model: const ComponentModel(
-                              pageBuilderType: PageBuilderType.page,
-                              version: '1.0.18'),
+                          model: const ComponentModel(pageBuilderType: PageBuilderType.page, version: '1.0.18'),
                         ),
                       ),
-                      onAddToMyFavorites: () {},
-                      personName: 'Kaiya Garcia',
+                      onShareTap: () {},
                     ),
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show favorite create folder',
-                onPressed: () => context.push(
-                  FavoriteCreateFolderComponent(
-                    titleController: TextEditingController(),
-                    onConfirm: () {
-                      context.pop();
-                    },
-                  ),
-                ),
-              ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show favorite folders',
-                onPressed: () => context.push(
-                  FavoriteFoldersComponent(
-                    places: List.generate(
-                      4,
-                      (index) => PlacePreview(
-                        onTap: (value) {},
-                        place: UiPlaceModel(
-                          id: index + 1,
-                          media: [
-                            UiKitMediaPhoto(
-                                link:
-                                    GraphicsFoundation.instance.png.place.path),
-                            UiKitMediaPhoto(
-                                link:
-                                    GraphicsFoundation.instance.png.place.path),
-                            UiKitMediaPhoto(
-                                link:
-                                    GraphicsFoundation.instance.png.place.path),
-                            UiKitMediaPhoto(
-                                link:
-                                    GraphicsFoundation.instance.png.place.path),
-                          ],
-                          title: 'lorem ipsum dolor sit amet',
-                          description:
-                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
-                          baseTags: [
-                            UiKitTag(
-                              title: 'Club',
-                              icon: ShuffleUiKitIcons.club,
-                              unique: false,
-                            ),
-                            UiKitTag(
-                              title: 'Free',
-                              icon: ShuffleUiKitIcons.discount,
-                              unique: false,
-                            ),
-                            UiKitTag(
-                              title: 'Closed',
-                              icon: ShuffleUiKitIcons.clock,
-                              unique: false,
-                            ),
-                            UiKitTag(
-                              title: '7 min',
-                              icon: ShuffleUiKitIcons.route,
-                              unique: false,
-                            ),
-                          ],
-                          tags: [],
-                        ),
-                        isFavorite: Stream<bool>.value(true),
-                        showFavoriteBtn: true,
-                        model: const ComponentModel(
-                            pageBuilderType: PageBuilderType.page,
-                            version: '1.0.18'),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show company feedback chat',
+                  onPressed: () => context.push(
+                    FeedbackResponseComponent(
+                      rating: 5,
+                      uiProfileModel: UiProfileModel(name: 'Marry Alliance'),
+                      onMessageTap: () {},
+                      feedBacks: List.generate(
+                        6,
+                        (index) {
+                          return FeedbackResponseUiModel(
+                            id: index,
+                            timeSent: DateTime.now(),
+                            senderIsMe: index.isOdd,
+                            helpfulCount: index.isEven ? 10 : null,
+                            message: index.isOdd
+                                ? 'Good thanks'
+                                : 'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
+                            senderName: index.isOdd ? 'Burj Khalifa' : 'Marry Alliance',
+                          );
+                        },
                       ),
                     ),
-                    onShareTap: () {},
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show company feedback chat',
-                onPressed: () => context.push(
-                  FeedbackResponseComponent(
-                    rating: 5,
-                    uiProfileModel: UiProfileModel(name: 'Marry Alliance'),
-                    onMessageTap: () {},
-                    feedBacks: List.generate(
-                      6,
-                      (index) {
-                        return FeedbackResponseUiModel(
-                          id: index,
-                          timeSent: DateTime.now(),
-                          senderIsMe: index.isOdd,
-                          helpfulCount: index.isEven ? 10 : null,
-                          message: index.isOdd
-                              ? 'Good thanks'
-                              : 'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
-                          senderName:
-                              index.isOdd ? 'Burj Khalifa' : 'Marry Alliance',
-                        );
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show company feedback',
+                  onPressed: () => context.push(
+                    CompanyAnswerFeedback(
+                      uiProfileModel: UiProfileModel(
+                        name: 'Marry Alliance',
+                      ),
+                      reviewUiModel: ReviewUiModel(
+                        reviewDescription:
+                            'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
+                        reviewTime: DateTime.now(),
+                      ),
+                      feedbackTextController: TextEditingController(),
+                      onConfirm: () {},
+                    ),
+                  ),
+                ),
+              ),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                  data: BaseUiKitButtonData(
+                      text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
+              // text: 'show create schedule',
+              // onPressed: () =>
+              //     context.push(const CreateScheduleWidget()))),
+
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                  data: BaseUiKitButtonData(
+                      text: 'show create schedule', onPressed: () => context.push(const CreateScheduleWidget()))),
+              SpacingFoundation.verticalSpace16,
+              OrdinaryButton(
+                text: 'show invite Bottom Sheet',
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    topPadding: 10,
+                    useRootNavigator: false,
+                    child: InviteComponent(
+                      persons: List.generate(
+                        15,
+                        (_) => UiInvitePersonModel(
+                          date: DateTime.now(),
+                          name: 'Marry Williams',
+                          rating: 4,
+                          handshake: true,
+                          avatarLink: GraphicsFoundation.instance.png.mockUserAvatar.path,
+                          description: 'Any cheerful person can invite me',
+                          id: 0,
+                        ),
+                      ),
+                      onLoadMore: () {},
+                      changeDate: () async {
+                        return DateTime.now();
                       },
+                      onInvitePersonsChanged: (List<UiInvitePersonModel> persons) {},
                     ),
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show company feedback',
-                onPressed: () => context.push(
-                  CompanyAnswerFeedback(
-                    uiProfileModel: UiProfileModel(
-                      name: 'Marry Alliance',
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show pro subscription',
+                  onPressed: () => buildComponent(
+                    context,
+                    ComponentModel.fromJson(
+                      configuration.appConfig.content['pro_account_info'],
                     ),
-                    reviewUiModel: ReviewUiModel(
-                      reviewDescription:
-                          'Came for lunch with my sister. We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant.But the service was below average and the chips were too terrible to finish.',
-                      reviewTime: DateTime.now(),
+                    ComponentBuilder(
+                      child: AccountSubscriptionComponent(
+                        configModel: ComponentModel.fromJson(
+                          configuration.appConfig.content['pro_account_info'],
+                        ),
+                        title: 'Pro account',
+                        uiModel: UiSubscriptionModel(
+                          privacyPolicyUrl: '',
+                          termsOfServiceUrl: '',
+                          userType: UserTileType.pro,
+                          subscriptionFeatures: [
+                            'lorem ipsum dolor sit amet',
+                            'lorem ipsum dolor sit amet',
+                            'lorem ipsum dolor sit amet',
+                            'lorem ipsum dolor sit amet',
+                            'lorem ipsum dolor sit amet',
+                            'lorem ipsum dolor sit amet',
+                          ],
+                          userName: 'userName',
+                          userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+                          nickname: 'nickname',
+                          offers: [
+                            SubscriptionOfferModel(
+                              storePurchaseId: '',
+                              currency: '\$',
+                              savings: 2,
+                              price: 4.49,
+                              name: 'Annually',
+                              periodName: 'month',
+                            ),
+                            SubscriptionOfferModel(
+                              storePurchaseId: '',
+                              currency: '\$',
+                              price: 4.99,
+                              name: 'Monthly',
+                              periodName: 'month',
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    feedbackTextController: TextEditingController(),
-                    onConfirm: () {},
                   ),
                 ),
               ),
@@ -661,20 +662,15 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show pro subscription',
-                onPressed: () => buildComponent(
-                  context,
-                  ComponentModel.fromJson(
-                    configuration.appConfig.content['pro_account_info'],
-                  ),
-                  ComponentBuilder(
-                    child: AccountSubscriptionComponent(
-                      configModel: ComponentModel.fromJson(
-                        configuration.appConfig.content['pro_account_info'],
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show chat screen',
+                  onPressed: () {
+                    buildComponent(
+                      context,
+                      ComponentModel.fromJson(
+                        configuration.appConfig.content['chat_page'],
                       ),
                       title: 'Pro account',
                       uiModel: UiSubscriptionModel(
@@ -709,10 +705,62 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             name: 'Monthly',
                             periodName: 'month',
                           ),
-                        ],
+                          scrollController: ScrollController(),
+                          messageController: TextEditingController(),
+                          pagingController: PagingController<int, ChatMessageUiModel>(
+                            firstPageKey: 1,
+                          )..appendLastPage(
+                              [
+                                ChatMessageUiModel(
+                                  messageType: MessageType.message,
+                                  senderIsMe: false,
+                                  timeSent: DateTime.now(),
+                                  message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                ),
+                                ChatMessageUiModel(
+                                  messageType: MessageType.message,
+                                  senderIsMe: true,
+                                  timeSent: DateTime.now(),
+                                  message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                ),
+                                ChatMessageUiModel(
+                                  messageType: MessageType.invitation,
+                                  senderIsMe: true,
+                                  timeSent: DateTime.now(),
+                                  message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                  invitationData: ChatMessageInvitationData(
+                                    username: '@araratjan',
+                                    placeId: 1,
+                                    placeName: 'Burj Khalifa 122nd Floor',
+                                    placeImagePath: GraphicsFoundation.instance.png.place.path,
+                                    invitedPeopleAvatarPaths: [
+                                      GraphicsFoundation.instance.png.inviteMock1.path,
+                                      GraphicsFoundation.instance.png.inviteMock2.path,
+                                      GraphicsFoundation.instance.png.inviteMock3.path,
+                                      GraphicsFoundation.instance.png.inviteMock4.path,
+                                    ],
+                                    tags: [
+                                      UiKitTag(
+                                        title: 'Cheap',
+                                        icon: ShuffleUiKitIcons.cutlery,
+                                      ),
+                                      UiKitTag(
+                                        title: 'Cheap',
+                                        icon: ShuffleUiKitIcons.cutlery,
+                                      ),
+                                      UiKitTag(
+                                        title: 'Cheap',
+                                        icon: ShuffleUiKitIcons.cutlery,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -763,22 +811,20 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             name: 'Monthly',
                             periodName: 'month',
                           ),
-                        ],
+                        onChatSelected: (index) {},
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show chat screen',
-                onPressed: () {
-                  buildComponent(
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show feed business',
+                  onPressed: () => buildComponent(
                     context,
-                    ComponentModel.fromJson(
-                      configuration.appConfig.content['chat_page'],
+                    ComponentFeedModel.fromJson(
+                      configuration.appConfig.content['feed_business'],
                     ),
                     ComponentBuilder(
                       child: ChatComponent(
@@ -888,9 +934,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                               unreadMessageCount: index % 2 == 0 ? index : null,
                             ),
                           ),
-                          2,
+                          onTagSortPressed: () {},
+                          onHowItWorksPoped: () {},
+                          onHowItWorksPopedBody: () {},
                         ),
-                      onChatSelected: (index) {},
+                      ),
                     ),
                   ),
                 ),
@@ -1168,95 +1216,95 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   ),
                 ),
               ),
-            ),
-            // SpacingFoundation.verticalSpace16,
-            // context.button(
-            //   data: BaseUiKitButtonData(
-            //     text: 'show invite to event',
-            //     onPressed: () =>
-            //         buildComponent(
-            //           context,
-            //           ComponentModel.fromJson(configuration.appConfig.content['invite_people_places']),
-            //           ComponentBuilder(
-            //             child: InviteToFavouritePlacesComponent(
-            //               places: List<UiKitLeadingRadioTile>.generate(
-            //                 10,
-            //                     (index) =>
-            //                     UiKitLeadingRadioTile(
-            //                       title: 'title',
-            //                       avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
-            //                       tags: [
-            //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-            //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-            //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-            //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-            //                       ],
-            //                     ),
-            //               ),
-            //               uiModel: UiInviteToFavouritePlacesModel(
-            //                 date: DateTime.now(),
-            //               ),
-            //               onInvite: () {},
-            //               onDatePressed: () {},
-            //             ),
-            //           ),
-            //         ),
-            //   ),
-            // ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
+              // SpacingFoundation.verticalSpace16,
+              // context.button(
+              //   data: BaseUiKitButtonData(
+              //     text: 'show invite to event',
+              //     onPressed: () =>
+              //         buildComponent(
+              //           context,
+              //           ComponentModel.fromJson(configuration.appConfig.content['invite_people_places']),
+              //           ComponentBuilder(
+              //             child: InviteToFavouritePlacesComponent(
+              //               places: List<UiKitLeadingRadioTile>.generate(
+              //                 10,
+              //                     (index) =>
+              //                     UiKitLeadingRadioTile(
+              //                       title: 'title',
+              //                       avatarLink: GraphicsFoundation.instance.png.inviteMock1.path,
+              //                       tags: [
+              //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+              //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+              //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+              //                         UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
+              //                       ],
+              //                     ),
+              //               ),
+              //               uiModel: UiInviteToFavouritePlacesModel(
+              //                 date: DateTime.now(),
+              //               ),
+              //               onInvite: () {},
+              //               onDatePressed: () {},
+              //             ),
+              //           ),
+              //         ),
+              //   ),
+              // ),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                  data: BaseUiKitButtonData(
+                      text: 'create event',
+                      onPressed: () {
+                        context.push(Scaffold(
+                            body: CreateEventComponent(
+                          availableTimeTemplates: [],
+                          propertiesOptions: (p0) => [],
+                          onEventCreated: (UiEventModel model) async {},
+                        )));
+                      })),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                  data: BaseUiKitButtonData(
+                      text: 'create place',
+                      onPressed: () {
+                        context.push(Scaffold(
+                            body: CreatePlaceComponent(
+                          availableTimeTemplates: [],
+                          propertiesOptions: (p0) => [],
+                          onPlaceCreated: (UiPlaceModel model) async {},
+                        )));
+                      })),
+              SpacingFoundation.verticalSpace16,
+              context.button(
                 data: BaseUiKitButtonData(
-                    text: 'create event',
-                    onPressed: () {
-                      context.push(Scaffold(
-                          body: CreateEventComponent(
-                        availableTimeTemplates: [],
-                        propertiesOptions: (p0) => [],
-                        onEventCreated: (UiEventModel model) async {},
-                      )));
-                    })),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-                data: BaseUiKitButtonData(
-                    text: 'create place',
-                    onPressed: () {
-                      context.push(Scaffold(
-                          body: CreatePlaceComponent(
-                        availableTimeTemplates: [],
-                        propertiesOptions: (p0) => [],
-                        onPlaceCreated: (UiPlaceModel model) async {},
-                      )));
-                    })),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show company profile',
-                onPressed: () => buildComponent(
-                  context,
-                  const ComponentModel(
-                    version: '1.0.0',
-                    pageBuilderType: PageBuilderType.page,
-                  ),
-                  ComponentBuilder(
-                    child: CompanyHomeScreenComponent(
-                      profileStats: [
-                        UiKitStats(
-                          title: 'Invited',
-                          value: '934',
-                          actionButton: context.smallButton(
-                            data: BaseUiKitButtonData(
-                              text: 'MORE',
-                              onPressed: () {},
+                  text: 'show company profile',
+                  onPressed: () => buildComponent(
+                    context,
+                    const ComponentModel(
+                      version: '1.0.0',
+                      pageBuilderType: PageBuilderType.page,
+                    ),
+                    ComponentBuilder(
+                      child: CompanyHomeScreenComponent(
+                        profileStats: [
+                          UiKitStats(
+                            title: 'Invited',
+                            value: '934',
+                            actionButton: context.smallButton(
+                              data: BaseUiKitButtonData(
+                                text: 'MORE',
+                                onPressed: () {},
+                              ),
                             ),
                           ),
-                        ),
-                        UiKitStats(
-                          title: 'Booked',
-                          value: '133',
-                          actionButton: context.smallButton(
-                            data: BaseUiKitButtonData(
-                              text: 'MORE',
-                              onPressed: () {},
+                          UiKitStats(
+                            title: 'Booked',
+                            value: '133',
+                            actionButton: context.smallButton(
+                              data: BaseUiKitButtonData(
+                                text: 'MORE',
+                                onPressed: () {},
+                              ),
                             ),
                           ),
                         ),
@@ -1554,9 +1602,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                               ],
                             ),
                           ),
+                          indexNotifier: ValueNotifier<int>(0),
+                          backgroundImageNotifier: ValueNotifier<String>(''),
                         ),
-                        indexNotifier: ValueNotifier<int>(0),
-                        backgroundImageNotifier: ValueNotifier<String>(''),
                       ),
                     ),
                   ),
@@ -1661,10 +1709,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             logo: 'assets/images/png/crazy_emoji.png',
                             id: 1,
                           ),
-                          onTabChanged: (String name) {
-                            return null;
-                          },
-                          isVisibleButton: ValueNotifier<bool>(true),
                         ),
                       ),
                     ),
@@ -1746,41 +1790,41 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   ),
                 ),
               ),
-            ),
-            // SpacingFoundation.verticalSpace16,
-            // context.button(
-            //   data: BaseUiKitButtonData(
-            //     text: 'show company registration',
-            //     onPressed: () =>
-            //         buildComponent(
-            //           context,
-            //           ComponentModel.fromJson(configuration.appConfig.content['about_company']),
-            //           ComponentBuilder(
-            //             child: AboutCompanyComponent(
-            //               uiModel: UiAboutCompanyModel(),
-            //               nameController: TextEditingController(),
-            //               positionController: TextEditingController(),
-            //               formKey: GlobalKey<FormState>(),
-            //             ),
-            //           ),
-            //         ),
-            //   ),
-            // ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show sms verification',
-                onPressed: () => buildComponent(
-                  context,
-                  SmsVerificationModel.fromJson({
-                    'version': '1.0.2',
-                    'builder_type': 'page',
-                  }),
-                  ComponentBuilder(
-                    child: CredentialsCodeVerificationComponent(
-                      codeController: TextEditingController(),
-                      formKey: GlobalKey<FormState>(),
-                      credentials: '+380 66 123 45 67',
+              // SpacingFoundation.verticalSpace16,
+              // context.button(
+              //   data: BaseUiKitButtonData(
+              //     text: 'show company registration',
+              //     onPressed: () =>
+              //         buildComponent(
+              //           context,
+              //           ComponentModel.fromJson(configuration.appConfig.content['about_company']),
+              //           ComponentBuilder(
+              //             child: AboutCompanyComponent(
+              //               uiModel: UiAboutCompanyModel(),
+              //               nameController: TextEditingController(),
+              //               positionController: TextEditingController(),
+              //               formKey: GlobalKey<FormState>(),
+              //             ),
+              //           ),
+              //         ),
+              //   ),
+              // ),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show sms verification',
+                  onPressed: () => buildComponent(
+                    context,
+                    SmsVerificationModel.fromJson({
+                      'version': '1.0.2',
+                      'builder_type': 'page',
+                    }),
+                    ComponentBuilder(
+                      child: CredentialsCodeVerificationComponent(
+                        codeController: TextEditingController(),
+                        formKey: GlobalKey<FormState>(),
+                        credentials: '+380 66 123 45 67',
+                      ),
                     ),
                   ),
                 ),
@@ -1827,55 +1871,55 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            OrdinaryButton(
-              text: 'show Donation Bottom Sheet',
-              onPressed: () => showUiKitGeneralFullScreenDialog(
-                context,
-                GeneralDialogData(
-                  useRootNavigator: false,
-                  child: DonationComponent(
-                    onMapTap: () {},
-                    onAskDonationTap: () {},
-                    donationTitle: 'Help me visit Nusr-Et restaurant',
-                    donationNumber: 1,
-                    actualSum: 310,
-                    sum: 900,
-                    topDayUsers: List.generate(
-                      7,
-                      (index) => UiDonationUserModel(
-                        position: index + 1,
-                        sum: '3640',
-                        username: '@misswow2022',
-                        name: 'Natalie White',
-                        points: index < 3 ? '364 000' : null,
-                        userType: UserTileType.influencer,
+              SpacingFoundation.verticalSpace16,
+              OrdinaryButton(
+                text: 'show Donation Bottom Sheet',
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    useRootNavigator: false,
+                    child: DonationComponent(
+                      onMapTap: () {},
+                      onAskDonationTap: () {},
+                      donationTitle: 'Help me visit Nusr-Et restaurant',
+                      donationNumber: 1,
+                      actualSum: 310,
+                      sum: 900,
+                      topDayUsers: List.generate(
+                        7,
+                        (index) => UiDonationUserModel(
+                          position: index + 1,
+                          sum: '3640',
+                          username: '@misswow2022',
+                          name: 'Natalie White',
+                          points: index < 3 ? '364 000' : null,
+                          userType: UserTileType.influencer,
+                        ),
                       ),
-                    ),
-                    topMonthUsers: List.generate(
-                      7,
-                      (index) => UiDonationUserModel(
-                        position: index + 1,
-                        sum: '3640',
-                        username: '@misswow2022',
-                        name: 'Natalie',
-                        points: index < 3 ? '364 000' : null,
-                        userType: UserTileType.premium,
+                      topMonthUsers: List.generate(
+                        7,
+                        (index) => UiDonationUserModel(
+                          position: index + 1,
+                          sum: '3640',
+                          username: '@misswow2022',
+                          name: 'Natalie',
+                          points: index < 3 ? '364 000' : null,
+                          userType: UserTileType.premium,
+                        ),
                       ),
-                    ),
-                    topYearUsers: List.generate(
-                      7,
-                      (index) => UiDonationUserModel(
-                        position: index + 1,
-                        sum: '3640',
-                        username: '@misswow2022',
-                        name: 'Natalie White',
-                        points: index < 3 ? '364 000' : null,
-                        userType: UserTileType.pro,
+                      topYearUsers: List.generate(
+                        7,
+                        (index) => UiDonationUserModel(
+                          position: index + 1,
+                          sum: '3640',
+                          username: '@misswow2022',
+                          name: 'Natalie White',
+                          points: index < 3 ? '364 000' : null,
+                          userType: UserTileType.pro,
+                        ),
                       ),
+                      onDonationIndicatorTap: () {},
                     ),
-                    onDonationIndicatorTap: () {},
                   ),
                 ),
               ),
@@ -1894,22 +1938,23 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     onSubmit: (averagePrice, rangePrice1, rangePrice2, currency,
                         averageSelected) {},
 
-                    // text: 'show complaint bottom sheet',
-                    // onPressed: () =>
-                    //     showUiKitGeneralFullScreenDialog(
-                    //       context,
-                    //       GeneralDialogData(
-                    //         topPadding: 0.3.sh,
-                    //         useRootNavigator: false,
-                    //         child: ComplaintFormComponent(
-                    //           onSend: () {},
-                    //           nameController: TextEditingController(),
-                    //           emailController: TextEditingController(),
-                    //           issueController: TextEditingController(),
-                    //           formKey: GlobalKey<FormState>(),
-                    //         ),
-                    //       ),
-                    //     ),
+                      // text: 'show complaint bottom sheet',
+                      // onPressed: () =>
+                      //     showUiKitGeneralFullScreenDialog(
+                      //       context,
+                      //       GeneralDialogData(
+                      //         topPadding: 0.3.sh,
+                      //         useRootNavigator: false,
+                      //         child: ComplaintFormComponent(
+                      //           onSend: () {},
+                      //           nameController: TextEditingController(),
+                      //           emailController: TextEditingController(),
+                      //           issueController: TextEditingController(),
+                      //           formKey: GlobalKey<FormState>(),
+                      //         ),
+                      //       ),
+                      //     ),
+                    ),
                   ),
                 ),
               ),
@@ -1954,42 +1999,42 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'Select your specialty component',
-                onPressed: () => context.push(
-                  SelectYourSpecialtyComponent(
-                    businessSpecialtyList: [
-                      SelectSpecialty(
-                        name: 'name',
-                        description: 'description',
-                        isSelected: true,
-                      ),
-                      SelectSpecialty(
-                        name: 'name',
-                        description: 'description',
-                        isSelected: false,
-                      ),
-                      SelectSpecialty(
-                        name: 'name',
-                        description: 'description',
-                        isSelected: true,
-                      ),
-                    ],
-                    leisureSpecialtyList: [
-                      SelectSpecialty(
-                        name: 'name',
-                        description: 'description',
-                        isSelected: false,
-                      ),
-                      SelectSpecialty(
-                        name: 'name',
-                        description: 'description',
-                        isSelected: false,
-                      ),
-                    ],
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'Select your specialty component',
+                  onPressed: () => context.push(
+                    SelectYourSpecialtyComponent(
+                      businessSpecialtyList: [
+                        SelectSpecialty(
+                          name: 'name',
+                          description: 'description',
+                          isSelected: true,
+                        ),
+                        SelectSpecialty(
+                          name: 'name',
+                          description: 'description',
+                          isSelected: false,
+                        ),
+                        SelectSpecialty(
+                          name: 'name',
+                          description: 'description',
+                          isSelected: true,
+                        ),
+                      ],
+                      leisureSpecialtyList: [
+                        SelectSpecialty(
+                          name: 'name',
+                          description: 'description',
+                          isSelected: false,
+                        ),
+                        SelectSpecialty(
+                          name: 'name',
+                          description: 'description',
+                          isSelected: false,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -2015,62 +2060,60 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            OrdinaryButton(
-              text: 'show new tool component',
-              onPressed: () => showUiKitGeneralFullScreenDialog(
-                context,
-                GeneralDialogData(
-                  useRootNavigator: false,
-                  child: InfluencerToolsComponent(
-                    onTap: () {},
-                    influencerUiModelList: [
-                      InfluencerToolUiModel(
-                        title: S.of(context).CountReviews(''),
-                        progress: 100,
-                        actualProgress: 50,
-                      ),
-                      InfluencerToolUiModel(
-                        title: S.of(context).CountVideoReaction(''),
-                        progress: 100,
-                        actualProgress: 50,
-                      ),
-                      InfluencerToolUiModel(
-                        title: S.of(context).News,
-                        progress: 50,
-                        actualProgress: 0,
-                      ),
-                      InfluencerToolUiModel(
-                        title: S.of(context).Voices,
-                        progress: 50,
-                        actualProgress: 0,
-                      ),
-                      InfluencerToolUiModel(
-                        title: S.of(context).Photos,
-                        progress: 50,
-                        actualProgress: 0,
-                      ),
-                      InfluencerToolUiModel(
-                        title: S.of(context).IdealRoute,
-                        progress: 5,
-                        actualProgress: 0,
-                      ),
-                    ],
-                    newToolsInfluncerList: [
-                      S.of(context).Photos,
-                      S.of(context).Voices,
-                      S.of(context).News,
-                      S.of(context).IdealRoute,
-                    ],
+              SpacingFoundation.verticalSpace16,
+              OrdinaryButton(
+                text: 'show new tool component',
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    useRootNavigator: false,
+                    child: InfluencerToolsComponent(
+                      onTap: () {},
+                      influencerUiModelList: [
+                        InfluencerToolUiModel(
+                          title: S.of(context).CountReviews(''),
+                          progress: 100,
+                          actualProgress: 50,
+                        ),
+                        InfluencerToolUiModel(
+                          title: S.of(context).CountVideoReaction(''),
+                          progress: 100,
+                          actualProgress: 50,
+                        ),
+                        InfluencerToolUiModel(
+                          title: S.of(context).News,
+                          progress: 50,
+                          actualProgress: 0,
+                        ),
+                        InfluencerToolUiModel(
+                          title: S.of(context).Voices,
+                          progress: 50,
+                          actualProgress: 0,
+                        ),
+                        InfluencerToolUiModel(
+                          title: S.of(context).Photos,
+                          progress: 50,
+                          actualProgress: 0,
+                        ),
+                        InfluencerToolUiModel(
+                          title: S.of(context).IdealRoute,
+                          progress: 5,
+                          actualProgress: 0,
+                        ),
+                      ],
+                      newToolsInfluncerList: [
+                        S.of(context).Photos,
+                        S.of(context).Voices,
+                        S.of(context).News,
+                        S.of(context).IdealRoute,
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        ));
   }
 
   final List<UiKitTag> tags = [

@@ -49,28 +49,20 @@ class HowItWorksWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    // final model
-
-    // final
-
-    return Transform.translate(
-      offset: customOffset ?? Offset(size.width / 1.7, 35),
-      child: Transform.rotate(
-        angle: pi * -20 / 180,
-        child: RotatableWidget(
-          animDuration: const Duration(milliseconds: 150),
-          endAngle: pi * 20 / 180,
-          alignment: Alignment.center,
-          applyReverseOnEnd: true,
-          startDelay: Duration(seconds: Random().nextInt(8) + 2),
-          child: UiKitBlurredQuestionChip(
-            label: S.of(context).HowItWorks,
-            onTap: () => showUiKitFullScreenAlertDialog(
-              context,
-              child: _howItWorksDialog,
-              paddingAll: EdgeInsetsFoundation.all12,
-            ),
+    return Transform.rotate(
+      angle: pi * -10 / 180,
+      child: RotatableWidget(
+        animDuration: const Duration(milliseconds: 150),
+        endAngle: pi * 20 / 180,
+        alignment: Alignment.center,
+        applyReverseOnEnd: true,
+        startDelay: Duration(seconds: Random().nextInt(8) + 2),
+        child: UiKitBlurredQuestionChip(
+          label: S.of(context).HowItWorks,
+          onTap: () => showUiKitFullScreenAlertDialog(
+            context,
+            child: _howItWorksDialog,
+            paddingAll: EdgeInsetsFoundation.all12,
           ),
         ),
       ),
