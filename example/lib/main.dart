@@ -170,6 +170,51 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                onPressed: () => context.push(CategoriesCreateComponent(
+                  relatedPropertySearchOptions: (value) async {
+                    return [
+                      'Chinese Cui',
+                      'Chinese restaurant',
+                      'Chinese culture',
+                      'Chinese goods'
+                    ];
+                  },
+                  onRelatedPropertyFieldSubmitted: (value) {},
+                  onSelectedRelatedPropertyTapped: (value) {},
+                  onSelectedUniquePropertyTapped: (value) {},
+                  onUniquePropertyDeleteTap: () {},
+                  onUniquePropertyEditTap: () {},
+                  onUniquePropertyFieldSubmitted: (value) {},
+                  uniquePropertySearchOptions: (value) async {
+                    return [
+                      'Chinese Cui',
+                      'Chinese restaurant',
+                      'Chinese culture',
+                      'Chinese goods'
+                    ];
+                  },
+                  onCategoryTypeAddTap: () {},
+                  propertySearchOptions: (value) async {
+                    return [
+                      'Chinese Cui',
+                      'Chinese restaurant',
+                      'Chinese culture',
+                      'Chinese goods'
+                    ];
+                  },
+                  onSelectedPropertyTapped: (value) {},
+                  onPropertyFieldSubmitted: (value) {},
+                  onCategoryPropertyTypeButtonTap: (value) {},
+                  onAddCategoriesTap: () {},
+                  onDeleteCategoryTypeTap: () {},
+                  onEditCategoryTypeTap: () {},
+                )),
+                text: 'show categories create component',
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     onPressed: () => context.push(
                           PropertyManagementComponent(
@@ -1682,6 +1727,13 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             configuration.appConfig.content['place']),
                         ComponentBuilder(
                             child: PlaceComponent(
+                              canLeaveFeedbackCallback: (placeId) async {
+                                return true;
+                              },
+                              canLeaveFeedbackForEventCallback:
+                                  (eventId) async {
+                                return true;
+                              },
                               place: place,
                               placeReactionLoaderCallback:
                                   (int page, int contentId) async {
@@ -1716,6 +1768,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             configuration.appConfig.content['event']),
                         ComponentBuilder(
                             child: EventComponent(
+                              canLeaveFeedback: (eventId) async {
+                                return true;
+                              },
                               event: event,
                               feedbackLoaderCallback: (page, conentId) =>
                                   [] as Future<List<FeedbackUiModel>>,

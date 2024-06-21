@@ -88,7 +88,7 @@ class PropertyManagementComponent extends StatelessWidget {
                 ),
               ),
             ),
-            SpacingFoundation.horizontalSpace32,
+          SpacingFoundation.horizontalSpace32,
             Expanded(
               child: PropertiesBorderedBox(
                 title: Row(
