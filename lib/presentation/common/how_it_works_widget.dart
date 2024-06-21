@@ -83,15 +83,18 @@ class HowItWorksWidget extends StatelessWidget {
 class CustomTextWithWidget extends MultiChildRenderObjectWidget {
   final Text text;
 
-  CustomTextWithWidget({required this.text, required Widget widget}) : super(children: [text, widget]);
+  CustomTextWithWidget({required this.text, required Widget widget})
+      : super(children: [text, widget]);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return RenderCustomTextWithWidget(textDirection: Directionality.of(context));
+    return RenderCustomTextWithWidget(
+        textDirection: Directionality.of(context));
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant RenderCustomTextWithWidget renderObject) {
+  void updateRenderObject(
+      BuildContext context, covariant RenderCustomTextWithWidget renderObject) {
     renderObject.textDirection = Directionality.of(context);
   }
 }
@@ -99,7 +102,8 @@ class CustomTextWithWidget extends MultiChildRenderObjectWidget {
 class RenderCustomTextWithWidget extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, CustomTextWithWidgetParentData>,
-        RenderBoxContainerDefaultsMixin<RenderBox, CustomTextWithWidgetParentData> {
+        RenderBoxContainerDefaultsMixin<RenderBox,
+            CustomTextWithWidgetParentData> {
   RenderCustomTextWithWidget({
     required TextDirection textDirection,
   })  : _textDirection = textDirection,
@@ -133,10 +137,23 @@ class RenderCustomTextWithWidget extends RenderBox
     final textParentData = textBox.parentData as CustomTextWithWidgetParentData;
     textParentData.offset = Offset.zero;
 
+    //TODO KOSTL
     if (widgetBox != null) {
+      developer.log('textBox.size.heinght!!! ${textBox.size.height}');
+      developer.log('heinght ${54.h}');
+
+      developer.log('textBox.size.width ${textBox.size.width}');
+      developer.log('1.sw ${1.sw - SpacingFoundation.horizontalSpacing32}');
+
       widgetBox.layout(constraints.loosen(), parentUsesSize: true);
-      final widgetParentData = widgetBox.parentData as CustomTextWithWidgetParentData;
-      widgetParentData.offset = Offset(textBox.size.width, 0);
+      final widgetParentData =
+          widgetBox.parentData as CustomTextWithWidgetParentData;
+      //TODO KOSTL
+      widgetParentData.offset = Offset(
+          textBox.size.width != (1.sw - SpacingFoundation.horizontalSpacing32)
+              ? textBox.size.width
+              : textBox.size.width - 45.w,
+          textBox.size.height != 54.h ? 0 : 20);
     }
 
     size = constraints.constrain(Size(
@@ -154,7 +171,8 @@ class RenderCustomTextWithWidget extends RenderBox
     context.paintChild(textBox, offset + textParentData.offset);
 
     if (widgetBox != null) {
-      final widgetParentData = widgetBox.parentData as CustomTextWithWidgetParentData;
+      final widgetParentData =
+          widgetBox.parentData as CustomTextWithWidgetParentData;
       context.paintChild(widgetBox, offset + widgetParentData.offset);
     }
   }
@@ -163,30 +181,24 @@ class RenderCustomTextWithWidget extends RenderBox
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
     RenderBox? child = lastChild;
     while (child != null) {
-      developer.log('child != null');
-      final CustomTextWithWidgetParentData childParentData = child.parentData as CustomTextWithWidgetParentData;
+      final CustomTextWithWidgetParentData childParentData =
+          child.parentData as CustomTextWithWidgetParentData;
       if (result.addWithPaintOffset(
         offset: childParentData.offset,
         position: position,
         hitTest: (BoxHitTestResult result, Offset transformed) {
-          developer
-              .log('child!.hitTest(result, position: transformed) ${child!.hitTest(result, position: transformed)}');
-
           assert(transformed == position - childParentData.offset);
           return child!.hitTest(result, position: transformed);
         },
       )) {
-        developer.log('true');
-
         return true;
       }
       child = childParentData.previousSibling;
-      developer.log('child = childParentData.previousSibling ${child = childParentData.previousSibling}');
     }
-    developer.log('false');
 
     return false;
   }
 }
 
-class CustomTextWithWidgetParentData extends ContainerBoxParentData<RenderBox> {}
+class CustomTextWithWidgetParentData
+    extends ContainerBoxParentData<RenderBox> {}
