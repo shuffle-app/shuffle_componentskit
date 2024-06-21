@@ -7,6 +7,7 @@ class UiProfileModel {
   final String? nickname;
   final String? name;
   final String? email;
+  final String? phone;
   final String? description;
   final String? avatarUrl;
   final String? userCredo;
@@ -101,6 +102,7 @@ class UiProfileModel {
     this.favoriteTagsIds,
     this.email,
     this.points,
+    this.phone,
   });
 
   /// write [copyWith] method
@@ -129,6 +131,7 @@ class UiProfileModel {
     List<int>? tagsIds,
     List<int>? favoriteTagsIds,
     String? email,
+    String? phone,
     int? points,
     bool? beInSearch
   }) =>
@@ -155,6 +158,7 @@ class UiProfileModel {
           mindsetId: mindsetId ?? this.mindsetId,
           tagsIds: tagsIds ?? this.tagsIds,
           email: email ?? this.email,
+          phone: phone ?? this.phone,
           beInSearch: beInSearch ?? this.beInSearch,
           favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
           points: points ?? this.points);
