@@ -12,7 +12,7 @@ class SettingsComponent extends StatelessWidget {
   final List<BaseUiKitButtonData>? proControlExpansionTileButtons;
 
   const SettingsComponent({
-    Key? key,
+    super.key,
     this.onTabSwitched,
     this.selectedContentType,
     this.tabs,
@@ -20,7 +20,7 @@ class SettingsComponent extends StatelessWidget {
     required this.btnDataList,
     required this.controlExpansionTileButtons,
     this.proControlExpansionTileButtons,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +69,7 @@ class SettingsComponent extends StatelessWidget {
           ).paddingSymmetric(
               horizontal: EdgeInsetsFoundation.horizontal16,
               vertical: EdgeInsetsFoundation.vertical12),
+        SpacingFoundation.verticalSpace16,
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: bodyAligment.crossAxisAlignment,

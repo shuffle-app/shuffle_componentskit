@@ -3,6 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiInvitePersonModel extends UiInviteToFavoritePlacesModel {
   final int id;
+  final int poolId;
   final String name;
   final String description;
   final String? avatarLink;
@@ -16,10 +17,19 @@ class UiInvitePersonModel extends UiInviteToFavoritePlacesModel {
     this.isSelected = false,
     required this.name,
     required this.id,
+    required this.poolId,
     this.rating,
     this.handshake,
     this.userTileType = UserTileType.ordinary,
     this.avatarLink,
     required this.description,
   });
+
+  @override
+  operator ==(Object other) {
+    return other is UiInvitePersonModel && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

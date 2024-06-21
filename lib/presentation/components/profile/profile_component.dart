@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/domain/config_models/profile/component_profile_model.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -21,12 +22,21 @@ class ProfileComponent extends StatelessWidget {
   final VoidCallback? onFulfillDream;
   final VoidCallback? onSettingsPressed;
   final VoidCallback? onMessagePressed;
+  final VoidCallback? onAllVideoReactionsPressed;
+  final VoidCallback? onAllFeedbacksPressed;
+  final ValueChanged<VideoReactionUiModel>? onReactionTapped;
+  final ValueChanged<int>? onRecommendedUserCardChanged;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
+  final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
+  final PagingController<int, FeedbackUiModel>? feedbackPagingController;
+  final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
 
   const ProfileComponent({
-    Key? key,
+    super.key,
     required this.profile,
+    this.videoReactionsPagingController,
+    this.feedbackPagingController,
     this.recommendedUsers,
     this.showHowItWorks = false,
     this.businessContentEnabled = false,
@@ -34,6 +44,9 @@ class ProfileComponent extends StatelessWidget {
     this.onHowItWorksPoped,
     this.onMyEventsPressed,
     this.onFulfillDream,
+    this.onReactionTapped,
+    this.onAllVideoReactionsPressed,
+    this.onAllFeedbacksPressed,
     this.onInvite,
     this.events,
     this.onEventTap,
@@ -43,20 +56,33 @@ class ProfileComponent extends StatelessWidget {
     this.favoriteEvents = const [],
     this.favoritePlaces = const [],
     this.onRecommendedUserAvatarPressed,
-  }) : super(key: key);
+    this.onRecommendedUserCardChanged,
+    this.onFeedbackCardPressed,
+  });
+
+  bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
+
+  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
+    final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: S.of(context).MyCard,
+      title: S
+          .of(context)
+          .MyCard,
       leading: context.iconButtonNoPadding(
         data: BaseUiKitButtonData(
           iconInfo: BaseUiKitButtonIconData(
@@ -89,12 +115,16 @@ class ProfileComponent extends StatelessWidget {
               children: [
                 if (businessContentEnabled)
                   Text(
-                    S.of(context).FindSomeoneToNetworkWith,
+                    S
+                        .of(context)
+                        .FindSomeoneToNetworkWith,
                     style: textTheme?.title1,
                   ),
                 if (!businessContentEnabled)
                   Text(
-                    S.of(context).FindSomeoneToHangOutWith,
+                    S
+                        .of(context)
+                        .FindSomeoneToHangOutWith,
                     style: textTheme?.title1,
                   ),
                 if (showHowItWorks)
@@ -120,18 +150,21 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ],
                     onPop: onHowItWorksPoped,
-                    customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
+                    customOffset: Offset(MediaQuery
+                        .sizeOf(context)
+                        .width / 1.5, 35),
                   ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
           ),
           SpacingFoundation.verticalSpace24,
           UiKitHorizontalScroll3D(
+            onItemChanged: onRecommendedUserCardChanged,
             itemBuilder: (BuildContext context, int index) {
               final user = recommendedUsers?[index];
 
               return UiKitFindSomeoneCard(
-                avatarUrl: user?.userAvatar ?? GraphicsFoundation.instance.png.mockUserAvatar.path,
+                avatarUrl: user?.userAvatar,
                 userNickName: user?.userNickname ?? '',
                 userName: user?.userName ?? '',
                 userPoints: user?.userPointsBalance ?? 0,
@@ -228,67 +261,171 @@ class ProfileComponent extends StatelessWidget {
           ),
         ],
         SpacingFoundation.verticalSpace24,
+        // if (videoReactionsPagingController != null)
+        if (videoReactionsPagingController != null)
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            child: UiKitColoredAccentBlock(
+              color: colorScheme?.surface1,
+              contentHeight: 0.205.sh,
+              titlePadding: EdgeInsetsFoundation.all16,
+              title: Text(
+                S.current.MyReactions,
+                style: textTheme?.title1,
+              ),
+              action: context
+                  .smallOutlinedButton(
+                blurred: false,
+                data: BaseUiKitButtonData(
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.chevronright,
+                  ),
+                  onPressed: onAllVideoReactionsPressed,
+                ),
+              )
+                  .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+              content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
+                spacing: SpacingFoundation.horizontalSpacing8,
+                shimmerLoadingChild: UiKitReactionPreview(
+                  customHeight: 0.205.sh,
+                  imagePath: GraphicsFoundation.instance.png.place.path,
+                ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                noItemsFoundIndicator: SizedBox(
+                    width: 1.sw,
+                    child: Text(
+                      S.current.NoVideoReactionsYet,
+                      style: textTheme?.subHeadline,
+                    ).paddingAll(EdgeInsetsFoundation.all16)),
+                itemBuilder: (context, reaction, index) {
+                  return UiKitReactionPreview(
+                    customHeight: 0.205.sh,
+                    imagePath: reaction.previewImageUrl ?? '',
+                    viewed: false,
+                    onTap: () => onReactionTapped?.call(reaction),
+                  ).paddingOnly(
+                    left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
+                  );
+                },
+                pagingController: videoReactionsPagingController!,
+              ),
+            ),
+          ),
+        if (videoReactionsPagingController != null) SpacingFoundation.verticalSpace24,
+        if (feedbackPagingController != null)
+          ValueListenableBuilder(
+            valueListenable: feedbackPagingController!,
+            builder: (context, value, child) {
+              return UiKitColoredAccentBlock(
+                title: Text(
+                  S.current.MyFeedback,
+                  style: textTheme?.title1,
+                ),
+                titlePadding: EdgeInsetsFoundation.all16,
+                color: colorScheme?.surface1,
+                contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
+                action: context
+                    .smallOutlinedButton(
+                  blurred: false,
+                  data: BaseUiKitButtonData(
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.chevronright,
+                    ),
+                    onPressed: onAllFeedbacksPressed,
+                  ),
+                )
+                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                content: _noFeedbacks
+                    ? Text(
+                  S.current.NoFeedbacksYet,
+                  style: textTheme?.subHeadline,
+                ).paddingAll(EdgeInsetsFoundation.all16)
+                    : UiKitHorizontalScrollableList<FeedbackUiModel>(
+                  spacing: SpacingFoundation.horizontalSpacing8,
+                  shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                  itemBuilder: (context, feedback, index) {
+                    return SizedBox(
+                      width: 0.95.sw,
+                      child: UiKitFeedbackCard(
+                        title: feedback.feedbackAuthorName,
+                        avatarUrl: feedback.feedbackAuthorPhoto,
+                        datePosted: feedback.feedbackDateTime,
+                        companyAnswered: false,
+                        text: feedback.feedbackText,
+                        isHelpful: feedback.helpfulForUser,
+                        helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                        onPressed: () => onFeedbackCardPressed?.call(feedback),
+                      ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
+                    );
+                  },
+                  pagingController: feedbackPagingController!,
+                ),
+              );
+            },
+          ),
+        if (feedbackPagingController != null) SpacingFoundation.verticalSpace24,
         if (profile.userTileType == UserTileType.pro) ...[
           MyEventsComponent(
-              title: S.of(context).MyEvents,
+              title: S
+                  .of(context)
+                  .MyEvents,
               onTap: onMyEventsPressed ?? () {},
               onEventTap: onEventTap ?? (_) {},
               events: events ?? []),
           SpacingFoundation.verticalSpace24,
         ],
-        SizedBox(
-          width: double.infinity,
-          child: Stack(
-            children: [
-              Text(
-                S.of(context).AskOrSupport,
-                style: textTheme?.title1,
-              ),
-              if (showHowItWorks)
-                HowItWorksWidget(
-                  title: S.current.ProfileAskOrSupportHiwTitle,
-                  subtitle: S.current.ProfileAskOrSupportHiwSubtitle,
-                  hintTiles: [
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(0),
-                      imageUrl: GraphicsFoundation.instance.png.donat.path,
-                    ),
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(1),
-                      imageUrl: GraphicsFoundation.instance.png.shoot.path,
-                    ),
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(2),
-                      imageUrl: GraphicsFoundation.instance.png.honest.path,
-                    ),
-                    HintCardUiModel(
-                      title: S.current.ProfileAskOrSupportHiwHint(3),
-                      imageUrl: GraphicsFoundation.instance.png.help.path,
-                    ),
-                  ],
-                  onPop: onHowItWorksPoped,
-                  customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
-                ),
-            ],
-          ).paddingSymmetric(horizontal: horizontalMargin),
-        ),
-        SpacingFoundation.verticalSpace16,
-        Text(
-          S.of(context).AcceptDonations,
-          style: context.uiKitTheme?.boldTextTheme.caption1Medium,
-        ).paddingSymmetric(horizontal: horizontalMargin),
-        SpacingFoundation.verticalSpace16,
-        GradientableWidget(
-          gradient: GradientFoundation.attentionCard,
-          child: context.outlinedGradientButton(
-            gradient: GradientFoundation.touchIdgradientBorder,
-            data: BaseUiKitButtonData(
-              fit: ButtonFit.fitWidth,
-              text: S.of(context).FulfillTheDream.toUpperCase(),
-              onPressed: () => onFulfillDream?.call(),
-            ),
-          ),
-        ).paddingSymmetric(horizontal: horizontalMargin),
+        // SizedBox(
+        //   width: double.infinity,
+        //   child: Stack(
+        //     children: [
+        //       Text(
+        //         S.of(context).AskOrSupport,
+        //         style: textTheme?.title1,
+        //       ),
+        //       if (showHowItWorks)
+        //         HowItWorksWidget(
+        //           title: S.current.ProfileAskOrSupportHiwTitle,
+        //           subtitle: S.current.ProfileAskOrSupportHiwSubtitle,
+        //           hintTiles: [
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(0),
+        //               imageUrl: GraphicsFoundation.instance.png.donat.path,
+        //             ),
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(1),
+        //               imageUrl: GraphicsFoundation.instance.png.shoot.path,
+        //             ),
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(2),
+        //               imageUrl: GraphicsFoundation.instance.png.honest.path,
+        //             ),
+        //             HintCardUiModel(
+        //               title: S.current.ProfileAskOrSupportHiwHint(3),
+        //               imageUrl: GraphicsFoundation.instance.png.help.path,
+        //             ),
+        //           ],
+        //           onPop: onHowItWorksPoped,
+        //           customOffset: Offset(MediaQuery.sizeOf(context).width / 1.4, 8),
+        //         ),
+        //     ],
+        //   ).paddingSymmetric(horizontal: horizontalMargin),
+        // ),
+        // SpacingFoundation.verticalSpace16,
+        // Text(
+        //   S.of(context).AcceptDonations,
+        //   style: context.uiKitTheme?.boldTextTheme.caption1Medium,
+        // ).paddingSymmetric(horizontal: horizontalMargin),
+        // SpacingFoundation.verticalSpace16,
+        // GradientableWidget(
+        //   gradient: GradientFoundation.attentionCard,
+        //   child: context.outlinedGradientButton(
+        //     gradient: GradientFoundation.touchIdgradientBorder,
+        //     data: BaseUiKitButtonData(
+        //       fit: ButtonFit.fitWidth,
+        //       text: S.of(context).FulfillTheDream.toUpperCase(),
+        //       onPressed: () => onFulfillDream?.call(),
+        //     ),
+        //   ),
+        // ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace24,
         kBottomNavigationBarHeight.heightBox,
       ],

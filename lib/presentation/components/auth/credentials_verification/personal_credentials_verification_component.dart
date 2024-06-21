@@ -84,8 +84,8 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   bool obscurePassword = true;
 
   List<UiKitCustomTab> get tabs => [
-        UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
         UiKitCustomTab.small(title: S.current.Account.toUpperCase(), customValue: 'account'),
+        UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
       ];
 
   @override
@@ -255,7 +255,6 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             onTappedTab: (tabIndex) {
                               setState(() {
                                 _selectedTab = tabs.elementAt(tabIndex).customValue;
-                                // tabController.animateTo(tabIndex);
                               });
                             },
                           ),
@@ -272,6 +271,21 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                 child: TabBarView(
                   controller: tabController,
                   children: [
+                    Column(
+                      children: [
+                        ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return socials.elementAt(index);
+                          },
+                          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+                          itemCount: socials.length,
+                        ),
+                        if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
+                      ],
+                    ),
                     Column(
                       children: [
                         if (authType == RegistrationType.phone) ...[
@@ -337,21 +351,6 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                         ],
                       ],
                     ),
-                    Column(
-                      children: [
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return socials.elementAt(index);
-                          },
-                          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-                          itemCount: socials.length,
-                        ),
-                        if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -414,20 +413,18 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                             ),
                             SpacingFoundation.verticalSpace16,
                             AnimatedOpacity(
-                              opacity:  tabController.index < 1 ? 1 : 0,
+                              opacity: tabController.index >= 1 ? 1 : 0,
                               duration: const Duration(milliseconds: 500),
-                              child:
-                                   context.button(
-                                      data: BaseUiKitButtonData(
-                                      text: S.of(context).Next.toUpperCase(),
-                                      onPressed: widget.passwordController.text.isEmpty ||
-                                              widget.credentialsController.text.isEmpty
-                                          ? null
-                                          : widget.onSubmit,
-                                      loading: widget.loading,
-                                      fit: ButtonFit.fitWidth,
-                                    ))
-                                  ,
+                              child: context.button(
+                                  data: BaseUiKitButtonData(
+                                text: S.of(context).Next.toUpperCase(),
+                                onPressed:
+                                    widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
+                                        ? null
+                                        : widget.onSubmit,
+                                loading: widget.loading,
+                                fit: ButtonFit.fitWidth,
+                              )),
                             ),
                             SpacingFoundation.verticalSpace4,
                           ],

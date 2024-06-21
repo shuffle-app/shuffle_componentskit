@@ -49,7 +49,9 @@ class FavoriteFoldersBottomSheetComponent extends StatelessWidget {
           style: context.uiKitTheme?.boldTextTheme.title2,
         ),
         SpacingFoundation.verticalSpace16,
-        ...places
+        ...places.map(
+          (e) => e.paddingSymmetric(vertical: EdgeInsetsFoundation.vertical8),
+        ),
       ],
     ).paddingAll(EdgeInsetsFoundation.all16);
   }

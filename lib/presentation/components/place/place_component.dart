@@ -14,7 +14,7 @@ class PlaceComponent extends StatefulWidget {
   final UiPlaceModel place;
   final bool isCreateEventAvaliable;
   final VoidCallback? onEventCreate;
-  final VoidCallback? onAddReactionTapped;
+  final Future<bool> Function()? onAddReactionTapped;
   final Future<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
@@ -25,16 +25,22 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
-  final VoidCallback? onAddFeedbackTapped;
-  final bool canLeaveFeedback;
+  final Future<bool> Function()? onAddFeedbackTapped;
+  final Future<bool> Function(int placeId) canLeaveFeedbackCallback;
+  final Future<bool> Function(int eventId) canLeaveFeedbackForEventCallback;
+  final bool canLeaveVideoReaction;
+  final ValueChanged<int>? onLikedFeedback;
+  final ValueChanged<int>? onDislikedFeedback;
 
   const PlaceComponent({
-    Key? key,
+    super.key,
     required this.place,
     required this.placeReactionLoaderCallback,
     required this.eventReactionLoaderCallback,
     required this.placeFeedbackLoaderCallback,
     required this.eventFeedbackLoaderCallback,
+    required this.canLeaveFeedbackCallback,
+    required this.canLeaveFeedbackForEventCallback,
     this.onFeedbackTap,
     this.onReactionTap,
     this.onAddFeedbackTapped,
@@ -45,32 +51,46 @@ class PlaceComponent extends StatefulWidget {
     this.onEventTap,
     this.onSharePressed,
     this.events,
-    this.canLeaveFeedback = false,
-  }) : super(key: key);
+    this.onLikedFeedback,
+    this.onDislikedFeedback,
+    this.canLeaveVideoReaction = false,
+  });
 
   @override
   State<PlaceComponent> createState() => _PlaceComponentState();
 }
 
 class _PlaceComponentState extends State<PlaceComponent> {
-  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 0);
+  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
-  final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 0);
+  final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
+
+  Set<int> likedReviews = {};
+
+  final ScrollController listViewController = ScrollController();
+
+  bool get _noFeedbacks => feedbacksPagedController.itemList?.isEmpty ?? true;
+
+  bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
+
+  bool? canLeaveFeedback;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _reactionsListener(1);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      canLeaveFeedback = await widget.canLeaveFeedbackCallback.call(widget.place.id);
       reactionsPagingController.addPageRequestListener(_reactionsListener);
-      _feedbacksListener(1);
       feedbacksPagedController.addPageRequestListener(_feedbacksListener);
+      reactionsPagingController.notifyPageRequestListeners(1);
+      feedbacksPagedController.notifyPageRequestListeners(1);
+      setState(() {});
     });
   }
 
   void _reactionsListener(int page) async {
     final data = await widget.placeReactionLoaderCallback(page, widget.place.id);
-
+    if (data.any((e) => reactionsPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
     if (data.isEmpty) {
       reactionsPagingController.appendLastPage(data);
       return;
@@ -79,12 +99,34 @@ class _PlaceComponentState extends State<PlaceComponent> {
       data.removeLast();
       reactionsPagingController.appendLastPage(data);
     } else {
-      reactionsPagingController.appendPage(data, page + 1);
+      if (data.length < 10) {
+        reactionsPagingController.appendLastPage(data);
+      } else {
+        reactionsPagingController.appendPage(data, page + 1);
+      }
     }
+    setState(() {});
+  }
+
+  void _updateFeedbackList(int feedbackId, int addValue) {
+    final updatedFeedbackIndex = feedbacksPagedController.itemList?.indexWhere((element) => element.id == feedbackId);
+    if (updatedFeedbackIndex != null && updatedFeedbackIndex >= 0) {
+      final updatedFeedback = feedbacksPagedController.itemList?.removeAt(updatedFeedbackIndex);
+      if (updatedFeedback != null) {
+        feedbacksPagedController.itemList?.insert(
+          updatedFeedbackIndex,
+          updatedFeedback.copyWith(
+              helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue, helpfulForUser: addValue > 0),
+        );
+      }
+    }
+    setState(() {});
   }
 
   void _feedbacksListener(int page) async {
     final data = await widget.placeFeedbackLoaderCallback(page, widget.place.id);
+    if (data.any((e) => feedbacksPagedController.itemList?.any((el) => el.id == e.id) ?? false)) return;
+    likedReviews.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
       feedbacksPagedController.appendLastPage(data);
       return;
@@ -93,8 +135,29 @@ class _PlaceComponentState extends State<PlaceComponent> {
       data.removeLast();
       feedbacksPagedController.appendLastPage(data);
     } else {
-      feedbacksPagedController.appendPage(data, page + 1);
+      if (data.length < 10) {
+        feedbacksPagedController.appendLastPage(data);
+      } else {
+        feedbacksPagedController.appendPage(data, page + 1);
+      }
     }
+    setState(() {});
+  }
+
+  Future<void> _handleAddReactionTap() async {
+    final addedReaction = await widget.onAddReactionTapped?.call();
+    if (addedReaction == true) {
+      setState(() {
+        reactionsPagingController.refresh();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    reactionsPagingController.dispose();
+    feedbacksPagedController.dispose();
+    super.dispose();
   }
 
   @override
@@ -123,6 +186,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
     return ListView(
       addAutomaticKeepAlives: false,
       physics: const BouncingScrollPhysics(),
+      controller: listViewController,
       children: [
         SpacingFoundation.verticalSpace16,
         TitleWithAvatar(
@@ -139,33 +203,14 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ),
         SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
+          listViewController: listViewController,
           rating: widget.place.rating,
           media: widget.place.media,
           description: widget.place.description,
           baseTags: widget.place.baseTags,
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
-          branches: widget.place.branches
-          // ?? Future.value( [
-          //     /// mock branches
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //     HorizontalCaptionedImageData(
-          //       imageUrl: GraphicsFoundation.instance.png.place.path,
-          //       caption: 'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-          //     ),
-          //   ])
-          ,
+          branches: widget.place.branches,
           actions: [
             if (widget.complaintFormComponent != null)
               context.smallOutlinedButton(
@@ -191,58 +236,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
           ],
         ),
-        ValueListenableBuilder(
-          valueListenable: reactionsPagingController,
-          builder: (context, value, child) {
-            if (reactionsPagingController.itemList?.isNotEmpty ?? false) {
-              return UiKitColoredAccentBlock(
-                color: colorScheme?.surface1,
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      S.current.ReactionsBy,
-                      style: boldTextTheme?.body,
-                    ),
-                    SpacingFoundation.horizontalSpace12,
-                    const Expanded(child: MemberPlate()),
-                  ],
-                ),
-                contentHeight: 0.2605.sh,
-                content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
-                  leftPadding: horizontalMargin,
-                  spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: const UiKitReactionPreview(imagePath: ''),
-                  itemBuilder: (context, reaction, index) {
-                    if (index == 0) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          UiKitReactionPreview.empty(onTap: widget.onAddReactionTapped),
-                          SpacingFoundation.horizontalSpace8,
-                          UiKitReactionPreview(
-                            imagePath: reaction.previewImageUrl ?? '',
-                            viewed: false,
-                            onTap: () => widget.onReactionTap?.call(reaction),
-                          ),
-                        ],
-                      );
-                    }
-
-                    return UiKitReactionPreview(
-                      imagePath: reaction.previewImageUrl ?? '',
-                      viewed: false,
-                      onTap: () => widget.onReactionTap?.call(reaction),
-                    );
-                  },
-                  pagingController: reactionsPagingController,
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
         if (widget.isCreateEventAvaliable)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
@@ -295,6 +288,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                       ComponentBuilder(
                                         child: EventComponent(
                                           event: event,
+                                          canLeaveVideoReaction: widget.canLeaveVideoReaction,
+                                          canLeaveFeedback: widget.canLeaveFeedbackForEventCallback,
                                           feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
                                           reactionsLoaderCallback: widget.eventReactionLoaderCallback,
                                         ),
@@ -327,7 +322,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
             ).paddingSymmetric(
               horizontal: horizontalMargin,
-              vertical: EdgeInsetsFoundation.vertical8,
+              vertical: EdgeInsetsFoundation.vertical24,
             ),
           )
         else
@@ -360,7 +355,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           ? null
                           : () {
                               if (widget.onEventTap != null) {
-                                widget.onEventTap?.call(closestEvent!);
+                                widget.onEventTap?.call(closestEvent);
                               }
                               // else {
                               //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
@@ -388,54 +383,149 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 ];
               }(),
             ),
-          ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical8),
-        ValueListenableBuilder(
-          valueListenable: feedbacksPagedController,
-          builder: (context, value, child) {
-            if (feedbacksPagedController.itemList?.isNotEmpty ?? false) {
+          ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
+        if (!_noReactions || widget.canLeaveVideoReaction)
+          ValueListenableBuilder(
+            valueListenable: reactionsPagingController,
+            builder: (context, value, child) {
               return UiKitColoredAccentBlock(
-                contentHeight: 0.28.sh,
                 color: colorScheme?.surface1,
-                title: Text(
-                  S.current.ReactionsByCritics,
-                  style: boldTextTheme?.body,
+                title: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    _noReactions
+                        ? Expanded(child: Text(S.current.NoReactionsMessage, style: boldTextTheme?.body))
+                        : Text(S.current.ReactionsBy, style: boldTextTheme?.body),
+                    if (!_noReactions) SpacingFoundation.horizontalSpace12,
+                    if (!_noReactions) const Expanded(child: MemberPlate()),
+                  ],
                 ),
-                action: context
-                    .smallOutlinedButton(
-                      blurred: false,
-                      data: BaseUiKitButtonData(
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.plus,
-                        ),
-                        onPressed: widget.onAddFeedbackTapped,
-                      ),
-                    )
-                    .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
-                content: UiKitHorizontalScrollableList(
-                  leftPadding: horizontalMargin,
+                contentHeight: 0.205.sh,
+                content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                   spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: SizedBox(width: 0.85.sw, child: const UiKitFeedbackCard()),
-                  itemBuilder: (context, feedback, index) {
-                    return SizedBox(
-                      width: 0.85.sw,
-                      child: UiKitFeedbackCard(
-                        title: feedback.feedbackAuthorName,
-                        avatarUrl: feedback.feedbackAuthorPhoto,
-                        datePosted: feedback.feedbackDateTime,
-                        companyAnswered: false,
-                        rating: feedback.feedbackRating,
-                        text: feedback.feedbackText,
-                      ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
-                    );
+                  shimmerLoadingChild: UiKitReactionPreview(
+                    customHeight: 0.205.sh,
+                    imagePath: GraphicsFoundation.instance.png.place.path,
+                  ).paddingOnly(
+                    left: EdgeInsetsFoundation.horizontal16,
+                  ),
+                  noItemsFoundIndicator:
+                      UiKitReactionPreview.empty(customHeight: 0.205.sh, onTap: _handleAddReactionTap)
+                          .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                  itemBuilder: (context, reaction, index) {
+                    if (index == 0 && widget.canLeaveVideoReaction) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          UiKitReactionPreview.empty(customHeight: 0.205.sh, onTap: _handleAddReactionTap)
+                              .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                          UiKitReactionPreview(
+                            customHeight: 0.205.sh,
+                            imagePath: reaction.previewImageUrl ?? '',
+                            viewed: false,
+                            onTap: () => widget.onReactionTap?.call(reaction),
+                          ).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
+                        ],
+                      );
+                    }
+
+                    return UiKitReactionPreview(
+                      customHeight: 0.205.sh,
+                      imagePath: reaction.previewImageUrl ?? '',
+                      viewed: false,
+                      onTap: () => widget.onReactionTap?.call(reaction),
+                    ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0);
                   },
-                  pagingController: feedbacksPagedController,
+                  pagingController: reactionsPagingController,
                 ),
               );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical24),
+            },
+          ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        if (!_noFeedbacks || (canLeaveFeedback ?? false))
+          ValueListenableBuilder(
+            valueListenable: feedbacksPagedController,
+            builder: (context, value, child) {
+              return UiKitColoredAccentBlock(
+                title: Text(
+                  _noFeedbacks ? S.current.NoReviewsMessage : S.current.ReviewsByCritics,
+                  style: boldTextTheme?.body,
+                ),
+                color: colorScheme?.surface1,
+                contentHeight: _noFeedbacks ? 0 : 0.28.sh,
+                action: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: canLeaveFeedback ?? false
+                      ? context
+                          .smallOutlinedButton(
+                            blurred: false,
+                            data: BaseUiKitButtonData(
+                              iconInfo: BaseUiKitButtonIconData(
+                                iconData: ShuffleUiKitIcons.plus,
+                              ),
+                              onPressed: () {
+                                widget.onAddFeedbackTapped?.call().then((addedFeedback) {
+                                  if (addedFeedback) {
+                                    setState(() {
+                                      canLeaveFeedback = false;
+                                      feedbacksPagedController.refresh();
+                                      feedbacksPagedController.notifyPageRequestListeners(1);
+                                    });
+                                  }
+                                });
+                              },
+                            ),
+                          )
+                          .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
+                      : null,
+                ),
+                content: _noFeedbacks
+                    ? null
+                    : UiKitHorizontalScrollableList<FeedbackUiModel>(
+                        leftPadding: horizontalMargin,
+                        spacing: SpacingFoundation.horizontalSpacing8,
+                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                        noItemsFoundIndicator: SizedBox(
+                          width: 1.sw,
+                          child: Center(
+                            child: Text(
+                              S.current.NoFeedbacksYet,
+                              style: boldTextTheme?.subHeadline,
+                            ).paddingAll(EdgeInsetsFoundation.all16),
+                          ),
+                        ),
+                        itemBuilder: (context, feedback, index) {
+                          return SizedBox(
+                            width: 0.95.sw,
+                            child: UiKitFeedbackCard(
+                              title: feedback.feedbackAuthorName,
+                              avatarUrl: feedback.feedbackAuthorPhoto,
+                              datePosted: feedback.feedbackDateTime,
+                              companyAnswered: false,
+                              rating: feedback.feedbackRating,
+                              text: feedback.feedbackText,
+                              helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                              onLike: () {
+                                final feedbackId = feedback.id;
+                                if (likedReviews.contains(feedbackId)) {
+                                  likedReviews.remove(feedbackId);
+                                  widget.onDislikedFeedback?.call(feedbackId);
+                                  _updateFeedbackList(feedbackId, -1);
+                                } else {
+                                  likedReviews.add(feedbackId);
+                                  widget.onLikedFeedback?.call(feedbackId);
+                                  _updateFeedbackList(feedbackId, 1);
+                                }
+                                setState(() {});
+                              },
+                            ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
+                          );
+                        },
+                        pagingController: feedbacksPagedController,
+                      ),
+              );
+            },
+          ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,
           spacing: SpacingFoundation.horizontalSpacing8,

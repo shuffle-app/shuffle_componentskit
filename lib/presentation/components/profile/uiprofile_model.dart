@@ -7,6 +7,7 @@ class UiProfileModel {
   final String? nickname;
   final String? name;
   final String? email;
+  final String? phone;
   final String? description;
   final String? avatarUrl;
   final String? userCredo;
@@ -30,7 +31,6 @@ class UiProfileModel {
   final bool? beInSearch;
 
   ProfileCard get cardWidget {
-    AutoSizeGroup group = AutoSizeGroup();
 
     return ProfileCard(
       onShare: onShare,
@@ -53,15 +53,15 @@ class UiProfileModel {
           : userTileType == UserTileType.premium
           ? const PremiumMemberPlate()
           : null,
-      // onViewAllAchievements: onViewAllAchievements,
-      // achievements: achievements.where((element) => element.asset != null).toList(),
+      onViewAllAchievements: onViewAllAchievements,
+      achievements: achievements.where((element) => element.asset != null || element.objectUrl != null).toList(),
       profileStats: [
         UiKitStats(
           title: S.current.Balance,
           value: '0',
           actionButton: SmallOrdinaryButton(
             text: S.current.Details.toUpperCase(),
-            group: group,
+            group: _statsConstGroup,
           ),
         ),
         UiKitStats(
@@ -69,7 +69,7 @@ class UiProfileModel {
           value: points?.toString() ?? '0',
           actionButton: SmallOrdinaryButton(
             text: S.current.Spent.toUpperCase(),
-            group: group,
+            group: _statsConstGroup,
           ),
         ),
       ],
@@ -102,6 +102,7 @@ class UiProfileModel {
     this.favoriteTagsIds,
     this.email,
     this.points,
+    this.phone,
   });
 
   /// write [copyWith] method
@@ -130,6 +131,7 @@ class UiProfileModel {
     List<int>? tagsIds,
     List<int>? favoriteTagsIds,
     String? email,
+    String? phone,
     int? points,
     bool? beInSearch
   }) =>
@@ -156,7 +158,10 @@ class UiProfileModel {
           mindsetId: mindsetId ?? this.mindsetId,
           tagsIds: tagsIds ?? this.tagsIds,
           email: email ?? this.email,
+          phone: phone ?? this.phone,
           beInSearch: beInSearch ?? this.beInSearch,
           favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
           points: points ?? this.points);
 }
+
+final AutoSizeGroup _statsConstGroup = AutoSizeGroup();

@@ -8,17 +8,17 @@ class BottomBookingBar extends StatefulWidget {
   final VoidCallback? onBook;
   final VoidCallback? onMagnify;
   final bool isLoading;
-  final int? usersCountInInviteList;
+  final Future<int>? usersCountInInviteList;
 
   const BottomBookingBar({
-    Key? key,
+    super.key,
     required this.model,
     this.onShowRoute,
     this.onBook,
-    this.usersCountInInviteList = 10,
+    this.usersCountInInviteList,
     this.isLoading = false,
     this.onMagnify,
-  }) : super(key: key);
+  });
 
   @override
   State<BottomBookingBar> createState() => _BottomBookingBarState();
@@ -26,6 +26,19 @@ class BottomBookingBar extends StatefulWidget {
 
 class _BottomBookingBarState extends State<BottomBookingBar> {
   bool animationEnded = false;
+  int? inviteCount;
+
+  @override
+  void initState() {
+    if (widget.usersCountInInviteList != null) {
+      widget.usersCountInInviteList!.then((value) {
+        setState(() {
+          inviteCount = value;
+        });
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +53,21 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
           transitionBuilder: (child, animation) {
             return FadeTransition(
               opacity: animation,
-              child: animationEnded
-                  ? const SizedBox()
-                  : child,
+              child: animationEnded ? const SizedBox() : child,
             );
           },
           child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    UiKitMessageCloud(
-                      message: S.of(context).InviteList,
-                      subtitle: S.of(context).Users(widget.usersCountInInviteList ?? 0),
-                    ),
-                    SpacingFoundation.horizontalSpace16,
-                  ],
-                ),
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              UiKitMessageCloud(
+                message: S.of(context).InviteList,
+                subtitle:
+                    (inviteCount ?? 0) == 0 ? S.of(context).BeFirstToInvite : S.of(context).Users(inviteCount ?? 0),
+              ),
+              SpacingFoundation.horizontalSpace16,
+            ],
+          ),
         ),
         SpacingFoundation.verticalSpace16,
         DecoratedBox(
@@ -99,7 +111,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                     ),
                   ),
                   SpacingFoundation.horizontalSpace12,
-                  if ((widget.model.showMagnify ?? true) && widget.usersCountInInviteList == null)
+                  if ((widget.model.showMagnify ?? true) && inviteCount == null)
                     context.outlinedButton(
                       blurred: true,
                       data: BaseUiKitButtonData(
@@ -109,7 +121,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                         ),
                       ),
                     ),
-                  if ((widget.model.showMagnify ?? true) && widget.usersCountInInviteList != null)
+                  if ((widget.model.showMagnify ?? true) && inviteCount != null)
                     UiKitLightUpAnimation(
                       onStarted: () => setState(() => animationEnded = false),
                       onFinished: () => setState(() => animationEnded = true),

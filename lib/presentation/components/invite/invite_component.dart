@@ -8,8 +8,8 @@ class InviteComponent extends StatefulWidget {
     super.key,
     required this.persons,
     required this.onLoadMore,
-    required this.onInvitePersonsChanged,
     this.invitedUser,
+    this.initialDate,
     this.onRemoveUserOptionTap,
     this.onAddWishTap,
     this.onInviteTap,
@@ -21,12 +21,12 @@ class InviteComponent extends StatefulWidget {
 
   final List<UiInvitePersonModel> persons;
   final VoidCallback onLoadMore;
-  final Function(List<UiInvitePersonModel> persons) onInvitePersonsChanged;
 
   final UiInvitePersonModel? invitedUser;
   final VoidCallback? onRemoveUserOptionTap;
   final void Function(String value, DateTime date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
+  final DateTime? initialDate;
   final ValueChanged<List<UiInvitePersonModel>>? onInviteTap;
 
   @override
@@ -40,8 +40,19 @@ class _InviteComponentState extends State<InviteComponent> {
 
   @override
   void initState() {
+    if (widget.initialDate != null) {
+      _date = widget.initialDate;
+    }
     super.initState();
     scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void didUpdateWidget(covariant InviteComponent oldWidget) {
+    if(widget.initialDate!=null){
+      _date = widget.initialDate;
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   void _scrollListener() {
@@ -79,24 +90,6 @@ class _InviteComponentState extends State<InviteComponent> {
                     : () {
                         final invitedPersons = widget.persons.where((e) => e.isSelected);
                         widget.onInviteTap?.call(invitedPersons.toList());
-                        showUiKitAlertDialog(
-                          context,
-                          AlertDialogData(
-                            defaultButtonText: S.of(context).OkayCool.toLowerCase(),
-                            defaultButtonSmall: false,
-                            title: Text(
-                              S.of(context).YouSentInvitationToNPeople(invitedPersons.length),
-                              style: boldTextTheme?.title2.copyWith(color: theme?.colorScheme.primary),
-                              textAlign: TextAlign.center,
-                            ),
-                            content: Text(
-                              S.of(context).InvitationsCanBeViewedInPrivateMessages,
-                              style: boldTextTheme?.body.copyWith(color: theme?.colorScheme.primary),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ).then((value) => context.pop());
-                        widget.onInvitePersonsChanged(invitedPersons.toList());
                       },
               ),
             ),
@@ -107,29 +100,35 @@ class _InviteComponentState extends State<InviteComponent> {
           height: 0.5.sh - MediaQuery.viewInsetsOf(context).bottom,
           borderRadius: BorderRadius.zero,
           color: ColorsFoundation.surface1,
-          child: ListView.separated(
-            controller: scrollController,
-            padding: EdgeInsets.symmetric(
-              horizontal: EdgeInsetsFoundation.horizontal16,
-              vertical: EdgeInsetsFoundation.vertical8,
-            ),
-            itemCount: widget.persons.length,
-            itemBuilder: (_, index) {
-              final person = widget.persons[index];
+          child: widget.persons.isEmpty
+              ? Center(
+                  child: Text(
+                  S.of(context).NoPeopleAvailableToInvite,
+                  style: theme?.boldTextTheme.subHeadline,
+                ))
+              : ListView.separated(
+                  controller: scrollController,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: EdgeInsetsFoundation.horizontal16,
+                    vertical: EdgeInsetsFoundation.vertical8,
+                  ),
+                  itemCount: widget.persons.length,
+                  itemBuilder: (_, index) {
+                    final person = widget.persons[index];
 
-              return UiKitUserTileWithCheckbox(
-                name: person.name,
-                subtitle: person.description,
-                isSelected: person.isSelected,
-                date: person.date,
-                rating: person.rating ?? 0,
-                avatarLink: person.avatarLink,
-                handShake: person.handshake,
-                onTap: (isInvited) => setState(() => person.isSelected = isInvited),
-              );
-            },
-            separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
-          ),
+                    return UiKitUserTileWithCheckbox(
+                      name: person.name,
+                      subtitle: person.description,
+                      isSelected: person.isSelected,
+                      date: person.date,
+                      rating: person.rating ?? 0,
+                      avatarLink: person.avatarLink,
+                      handShake: person.handshake,
+                      onTap: (isInvited) => setState(() => person.isSelected = isInvited),
+                    );
+                  },
+                  separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
+                ),
         ),
         SpacingFoundation.verticalSpace16,
         widget.invitedUser != null
@@ -163,11 +162,13 @@ class _InviteComponentState extends State<InviteComponent> {
                       context.smallOutlinedButton(
                         blurred: false,
                         data: BaseUiKitButtonData(
-                          onPressed: () => widget.changeDate?.call().then((selectedDate) {
-                            if (selectedDate != null) {
-                              setState(() => _date = selectedDate);
-                            }
-                          }),
+                          onPressed: widget.initialDate == null
+                              ? () => widget.changeDate?.call().then((selectedDate) {
+                                    if (selectedDate != null) {
+                                      setState(() => _date = selectedDate);
+                                    }
+                                  })
+                              : null,
                           iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.calendar,
                           ),
@@ -187,6 +188,7 @@ class _InviteComponentState extends State<InviteComponent> {
                   ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                   SpacingFoundation.verticalSpace8,
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ConstrainedBox(
                         constraints: BoxConstraints(
@@ -194,8 +196,8 @@ class _InviteComponentState extends State<InviteComponent> {
                           maxWidth: 0.75.sw,
                         ),
                         child: UiKitInputFieldNoIcon(
-                          maxLines: 3,
                           minLines: 1,
+                          maxSymbols: 100,
                           controller: _wishController,
                           hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,
@@ -230,7 +232,7 @@ class _InviteComponentState extends State<InviteComponent> {
                   ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 ],
               ),
-        SpacingFoundation.verticalSpace24,
+        SpacingFoundation.verticalSpace16,
       ],
     );
   }

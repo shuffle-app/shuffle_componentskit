@@ -13,7 +13,8 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -67,13 +68,18 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
+                  ? GlobalComponent(
+                      globalConfiguration: configuration,
+                      child: const ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.18')
-                          .then((_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(body: Center(child: LoadingWidget()));
+                          .then(
+                              (_) => Future.delayed(const Duration(seconds: 1)))
+                          .then((_) => UiKitTheme.of(c).onThemeUpdated(
+                              themeMatcher(configuration.appConfig.theme)));
+                      return const Scaffold(
+                          body: Center(child: LoadingWidget()));
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -90,7 +96,8 @@ class ComponentsTestPage extends StatefulWidget {
   State<ComponentsTestPage> createState() => _ComponentsTestPageState();
 }
 
-class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProviderStateMixin {
+class _ComponentsTestPageState extends State<ComponentsTestPage>
+    with TickerProviderStateMixin {
   late final likeController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 1, milliseconds: 500),
@@ -153,128 +160,261 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
     );
 
     return Scaffold(
-        appBar: CustomAppBar(
-          title:
-              'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
-          // centerTitle: true,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SpacingFoundation.verticalSpace16,
-              context.button(
+      appBar: CustomAppBar(
+        title:
+            'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
+        // centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
-                  text: 'show favorite merge component',
-                  onPressed: () => context.push(
-                    FavoritesMergeComponent(
-                      contentsList: List.generate(
-                        3,
-                        (index) {
-                          return UiModelFavoritesMergeContentList(
-                              title: 'The Best Parties $index',
-                              contents: List.generate(
-                                3,
-                                (index) => UiModelFavoritesMergeComponent(
-                                  imageUrl: GraphicsFoundation.instance.png.place.path,
-                                  title: 'La Vue Citytel Group',
-                                  tags: [
-                                    UiKitTag(
-                                      title: 'Club',
-                                      icon: ShuffleUiKitIcons.club,
-                                      unique: false,
-                                    ),
-                                    UiKitTag(
-                                      title: 'Free',
-                                      icon: ShuffleUiKitIcons.discount,
-                                      unique: false,
-                                    ),
-                                    UiKitTag(
-                                      title: 'Closed',
-                                      icon: ShuffleUiKitIcons.clock,
-                                      unique: false,
-                                    ),
-                                    UiKitTag(
-                                      title: '7 min',
-                                      icon: ShuffleUiKitIcons.route,
-                                      unique: false,
-                                    ),
-                                  ],
-                                ),
-                              ));
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show favorite folder bottom sheet',
-                  onPressed: () => showUiKitGeneralFullScreenDialog(
-                    context,
-                    GeneralDialogData(
-                      child: FavoriteFoldersBottomSheetComponent(
-                        places: List.generate(
-                          4,
-                          (index) => PlacePreview(
-                            onTap: (value) {},
-                            place: UiPlaceModel(
-                              id: index + 1,
-                              media: [
-                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                              ],
-                              title: 'lorem ipsum dolor sit amet',
-                              description:
-                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
-                              baseTags: [
-                                UiKitTag(
-                                  title: 'Club',
-                                  icon: ShuffleUiKitIcons.club,
-                                  unique: false,
-                                ),
-                                UiKitTag(
-                                  title: 'Free',
-                                  icon: ShuffleUiKitIcons.discount,
-                                  unique: false,
-                                ),
-                                UiKitTag(
-                                  title: 'Closed',
-                                  icon: ShuffleUiKitIcons.clock,
-                                  unique: false,
-                                ),
-                                UiKitTag(
-                                  title: '7 min',
-                                  icon: ShuffleUiKitIcons.route,
-                                  unique: false,
-                                ),
-                              ],
-                              tags: [],
-                            ),
-                            isFavorite: Stream<bool>.value(true),
-                            showFavoriteBtn: true,
-                            model: const ComponentModel(pageBuilderType: PageBuilderType.page, version: '1.0.18'),
+                    onPressed: () => context.push(
+                          PropertyManagementComponent(
+                            propertySearchOptions: (value) async {
+                              return [
+                                'Active tiger',
+                                'Interested adventure',
+                                'Forever resting sloth',
+                                'Foodie'
+                              ];
+                            },
+                            selectedProperties: [
+                              UiModelPropertyType(title: 'Stripes', id: 0),
+                              UiModelPropertyType(title: 'Melomaniac', id: 1),
+                              UiModelPropertyType(title: 'Drinker', id: 2),
+                              UiModelPropertyType(title: 'Smoker', id: 3),
+                            ],
+                            recentlyAddedProperties: [
+                              UiModelPropertyType(title: 'Stripes', id: 0),
+                              UiModelPropertyType(title: 'Melomaniac', id: 1),
+                              UiModelPropertyType(title: 'Drinker', id: 2),
+                              UiModelPropertyType(title: 'Smoker', id: 3),
+                            ],
+                            onRecentlyAddedPropertyTapped: (value) {},
+                            onSelectedPropertyTapped: (value) {},
+                            onPropertyFieldSubmitted: (value) {},
+                            onAddPropertyTypeTap: () {},
+                            onDeletePropertyTypeTap: () {},
+                            onEditPropertyTypeTap: () {},
+                            selectedPropertyTypeTitle: 'Active tiger',
+                            onPropertyTypeTapped: (value) {},
+                            propertyTypes: [
+                              UiModelPropertyType(title: 'Active tiger', id: 0),
+                              UiModelPropertyType(
+                                  title: 'Interested adventure', id: 1),
+                              UiModelPropertyType(
+                                  title: 'Forever resting sloth', id: 2),
+                              UiModelPropertyType(title: 'Foodie', id: 3),
+                            ],
                           ),
                         ),
-                        onAddToMyFavorites: () {},
-                        personName: 'Kaiya Garcia',
+                    text: 'show property management component')),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show spent point barcode component',
+                onPressed: () {
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      topPadding: 0.35.sh,
+                      child: SpentPointBarcodeComponent(
+                        discountTitle: 'Free coctails',
+                        uiModelDiscounts: UiModelDiscounts(
+                          buttonTitle: '30% discount '
+                              '(-1500)',
+                          barcode: '189576975672367',
+                          contentShortUiModel: ContentShortUiModel(
+                            imageUrl:
+                                GraphicsFoundation.instance.png.place.path,
+                            title: 'La Vue Citytel Group',
+                            tags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.club,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show spent points component',
+                onPressed: () => context.push(
+                  SpentPointsComponent(
+                    balance: 1234,
+                    onHistoryTap: () {},
+                    onDiscountTap: (value) {},
+                    discountsList: List.generate(
+                      6,
+                      (index) {
+                        return UiModelDiscounts(
+                          buttonTitle: '30% discount '
+                              '(-1500)',
+                          barcode: '189576975672367',
+                          contentShortUiModel: ContentShortUiModel(
+                            imageUrl:
+                                GraphicsFoundation.instance.png.place.path,
+                            title: 'La Vue Citytel Group',
+                            tags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.club,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show favorite create folder',
-                  onPressed: () => context.push(
-                    FavoriteCreateFolderComponent(
-                      titleController: TextEditingController(),
-                      onConfirm: () {
-                        context.pop();
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show view history point',
+                onPressed: () => context.push(
+                  ViewHistoryPointComponent(
+                    onTapBarCode: () {},
+                    onTabChange: (value) {},
+                    pagingController:
+                        PagingController<int, PointHistoryUniversalModel>(
+                      firstPageKey: 0,
+                    )..appendLastPage(
+                            //when the given List changes, the widget changes as well
+                            //// FOR ACCRUAL TAB
+                            List.generate(
+                              10,
+                              (index) => PointHistoryUniversalModel(
+                                uiModelViewHistoryAccrual:
+                                    UiModelViewHistoryAccrual(
+                                  title: 'The Best Parties $index',
+                                  date: DateTime.now(),
+                                  points: index,
+                                ),
+                              ),
+                            ),
+                            //// FOR ACTIVATION TAB
+                            // List.generate(
+                            //   10,
+                            //   (index) => PointHistoryUniversalModel(
+                            //       contentShortUiModel:
+                            //       ContentShortUiModel(
+                            //     imageUrl:
+                            //         GraphicsFoundation.instance.png.place.path,
+                            //     title: 'La Vue Citytel Group',
+                            //     tags: [
+                            //       UiKitTag(
+                            //         title: 'Club',
+                            //         icon: ShuffleUiKitIcons.club,
+                            //         unique: false,
+                            //       ),
+                            //       UiKitTag(
+                            //         title: 'Free',
+                            //         icon: ShuffleUiKitIcons.discount,
+                            //         unique: false,
+                            //       ),
+                            //       UiKitTag(
+                            //         title: 'Closed',
+                            //         icon: ShuffleUiKitIcons.clock,
+                            //         unique: false,
+                            //       ),
+                            //       UiKitTag(
+                            //         title: '7 min',
+                            //         icon: ShuffleUiKitIcons.route,
+                            //         unique: false,
+                            //       ),
+                            //     ],
+                            //   )),
+                            // ),
+                          ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show favorite merge component',
+                onPressed: () => context.push(
+                  FavoritesMergeComponent(
+                    contentsList: List.generate(
+                      3,
+                      (index) {
+                        return UiModelFavoritesMergeContentList(
+                            title: 'The Best Parties $index',
+                            contents: List.generate(
+                              3,
+                              (index) => ContentShortUiModel(
+                                imageUrl:
+                                    GraphicsFoundation.instance.png.place.path,
+                                title: 'La Vue Citytel Group',
+                                tags: [
+                                  UiKitTag(
+                                    title: 'Club',
+                                    icon: ShuffleUiKitIcons.club,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Free',
+                                    icon: ShuffleUiKitIcons.discount,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: 'Closed',
+                                    icon: ShuffleUiKitIcons.clock,
+                                    unique: false,
+                                  ),
+                                  UiKitTag(
+                                    title: '7 min',
+                                    icon: ShuffleUiKitIcons.route,
+                                    unique: false,
+                                  ),
+                                ],
+                              ),
+                            ));
                       },
                     ),
                   ),
@@ -478,56 +618,47 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
-                  text: 'show premium subscription',
-                  onPressed: () => buildComponent(
-                    context,
-                    ComponentModel.fromJson(
-                      configuration.appConfig.content['premium_account_info'],
-                    ),
-                    ComponentBuilder(
-                      child: AccountSubscriptionComponent(
-                        configModel: ComponentModel.fromJson(
-                          configuration.appConfig.content['premium_account_info'],
-                        ),
-                        title: 'Premium account',
-                        uiModel: UiSubscriptionModel(
-                          privacyPolicyUrl: '',
-                          termsOfServiceUrl: '',
-                          subscriptionFeatures: [
-                            'lorem ipsum dolor sit amet',
-                            'lorem ipsum dolor sit amet',
-                            'lorem ipsum dolor sit amet',
-                            'lorem ipsum dolor sit amet',
-                            'lorem ipsum dolor sit amet',
-                            'lorem ipsum dolor sit amet',
-                          ],
-                          userType: UserTileType.premium,
-                          userName: 'userName',
-                          userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
-                          nickname: 'nickname',
-                          offers: [
-                            SubscriptionOfferModel(
-                              storePurchaseId: '',
-                              currency: '\$',
-                              savings: 2,
-                              price: 4.90,
-                              name: 'Annually',
-                              periodName: 'month',
-                            ),
-                            SubscriptionOfferModel(
-                              storePurchaseId: '',
-                              currency: '\$',
-                              price: 5,
-                              name: 'Monthly',
-                              periodName: 'month',
-                            ),
-                          ],
-                        ),
+                    text: 'show create schedule',
+                    onPressed: () =>
+                        context.push(const CreateScheduleWidget()))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show create schedule',
+                    onPressed: () =>
+                        context.push(const CreateScheduleWidget()))),
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show invite Bottom Sheet',
+              onPressed: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 10,
+                  useRootNavigator: false,
+                  child: InviteComponent(
+                    persons: List.generate(
+                      15,
+                      (_) => UiInvitePersonModel(
+                        date: DateTime.now(),
+                        name: 'Marry Williams',
+                        rating: 4,
+                        handshake: true,
+                        avatarLink:
+                            GraphicsFoundation.instance.png.mockUserAvatar.path,
+                        description: 'Any cheerful person can invite me',
+                        id: 0,
                       ),
                     ),
+                    onLoadMore: () {},
+                    changeDate: () async {
+                      return DateTime.now();
+                    },
+                    onInvitePersonsChanged:
+                        (List<UiInvitePersonModel> persons) {},
                   ),
                 ),
               ),
@@ -541,17 +672,38 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       ComponentModel.fromJson(
                         configuration.appConfig.content['chat_page'],
                       ),
-                      ComponentBuilder(
-                        child: ChatComponent(
-                          chatItemUiModel: ChatItemUiModel(
-                            id: 0,
-                            username: 'username',
-                            nickname: 'nickname',
-                            userType: UserTileType.ordinary,
-                            lastMessage: 'lastMessage',
-                            lastMessageTime: DateTime.now().subtract(
-                              const Duration(days: 2),
-                            ),
+                      title: 'Pro account',
+                      uiModel: UiSubscriptionModel(
+                        privacyPolicyUrl: '',
+                        termsOfServiceUrl: '',
+                        userType: UserTileType.pro,
+                        subscriptionFeatures: [
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                        ],
+                        userName: 'userName',
+                        userAvatarUrl:
+                            GraphicsFoundation.instance.png.mockAvatar.path,
+                        nickname: 'nickname',
+                        offers: [
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            savings: 2,
+                            price: 4.49,
+                            name: 'Annually',
+                            periodName: 'month',
+                          ),
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            price: 4.99,
+                            name: 'Monthly',
+                            periodName: 'month',
                           ),
                           scrollController: ScrollController(),
                           messageController: TextEditingController(),
@@ -611,33 +763,53 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   },
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show chats screen',
-                  onPressed: () => buildComponent(
-                    context,
-                    ComponentModel.fromJson(
-                      configuration.appConfig.content['chats'],
-                    ),
-                    ComponentBuilder(
-                      child: AllChatsComponent(
-                        controller: PagingController<int, ChatItemUiModel>(firstPageKey: 1)
-                          ..appendPage(
-                            List<ChatItemUiModel>.generate(
-                              10,
-                              (index) => ChatItemUiModel(
-                                id: index,
-                                userType: UserTileType.ordinary,
-                                username: 'Araratjan $index',
-                                nickname: '@arajan',
-                                avatarUrl: '',
-                                lastMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-                                lastMessageTime: DateTime.now().subtract(Duration(hours: 6 * index)),
-                                unreadMessageCount: index % 2 == 0 ? index : null,
-                              ),
-                            ),
-                            2,
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show premium subscription',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                    configuration.appConfig.content['premium_account_info'],
+                  ),
+                  ComponentBuilder(
+                    child: AccountSubscriptionComponent(
+                      configModel: ComponentModel.fromJson(
+                        configuration.appConfig.content['premium_account_info'],
+                      ),
+                      title: 'Premium account',
+                      uiModel: UiSubscriptionModel(
+                        privacyPolicyUrl: '',
+                        termsOfServiceUrl: '',
+                        subscriptionFeatures: [
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                        ],
+                        userType: UserTileType.premium,
+                        userName: 'userName',
+                        userAvatarUrl:
+                            GraphicsFoundation.instance.png.mockAvatar.path,
+                        nickname: 'nickname',
+                        offers: [
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            savings: 2,
+                            price: 4.90,
+                            name: 'Annually',
+                            periodName: 'month',
+                          ),
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            price: 5,
+                            name: 'Monthly',
+                            periodName: 'month',
                           ),
                         onChatSelected: (index) {},
                       ),
@@ -655,59 +827,112 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       configuration.appConfig.content['feed_business'],
                     ),
                     ComponentBuilder(
-                      child: Scaffold(
-                        body: FeedComponent(
-                          controller: PagingController(firstPageKey: GlobalKey()),
-                          hasFavourites: true,
-                          onNichePressed: (value) {},
-                          progressIndicator: UiKitShimmerProgressIndicator(
-                            gradient: GradientFoundation.greyGradient,
-                            child: PlacePreview(
-                              onTap: (id) {},
-                              place: UiPlaceModel(
-                                id: 0,
-                                description: '',
-                                tags: [],
-                                media: [UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path)],
+                      child: ChatComponent(
+                        chatItemUiModel: ChatItemUiModel(
+                          id: 0,
+                          username: 'username',
+                          nickname: 'nickname',
+                          userType: UserTileType.ordinary,
+                          lastMessage: 'lastMessage',
+                          lastMessageTime: DateTime.now().subtract(
+                            const Duration(days: 2),
+                          ),
+                        ),
+                        scrollController: ScrollController(),
+                        messageController: TextEditingController(),
+                        pagingController:
+                            PagingController<int, ChatMessageUiModel>(
+                          firstPageKey: 1,
+                        )..appendLastPage(
+                                [
+                                  ChatMessageUiModel(
+                                    messageType: MessageType.message,
+                                    senderIsMe: false,
+                                    timeSent: DateTime.now(),
+                                    message:
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                  ),
+                                  ChatMessageUiModel(
+                                    messageType: MessageType.message,
+                                    senderIsMe: true,
+                                    timeSent: DateTime.now(),
+                                    message:
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                  ),
+                                  ChatMessageUiModel(
+                                    messageType: MessageType.invitation,
+                                    senderIsMe: true,
+                                    timeSent: DateTime.now(),
+                                    message:
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                                    invitationData: ChatMessageInvitationData(
+                                      username: '@araratjan',
+                                      placeId: 1,
+                                      placeName: 'Burj Khalifa 122nd Floor',
+                                      placeImagePath: GraphicsFoundation
+                                          .instance.png.place.path,
+                                      invitedPeopleAvatarPaths: [
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock1.path,
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock2.path,
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock3.path,
+                                        GraphicsFoundation
+                                            .instance.png.inviteMock4.path,
+                                      ],
+                                      tags: [
+                                        UiKitTag(
+                                          title: 'Cheap',
+                                          icon: ShuffleUiKitIcons.cutlery,
+                                        ),
+                                        UiKitTag(
+                                          title: 'Cheap',
+                                          icon: ShuffleUiKitIcons.cutlery,
+                                        ),
+                                        UiKitTag(
+                                          title: 'Cheap',
+                                          icon: ShuffleUiKitIcons.cutlery,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                              model: ComponentFeedModel(
-                                content: const ContentBaseModel(),
-                                positionModel: PositionModel(version: ''),
-                                version: '',
-                                pageBuilderType: PageBuilderType.page,
-                              ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show chats screen',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                    configuration.appConfig.content['chats'],
+                  ),
+                  ComponentBuilder(
+                    child: AllChatsComponent(
+                      controller: PagingController<int, ChatItemUiModel>(
+                          firstPageKey: 1)
+                        ..appendPage(
+                          List<ChatItemUiModel>.generate(
+                            10,
+                            (index) => ChatItemUiModel(
+                              id: index,
+                              userType: UserTileType.ordinary,
+                              username: 'Araratjan $index',
+                              nickname: '@arajan',
+                              avatarUrl: '',
+                              lastMessage:
+                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                              lastMessageTime: DateTime.now()
+                                  .subtract(Duration(hours: 6 * index)),
+                              unreadMessageCount: index % 2 == 0 ? index : null,
                             ),
-                          ),
-                          // storiesPagingController: vm.storiesPagingController.value,
-                          // onReactionTapped: vm.onReactionTapped,
-                          preserveScrollPosition: true,
-                          showBusinessContent: true,
-                          // controller: vm.controller.value,
-                          feed: UiFeedModel(
-                            niches: [UiKitTag(title: 'title', icon: ShuffleUiKitIcons.active)],
-                            recommendedBusinessEvents: [
-                              UiEventModel(
-                                id: 1,
-                              )
-                            ],
-                            activeFilterChips: [UiKitTag(title: 'title', icon: ShuffleUiKitIcons.active)],
-                            filterChips: [UiKitTag(title: 'title', icon: ShuffleUiKitIcons.active)],
-                            recommendedEvent: UiEventModel(id: 1),
-                            showHowItWorksTitle: true,
-                            showHowItWorksBody: true,
-                            isHealthKitEnabled: true,
-                          ),
-                          //TODO remove hardcode
-                          onEventPressed: () {},
-                          onListItemPressed: (id, type) {},
-                          onMoodPressed: () {},
-                          onMoodCheck: () {},
-                          onLoadMoreChips: () {},
-                          onMoodCompleted: () async {},
-                          mood: UiMoodModel(
-                            id: 1,
-                            title: '',
-                            logo: '',
                           ),
                           onTagSortPressed: () {},
                           onHowItWorksPoped: () {},
@@ -718,109 +943,151 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show search',
-                  onPressed: () => buildComponent(
-                    context,
-                    ComponentModel.fromJson(configuration.appConfig.content['search']),
-                    ComponentBuilder(
-                      child: Scaffold(
-                        body: SearchComponent(
-                          showBusinessContent: false,
-                          searchController: TextEditingController(),
-                          search: UiSearchModel(
-                            heroSearchTag: 'heroSearchTag',
-                            places: List.generate(
-                              10,
-                              (index) => UiPlaceModel(
-                                id: index + 1,
-                                rating: 4 + (index / 10),
-                                media: [
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                ],
-                                title: 'lorem ipsum dolor sit amet',
-                                description:
-                                    'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
-                                baseTags: [
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                ],
-                                tags: [
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Duh',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Metal',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Heavy',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Club',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheaper',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                ],
-                              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show feed business',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentFeedModel.fromJson(
+                    configuration.appConfig.content['feed_business'],
+                  ),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: FeedComponent(
+                        showBusinessContent: true,
+                        controller:
+                            PagingController<int, dynamic>(firstPageKey: 1),
+                        feed: UiFeedModel(
+                          recommendedEvent: event,
+                          // moods: List.generate(
+                          //   4,
+                          //       (index) =>
+                          //       UiMoodModel(
+                          //         id: 1,
+                          //         title: 'Want to have some fun',
+                          //         logo: 'assets/images/png/crazy_emoji.png',
+                          //       ),
+                          // ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show search',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                      configuration.appConfig.content['search']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: SearchComponent(
+                        showBusinessContent: false,
+                        searchController: TextEditingController(),
+                        search: UiSearchModel(
+                          heroSearchTag: 'heroSearchTag',
+                          places: List.generate(
+                            10,
+                            (index) => UiPlaceModel(
+                              id: index + 1,
+                              rating: 4 + (index / 10),
+                              media: [
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                              ],
+                              title: 'lorem ipsum dolor sit amet',
+                              description:
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              baseTags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                              ],
+                              tags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Duh',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Metal',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Heavy',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Club',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheaper',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -829,109 +1096,118 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show search for business',
-                  onPressed: () => buildComponent(
-                    context,
-                    ComponentModel.fromJson(configuration.appConfig.content['search']),
-                    ComponentBuilder(
-                      child: Scaffold(
-                        body: SearchComponent(
-                          showBusinessContent: true,
-                          searchController: TextEditingController(),
-                          search: UiSearchModel(
-                            heroSearchTag: 'heroSearchBusinessTag',
-                            places: List.generate(
-                              10,
-                              (index) => UiPlaceModel(
-                                id: index + 1,
-                                rating: 4 + (index / 10),
-                                media: [
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                  UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                                ],
-                                title: 'lorem ipsum dolor sit amet',
-                                description:
-                                    'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
-                                baseTags: [
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: false,
-                                  ),
-                                ],
-                                tags: [
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheap',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Duh',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Metal',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Heavy',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Club',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                  UiKitTag(
-                                    title: 'Cheaper',
-                                    icon: ShuffleUiKitIcons.cutlery,
-                                    unique: true,
-                                  ),
-                                ],
-                              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show search for business',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                      configuration.appConfig.content['search']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: SearchComponent(
+                        showBusinessContent: true,
+                        searchController: TextEditingController(),
+                        search: UiSearchModel(
+                          heroSearchTag: 'heroSearchBusinessTag',
+                          places: List.generate(
+                            10,
+                            (index) => UiPlaceModel(
+                              id: index + 1,
+                              rating: 4 + (index / 10),
+                              media: [
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                                UiKitMediaPhoto(
+                                    link: GraphicsFoundation
+                                        .instance.png.place.path),
+                              ],
+                              title: 'lorem ipsum dolor sit amet',
+                              description:
+                                  'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                              baseTags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: false,
+                                ),
+                              ],
+                              tags: [
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheap',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Duh',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Metal',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Heavy',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Club',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                                UiKitTag(
+                                  title: 'Cheaper',
+                                  icon: ShuffleUiKitIcons.cutlery,
+                                  unique: true,
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -1031,244 +1307,299 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ),
                             ),
                           ),
-                        ],
-                        name: 'Name asads',
-                        places: List.generate(
-                          2,
-                          (index) => UiPlaceModel(
-                            id: index + 1,
-                            media: [
-                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                              UiKitMediaPhoto(link: GraphicsFoundation.instance.png.place.path),
-                            ],
-                            title: 'lorem ipsum dolor sit amet',
-                            description:
-                                'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
-                            baseTags: [
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                            ],
-                            tags: [
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Duh',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Metal',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Heavy',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Club',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Cheaper',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                            ],
-                          ),
+                        ),
+                      ],
+                      name: 'Name asads',
+                      places: List.generate(
+                        2,
+                        (index) => UiPlaceModel(
+                          id: index + 1,
+                          media: [
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                            UiKitMediaPhoto(
+                                link:
+                                    GraphicsFoundation.instance.png.place.path),
+                          ],
+                          title: 'lorem ipsum dolor sit amet',
+                          description:
+                              'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                          baseTags: [
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: false,
+                            ),
+                          ],
+                          tags: [
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Cheap',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Duh',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Metal',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Heavy',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Club',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                            UiKitTag(
+                              title: 'Cheaper',
+                              icon: ShuffleUiKitIcons.cutlery,
+                              unique: true,
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      text: 'show onboarding',
-                      onPressed: () => buildComponent(
-                          context,
-                          ComponentModel.fromJson(configuration.appConfig.content['onboarding']),
-                          ComponentBuilder(child: Scaffold(body: OnboardingComponent()))))),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      text: 'show welcome page',
-                      onPressed: () => buildComponent(
-                          context,
-                          ComponentModel.fromJson(configuration.appConfig.content['welcome']),
-                          ComponentBuilder(
-                              child: Scaffold(
-                                  body: WelcomeComponent(
-                            onFinished: () => context.pop(),
-                          )))))),
-              SpacingFoundation.verticalSpace16,
-              // context.button(
-              //     data: BaseUiKitButtonData(
-              //         text: 'show about user step 1',
-              // onPressed: () =>
-              //     buildComponent(
-              //         context,
-              //         ComponentModel.fromJson(configuration.appConfig.content['about_user']),
-              //         ComponentBuilder(
-              //             child: Scaffold(
-              //               body: SafeArea(
-              //                 child: SingleChildScrollView(
-              //                     child: AboutUserComponent(
-              //                       nameController: TextEditingController(),
-              //                       nickNameController: TextEditingController(),
-              //                       aboutUserModel: UiAboutUserModel(),
-              //                     )),
-              //               ),
-              //             ))))),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      text: 'show preferences selector',
-                      onPressed: () => buildComponent(
-                          context,
-                          ComponentShuffleModel.fromJson(configuration.appConfig.content['about_user']),
-                          ComponentBuilder(
-                              child: Scaffold(
-                                  body: PreferencesComponent(
-                            preferences: UiPreferencesModel([
-                              UiKitImportanceChip(id: -1, title: 'Electronic\nMusic', importance: ImportanceChip.high),
-                              UiKitImportanceChip(id: -1, title: 'Swimming', importance: ImportanceChip.medium),
-                              UiKitImportanceChip(id: -1, title: 'Theme\nParks', importance: ImportanceChip.none),
-                              UiKitImportanceChip(id: -1, title: 'Hookah', importance: ImportanceChip.high),
-                              UiKitImportanceChip(id: -1, title: 'Electronic\nMusic', importance: ImportanceChip.high),
-                              UiKitImportanceChip(id: -1, title: 'Swimming', importance: ImportanceChip.medium),
-                              UiKitImportanceChip(id: -1, title: 'Theme\nParks', importance: ImportanceChip.none),
-                              UiKitImportanceChip(id: -1, title: 'Hookah', importance: ImportanceChip.high),
-                              UiKitImportanceChip(id: -1, title: 'Electronic\nMusic', importance: ImportanceChip.high),
-                              UiKitImportanceChip(id: -1, title: 'Swimming', importance: ImportanceChip.medium),
-                              UiKitImportanceChip(id: -1, title: 'Theme\nParks', importance: ImportanceChip.none),
-                              UiKitImportanceChip(id: -1, title: 'Hookah', importance: ImportanceChip.high),
-                            ], TextEditingController()),
-                            onSubmit: () {},
-                            onSelect: () {},
-                          )))))),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      text: 'show profile',
-                      onPressed: () => buildComponent(
-                          context,
-                          ComponentShuffleModel.fromJson(configuration.appConfig.content['profile']),
-                          ComponentBuilder(
-                              child: Scaffold(
-                            body: ProfileComponent(
-                                profile: UiProfileModel(
-                              name: 'Marry Williams',
-                              nickname: '@marywill',
-                              description:
-                                  'Just walking here and there trying to find something unique and interesting to show you!',
-                              avatarUrl: 'assets/images/png/profile_avatar.png',
-                              // interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
-                              // followers: 2650,
-                            )),
-                          ))))),
-              SpacingFoundation.verticalSpace16,
-              context.button(
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
-                  text: 'show shuffle',
-                  onPressed: () => buildComponent(
-                    context,
-                    ComponentShuffleModel.fromJson(configuration.appConfig.content['shuffle']),
-                    ComponentBuilder(
-                      child: Scaffold(
-                        body: ShuffleComponent(
-                          configModel: ComponentShuffleModel.fromJson(configuration.appConfig.content['shuffle']),
-                          shuffle: UiShuffleModel(
-                            likeController: likeController,
-                            dislikeController: dislikeController,
-                            items: List.generate(
-                              4,
-                              (index) => UiKitSwiperCard(
-                                id: 0,
-                                title: 'Dance Again',
-                                subtitle: 'Unique place for unique people',
-                                imageLink: index == 0
-                                    ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
-                                    : index == 1
-                                        ? 'https://www.trutravels.com/blog/finns-beach-club.png'
-                                        : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
-                                tags: [
-                                  const UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: ShuffleUiKitIcons.cocktail,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: ShuffleUiKitIcons.cocktail,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: ShuffleUiKitIcons.cocktail,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: ShuffleUiKitIcons.cocktail,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                  UiKitTagWidget(
-                                    title: 'Club',
-                                    icon: ShuffleUiKitIcons.cocktail,
-                                    customSpace: SpacingFoundation.horizontalSpace8,
-                                    showSpacing: true,
-                                  ),
-                                ],
-                              ),
+                    text: 'show onboarding',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentModel.fromJson(
+                            configuration.appConfig.content['onboarding']),
+                        ComponentBuilder(
+                            child: Scaffold(body: OnboardingComponent()))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show welcome page',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentModel.fromJson(
+                            configuration.appConfig.content['welcome']),
+                        ComponentBuilder(
+                            child: Scaffold(
+                                body: WelcomeComponent(
+                          onFinished: () => context.pop(),
+                        )))))),
+            SpacingFoundation.verticalSpace16,
+            // context.button(
+            //     data: BaseUiKitButtonData(
+            //         text: 'show about user step 1',
+            // onPressed: () =>
+            //     buildComponent(
+            //         context,
+            //         ComponentModel.fromJson(configuration.appConfig.content['about_user']),
+            //         ComponentBuilder(
+            //             child: Scaffold(
+            //               body: SafeArea(
+            //                 child: SingleChildScrollView(
+            //                     child: AboutUserComponent(
+            //                       nameController: TextEditingController(),
+            //                       nickNameController: TextEditingController(),
+            //                       aboutUserModel: UiAboutUserModel(),
+            //                     )),
+            //               ),
+            //             ))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show preferences selector',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentShuffleModel.fromJson(
+                            configuration.appConfig.content['about_user']),
+                        ComponentBuilder(
+                            child: Scaffold(
+                                body: PreferencesComponent(
+                          preferences: UiPreferencesModel([
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Hookah',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Hookah',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Electronic\nMusic',
+                                importance: ImportanceChip.high),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Swimming',
+                                importance: ImportanceChip.medium),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Theme\nParks',
+                                importance: ImportanceChip.none),
+                            UiKitImportanceChip(
+                                id: -1,
+                                title: 'Hookah',
+                                importance: ImportanceChip.high),
+                          ], TextEditingController()),
+                          onSubmit: () {},
+                          onSelect: () {},
+                        )))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show profile',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentShuffleModel.fromJson(
+                            configuration.appConfig.content['profile']),
+                        ComponentBuilder(
+                            child: Scaffold(
+                          body: ProfileComponent(
+                              profile: UiProfileModel(
+                            name: 'Marry Williams',
+                            nickname: '@marywill',
+                            description:
+                                'Just walking here and there trying to find something unique and interesting to show you!',
+                            avatarUrl: 'assets/images/png/profile_avatar.png',
+                            // interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
+                            // followers: 2650,
+                          )),
+                        ))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show shuffle',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentShuffleModel.fromJson(
+                      configuration.appConfig.content['shuffle']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: ShuffleComponent(
+                        configModel: ComponentShuffleModel.fromJson(
+                            configuration.appConfig.content['shuffle']),
+                        shuffle: UiShuffleModel(
+                          likeController: likeController,
+                          dislikeController: dislikeController,
+                          items: List.generate(
+                            4,
+                            (index) => UiKitSwiperCard(
+                              id: 0,
+                              title: 'Dance Again',
+                              subtitle: 'Unique place for unique people',
+                              imageLink: index == 0
+                                  ? 'https://www.vipbeachclubbali.com/wp-content/uploads/2019/05/FINNS-12.jpg'
+                                  : index == 1
+                                      ? 'https://www.trutravels.com/blog/finns-beach-club.png'
+                                      : 'https://media.cntraveler.com/photos/59f0e2c6b222cd1c857a0c8a/master/w_1200',
+                              tags: [
+                                const UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: ShuffleUiKitIcons.cocktail,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: ShuffleUiKitIcons.cocktail,
+                                  customSpace:
+                                      SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: ShuffleUiKitIcons.cocktail,
+                                  customSpace:
+                                      SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: ShuffleUiKitIcons.cocktail,
+                                  customSpace:
+                                      SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                                UiKitTagWidget(
+                                  title: 'Club',
+                                  icon: ShuffleUiKitIcons.cocktail,
+                                  customSpace:
+                                      SpacingFoundation.horizontalSpace8,
+                                  showSpacing: true,
+                                ),
+                              ],
                             ),
                           ),
                           indexNotifier: ValueNotifier<int>(0),
@@ -1279,100 +1610,104 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show company profile',
-                  onPressed: () => buildComponent(
-                    context,
-                    ComponentModel.fromJson(configuration.appConfig.content['company_profile']),
-                    ComponentBuilder(
-                      child: CompanyProfileComponent(
-                        onProfileItemChosen: (value) {},
-                      ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company profile',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                      configuration.appConfig.content['company_profile']),
+                  ComponentBuilder(
+                    child: CompanyProfileComponent(
+                      onProfileItemChosen: (value) {},
                     ),
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              // context.button(
-              //     data: BaseUiKitButtonData(
-              //         text: 'show spinner',
-              //         onPressed: () => buildComponent(
-              //             context,
-              //             ComponentSpinnerModel.fromJson(configuration.appConfig.content['spinner']),
-              //             ComponentBuilder(
-              //                 child: Scaffold(
-              //                     body: SpinnerComponent(
-              //                         onEventTap: () {},
-              //                         onFavoriteTap: () {},
-              //                         spinner: UiSpinnerModel(
-              //                             categories: List<String>.generate(
-              //                               10,
-              //                               (index) => 'Category ${index + 1}',
-              //                             ),
-              //                             events: List.generate(5, (index) => event)))))))),
-              // SpacingFoundation.verticalSpace16,
-              // context.button(
-              //     data: BaseUiKitButtonData(
-              //         text: 'show feed',
-              //         onPressed: () =>
-              //             buildComponent(
-              //                 context,
-              //                 ComponentFeedModel.fromJson(configuration.appConfig.content['feed']),
-              //                 ComponentBuilder(
-              //                     child: Scaffold(
-              //                       // appBar: AppBar(
-              //                       //   backgroundColor: Colors.transparent,
-              //                       //   toolbarHeight: 0,
-              //                       //   bottomOpacity: 0,
-              //                       //   toolbarOpacity: 0,
-              //                       // ),
-              //                         body: SingleChildScrollView(
-              //                             child: FeedComponent(
-              //                                 showBusinessContent: false,
-              //                                 controller: PagingController(firstPageKey: 1),
-              //                                 feed: UiFeedModel(
-              //                                   // mixedItems: List.generate(4, (index) => item),
-              //                                   recommendedEvent: event,
-              //                                   moods: List.generate(
-              //                                       4,
-              //                                           (index) =>
-              //                                           UiMoodModel(
-              //                                             id: 1,
-              //                                             title: 'Want to have some fun',
-              //                                             logo: 'assets/images/png/crazy_emoji.png',
-              //                                           )),
-              //                                 )))))))),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show mood',
-                  onPressed: () => buildComponent(
-                    context,
-                    ComponentMoodModel.fromJson(configuration.appConfig.content['mood']),
-                    ComponentBuilder(
-                      child: Scaffold(
-                        appBar: const CustomAppBar(
-                          title: 'Feeling',
-                          centerTitle: true,
-                        ),
-                        body: SingleChildScrollView(
-                          child: MoodComponent(
-                            controller: ScrollController(),
-                            mood: UiMoodModel(
-                              descriptionItems: [
-                                const UiDescriptionItemModel(active: true, title: 'Sunny', description: '+32'),
-                                const UiDescriptionItemModel(active: true, title: 'Burned today', description: '432'),
-                              ],
-                              title: 'need to cool down a bit?',
-                              logo: 'assets/images/png/crazy_emoji.png',
-                              id: 1,
-                            ),
-                            onTabChanged: (String name) {
-                              return null;
-                            },
-                            isVisibleButton: ValueNotifier<bool>(true),
+            ),
+            SpacingFoundation.verticalSpace16,
+            // context.button(
+            //     data: BaseUiKitButtonData(
+            //         text: 'show spinner',
+            //         onPressed: () => buildComponent(
+            //             context,
+            //             ComponentSpinnerModel.fromJson(configuration.appConfig.content['spinner']),
+            //             ComponentBuilder(
+            //                 child: Scaffold(
+            //                     body: SpinnerComponent(
+            //                         onEventTap: () {},
+            //                         onFavoriteTap: () {},
+            //                         spinner: UiSpinnerModel(
+            //                             categories: List<String>.generate(
+            //                               10,
+            //                               (index) => 'Category ${index + 1}',
+            //                             ),
+            //                             events: List.generate(5, (index) => event)))))))),
+            // SpacingFoundation.verticalSpace16,
+            // context.button(
+            //     data: BaseUiKitButtonData(
+            //         text: 'show feed',
+            //         onPressed: () =>
+            //             buildComponent(
+            //                 context,
+            //                 ComponentFeedModel.fromJson(configuration.appConfig.content['feed']),
+            //                 ComponentBuilder(
+            //                     child: Scaffold(
+            //                       // appBar: AppBar(
+            //                       //   backgroundColor: Colors.transparent,
+            //                       //   toolbarHeight: 0,
+            //                       //   bottomOpacity: 0,
+            //                       //   toolbarOpacity: 0,
+            //                       // ),
+            //                         body: SingleChildScrollView(
+            //                             child: FeedComponent(
+            //                                 showBusinessContent: false,
+            //                                 controller: PagingController(firstPageKey: 1),
+            //                                 feed: UiFeedModel(
+            //                                   // mixedItems: List.generate(4, (index) => item),
+            //                                   recommendedEvent: event,
+            //                                   moods: List.generate(
+            //                                       4,
+            //                                           (index) =>
+            //                                           UiMoodModel(
+            //                                             id: 1,
+            //                                             title: 'Want to have some fun',
+            //                                             logo: 'assets/images/png/crazy_emoji.png',
+            //                                           )),
+            //                                 )))))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show mood',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentMoodModel.fromJson(
+                      configuration.appConfig.content['mood']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      appBar: const CustomAppBar(
+                        title: 'Feeling',
+                        centerTitle: true,
+                      ),
+                      body: SingleChildScrollView(
+                        child: MoodComponent(
+                          controller: ScrollController(),
+                          mood: UiMoodModel(
+                            descriptionItems: [
+                              const UiDescriptionItemModel(
+                                  active: true,
+                                  title: 'Sunny',
+                                  description: '+32'),
+                              const UiDescriptionItemModel(
+                                  active: true,
+                                  title: 'Burned today',
+                                  description: '432'),
+                            ],
+                            title: 'need to cool down a bit?',
+                            logo: 'assets/images/png/crazy_emoji.png',
+                            id: 1,
                           ),
                         ),
                       ),
@@ -1380,74 +1715,76 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      text: 'show place',
-                      onPressed: () => buildComponent(
-                          context,
-                          ComponentPlaceModel.fromJson(configuration.appConfig.content['place']),
-                          ComponentBuilder(
-                              child: PlaceComponent(
-                                place: place,
-                                placeReactionLoaderCallback: (int page, int contentId) async {
-                                  return [];
-                                },
-                                eventReactionLoaderCallback: (int page, int contentId) async {
-                                  return [];
-                                },
-                                placeFeedbackLoaderCallback: (int page, int contentId) async {
-                                  return [];
-                                },
-                                eventFeedbackLoaderCallback: (int page, int contentId) async {
-                                  return [];
-                                },
-                                // placeReactionLoaderCallback: (page, conentId) => [] as Future<List<VideoReactionUiModel>>,
-                                // eventReactionLoaderCallback: (int page, conentId) =>
-                                //     [] as Future<List<VideoReactionUiModel>>,
-                                // placeFeedbackLoaderCallback: (int page, conentId) => [] as Future<List<FeedbackUiModel>>,
-                                // eventFeedbackLoaderCallback: (int page, conentId) => [] as Future<List<FeedbackUiModel>>,
-                              ),
-                              bottomBar: BottomBookingBar(
-                                  model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place'])
-                                          .bookingElementModel ??
-                                      BookingElementModel(version: '0')))))),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      text: 'show event',
-                      onPressed: () => buildComponent(
-                          context,
-                          ComponentEventModel.fromJson(configuration.appConfig.content['event']),
-                          ComponentBuilder(
-                              child: EventComponent(
-                                event: event,
-                                reactionsLoaderCallback: (int page, int contentId) async {
-                                  return [];
-                                },
-                                feedbackLoaderCallback: (int page, int contentId) async {
-                                  return [];
-                                },
-                                // feedbackLoaderCallback: (page, conentId) => [] as Future<List<FeedbackUiModel>>,
-                                // reactionsLoaderCallback: (page, conentId) => [] as Future<List<VideoReactionUiModel>>,
-                              ),
-                              bottomBar: BottomBookingBar(
-                                  model: ComponentPlaceModel.fromJson(configuration.appConfig.content['event'])
-                                          .bookingElementModel ??
-                                      BookingElementModel(version: '0')))))),
-              SpacingFoundation.verticalSpace16,
-              context.button(
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
-                  text: 'show user selection',
-                  onPressed: () => buildComponent(
-                    context,
-                    UserTypeSelectionModel.fromJson(configuration.appConfig.content['user_type_selection']),
-                    ComponentBuilder(
-                      child: UserTypeSelectionComponent(
-                        onUserTypeSelected: (userType) {},
-                        uiModel: UiUserTypeSelectionModel(
-                          options: [],
-                        ),
+                    text: 'show place',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentPlaceModel.fromJson(
+                            configuration.appConfig.content['place']),
+                        ComponentBuilder(
+                            child: PlaceComponent(
+                              place: place,
+                              placeReactionLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                              eventReactionLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                              placeFeedbackLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                              eventFeedbackLoaderCallback:
+                                  (int page, int contentId) async {
+                                return [];
+                              },
+                            ),
+                            bottomBar: BottomBookingBar(
+                                model: ComponentPlaceModel.fromJson(
+                                            configuration
+                                                .appConfig.content['place'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show event',
+                    onPressed: () => buildComponent(
+                        context,
+                        ComponentEventModel.fromJson(
+                            configuration.appConfig.content['event']),
+                        ComponentBuilder(
+                            child: EventComponent(
+                              event: event,
+                              feedbackLoaderCallback: (page, conentId) =>
+                                  [] as Future<List<FeedbackUiModel>>,
+                              reactionsLoaderCallback: (page, conentId) =>
+                                  [] as Future<List<VideoReactionUiModel>>,
+                            ),
+                            bottomBar: BottomBookingBar(
+                                model: ComponentPlaceModel.fromJson(
+                                            configuration
+                                                .appConfig.content['event'])
+                                        .bookingElementModel ??
+                                    BookingElementModel(version: '0')))))),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show user selection',
+                onPressed: () => buildComponent(
+                  context,
+                  UserTypeSelectionModel.fromJson(
+                      configuration.appConfig.content['user_type_selection']),
+                  ComponentBuilder(
+                    child: UserTypeSelectionComponent(
+                      onUserTypeSelected: (userType) {},
+                      uiModel: UiUserTypeSelectionModel(
+                        options: [],
                       ),
                     ),
                   ),
@@ -1492,42 +1829,44 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show company credential verification',
-                  onPressed: () => buildComponent(
-                    context,
-                    PersonalCredentialVerificationModel.fromJson(
-                      configuration.appConfig.content['company_credentials_verification'],
-                    ),
-                    ComponentBuilder(
-                      child: CompanyCredentialsVerificationComponent(
-                        passwordController: TextEditingController(),
-                        uiModel: UiCompanyCredentialsVerificationModel(),
-                        credentialsController: TextEditingController(),
-                        formKey: GlobalKey<FormState>(),
-                      ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company credential verification',
+                onPressed: () => buildComponent(
+                  context,
+                  PersonalCredentialVerificationModel.fromJson(
+                    configuration
+                        .appConfig.content['company_credentials_verification'],
+                  ),
+                  ComponentBuilder(
+                    child: CompanyCredentialsVerificationComponent(
+                      passwordController: TextEditingController(),
+                      uiModel: UiCompanyCredentialsVerificationModel(),
+                      credentialsController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
                     ),
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show personal credential verification',
-                  onPressed: () => buildComponent(
-                    context,
-                    PersonalCredentialVerificationModel.fromJson(
-                      configuration.appConfig.content['personal_credentials_verification'],
-                    ),
-                    ComponentBuilder(
-                      child: PersonalCredentialsVerificationComponent(
-                        uiModel: UiPersonalCredentialsVerificationModel(),
-                        credentialsController: TextEditingController(),
-                        formKey: GlobalKey<FormState>(),
-                        passwordController: TextEditingController(),
-                      ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show personal credential verification',
+                onPressed: () => buildComponent(
+                  context,
+                  PersonalCredentialVerificationModel.fromJson(
+                    configuration
+                        .appConfig.content['personal_credentials_verification'],
+                  ),
+                  ComponentBuilder(
+                    child: PersonalCredentialsVerificationComponent(
+                      uiModel: UiPersonalCredentialsVerificationModel(),
+                      credentialsController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
+                      passwordController: TextEditingController(),
                     ),
                   ),
                 ),
@@ -1584,20 +1923,20 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              OrdinaryButton(
-                text: 'show price selector component bottom sheet',
-                onPressed: () => showUiKitGeneralFullScreenDialog(
-                  context,
-                  GeneralDialogData(
-                    topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
-                    useRootNavigator: false,
-                    child: PriceSelectorComponent(
-                      isPriceRangeSelected: false,
-                      initialPriceRangeStart: '100',
-                      initialPriceRangeEnd: '500',
-                      initialCurrency: null,
-                      onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {},
+            ),
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show price selector component bottom sheet',
+              onPressed: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.15.sh : 0.40.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    isPriceRangeSelected: false,
+                    initialCurrency: null,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency,
+                        averageSelected) {},
 
                       // text: 'show complaint bottom sheet',
                       // onPressed: () =>
@@ -1619,43 +1958,44 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              OrdinaryButton(
-                text: 'show price selector component bottom sheet',
-                onPressed: () => showUiKitAlertDialog(
-                  context,
-                  AlertDialogData(
-                    insetPadding: EdgeInsets.zero,
-                    defaultButtonSmall: true,
-                    customBackgroundColor: context.uiKitTheme?.colorScheme.surface3,
-                    title: Column(
-                      children: [
-                        Container(
-                          alignment: FractionalOffset.topRight,
-                          child: context.iconButtonNoPadding(
-                            data: BaseUiKitButtonData(
-                              iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.x, size: 16.0),
-                              onPressed: () => context.pop(),
-                            ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'show price selector component bottom sheet',
+              onPressed: () => showUiKitAlertDialog(
+                context,
+                AlertDialogData(
+                  insetPadding: EdgeInsets.zero,
+                  defaultButtonSmall: true,
+                  customBackgroundColor:
+                      context.uiKitTheme?.colorScheme.surface3,
+                  title: Column(
+                    children: [
+                      Container(
+                        alignment: FractionalOffset.topRight,
+                        child: context.iconButtonNoPadding(
+                          data: BaseUiKitButtonData(
+                            iconInfo: BaseUiKitButtonIconData(
+                                iconData: ShuffleUiKitIcons.x, size: 16.0),
+                            onPressed: () => context.pop(),
                           ),
                         ),
-                        Text(
-                          S.of(context).SelectPriceAndCurrency,
-                          style: context.uiKitTheme?.regularTextTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                    defaultButtonText: '',
-                    content: PriceSelectorAdminComponent(
-                      isPriceRangeSelected: false,
-                      initialPriceRangeStart: '100',
-                      initialPriceRangeEnd: '500',
-                      initialCurrency: null,
-                      onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, priceRangeSelected) {
-                        debugPrint(
-                            'averagePrice - $averagePrice, rangePrice1 - $rangePrice1, rangePrice2 - $rangePrice2, currency - $currency, averageSelected - $priceRangeSelected');
-                      },
-                    ),
+                      ),
+                      Text(
+                        S.of(context).SelectPriceAndCurrency,
+                        style: context.uiKitTheme?.regularTextTheme.titleLarge,
+                      ),
+                    ],
+                  ),
+                  defaultButtonText: '',
+                  content: PriceSelectorAdminComponent(
+                    isPriceRangeSelected: false,
+                    initialCurrency: null,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency,
+                        priceRangeSelected) {
+                      debugPrint(
+                          'averagePrice - $averagePrice, rangePrice1 - $rangePrice1, rangePrice2 - $rangePrice2, currency - $currency, averageSelected - $priceRangeSelected');
+                    },
                   ),
                 ),
               ),
@@ -1698,21 +2038,25 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                 ),
               ),
-              SpacingFoundation.verticalSpace16,
-              OrdinaryButton(
-                text: 'To become an influencer you need to do:',
-                onPressed: () => showGeneralDialog(
-                  context: context,
-                  transitionBuilder: (context, animation1, animation2, child) => BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: animation1.value * 30, sigmaY: animation1.value * 30),
-                    child: child,
-                  ),
-                  pageBuilder: (context, animation1, animation2) => FadeTransition(
-                    opacity: animation1,
-                    child: const ProgressBecomingInfluencerComponent(
-                      reviewsProgress: 47,
-                      videoReactionProgress: 50,
-                    ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            OrdinaryButton(
+              text: 'To become an influencer you need to do:',
+              onPressed: () => showGeneralDialog(
+                context: context,
+                transitionBuilder: (context, animation1, animation2, child) =>
+                    BackdropFilter(
+                  filter: ImageFilter.blur(
+                      sigmaX: animation1.value * 30,
+                      sigmaY: animation1.value * 30),
+                  child: child,
+                ),
+                pageBuilder: (context, animation1, animation2) =>
+                    FadeTransition(
+                  opacity: animation1,
+                  child: const ProgressBecomingInfluencerComponent(
+                    reviewsProgress: 47,
+                    videoReactionProgress: 50,
                   ),
                 ),
               ),
@@ -1817,22 +2161,40 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
           'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
           'Nulla facilisi',
       tags: [
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'uniqueCheap',
+            icon: ShuffleUiKitIcons.cocktail,
+            unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
       ],
       type: '');
 
@@ -1865,7 +2227,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
     tags: [
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-      UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(
+          title: 'uniqueCheap',
+          icon: ShuffleUiKitIcons.cocktail,
+          unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
