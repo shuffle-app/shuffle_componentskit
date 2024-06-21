@@ -54,14 +54,21 @@ class FeedComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentFeedModel feedLeisureModel = ComponentFeedModel.fromJson(config['feed']);
-    final ComponentFeedModel feedBusinessModel = ComponentFeedModel.fromJson(config['feed_business']);
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+            GlobalConfiguration().appConfig.content;
+    final ComponentFeedModel feedLeisureModel =
+        ComponentFeedModel.fromJson(config['feed']);
+    final ComponentFeedModel feedBusinessModel =
+        ComponentFeedModel.fromJson(config['feed_business']);
     MapEntry<String, PropertiesBaseModel>? advertisement;
-    if (feedLeisureModel.content.body?[ContentItemType.advertisement]?.properties?.isNotEmpty ?? false) {
-      advertisement = feedLeisureModel.content.body?[ContentItemType.advertisement]?.properties?.entries.first;
+    if (feedLeisureModel.content.body?[ContentItemType.advertisement]
+            ?.properties?.isNotEmpty ??
+        false) {
+      advertisement = feedLeisureModel.content
+          .body?[ContentItemType.advertisement]?.properties?.entries.first;
     }
-    final horizontalMargin = (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin =
+        (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
     final isLightTheme = context.uiKitTheme?.themeMode == ThemeMode.light;
@@ -84,7 +91,8 @@ class FeedComponent extends StatelessWidget {
           height: MediaQuery.viewPaddingOf(context).top,
         ).wrapSliverBox,
         if (showBusinessContent) ...[
-          if (feed.recommendedBusinessEvents != null && feed.recommendedBusinessEvents!.isNotEmpty) ...[
+          if (feed.recommendedBusinessEvents != null &&
+              feed.recommendedBusinessEvents!.isNotEmpty) ...[
             Text(
               S.current.UpcomingGlobalEvents,
               style: themeTitleStyle,
@@ -100,13 +108,17 @@ class FeedComponent extends StatelessWidget {
                             onTap: () => onListItemPressed?.call(e.id, 'event'),
                             title: e.title ?? '',
                             imageUrl: e.verticalPreview?.link ??
-                                e.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link ??
+                                e.media
+                                    .firstWhereOrNull(
+                                        (e) => e.type == UiKitMediaType.image)
+                                    ?.link ??
                                 '',
                             subtitleIcon: ShuffleUiKitIcons.clock,
                             subtitle: e.scheduleString,
                             tags: e.tags,
                           ).paddingOnly(
-                              right: e.id == feed.recommendedBusinessEvents?.last.id
+                              right: e.id ==
+                                      feed.recommendedBusinessEvents?.last.id
                                   ? 0
                                   : SpacingFoundation.horizontalSpacing12),
                         )
@@ -127,24 +139,29 @@ class FeedComponent extends StatelessWidget {
                           subtitle: S.current.FeedNichesHiwSubtitle,
                           hintTiles: [
                             HintCardUiModel(
-                              imageUrl: GraphicsFoundation.instance.png.selectNiche.path,
+                              imageUrl: GraphicsFoundation
+                                  .instance.png.selectNiche.path,
                               title: S.current.FeedNichesHiwItems(0),
                             ),
                             HintCardUiModel(
-                              imageUrl: GraphicsFoundation.instance.png.pressNiche.path,
+                              imageUrl: GraphicsFoundation
+                                  .instance.png.pressNiche.path,
                               title: S.current.FeedNichesHiwItems(1),
                             ),
                             HintCardUiModel(
-                              imageUrl: GraphicsFoundation.instance.png.getSelection.path,
+                              imageUrl: GraphicsFoundation
+                                  .instance.png.getSelection.path,
                               title: S.current.FeedNichesHiwItems(2),
                             ),
                             HintCardUiModel(
-                              imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
+                              imageUrl: GraphicsFoundation
+                                  .instance.png.choosePlan.path,
                               title: S.current.FeedNichesHiwItems(3),
                             ),
                           ],
                           onPop: onHowItWorksPoped,
-                        ).paddingOnly(left: SpacingFoundation.horizontalSpacing4)
+                        ).paddingOnly(
+                          left: SpacingFoundation.horizontalSpacing4)
                       : const SizedBox(),
                 ),
               ],
@@ -158,7 +175,8 @@ class FeedComponent extends StatelessWidget {
               children: feed.niches?.map<Widget>(
                     (e) {
                       double padding = 0.0;
-                      if (e.title == feed.niches?.first.title) padding = horizontalMargin;
+                      if (e.title == feed.niches?.first.title)
+                        padding = horizontalMargin;
 
                       return UiKitMessageCardWithIcon(
                         message: e.title,
@@ -176,11 +194,16 @@ class FeedComponent extends StatelessWidget {
         ],
         if (!showBusinessContent) ...[
           SpacingFoundation.verticalSpace16.wrapSliverBox,
-          if (feed.recommendedEvent != null && (feedLeisureModel.showDailyRecomendation ?? true)) ...[
+          if (feed.recommendedEvent != null &&
+              (feedLeisureModel.showDailyRecomendation ?? true)) ...[
             UiKitAccentCard(
-              onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
+              onPressed: onEventPressed == null
+                  ? null
+                  : () => onEventPressed!(feed.recommendedEvent?.id),
               title: feed.recommendedEvent!.title ?? '',
-              additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
+              additionalInfo:
+                  feed.recommendedEvent!.descriptionItems?.first.description ??
+                      '',
               accentMessage: S.of(context).DontMissIt,
               image: ImageWidget(
                 link: feed.recommendedEvent?.media.firstOrNull?.link,
@@ -201,8 +224,10 @@ class FeedComponent extends StatelessWidget {
               child: PagedListView<int, VideoReactionUiModel>.separated(
                 scrollDirection: Axis.horizontal,
                 builderDelegate: PagedChildBuilderDelegate(
-                  firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
-                  newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+                  firstPageProgressIndicatorBuilder: (c) =>
+                      progressIndicator ?? const SizedBox.shrink(),
+                  newPageProgressIndicatorBuilder: (c) =>
+                      progressIndicator ?? const SizedBox.shrink(),
                   itemBuilder: (_, item, index) {
                     double leftPadding = 0;
                     if (index == 0) leftPadding = horizontalMargin;
@@ -238,11 +263,13 @@ class FeedComponent extends StatelessWidget {
                           title: S.current.FeedFeelingsHiwItems(1),
                         ),
                         HintCardUiModel(
-                          imageUrl: GraphicsFoundation.instance.png.sunClouds.path,
+                          imageUrl:
+                              GraphicsFoundation.instance.png.sunClouds.path,
                           title: S.current.FeedFeelingsHiwItems(2),
                         ),
                         HintCardUiModel(
-                          imageUrl: GraphicsFoundation.instance.png.smileMood.path,
+                          imageUrl:
+                              GraphicsFoundation.instance.png.smileMood.path,
                           title: S.current.FeedFeelingsHiwItems(3),
                         ),
                       ],
@@ -256,7 +283,8 @@ class FeedComponent extends StatelessWidget {
               isHealthKitEnabled: feed.isHealthKitEnabled,
               title: Text(
                 S.of(context).Guess,
-                style: context.uiKitTheme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
+                style: context.uiKitTheme?.boldTextTheme.subHeadline
+                    .copyWith(color: Colors.white),
               ),
               backgroundImage: ImageWidget(
                 width: double.infinity,
@@ -265,8 +293,10 @@ class FeedComponent extends StatelessWidget {
                 color: context.uiKitTheme?.colorScheme.surface1,
               ),
               animationPath: isLightTheme
-                  ? GraphicsFoundation.instance.animations.lottie.fingerprintWhite.path
-                  : GraphicsFoundation.instance.animations.lottie.fingerprintBlack.path,
+                  ? GraphicsFoundation
+                      .instance.animations.lottie.fingerprintWhite.path
+                  : GraphicsFoundation
+                      .instance.animations.lottie.fingerprintBlack.path,
               isCompleted: mood != null,
               onCompleted: onMoodCompleted,
               onPressed: onMoodCheck,
@@ -275,7 +305,8 @@ class FeedComponent extends StatelessWidget {
                       message: mood!.title,
                       iconLink: mood!.logo,
                       layoutDirection: Axis.vertical,
-                      onPressed: onMoodPressed == null ? null : () => onMoodPressed!(),
+                      onPressed:
+                          onMoodPressed == null ? null : () => onMoodPressed!(),
                     )
                   : const SizedBox.shrink(),
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
@@ -283,55 +314,55 @@ class FeedComponent extends StatelessWidget {
           ],
         ],
         if ((feedLeisureModel.showPlaces ?? true)) ...[
-          Stack(
-            children: [
-              CustomTextWithWidget(
-                text: Text(
-                  //TODO
-                  S.of(context).YouBetterCheckThisOut,
-                  // 'To become an ',
-                  style: themeTitleStyle,
-                  textAlign: TextAlign.left,
+          CustomTextWithWidget(
+            text: Text(
+              //TODO
+              S.of(context).YouBetterCheckThisOut,
+              // 'To become an ф ы ы s  s s s s s s s s s ',
+              style: themeTitleStyle,
+              textAlign: TextAlign.left,
+            ),
+            widget: HowItWorksWidget(
+              title: S.current.FeedRandomizerHiwTitle,
+              subtitle: S.current.FeedRandomizerHiwSubtitle,
+              hintTiles: [
+                HintCardUiModel(
+                  imageUrl: GraphicsFoundation.instance.png.events.path,
+                  title: S.current.FeedRandomizerHiwItems(0),
                 ),
-                widget: HowItWorksWidget(
-                  title: S.current.FeedRandomizerHiwTitle,
-                  subtitle: S.current.FeedRandomizerHiwSubtitle,
-                  hintTiles: [
-                    HintCardUiModel(
-                      imageUrl: GraphicsFoundation.instance.png.events.path,
-                      title: S.current.FeedRandomizerHiwItems(0),
-                    ),
-                    HintCardUiModel(
-                      imageUrl: GraphicsFoundation.instance.png.filtering.path,
-                      title: S.current.FeedRandomizerHiwItems(1),
-                    ),
-                    HintCardUiModel(
-                      imageUrl: GraphicsFoundation.instance.png.chipsSelect.path,
-                      title: S.current.FeedRandomizerHiwItems(2),
-                    ),
-                    HintCardUiModel(
-                      imageUrl: GraphicsFoundation.instance.png.pressScroll.path,
-                      title: S.current.FeedRandomizerHiwItems(3),
-                    ),
-                  ],
-                  onPop: onHowItWorksPopedBody,
+                HintCardUiModel(
+                  imageUrl: GraphicsFoundation.instance.png.filtering.path,
+                  title: S.current.FeedRandomizerHiwItems(1),
                 ),
-              ),
-            ],
-          ).paddingOnly(left: horizontalMargin, right: horizontalMargin + 0.2.sw).wrapSliverBox,
+                HintCardUiModel(
+                  imageUrl: GraphicsFoundation.instance.png.chipsSelect.path,
+                  title: S.current.FeedRandomizerHiwItems(2),
+                ),
+                HintCardUiModel(
+                  imageUrl: GraphicsFoundation.instance.png.pressScroll.path,
+                  title: S.current.FeedRandomizerHiwItems(3),
+                ),
+              ],
+              onPop: onHowItWorksPopedBody,
+            ),
+          )
+              .paddingOnly(left: horizontalMargin, right: horizontalMargin)
+              .wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
             SpacingFoundation.verticalSpace8.wrapSliverBox,
             NotificationListener(
                 onNotification: (notification) {
                   if (notification is ScrollUpdateNotification) {
-                    if (notification.metrics.pixels >= notification.metrics.maxScrollExtent * 0.8) {
+                    if (notification.metrics.pixels >=
+                        notification.metrics.maxScrollExtent * 0.8) {
                       onLoadMoreChips?.call();
                     }
                   }
                   return false;
                 },
                 child: ConstrainedBox(
-                    constraints: BoxConstraints.loose(Size(double.infinity, 40.h)),
+                    constraints:
+                        BoxConstraints.loose(Size(double.infinity, 40.h)),
                     child: ListView.builder(
                         padding: EdgeInsets.only(left: horizontalMargin),
                         primary: false,
@@ -354,20 +385,32 @@ class FeedComponent extends StatelessWidget {
                             if (hasFavourites) {
                               return UiKitTitledFilterChip(
                                 //const flag for showing favorites is 'Favorites'
-                                selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
+                                selected: feed.activeFilterChips
+                                        ?.map((e) => e.title)
+                                        .contains('Favorites') ??
+                                    false,
                                 title: S.of(context).Favorites,
-                                onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                                onPressed: onTagSortPressed == null
+                                    ? null
+                                    : () => onTagSortPressed!('Favorites'),
                                 icon: ShuffleUiKitIcons.starfill,
-                              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
+                              ).paddingSymmetric(
+                                  horizontal:
+                                      SpacingFoundation.horizontalSpacing8);
                             } else {
                               return SpacingFoundation.horizontalSpace8;
                             }
                           } else {
                             return feed.filterChips!
                                 .map((e) => UiKitTitledFilterChip(
-                                      selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                                      selected: feed.activeFilterChips
+                                              ?.map((e) => e.title)
+                                              .contains(e.title) ??
+                                          false,
                                       title: e.title,
-                                      onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                                      onPressed: onTagSortPressed == null
+                                          ? null
+                                          : () => onTagSortPressed!(e.title),
                                       icon: e.icon,
                                     ).paddingOnly(right: horizontalMargin))
                                 .toList()[index - 2];
@@ -379,13 +422,16 @@ class FeedComponent extends StatelessWidget {
             shrinkWrapFirstPageIndicators: true,
             builderDelegate: PagedChildBuilderDelegate(
               animateTransitions: true,
-              firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
-              newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+              firstPageProgressIndicatorBuilder: (c) =>
+                  progressIndicator ?? const SizedBox.shrink(),
+              newPageProgressIndicatorBuilder: (c) =>
+                  progressIndicator ?? const SizedBox.shrink(),
               itemBuilder: (_, item, index) {
                 item as UiUniversalModel;
                 if (item.isAdvertisement && advertisement != null) {
                   if (item.bannerType == AdvertisementBannerType.text) {
-                    return item.smallTextBanner.paddingSymmetric(horizontal: horizontalMargin);
+                    return item.smallTextBanner
+                        .paddingSymmetric(horizontal: horizontalMargin);
                   } else {
                     return context
                         .advertisementImageBanner(
@@ -395,7 +441,8 @@ class FeedComponent extends StatelessWidget {
                             imageLink: item.smallBannerImage,
                             title: advertisement.key,
                             size: AdvertisementBannerSize.values.byName(
-                              advertisement.value.type ?? S.of(context).Small.toLowerCase(),
+                              advertisement.value.type ??
+                                  S.of(context).Small.toLowerCase(),
                             ),
                           ),
                         )
@@ -428,7 +475,8 @@ class FeedComponent extends StatelessWidget {
         ],
       ],
     ).paddingSymmetric(
-      vertical: (feedLeisureModel.positionModel?.verticalMargin ?? 0).toDouble(),
+      vertical:
+          (feedLeisureModel.positionModel?.verticalMargin ?? 0).toDouble(),
     );
   }
 }
