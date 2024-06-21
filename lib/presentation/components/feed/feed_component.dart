@@ -131,39 +131,39 @@ class FeedComponent extends StatelessWidget {
           if ((feedBusinessModel.showFeelings ?? true)) ...[
             Stack(
               children: [
-                CustomTextWithWidget(
-                  text: Text(S.of(context).YourNiche, style: themeTitleStyle),
-                  widget: feed.showHowItWorksTitle
-                      ? HowItWorksWidget(
-                          title: S.current.FeedNichesHiwTitle,
-                          subtitle: S.current.FeedNichesHiwSubtitle,
-                          hintTiles: [
-                            HintCardUiModel(
-                              imageUrl: GraphicsFoundation
-                                  .instance.png.selectNiche.path,
-                              title: S.current.FeedNichesHiwItems(0),
-                            ),
-                            HintCardUiModel(
-                              imageUrl: GraphicsFoundation
-                                  .instance.png.pressNiche.path,
-                              title: S.current.FeedNichesHiwItems(1),
-                            ),
-                            HintCardUiModel(
-                              imageUrl: GraphicsFoundation
-                                  .instance.png.getSelection.path,
-                              title: S.current.FeedNichesHiwItems(2),
-                            ),
-                            HintCardUiModel(
-                              imageUrl: GraphicsFoundation
-                                  .instance.png.choosePlan.path,
-                              title: S.current.FeedNichesHiwItems(3),
-                            ),
-                          ],
-                          onPop: onHowItWorksPoped,
-                        ).paddingOnly(
-                          left: SpacingFoundation.horizontalSpacing4)
-                      : const SizedBox(),
-                ),
+                // CustomTextWithWidget(
+                //   text: Text(S.of(context).YourNiche, style: themeTitleStyle),
+                //   widget: feed.showHowItWorksTitle
+                //       ? HowItWorksWidget(
+                //           title: S.current.FeedNichesHiwTitle,
+                //           subtitle: S.current.FeedNichesHiwSubtitle,
+                //           hintTiles: [
+                //             HintCardUiModel(
+                //               imageUrl: GraphicsFoundation
+                //                   .instance.png.selectNiche.path,
+                //               title: S.current.FeedNichesHiwItems(0),
+                //             ),
+                //             HintCardUiModel(
+                //               imageUrl: GraphicsFoundation
+                //                   .instance.png.pressNiche.path,
+                //               title: S.current.FeedNichesHiwItems(1),
+                //             ),
+                //             HintCardUiModel(
+                //               imageUrl: GraphicsFoundation
+                //                   .instance.png.getSelection.path,
+                //               title: S.current.FeedNichesHiwItems(2),
+                //             ),
+                //             HintCardUiModel(
+                //               imageUrl: GraphicsFoundation
+                //                   .instance.png.choosePlan.path,
+                //               title: S.current.FeedNichesHiwItems(3),
+                //             ),
+                //           ],
+                //           onPop: onHowItWorksPoped,
+                //         ).paddingOnly(
+                //           left: SpacingFoundation.horizontalSpacing4)
+                //       : const SizedBox(),
+                // ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
           ],
@@ -247,36 +247,36 @@ class FeedComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace16.wrapSliverBox,
           ],
           if ((feedLeisureModel.showFeelings ?? true)) ...[
-            CustomTextWithWidget(
-              text: Text(feelingText, style: themeTitleStyle),
-              widget: feed.showHowItWorksBody
-                  ? HowItWorksWidget(
-                      title: S.current.FeedFeelingsHiwTitle,
-                      subtitle: S.current.FeedFeelingsHiwSubtitle,
-                      hintTiles: [
-                        HintCardUiModel(
-                          imageUrl: GraphicsFoundation.instance.png.map.path,
-                          title: S.current.FeedFeelingsHiwItems(0),
-                        ),
-                        HintCardUiModel(
-                          imageUrl: GraphicsFoundation.instance.png.dart.path,
-                          title: S.current.FeedFeelingsHiwItems(1),
-                        ),
-                        HintCardUiModel(
-                          imageUrl:
-                              GraphicsFoundation.instance.png.sunClouds.path,
-                          title: S.current.FeedFeelingsHiwItems(2),
-                        ),
-                        HintCardUiModel(
-                          imageUrl:
-                              GraphicsFoundation.instance.png.smileMood.path,
-                          title: S.current.FeedFeelingsHiwItems(3),
-                        ),
-                      ],
-                      onPop: onHowItWorksPoped,
-                    )
-                  : const SizedBox(),
-            ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+            // CustomTextWithWidget(
+            //   text: Text(feelingText, style: themeTitleStyle),
+            //   widget: feed.showHowItWorksBody
+            //       ? HowItWorksWidget(
+            //           title: S.current.FeedFeelingsHiwTitle,
+            //           subtitle: S.current.FeedFeelingsHiwSubtitle,
+            //           hintTiles: [
+            //             HintCardUiModel(
+            //               imageUrl: GraphicsFoundation.instance.png.map.path,
+            //               title: S.current.FeedFeelingsHiwItems(0),
+            //             ),
+            //             HintCardUiModel(
+            //               imageUrl: GraphicsFoundation.instance.png.dart.path,
+            //               title: S.current.FeedFeelingsHiwItems(1),
+            //             ),
+            //             HintCardUiModel(
+            //               imageUrl:
+            //                   GraphicsFoundation.instance.png.sunClouds.path,
+            //               title: S.current.FeedFeelingsHiwItems(2),
+            //             ),
+            //             HintCardUiModel(
+            //               imageUrl:
+            //                   GraphicsFoundation.instance.png.smileMood.path,
+            //               title: S.current.FeedFeelingsHiwItems(3),
+            //             ),
+            //           ],
+            //           onPop: onHowItWorksPoped,
+            //         )
+            //       : const SizedBox(),
+            // ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
             FingerprintSwitch(
               height: (size.width - horizontalMargin * 2) * 0.54,
@@ -314,40 +314,83 @@ class FeedComponent extends StatelessWidget {
           ],
         ],
         if ((feedLeisureModel.showPlaces ?? true)) ...[
-          CustomTextWithWidget(
-            text: Text(
-              //TODO
-              S.of(context).YouBetterCheckThisOut,
-              // 'To become an ф ы ы s  s s s s s s s s s ',
-              style: themeTitleStyle,
-              textAlign: TextAlign.left,
-            ),
-            widget: HowItWorksWidget(
-              title: S.current.FeedRandomizerHiwTitle,
-              subtitle: S.current.FeedRandomizerHiwSubtitle,
-              hintTiles: [
-                HintCardUiModel(
-                  imageUrl: GraphicsFoundation.instance.png.events.path,
-                  title: S.current.FeedRandomizerHiwItems(0),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: S.of(context).YouBetterCheckThisOut,
+                  // text: 'Как вы себя чувстуете в течении дня lyzlyz',
+                  style: themeTitleStyle,
                 ),
-                HintCardUiModel(
-                  imageUrl: GraphicsFoundation.instance.png.filtering.path,
-                  title: S.current.FeedRandomizerHiwItems(1),
-                ),
-                HintCardUiModel(
-                  imageUrl: GraphicsFoundation.instance.png.chipsSelect.path,
-                  title: S.current.FeedRandomizerHiwItems(2),
-                ),
-                HintCardUiModel(
-                  imageUrl: GraphicsFoundation.instance.png.pressScroll.path,
-                  title: S.current.FeedRandomizerHiwItems(3),
-                ),
+                WidgetSpan(
+                  child: HowItWorksWidget(
+                    title: S.current.FeedRandomizerHiwTitle,
+                    subtitle: S.current.FeedRandomizerHiwSubtitle,
+                    hintTiles: [
+                      HintCardUiModel(
+                        imageUrl: GraphicsFoundation.instance.png.events.path,
+                        title: S.current.FeedRandomizerHiwItems(0),
+                      ),
+                      HintCardUiModel(
+                        imageUrl:
+                            GraphicsFoundation.instance.png.filtering.path,
+                        title: S.current.FeedRandomizerHiwItems(1),
+                      ),
+                      HintCardUiModel(
+                        imageUrl:
+                            GraphicsFoundation.instance.png.chipsSelect.path,
+                        title: S.current.FeedRandomizerHiwItems(2),
+                      ),
+                      HintCardUiModel(
+                        imageUrl:
+                            GraphicsFoundation.instance.png.pressScroll.path,
+                        title: S.current.FeedRandomizerHiwItems(3),
+                      ),
+                    ],
+                    onPop: onHowItWorksPopedBody,
+                  ).paddingOnly(left: 10.0),
+                )
               ],
-              onPop: onHowItWorksPopedBody,
             ),
-          )
-              .paddingOnly(left: horizontalMargin, right: horizontalMargin)
-              .wrapSliverBox,
+          ).wrapSliverBox,
+
+          // TimestampedChatMessage(
+          // text: Text(
+          //   //TODO
+          //   // S.of(context).YouBetterCheckThisOut,
+          //   'Как вы себя чувстуете в течении дня',
+          //   style: themeTitleStyle,
+          //   textAlign: TextAlign.left,
+          // ),
+          // text: 'Как вы себя чувстуете в течении дня',
+          // style: themeTitleStyle,
+          // sentAt: HowItWorksWidget(
+          //   title: S.current.FeedRandomizerHiwTitle,
+          //   subtitle: S.current.FeedRandomizerHiwSubtitle,
+          //   hintTiles: [
+          //     HintCardUiModel(
+          //       imageUrl: GraphicsFoundation.instance.png.events.path,
+          //       title: S.current.FeedRandomizerHiwItems(0),
+          //     ),
+          //     HintCardUiModel(
+          //       imageUrl: GraphicsFoundation.instance.png.filtering.path,
+          //       title: S.current.FeedRandomizerHiwItems(1),
+          //     ),
+          //     HintCardUiModel(
+          //       imageUrl: GraphicsFoundation.instance.png.chipsSelect.path,
+          //       title: S.current.FeedRandomizerHiwItems(2),
+          //     ),
+          //     HintCardUiModel(
+          //       imageUrl: GraphicsFoundation.instance.png.pressScroll.path,
+          //       title: S.current.FeedRandomizerHiwItems(3),
+          //     ),
+          //   ],
+          //   onPop: onHowItWorksPopedBody,
+          // ),
+          // sentAt: 'text',
+          //     )
+          // .paddingOnly(left: horizontalMargin, right: horizontalMargin)
+          // .wrapSliverBox,
           if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
             SpacingFoundation.verticalSpace8.wrapSliverBox,
             NotificationListener(
