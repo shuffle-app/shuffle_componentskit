@@ -30,6 +30,7 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
   final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
+  final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
 
   const ProfileComponent({
     super.key,
@@ -56,6 +57,7 @@ class ProfileComponent extends StatelessWidget {
     this.favoritePlaces = const [],
     this.onRecommendedUserAvatarPressed,
     this.onRecommendedUserCardChanged,
+    this.onFeedbackCardPressed,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
@@ -67,14 +69,20 @@ class ProfileComponent extends StatelessWidget {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: S.of(context).MyCard,
+      title: S
+          .of(context)
+          .MyCard,
       leading: context.iconButtonNoPadding(
         data: BaseUiKitButtonData(
           iconInfo: BaseUiKitButtonIconData(
@@ -107,12 +115,16 @@ class ProfileComponent extends StatelessWidget {
               children: [
                 if (businessContentEnabled)
                   Text(
-                    S.of(context).FindSomeoneToNetworkWith,
+                    S
+                        .of(context)
+                        .FindSomeoneToNetworkWith,
                     style: textTheme?.title1,
                   ),
                 if (!businessContentEnabled)
                   Text(
-                    S.of(context).FindSomeoneToHangOutWith,
+                    S
+                        .of(context)
+                        .FindSomeoneToHangOutWith,
                     style: textTheme?.title1,
                   ),
                 if (showHowItWorks)
@@ -138,7 +150,9 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ],
                     onPop: onHowItWorksPoped,
-                    customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
+                    customOffset: Offset(MediaQuery
+                        .sizeOf(context)
+                        .width / 1.5, 35),
                   ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
@@ -261,14 +275,14 @@ class ProfileComponent extends StatelessWidget {
               ),
               action: context
                   .smallOutlinedButton(
-                    blurred: false,
-                    data: BaseUiKitButtonData(
-                      iconInfo: BaseUiKitButtonIconData(
-                        iconData: ShuffleUiKitIcons.chevronright,
-                      ),
-                      onPressed: onAllVideoReactionsPressed,
-                    ),
-                  )
+                blurred: false,
+                data: BaseUiKitButtonData(
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.chevronright,
+                  ),
+                  onPressed: onAllVideoReactionsPressed,
+                ),
+              )
                   .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
               content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                 spacing: SpacingFoundation.horizontalSpacing8,
@@ -276,10 +290,12 @@ class ProfileComponent extends StatelessWidget {
                   customHeight: 0.205.sh,
                   imagePath: GraphicsFoundation.instance.png.place.path,
                 ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
-                noItemsFoundIndicator: Text(
-                  S.current.NoVideoReactionsYet,
-                  style: textTheme?.subHeadline,
-                ).paddingAll(EdgeInsetsFoundation.all16),
+                noItemsFoundIndicator: SizedBox(
+                    width: 1.sw,
+                    child: Text(
+                      S.current.NoVideoReactionsYet,
+                      style: textTheme?.subHeadline,
+                    ).paddingAll(EdgeInsetsFoundation.all16)),
                 itemBuilder: (context, reaction, index) {
                   return UiKitReactionPreview(
                     customHeight: 0.205.sh,
@@ -309,46 +325,49 @@ class ProfileComponent extends StatelessWidget {
                 contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
                 action: context
                     .smallOutlinedButton(
-                      blurred: false,
-                      data: BaseUiKitButtonData(
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.chevronright,
-                        ),
-                        onPressed: onAllFeedbacksPressed,
-                      ),
-                    )
+                  blurred: false,
+                  data: BaseUiKitButtonData(
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.chevronright,
+                    ),
+                    onPressed: onAllFeedbacksPressed,
+                  ),
+                )
                     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: _noFeedbacks
                     ? Text(
-                        S.current.NoFeedbacksYet,
-                        style: textTheme?.subHeadline,
-                      ).paddingAll(EdgeInsetsFoundation.all16)
+                  S.current.NoFeedbacksYet,
+                  style: textTheme?.subHeadline,
+                ).paddingAll(EdgeInsetsFoundation.all16)
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
-                        spacing: SpacingFoundation.horizontalSpacing8,
-                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
-                        itemBuilder: (context, feedback, index) {
-                          return SizedBox(
-                            width: 0.95.sw,
-                            child: UiKitFeedbackCard(
-                              title: feedback.feedbackAuthorName,
-                              avatarUrl: feedback.feedbackAuthorPhoto,
-                              datePosted: feedback.feedbackDateTime,
-                              companyAnswered: false,
-                              text: feedback.feedbackText,
-                              isHelpful: feedback.helpfulForUser,
-                              helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                            ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
-                          );
-                        },
-                        pagingController: feedbackPagingController!,
-                      ),
+                  spacing: SpacingFoundation.horizontalSpacing8,
+                  shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                  itemBuilder: (context, feedback, index) {
+                    return SizedBox(
+                      width: 0.95.sw,
+                      child: UiKitFeedbackCard(
+                        title: feedback.feedbackAuthorName,
+                        avatarUrl: feedback.feedbackAuthorPhoto,
+                        datePosted: feedback.feedbackDateTime,
+                        companyAnswered: false,
+                        text: feedback.feedbackText,
+                        isHelpful: feedback.helpfulForUser,
+                        helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                        onPressed: () => onFeedbackCardPressed?.call(feedback),
+                      ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
+                    );
+                  },
+                  pagingController: feedbackPagingController!,
+                ),
               );
             },
           ),
         if (feedbackPagingController != null) SpacingFoundation.verticalSpace24,
         if (profile.userTileType == UserTileType.pro) ...[
           MyEventsComponent(
-              title: S.of(context).MyEvents,
+              title: S
+                  .of(context)
+                  .MyEvents,
               onTap: onMyEventsPressed ?? () {},
               onEventTap: onEventTap ?? (_) {},
               events: events ?? []),
