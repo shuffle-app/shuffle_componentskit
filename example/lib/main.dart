@@ -172,6 +172,74 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             context.button(
               data: BaseUiKitButtonData(
                 onPressed: () => context.push(CategoriesCreateComponent(
+                  businessCategories: List.generate(
+                    4,
+                    (index) {
+                      return UiModelCategoryCreate(
+                        categoryTitle: 'Foodie and drink $index',
+                        categoryId: index,
+                        categoryTypes: List.generate(
+                          4,
+                          (categoryIndex) {
+                            return UiModelPropertyType(
+                                title: 'title $index',
+                                id: index + categoryIndex);
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  entertainmentCategories: List.generate(
+                    4,
+                    (index) {
+                      return UiModelCategoryCreate(
+                        categoryTitle: 'Foodie and drink $index',
+                        categoryId: index,
+                        categoryTypes: List.generate(
+                          4,
+                          (categoryIndex) {
+                            return UiModelPropertyType(
+                                title: 'title $index',
+                                id: index + categoryIndex);
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  baseProperties: List.generate(
+                    5,
+                    (index) {
+                      return UiModelPropertyType(
+                        title: 'index ==> $index',
+                        id: index,
+                        iconPath:
+                            GraphicsFoundation.instance.svg.restaurant.path,
+                      );
+                    },
+                  ),
+                  relatedProperties: List.generate(
+                    4,
+                    (index) {
+                      return UiModelRelatedProperties(
+                        title: 'index ==>$index',
+                        id: index,
+                        linkedMainSets: ['1', '2', '3'],
+                      );
+                    },
+                  ),
+                  uniqueProperties: List.generate(
+                    4,
+                    (index) {
+                      return UiModelPropertyType(
+                        title: 'index ==>$index',
+                        id: index,
+                        iconPath:
+                            GraphicsFoundation.instance.svg.restaurant.path,
+                      );
+                    },
+                  ),
+                  selectedCategoryType:
+                      UiModelPropertyType(title: 'Restaurant', id: 1),
                   relatedPropertySearchOptions: (value) async {
                     return [
                       'Chinese Cui',

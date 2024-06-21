@@ -99,3 +99,5 @@ export 'suggest_place/suggest_place_component.dart';
 export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
 export 'property_management/categories_create_component.dart';
+export 'property_management/ui_model_category_create.dart';
+export 'property_management/ui_model_related_properties.dart';
