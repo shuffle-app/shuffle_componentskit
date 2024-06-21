@@ -9,3 +9,4 @@ export 'create_schedule_widget.dart';
 export 'price_selector_component.dart';
 export 'price_selector_admin_component.dart';
 export 'select_your_specialty_component.dart';
+export 'title_with_how_it_works.dart';
