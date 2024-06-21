@@ -37,7 +37,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
   void initState() {
     CustomCacheManager.personsInstance
         .getFileStream(widget.modelUrl ??
-            'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/characters/1+character+(1).glb')
+        'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/characters/1+character+(1).glb')
         .listen((value) {
       if (value.runtimeType == DownloadProgress) {
         setState(() {
@@ -76,10 +76,26 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
     return super.didPopRoute();
   }
 
+  setAnimation() {
+    if (animationInProgress) return;
+    final animationItem = widget.animations[random.nextInt(widget.animations.length)];
+    log('tapped ${animationItem.animationName}', name: 'HallOfFameComponent');
+    controller?.runJavaScript('''
+                    var viewer = document.querySelector('#model-viewer');
+                    viewer.setAttribute('animation-name', '${animationItem.animationName}');
+                    AnimationChannel.postMessage('${animationItem.durationInMs.round()}');
+                    ''');
+    setState(() {
+      animationInProgress = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    return BlurredAppBarPage(title: S.of(context).HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
+    return BlurredAppBarPage(title: S
+        .of(context)
+        .HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
       SpacingFoundation.verticalSpace12,
       SizedBox(
           height: 0.394.sh,
@@ -90,11 +106,11 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                   position: DecorationPosition.foreground,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
-                    Colors.black.withOpacity(0.6),
-                    Colors.black.withOpacity(0.8),
-                    Colors.black.withOpacity(0.9),
-                    Colors.black.withOpacity(1),
-                  ])),
+                        Colors.black.withOpacity(0.6),
+                        Colors.black.withOpacity(0.8),
+                        Colors.black.withOpacity(0.9),
+                        Colors.black.withOpacity(1),
+                      ])),
                   child: ImageWidget(
                       svgAsset: GraphicsFoundation.instance.svg.logo, height: 0.394.sh, fit: BoxFit.fitHeight),
                 )),
@@ -108,6 +124,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                     animationName: 'base',
                     localPath: model!.file.path,
                     autoPlay: true,
+                    onTap: setAnimation,
                     javascriptChannels: {_channel},
                     // environmentImage: 'https://github.com/shuffle-app/test-images/raw/master/Interior%20Light%20HDRI.jpg',
                     onWebViewCreated: (WebViewController controller) {
@@ -123,29 +140,18 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                 link: widget.posterUrl ??
                     'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/posters/prince-2.png',
               ),
-            RawGestureDetector(
-                gestures: <Type, GestureRecognizerFactory>{
-                  CustomTapRecognizer: GestureRecognizerFactoryWithHandlers<CustomTapRecognizer>(
-                    () => CustomTapRecognizer(onTap: () {
-                      if (animationInProgress) return;
-                      final animationItem = widget.animations[random.nextInt(widget.animations.length)];
-                      log('tapped ${animationItem.animationName}', name: 'HallOfFameComponent');
-                      controller?.runJavaScript('''
-                    var viewer = document.querySelector('#model-viewer');
-                    viewer.setAttribute('animation-name', '${animationItem.animationName}');
-                    AnimationChannel.postMessage('${animationItem.durationInMs.round()}');
-                    ''');
-                      setState(() {
-                        animationInProgress = true;
-                      });
-                    },),
-                    (CustomTapRecognizer instance) {},
-                  )
-                },
-                // splashFactory: NoSplash.splashFactory,
-                // behavior: HitTestBehavior.translucent,
-
-               )
+            // GestureDetector(
+            // RawGestureDetector(
+            //   gestures: <Type, GestureRecognizerFactory>{
+            //     CustomTapRecognizer: GestureRecognizerFactoryWithHandlers<CustomTapRecognizer>(
+            //           () => CustomTapRecognizer(onTap:setAnimation),
+            //           (CustomTapRecognizer instance) {},
+            //     )
+            //   },
+              // splashFactory: NoSplash.splashFactory,
+              // behavior: HitTestBehavior.translucent,
+// onTap: setAnimation,
+//             )
             // child: const SizedBox.expand())
           ])),
       GridView.count(
@@ -158,11 +164,12 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
         childAspectRatio: 0.5.sp,
         crossAxisSpacing: SpacingFoundation.verticalSpacing8,
         children: widget.items
-            .map((e) => GridTitledItemWidget(
-                  preserveDarkTheme: true,
-                  title: e.title,
-                  child: UiKitFameItem(uiModel: e, preserveDarkTheme: true),
-                ))
+            .map((e) =>
+            GridTitledItemWidget(
+              preserveDarkTheme: true,
+              title: e.title,
+              child: UiKitFameItem(uiModel: e, preserveDarkTheme: true),
+            ))
             .toList(),
       ),
       kBottomNavigationBarHeight.heightBox
@@ -206,7 +213,7 @@ class CustomTapRecognizer extends OneSequenceGestureRecognizer {
   }
 
   @override
-  String get debugDescription => "tap";
+  String get debugDescription => 'tap';
 
   @override
   void didStopTrackingLastPointer(int pointer) {}
