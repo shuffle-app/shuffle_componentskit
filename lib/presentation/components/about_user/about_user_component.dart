@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -19,7 +18,7 @@ class AboutUserComponent extends StatelessWidget {
   final List<UiKitTag>? religions;
   final List<UiKitTag>? genders;
 
-  final GlobalKey? formKey;
+  final GlobalKey<FormState>? formKey;
   final tabs = [
     UiKitCustomTab(title: S.current.Leisure, customValue: 'leisure'),
     UiKitCustomTab(title: S.current.Business, customValue: 'business'),
@@ -49,7 +48,8 @@ class AboutUserComponent extends StatelessWidget {
     if (aboutUserModel.selectedAge == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
     }
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -137,9 +137,14 @@ class AboutUserComponent extends StatelessWidget {
                 UiKitInputFieldNoIcon(
                   controller: nameController,
                   hintText: S.of(context).Name.toUpperCase(),
-                  validator: inputFieldValidator,
+                  validator: (str) {
+                    if (str != null && str.length < 3) {
+                      return S.of(context).ValueMustBeAtLeast3Characters;
+                    }
+                    return null;
+                  },
                   fillColor: colorScheme?.surface3,
-                  // onChanged: (value) => onNameChanged?.call(value),
+                  onChanged: (value) => formKey?.currentState!.validate(),
                 ),
                 SpacingFoundation.verticalSpace16,
                 UiKitInputFieldNoIcon(
