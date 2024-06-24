@@ -160,40 +160,191 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
     );
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title:
-            'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
-        // centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          context.button(
-            data: BaseUiKitButtonData(
-                onPressed: () {
-                  context.push(
-                    PropertyManagementIconsComponent(
-                      relatedPropertyTextController: TextEditingController(),
-                      onIconTap: () {},
-                      iconsPath: [],
-                      recentlyAddedIconPaths: [],
-                      relatedProperties: List.generate(
-                        6,
-                        (index) {
-                          return RelatedPropertiesItemUiModel(
-                            title: 'Hello $index',
-                            propertiesList: ['Foodie', 'Smoke', 'Drink'],
-                            iconData: ShuffleUiKitIcons.restaurant,
-                          );
-                        },
+        appBar: CustomAppBar(
+          title:
+              'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
+          // centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                  data: BaseUiKitButtonData(
+                      text: 'show company presentation component',
+                      onPressed: () {
+                        context.push(CompanyPresentationComponent(
+                          place: UiPlaceModel(
+                            id: 1,
+                            media: [
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                              UiKitMediaPhoto(
+                                  link: GraphicsFoundation
+                                      .instance.png.place.path),
+                            ],
+                            title: 'L\'ETO The Wharf',
+                            logo: GraphicsFoundation.instance.png.place.path,
+                            description:
+                                'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                            baseTags: [
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: false,
+                              ),
+                            ],
+                            tags: [
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: true,
+                              ),
+                              UiKitTag(
+                                title: 'Cheap',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: true,
+                              ),
+                              UiKitTag(
+                                title: 'Duh',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: true,
+                              ),
+                              UiKitTag(
+                                title: 'Metal',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: true,
+                              ),
+                              UiKitTag(
+                                title: 'Heavy',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: true,
+                              ),
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: true,
+                              ),
+                              UiKitTag(
+                                title: 'Cheaper',
+                                icon: ShuffleUiKitIcons.cutlery,
+                                unique: true,
+                              ),
+                            ],
+                          ),
+                        ));
+                      })),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                  data: BaseUiKitButtonData(
+                      onPressed: () => context.push(
+                            PropertyManagementComponent(
+                              propertySearchOptions: (value) async {
+                                return [
+                                  'Active tiger',
+                                  'Interested adventure',
+                                  'Forever resting sloth',
+                                  'Foodie'
+                                ];
+                              },
+                              selectedProperties: [
+                                UiModelPropertyType(title: 'Stripes', id: 0),
+                                UiModelPropertyType(title: 'Melomaniac', id: 1),
+                                UiModelPropertyType(title: 'Drinker', id: 2),
+                                UiModelPropertyType(title: 'Smoker', id: 3),
+                              ],
+                              recentlyAddedProperties: [
+                                UiModelPropertyType(title: 'Stripes', id: 0),
+                                UiModelPropertyType(title: 'Melomaniac', id: 1),
+                                UiModelPropertyType(title: 'Drinker', id: 2),
+                                UiModelPropertyType(title: 'Smoker', id: 3),
+                              ],
+                              onRecentlyAddedPropertyTapped: (value) {},
+                              onSelectedPropertyTapped: (value) {},
+                              onPropertyFieldSubmitted: (value) {},
+                              onAddPropertyTypeTap: () {},
+                              onDeletePropertyTypeTap: () {},
+                              onEditPropertyTypeTap: () {},
+                              selectedPropertyTypeTitle: 'Active tiger',
+                              onPropertyTypeTapped: (value) {},
+                              propertyTypes: [
+                                UiModelPropertyType(
+                                    title: 'Active tiger', id: 0),
+                                UiModelPropertyType(
+                                    title: 'Interested adventure', id: 1),
+                                UiModelPropertyType(
+                                    title: 'Forever resting sloth', id: 2),
+                                UiModelPropertyType(title: 'Foodie', id: 3),
+                              ],
+                            ),
+                          ),
+                      text: 'show property management component')),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                data: BaseUiKitButtonData(
+                  text: 'show spent point barcode component',
+                  onPressed: () {
+                    context.push(
+                      PropertyManagementIconsComponent(
+                        relatedPropertyTextController: TextEditingController(),
+                        onIconTap: () {},
+                        iconsPath: [],
+                        recentlyAddedIconPaths: [],
+                        relatedProperties: List.generate(
+                          6,
+                          (index) {
+                            return RelatedPropertiesItemUiModel(
+                              title: 'Hello $index',
+                              propertiesList: ['Foodie', 'Smoke', 'Drink'],
+                              iconData: ShuffleUiKitIcons.restaurant,
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                },
-                text: 'show property icons component'),
-          )
-        ],
-      ),
-    );
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+        ));
   }
 
   final List<UiKitTag> tags = [
