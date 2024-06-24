@@ -9,7 +9,6 @@ class HowItWorksWidget extends StatelessWidget {
   final String title;
   final String subtitle;
   final List<HintCardUiModel> hintTiles;
-  final Offset? customOffset;
 
   // final
   final VoidCallback? onPop;
@@ -20,7 +19,6 @@ class HowItWorksWidget extends StatelessWidget {
     required this.title,
     required this.hintTiles,
     this.onPop,
-    this.customOffset,
   });
 
   _howItWorksDialog(_, textStyle) => UiKitHintDialog(
