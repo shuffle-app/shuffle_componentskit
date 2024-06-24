@@ -171,18 +171,35 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                  text: 'show property management create property dialog',
                   onPressed: () {
                     showGeneralDialog(
                       context: context,
-
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return PropertyManagementCreatePropertyDialog(
+                          iconTextController: TextEditingController(),
+                          titleTextController: TextEditingController(),
+                          isPlaceType: true,
+                          onCloseTap: () {},
+                          listIcons: [],
+                          onIconTap: (String value) {},
+                        );
+                      },
+                    );
+                  }),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                  onPressed: () {
+                    showGeneralDialog(
+                      context: context,
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return PropertyManagementCreateTitleDialog(
                           isBusiness: false,
                           titleController: TextEditingController(),
-                          onCancelTap: (){},
-                          onCreateTap: (value) {
-
-                          },
+                          onCancelTap: () {},
+                          onCreateTap: (value) {},
                           onCloseTap: () {
                             context.pop();
                           },
@@ -198,7 +215,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   onPressed: () {
                     showGeneralDialog(
                       context: context,
-                      
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return PropertyManagementAddCategoryDialog(
                           onBusinessTap: () {},
@@ -807,6 +823,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             GraphicsFoundation.instance.png.mockUserAvatar.path,
                         description: 'Any cheerful person can invite me',
                         id: 0,
+                        poolId: 1,
                       ),
                     ),
                     onLoadMore: () {},
