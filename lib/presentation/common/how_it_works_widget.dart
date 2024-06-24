@@ -40,7 +40,7 @@ class HowItWorksWidget extends StatelessWidget {
                 hint: e.title,
                 icon: ImageWidget(
                   link: e.imageUrl,
-                  height: 60.h,
+                  height: 65.h,
                   fit: BoxFit.fitHeight,
                 ),
               ),
