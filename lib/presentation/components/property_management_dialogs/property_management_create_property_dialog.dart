@@ -11,7 +11,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
       required this.iconTextController,
       this.iconPath,
       required this.onIconTap,
-      required this.listIcons});
+      required this.listIcons, this.onUploadIconTap});
 
   final VoidCallback? onCloseTap;
   final bool isPlaceType;
@@ -19,7 +19,8 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
   final TextEditingController iconTextController;
   final String? iconPath;
   final ValueChanged<String> onIconTap;
-  final List<IconData> listIcons;
+  final List<String> listIcons;
+  final VoidCallback? onUploadIconTap;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    isPlaceType ? 'Add Place Type' : 'Add property',
+                    isPlaceType ? S.current.AddPlaceType : S.current.AddProperty,
                     style: theme?.boldTextTheme.title1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -71,7 +72,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace24,
             PlaceIconSelector(
-              onPressed: () {},
+              onPressed: onUploadIconTap,
               onIconTap: onIconTap,
               listIconData: listIcons,
             )

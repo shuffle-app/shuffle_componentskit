@@ -27,7 +27,7 @@ class PropertyManagementAddCategoryDialog extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Add Category',
+                  S.current.AddCategory,
                   style: theme?.boldTextTheme.title1,
                   overflow: TextOverflow.ellipsis,
                 ),
