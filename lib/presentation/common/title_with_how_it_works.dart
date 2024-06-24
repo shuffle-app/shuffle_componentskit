@@ -8,6 +8,7 @@ class TitleWithHowItWorks extends StatelessWidget {
   final TextStyle? textStyle;
   final HowItWorksWidget howItWorksWidget;
   final bool shouldShow;
+  final TextAlign textAlign;
 
   const TitleWithHowItWorks({
     super.key,
@@ -15,11 +16,13 @@ class TitleWithHowItWorks extends StatelessWidget {
     required this.textStyle,
     required this.howItWorksWidget,
     required this.shouldShow,
+    this.textAlign = TextAlign.start,
   });
 
   @override
   Widget build(BuildContext context) {
     return RichText(
+      textAlign: textAlign,
       text: TextSpan(
         children: [
           TextSpan(

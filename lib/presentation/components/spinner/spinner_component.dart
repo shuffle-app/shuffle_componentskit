@@ -44,15 +44,13 @@ class SpinnerComponent extends StatelessWidget {
       children: [
         SizedBox(height: MediaQuery.of(context).viewPadding.top),
         spacing,
-        Stack(
-          children: [
-            Text(
-              S.current.SpinnerTitle,
-              style: context.uiKitTheme?.boldTextTheme.title1,
-              textAlign: TextAlign.center,
-            ),
-            if (spinner.showHowItWorks)
-              HowItWorksWidget(
+    TitleWithHowItWorks(
+    title: S.of(context).SpinnerTitle,
+    textStyle: context.uiKitTheme?.boldTextTheme.title1,
+    shouldShow: spinner.showHowItWorks,
+    textAlign: TextAlign.center,
+    howItWorksWidget: HowItWorksWidget(
+
                 title: S.current.SpinnerHiwTitle,
                 subtitle: S.current.SpinnerHiwSubtitle,
                 hintTiles: [
@@ -73,10 +71,9 @@ class SpinnerComponent extends StatelessWidget {
                     imageUrl: GraphicsFoundation.instance.png.booking.path,
                   ),
                 ],
-                customOffset: Offset(0.78.sw, 35),
                 onPop: onHowItWorksPoped,
               ),
-          ],
+
         ),
         Expanded(
           child: LayoutBuilder(

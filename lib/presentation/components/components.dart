@@ -119,3 +119,5 @@ export 'property_management/property_management_component.dart';
 export 'property_management/ui_model_property_type.dart';
 export 'company_presentation/company_presentation_component.dart';
 
+
+export 'property_management/property_management_icons_component.dart';

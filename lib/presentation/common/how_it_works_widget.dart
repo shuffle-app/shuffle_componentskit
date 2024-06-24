@@ -7,9 +7,9 @@ import '../../domain/data_uimodels/hint_card_ui_model.dart';
 
 class HowItWorksWidget extends StatelessWidget {
   final String title;
+  final Widget? customTitle;
   final String subtitle;
   final List<HintCardUiModel> hintTiles;
-  final Offset? customOffset;
 
   // final
   final VoidCallback? onPop;
@@ -19,12 +19,13 @@ class HowItWorksWidget extends StatelessWidget {
     required this.subtitle,
     required this.title,
     required this.hintTiles,
+    this.customTitle,
     this.onPop,
-    this.customOffset,
   });
 
   _howItWorksDialog(_, textStyle) => UiKitHintDialog(
         title: title,
+        customTitle: customTitle,
         subtitle: subtitle,
         textStyle: textStyle,
         dismissText: S.current.OkayCool.toUpperCase(),
@@ -39,7 +40,7 @@ class HowItWorksWidget extends StatelessWidget {
                 hint: e.title,
                 icon: ImageWidget(
                   link: e.imageUrl,
-                  height: 74.h,
+                  height: 60.h,
                   fit: BoxFit.fitHeight,
                 ),
               ),

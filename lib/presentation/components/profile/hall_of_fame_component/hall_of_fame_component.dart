@@ -63,6 +63,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
         });
       });
     });
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
@@ -88,6 +89,12 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
     setState(() {
       animationInProgress = true;
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
