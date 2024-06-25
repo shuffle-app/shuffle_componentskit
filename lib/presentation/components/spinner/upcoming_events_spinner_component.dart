@@ -14,7 +14,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
   final VoidCallback? onAdvertisementTap;
 
   const UpcomingEventsSpinnerComponent({
-    Key? key,
+    super.key,
     required this.uiModel,
     required this.itemsController,
     required this.categoriesController,
@@ -22,7 +22,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
     this.onFavoriteTap,
     this.favoriteStream,
     this.onAdvertisementTap,
-  }) : super(key: key);
+  });
 
   factory UpcomingEventsSpinnerComponent.simple(
       {required List<UiEventModel> events, Function? onEventTap, Function? onFavoriteTap, Function? favoriteStream}) {

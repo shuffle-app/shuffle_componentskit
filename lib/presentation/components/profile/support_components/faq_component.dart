@@ -70,8 +70,8 @@ class _FAQComponentState extends State<FAQComponent> {
             data: ThemeData(
               textButtonTheme: TextButtonThemeData(
                 style: theme?.textButtonStyle(theme.colorScheme.inversePrimary).copyWith(
-                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-                      textStyle: MaterialStateTextStyle.resolveWith(
+                      padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                      textStyle: WidgetStateTextStyle.resolveWith(
                         (states) {
                           return theme.regularTextTheme.body;
                         },

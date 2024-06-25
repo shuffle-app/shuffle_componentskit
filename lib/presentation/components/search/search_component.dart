@@ -435,7 +435,7 @@ class SearchComponent extends StatelessWidget {
                         imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
                         onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
                     .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
-                .toList(),
+                ,
             kBottomNavigationBarHeight.heightBox,
           ],
         ),

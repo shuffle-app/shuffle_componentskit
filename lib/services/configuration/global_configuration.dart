@@ -11,7 +11,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class GlobalConfiguration {
   static final GlobalConfiguration _singleton = GlobalConfiguration._internal();
-  static String _configUrl = ConfigConstants.configAlternativeUrl;
+  // static String _configUrl = ConfigConstants.configAlternativeUrl;
   static int _timeout = 1;
   static String? _languageCode;
   final Completer _completer = Completer();
@@ -23,9 +23,9 @@ class GlobalConfiguration {
   bool get isLoaded => _completer.isCompleted;
 
   factory GlobalConfiguration([String? configUrl, String? languageCode, int? timeout]) {
-    if (configUrl != null) {
-      _configUrl = configUrl;
-    }
+    // if (configUrl != null) {
+    //   _configUrl = configUrl;
+    // }
     if (timeout != null) {
       _timeout = timeout;
     }

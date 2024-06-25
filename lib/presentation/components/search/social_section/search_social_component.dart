@@ -9,12 +9,12 @@ class SearchSocialComponent extends StatelessWidget {
   final List<SearchSocialCardUiModel>? servicesEvents;
 
   const SearchSocialComponent({
-    Key? key,
+    super.key,
     this.onFilterPressed,
     this.onContentTypePressed,
     this.placesEvents,
     this.servicesEvents,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class SearchSocialComponent extends StatelessWidget {
                         backgroundColor: isLightTheme ? colorScheme?.surface : null,
                       ).paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                     )
-                    .toList(),
+                    ,
               ],
             ),
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16),
@@ -171,7 +171,7 @@ class SearchSocialComponent extends StatelessWidget {
                       iconRingColor: e.value.color,
                     ).paddingOnly(right: SpacingFoundation.horizontalSpacing16);
                   },
-                ).toList(),
+                ),
               ],
             ),
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16),

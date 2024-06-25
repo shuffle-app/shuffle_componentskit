@@ -29,7 +29,7 @@ class FeedComponent extends StatelessWidget {
   final bool canShowVideoReactions;
 
   const FeedComponent({
-    Key? key,
+    super.key,
     required this.feed,
     required this.controller,
     required this.showBusinessContent,
@@ -51,7 +51,7 @@ class FeedComponent extends StatelessWidget {
     this.onListItemPressed,
     this.onAdvertisementPressed,
     this.onLoadMoreChips,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +156,9 @@ class FeedComponent extends StatelessWidget {
               children: feed.niches?.map<Widget>(
                     (e) {
                       double padding = 0.0;
-                      if (e.title == feed.niches?.first.title) padding = horizontalMargin;
+                      if (e.title == feed.niches?.first.title) {
+                        padding = horizontalMargin;
+                      }
 
                       return UiKitMessageCardWithIcon(
                         message: e.title,

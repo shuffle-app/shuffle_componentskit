@@ -17,7 +17,7 @@ class SpinnerComponent extends StatelessWidget {
   final DateTimeRange? filterDate;
 
   const SpinnerComponent(
-      {Key? key,
+      {super.key,
       required this.spinner,
       this.onEventTap,
       this.onHowItWorksPoped,
@@ -27,8 +27,7 @@ class SpinnerComponent extends StatelessWidget {
       this.filterDate,
       required this.categoriesController,
       required this.itemsController,
-      this.favoriteStream})
-      : super(key: key);
+      this.favoriteStream});
 
   @override
   Widget build(BuildContext context) {

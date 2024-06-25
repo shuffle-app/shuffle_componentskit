@@ -17,7 +17,7 @@ class ChatComponent extends StatelessWidget {
   final ChatItemUiModel chatItemUiModel;
 
   const ChatComponent({
-    Key? key,
+    super.key,
     required this.messageController,
     required this.pagingController,
     required this.scrollController,
@@ -27,7 +27,7 @@ class ChatComponent extends StatelessWidget {
     this.onAcceptInvitationTap,
     this.onDenyInvitationTap,
     this.onMessageSent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +113,7 @@ class ChatComponent extends StatelessWidget {
                   return UiKitChatOutCard(
                     timeOfDay: item.timeSent,
                     sentByMe: item.senderIsMe,
+                    id: 0,
                     child: UiKitInviteMessageContent(
                       username: item.invitationData!.username,
                       placeName: item.invitationData!.placeName,
@@ -129,12 +130,14 @@ class ChatComponent extends StatelessWidget {
                 }
 
                 return UiKitChatOutCard(
+                  id: 0,
                   timeOfDay: item.timeSent,
                   text: item.message,
                   sentByMe: item.senderIsMe,
                 );
               } else {
                 return UiKitChatInCard(
+                  id: 0,
                   timeOfDay: item.timeSent,
                   text: item.message,
                 );

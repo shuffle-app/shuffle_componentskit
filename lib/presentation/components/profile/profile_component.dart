@@ -62,7 +62,7 @@ class ProfileComponent extends StatelessWidget {
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
-  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
+  // bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
   @override
   Widget build(BuildContext context) {

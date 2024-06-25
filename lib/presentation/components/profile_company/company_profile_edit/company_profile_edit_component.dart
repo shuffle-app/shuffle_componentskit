@@ -72,7 +72,6 @@ class CompanyProfileEditComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
-    final colorScheme = context.uiKitTheme?.colorScheme;
 
     return Scaffold(
       body: Form(

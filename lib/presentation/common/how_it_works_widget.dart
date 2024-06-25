@@ -23,7 +23,7 @@ class HowItWorksWidget extends StatelessWidget {
     this.onPop,
   });
 
-  _howItWorksDialog(_, textStyle) => UiKitHintDialog(
+  _howItWorksDialog(ctx, textStyle) => UiKitHintDialog(
         title: title,
         customTitle: customTitle,
         subtitle: subtitle,
@@ -32,7 +32,7 @@ class HowItWorksWidget extends StatelessWidget {
         onDismiss: () {
           onPop?.call();
 
-          return Navigator.pop(_);
+          return Navigator.pop(ctx);
         },
         hintTiles: hintTiles
             .map<UiKitIconHintCard>(

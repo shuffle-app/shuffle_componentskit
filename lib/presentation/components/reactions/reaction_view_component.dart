@@ -7,6 +7,8 @@ class ReactionViewComponent extends StatelessWidget {
   final VideoReactionUiModel videoReactionModel;
   final VoidCallback? onSwipeUp;
   final VoidCallback? onSwipeDown;
+  final VoidCallback? onSingleTapRight;
+  final VoidCallback? onSingleTapLeft;
   final UiUniversalModel content;
   final VoidCallback? onPlaceNameTapped;
   final VoidCallback? onSeeMorePopOverCallback;
@@ -21,6 +23,8 @@ class ReactionViewComponent extends StatelessWidget {
     this.onSeeMorePopOverCallback,
     this.onPlaceNameTapped,
     this.onAuthorTapped,
+    this.onSingleTapRight,
+    this.onSingleTapLeft,
   });
 
   final videoProgressNotifier = ValueNotifier<double>(0);
@@ -39,6 +43,14 @@ class ReactionViewComponent extends StatelessWidget {
     }
     if(details.velocity.pixelsPerSecond.dy > 100 && onSwipeDown!= null) {
       onSwipeDown?.call();
+    }
+  }
+
+  void _tapUpHandler(TapUpDetails details) {
+    if(details.globalPosition.dx>0.5.sw && onSingleTapRight!= null) {
+      onSingleTapRight?.call();
+    } else if(details.globalPosition.dx<0.5.sw && onSingleTapLeft!=null){
+      onSingleTapLeft?.call();
     }
   }
 
@@ -137,6 +149,7 @@ class ReactionViewComponent extends StatelessWidget {
               SpacingFoundation.horizontalSpace20,
               Expanded(
                 child: GestureDetector(
+                  onTapUp: _tapUpHandler,
                   onVerticalDragEnd: _verticalSwipeHandler,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

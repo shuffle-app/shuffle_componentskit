@@ -7,12 +7,11 @@ class _FirstBody extends StatelessWidget {
   final AnimationController animationController;
 
   const _FirstBody({
-    Key? key,
     required this.bigScreen,
     required this.backgroundImage,
     required this.animationController,
     this.onNextPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

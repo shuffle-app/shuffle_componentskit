@@ -8,11 +8,11 @@ class SearchSocialContentTypeRecommendationComponent extends StatelessWidget {
   final VoidCallback? onFilterPressed;
 
   const SearchSocialContentTypeRecommendationComponent({
-    Key? key,
+    super.key,
     required this.title,
     this.onContentPressed,
     this.onFilterPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class RecoverPasswordDialogComponent extends StatelessWidget {
-  const RecoverPasswordDialogComponent({Key? key}) : super(key: key);
+  const RecoverPasswordDialogComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
