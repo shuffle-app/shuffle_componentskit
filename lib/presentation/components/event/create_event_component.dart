@@ -7,7 +7,6 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 import '../../common/photolist_editing_component.dart';
-import '../../common/price_selector_component.dart';
 import '../../common/tags_selection_component.dart';
 
 class CreateEventComponent extends StatefulWidget {

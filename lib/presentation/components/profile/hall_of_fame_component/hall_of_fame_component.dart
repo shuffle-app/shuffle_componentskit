@@ -5,7 +5,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'animation_info.dart';
 
@@ -101,7 +100,6 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.uiKitTheme;
     return BlurredAppBarPage(title: S.of(context).HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
       SpacingFoundation.verticalSpace12,
       SizedBox(

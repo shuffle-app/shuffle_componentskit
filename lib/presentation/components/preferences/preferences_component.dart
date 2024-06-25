@@ -9,12 +9,12 @@ class PreferencesComponent extends StatelessWidget {
   final bool isLoading;
 
   const PreferencesComponent({
-    Key? key,
+    super.key,
     this.onSubmit,
     required this.preferences,
     this.isLoading = false,
     required this.onSelect,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

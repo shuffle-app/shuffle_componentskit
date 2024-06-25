@@ -9,12 +9,12 @@ class SearchSocialFiltersSheetComponent extends StatefulWidget {
   final Map<String, String> selectedFilters;
 
   const SearchSocialFiltersSheetComponent({
-    Key? key,
+    super.key,
     required this.model,
     required this.onFilterChanged,
     required this.selectedFilters,
     this.onFiltersReset,
-  }) : super(key: key);
+  });
 
   @override
   State<SearchSocialFiltersSheetComponent> createState() => _SearchSocialFiltersSheetComponentState();

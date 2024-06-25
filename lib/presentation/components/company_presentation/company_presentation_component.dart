@@ -104,8 +104,6 @@ class CompanyPresentationComponent extends StatelessWidget {
         : ComponentPlaceModel.fromJson(config['place']);
     final horizontalMargin =
         (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
     final theme = context.uiKitTheme;
     final colorScheme = theme?.colorScheme;
     final boldTextTheme = theme?.boldTextTheme;

@@ -17,7 +17,7 @@ class ChatComponent extends StatelessWidget {
   final ChatItemUiModel chatItemUiModel;
 
   const ChatComponent({
-    Key? key,
+    super.key,
     required this.messageController,
     required this.pagingController,
     required this.scrollController,
@@ -27,7 +27,7 @@ class ChatComponent extends StatelessWidget {
     this.onAcceptInvitationTap,
     this.onDenyInvitationTap,
     this.onMessageSent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

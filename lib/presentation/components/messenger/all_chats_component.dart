@@ -8,10 +8,10 @@ class AllChatsComponent extends StatelessWidget {
   final ValueChanged<int> onChatSelected;
 
   const AllChatsComponent({
-    Key? key,
+    super.key,
     required this.controller,
     required this.onChatSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

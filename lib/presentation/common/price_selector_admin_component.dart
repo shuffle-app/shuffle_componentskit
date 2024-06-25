@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PriceSelectorAdminComponent extends StatefulWidget {

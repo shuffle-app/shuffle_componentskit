@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SearchResultComponent extends StatelessWidget {
@@ -28,11 +27,9 @@ class SearchResultComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalConfiguration().appConfig.content;
-    final model = ComponentSearchModel.fromJson(config['search']);
+    // final config = GlobalConfiguration().appConfig.content;
+    // final model = ComponentSearchModel.fromJson(config['search']);
 
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final colorScheme = context.uiKitTheme?.colorScheme;
 
     return BlurredAppBarPage(

@@ -14,7 +14,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
   final bool multiSelectEnabled;
 
   const CreateVideoReactionComponent({
-    Key? key,
+    super.key,
     required this.onGoPressed,
     required this.onAlbumNameChanged,
     required this.videosPagingController,
@@ -23,7 +23,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
     this.initiallySelectedAlbum,
     this.onVideoSelectionChanged,
     this.multiSelectEnabled = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

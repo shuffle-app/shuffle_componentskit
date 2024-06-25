@@ -2,13 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 import '../../common/photolist_editing_component.dart';
-import '../../common/price_selector_component.dart';
 import '../../common/tags_selection_component.dart';
 
 class CreatePlaceComponent extends StatefulWidget {
@@ -72,11 +70,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _priceController.text = widget.placeToEdit?.price ?? '';
   }
 
-  _onVideoDeleted(int index) {
-    setState(() {
-      _videos.removeAt(index);
-    });
-  }
+  // _onVideoDeleted(int index) {
+  //   setState(() {
+  //     _videos.removeAt(index);
+  //   });
+  // }
 
   _onPhotoDeleted(int index) {
     setState(() {
@@ -115,14 +113,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     }
   }
 
-  _onVideoAddRequested() async {
-    final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
-    if (videoFile != null) {
-      setState(() {
-        _videos.add(UiKitMediaVideo(link: videoFile.path));
-      });
-    }
-  }
+  // _onVideoAddRequested() async {
+  //   final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+  //   if (videoFile != null) {
+  //     setState(() {
+  //       _videos.add(UiKitMediaVideo(link: videoFile.path));
+  //     });
+  //   }
+  // }
 
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
     setState(() {
@@ -130,11 +128,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     });
   }
 
-  _onVideoReorderRequested(int oldIndex, int newIndex) {
-    setState(() {
-      _videos.insert(newIndex, _videos.removeAt(oldIndex));
-    });
-  }
+  // _onVideoReorderRequested(int oldIndex, int newIndex) {
+  //   setState(() {
+  //     _videos.insert(newIndex, _videos.removeAt(oldIndex));
+  //   });
+  // }
 
   @override
   void didUpdateWidget(covariant CreatePlaceComponent oldWidget) {

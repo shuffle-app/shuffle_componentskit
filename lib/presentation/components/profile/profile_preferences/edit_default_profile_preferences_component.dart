@@ -7,10 +7,10 @@ class EditDefaultProfilePreferencesComponent extends StatelessWidget {
   final ValueChanged<List<String>>? onSelectedPreferencesChanged;
 
   const EditDefaultProfilePreferencesComponent({
-    Key? key,
+    super.key,
     required this.preferencesModel,
     this.onSelectedPreferencesChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

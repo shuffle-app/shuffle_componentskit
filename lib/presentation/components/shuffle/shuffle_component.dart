@@ -20,7 +20,7 @@ class ShuffleComponent extends StatelessWidget {
   final ValueNotifier<String> backgroundImageNotifier;
 
   const ShuffleComponent({
-    Key? key,
+    super.key,
     required this.shuffle,
     required this.configModel,
     required this.indexNotifier,
@@ -32,7 +32,7 @@ class ShuffleComponent extends StatelessWidget {
     this.onCardTap,
     this.onEnd,
     this.onFavorite,
-  }) : super(key: key);
+  });
 
   final animDuration = const Duration(milliseconds: 350);
 

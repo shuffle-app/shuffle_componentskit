@@ -9,10 +9,10 @@ class AllVideoReactionsComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel> onReactionTapped;
 
   const AllVideoReactionsComponent({
-    Key? key,
+    super.key,
     required this.videoReactionsPagingController,
     required this.onReactionTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

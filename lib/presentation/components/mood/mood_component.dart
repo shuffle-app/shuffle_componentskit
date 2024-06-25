@@ -21,7 +21,7 @@ class MoodComponent extends StatelessWidget {
   final bool showHowItWorks;
 
   const MoodComponent({
-    Key? key,
+    super.key,
     required this.mood,
     this.onPlacePressed,
     this.onCheckInPressed,
@@ -31,7 +31,7 @@ class MoodComponent extends StatelessWidget {
     required this.isVisibleButton,
     this.onLevelActivated,
     this.showHowItWorks = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
