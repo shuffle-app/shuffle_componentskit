@@ -111,13 +111,8 @@ export 'profile/favorites_component/ui_model_favorites_merge_components_list.dar
 export 'profile/spent_points/spent_points_component.dart';
 export 'profile/spent_points/ui_model_discounts.dart';
 export 'profile/spent_points/spent_point_barcode_component.dart';
+export 'moderation/feedback_moderation.dart';
+export 'moderation/video_reaction_moderation.dart';
 export 'profile/hall_of_fame_component/animation_info.dart';
-export 'profile/spent_points/view_history_point_component.dart';
-export 'profile/spent_points/view_history_activation_widget.dart';
-export 'profile/spent_points/ui_model_view_history_accrual.dart';
-export 'property_management/property_management_component.dart';
-export 'property_management/ui_model_property_type.dart';
 export 'company_presentation/company_presentation_component.dart';
-
-
 export 'property_management/property_management_icons_component.dart';
