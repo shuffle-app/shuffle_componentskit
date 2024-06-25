@@ -179,6 +179,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             label: S.of(context).Title,
             controller: _titleController,
             validator: titleValidator,
+            onChanged: (_) {
+              _formKey.currentState?.validate();
+            },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
@@ -199,6 +202,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               label: S.of(context).Description,
               controller: _descriptionController,
               expands: true,
+              onChanged: (_) {
+                _formKey.currentState?.validate();
+              },
               validator: descriptionValidator,
             ),
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -243,6 +249,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
             keyboardType: TextInputType.phone,
+            inputFormatters: [americanInputFormatter],
             label: S.of(context).Phone,
             controller: _phoneController,
             validator: phoneNumberValidator,
@@ -340,8 +347,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               listUiKitTags: _eventToEdit.niche != null ? [UiKitTag(title: _eventToEdit.niche!, icon: '')] : null,
               title: S.of(context).PleaseSelectANiche,
               onTap: () {
-                setState(() {
-                  widget.onNicheChanged?.call().then((value) {
+                widget.onNicheChanged?.call().then((value) {
+                  setState(() {
                     _eventToEdit.niche = value ?? '';
                   });
                 });

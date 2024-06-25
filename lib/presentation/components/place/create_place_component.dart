@@ -228,6 +228,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               label: S.of(context).Title,
               validator: titleValidator,
               controller: _titleController,
+              onChanged: (_) {
+                _formKey.currentState?.validate();
+              },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             Row(
@@ -271,6 +274,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 validator: descriptionValidator,
                 controller: _descriptionController,
                 expands: true,
+                onChanged: (_) {
+                  _formKey.currentState?.validate();
+                },
               ),
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
@@ -323,6 +329,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
               keyboardType: TextInputType.phone,
+              inputFormatters: [americanInputFormatter],
               label: S.of(context).Phone,
               validator: phoneNumberValidator,
               controller: _phoneController,
@@ -419,11 +426,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             SpacingFoundation.verticalSpace24,
             if (_placeToEdit.contentType == 'business')
               UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.niche != null ? [UiKitTag(title: _placeToEdit.niche!, icon: '')] : null,
+                listUiKitTags: _placeToEdit.niche != null ? [UiKitTag(title: _placeToEdit.niche!, icon: null)] : null,
                 title: S.of(context).PleaseSelectANiche,
                 onTap: () {
-                  setState(() {
-                    widget.onNicheChanged?.call().then((value) {
+                  widget.onNicheChanged?.call().then((value) {
+                    setState(() {
                       _placeToEdit.niche = value ?? '';
                     });
                   });
