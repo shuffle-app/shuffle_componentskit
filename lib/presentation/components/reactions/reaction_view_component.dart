@@ -6,6 +6,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class ReactionViewComponent extends StatelessWidget {
   final VideoReactionUiModel videoReactionModel;
   final VoidCallback? onSwipeUp;
+  final VoidCallback? onSwipeDown;
   final UiUniversalModel content;
   final VoidCallback? onPlaceNameTapped;
   final VoidCallback? onSeeMorePopOverCallback;
@@ -16,6 +17,7 @@ class ReactionViewComponent extends StatelessWidget {
     required this.videoReactionModel,
     required this.content,
     this.onSwipeUp,
+    this.onSwipeDown,
     this.onSeeMorePopOverCallback,
     this.onPlaceNameTapped,
     this.onAuthorTapped,
@@ -34,6 +36,9 @@ class ReactionViewComponent extends StatelessWidget {
   void _verticalSwipeHandler(DragEndDetails details) {
     if (details.velocity.pixelsPerSecond.dy < 0 && canSwipeUp) {
       onSwipeUp?.call();
+    }
+    if(details.velocity.pixelsPerSecond.dy > 100 && onSwipeDown!= null) {
+      onSwipeDown?.call();
     }
   }
 

@@ -37,7 +37,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
   void initState() {
     CustomCacheManager.personsInstance
         .getFileStream(widget.modelUrl ??
-        'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/characters/1+character+(1).glb')
+            'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/characters/1+character+(1).glb')
         .listen((value) {
       if (value.runtimeType == DownloadProgress) {
         setState(() {
@@ -58,11 +58,14 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                       var viewer = document.querySelector('#model-viewer');
                       viewer.setAttribute('animation-name', 'base');
                       ''');
-        setState(() {
-          animationInProgress = false;
-        });
+        Future.delayed(
+            Duration.zero,
+            () => setState(() {
+                  animationInProgress = false;
+                }));
       });
     });
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
@@ -91,11 +94,15 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    return BlurredAppBarPage(title: S
-        .of(context)
-        .HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
+    return BlurredAppBarPage(title: S.of(context).HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
       SpacingFoundation.verticalSpace12,
       SizedBox(
           height: 0.394.sh,
@@ -106,11 +113,11 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                   position: DecorationPosition.foreground,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
-                        Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.8),
-                        Colors.black.withOpacity(0.9),
-                        Colors.black.withOpacity(1),
-                      ])),
+                    Colors.black.withOpacity(0.6),
+                    Colors.black.withOpacity(0.8),
+                    Colors.black.withOpacity(0.9),
+                    Colors.black.withOpacity(1),
+                  ])),
                   child: ImageWidget(
                       svgAsset: GraphicsFoundation.instance.svg.logo, height: 0.394.sh, fit: BoxFit.fitHeight),
                 )),
@@ -140,19 +147,6 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                 link: widget.posterUrl ??
                     'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/posters/prince-2.png',
               ),
-            // GestureDetector(
-            // RawGestureDetector(
-            //   gestures: <Type, GestureRecognizerFactory>{
-            //     CustomTapRecognizer: GestureRecognizerFactoryWithHandlers<CustomTapRecognizer>(
-            //           () => CustomTapRecognizer(onTap:setAnimation),
-            //           (CustomTapRecognizer instance) {},
-            //     )
-            //   },
-              // splashFactory: NoSplash.splashFactory,
-              // behavior: HitTestBehavior.translucent,
-// onTap: setAnimation,
-//             )
-            // child: const SizedBox.expand())
           ])),
       GridView.count(
         crossAxisCount: 3,
@@ -164,12 +158,11 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
         childAspectRatio: 0.5.sp,
         crossAxisSpacing: SpacingFoundation.verticalSpacing8,
         children: widget.items
-            .map((e) =>
-            GridTitledItemWidget(
-              preserveDarkTheme: true,
-              title: e.title,
-              child: UiKitFameItem(uiModel: e, preserveDarkTheme: true),
-            ))
+            .map((e) => GridTitledItemWidget(
+                  preserveDarkTheme: true,
+                  title: e.title,
+                  child: UiKitFameItem(uiModel: e, preserveDarkTheme: true),
+                ))
             .toList(),
       ),
       kBottomNavigationBarHeight.heightBox

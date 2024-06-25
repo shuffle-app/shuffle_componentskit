@@ -86,41 +86,35 @@ class ShuffleComponent extends StatelessWidget {
                 RepaintBoundary(
                   child: SizedBox(
                     width: double.infinity,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Text(
-                          S.of(context).TryYourself,
-                          style: theme?.boldTextTheme.title1.copyWith(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                        if (shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null)
-                          HowItWorksWidget(
-                            title: S.of(context).ShuffleHiwTitle,
-                            subtitle: S.of(context).ShuffleHiwSubtitle,
-                            hintTiles: [
-                              HintCardUiModel(
-                                title: S.of(context).ShuffleHiwHint(0),
-                                imageUrl: GraphicsFoundation.instance.png.shuffleAny.path,
-                              ),
-                              HintCardUiModel(
-                                title: S.of(context).ShuffleHiwHint(1),
-                                imageUrl: GraphicsFoundation.instance.png.swipeProperties.path,
-                              ),
-                              HintCardUiModel(
-                                title: S.of(context).ShuffleHiwHint(2),
-                                imageUrl: GraphicsFoundation.instance.png.likeDislike.path,
-                              ),
-                              HintCardUiModel(
-                                title: S.of(context).ShuffleHiwHint(3),
-                                imageUrl: GraphicsFoundation.instance.png.teach.path,
-                              ),
-                            ],
-                            customOffset: Offset(0.35.sw, 25),
-                            onPop: onHowItWorksPoped,
+                    child: TitleWithHowItWorks(
+                      title: S.of(context).TryYourself,
+                      textStyle: theme?.boldTextTheme.title1.copyWith(color: Colors.white),
+                      textAlign: TextAlign.center,
+                      shouldShow:
+                          shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null,
+                      howItWorksWidget: HowItWorksWidget(
+                        title: S.of(context).ShuffleHiwTitle,
+                        subtitle: S.of(context).ShuffleHiwSubtitle,
+                        hintTiles: [
+                          HintCardUiModel(
+                            title: S.of(context).ShuffleHiwHint(0),
+                            imageUrl: GraphicsFoundation.instance.png.shuffleAny.path,
                           ),
-                      ],
+                          HintCardUiModel(
+                            title: S.of(context).ShuffleHiwHint(1),
+                            imageUrl: GraphicsFoundation.instance.png.swipeProperties.path,
+                          ),
+                          HintCardUiModel(
+                            title: S.of(context).ShuffleHiwHint(2),
+                            imageUrl: GraphicsFoundation.instance.png.likeDislike.path,
+                          ),
+                          HintCardUiModel(
+                            title: S.of(context).ShuffleHiwHint(3),
+                            imageUrl: GraphicsFoundation.instance.png.teach.path,
+                          ),
+                        ],
+                        onPop: onHowItWorksPoped,
+                      ),
                     ),
                   ),
                 ),

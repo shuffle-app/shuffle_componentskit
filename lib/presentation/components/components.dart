@@ -114,4 +114,5 @@ export 'profile/spent_points/spent_point_barcode_component.dart';
 export 'moderation/feedback_moderation.dart';
 export 'moderation/video_reaction_moderation.dart';
 export 'profile/hall_of_fame_component/animation_info.dart';
-
+export 'company_presentation/company_presentation_component.dart';
+export 'property_management/property_management_icons_component.dart';

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart' as kit;
 
@@ -44,6 +45,15 @@ class ComponentBuilder {
   late final bool isWidgetScrollable;
 
   ComponentBuilder({required this.child, this.bottomBar, this.alertDialogData, this.useRootNavigator = false}) {
-    isWidgetScrollable = child.runtimeType == PlaceComponent || child.runtimeType == EventComponent;
+    isWidgetScrollable = [
+      PlaceComponent,
+      EventComponent,
+      Observer,
+      NotificationsListComponent,
+      AccountSubscriptionComponent,
+      CompanySubscriptionComponent,
+      AllReviewsComponent,
+      AllVideoReactionsComponent
+    ].contains(child.runtimeType);
   }
 }

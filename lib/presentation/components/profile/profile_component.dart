@@ -30,6 +30,7 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
   final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
+  final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
 
   const ProfileComponent({
     super.key,
@@ -56,6 +57,7 @@ class ProfileComponent extends StatelessWidget {
     this.favoritePlaces = const [],
     this.onRecommendedUserAvatarPressed,
     this.onRecommendedUserCardChanged,
+    this.onFeedbackCardPressed,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
@@ -103,44 +105,35 @@ class ProfileComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace24,
           SizedBox(
             width: double.infinity,
-            child: Stack(
-              children: [
-                if (businessContentEnabled)
-                  Text(
-                    S.of(context).FindSomeoneToNetworkWith,
-                    style: textTheme?.title1,
+            child: TitleWithHowItWorks(
+              title: businessContentEnabled
+                  ? S.of(context).FindSomeoneToNetworkWith
+                  : S.of(context).FindSomeoneToHangOutWith,
+              textStyle: textTheme?.title1,
+              shouldShow: showHowItWorks,
+              howItWorksWidget: HowItWorksWidget(
+                title: S.current.ProfileFindSomeoneHiwTitle,
+                subtitle: S.current.ProfileFindSomeoneHiwSubtitle,
+                hintTiles: [
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(0),
+                    imageUrl: GraphicsFoundation.instance.png.companions.path,
                   ),
-                if (!businessContentEnabled)
-                  Text(
-                    S.of(context).FindSomeoneToHangOutWith,
-                    style: textTheme?.title1,
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(1),
+                    imageUrl: GraphicsFoundation.instance.png.preferences.path,
                   ),
-                if (showHowItWorks)
-                  HowItWorksWidget(
-                    title: S.current.ProfileFindSomeoneHiwTitle,
-                    subtitle: S.current.ProfileFindSomeoneHiwSubtitle,
-                    hintTiles: [
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(0),
-                        imageUrl: GraphicsFoundation.instance.png.companions.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(1),
-                        imageUrl: GraphicsFoundation.instance.png.preferences.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(2),
-                        imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(3),
-                        imageUrl: GraphicsFoundation.instance.png.foe.path,
-                      ),
-                    ],
-                    onPop: onHowItWorksPoped,
-                    customOffset: Offset(MediaQuery.sizeOf(context).width / 1.5, 35),
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(2),
+                    imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
                   ),
-              ],
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(3),
+                    imageUrl: GraphicsFoundation.instance.png.foe.path,
+                  ),
+                ],
+                onPop: onHowItWorksPoped,
+              ),
             ).paddingSymmetric(horizontal: horizontalMargin),
           ),
           SpacingFoundation.verticalSpace24,
@@ -276,10 +269,12 @@ class ProfileComponent extends StatelessWidget {
                   customHeight: 0.205.sh,
                   imagePath: GraphicsFoundation.instance.png.place.path,
                 ).paddingOnly(left: EdgeInsetsFoundation.horizontal16),
-                noItemsFoundIndicator: Text(
-                  S.current.NoVideoReactionsYet,
-                  style: textTheme?.subHeadline,
-                ).paddingAll(EdgeInsetsFoundation.all16),
+                noItemsFoundIndicator: SizedBox(
+                    width: 1.sw,
+                    child: Text(
+                      S.current.NoVideoReactionsYet,
+                      style: textTheme?.subHeadline,
+                    ).paddingAll(EdgeInsetsFoundation.all16)),
                 itemBuilder: (context, reaction, index) {
                   return UiKitReactionPreview(
                     customHeight: 0.205.sh,
@@ -337,6 +332,7 @@ class ProfileComponent extends StatelessWidget {
                               text: feedback.feedbackText,
                               isHelpful: feedback.helpfulForUser,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                              onPressed: () => onFeedbackCardPressed?.call(feedback),
                             ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
                           );
                         },

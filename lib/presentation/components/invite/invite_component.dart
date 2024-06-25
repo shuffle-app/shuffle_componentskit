@@ -8,7 +8,6 @@ class InviteComponent extends StatefulWidget {
     super.key,
     required this.persons,
     required this.onLoadMore,
-    required this.onInvitePersonsChanged,
     this.invitedUser,
     this.initialDate,
     this.onRemoveUserOptionTap,
@@ -22,7 +21,6 @@ class InviteComponent extends StatefulWidget {
 
   final List<UiInvitePersonModel> persons;
   final VoidCallback onLoadMore;
-  final Function(List<UiInvitePersonModel> persons) onInvitePersonsChanged;
 
   final UiInvitePersonModel? invitedUser;
   final VoidCallback? onRemoveUserOptionTap;
@@ -92,24 +90,6 @@ class _InviteComponentState extends State<InviteComponent> {
                     : () {
                         final invitedPersons = widget.persons.where((e) => e.isSelected);
                         widget.onInviteTap?.call(invitedPersons.toList());
-                        showUiKitAlertDialog(
-                          context,
-                          AlertDialogData(
-                            defaultButtonText: S.of(context).OkayCool.toLowerCase(),
-                            defaultButtonSmall: false,
-                            title: Text(
-                              S.of(context).YouSentInvitationToNPeople(invitedPersons.length),
-                              style: boldTextTheme?.title2.copyWith(color: theme?.colorScheme.primary),
-                              textAlign: TextAlign.center,
-                            ),
-                            content: Text(
-                              S.of(context).InvitationsCanBeViewedInPrivateMessages,
-                              style: boldTextTheme?.body.copyWith(color: theme?.colorScheme.primary),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ).then((value) => context.pop());
-                        widget.onInvitePersonsChanged(invitedPersons.toList());
                       },
               ),
             ),

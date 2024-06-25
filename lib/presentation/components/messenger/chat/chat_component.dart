@@ -113,6 +113,7 @@ class ChatComponent extends StatelessWidget {
                   return UiKitChatOutCard(
                     timeOfDay: item.timeSent,
                     sentByMe: item.senderIsMe,
+                    id: 0,
                     child: UiKitInviteMessageContent(
                       username: item.invitationData!.username,
                       placeName: item.invitationData!.placeName,
@@ -129,12 +130,14 @@ class ChatComponent extends StatelessWidget {
                 }
 
                 return UiKitChatOutCard(
+                  id: 0,
                   timeOfDay: item.timeSent,
                   text: item.message,
                   sentByMe: item.senderIsMe,
                 );
               } else {
                 return UiKitChatInCard(
+                  id: 0,
                   timeOfDay: item.timeSent,
                   text: item.message,
                 );
