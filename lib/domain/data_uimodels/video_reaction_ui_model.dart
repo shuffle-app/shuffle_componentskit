@@ -12,6 +12,7 @@ class VideoReactionUiModel {
   final DateTime? eventDate;
   final int? answeredCompanyId;
   final String? placeName;
+  final String? eventName;
   final int? placeId;
   final int authorId;
   final int id;
@@ -25,6 +26,7 @@ class VideoReactionUiModel {
     required this.parentContentType,
     required this.parentContentId,
     this.placeName,
+    this.eventName,
     this.placeId,
     this.videoUrl,
     this.previewImageUrl,
