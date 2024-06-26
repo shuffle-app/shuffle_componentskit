@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/domain.dart';
 import 'package:shuffle_components_kit/presentation/components/feed/uifeed_model.dart';
@@ -47,9 +49,9 @@ class ReactionViewComponent extends StatelessWidget {
   }
 
   void _tapUpHandler(TapUpDetails details) {
-    if(details.globalPosition.dx>0.5.sw && onSingleTapRight!= null) {
+    if(details.globalPosition.dx>0.3.sw && onSingleTapRight!= null) {
       onSingleTapRight?.call();
-    } else if(details.globalPosition.dx<0.5.sw && onSingleTapLeft!=null){
+    } else if(details.globalPosition.dx<0.3.sw && onSingleTapLeft!=null){
       onSingleTapLeft?.call();
     }
   }
@@ -65,6 +67,7 @@ class ReactionViewComponent extends StatelessWidget {
           videoUrl: videoReactionModel.videoUrl!,
           coverImageUrl: videoReactionModel.previewImageUrl,
           onProgressChanged: (progress) => videoProgressNotifier.value = progress,
+          onTapUp: _tapUpHandler,
           onVerticalSwipe: _verticalSwipeHandler,
         ),
         Positioned(
