@@ -6,9 +6,9 @@ class ForgotPasswordDialogComponent extends StatelessWidget {
   final VoidCallback? onForgotPassword;
 
   const ForgotPasswordDialogComponent({
-    Key? key,
+    super.key,
     this.onForgotPassword,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

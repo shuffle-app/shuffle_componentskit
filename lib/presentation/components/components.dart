@@ -104,3 +104,7 @@ export 'property_management/ui_model_related_properties.dart';
 export 'property_management_dialogs/property_management_add_category_dialog.dart';
 export 'property_management_dialogs/property_management_create_title_dialog.dart';
 export 'property_management_dialogs/property_management_create_property_dialog.dart';
+export 'moderation/feedback_moderation.dart';
+export 'moderation/video_reaction_moderation.dart';
+export 'company_presentation/company_presentation_component.dart';
+export 'property_management/property_management_icons_component.dart';

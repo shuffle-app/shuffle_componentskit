@@ -11,10 +11,10 @@ class SearchSocialSectionItemDetailsComponent extends StatelessWidget {
   final ComplaintFormComponent? complaintFormComponent;
 
   const SearchSocialSectionItemDetailsComponent({
-    Key? key,
+    super.key,
     required this.model,
     this.complaintFormComponent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

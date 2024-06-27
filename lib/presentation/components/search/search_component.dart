@@ -262,40 +262,34 @@ class SearchComponent extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     // height: 30.h,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Text(
-                          S.of(context).YoullFindIt,
-                          style: theme?.boldTextTheme.title1,
-                        ),
-                        if (search.showHowItWorks && title?[ContentItemType.hintDialog] != null)
-                          HowItWorksWidget(
-                            title: S.current.SearchHiwTitle,
-                            subtitle: S.current.SearchHiwSubtitle,
-                            hintTiles: [
-                              HintCardUiModel(
-                                title: S.current.SearchHiwHint(0),
-                                imageUrl: GraphicsFoundation.instance.png.pixelatedSunglassesEmoji.path,
-                              ),
-                              HintCardUiModel(
-                                title: S.current.SearchHiwHint(1),
-                                imageUrl: GraphicsFoundation.instance.png.placeEvents.path,
-                              ),
-                              HintCardUiModel(
-                                title: S.current.SearchHiwHint(2),
-                                imageUrl: GraphicsFoundation.instance.png.result.path,
-                              ),
-                              HintCardUiModel(
-                                title: S.current.SearchHiwHint(3),
-                                imageUrl: GraphicsFoundation.instance.png.rating.path,
-                              ),
-                            ],
-                            customOffset: Offset(0.35.sw, 10),
-                            onPop: onHowItWorksPoped,
+                    child: TitleWithHowItWorks(
+                      title: S.of(context).YoullFindIt,
+                      textStyle: theme?.boldTextTheme.title1,
+                      textAlign: TextAlign.center,
+                      shouldShow: search.showHowItWorks && title?[ContentItemType.hintDialog] != null,
+                      howItWorksWidget: HowItWorksWidget(
+                        title: S.current.SearchHiwTitle,
+                        subtitle: S.current.SearchHiwSubtitle,
+                        hintTiles: [
+                          HintCardUiModel(
+                            title: S.current.SearchHiwHint(0),
+                            imageUrl: GraphicsFoundation.instance.png.pixelatedSunglassesEmoji.path,
                           ),
-                      ],
+                          HintCardUiModel(
+                            title: S.current.SearchHiwHint(1),
+                            imageUrl: GraphicsFoundation.instance.png.placeEvents.path,
+                          ),
+                          HintCardUiModel(
+                            title: S.current.SearchHiwHint(2),
+                            imageUrl: GraphicsFoundation.instance.png.result.path,
+                          ),
+                          HintCardUiModel(
+                            title: S.current.SearchHiwHint(3),
+                            imageUrl: GraphicsFoundation.instance.png.rating.path,
+                          ),
+                        ],
+                        onPop: onHowItWorksPoped,
+                      ),
                     ),
                   ),
                   SpacingFoundation.verticalSpace16,
@@ -441,7 +435,7 @@ class SearchComponent extends StatelessWidget {
                         imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
                         onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
                     .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
-                .toList(),
+                ,
             kBottomNavigationBarHeight.heightBox,
           ],
         ),

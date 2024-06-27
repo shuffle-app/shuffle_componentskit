@@ -50,8 +50,6 @@ class PhotoVideoSelector extends StatelessWidget {
       }
     });
 
-    final List<BaseUiKitMedia> covers = photos.where((element) => element.previewType != null).toList();
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: (positionModel?.bodyAlignment).mainAxisAlignment,

@@ -12,9 +12,9 @@ class WelcomeComponent extends StatefulWidget {
   final VoidCallback? onFinished;
 
   WelcomeComponent({
-    Key? key,
+    super.key,
     this.onFinished,
-  }) : super(key: key) {
+  }) {
     model = ComponentModel.fromJson(GlobalConfiguration().appConfig.content['welcome']);
     final rawItems =
         model.content.body?.entries.firstWhere((element) => element.key == ContentItemType.onboardingCard).value.properties;

@@ -7,12 +7,11 @@ class _LastBody extends StatelessWidget {
   final bool loading;
 
   const _LastBody({
-    Key? key,
     required this.bigScreen,
     this.loading = false,
     required this.backgroundImage,
     this.onFinished,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

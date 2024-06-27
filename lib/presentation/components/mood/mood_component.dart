@@ -21,7 +21,7 @@ class MoodComponent extends StatelessWidget {
   final bool showHowItWorks;
 
   const MoodComponent({
-    Key? key,
+    super.key,
     required this.mood,
     this.onPlacePressed,
     this.onCheckInPressed,
@@ -31,7 +31,7 @@ class MoodComponent extends StatelessWidget {
     required this.isVisibleButton,
     this.onLevelActivated,
     this.showHowItWorks = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -147,14 +147,12 @@ class MoodComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: horizontalMargin),
           if (model.showPlaces ?? true && tabBarContent != null) ...[
             SpacingFoundation.verticalSpace24,
-            Stack(
-              children: [
-                Text(
-                  S.of(context).WeHavePlacesJustForYou,
-                  style: theme?.boldTextTheme.title1,
-                ).paddingSymmetric(horizontal: horizontalMargin),
-                if (showHowItWorks)
-                  HowItWorksWidget(
+    TitleWithHowItWorks(
+    title:  S.of(context).WeHavePlacesJustForYou,
+    textStyle: theme?.boldTextTheme.title1,
+    shouldShow: showHowItWorks,
+    howItWorksWidget: HowItWorksWidget(
+
                     title: S.current.CheckInHiwTitle,
                     subtitle: S.current.CheckInHiwSubtitle,
                     hintTiles: [
@@ -175,10 +173,9 @@ class MoodComponent extends StatelessWidget {
                         imageUrl: GraphicsFoundation.instance.png.reward.path,
                       ),
                     ],
-                    customOffset: Offset(0.6.sw, 40),
-                  ),
-              ],
-            ),
+
+
+            )),
             SpacingFoundation.verticalSpace24,
             StatefulBuilder(
               builder: (context, setState) {

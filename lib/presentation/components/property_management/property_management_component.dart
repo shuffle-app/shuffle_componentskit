@@ -77,7 +77,7 @@ class PropertyManagementComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace24,
                     ...(propertyTypes ?? []).map((element) {
                       return PropertiesTypeAnimatedButton(
-                        title: element.title ?? '',
+                        title: element.title,
                         onTap: () {
                           onPropertyTypeTapped
                               ?.call(propertyTypes?.indexOf(element) ?? 0);

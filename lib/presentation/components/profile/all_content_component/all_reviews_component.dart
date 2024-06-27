@@ -8,10 +8,10 @@ class AllReviewsComponent extends StatelessWidget {
   final ValueChanged<FeedbackUiModel> onFeedbackTapped;
 
   const AllReviewsComponent({
-    Key? key,
+    super.key,
     required this.feedbacksPagingController,
     required this.onFeedbackTapped,
-  }) : super(key: key);
+  });
 
   double get feedbackCardWidth => 1.sw - EdgeInsetsFoundation.horizontal32;
 
@@ -61,7 +61,7 @@ class AllReviewsComponent extends StatelessWidget {
                     companyAnswered: false,
                     text: feedback.feedbackText,
                     helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                    onPressed: ()=>onFeedbackTapped?.call(feedback),
+                    onPressed: ()=>onFeedbackTapped.call(feedback),
                   ),
                 );
               },

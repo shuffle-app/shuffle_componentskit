@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -190,11 +192,11 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                         })),
               )
             : null,
-        body: WillPopScope(
-          onWillPop: () async {
-            context.pop(result: _photos);
-            return true;
-          },
+        body: PopScope(
+          // onPopInvoked: (didPop) async {
+            // context.pop(result: _photos);
+            // return true;
+          // },
           child: BlurredAppBarPage(
             autoImplyLeading: true,
             centerTitle: true,
@@ -323,12 +325,11 @@ class _ImageViewFinderDialog extends StatefulWidget {
   final Axis? viewFinderOrientation;
 
   const _ImageViewFinderDialog({
-    Key? key,
     required this.onCropCompleted,
     required this.title,
     this.viewFinderOrientation,
     this.imageBytes,
-  }) : super(key: key);
+  });
 
   @override
   State<_ImageViewFinderDialog> createState() => _ImageViewFinderDialogState();

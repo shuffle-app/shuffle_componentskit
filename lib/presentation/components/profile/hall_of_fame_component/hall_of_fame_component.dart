@@ -5,7 +5,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'animation_info.dart';
 
@@ -44,10 +43,11 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
           downloadProgress = (value as DownloadProgress).progress;
         });
       } else if (value.runtimeType == FileInfo) {
-        setState(() {
-          model = value as FileInfo;
-          isLoading = false;
-        });
+        Future.delayed(Duration.zero, () =>
+            setState(() {
+              model = value as FileInfo;
+              isLoading = false;
+            }));
       }
     });
     _channel = JavascriptChannel('AnimationChannel', onMessageReceived: (JavaScriptMessage value) {
@@ -58,11 +58,15 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                       var viewer = document.querySelector('#model-viewer');
                       viewer.setAttribute('animation-name', 'base');
                       ''');
-        setState(() {
-          animationInProgress = false;
-        });
+        Future.delayed(
+            Duration.zero,
+                () =>
+                setState(() {
+                  animationInProgress = false;
+                }));
       });
     });
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
@@ -91,8 +95,13 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final theme = context.uiKitTheme;
     return BlurredAppBarPage(title: S
         .of(context)
         .HallOfFame, autoImplyLeading: true, centerTitle: true, children: [
@@ -140,19 +149,6 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                 link: widget.posterUrl ??
                     'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/posters/prince-2.png',
               ),
-            // GestureDetector(
-            // RawGestureDetector(
-            //   gestures: <Type, GestureRecognizerFactory>{
-            //     CustomTapRecognizer: GestureRecognizerFactoryWithHandlers<CustomTapRecognizer>(
-            //           () => CustomTapRecognizer(onTap:setAnimation),
-            //           (CustomTapRecognizer instance) {},
-            //     )
-            //   },
-              // splashFactory: NoSplash.splashFactory,
-              // behavior: HitTestBehavior.translucent,
-// onTap: setAnimation,
-//             )
-            // child: const SizedBox.expand())
           ])),
       GridView.count(
         crossAxisCount: 3,

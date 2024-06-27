@@ -9,7 +9,6 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class ProfileComponent extends StatelessWidget {
   final UiProfileModel profile;
   final VoidCallback? onHowItWorksPoped;
-  final ValueChanged<InvitationData?>? onInvite;
   final bool showHowItWorks;
   final bool businessContentEnabled;
   final bool showRecommendedUsers;
@@ -47,7 +46,6 @@ class ProfileComponent extends StatelessWidget {
     this.onReactionTapped,
     this.onAllVideoReactionsPressed,
     this.onAllFeedbacksPressed,
-    this.onInvite,
     this.events,
     this.onEventTap,
     this.onSettingsPressed,
@@ -62,27 +60,21 @@ class ProfileComponent extends StatelessWidget {
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
-  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
+  // bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
-        GlobalComponent
-            .of(context)
-            ?.globalConfiguration
-            .appConfig
-            .content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: S
-          .of(context)
-          .MyCard,
+      title: S.of(context).MyCard,
       leading: context.iconButtonNoPadding(
         data: BaseUiKitButtonData(
           iconInfo: BaseUiKitButtonIconData(
@@ -111,50 +103,35 @@ class ProfileComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace24,
           SizedBox(
             width: double.infinity,
-            child: Stack(
-              children: [
-                if (businessContentEnabled)
-                  Text(
-                    S
-                        .of(context)
-                        .FindSomeoneToNetworkWith,
-                    style: textTheme?.title1,
+            child: TitleWithHowItWorks(
+              title: businessContentEnabled
+                  ? S.of(context).FindSomeoneToNetworkWith
+                  : S.of(context).FindSomeoneToHangOutWith,
+              textStyle: textTheme?.title1,
+              shouldShow: showHowItWorks,
+              howItWorksWidget: HowItWorksWidget(
+                title: S.current.ProfileFindSomeoneHiwTitle,
+                subtitle: S.current.ProfileFindSomeoneHiwSubtitle,
+                hintTiles: [
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(0),
+                    imageUrl: GraphicsFoundation.instance.png.companions.path,
                   ),
-                if (!businessContentEnabled)
-                  Text(
-                    S
-                        .of(context)
-                        .FindSomeoneToHangOutWith,
-                    style: textTheme?.title1,
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(1),
+                    imageUrl: GraphicsFoundation.instance.png.preferences.path,
                   ),
-                if (showHowItWorks)
-                  HowItWorksWidget(
-                    title: S.current.ProfileFindSomeoneHiwTitle,
-                    subtitle: S.current.ProfileFindSomeoneHiwSubtitle,
-                    hintTiles: [
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(0),
-                        imageUrl: GraphicsFoundation.instance.png.companions.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(1),
-                        imageUrl: GraphicsFoundation.instance.png.preferences.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(2),
-                        imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.ProfileFindSomeoneHiwHint(3),
-                        imageUrl: GraphicsFoundation.instance.png.foe.path,
-                      ),
-                    ],
-                    onPop: onHowItWorksPoped,
-                    customOffset: Offset(MediaQuery
-                        .sizeOf(context)
-                        .width / 1.5, 35),
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(2),
+                    imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
                   ),
-              ],
+                  HintCardUiModel(
+                    title: S.current.ProfileFindSomeoneHiwHint(3),
+                    imageUrl: GraphicsFoundation.instance.png.foe.path,
+                  ),
+                ],
+                onPop: onHowItWorksPoped,
+              ),
             ).paddingSymmetric(horizontal: horizontalMargin),
           ),
           SpacingFoundation.verticalSpace24,
@@ -171,90 +148,7 @@ class ProfileComponent extends StatelessWidget {
                 sameInterests: user?.commonInterests ?? 0,
                 userTileType: user?.userTileType ?? UserTileType.ordinary,
                 onAvatarTapped: () => onRecommendedUserAvatarPressed?.call(user!),
-                onMessage: () {
-                  onRecommendedUserMessagePressed?.call();
-                  // buildComponent(
-                  //   context,
-                  //   ComponentModel.fromJson(GlobalConfiguration().appConfig.content['invite_people_places']),
-                  //   ComponentBuilder(
-                  //     useRootNavigator: true,
-                  //     child: Builder(
-                  //       builder: (context) {
-                  //         var model = UiInviteToFavoritePlacesModel(
-                  //           date: DateTime.now(),
-                  //         );
-                  //         String? selected;
-                  //
-                  //         return StatefulBuilder(
-                  //           builder: (context, state) => InviteToFavoritePlacesComponent(
-                  //             places: favoritePlaces
-                  //                 .map(
-                  //                   (e) => UiKitLeadingRadioTile(
-                  //                     title: e.title ?? '',
-                  //                     selected: selected == (e.title ?? ''),
-                  //                     onTap: () {
-                  //                       state(() {
-                  //                         selected = e.title ?? '';
-                  //                       });
-                  //                     },
-                  //                     avatarLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                  //                     tags: e.tags,
-                  //                   ),
-                  //                 )
-                  //                 .toList(),
-                  //             events: favoriteEvents
-                  //                 .map((e) => UiKitLeadingRadioTile(
-                  //                       title: e.title ?? '',
-                  //                       selected: selected == (e.title ?? ''),
-                  //                       onTap: () {
-                  //                         state(() {
-                  //                           selected = e.title ?? '';
-                  //                         });
-                  //                       },
-                  //                       avatarLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                  //                       tags: e.tags,
-                  //                     ))
-                  //                 .toList(),
-                  //             uiModel: model,
-                  //             onInvite: onInvite == null || selected == null
-                  //                 ? null
-                  //                 : () {
-                  //                     Navigator.of(context, rootNavigator: true).pop();
-                  //                     onInvite?.call(
-                  //                       InvitationData(
-                  //                         user: user,
-                  //                         placeId: 0,
-                  //                         placePhotoUrl: GraphicsFoundation.instance.png.place.path,
-                  //                         placeName: selected ?? '',
-                  //                         placeTags: [
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                         ],
-                  //                       ),
-                  //                     );
-                  //                   },
-                  //             onDatePressed: () async {
-                  //               final newDate = await showUiKitCalendarDialog(
-                  //                 context,
-                  //                 selectableDayPredicate: (day) {
-                  //                   log(day.toIso8601String(), name: 'ProfileComponent');
-                  //
-                  //                   return day.isAfter(DateTime.now().subtract(const Duration(days: 1)));
-                  //                 },
-                  //               );
-                  //               if (newDate != null) {
-                  //                 state(() => model = UiInviteToFavoritePlacesModel(date: newDate));
-                  //               }
-                  //             },
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // );
-                },
+                onMessage: onRecommendedUserMessagePressed,
               );
             },
             itemCount: recommendedUsers?.length ?? 3,
@@ -275,14 +169,14 @@ class ProfileComponent extends StatelessWidget {
               ),
               action: context
                   .smallOutlinedButton(
-                blurred: false,
-                data: BaseUiKitButtonData(
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: ShuffleUiKitIcons.chevronright,
-                  ),
-                  onPressed: onAllVideoReactionsPressed,
-                ),
-              )
+                    blurred: false,
+                    data: BaseUiKitButtonData(
+                      iconInfo: BaseUiKitButtonIconData(
+                        iconData: ShuffleUiKitIcons.chevronright,
+                      ),
+                      onPressed: onAllVideoReactionsPressed,
+                    ),
+                  )
                   .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
               content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                 spacing: SpacingFoundation.horizontalSpacing8,
@@ -325,49 +219,47 @@ class ProfileComponent extends StatelessWidget {
                 contentHeight: _noFeedbacks ? 0.15.sh : 0.28.sh,
                 action: context
                     .smallOutlinedButton(
-                  blurred: false,
-                  data: BaseUiKitButtonData(
-                    iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.chevronright,
-                    ),
-                    onPressed: onAllFeedbacksPressed,
-                  ),
-                )
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.chevronright,
+                        ),
+                        onPressed: onAllFeedbacksPressed,
+                      ),
+                    )
                     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
                 content: _noFeedbacks
                     ? Text(
-                  S.current.NoFeedbacksYet,
-                  style: textTheme?.subHeadline,
-                ).paddingAll(EdgeInsetsFoundation.all16)
+                        S.current.NoFeedbacksYet,
+                        style: textTheme?.subHeadline,
+                      ).paddingAll(EdgeInsetsFoundation.all16)
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
-                  spacing: SpacingFoundation.horizontalSpacing8,
-                  shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
-                  itemBuilder: (context, feedback, index) {
-                    return SizedBox(
-                      width: 0.95.sw,
-                      child: UiKitFeedbackCard(
-                        title: feedback.feedbackAuthorName,
-                        avatarUrl: feedback.feedbackAuthorPhoto,
-                        datePosted: feedback.feedbackDateTime,
-                        companyAnswered: false,
-                        text: feedback.feedbackText,
-                        isHelpful: feedback.helpfulForUser,
-                        helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                        onPressed: () => onFeedbackCardPressed?.call(feedback),
-                      ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
-                    );
-                  },
-                  pagingController: feedbackPagingController!,
-                ),
+                        spacing: SpacingFoundation.horizontalSpacing8,
+                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                        itemBuilder: (context, feedback, index) {
+                          return SizedBox(
+                            width: 0.95.sw,
+                            child: UiKitFeedbackCard(
+                              title: feedback.feedbackAuthorName,
+                              avatarUrl: feedback.feedbackAuthorPhoto,
+                              datePosted: feedback.feedbackDateTime,
+                              companyAnswered: false,
+                              text: feedback.feedbackText,
+                              isHelpful: feedback.helpfulForUser,
+                              helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                              onPressed: () => onFeedbackCardPressed?.call(feedback),
+                            ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
+                          );
+                        },
+                        pagingController: feedbackPagingController!,
+                      ),
               );
             },
           ),
         if (feedbackPagingController != null) SpacingFoundation.verticalSpace24,
         if (profile.userTileType == UserTileType.pro) ...[
           MyEventsComponent(
-              title: S
-                  .of(context)
-                  .MyEvents,
+              title: S.of(context).MyEvents,
               onTap: onMyEventsPressed ?? () {},
               onEventTap: onEventTap ?? (_) {},
               events: events ?? []),

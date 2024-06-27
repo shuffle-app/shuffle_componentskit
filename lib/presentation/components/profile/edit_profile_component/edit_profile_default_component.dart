@@ -289,6 +289,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(
               controller: emailController,
+              readOnly: true,
               label: S.of(context).Email,
               hintText: S.of(context).Email,
               validator: emailValidator,
