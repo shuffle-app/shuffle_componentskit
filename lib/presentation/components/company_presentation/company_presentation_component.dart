@@ -397,6 +397,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                             child: UiKitFeedbackCard(
                               rating: feedbacks[index].feedbackRating,
                               title: feedbacks[index].feedbackAuthorName,
+                              maxLines:3,
                               text: feedbacks[index].feedbackText,
                               datePosted: feedbacks[index].feedbackDateTime,
                               avatarUrl: feedbacks[index].feedbackAuthorPhoto,
