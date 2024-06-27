@@ -9,6 +9,7 @@ class BottomBookingBar extends StatefulWidget {
   final VoidCallback? onMagnify;
   final bool isLoading;
   final Future<int>? usersCountInInviteList;
+  final bool? isInviteEnable;
 
   const BottomBookingBar({
     super.key,
@@ -18,6 +19,7 @@ class BottomBookingBar extends StatefulWidget {
     this.usersCountInInviteList,
     this.isLoading = false,
     this.onMagnify,
+    this.isInviteEnable,
   });
 
   @override
@@ -48,27 +50,29 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 250),
-          transitionBuilder: (child, animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: animationEnded ? const SizedBox() : child,
-            );
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              UiKitMessageCloud(
-                message: S.of(context).InviteList,
-                subtitle:
-                    (inviteCount ?? 0) == 0 ? S.of(context).BeFirstToInvite : S.of(context).Users(inviteCount ?? 0),
-              ),
-              SpacingFoundation.horizontalSpace16,
-            ],
+        if (widget.isInviteEnable ?? true)
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: animationEnded ? const SizedBox() : child,
+              );
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                UiKitMessageCloud(
+                  message: S.of(context).InviteList,
+                  subtitle: (inviteCount ?? 0) == 0
+                      ? S.of(context).BeFirstToInvite
+                      : S.of(context).Users(inviteCount ?? 0),
+                ),
+                SpacingFoundation.horizontalSpace16,
+              ],
+            ),
           ),
-        ),
         SpacingFoundation.verticalSpace16,
         DecoratedBox(
           decoration: BoxDecoration(
@@ -76,7 +80,8 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                context.uiKitTheme?.colorScheme.surface.withOpacity(0.5) ?? Colors.transparent,
+                context.uiKitTheme?.colorScheme.surface.withOpacity(0.5) ??
+                    Colors.transparent,
                 context.uiKitTheme?.colorScheme.surface ?? Colors.transparent,
               ],
             ),
@@ -138,8 +143,10 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                 ];
               }(),
             ).paddingSymmetric(
-              vertical: (widget.model.positionModel?.verticalMargin ?? 0).toDouble(),
-              horizontal: (widget.model.positionModel?.horizontalMargin ?? 0).toDouble(),
+              vertical:
+                  (widget.model.positionModel?.verticalMargin ?? 0).toDouble(),
+              horizontal: (widget.model.positionModel?.horizontalMargin ?? 0)
+                  .toDouble(),
             ),
           ),
         ),

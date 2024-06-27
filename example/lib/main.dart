@@ -174,101 +174,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                       text: 'show company presentation component',
                       onPressed: () {
                         context.push(CompanyPresentationComponent(
-                          place: UiPlaceModel(
-                            id: 1,
-                            media: [
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                            ],
-                            title: 'L\'ETO The Wharf',
-                            logo: GraphicsFoundation.instance.png.place.path,
-                            description:
-                                'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
-                            baseTags: [
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                            ],
-                            tags: [
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Duh',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Metal',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Heavy',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Club',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Cheaper',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                            ],
-                          ),
                         ));
                       })),
               SpacingFoundation.verticalSpace16,
@@ -316,32 +221,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                             ),
                           ),
                       text: 'show property management component')),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show spent point barcode component',
-                  onPressed: () {
-                    context.push(
-                      PropertyManagementIconsComponent(
-                        relatedPropertyTextController: TextEditingController(),
-                        onIconTap: () {},
-                        iconsPath: [],
-                        recentlyAddedIconPaths: [],
-                        relatedProperties: List.generate(
-                          6,
-                          (index) {
-                            return RelatedPropertiesItemUiModel(
-                              title: 'Hello $index',
-                              propertiesList: ['Foodie', 'Smoke', 'Drink'],
-                              iconData: ShuffleUiKitIcons.restaurant,
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
             ],
           ),
         ));

@@ -8,23 +8,83 @@ import '../../../shuffle_components_kit.dart';
 class CompanyPresentationComponent extends StatelessWidget {
   CompanyPresentationComponent({
     super.key,
-    required this.place,
     this.onNext,
   });
 
   final VoidCallback? onNext;
 
-  final UiPlaceModel place;
-  static const List<String> infoTexts = [
-    "It is a non-public profile that allows you to post your places, branches, and place's events",
-    'You can create branches; in a place card users will see the entire brench network',
-    "Your content appears in the app's rotation and is recommended to users through the unique Shuffle system",
-    "Increase awareness & traffic to your places and events. All app's & users features are around your content cards",
-    'You attract specialized Shuffle influencers who will elevate the status of your places',
-    'You can interact with your audience through the unique functionality of special notifications, reminders, offers and presales',
-    'You can use the internal targeted advertising system',
-    'You can integrate your booking system into content cards or use the Shuffle booking system in the future',
+  final List<String> infoTexts = [
+    S.current.CompanyPresentationSlider1,
+    S.current.CompanyPresentationSlider2,
+    S.current.CompanyPresentationSlider3,
+    S.current.CompanyPresentationSlider4,
+    S.current.CompanyPresentationSlider5,
+    S.current.CompanyPresentationSlider6,
+    S.current.CompanyPresentationSlider7,
+    S.current.CompanyPresentationSlider8,
   ];
+
+  final UiPlaceModel place = UiPlaceModel(
+    id: 1,
+    media: [
+      UiKitMediaPhoto(link: GraphicsFoundation.instance.png.leto1.path),
+      UiKitMediaPhoto(link: GraphicsFoundation.instance.png.leto4.path),
+    ],
+    title: 'L\'ETO The Wharf',
+    logo: GraphicsFoundation.instance.png.lETOLogo.path,
+    description:
+        "Step right into the cozy wonderland of this cafe! It's the kind of place where the atmosphere wraps around you like a warm, fuzzy blanket, and the menu is as varied as a chameleon with a culinary streak. Brace yourself for a taste extravaganza that'll have your taste buds doing the conga!",
+    baseTags: [
+      UiKitTag(
+        title: S.current.Restaurant,
+        icon: ShuffleUiKitIcons.cup,
+        unique: false,
+      ),
+      UiKitTag(
+        title: 'Dh 170',
+        icon: ShuffleUiKitIcons.label,
+        unique: false,
+      ),
+      UiKitTag(
+        title: S.current.Open,
+        icon: ShuffleUiKitIcons.clock,
+        unique: false,
+      ),
+      UiKitTag(
+        title: '7 ${S.current.Min}',
+        icon: ShuffleUiKitIcons.route,
+        unique: false,
+      ),
+    ],
+    tags: [
+      UiKitTag(
+        title: S.current.TastyCoffee,
+        icon: GraphicsFoundation.instance.svg.coffee.path,
+        unique: true,
+      ),
+      UiKitTag(
+        title: S.current.CalmAtmosphere,
+        icon: GraphicsFoundation.instance.svg.calm.path,
+        unique: true,
+      ),
+      UiKitTag(
+        title: S.current.TeaList,
+        icon: GraphicsFoundation.instance.svg.teapot.path,
+        unique: true,
+      ),
+    ],
+    branches: Future.value([
+      /// mock branches
+      HorizontalCaptionedImageData(
+        imageUrl: GraphicsFoundation.instance.png.leto3.path,
+        caption: 'L’ETO Marina Mall',
+      ),
+      HorizontalCaptionedImageData(
+        imageUrl: GraphicsFoundation.instance.png.leto2.path,
+        caption: 'L’ETO Dubai Hills Mall',
+      ),
+    ]),
+  );
 
   final List<String> avatars = [
     GraphicsFoundation.instance.png.avatars.avatar1.path,
@@ -37,12 +97,11 @@ class CompanyPresentationComponent extends StatelessWidget {
   ];
 
   final List<String> placeImages = [
-    GraphicsFoundation.instance.png.mockAdBanner6.path,
-    GraphicsFoundation.instance.png.mockAdBanner7.path,
-    GraphicsFoundation.instance.png.mockAdBanner8.path,
-    GraphicsFoundation.instance.png.mockAdBanner9.path,
-    GraphicsFoundation.instance.png.mockAdBanner10.path,
-    GraphicsFoundation.instance.png.mockAdBanner24.path,
+    GraphicsFoundation.instance.png.leto5.path,
+    GraphicsFoundation.instance.png.leto7.path,
+    GraphicsFoundation.instance.png.leto82.path,
+    GraphicsFoundation.instance.png.leto4.path,
+    GraphicsFoundation.instance.png.story.path,
   ];
 
   final List<String> names = [
@@ -123,7 +182,7 @@ class CompanyPresentationComponent extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        customToolbarBaseHeight: 0.13.sh,
+        customToolbarBaseHeight: 0.14.sh,
         children: [
           SpacingFoundation.verticalSpace16,
           SizedBox(
@@ -198,39 +257,16 @@ class CompanyPresentationComponent extends StatelessWidget {
               const Spacer(),
               UiKitUsersRespectCard(
                 users: List<RespectFromUser>.generate(
-                  5,
+                  avatars.length,
                   (index) => RespectFromUser(
                     name: 'Alice',
                     avatarUrl:
-                        GraphicsFoundation.instance.png.avatars.avatar1.path,
+                        avatars[index],
                   ),
                 ),
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),
             ],
-            branches: place.branches ??
-                Future.value([
-                  /// mock branches
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption:
-                        'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption:
-                        'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption:
-                        'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                  HorizontalCaptionedImageData(
-                    imageUrl: GraphicsFoundation.instance.png.place.path,
-                    caption:
-                        'Dubai mall 1st floor, next to the Aquarium. This is a mock branch to see how it looks in app',
-                  ),
-                ]),
+            branches: place.branches,
           ),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
@@ -238,9 +274,11 @@ class CompanyPresentationComponent extends StatelessWidget {
             padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
             child: UiKitVideoInterviewTile(
               onPlayTap: () {},
-              title: 'Great interview with the owner',
+              imagePath:  GraphicsFoundation.instance.png.leto7.path,
+              userNickname: 'msgeidt',
+              title: S.current.GreatInterviewWithOwner,
               userImage: avatars[3],
-              userName: names[3],
+              userName: 'Aspen Geidt',
             ),
           ),
           SpacingFoundation.verticalSpace16,
@@ -296,6 +334,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                     children: List.generate(placeImages.length, (index) {
                       return UiKitReactionPreview(
                         imagePath: placeImages[index],
+                        customWidth: 0.27.sw,
                       ).paddingSymmetric(
                           horizontal: EdgeInsetsFoundation.horizontal4);
                     }),
@@ -417,6 +456,7 @@ class CompanyPresentationComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           BottomBookingBar(
             onBook: () {},
+            isInviteEnable: false,
             model: ComponentPlaceModel.fromJson(
                         configuration.appConfig.content['place'])
                     .bookingElementModel ??
@@ -428,9 +468,10 @@ class CompanyPresentationComponent extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadiusFoundation.all24,
                 child: ImageWidget(
-                  link: GraphicsFoundation.instance.png.place.path,
-                  height: 0.30.sh,
-                  width: 1.sw,
+                  link: GraphicsFoundation.instance.png.entertainment.path,
+                  height: 0.25.sh,
+                  width: 1.sw-(2*EdgeInsetsFoundation.horizontal20),
+                  fit: BoxFit.fitHeight,
                 ),
               ),
               UiKitBlurWrapper(
