@@ -429,7 +429,7 @@ class CompanyPresentationComponent extends StatelessWidget {
             userImage: avatars[2],
             userNickname: 'alex_doe',
             duration: const Duration(seconds: 70),
-          ),
+          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           SpacingFoundation.verticalSpace24,
           UiKitDescriptionGrid(
             spacing: SpacingFoundation.horizontalSpacing16,
