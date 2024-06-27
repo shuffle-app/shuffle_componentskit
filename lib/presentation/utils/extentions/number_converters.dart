@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 extension NumberConverters on double {
   String get nanOrTwoTrailingZeros {

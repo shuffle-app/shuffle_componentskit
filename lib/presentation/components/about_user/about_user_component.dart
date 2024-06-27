@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -26,7 +25,7 @@ class AboutUserComponent extends StatelessWidget {
   ];
 
   AboutUserComponent({
-    Key? key,
+    super.key,
     required this.aboutUserModel,
     required this.mindsets,
     this.onReligionSelected,
@@ -42,7 +41,7 @@ class AboutUserComponent extends StatelessWidget {
     this.onTypeOfContentChanged,
     this.religions,
     this.genders,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -243,7 +242,7 @@ class AboutUserComponent extends StatelessWidget {
                               onTap: () => onGenderChanged?.call(e.id),
                             ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
                           ))
-                      .toList(),
+                      ,
                 SpacingFoundation.horizontalSpace16,
               ],
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),

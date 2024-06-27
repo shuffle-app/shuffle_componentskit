@@ -12,12 +12,15 @@ class VideoReactionUiModel {
   final DateTime? eventDate;
   final int? answeredCompanyId;
   final String? placeName;
+  final String? eventName;
   final int? placeId;
   final int authorId;
   final int id;
   final UserTileType authorType;
   final String parentContentType;
   final int parentContentId;
+  int? nextReactionId;
+  int? previousReactionId;
 
   VideoReactionUiModel({
     required this.id,
@@ -25,6 +28,7 @@ class VideoReactionUiModel {
     required this.parentContentType,
     required this.parentContentId,
     this.placeName,
+    this.eventName,
     this.placeId,
     this.videoUrl,
     this.previewImageUrl,
@@ -37,6 +41,8 @@ class VideoReactionUiModel {
     this.answeredCompanyId,
     this.eventDate,
     this.authorType = UserTileType.ordinary,
+    this.nextReactionId,
+    this.previousReactionId,
   });
 
   bool get empty => id == -1;
@@ -61,6 +67,8 @@ class VideoReactionUiModel {
     int? answeredCompanyId,
     int? placeId,
     String? placeName,
+    int? nextReactionId,
+    int? previousReactionId,
   }) {
     return VideoReactionUiModel(
       id: id,
@@ -79,6 +87,16 @@ class VideoReactionUiModel {
       videoReactionDateTime: videoReactionDateTime ?? this.videoReactionDateTime,
       eventDate: eventDate ?? this.eventDate,
       answeredCompanyId: answeredCompanyId ?? this.answeredCompanyId,
+      nextReactionId: nextReactionId ?? this.nextReactionId,
+      previousReactionId: previousReactionId ?? this.previousReactionId,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is VideoReactionUiModel && id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

@@ -473,7 +473,7 @@ class _EventComponentState extends State<EventComponent> {
                   ),
                 ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
               )
-              .toList(),
+              ,
         (kBottomNavigationBarHeight * 1.5).heightBox
       ],
     ).paddingSymmetric(

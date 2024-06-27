@@ -57,9 +57,9 @@ class UiPlaceModel {
     this.currency,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
-            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website ?? ''),
+            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website ),
           if (phone != null && phone.isNotEmpty)
-            UiDescriptionItemModel(title: S.current.Phone, description: phone ?? ''),
+            UiDescriptionItemModel(title: S.current.Phone, description: phone ),
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
           if (scheduleString != null)
             UiDescriptionItemModel(

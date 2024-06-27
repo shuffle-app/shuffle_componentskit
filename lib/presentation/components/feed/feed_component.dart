@@ -26,12 +26,14 @@ class FeedComponent extends StatelessWidget {
   final PagingController<int, VideoReactionUiModel>? storiesPagingController;
   final ValueChanged<int?>? onNichePressed;
   final bool hasFavourites;
+  final bool canShowVideoReactions;
 
   const FeedComponent({
-    Key? key,
+    super.key,
     required this.feed,
     required this.controller,
     required this.showBusinessContent,
+    this.canShowVideoReactions = false,
     this.storiesPagingController,
     this.onReactionTapped,
     this.hasFavourites = false,
@@ -49,26 +51,19 @@ class FeedComponent extends StatelessWidget {
     this.onListItemPressed,
     this.onAdvertisementPressed,
     this.onLoadMoreChips,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentFeedModel feedLeisureModel =
-        ComponentFeedModel.fromJson(config['feed']);
-    final ComponentFeedModel feedBusinessModel =
-        ComponentFeedModel.fromJson(config['feed_business']);
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentFeedModel feedLeisureModel = ComponentFeedModel.fromJson(config['feed']);
+    final ComponentFeedModel feedBusinessModel = ComponentFeedModel.fromJson(config['feed_business']);
     MapEntry<String, PropertiesBaseModel>? advertisement;
-    if (feedLeisureModel.content.body?[ContentItemType.advertisement]
-            ?.properties?.isNotEmpty ??
-        false) {
-      advertisement = feedLeisureModel.content
-          .body?[ContentItemType.advertisement]?.properties?.entries.first;
+    if (feedLeisureModel.content.body?[ContentItemType.advertisement]?.properties?.isNotEmpty ?? false) {
+      advertisement = feedLeisureModel.content.body?[ContentItemType.advertisement]?.properties?.entries.first;
     }
-    final horizontalMargin =
-        (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
 
     final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
     final isLightTheme = context.uiKitTheme?.themeMode == ThemeMode.light;
@@ -91,8 +86,7 @@ class FeedComponent extends StatelessWidget {
           height: MediaQuery.viewPaddingOf(context).top,
         ).wrapSliverBox,
         if (showBusinessContent) ...[
-          if (feed.recommendedBusinessEvents != null &&
-              feed.recommendedBusinessEvents!.isNotEmpty) ...[
+          if (feed.recommendedBusinessEvents != null && feed.recommendedBusinessEvents!.isNotEmpty) ...[
             Text(
               S.current.UpcomingGlobalEvents,
               style: themeTitleStyle,
@@ -108,17 +102,13 @@ class FeedComponent extends StatelessWidget {
                             onTap: () => onListItemPressed?.call(e.id, 'event'),
                             title: e.title ?? '',
                             imageUrl: e.verticalPreview?.link ??
-                                e.media
-                                    .firstWhereOrNull(
-                                        (e) => e.type == UiKitMediaType.image)
-                                    ?.link ??
+                                e.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link ??
                                 '',
                             subtitleIcon: ShuffleUiKitIcons.clock,
                             subtitle: e.scheduleString,
                             tags: e.tags,
                           ).paddingOnly(
-                              right: e.id ==
-                                      feed.recommendedBusinessEvents?.last.id
+                              right: e.id == feed.recommendedBusinessEvents?.last.id
                                   ? 0
                                   : SpacingFoundation.horizontalSpacing12),
                         )
@@ -166,8 +156,9 @@ class FeedComponent extends StatelessWidget {
               children: feed.niches?.map<Widget>(
                     (e) {
                       double padding = 0.0;
-                      if (e.title == feed.niches?.first.title)
+                      if (e.title == feed.niches?.first.title) {
                         padding = horizontalMargin;
+                      }
 
                       return UiKitMessageCardWithIcon(
                         message: e.title,
@@ -185,16 +176,11 @@ class FeedComponent extends StatelessWidget {
         ],
         if (!showBusinessContent) ...[
           SpacingFoundation.verticalSpace16.wrapSliverBox,
-          if (feed.recommendedEvent != null &&
-              (feedLeisureModel.showDailyRecomendation ?? true)) ...[
+          if (feed.recommendedEvent != null && (feedLeisureModel.showDailyRecomendation ?? true)) ...[
             UiKitAccentCard(
-              onPressed: onEventPressed == null
-                  ? null
-                  : () => onEventPressed!(feed.recommendedEvent?.id),
+              onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
               title: feed.recommendedEvent!.title ?? '',
-              additionalInfo:
-                  feed.recommendedEvent!.descriptionItems?.first.description ??
-                      '',
+              additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
               accentMessage: S.of(context).DontMissIt,
               image: ImageWidget(
                 link: feed.recommendedEvent?.media.firstOrNull?.link,
@@ -205,32 +191,52 @@ class FeedComponent extends StatelessWidget {
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
-          if (storiesPagingController != null) ...[
+          if (storiesPagingController != null && canShowVideoReactions) ...[
             Text(S.current.YouMissedALot, style: themeTitleStyle)
                 .paddingSymmetric(horizontal: horizontalMargin)
                 .wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
             SizedBox(
               height: 0.26.sh,
+              width: 1.sw,
               child: PagedListView<int, VideoReactionUiModel>.separated(
                 scrollDirection: Axis.horizontal,
                 builderDelegate: PagedChildBuilderDelegate(
-                  firstPageProgressIndicatorBuilder: (c) =>
-                      progressIndicator ?? const SizedBox.shrink(),
-                  newPageProgressIndicatorBuilder: (c) =>
-                      progressIndicator ?? const SizedBox.shrink(),
+                  firstPageProgressIndicatorBuilder: (c) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: UiKitShimmerProgressIndicator(
+                      gradient: GradientFoundation.greyGradient,
+                      child: UiKitReactionPreview(
+                        customHeight: 0.26.sh,
+                        customWidth: 0.285.sw,
+                        imagePath: GraphicsFoundation.instance.png.place.path,
+                      ).paddingOnly(left: horizontalMargin),
+                    ),
+                  ),
+                  newPageProgressIndicatorBuilder: (c) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: UiKitShimmerProgressIndicator(
+                      gradient: GradientFoundation.greyGradient,
+                      child: UiKitReactionPreview(
+                        customHeight: 0.26.sh,
+                        customWidth: 0.285.sw,
+                        imagePath: GraphicsFoundation.instance.png.place.path,
+                      ),
+                    ),
+                  ),
                   itemBuilder: (_, item, index) {
                     double leftPadding = 0;
                     if (index == 0) leftPadding = horizontalMargin;
 
                     return UiKitReactionPreview(
+                      customHeight: 0.26.sh,
+                      customWidth: 0.285.sw,
                       imagePath: item.previewImageUrl ?? '',
                       viewed: false,
                       onTap: () => onReactionTapped?.call(item),
                     ).paddingOnly(left: leftPadding);
                   },
                 ),
-                itemExtent: 147.h,
                 separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
                 pagingController: storiesPagingController!,
               ),
@@ -272,8 +278,7 @@ class FeedComponent extends StatelessWidget {
               isHealthKitEnabled: feed.isHealthKitEnabled,
               title: Text(
                 S.of(context).Guess,
-                style: context.uiKitTheme?.boldTextTheme.subHeadline
-                    .copyWith(color: Colors.white),
+                style: context.uiKitTheme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
               ),
               backgroundImage: ImageWidget(
                 width: double.infinity,
@@ -282,10 +287,8 @@ class FeedComponent extends StatelessWidget {
                 color: context.uiKitTheme?.colorScheme.surface1,
               ),
               animationPath: isLightTheme
-                  ? GraphicsFoundation
-                      .instance.animations.lottie.fingerprintWhite.path
-                  : GraphicsFoundation
-                      .instance.animations.lottie.fingerprintBlack.path,
+                  ? GraphicsFoundation.instance.animations.lottie.fingerprintWhite.path
+                  : GraphicsFoundation.instance.animations.lottie.fingerprintBlack.path,
               isCompleted: mood != null,
               onCompleted: onMoodCompleted,
               onPressed: onMoodCheck,
@@ -294,8 +297,7 @@ class FeedComponent extends StatelessWidget {
                       message: mood!.title,
                       iconLink: mood!.logo,
                       layoutDirection: Axis.vertical,
-                      onPressed:
-                          onMoodPressed == null ? null : () => onMoodPressed!(),
+                      onPressed: onMoodPressed == null ? null : () => onMoodPressed!(),
                     )
                   : const SizedBox.shrink(),
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
@@ -336,16 +338,14 @@ class FeedComponent extends StatelessWidget {
             NotificationListener(
                 onNotification: (notification) {
                   if (notification is ScrollUpdateNotification) {
-                    if (notification.metrics.pixels >=
-                        notification.metrics.maxScrollExtent * 0.8) {
+                    if (notification.metrics.pixels >= notification.metrics.maxScrollExtent * 0.8) {
                       onLoadMoreChips?.call();
                     }
                   }
                   return false;
                 },
                 child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints.loose(Size(double.infinity, 40.h)),
+                    constraints: BoxConstraints.loose(Size(double.infinity, 40.h)),
                     child: ListView.builder(
                         padding: EdgeInsets.only(left: horizontalMargin),
                         primary: false,
@@ -368,32 +368,20 @@ class FeedComponent extends StatelessWidget {
                             if (hasFavourites) {
                               return UiKitTitledFilterChip(
                                 //const flag for showing favorites is 'Favorites'
-                                selected: feed.activeFilterChips
-                                        ?.map((e) => e.title)
-                                        .contains('Favorites') ??
-                                    false,
+                                selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
                                 title: S.of(context).Favorites,
-                                onPressed: onTagSortPressed == null
-                                    ? null
-                                    : () => onTagSortPressed!('Favorites'),
+                                onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
                                 icon: ShuffleUiKitIcons.starfill,
-                              ).paddingSymmetric(
-                                  horizontal:
-                                      SpacingFoundation.horizontalSpacing8);
+                              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
                             } else {
                               return SpacingFoundation.horizontalSpace8;
                             }
                           } else {
                             return feed.filterChips!
                                 .map((e) => UiKitTitledFilterChip(
-                                      selected: feed.activeFilterChips
-                                              ?.map((e) => e.title)
-                                              .contains(e.title) ??
-                                          false,
+                                      selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
                                       title: e.title,
-                                      onPressed: onTagSortPressed == null
-                                          ? null
-                                          : () => onTagSortPressed!(e.title),
+                                      onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                                       icon: e.icon,
                                     ).paddingOnly(right: horizontalMargin))
                                 .toList()[index - 2];
@@ -405,16 +393,13 @@ class FeedComponent extends StatelessWidget {
             shrinkWrapFirstPageIndicators: true,
             builderDelegate: PagedChildBuilderDelegate(
               animateTransitions: true,
-              firstPageProgressIndicatorBuilder: (c) =>
-                  progressIndicator ?? const SizedBox.shrink(),
-              newPageProgressIndicatorBuilder: (c) =>
-                  progressIndicator ?? const SizedBox.shrink(),
+              firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+              newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
               itemBuilder: (_, item, index) {
                 item as UiUniversalModel;
                 if (item.isAdvertisement && advertisement != null) {
                   if (item.bannerType == AdvertisementBannerType.text) {
-                    return item.smallTextBanner
-                        .paddingSymmetric(horizontal: horizontalMargin);
+                    return item.smallTextBanner.paddingSymmetric(horizontal: horizontalMargin);
                   } else {
                     return context
                         .advertisementImageBanner(
@@ -424,8 +409,7 @@ class FeedComponent extends StatelessWidget {
                             imageLink: item.smallBannerImage,
                             title: advertisement.key,
                             size: AdvertisementBannerSize.values.byName(
-                              advertisement.value.type ??
-                                  S.of(context).Small.toLowerCase(),
+                              advertisement.value.type ?? S.of(context).Small.toLowerCase(),
                             ),
                           ),
                         )
@@ -458,8 +442,7 @@ class FeedComponent extends StatelessWidget {
         ],
       ],
     ).paddingSymmetric(
-      vertical:
-          (feedLeisureModel.positionModel?.verticalMargin ?? 0).toDouble(),
+      vertical: (feedLeisureModel.positionModel?.verticalMargin ?? 0).toDouble(),
     );
   }
 }

@@ -9,7 +9,6 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class ProfileComponent extends StatelessWidget {
   final UiProfileModel profile;
   final VoidCallback? onHowItWorksPoped;
-  final ValueChanged<InvitationData?>? onInvite;
   final bool showHowItWorks;
   final bool businessContentEnabled;
   final bool showRecommendedUsers;
@@ -47,7 +46,6 @@ class ProfileComponent extends StatelessWidget {
     this.onReactionTapped,
     this.onAllVideoReactionsPressed,
     this.onAllFeedbacksPressed,
-    this.onInvite,
     this.events,
     this.onEventTap,
     this.onSettingsPressed,
@@ -62,7 +60,7 @@ class ProfileComponent extends StatelessWidget {
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
 
-  bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
+  // bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
   @override
   Widget build(BuildContext context) {
@@ -150,90 +148,7 @@ class ProfileComponent extends StatelessWidget {
                 sameInterests: user?.commonInterests ?? 0,
                 userTileType: user?.userTileType ?? UserTileType.ordinary,
                 onAvatarTapped: () => onRecommendedUserAvatarPressed?.call(user!),
-                onMessage: () {
-                  onRecommendedUserMessagePressed?.call();
-                  // buildComponent(
-                  //   context,
-                  //   ComponentModel.fromJson(GlobalConfiguration().appConfig.content['invite_people_places']),
-                  //   ComponentBuilder(
-                  //     useRootNavigator: true,
-                  //     child: Builder(
-                  //       builder: (context) {
-                  //         var model = UiInviteToFavoritePlacesModel(
-                  //           date: DateTime.now(),
-                  //         );
-                  //         String? selected;
-                  //
-                  //         return StatefulBuilder(
-                  //           builder: (context, state) => InviteToFavoritePlacesComponent(
-                  //             places: favoritePlaces
-                  //                 .map(
-                  //                   (e) => UiKitLeadingRadioTile(
-                  //                     title: e.title ?? '',
-                  //                     selected: selected == (e.title ?? ''),
-                  //                     onTap: () {
-                  //                       state(() {
-                  //                         selected = e.title ?? '';
-                  //                       });
-                  //                     },
-                  //                     avatarLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                  //                     tags: e.tags,
-                  //                   ),
-                  //                 )
-                  //                 .toList(),
-                  //             events: favoriteEvents
-                  //                 .map((e) => UiKitLeadingRadioTile(
-                  //                       title: e.title ?? '',
-                  //                       selected: selected == (e.title ?? ''),
-                  //                       onTap: () {
-                  //                         state(() {
-                  //                           selected = e.title ?? '';
-                  //                         });
-                  //                       },
-                  //                       avatarLink: e.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                  //                       tags: e.tags,
-                  //                     ))
-                  //                 .toList(),
-                  //             uiModel: model,
-                  //             onInvite: onInvite == null || selected == null
-                  //                 ? null
-                  //                 : () {
-                  //                     Navigator.of(context, rootNavigator: true).pop();
-                  //                     onInvite?.call(
-                  //                       InvitationData(
-                  //                         user: user,
-                  //                         placeId: 0,
-                  //                         placePhotoUrl: GraphicsFoundation.instance.png.place.path,
-                  //                         placeName: selected ?? '',
-                  //                         placeTags: [
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                           UiKitTag(title: 'title', icon: ShuffleUiKitIcons.cocktail),
-                  //                         ],
-                  //                       ),
-                  //                     );
-                  //                   },
-                  //             onDatePressed: () async {
-                  //               final newDate = await showUiKitCalendarDialog(
-                  //                 context,
-                  //                 selectableDayPredicate: (day) {
-                  //                   log(day.toIso8601String(), name: 'ProfileComponent');
-                  //
-                  //                   return day.isAfter(DateTime.now().subtract(const Duration(days: 1)));
-                  //                 },
-                  //               );
-                  //               if (newDate != null) {
-                  //                 state(() => model = UiInviteToFavoritePlacesModel(date: newDate));
-                  //               }
-                  //             },
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // );
-                },
+                onMessage: onRecommendedUserMessagePressed,
               );
             },
             itemCount: recommendedUsers?.length ?? 3,
