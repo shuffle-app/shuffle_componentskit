@@ -14,8 +14,6 @@ class InviteComponent extends StatefulWidget {
     this.onAddWishTap,
     this.onInviteTap,
     this.changeDate,
-    required Null Function(List<UiInvitePersonModel> persons)
-        onInvitePersonsChanged,
   }) : assert(
           invitedUser != null
               ? onRemoveUserOptionTap != null
