@@ -189,35 +189,27 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                                   'Foodie'
                                 ];
                               },
-                              selectedProperties: [
-                                UiModelPropertyType(title: 'Stripes', id: 0),
-                                UiModelPropertyType(title: 'Melomaniac', id: 1),
-                                UiModelPropertyType(title: 'Drinker', id: 2),
-                                UiModelPropertyType(title: 'Smoker', id: 3),
-                              ],
-                              recentlyAddedProperties: [
-                                UiModelPropertyType(title: 'Stripes', id: 0),
-                                UiModelPropertyType(title: 'Melomaniac', id: 1),
-                                UiModelPropertyType(title: 'Drinker', id: 2),
-                                UiModelPropertyType(title: 'Smoker', id: 3),
-                              ],
                               onRecentlyAddedPropertyTapped: (value) {},
-                              onSelectedPropertyTapped: (value) {},
-                              onPropertyFieldSubmitted: (value) {},
+                              onPropertyFieldSubmitted: (value) async {
+                                return UiModelProperty(title: value, id: 9);
+                              },
                               onAddPropertyTypeTap: () {},
                               onDeletePropertyTypeTap: () {},
                               onEditPropertyTypeTap: () {},
-                              selectedPropertyTypeTitle: 'Active tiger',
                               onPropertyTypeTapped: (value) {},
-                              propertyTypes: [
-                                UiModelPropertyType(
+                              allPropertyCategories: [
+                                UiModelPropertiesCategory(
                                     title: 'Active tiger', id: 0),
-                                UiModelPropertyType(
+                                UiModelPropertiesCategory(
                                     title: 'Interested adventure', id: 1),
-                                UiModelPropertyType(
+                                UiModelPropertiesCategory(
                                     title: 'Forever resting sloth', id: 2),
-                                UiModelPropertyType(title: 'Foodie', id: 3),
+                                UiModelPropertiesCategory(
+                                    title: 'Foodie', id: 3),
                               ],
+                              basePropertyTypesTap: (int) async {},
+                              uniquePropertyTypesTap: (int) async {},
+                              relatedProperties: [],
                             ),
                           ),
                       text: 'show property management component')),
