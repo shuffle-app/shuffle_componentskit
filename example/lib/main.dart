@@ -171,258 +171,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
               SpacingFoundation.verticalSpace16,
               context.button(
                   data: BaseUiKitButtonData(
-                      text: 'show company presentation component',
-                      onPressed: () {
-                        context.push(CompanyPresentationComponent(
-                          place: UiPlaceModel(
-                            id: 1,
-                            media: [
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                              UiKitMediaPhoto(
-                                  link: GraphicsFoundation
-                                      .instance.png.place.path),
-                            ],
-                          ),
-                        ),
-                    text: 'show property management component')),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show video-reactions moderations',
-                onPressed: () {
-                  context.push(
-                    Scaffold(
-                      body: VideoReactionModeration(
-                        sortFunction: () {},
-                        deleteFunction: () {},
-                        reactionPreviewModelList: [
-                          ReactionPreviewUiModel(
-                            imagePath: 'assets/images/png/profile_story_1.png',
-                            viewed: false,
-                            onTap: () {},
-                          ),
-                          ReactionPreviewUiModel(
-                            imagePath: 'assets/images/png/profile_story_1.png',
-                            viewed: false,
-                            onTap: () {},
-                          ),
-                          ReactionPreviewUiModel(
-                            imagePath: 'assets/images/png/profile_story_1.png',
-                            viewed: false,
-                            onTap: () {},
-                          ),
-                          ReactionPreviewUiModel(
-                            imagePath: 'assets/images/png/profile_story_1.png',
-                            viewed: false,
-                            onTap: () {},
-                          ),
-                          ReactionPreviewUiModel(
-                            imagePath: 'assets/images/png/profile_story_1.png',
-                            viewed: false,
-                            onTap: () {},
-                          ),
-                          ReactionPreviewUiModel(
-                            imagePath: 'assets/images/png/profile_story_1.png',
-                            viewed: false,
-                            onTap: () {},
-                          ),
-                          ReactionPreviewUiModel(
-                            imagePath: 'assets/images/png/profile_story_1.png',
-                            viewed: false,
-                            onTap: () {},
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show Feedback',
-                onPressed: () {
-                  context.push(
-                    Scaffold(
-                      body: FeedbackModeration(
-                        sortFunction: () {},
-                        deleteFunction: () {},
-                        feedbackUiModelList: [
-                          FeedbackModerationUiModel(
-                            feedbackItemUiModel: FeedbackItemUiModel(
-                              title: 'Ryan Gosling',
-                              avatarUrl: GraphicsFoundation
-                                  .instance.png.atmosphere.path,
-                              datePosted: DateTime.now(),
-                              rating: 5,
-                              companyAnswered: false,
-                              helpfulCount: 1,
-                              text: 'Came for lunch with my sister. '
-                                  'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
-                                  'But the service was below average and the chips were too terrible to finish.',
-                              removeFunction: () {},
-                            ),
-                            companyFeedbackItemUiModel: [],
-                          ),
-                          FeedbackModerationUiModel(
-                            feedbackItemUiModel: FeedbackItemUiModel(
-                              title: 'Ryan Gosling',
-                              avatarUrl: GraphicsFoundation
-                                  .instance.png.atmosphere.path,
-                              datePosted: DateTime.now(),
-                              rating: 5,
-                              companyAnswered: false,
-                              helpfulCount: 1,
-                              text: 'Came for lunch with my sister. '
-                                  'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
-                                  'But the service was below average and the chips were too terrible to finish.',
-                              removeFunction: () {},
-                            ),
-                            companyFeedbackItemUiModel: [
-                              FeedbackItemUiModel(
-                                title: 'Ryan Gosling',
-                                avatarUrl: GraphicsFoundation
-                                    .instance.png.atmosphere.path,
-                                datePosted: DateTime.now(),
-                                rating: 5,
-                                companyAnswered: false,
-                                helpfulCount: 1,
-                                text: 'Came for lunch with my sister. '
-                                    'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
-                                    'But the service was below average and the chips were too terrible to finish.',
-                                removeFunction: () {},
-                              ),
-                              FeedbackItemUiModel(
-                                title: 'Ryan Gosling',
-                                avatarUrl: GraphicsFoundation
-                                    .instance.png.atmosphere.path,
-                                datePosted: DateTime.now(),
-                                rating: 5,
-                                companyAnswered: false,
-                                helpfulCount: 1,
-                                text: 'Came for lunch with my sister. '
-                                    'We loved our Thai-style mains which were amazing with lots of flavour, very impressive for a vegetarian restaurant. '
-                                    'But the service was below average and the chips were too terrible to finish.',
-                                removeFunction: () {},
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                text: 'show spent point barcode component',
-                onPressed: () {
-                  showUiKitGeneralFullScreenDialog(
-                    context,
-                    GeneralDialogData(
-                      topPadding: 0.35.sh,
-                      child: SpentPointBarcodeComponent(
-                        discountTitle: 'Free coctails',
-                        uiModelDiscounts: UiModelDiscounts(
-                          buttonTitle: '30% discount '
-                              '(-1500)',
-                          barcode: '189576975672367',
-                          contentShortUiModel: ContentShortUiModel(
-                            imageUrl:
-                                GraphicsFoundation.instance.png.place.path,
-                            title: 'La Vue Citytel Group',
-                            tags: [
-
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: false,
-                              ),
-                            ],
-                            tags: [
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Cheap',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Duh',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Metal',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Heavy',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Club',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                              UiKitTag(
-                                title: 'Cheaper',
-                                icon: ShuffleUiKitIcons.cutlery,
-                                unique: true,
-                              ),
-                            ],
-                          ),
-                        ));
-                      })),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
                       onPressed: () => context.push(
                             PropertyManagementComponent(
                               propertySearchOptions: (value) async {
@@ -433,64 +181,30 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                                   'Foodie'
                                 ];
                               },
-                              selectedProperties: [
-                                UiModelPropertyType(title: 'Stripes', id: 0),
-                                UiModelPropertyType(title: 'Melomaniac', id: 1),
-                                UiModelPropertyType(title: 'Drinker', id: 2),
-                                UiModelPropertyType(title: 'Smoker', id: 3),
-                              ],
-                              recentlyAddedProperties: [
-                                UiModelPropertyType(title: 'Stripes', id: 0),
-                                UiModelPropertyType(title: 'Melomaniac', id: 1),
-                                UiModelPropertyType(title: 'Drinker', id: 2),
-                                UiModelPropertyType(title: 'Smoker', id: 3),
-                              ],
                               onRecentlyAddedPropertyTapped: (value) {},
-                              onSelectedPropertyTapped: (value) {},
-                              onPropertyFieldSubmitted: (value) {},
+                              onPropertyFieldSubmitted: (value) async {
+                                return UiModelProperty(title: value, id: 9);
+                              },
                               onAddPropertyTypeTap: () {},
                               onDeletePropertyTypeTap: () {},
                               onEditPropertyTypeTap: () {},
-                              selectedPropertyTypeTitle: 'Active tiger',
                               onPropertyTypeTapped: (value) {},
-                              propertyTypes: [
-                                UiModelPropertyType(
+                              allPropertyCategories: [
+                                UiModelPropertiesCategory(
                                     title: 'Active tiger', id: 0),
-                                UiModelPropertyType(
+                                UiModelPropertiesCategory(
                                     title: 'Interested adventure', id: 1),
-                                UiModelPropertyType(
+                                UiModelPropertiesCategory(
                                     title: 'Forever resting sloth', id: 2),
-                                UiModelPropertyType(title: 'Foodie', id: 3),
+                                UiModelPropertiesCategory(
+                                    title: 'Foodie', id: 3),
                               ],
+                              basePropertyTypesTap: (int) async {},
+                              uniquePropertyTypesTap: (int) async {},
+                              relatedProperties: [],
                             ),
                           ),
                       text: 'show property management component')),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                data: BaseUiKitButtonData(
-                  text: 'show spent point barcode component',
-                  onPressed: () {
-                    context.push(
-                      PropertyManagementIconsComponent(
-                        relatedPropertyTextController: TextEditingController(),
-                        onIconTap: () {},
-                        iconsPath: [],
-                        recentlyAddedIconPaths: [],
-                        relatedProperties: List.generate(
-                          6,
-                          (index) {
-                            return RelatedPropertiesItemUiModel(
-                              title: 'Hello $index',
-                              propertiesList: ['Foodie', 'Smoke', 'Drink'],
-                              iconData: ShuffleUiKitIcons.restaurant,
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
             ],
           ),
         ));

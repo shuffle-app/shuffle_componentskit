@@ -48,7 +48,7 @@ class ComponentBuilder {
     isWidgetScrollable = [
       PlaceComponent,
       EventComponent,
-      Observer,
+      // Observer,
       NotificationsListComponent,
       AccountSubscriptionComponent,
       CompanySubscriptionComponent,
