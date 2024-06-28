@@ -1,38 +1,50 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
-class PropertyManagementComponent extends StatelessWidget {
+class PropertyManagementComponent extends StatefulWidget {
   const PropertyManagementComponent({
     super.key,
     this.onPropertyTypeTapped,
-    this.propertyTypes,
-    this.selectedPropertyTypeTitle,
+    required this.allPropertyCategories,
     this.onAddPropertyTypeTap,
     this.onEditPropertyTypeTap,
     this.onDeletePropertyTypeTap,
     required this.propertySearchOptions,
-    this.onPropertyFieldSubmitted,
-    this.selectedProperties,
-    this.onSelectedPropertyTapped,
-    this.recentlyAddedProperties,
-    this.onRecentlyAddedPropertyTapped,
+    required this.onPropertyFieldSubmitted,
+    required this.basePropertyTypesTap,
+    required this.uniquePropertyTypesTap,
+    required this.onRecentlyAddedPropertyTapped,
+    required this.relatedProperties,
   });
 
   final ValueChanged<int>? onPropertyTypeTapped;
-  final List<UiModelPropertyType>? propertyTypes;
+  final List<UiModelPropertiesCategory> allPropertyCategories;
   final VoidCallback? onAddPropertyTypeTap;
   final VoidCallback? onEditPropertyTypeTap;
   final VoidCallback? onDeletePropertyTypeTap;
-  final String? selectedPropertyTypeTitle;
   final Future<List<String>> Function(String) propertySearchOptions;
-  final ValueChanged<String>? onPropertyFieldSubmitted;
-  final List<UiModelPropertyType>? selectedProperties;
-  final ValueChanged<UiModelPropertyType>? onSelectedPropertyTapped;
-  final List<UiModelPropertyType>? recentlyAddedProperties;
-  final ValueChanged<UiModelPropertyType>? onRecentlyAddedPropertyTapped;
+  final Future<void> Function(int) basePropertyTypesTap;
+  final Future<UiModelProperty> Function(String) onPropertyFieldSubmitted;
+  final Future<void> Function(int) uniquePropertyTypesTap;
+  final ValueChanged<UiModelRelatedProperties>? onRecentlyAddedPropertyTapped;
+  final List<UiModelRelatedProperties>? relatedProperties;
+
+  @override
+  State<PropertyManagementComponent> createState() =>
+      _PropertyManagementComponentState();
+}
+
+class _PropertyManagementComponentState
+    extends State<PropertyManagementComponent> {
+  UiModelPropertiesCategory? selectedPropertiesCategory;
+  List<UiModelProperty> selectedBaseProperties = [];
+  List<UiModelProperty> selectedUniqueProperties = [];
+  late List<UiModelPropertiesCategory> allPropertyCategories =
+      widget.allPropertyCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +73,7 @@ class PropertyManagementComponent extends StatelessWidget {
                     SpacingFoundation.horizontalSpace16,
                     context.boxIconButton(
                       data: BaseUiKitButtonData(
-                        onPressed: onAddPropertyTypeTap,
+                        onPressed: widget.onAddPropertyTypeTap,
                         backgroundColor:
                             ColorsFoundation.primary200.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
@@ -75,12 +87,13 @@ class PropertyManagementComponent extends StatelessWidget {
                 child: Column(
                   children: [
                     SpacingFoundation.verticalSpace24,
-                    ...(propertyTypes ?? []).map((element) {
+                    ...(widget.allPropertyCategories ?? []).map((element) {
                       return PropertiesTypeAnimatedButton(
                         title: element.title,
                         onTap: () {
-                          onPropertyTypeTapped
-                              ?.call(propertyTypes?.indexOf(element) ?? 0);
+                          setState(() {
+                            selectedPropertiesCategory = element;
+                          });
                         },
                       );
                     })
@@ -88,7 +101,7 @@ class PropertyManagementComponent extends StatelessWidget {
                 ),
               ),
             ),
-          SpacingFoundation.horizontalSpace32,
+            SpacingFoundation.horizontalSpace32,
             Expanded(
               child: PropertiesBorderedBox(
                 title: Row(
@@ -96,7 +109,7 @@ class PropertyManagementComponent extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        selectedPropertyTypeTitle ?? 'Empty',
+                        selectedPropertiesCategory?.title ?? 'Empty',
                         overflow: TextOverflow.ellipsis,
                         style: uiKitTheme?.boldTextTheme.title2,
                       ),
@@ -104,7 +117,7 @@ class PropertyManagementComponent extends StatelessWidget {
                     SpacingFoundation.horizontalSpace16,
                     context.boxIconButton(
                       data: BaseUiKitButtonData(
-                        onPressed: onEditPropertyTypeTap,
+                        onPressed: widget.onEditPropertyTypeTap,
                         backgroundColor:
                             ColorsFoundation.primary200.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
@@ -116,7 +129,7 @@ class PropertyManagementComponent extends StatelessWidget {
                     SpacingFoundation.horizontalSpace4,
                     context.boxIconButton(
                       data: BaseUiKitButtonData(
-                        onPressed: onDeletePropertyTypeTap,
+                        onPressed: widget.onDeletePropertyTypeTap,
                         backgroundColor:
                             ColorsFoundation.danger.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
@@ -137,9 +150,16 @@ class PropertyManagementComponent extends StatelessWidget {
                     ),
                     SpacingFoundation.verticalSpace12,
                     PropertiesSearchInput(
-                      options: propertySearchOptions,
+                      options: widget.propertySearchOptions,
                       showAllOptions: true,
-                      onFieldSubmitted: onPropertyFieldSubmitted,
+                      onFieldSubmitted: (value) {
+                        widget.onPropertyFieldSubmitted.call(value).then(
+                          (v) {
+                            selectedPropertiesCategory?.baseProperties?.add(v);
+                            _updateAllPropertyCategories();
+                          },
+                        );
+                      },
                     ),
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
@@ -147,11 +167,77 @@ class PropertyManagementComponent extends StatelessWidget {
                               spacing: SpacingFoundation.horizontalSpacing12,
                               runSpacing: SpacingFoundation.verticalSpacing12,
                               children:
-                                  (selectedProperties ?? []).map((element) {
+                                  (selectedPropertiesCategory?.baseProperties ??
+                                          [])
+                                      .map((element) {
                                 return UiKitCloudChip(
                                   title: element.title,
                                   onTap: () {
-                                    onSelectedPropertyTapped?.call(element);
+                                    widget.basePropertyTypesTap
+                                        .call(element.id)
+                                        .then(
+                                      (value) {
+                                        selectedPropertiesCategory
+                                            ?.baseProperties
+                                            ?.removeWhere(
+                                          (e) => e.id == element.id,
+                                        );
+                                        _updateAllPropertyCategories();
+                                      },
+                                    );
+                                  },
+                                );
+                              }).toList())
+                          .paddingAll(EdgeInsetsFoundation.all24),
+                    ),
+                    SpacingFoundation.verticalSpace12,
+                    UiKitPropertiesCloud(
+                      child: Wrap(
+                              spacing: SpacingFoundation.horizontalSpacing12,
+                              runSpacing: SpacingFoundation.verticalSpacing12,
+                              children: (selectedPropertiesCategory
+                                          ?.uniqueProperties ??
+                                      [])
+                                  .map((element) {
+                                return UiKitCloudChip(
+                                  title: element.title,
+                                  isSelectable: true,
+                                  initialSelect: element.isSelected,
+                                  onTap: () {
+                                    widget.uniquePropertyTypesTap
+                                        .call(element.id)
+                                        .then(
+                                      (value) {
+                                        final uniquePropertyIndex =
+                                            selectedPropertiesCategory
+                                                ?.uniqueProperties
+                                                ?.indexWhere(
+                                          (e) => e.id == element.id,
+                                        );
+                                        if (uniquePropertyIndex != null &&
+                                            uniquePropertyIndex >= 0) {
+                                          final selectedUniqueProperty =
+                                              selectedPropertiesCategory
+                                                  ?.uniqueProperties?[
+                                                      uniquePropertyIndex]
+                                                  .copyWith(
+                                            isSelected:
+                                                !(selectedPropertiesCategory
+                                                        ?.uniqueProperties?[
+                                                            uniquePropertyIndex]
+                                                        .isSelected ??
+                                                    false),
+                                          );
+                                          if (selectedUniqueProperty != null) {
+                                            selectedPropertiesCategory
+                                                        ?.uniqueProperties?[
+                                                    uniquePropertyIndex] =
+                                                selectedUniqueProperty;
+                                          }
+                                        }
+                                        _updateAllPropertyCategories();
+                                      },
+                                    );
                                   },
                                 );
                               }).toList())
@@ -200,12 +286,12 @@ class PropertyManagementComponent extends StatelessWidget {
                       child: Wrap(
                               spacing: SpacingFoundation.horizontalSpacing12,
                               runSpacing: SpacingFoundation.verticalSpacing12,
-                              children: (recentlyAddedProperties ?? [])
+                              children: (widget.relatedProperties ?? [])
                                   .map((element) {
                                 return UiKitCloudChip(
                                   title: element.title,
                                   onTap: () {
-                                    onRecentlyAddedPropertyTapped?.call(
+                                    widget.onRecentlyAddedPropertyTapped?.call(
                                       element,
                                     );
                                   },
@@ -221,5 +307,15 @@ class PropertyManagementComponent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _updateAllPropertyCategories() {
+    final selectedCategoryIndex = allPropertyCategories
+        .indexWhere((e) => e.id == selectedPropertiesCategory?.id);
+    if (selectedCategoryIndex >= 0) {
+      allPropertyCategories[selectedCategoryIndex] =
+          selectedPropertiesCategory!;
+    }
+    setState(() {});
   }
 }

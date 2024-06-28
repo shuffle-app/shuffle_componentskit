@@ -1,11 +1,11 @@
 import '../components.dart';
 
-class UiModelCategoryCreate {
+class UiModelCategoryParent {
   final String categoryTitle;
   final int categoryId;
-  final List<UiModelPropertyType> categoryTypes;
+  final List<UiModelPropertiesCategory> categoryTypes;
 
-  UiModelCategoryCreate({
+  UiModelCategoryParent({
     required this.categoryTitle,
     required this.categoryId,
     required this.categoryTypes,

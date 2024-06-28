@@ -108,3 +108,4 @@ export 'moderation/feedback_moderation.dart';
 export 'moderation/video_reaction_moderation.dart';
 export 'company_presentation/company_presentation_component.dart';
 export 'property_management/property_management_icons_component.dart';
+export 'property_management/ui_model_properties_category.dart';
