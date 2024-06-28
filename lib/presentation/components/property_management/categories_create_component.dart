@@ -30,12 +30,12 @@ class CategoriesCreateComponent extends StatelessWidget {
       this.uniqueProperties,
       this.relatedProperties});
 
-  final List<UiModelCategoryCreate> entertainmentCategories;
+  final List<UiModelCategoryParent> entertainmentCategories;
   final List<UiModelRelatedProperties>? relatedProperties;
-  final List<UiModelCategoryCreate> businessCategories;
-  final List<UiModelPropertyType>? baseProperties;
-  final List<UiModelPropertyType>? uniqueProperties;
-  final UiModelPropertyType? selectedCategoryType;
+  final List<UiModelCategoryParent> businessCategories;
+  final List<UiModelPropertiesCategory>? baseProperties;
+  final List<UiModelPropertiesCategory>? uniqueProperties;
+  final UiModelPropertiesCategory? selectedCategoryType;
   final VoidCallback onAddCategoriesTap;
   final VoidCallback onCategoryTypeAddTap;
   final ValueChanged<int> onCategoryPropertyTypeButtonTap;
@@ -50,7 +50,7 @@ class CategoriesCreateComponent extends StatelessWidget {
   final Future<List<String>> Function(String) uniquePropertySearchOptions;
   final Future<List<String>> Function(String) relatedPropertySearchOptions;
   final ValueChanged<int>? onSelectedPropertyTapped;
-  final ValueChanged<UiModelPropertyType>? onSelectedUniquePropertyTapped;
+  final ValueChanged<UiModelPropertiesCategory>? onSelectedUniquePropertyTapped;
   final ValueChanged<UiModelRelatedProperties>? onSelectedRelatedPropertyTapped;
 
   @override
