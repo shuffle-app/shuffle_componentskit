@@ -171,6 +171,14 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
               SpacingFoundation.verticalSpace16,
               context.button(
                   data: BaseUiKitButtonData(
+                      text: 'show company presentation component',
+                      onPressed: () {
+                        context.push(CompanyPresentationComponent(
+                        ));
+                      })),
+              SpacingFoundation.verticalSpace16,
+              context.button(
+                  data: BaseUiKitButtonData(
                       onPressed: () => context.push(
                             PropertyManagementComponent(
                               propertySearchOptions: (value) async {
