@@ -57,9 +57,8 @@ class UiPlaceModel {
     this.currency,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
-            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website ),
-          if (phone != null && phone.isNotEmpty)
-            UiDescriptionItemModel(title: S.current.Phone, description: phone ),
+            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
+          if (phone != null && phone.isNotEmpty) UiDescriptionItemModel(title: S.current.Phone, description: phone),
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
           if (scheduleString != null)
             UiDescriptionItemModel(
@@ -169,5 +168,9 @@ class UiPlaceModel {
     if (tags.isEmpty) {
       tags = List.empty(growable: true);
     }
+  }
+
+  bool selectableDayPredicate(DateTime day) {
+    return weekdays.isEmpty ? true : weekdays.contains(day.weekday.toString().substring(0, 3).toLowerCase());
   }
 }

@@ -21,6 +21,7 @@ class VideoReactionUiModel {
   final int parentContentId;
   int? nextReactionId;
   int? previousReactionId;
+  bool isViewed;
 
   VideoReactionUiModel({
     required this.id,
@@ -43,6 +44,7 @@ class VideoReactionUiModel {
     this.authorType = UserTileType.ordinary,
     this.nextReactionId,
     this.previousReactionId,
+    this.isViewed = false,
   });
 
   bool get empty => id == -1;
@@ -69,6 +71,7 @@ class VideoReactionUiModel {
     String? placeName,
     int? nextReactionId,
     int? previousReactionId,
+    bool? isViewed
   }) {
     return VideoReactionUiModel(
       id: id,
@@ -89,6 +92,7 @@ class VideoReactionUiModel {
       answeredCompanyId: answeredCompanyId ?? this.answeredCompanyId,
       nextReactionId: nextReactionId ?? this.nextReactionId,
       previousReactionId: previousReactionId ?? this.previousReactionId,
+      isViewed: isViewed?? this.isViewed,
     );
   }
 

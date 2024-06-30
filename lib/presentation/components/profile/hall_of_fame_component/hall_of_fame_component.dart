@@ -135,7 +135,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                     autoPlay: true,
                     onTap: setAnimation,
                     javascriptChannels: {_channel},
-                    // environmentImage: 'https://github.com/shuffle-app/test-images/raw/master/Interior%20Light%20HDRI.jpg',
+                    // environmentImage: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/6-ll.hdr',
                     onWebViewCreated: (WebViewController controller) {
                       setState(() {
                         this.controller = controller;
@@ -143,6 +143,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                       controller.setJavaScriptMode(JavaScriptMode.unrestricted);
                       log('webview created with controller $controller', name: 'HallOfFameComponent');
                     },
+
                   ))
             else
               ImageWidget(
@@ -171,46 +172,4 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
       kBottomNavigationBarHeight.heightBox
     ]);
   }
-}
-
-class CustomTapRecognizer extends OneSequenceGestureRecognizer {
-  final void Function() onTap;
-  Offset pointerDownPosition = Offset.zero;
-
-  CustomTapRecognizer({required this.onTap});
-
-  @override
-  void addPointer(PointerEvent event) {
-    if (event is PointerDownEvent) {
-      startTrackingPointer(event.pointer);
-      pointerDownPosition = event.position;
-    } else {
-      stopTrackingPointer(event.pointer);
-    }
-  }
-
-  @override
-  void handleEvent(PointerEvent event) {
-    if (event is PointerUpEvent) {
-      Offset pointerUpPosition = event.position;
-      if (pointerUpPosition - pointerDownPosition == Offset.zero) {
-        resolve(GestureDisposition.accepted);
-      } else {
-        resolve(GestureDisposition.rejected);
-      }
-      stopTrackingPointer(event.pointer);
-    }
-  }
-
-  @override
-  void acceptGesture(int pointer) {
-    super.acceptGesture(pointer);
-    onTap();
-  }
-
-  @override
-  String get debugDescription => 'tap';
-
-  @override
-  void didStopTrackingLastPointer(int pointer) {}
 }

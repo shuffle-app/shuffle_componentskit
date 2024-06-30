@@ -56,13 +56,12 @@ class FeedbackResponseComponent extends StatelessWidget {
           FeedbackResponseItemComponent(feedBacks: feedBacks),
         ],
       ),
-      floatingActionButton: context.smallGradientButton(
+      floatingActionButton: onMessageTap != null ? context.smallGradientButton(
         data: BaseUiKitButtonData(
           onPressed: onMessageTap,
-          iconInfo:
-              BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.message),
+          iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.message),
         ),
-      ),
+      ) : null,
     );
   }
 }

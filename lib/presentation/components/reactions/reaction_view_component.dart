@@ -15,6 +15,7 @@ class ReactionViewComponent extends StatelessWidget {
   final VoidCallback? onPlaceNameTapped;
   final VoidCallback? onSeeMorePopOverCallback;
   final bool Function()? onAuthorTapped;
+  final VoidCallback? onVideoStarted;
 
   ReactionViewComponent({
     super.key,
@@ -27,6 +28,7 @@ class ReactionViewComponent extends StatelessWidget {
     this.onAuthorTapped,
     this.onSingleTapRight,
     this.onSingleTapLeft,
+    this.onVideoStarted,
   });
 
   final videoProgressNotifier = ValueNotifier<double>(0);
@@ -43,15 +45,15 @@ class ReactionViewComponent extends StatelessWidget {
     if (details.velocity.pixelsPerSecond.dy < 0 && canSwipeUp) {
       onSwipeUp?.call();
     }
-    if(details.velocity.pixelsPerSecond.dy > 100 && onSwipeDown!= null) {
+    if (details.velocity.pixelsPerSecond.dy > 100 && onSwipeDown != null) {
       onSwipeDown?.call();
     }
   }
 
   void _tapUpHandler(TapUpDetails details) {
-    if(details.globalPosition.dx>0.3.sw && onSingleTapRight!= null) {
+    if (details.globalPosition.dx > 0.3.sw && onSingleTapRight != null) {
       onSingleTapRight?.call();
-    } else if(details.globalPosition.dx<0.3.sw && onSingleTapLeft!=null){
+    } else if (details.globalPosition.dx < 0.3.sw && onSingleTapLeft != null) {
       onSingleTapLeft?.call();
     }
   }
@@ -69,6 +71,8 @@ class ReactionViewComponent extends StatelessWidget {
           onProgressChanged: (progress) => videoProgressNotifier.value = progress,
           onTapUp: _tapUpHandler,
           onVerticalSwipe: _verticalSwipeHandler,
+          onVideoComplete: onSingleTapRight,
+          onVideoInited: onVideoStarted,
         ),
         Positioned(
           top: 0,
@@ -159,19 +163,19 @@ class ReactionViewComponent extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: canSwipeUp
                         ? [
-                            SpacingFoundation.verticalSpace24,
-                            ImageWidget(
-                              iconData: ShuffleUiKitIcons.chevronuplong,
-                              color: Colors.white,
-                              width: 48.w,
-                            ),
-                            SpacingFoundation.verticalSpace16,
-                            Text(
-                              contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
-                              style: boldTextTheme?.body,
-                              textAlign: TextAlign.center,
-                            ),
-                          ]
+                      SpacingFoundation.verticalSpace24,
+                      ImageWidget(
+                        iconData: ShuffleUiKitIcons.chevronuplong,
+                        color: Colors.white,
+                        width: 48.w,
+                      ),
+                      SpacingFoundation.verticalSpace16,
+                      Text(
+                        contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
+                        style: boldTextTheme?.body,
+                        textAlign: TextAlign.center,
+                      ),
+                    ]
                         : [],
                   ),
                 ),

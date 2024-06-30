@@ -55,6 +55,7 @@ class AllReviewsComponent extends StatelessWidget {
                 return SizedBox(
                   width: feedbackCardWidth,
                   child: UiKitFeedbackCard(
+                    userTileType: feedback.feedbackAuthorType,
                     title: feedback.feedbackAuthorName,
                     avatarUrl: feedback.feedbackAuthorPhoto,
                     datePosted: feedback.feedbackDateTime,

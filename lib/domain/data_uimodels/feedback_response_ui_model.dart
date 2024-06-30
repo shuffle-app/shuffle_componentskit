@@ -1,3 +1,5 @@
+import 'package:shuffle_uikit/shuffle_uikit.dart';
+
 class FeedbackResponseUiModel {
   final DateTime timeSent;
   final String? message;
@@ -6,6 +8,7 @@ class FeedbackResponseUiModel {
   final String? senderImagePath;
   final int? helpfulCount;
   final int id;
+  final UserTileType userTileType;
 
   FeedbackResponseUiModel( {
     required this.id,
@@ -15,5 +18,6 @@ class FeedbackResponseUiModel {
     required this.senderName,
     this.senderImagePath,
     this.helpfulCount,
+    required this.userTileType,
   });
 }

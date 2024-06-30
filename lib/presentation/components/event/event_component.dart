@@ -21,6 +21,7 @@ class EventComponent extends StatefulWidget {
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
+  final ValueChanged<FeedbackUiModel>? onFeedbackTap;
 
   const EventComponent({
     super.key,
@@ -38,6 +39,7 @@ class EventComponent extends StatefulWidget {
     this.canLeaveVideoReaction = true,
     this.onLikedFeedback,
     this.onDislikedFeedback,
+    this.onFeedbackTap,
   });
 
   @override
@@ -426,12 +428,20 @@ class _EventComponentState extends State<EventComponent> {
                             child: UiKitFeedbackCard(
                               title: feedback.feedbackAuthorName,
                               avatarUrl: feedback.feedbackAuthorPhoto,
+                              userTileType: feedback.feedbackAuthorType ,
                               datePosted: feedback.feedbackDateTime,
                               companyAnswered: false,
                               text: feedback.feedbackText,
                               rating: feedback.feedbackRating,
                               isHelpful: feedback.helpfulForUser,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                              onPressed: () {
+                                if (widget.onFeedbackTap != null) {
+                                  widget.onFeedbackTap?.call(feedback);
+                                } else {
+                                  feedback.onTap?.call();
+                                }
+                              },
                               onLike: () {
                                 final feedbackId = feedback.id;
                                 if (likedReviews.contains(feedbackId)) {
@@ -454,26 +464,24 @@ class _EventComponentState extends State<EventComponent> {
             },
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
         if (widget.event.descriptionItems != null)
-          ...widget.event.descriptionItems!
-              .map(
-                (e) => GestureDetector(
-                  onTap: () {
-                    if (e.descriptionUrl != null) {
-                      launchUrlString(e.descriptionUrl!);
-                    } else if (e.description.startsWith('http')) {
-                      launchUrlString(e.description);
-                    } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
-                      launchUrlString('tel:${e.description}');
-                    }
-                  },
-                  child: TitledAccentInfo(
-                    title: e.title,
-                    info: e.description,
-                    showFullInfo: true,
-                  ),
-                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
-              )
-              ,
+          ...widget.event.descriptionItems!.map(
+            (e) => GestureDetector(
+              onTap: () {
+                if (e.descriptionUrl != null) {
+                  launchUrlString(e.descriptionUrl!);
+                } else if (e.description.startsWith('http')) {
+                  launchUrlString(e.description);
+                } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                  launchUrlString('tel:${e.description}');
+                }
+              },
+              child: TitledAccentInfo(
+                title: e.title,
+                info: e.description,
+                showFullInfo: true,
+              ),
+            ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
+          ),
         (kBottomNavigationBarHeight * 1.5).heightBox
       ],
     ).paddingSymmetric(

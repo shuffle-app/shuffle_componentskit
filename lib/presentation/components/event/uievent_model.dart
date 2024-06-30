@@ -225,4 +225,12 @@ class UiEventModel extends Advertisable {
         schedule: schedule ?? this.schedule,
         reviewStatus: reviewStatus ?? this.reviewStatus,
       );
+
+  bool selectableDayPredicate(DateTime day) {
+    if (startDate == null) return true;
+    if (endDate == null || startDate?.day == endDate?.day) {
+      return startDate?.day == day.day;
+    }
+    return day.isAfter(startDate!) && day.isBefore(endDate!);
+  }
 }

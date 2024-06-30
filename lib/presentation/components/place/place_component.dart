@@ -500,11 +500,19 @@ class _PlaceComponentState extends State<PlaceComponent> {
                             child: UiKitFeedbackCard(
                               title: feedback.feedbackAuthorName,
                               avatarUrl: feedback.feedbackAuthorPhoto,
+                              userTileType: feedback.feedbackAuthorType,
                               datePosted: feedback.feedbackDateTime,
                               companyAnswered: false,
                               rating: feedback.feedbackRating,
                               text: feedback.feedbackText,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                              onPressed: () {
+                                if (widget.onFeedbackTap != null) {
+                                  widget.onFeedbackTap?.call(feedback);
+                                } else {
+                                  feedback.onTap?.call();
+                                }
+                              },
                               onLike: () {
                                 final feedbackId = feedback.id;
                                 if (likedReviews.contains(feedbackId)) {
