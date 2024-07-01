@@ -194,7 +194,7 @@ class ProfileComponent extends StatelessWidget {
                   return UiKitReactionPreview(
                     customHeight: 0.205.sh,
                     imagePath: reaction.previewImageUrl ?? '',
-                    viewed: false,
+                    viewed: reaction.isViewed,
                     onTap: () => onReactionTapped?.call(reaction),
                   ).paddingOnly(
                     left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,

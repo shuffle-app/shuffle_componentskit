@@ -232,7 +232,7 @@ class FeedComponent extends StatelessWidget {
                       customHeight: 0.26.sh,
                       customWidth: 0.285.sw,
                       imagePath: item.previewImageUrl ?? '',
-                      viewed: false,
+                      viewed: item.isViewed,
                       onTap: () => onReactionTapped?.call(item),
                     ).paddingOnly(left: leftPadding);
                   },

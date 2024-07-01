@@ -35,6 +35,7 @@ class AllVideoReactionsComponent extends StatelessWidget {
             builderDelegate: PagedChildBuilderDelegate<VideoReactionUiModel>(
               itemBuilder: (context, item, index) {
                 return UiKitReactionPreview(
+                  viewed: item.isViewed,
                   imagePath: item.previewImageUrl,
                   onTap: () => onReactionTapped(item),
                 );
