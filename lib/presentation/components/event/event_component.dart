@@ -355,7 +355,7 @@ class _EventComponentState extends State<EventComponent> {
                           UiKitReactionPreview(
                             customHeight: 0.205.sh,
                             imagePath: reaction.previewImageUrl ?? '',
-                            viewed: false,
+                            viewed: reaction.isViewed,
                             onTap: () => widget.onReactionTap?.call(reaction),
                           ).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                         ],
@@ -365,7 +365,7 @@ class _EventComponentState extends State<EventComponent> {
                     return UiKitReactionPreview(
                       customHeight: 0.205.sh,
                       imagePath: reaction.previewImageUrl ?? '',
-                      viewed: false,
+                      viewed: reaction.isViewed,
                       onTap: () => widget.onReactionTap?.call(reaction),
                     ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0);
                   },
@@ -428,7 +428,7 @@ class _EventComponentState extends State<EventComponent> {
                             child: UiKitFeedbackCard(
                               title: feedback.feedbackAuthorName,
                               avatarUrl: feedback.feedbackAuthorPhoto,
-                              userTileType: feedback.feedbackAuthorType ,
+                              userTileType: feedback.feedbackAuthorType,
                               datePosted: feedback.feedbackDateTime,
                               companyAnswered: false,
                               text: feedback.feedbackText,

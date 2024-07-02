@@ -423,7 +423,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           UiKitReactionPreview(
                             customHeight: 0.205.sh,
                             imagePath: reaction.previewImageUrl ?? '',
-                            viewed: false,
+                            viewed: reaction.isViewed,
                             onTap: () => widget.onReactionTap?.call(reaction),
                           ).paddingOnly(left: EdgeInsetsFoundation.horizontal8),
                         ],

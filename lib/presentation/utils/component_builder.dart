@@ -27,6 +27,7 @@ Future buildComponent(BuildContext context, UiBaseModel configuration, Component
           child: componentWidgets.child,
           bottomBar: componentWidgets.bottomBar,
           useRootNavigator: componentWidgets.useRootNavigator,
+          topPadding: componentWidgets.topPadding,
         ),
       );
 
@@ -43,6 +44,7 @@ class ComponentBuilder {
   final kit.AlertDialogData? alertDialogData;
   final bool useRootNavigator;
   late final bool isWidgetScrollable;
+  double? topPadding;
 
   ComponentBuilder({required this.child, this.bottomBar, this.alertDialogData, this.useRootNavigator = false}) {
     isWidgetScrollable = [
@@ -53,6 +55,7 @@ class ComponentBuilder {
       AccountSubscriptionComponent,
       CompanySubscriptionComponent,
       AllReviewsComponent,
+      FeedbackReaderComponent,
       AllVideoReactionsComponent
     ].contains(child.runtimeType);
   }
