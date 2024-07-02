@@ -9,11 +9,13 @@ class ChatComponent extends StatelessWidget {
   final TextEditingController messageController;
   final PagingController<int, ChatMessageUiModel> pagingController;
   final ScrollController scrollController;
-  final ValueChanged<int>? onPlaceTap;
+  final ValueChanged<int>? onChatHeaderTapped;
   final ValueChanged<int>? onAcceptInvitationTap;
   final ValueChanged<int>? onDenyInvitationTap;
   final VoidCallback? onMessageSent;
-  final VoidCallback? onProfileTapped;
+  final VoidCallback? onAddMorePeople;
+  final VoidCallback? onLeaveChat;
+  final VoidCallback? onInviteToAnotherPlace;
   final ChatItemUiModel chatItemUiModel;
 
   const ChatComponent({
@@ -22,8 +24,10 @@ class ChatComponent extends StatelessWidget {
     required this.pagingController,
     required this.scrollController,
     required this.chatItemUiModel,
-    this.onPlaceTap,
-    this.onProfileTapped,
+    this.onInviteToAnotherPlace,
+    this.onLeaveChat,
+    this.onChatHeaderTapped,
+    this.onAddMorePeople,
     this.onAcceptInvitationTap,
     this.onDenyInvitationTap,
     this.onMessageSent,
@@ -33,25 +37,46 @@ class ChatComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-    return BlurredAppBarPage(
+    return BlurredAppPageWithPagination(
+      paginationController: pagingController,
       customToolbarBaseHeight: 100,
       autoImplyLeading: true,
       canFoldAppBar: false,
-      appBarTrailing: context.smallGradientButton(
-        data: BaseUiKitButtonData(
-          iconInfo: BaseUiKitButtonIconData(
-            iconData: ShuffleUiKitIcons.profileplus,
-          ),
-          onPressed: onProfileTapped,
-        ),
-      ),
+      reverse: true,
+      appBarTrailing: chatItemUiModel.isGroupChat
+          ? chatItemUiModel.userIsOwner
+              ? context.smallGradientButton(
+                  data: BaseUiKitButtonData(
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.profileplus,
+                    ),
+                    onPressed: onAddMorePeople,
+                  ),
+                )
+              : context.smallOutlinedButton(
+                  data: BaseUiKitButtonData(
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.logout,
+                    ),
+                    onPressed: onLeaveChat,
+                  ),
+                )
+          : context.smallGradientButton(
+              data: BaseUiKitButtonData(
+                iconInfo: BaseUiKitButtonIconData(
+                  iconData: ShuffleUiKitIcons.profileplus,
+                ),
+                onPressed: onInviteToAnotherPlace,
+              ),
+            ),
       customTitle: Expanded(
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            BorderedUserCircleAvatar(
-              imageUrl: chatItemUiModel.avatarUrl,
-              size: 0.1375.sw,
+            context.userAvatar(
+              size: UserAvatarSize.x40x40,
+              type: chatItemUiModel.userType,
+              userName: chatItemUiModel.chatTitle,
             ),
             SpacingFoundation.horizontalSpace12,
             Expanded(
@@ -60,9 +85,11 @@ class ChatComponent extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        chatItemUiModel.username,
-                        style: theme?.boldTextTheme.caption1Bold,
+                      Flexible(
+                        child: Text(
+                          chatItemUiModel.chatTitle,
+                          style: theme?.boldTextTheme.caption1Bold.copyWith(overflow: TextOverflow.ellipsis),
+                        ),
                       ),
                       SpacingFoundation.horizontalSpace12,
                       if (chatItemUiModel.userType == UserTileType.influencer)
@@ -90,66 +117,82 @@ class ChatComponent extends StatelessWidget {
                         ),
                     ],
                   ),
-                  SpacingFoundation.verticalSpace2,
-                  Text(
-                    chatItemUiModel.nickname,
-                    style: theme?.boldTextTheme.caption1Medium,
-                  ),
+                  if (chatItemUiModel.subtitle != null)
+                    Text(
+                      chatItemUiModel.subtitle!,
+                      style: theme?.boldTextTheme.caption1Medium,
+                    ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical2),
+                  if (chatItemUiModel.tag != null)
+                    UiKitTagWidget(
+                      title: chatItemUiModel.tag!.title,
+                      icon: chatItemUiModel.tag!.icon,
+                    ),
                 ],
               ),
             ),
           ],
         ),
       ),
-      children: [
-        PagedListView<int, ChatMessageUiModel>.separated(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          pagingController: pagingController,
-          builderDelegate: PagedChildBuilderDelegate(
-            itemBuilder: (context, item, index) {
-              if (item.senderIsMe) {
-                if (item.isInvitation) {
-                  return UiKitChatOutCard(
-                    timeOfDay: item.timeSent,
-                    sentByMe: item.senderIsMe,
-                    id: 0,
-                    child: UiKitInviteMessageContent(
-                      username: item.invitationData!.username,
-                      placeName: item.invitationData!.placeName,
-                      placeImagePath: item.invitationData!.placeImagePath,
-                      invitedPeopleAvatarPaths: item.invitationData!.invitedPeopleAvatarPaths,
-                      userType: UserTileType.ordinary,
-                      onPlaceTap: () {},
-                      canDenyInvitation: true,
-                      onAcceptTap: () {},
-                      onDenyTap: () {},
-                      tags: item.invitationData!.tags,
-                    ),
-                  );
-                }
-
-                return UiKitChatOutCard(
-                  id: 0,
-                  timeOfDay: item.timeSent,
-                  text: item.message,
-                  sentByMe: item.senderIsMe,
-                );
-              } else {
-                return UiKitChatInCard(
-                  id: 0,
-                  timeOfDay: item.timeSent,
-                  text: item.message,
-                );
-              }
-            },
+      bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing40,
+      padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
+      builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
+        firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),
+        newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
+          gradient: GradientFoundation.greyGradient,
+          child: UiKitChatOutCard(
+            id: -1,
+            timeOfDay: DateTime.now(),
+            sentByMe: true,
+            text: ' ',
           ),
-          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace8,
         ),
-        SpacingFoundation.verticalSpace24,
-        SpacingFoundation.verticalSpace12,
-        SpacingFoundation.verticalSpace24,
-      ],
+        noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
+          message: S.of(context).NoMessagesYet,
+        ),
+        itemBuilder: (context, item, index) {
+          if (item.messageType == MessageType.info) {
+            return UiKitInfoText(
+              text: item.message!,
+              title: item.infoMessageTitle,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal20);
+          } else if (item.senderIsMe) {
+            if (item.isInvitation && item.invitationData != null) {
+              return UiKitChatOutCard(
+                timeOfDay: item.timeSent,
+                sentByMe: item.senderIsMe,
+                id: item.messageId,
+                child: UiKitInviteMessageContent(
+                  username: 'item.invitationData!.username',
+                  placeName: 'item.invitationData!.placeName',
+                  placeImagePath: 'item.invitationData!.placeImagePath',
+                  invitedPeopleAvatarPaths: ['item.invitationData!.invitedPeopleAvatarPaths'],
+                  userType: UserTileType.ordinary,
+                  onPlaceTap: () {},
+                  canDenyInvitation: true,
+                  onAcceptTap: () {},
+                  onDenyTap: () {},
+                  tags: [
+                    // item.invitationData!.tags,
+                  ],
+                ),
+              );
+            }
+
+            return UiKitChatOutCard(
+              id: item.messageId,
+              timeOfDay: item.timeSent,
+              text: item.message,
+              sentByMe: item.senderIsMe,
+            );
+          } else {
+            return UiKitChatInCard(
+              id: item.messageId,
+              timeOfDay: item.timeSent,
+              text: item.message,
+            );
+          }
+        },
+      ),
     );
   }
 }
