@@ -30,6 +30,7 @@ class ProfileComponent extends StatelessWidget {
   final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
   final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
+  final int? unreadMessagesCount;
 
   const ProfileComponent({
     super.key,
@@ -56,6 +57,7 @@ class ProfileComponent extends StatelessWidget {
     this.onRecommendedUserAvatarPressed,
     this.onRecommendedUserCardChanged,
     this.onFeedbackCardPressed,
+    this.unreadMessagesCount,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
@@ -85,16 +87,29 @@ class ProfileComponent extends StatelessWidget {
           onPressed: onSettingsPressed,
         ),
       ),
-      appBarTrailing: context.iconButtonNoPadding(
-        data: BaseUiKitButtonData(
-          iconInfo: BaseUiKitButtonIconData(
-            iconData: ShuffleUiKitIcons.message,
-            color: context.uiKitTheme?.colorScheme.inversePrimary,
-            size: 26.h,
-          ),
-          onPressed: onMessagePressed,
-        ),
-      ),
+      appBarTrailing: unreadMessagesCount == null
+          ? context.iconButtonNoPadding(
+              data: BaseUiKitButtonData(
+                iconInfo: BaseUiKitButtonIconData(
+                  iconData: ShuffleUiKitIcons.message,
+                  color: context.uiKitTheme?.colorScheme.inversePrimary,
+                  size: 26.h,
+                ),
+                onPressed: onMessagePressed,
+              ),
+            )
+          : context.badgeButton(
+              badgeValue: unreadMessagesCount,
+              badgeAlignment: Alignment.topLeft,
+              data: BaseUiKitButtonData(
+                iconInfo: BaseUiKitButtonIconData(
+                  iconData: ShuffleUiKitIcons.message,
+                  color: context.uiKitTheme?.colorScheme.inversePrimary,
+                  size: 26.h,
+                ),
+                onPressed: onMessagePressed,
+              ),
+            ),
       bodyBottomSpace: verticalMargin,
       children: [
         verticalMargin.heightBox,

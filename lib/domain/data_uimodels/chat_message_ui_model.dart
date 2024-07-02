@@ -2,7 +2,9 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ChatMessageUiModel {
   final DateTime timeSent;
+  final int messageId;
   final String? message;
+  final String? infoMessageTitle;
   final bool senderIsMe;
   final MessageType messageType;
   final ChatMessageInvitationData? invitationData;
@@ -11,9 +13,11 @@ class ChatMessageUiModel {
 
   ChatMessageUiModel({
     required this.timeSent,
-    this.message,
+    required this.messageId,
     required this.senderIsMe,
     required this.messageType,
+    this.message,
+    this.infoMessageTitle,
     this.invitationData,
   });
 }
@@ -36,4 +40,4 @@ class ChatMessageInvitationData {
   });
 }
 
-enum MessageType { message, invitation }
+enum MessageType { message, invitation, info }
