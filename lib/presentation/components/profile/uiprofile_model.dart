@@ -4,6 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiProfileModel {
   final VoidCallback? onShare;
+  final VoidCallback? onPointsDetails;
   final String? nickname;
   final String? name;
   final String? email;
@@ -31,7 +32,6 @@ class UiProfileModel {
   final bool? beInSearch;
 
   ProfileCard get cardWidget {
-
     return ProfileCard(
       onShare: onShare,
       nickname: nickname,
@@ -51,8 +51,10 @@ class UiProfileModel {
       badge: userTileType == UserTileType.pro
           ? const ProMemberPlate()
           : userTileType == UserTileType.premium
-          ? const PremiumMemberPlate()
-          : null,
+              ? const PremiumMemberPlate()
+              : userTileType == UserTileType.influencer
+                  ? const InfluencerMemberPlate()
+                  : null,
       onViewAllAchievements: onViewAllAchievements,
       achievements: achievements.where((element) => element.asset != null || element.objectUrl != null).toList(),
       profileStats: [
@@ -70,6 +72,7 @@ class UiProfileModel {
           actionButton: SmallOrdinaryButton(
             text: S.current.Spent.toUpperCase(),
             group: _statsConstGroup,
+            onPressed: onPointsDetails,
           ),
         ),
       ],
@@ -78,6 +81,7 @@ class UiProfileModel {
 
   UiProfileModel({
     this.onShare,
+    this.onPointsDetails,
     this.onDonate,
     this.mindsetId,
     this.showSupportShuffle = false,
@@ -107,36 +111,37 @@ class UiProfileModel {
 
   /// write [copyWith] method
 
-  UiProfileModel copyWith({
-    String? nickname,
-    String? name,
-    String? description,
-    String? avatarUrl,
-    String? userCredo,
-    int? followers,
-    int? mindsetId,
-    VoidCallback? onFollow,
-    bool? showSupportShuffle,
-    ValueChanged<int>? onDonate,
-    List<String>? allInterests,
-    List<String>? favoriteTags,
-    List<String>? matchingInterests,
-    VoidCallback? onViewAllAchievements,
-    List<UiKitAchievementsModel>? achievements,
-    UserTileType? userTileType,
-    VoidCallback? onShare,
-    String? specialization,
-    List<String>? socialLinks,
-    List<String>? tags,
-    List<int>? tagsIds,
-    List<int>? favoriteTagsIds,
-    String? email,
-    String? phone,
-    int? points,
-    bool? beInSearch
-  }) =>
+  UiProfileModel copyWith(
+          {String? nickname,
+          String? name,
+          String? description,
+          String? avatarUrl,
+          String? userCredo,
+          int? followers,
+          int? mindsetId,
+          VoidCallback? onFollow,
+          VoidCallback? onPointsDetails,
+          bool? showSupportShuffle,
+          ValueChanged<int>? onDonate,
+          List<String>? allInterests,
+          List<String>? favoriteTags,
+          List<String>? matchingInterests,
+          VoidCallback? onViewAllAchievements,
+          List<UiKitAchievementsModel>? achievements,
+          UserTileType? userTileType,
+          VoidCallback? onShare,
+          String? specialization,
+          List<String>? socialLinks,
+          List<String>? tags,
+          List<int>? tagsIds,
+          List<int>? favoriteTagsIds,
+          String? email,
+          String? phone,
+          int? points,
+          bool? beInSearch}) =>
       UiProfileModel(
           onShare: onShare ?? this.onShare,
+          onPointsDetails: onPointsDetails ?? this.onPointsDetails,
           nickname: nickname ?? this.nickname,
           name: name ?? this.name,
           description: description ?? this.description,
