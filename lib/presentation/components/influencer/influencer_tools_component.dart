@@ -3,14 +3,14 @@ import 'package:shuffle_components_kit/presentation/components/influencer/linear
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class InfluencerToolsComponent extends StatelessWidget {
-  final List<String> newToolsInfluncerList;
+  final List<String> newToolsInfluencerList;
   final List<InfluencerToolUiModel> influencerUiModelList;
   final Function() onTap;
 
   const InfluencerToolsComponent({
     super.key,
     required this.influencerUiModelList,
-    required this.newToolsInfluncerList,
+    required this.newToolsInfluencerList,
     required this.onTap,
   });
 
@@ -39,10 +39,10 @@ class InfluencerToolsComponent extends StatelessWidget {
               borderRadius: BorderRadiusFoundation.all24,
             ),
             child: Column(
-              children: newToolsInfluncerList.map(
+              children: newToolsInfluencerList.map(
                 (e) {
                   double padding = 0.0;
-                  if (e != newToolsInfluncerList.last) padding = 16.0;
+                  if (e != newToolsInfluencerList.last) padding = 16.0;
 
                   return Row(
                     mainAxisSize: MainAxisSize.max,

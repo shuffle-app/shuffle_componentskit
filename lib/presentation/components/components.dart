@@ -17,6 +17,7 @@ export 'feed/feed_component.dart';
 export 'feed/uifeed_model.dart';
 export 'feedback/add_influencer_feedback.dart';
 export 'feedback/add_review_component.dart';
+export 'feedback/feedback_reader_component.dart';
 export 'feedback/company_answer_feedback.dart';
 export 'feedback/feedback_response_component.dart';
 export 'forgot_password/forgot_password_component.dart';
