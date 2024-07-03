@@ -10,6 +10,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final GlobalKey? formKey;
   final VoidCallback? onPreferencesChangeRequested;
   final VoidCallback? onPhotoChangeRequested;
+  final VoidCallback? onInfluencerAccountRequested;
   final VoidCallback? onPremiumAccountRequested;
   final VoidCallback? onProAccountRequested;
   final VoidCallback? onActivityTileTap;
@@ -43,6 +44,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   const EditProfileDefaultComponent({
     super.key,
     this.onProfileEditSubmitted,
+    this.onInfluencerAccountRequested,
     this.onPremiumAccountRequested,
     this.onProAccountRequested,
     this.formKey,
@@ -130,22 +132,32 @@ class EditProfileDefaultComponent extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                if (onPremiumAccountRequested != null)
+                if (onInfluencerAccountRequested != null)
+                  Expanded(
+                    child: context.smallButton(
+                      blurred: false,
+                      data: BaseUiKitButtonData(
+                        fit: ButtonFit.fitWidth,
+                        text: S.of(context).Influencer.toUpperCase(),
+                        iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.star2, size: 15.w),
+                        onPressed: onInfluencerAccountRequested,
+                      ),
+                    ),
+                  )
+                else if (onPremiumAccountRequested != null) ...[
                   Expanded(
                     child: context.smallButton(
                       blurred: false,
                       data: BaseUiKitButtonData(
                         fit: ButtonFit.fitWidth,
                         text: S.of(context).Premium.toUpperCase(),
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.star2,
-                          size: 15.w
-                        ),
+                        iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.star2, size: 15.w),
                         onPressed: onPremiumAccountRequested,
                       ),
                     ),
                   ),
-                SpacingFoundation.horizontalSpace16,
+                  SpacingFoundation.horizontalSpace16
+                ],
                 if (onProAccountRequested != null)
                   Expanded(
                     child: context.smallButton(

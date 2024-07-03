@@ -39,7 +39,7 @@ class SpentPointsComponent extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        customToolbarBaseHeight: 0.13.sh,
+        // customToolbarBaseHeight: 0.13.sh,
         childrenPadding:
             EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
