@@ -93,7 +93,8 @@ class SearchComponent extends StatelessWidget {
     ),
   ];
 
-  List<UiKitTitledCardWithBackground> get _mockedBusinessChips => [
+  List<UiKitTitledCardWithBackground> get _mockedBusinessChips =>
+      [
         UiKitTitledCardWithBackground(
           title: S.current.SearchBusinessChooseYourself1,
           backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessClubs.path,
@@ -150,7 +151,8 @@ class SearchComponent extends StatelessWidget {
         ),
       ];
 
-  List<UiKitTitledCardWithBackground> get _mockedLeisureChips => [
+  List<UiKitTitledCardWithBackground> get _mockedLeisureChips =>
+      [
         UiKitTitledCardWithBackground(
           title: S.current.SearchChooseYourself1,
           backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFamily.path,
@@ -240,7 +242,6 @@ class SearchComponent extends StatelessWidget {
     final config = GlobalConfiguration().appConfig.content;
     final source = showBusinessContent ? 'search_business' : 'search';
     final model = ComponentSearchModel.fromJson(config[source]);
-    final showSocial = model.showSocial ?? false;
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
@@ -263,7 +264,9 @@ class SearchComponent extends StatelessWidget {
                     width: double.infinity,
                     // height: 30.h,
                     child: TitleWithHowItWorks(
-                      title: S.of(context).YoullFindIt,
+                      title: S
+                          .of(context)
+                          .YoullFindIt,
                       textStyle: theme?.boldTextTheme.title1,
                       textAlign: TextAlign.center,
                       shouldShow: search.showHowItWorks && title?[ContentItemType.hintDialog] != null,
@@ -299,7 +302,10 @@ class SearchComponent extends StatelessWidget {
                     child: IgnorePointer(
                       child: UiKitInputFieldRightIcon(
                         fillColor: theme?.colorScheme.surface3,
-                        hintText: S.of(context).Search.toUpperCase(),
+                        hintText: S
+                            .of(context)
+                            .Search
+                            .toUpperCase(),
                         controller: searchController,
                         icon: ImageWidget(
                           svgAsset: GraphicsFoundation.instance.svg.search,
@@ -319,16 +325,14 @@ class SearchComponent extends StatelessWidget {
           controller: scrollController,
           children: [
             127.h.heightBox,
-            if (showSocial) ...[
-              UiKitNoActionOverflownCard(
-                horizontalMargin: horizontalMargin,
-                title: 'Social',
-                subtitle: S.current.SocialSubtitle,
-                decorationIcons: _decorationItemsForSocials,
-                onTap: onSocialCardPressed,
-              ),
-              SpacingFoundation.verticalSpace24,
-            ],
+            UiKitNoActionOverflownCard(
+              horizontalMargin: horizontalMargin,
+              title: 'Social',
+              subtitle: S.current.SocialSubtitle,
+              decorationIcons: _decorationItemsForSocials,
+              onTap: onSocialCardPressed,
+            ),
+            SpacingFoundation.verticalSpace24,
             if (model.showFree ?? false) ...[
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
@@ -344,9 +348,13 @@ class SearchComponent extends StatelessWidget {
                       text: TextSpan(
                         style: theme?.boldTextTheme.body,
                         children: [
-                          TextSpan(text: S.of(context).SelectionOfTheBest),
+                          TextSpan(text: S
+                              .of(context)
+                              .SelectionOfTheBest),
                           TextSpan(
-                            text: S.of(context).FreePlaces,
+                            text: S
+                                .of(context)
+                                .FreePlaces,
                             style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.transparent),
                           )
                         ],
@@ -358,11 +366,15 @@ class SearchComponent extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: S.of(context).SelectionOfTheBest,
+                              text: S
+                                  .of(context)
+                                  .SelectionOfTheBest,
                               style: theme?.boldTextTheme.body.copyWith(color: Colors.transparent),
                             ),
                             TextSpan(
-                              text: S.of(context).FreePlaces,
+                              text: S
+                                  .of(context)
+                                  .FreePlaces,
                               style: theme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
                             )
                           ],
@@ -413,13 +425,14 @@ class SearchComponent extends StatelessWidget {
                       spacing: SpacingFoundation.verticalSpacing8,
                       children: search.filterChips!
                           .map(
-                            (e) => UiKitTitledFilterChip(
+                            (e) =>
+                            UiKitTitledFilterChip(
                               selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
                               title: e.title,
                               onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                               icon: e.icon,
                             ),
-                          )
+                      )
                           .toList(),
                     )
                   ],
@@ -428,14 +441,17 @@ class SearchComponent extends StatelessWidget {
             ],
             SpacingFoundation.verticalSpace24,
             ...search.places
-                .map((e) => UiKitCompactOrderedRatingCard(
-                        order: search.places.indexOf(e) + 1,
-                        rating: e.rating,
-                        title: e.title,
-                        imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
-                        onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
+                .map((e) =>
+                UiKitCompactOrderedRatingCard(
+                    order: search.places.indexOf(e) + 1,
+                    rating: e.rating,
+                    title: e.title,
+                    imageLink: e.media
+                        .firstWhereOrNull((element) => element.type == UiKitMediaType.image)
+                        ?.link,
+                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
                     .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
-                ,
+            ,
             kBottomNavigationBarHeight.heightBox,
           ],
         ),

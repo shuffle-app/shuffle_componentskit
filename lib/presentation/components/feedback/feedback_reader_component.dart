@@ -19,6 +19,7 @@ class FeedbackReaderComponent extends StatelessWidget {
     );
     return UiKitCardWrapper(
       padding: EdgeInsets.zero,
+      color: theme?.colorScheme.surface,
       child: ListView.separated(
         shrinkWrap: true,
         padding: EdgeInsets.zero,

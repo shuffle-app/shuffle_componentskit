@@ -197,7 +197,7 @@ class FeedComponent extends StatelessWidget {
                 .wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
             SizedBox(
-              height: 0.26.sh,
+              height: 0.285.sw*1.7,
               width: 1.sw,
               child: PagedListView<int, VideoReactionUiModel>.separated(
                 scrollDirection: Axis.horizontal,
@@ -207,7 +207,7 @@ class FeedComponent extends StatelessWidget {
                     child: UiKitShimmerProgressIndicator(
                       gradient: GradientFoundation.greyGradient,
                       child: UiKitReactionPreview(
-                        customHeight: 0.26.sh,
+                        customHeight: 0.285.sw*1.7,
                         customWidth: 0.285.sw,
                         imagePath: GraphicsFoundation.instance.png.place.path,
                       ).paddingOnly(left: horizontalMargin),
@@ -218,7 +218,7 @@ class FeedComponent extends StatelessWidget {
                     child: UiKitShimmerProgressIndicator(
                       gradient: GradientFoundation.greyGradient,
                       child: UiKitReactionPreview(
-                        customHeight: 0.26.sh,
+                        customHeight: 0.285.sw*1.7,
                         customWidth: 0.285.sw,
                         imagePath: GraphicsFoundation.instance.png.place.path,
                       ),
@@ -229,7 +229,7 @@ class FeedComponent extends StatelessWidget {
                     if (index == 0) leftPadding = horizontalMargin;
 
                     return UiKitReactionPreview(
-                      customHeight: 0.26.sh,
+                      customHeight: 0.285.sw*1.7,
                       customWidth: 0.285.sw,
                       imagePath: item.previewImageUrl ?? '',
                       viewed: item.isViewed,
