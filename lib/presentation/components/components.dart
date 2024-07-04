@@ -96,6 +96,8 @@ export 'subscriptions/account_subscription_component.dart';
 export 'subscriptions/company_subscription_component.dart';
 export 'subscriptions/company_subscription_model.dart';
 export 'subscriptions/ui_subscription_model.dart';
+export 'subscriptions/additional_info_premium.dart';
+export 'subscriptions/subscription_description_item.dart';
 export 'suggest_place/suggest_place_component.dart';
 export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';

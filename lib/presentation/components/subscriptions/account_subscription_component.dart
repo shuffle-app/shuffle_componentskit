@@ -15,12 +15,14 @@ class AccountSubscriptionComponent extends StatefulWidget {
   final String title;
   final bool isLoading;
   final VoidCallback? onRestorePurchase;
+  final List<SubscriptionDescriptionItem> subscriptionFeatures;
 
   const AccountSubscriptionComponent({
     super.key,
     required this.uiModel,
     required this.configModel,
     required this.title,
+    required this.subscriptionFeatures,
     this.onSubscribe,
     this.isLoading = false,
     this.onRestorePurchase,
@@ -34,6 +36,25 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
   SubscriptionOfferModel? _selectedOffer;
   bool _isLoading = false;
   final _autoSizeGroup = AutoSizeGroup();
+
+  String _buttonText() {
+    if (widget.uiModel.userType == UserTileType.premium) {
+      return S.of(context).GoPremium.toUpperCase();
+    } else if (widget.uiModel.userType == UserTileType.pro) {
+      return S.of(context).GoProFree.toUpperCase();
+    } else {
+      return S
+          .of(context)
+          .UpgradeForNmoney(
+            _selectedOffer == null
+                ? ''
+                : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
+                    ? S.of(context).ForFormattedPrice(S.of(context).Free)
+                    : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
+          )
+          .toUpperCase();
+    }
+  }
 
   @override
   void initState() {
@@ -104,75 +125,124 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               ).toList(),
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
-          if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable! > 0) ...[
+          if (_selectedOffer?.trialDaysAvailable != null &&
+              _selectedOffer!.trialDaysAvailable! > 0 &&
+              widget.uiModel.userType == UserTileType.pro) ...[
             SpacingFoundation.verticalSpace16,
             UiKitCardWrapper(
-                gradient: theme?.themeMode == ThemeMode.light
-                    ? GradientFoundation.lightShunyGreyGradient
-                    : GradientFoundation.shunyGreyGradient,
-                padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-                child: Stack(
-                  children: [
-                    Text(S.of(context).YouGetAccessToTrial, style: regularTextTheme?.body),
-                    GradientableWidget(
-                        gradient: GradientFoundation.attentionCard,
-                        child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: S.of(context).YouGetAccessToTrial,
-                              style: boldTextTheme?.body.copyWith(color: Colors.transparent),
-                            ),
-                            TextSpan(
-                              text:
-                                  ' ${_selectedOffer!.trialDaysAvailable!} ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)} ${S.of(context).TrialPeriod.toLowerCase()}',
-                              style: regularTextTheme?.body.copyWith(color: Colors.white),
-                            )
-                          ]),
-                        ))
-                  ],
-                )),
+              gradient: theme?.themeMode == ThemeMode.light
+                  ? GradientFoundation.lightShunyGreyGradient
+                  : GradientFoundation.shunyGreyGradient,
+              padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+              child: Stack(
+                children: [
+                  Text(
+                    '${S.of(context).YouGetAccessToTrial}  ${_selectedOffer!.trialDaysAvailable} ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)}',
+                    style: regularTextTheme?.body,
+                  ),
+                  GradientableWidget(
+                    gradient: GradientFoundation.defaultLinearGradient,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${S.of(context).YouGetAccessToTrial} ',
+                            style: boldTextTheme?.body.copyWith(color: Colors.transparent),
+                          ),
+                          TextSpan(
+                            text: '${_selectedOffer!.trialDaysAvailable!}',
+                            style: regularTextTheme?.body.copyWith(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  GradientableWidget(
+                    gradient: GradientFoundation.defaultLinearGradient,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                '${S.of(context).YouGetAccessToTrial}  ${_selectedOffer!.trialDaysAvailable!} ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)} ',
+                            style: regularTextTheme?.body.copyWith(color: Colors.transparent),
+                          ),
+                          TextSpan(
+                            text: S.of(context).TrialPeriod.toLowerCase(),
+                            style: boldTextTheme?.body.copyWith(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
           SpacingFoundation.verticalSpace16,
-          UiKitCardWrapper(
-            gradient: theme?.themeMode == ThemeMode.light
-                ? GradientFoundation.lightShunyGreyGradient
-                : GradientFoundation.shunyGreyGradient,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: widget.uiModel.subscriptionFeatures.map(
-                (e) {
-                  double padding = 0;
-                  if (e != widget.uiModel.subscriptionFeatures.last) {
-                    padding = EdgeInsetsFoundation.vertical16;
-                  }
+          ...List.generate(
+            widget.subscriptionFeatures.length,
+            (index) {
+              final indexIsEven = index.isEven;
 
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GradientableWidget(
-                        gradient: GradientFoundation.starLinearGradient,
-                        child: ImageWidget(
-                          iconData: ShuffleUiKitIcons.gradientStar,
-                          color: Colors.white,
-                          width: 0.0625.sw,
-                          height: 0.0625.sw,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SpacingFoundation.horizontalSpace8,
-                      Expanded(
-                        child: Text(
-                          e,
-                          style: regularTextTheme?.body,
-                        ),
-                      ),
-                    ],
-                  ).paddingOnly(bottom: padding);
-                },
-              ).toList(),
-            ).paddingAll(EdgeInsetsFoundation.all16),
+              double bottimPaddign = SpacingFoundation.verticalSpacing16;
+              if (index == widget.subscriptionFeatures.length - 1) bottimPaddign = SpacingFoundation.zero;
+
+              return UiKitCardWrapper(
+                      gradient: theme?.themeMode == ThemeMode.light
+                          ? GradientFoundation.lightShunyGreyGradient
+                          : GradientFoundation.shunyGreyGradient,
+                      child: indexIsEven
+                          ? Row(
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    widget.subscriptionFeatures[index].description,
+                                    style: regularTextTheme?.body,
+                                  ).paddingOnly(
+                                    left: SpacingFoundation.horizontalSpacing16,
+                                    top: SpacingFoundation.horizontalSpacing16,
+                                    bottom: SpacingFoundation.horizontalSpacing16,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: ImageWidget(
+                                    link: widget.subscriptionFeatures[index].imagePath,
+                                  ).paddingOnly(
+                                    left: SpacingFoundation.horizontalSpacing2,
+                                    right: SpacingFoundation.horizontalSpacing8,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: ImageWidget(
+                                    link: widget.subscriptionFeatures[index].imagePath,
+                                  ).paddingOnly(
+                                    right: SpacingFoundation.horizontalSpacing2,
+                                    left: SpacingFoundation.horizontalSpacing8,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    widget.subscriptionFeatures[index].description,
+                                    style: regularTextTheme?.body,
+                                  ).paddingOnly(
+                                    right: SpacingFoundation.horizontalSpacing16,
+                                    top: SpacingFoundation.horizontalSpacing16,
+                                    bottom: SpacingFoundation.horizontalSpacing16,
+                                  ),
+                                )
+                              ],
+                            ))
+                  .paddingOnly(bottom: bottimPaddign);
+            },
           ),
           if (widget.uiModel.additionalInfo != null) ...[
             SpacingFoundation.verticalSpace24,
@@ -184,16 +254,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               loading: _isLoading,
               autoSizeGroup: AutoSizeGroup(),
               fit: ButtonFit.fitWidth,
-              text: S
-                  .of(context)
-                  .UpgradeForNmoney(
-                    _selectedOffer == null
-                        ? ''
-                        : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
-                            ? S.of(context).ForFormattedPrice(S.of(context).Free)
-                            : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
-                  )
-                  .toUpperCase(),
+              text: _buttonText(),
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),
@@ -201,6 +262,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
             onPressed: widget.onRestorePurchase,
             child: Text(
               S.current.RestorePurchase,
+              style: boldTextTheme?.caption1Bold,
             ),
           ),
           if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0) ...[
