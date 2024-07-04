@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -13,8 +14,7 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -68,18 +68,13 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(
-                      globalConfiguration: configuration,
-                      child: const ComponentsTestPage())
+                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.18')
-                          .then(
-                              (_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(
-                              themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(
-                          body: Center(child: LoadingWidget()));
+                          .then((_) => Future.delayed(const Duration(seconds: 1)))
+                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
+                      return const Scaffold(body: Center(child: LoadingWidget()));
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -96,8 +91,7 @@ class ComponentsTestPage extends StatefulWidget {
   State<ComponentsTestPage> createState() => _ComponentsTestPageState();
 }
 
-class _ComponentsTestPageState extends State<ComponentsTestPage>
-    with TickerProviderStateMixin {
+class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProviderStateMixin {
   late final likeController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 1, milliseconds: 500),
@@ -160,62 +154,239 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
     );
 
     return Scaffold(
-        appBar: CustomAppBar(
-          title:
-              'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
-          // centerTitle: true,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      text: 'show company presentation component',
-                      onPressed: () {
-                        context.push(CompanyPresentationComponent(
-                        ));
-                      })),
-              SpacingFoundation.verticalSpace16,
-              context.button(
-                  data: BaseUiKitButtonData(
-                      onPressed: () => context.push(
-                            PropertyManagementComponent(
-                              propertySearchOptions: (value) async {
-                                return [
-                                  'Active tiger',
-                                  'Interested adventure',
-                                  'Forever resting sloth',
-                                  'Foodie'
-                                ];
-                              },
-                              onRecentlyAddedPropertyTapped: (value) {},
-                              onPropertyFieldSubmitted: (value) async {
-                                return UiModelProperty(title: value, id: 9);
-                              },
-                              onAddPropertyTypeTap: () {},
-                              onDeletePropertyTypeTap: () {},
-                              onEditPropertyTypeTap: () {},
-                              onPropertyTypeTapped: (value) {},
-                              allPropertyCategories: [
-                                UiModelPropertiesCategory(
-                                    title: 'Active tiger', id: 0),
-                                UiModelPropertiesCategory(
-                                    title: 'Interested adventure', id: 1),
-                                UiModelPropertiesCategory(
-                                    title: 'Forever resting sloth', id: 2),
-                                UiModelPropertiesCategory(
-                                    title: 'Foodie', id: 3),
-                              ],
-                              basePropertyTypesTap: (int) async {},
-                              uniquePropertyTypesTap: (int) async {},
-                              relatedProperties: [],
-                            ),
+      appBar: CustomAppBar(
+        title:
+            'Config updated on ${configuration.appConfig.updated.day}/${configuration.appConfig.updated.month} with ${configuration.appConfig.content['version']}',
+        // centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SpacingFoundation.verticalSpace16,
+            context.button(
+                data: BaseUiKitButtonData(
+                    text: 'show company presentation component',
+                    onPressed: () {
+                      context.push(CompanyPresentationComponent());
+                    })),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                onPressed: () => context.push(
+                  PropertyManagementComponent(
+                    propertySearchOptions: (value) async {
+                      return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
+                    },
+                    onRecentlyAddedPropertyTapped: (value) {},
+                    onPropertyFieldSubmitted: (value) async {
+                      return UiModelProperty(title: value, id: 9);
+                    },
+                    onAddPropertyTypeTap: () {},
+                    onDeletePropertyTypeTap: () {},
+                    onEditPropertyTypeTap: () {},
+                    onPropertyTypeTapped: (value) {},
+                    allPropertyCategories: [
+                      UiModelPropertiesCategory(title: 'Active tiger', id: 0),
+                      UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
+                      UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
+                      UiModelPropertiesCategory(title: 'Foodie', id: 3),
+                    ],
+                    basePropertyTypesTap: (int) async {},
+                    uniquePropertyTypesTap: (int) async {},
+                    relatedProperties: [],
+                  ),
+                ),
+                text: 'show property management component',
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show pro subscription',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                    configuration.appConfig.content['pro_account_info'],
+                  ),
+                  ComponentBuilder(
+                    child: AccountSubscriptionComponent(
+                      subscriptionFeatures: [
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).ProSubscriptionFeature2,
+                          imagePath: GraphicsFoundation.instance.png.scheduler.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).ProSubscriptionFeature4,
+                          imagePath: GraphicsFoundation.instance.png.presale.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).ProSubscriptionFeature5,
+                          imagePath: GraphicsFoundation.instance.png.upsales.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).ProSubscriptionFeature6,
+                          imagePath: GraphicsFoundation.instance.png.statistics.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).ProSubscriptionFeature7,
+                          imagePath: GraphicsFoundation.instance.png.notif.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).ProSubscriptionFeature3,
+                          imagePath: GraphicsFoundation.instance.png.pointGift.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature1,
+                          imagePath: GraphicsFoundation.instance.png.help.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature5,
+                          imagePath: GraphicsFoundation.instance.png.blackWhite.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).ProSubscriptionFeature1,
+                          imagePath: GraphicsFoundation.instance.png.pROLabel.path,
+                        ),
+                      ],
+                      configModel: ComponentModel.fromJson(
+                        configuration.appConfig.content['pro_account_info'],
+                      ),
+                      title: 'Pro account',
+                      uiModel: UiSubscriptionModel(
+                        privacyPolicyUrl: '',
+                        termsOfServiceUrl: '',
+                        userType: UserTileType.pro,
+                        subscriptionFeatures: [
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                        ],
+                        userName: 'userName',
+                        userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+                        nickname: 'nickname',
+                        offers: [
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            savings: 30,
+                            price: 13.23,
+                            name: 'Yearly',
+                            periodName: 'month',
+                            trialDaysAvailable: 14,
                           ),
-                      text: 'show property management component')),
-            ],
-          ),
-        ));
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            price: 18.19,
+                            name: 'Monthly',
+                            periodName: 'month',
+                            trialDaysAvailable: 14,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show premium subscription',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentModel.fromJson(
+                    configuration.appConfig.content['premium_account_info'],
+                  ),
+                  ComponentBuilder(
+                    child: AccountSubscriptionComponent(
+                      subscriptionFeatures: [
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature1,
+                          imagePath: GraphicsFoundation.instance.png.help.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature3,
+                          imagePath: GraphicsFoundation.instance.png.reaction.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature4,
+                          imagePath: GraphicsFoundation.instance.png.favoritePlace.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature5,
+                          imagePath: GraphicsFoundation.instance.png.blackWhite.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature7,
+                          imagePath: GraphicsFoundation.instance.png.shareStack.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature8,
+                          imagePath: GraphicsFoundation.instance.png.scheduler.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature2,
+                          imagePath: GraphicsFoundation.instance.png.shuffleLabel.path,
+                        ),
+                        SubscriptionDescriptionItem(
+                          description: S.of(context).PremiumSubscriptionFeature6,
+                          imagePath: GraphicsFoundation.instance.png.influencer.path,
+                        ),
+                      ],
+                      configModel: ComponentModel.fromJson(
+                        configuration.appConfig.content['premium_account_info'],
+                      ),
+                      title: 'Premium account',
+                      uiModel: UiSubscriptionModel(
+                        privacyPolicyUrl: '',
+                        termsOfServiceUrl: '',
+                        subscriptionFeatures: [
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                          'lorem ipsum dolor sit amet',
+                        ],
+                        additionalInfo: const AdditionalInfoPremium(
+                          name: 'nickname',
+                          userName: 'username',
+                        ),
+                        userType: UserTileType.premium,
+                        userName: 'userName',
+                        userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+                        nickname: 'nickname',
+                        offers: [
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            savings: 2,
+                            price: 4.90,
+                            name: 'Annually',
+                            periodName: 'month',
+                          ),
+                          SubscriptionOfferModel(
+                            storePurchaseId: '',
+                            currency: '\$',
+                            price: 5,
+                            name: 'Monthly',
+                            periodName: 'month',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   final List<UiKitTag> tags = [
@@ -263,40 +434,22 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
           'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
           'Nulla facilisi',
       tags: [
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(
-            title: 'uniqueCheap',
-            icon: ShuffleUiKitIcons.cocktail,
-            unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(
-            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
       ],
       type: '');
 
@@ -329,10 +482,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
     tags: [
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-      UiKitTag(
-          title: 'uniqueCheap',
-          icon: ShuffleUiKitIcons.cocktail,
-          unique: false),
+      UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
