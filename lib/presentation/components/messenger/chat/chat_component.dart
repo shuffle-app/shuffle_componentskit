@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 //ignore_for_file: no-empty-block
 
@@ -17,6 +18,8 @@ class ChatComponent extends StatelessWidget {
   final VoidCallback? onLeaveChat;
   final VoidCallback? onInviteToAnotherPlace;
   final ChatItemUiModel chatItemUiModel;
+  final ValueChanged<int>? onMessageVisible;
+  final ValueChanged<int>? onReplyMessage;
 
   const ChatComponent({
     super.key,
@@ -31,6 +34,8 @@ class ChatComponent extends StatelessWidget {
     this.onAcceptInvitationTap,
     this.onDenyInvitationTap,
     this.onMessageSent,
+    this.onMessageVisible,
+    this.onReplyMessage,
   });
 
   @override
@@ -151,44 +156,72 @@ class ChatComponent extends StatelessWidget {
         ),
         itemBuilder: (context, item, index) {
           if (item.messageType == MessageType.info) {
-            return UiKitInfoText(
-              text: item.message!,
-              title: item.infoMessageTitle,
-            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal20);
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: UiKitInfoText(
+                text: item.message!,
+                title: item.infoMessageTitle,
+                centerText: !item.messageId.isNegative,
+              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal20),
+            );
           } else if (item.senderIsMe) {
             if (item.isInvitation && item.invitationData != null) {
-              return UiKitChatOutCard(
-                timeOfDay: item.timeSent,
-                sentByMe: item.senderIsMe,
-                id: item.messageId,
-                child: UiKitInviteMessageContent(
-                  username: 'item.invitationData!.username',
-                  placeName: 'item.invitationData!.placeName',
-                  placeImagePath: 'item.invitationData!.placeImagePath',
-                  invitedPeopleAvatarPaths: ['item.invitationData!.invitedPeopleAvatarPaths'],
-                  userType: UserTileType.ordinary,
-                  onPlaceTap: () {},
-                  canDenyInvitation: true,
-                  onAcceptTap: () {},
-                  onDenyTap: () {},
-                  tags: [
-                    // item.invitationData!.tags,
-                  ],
+              return VisibilityDetector(
+                key: Key(item.messageId.toString()),
+                onVisibilityChanged: (info) {
+                  if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+                },
+                child: UiKitChatOutCard(
+                  onReplyMessage: onReplyMessage,
+                  timeOfDay: item.timeSent,
+                  sentByMe: item.senderIsMe,
+                  id: item.messageId,
+                  child: UiKitInviteMessageContent(
+                    username: 'item.invitationData!.username',
+                    placeName: 'item.invitationData!.placeName',
+                    placeImagePath: 'item.invitationData!.placeImagePath',
+                    invitedPeopleAvatarPaths: ['item.invitationData!.invitedPeopleAvatarPaths'],
+                    userType: UserTileType.ordinary,
+                    onPlaceTap: () {},
+                    canDenyInvitation: true,
+                    onAcceptTap: () {},
+                    onDenyTap: () {},
+                    tags: [
+                      // item.invitationData!.tags,
+                    ],
+                  ),
                 ),
               );
             }
 
-            return UiKitChatOutCard(
-              id: item.messageId,
-              timeOfDay: item.timeSent,
-              text: item.message,
-              sentByMe: item.senderIsMe,
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: UiKitChatOutCard(
+                onReplyMessage: onReplyMessage,
+                id: item.messageId,
+                timeOfDay: item.timeSent,
+                text: item.message,
+                sentByMe: item.senderIsMe,
+              ),
             );
           } else {
-            return UiKitChatInCard(
-              id: item.messageId,
-              timeOfDay: item.timeSent,
-              text: item.message,
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: UiKitChatInCard(
+                onReplyMessage: onReplyMessage,
+                id: item.messageId,
+                timeOfDay: item.timeSent,
+                text: item.message,
+              ),
             );
           }
         },

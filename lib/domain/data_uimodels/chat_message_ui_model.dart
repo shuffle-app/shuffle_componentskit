@@ -6,6 +6,8 @@ class ChatMessageUiModel {
   final String? message;
   final String? infoMessageTitle;
   final bool senderIsMe;
+  final String? senderName;
+  final bool isRead;
   final MessageType messageType;
   final ChatMessageInvitationData? invitationData;
 
@@ -16,10 +18,36 @@ class ChatMessageUiModel {
     required this.messageId,
     required this.senderIsMe,
     required this.messageType,
+    required this.isRead,
+    this.senderName,
     this.message,
     this.infoMessageTitle,
     this.invitationData,
   });
+
+  ChatMessageUiModel copyWith({
+    DateTime? timeSent,
+    int? messageId,
+    String? message,
+    String? infoMessageTitle,
+    bool? senderIsMe,
+    bool? isRead,
+    MessageType? messageType,
+    ChatMessageInvitationData? invitationData,
+    String? senderName,
+  }) {
+    return ChatMessageUiModel(
+      timeSent: timeSent ?? this.timeSent,
+      senderName: senderName ?? this.senderName,
+      messageId: messageId ?? this.messageId,
+      message: message ?? this.message,
+      infoMessageTitle: infoMessageTitle ?? this.infoMessageTitle,
+      senderIsMe: senderIsMe ?? this.senderIsMe,
+      isRead: isRead ?? this.isRead,
+      messageType: messageType ?? this.messageType,
+      invitationData: invitationData ?? this.invitationData,
+    );
+  }
 }
 
 class ChatMessageInvitationData {

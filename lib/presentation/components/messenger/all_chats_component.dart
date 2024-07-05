@@ -32,7 +32,7 @@ class AllChatsComponent extends StatelessWidget {
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget().paddingOnly(bottom: 0.2.sh),
         noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
           message: S.of(context).NoMessagesYet,
-        ),
+        ).paddingOnly(bottom: 0.2.sh),
         newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
           gradient: GradientFoundation.greyGradient,
           child: UiKitMessageCard.empty(),

@@ -8,6 +8,7 @@ class InviteComponent extends StatefulWidget {
     super.key,
     required this.persons,
     required this.onLoadMore,
+    this.alreadyInvitedUserIds,
     this.invitedUser,
     this.initialDate,
     this.onRemoveUserOptionTap,
@@ -15,13 +16,12 @@ class InviteComponent extends StatefulWidget {
     this.onInviteTap,
     this.changeDate,
   }) : assert(
-          invitedUser != null
-              ? onRemoveUserOptionTap != null
-              : changeDate != null,
+          invitedUser != null ? onRemoveUserOptionTap != null : changeDate != null,
           'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
         );
 
   final List<UiInvitePersonModel> persons;
+  final List<int>? alreadyInvitedUserIds;
   final VoidCallback onLoadMore;
 
   final UiInvitePersonModel? invitedUser;
@@ -58,8 +58,7 @@ class _InviteComponentState extends State<InviteComponent> {
   }
 
   void _scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       widget.onLoadMore.call();
     }
   }
@@ -91,8 +90,7 @@ class _InviteComponentState extends State<InviteComponent> {
                 onPressed: widget.persons.where((e) => e.isSelected).isEmpty
                     ? null
                     : () {
-                        final invitedPersons =
-                            widget.persons.where((e) => e.isSelected);
+                        final invitedPersons = widget.persons.where((e) => e.isSelected);
                         widget.onInviteTap?.call(invitedPersons.toList());
                       },
               ),
@@ -122,18 +120,17 @@ class _InviteComponentState extends State<InviteComponent> {
 
                     return UiKitUserTileWithCheckbox(
                       name: person.name,
+                      disableSelection: widget.alreadyInvitedUserIds?.contains(person.id) ?? false,
                       subtitle: person.description,
                       isSelected: person.isSelected,
                       date: person.date,
                       rating: person.rating ?? 0,
                       avatarLink: person.avatarLink,
                       handShake: person.handshake,
-                      onTap: (isInvited) =>
-                          setState(() => person.isSelected = isInvited),
+                      onTap: (isInvited) => setState(() => person.isSelected = isInvited),
                     );
                   },
-                  separatorBuilder: (_, __) =>
-                      SpacingFoundation.verticalSpace16,
+                  separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
                 ),
         ),
         SpacingFoundation.verticalSpace16,
@@ -160,8 +157,7 @@ class _InviteComponentState extends State<InviteComponent> {
                   Text(
                     S.of(context).AddYourselfToList,
                     style: boldTextTheme?.subHeadline,
-                  ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16),
+                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                   SpacingFoundation.verticalSpace4,
                   Row(
                     mainAxisSize: MainAxisSize.max,
@@ -170,9 +166,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         blurred: false,
                         data: BaseUiKitButtonData(
                           onPressed: widget.initialDate == null
-                              ? () => widget.changeDate
-                                      ?.call()
-                                      .then((selectedDate) {
+                              ? () => widget.changeDate?.call().then((selectedDate) {
                                     if (selectedDate != null) {
                                       setState(() => _date = selectedDate);
                                     }
@@ -194,8 +188,7 @@ class _InviteComponentState extends State<InviteComponent> {
                               style: regularTextTheme?.body,
                             ),
                     ],
-                  ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16),
+                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                   SpacingFoundation.verticalSpace8,
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,8 +202,7 @@ class _InviteComponentState extends State<InviteComponent> {
                           minLines: 1,
                           maxSymbols: 100,
                           controller: _wishController,
-                          hintText:
-                              S.of(context).DescribeYourWishes.toUpperCase(),
+                          hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,
                         ),
                       ),
@@ -231,8 +223,7 @@ class _InviteComponentState extends State<InviteComponent> {
                                 type: AppSnackBarType.warning,
                               );
                             } else {
-                              widget.onAddWishTap
-                                  ?.call(_wishController.text, _date!);
+                              widget.onAddWishTap?.call(_wishController.text, _date!);
                             }
                           },
                           iconInfo: BaseUiKitButtonIconData(
@@ -241,8 +232,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         ),
                       ),
                     ],
-                  ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16),
+                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 ],
               ),
         SpacingFoundation.verticalSpace16,
