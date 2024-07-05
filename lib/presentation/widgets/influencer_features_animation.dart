@@ -29,7 +29,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
         GraphicsFoundation.instance.png.mockAdBanner5.path,
         GraphicsFoundation.instance.png.place.path,
       ],
-      carouselSize: Size(1.sw - SpacingFoundation.verticalSpacing32, 0.3.sh),
+      carouselSize: Size(1.sw - SpacingFoundation.verticalSpacing32, 0.285.sw*1.7),
     ),
     PlacePreview(
       cellSize: Size(1.sw - 44.w, 156.h),
@@ -169,8 +169,8 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
         height: 0.55.sh,
         padding: EdgeInsets.all(SpacingFoundation.verticalSpacing16),
         gradient: theme?.themeMode == ThemeMode.light
-            ? GradientFoundation.lightShunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.3)
-            : GradientFoundation.shunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.3),
+            ? GradientFoundation.lightShunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.25)
+            : GradientFoundation.shunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.25),
         child: Column(
           children: [
             Row(

@@ -70,7 +70,7 @@ class UiProfileModel {
           title: S.current.Points,
           value: points?.toString() ?? '0',
           actionButton: SmallOrdinaryButton(
-            text: S.current.Spent.toUpperCase(),
+            text: S.current.Details.toUpperCase(),
             group: _statsConstGroup,
             onPressed: onPointsDetails,
           ),

@@ -93,154 +93,12 @@ class SearchComponent extends StatelessWidget {
     ),
   ];
 
-  List<UiKitTitledCardWithBackground> get _mockedBusinessChips => [
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchBusinessChooseYourself1,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessClubs.path,
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'business club';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchBusinessChooseYourself2,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessConferences.path,
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'conference';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchBusinessChooseYourself3,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessSpeech.path,
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'pitch';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchBusinessChooseYourself4,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessGames.path,
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'business games';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchBusinessChooseYourself5,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessNetworking.path,
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'networking';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchBusinessChooseYourself6,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchBusinessTraining.path,
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'business training';
-          },
-        ),
-      ];
-
-  List<UiKitTitledCardWithBackground> get _mockedLeisureChips => [
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself1,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFamily.path,
-          backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'happiness for children and family';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself2,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryAdventure.path,
-          backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'thirst for adventure';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself3,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryParty.path,
-          backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'parties and dancing';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself4,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryExtreme.path,
-          backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'extremes and thrills';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself5,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryZadrot.path,
-          backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'age of enlightenment';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself6,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryFood.path,
-          backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'fine dining';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself7,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategoryChill.path,
-          backgroundColor: Color(int.parse('FFFA4C34', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'bliss and chill';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself8,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategorySport.path,
-          backgroundColor: Color(int.parse('FFFAE634', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'sporty movements';
-          },
-        ),
-        UiKitTitledCardWithBackground(
-          title: S.current.SearchChooseYourself9,
-          backgroundImageLink: GraphicsFoundation.instance.png.searchCategorySelfCare.path,
-          backgroundColor: Color(int.parse('FFD808FA', radix: 16)),
-          onPressed: () {
-            onSearchFieldTap?.call();
-            searchController.text = 'self care';
-          },
-        ),
-      ];
-
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final config = GlobalConfiguration().appConfig.content;
     final source = showBusinessContent ? 'search_business' : 'search';
     final model = ComponentSearchModel.fromJson(config[source]);
-    final showSocial = model.showSocial ?? false;
 
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
@@ -319,16 +177,14 @@ class SearchComponent extends StatelessWidget {
           controller: scrollController,
           children: [
             127.h.heightBox,
-            if (showSocial) ...[
-              UiKitNoActionOverflownCard(
-                horizontalMargin: horizontalMargin,
-                title: 'Social',
-                subtitle: S.current.SocialSubtitle,
-                decorationIcons: _decorationItemsForSocials,
-                onTap: onSocialCardPressed,
-              ),
-              SpacingFoundation.verticalSpace24,
-            ],
+            UiKitNoActionOverflownCard(
+              horizontalMargin: horizontalMargin,
+              title: 'Social',
+              subtitle: S.current.SocialSubtitle,
+              decorationIcons: _decorationItemsForSocials,
+              onTap: onSocialCardPressed,
+            ),
+            SpacingFoundation.verticalSpace24,
             if (model.showFree ?? false) ...[
               UiKitOverflownActionCard(
                 horizontalMargin: horizontalMargin,
@@ -376,20 +232,22 @@ class SearchComponent extends StatelessWidget {
               ),
             ],
             SpacingFoundation.verticalSpace24,
-            Text(
-              S.current.ChooseYourself,
-              style: theme?.boldTextTheme.title1,
-            ).paddingSymmetric(horizontal: horizontalMargin),
-            SpacingFoundation.verticalSpace24,
-            SingleChildScrollView(
-              primary: false,
-              scrollDirection: Axis.horizontal,
-              child: Wrap(
-                spacing: SpacingFoundation.horizontalSpacing12,
-                children: chooseYourselfChips ?? (showBusinessContent ? _mockedBusinessChips : _mockedLeisureChips),
-              ),
-            ).paddingOnly(left: horizontalMargin),
-            SpacingFoundation.verticalSpace24,
+            if (chooseYourselfChips != null) ...[
+              Text(
+                S.current.ChooseYourself,
+                style: theme?.boldTextTheme.title1,
+              ).paddingSymmetric(horizontal: horizontalMargin),
+              SpacingFoundation.verticalSpace24,
+              SingleChildScrollView(
+                primary: false,
+                scrollDirection: Axis.horizontal,
+                child: Wrap(
+                  spacing: SpacingFoundation.horizontalSpacing12,
+                  children: chooseYourselfChips!,
+                ),
+              ).paddingOnly(left: horizontalMargin),
+              SpacingFoundation.verticalSpace24
+            ],
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -427,15 +285,13 @@ class SearchComponent extends StatelessWidget {
               ),
             ],
             SpacingFoundation.verticalSpace24,
-            ...search.places
-                .map((e) => UiKitCompactOrderedRatingCard(
-                        order: search.places.indexOf(e) + 1,
-                        rating: e.rating,
-                        title: e.title,
-                        imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
-                        onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
-                    .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12))
-                ,
+            ...search.places.map((e) => UiKitCompactOrderedRatingCard(
+                    order: search.places.indexOf(e) + 1,
+                    rating: e.rating,
+                    title: e.title,
+                    imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
+                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
+                .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12)),
             kBottomNavigationBarHeight.heightBox,
           ],
         ),

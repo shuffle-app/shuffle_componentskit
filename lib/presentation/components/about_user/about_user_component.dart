@@ -48,7 +48,8 @@ class AboutUserComponent extends StatelessWidget {
     if (aboutUserModel.selectedAge == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) => onAgeChanged?.call(24));
     }
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['about_user']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
@@ -233,16 +234,14 @@ class AboutUserComponent extends StatelessWidget {
               children: [
                 SpacingFoundation.horizontalSpace16,
                 if (genders != null)
-                  ...genders!
-                      .map((e) => Expanded(
-                            child: UiKitVerticalChip(
-                              selected: aboutUserModel.selectedGenderId == e.id,
-                              caption: e.title,
-                              sign: _getIconForGenderMock(e),
-                              onTap: () => onGenderChanged?.call(e.id),
-                            ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
-                          ))
-                      ,
+                  ...genders!.map((e) => Expanded(
+                        child: UiKitVerticalChip(
+                          selected: aboutUserModel.selectedGenderId == e.id,
+                          caption: e.title,
+                          sign: _getIconForGenderMock(e),
+                          onTap: () => onGenderChanged?.call(e.id),
+                        ).paddingOnly(right: EdgeInsetsFoundation.horizontal4),
+                      )),
                 SpacingFoundation.horizontalSpace16,
               ],
             ).paddingOnly(bottom: SpacingFoundation.horizontalSpacing8),
@@ -273,22 +272,7 @@ ImageWidget _getIconForReligionMock(UiKitTag religion) {
     }
   }
 
-  switch (religion.title.toLowerCase()) {
-    case 'hindu':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.hindu);
-    case 'islam':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.muslimFlag);
-    case 'atheism':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.atheist);
-    case 'buddism':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.buddismFlag);
-    case 'judaism':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.judaism);
-    case 'christianity':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.christianity);
-    default:
-      return const ImageWidget();
-  }
+  return const ImageWidget();
 }
 
 ImageWidget _getIconForGenderMock(UiKitTag gender) {
@@ -300,14 +284,5 @@ ImageWidget _getIconForGenderMock(UiKitTag gender) {
     }
   }
 
-  switch (gender.title.toLowerCase()) {
-    case 'male':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.male);
-    case 'female':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.female);
-    case 'other':
-      return ImageWidget(rasterAsset: GraphicsFoundation.instance.png.otherGender);
-    default:
-      return const ImageWidget();
-  }
+  return const ImageWidget();
 }
