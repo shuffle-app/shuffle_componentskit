@@ -109,8 +109,10 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     final selected = await showDialog(
         context: context,
         builder: (context) {
+          final inversedColor = context.uiKitTheme?.colorScheme.inversePrimary;
+          final primaryColor = context.uiKitTheme?.colorScheme.primary;
           return Dialog(
-              backgroundColor: context.uiKitTheme?.colorScheme.surface3,
+              backgroundColor: inversedColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadiusFoundation.all24,
               ),
@@ -118,7 +120,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 Text(
                   'Select a photo to set preview',
                   textAlign: TextAlign.center,
-                  style: context.uiKitTheme?.boldTextTheme.title2,
+                  style: context.uiKitTheme?.boldTextTheme.title2.copyWith(color: primaryColor),
                 ),
                 16.h.heightBox,
                 SizedBox(
@@ -144,6 +146,8 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 context.button(
                   data: BaseUiKitButtonData(
                       text: 'From gallery',
+                      textColor: inversedColor,
+                      backgroundColor: primaryColor,
                       onPressed: () async {
                         final res = await ImagePicker().pickImage(source: ImageSource.gallery);
                         if (res != null) {
@@ -373,11 +377,13 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final inversedColor = theme?.colorScheme.inversePrimary;
+    final primaryColor = theme?.colorScheme.primary;
     final boldTextTheme = theme?.boldTextTheme;
 
     return Dialog(
       insetPadding: EdgeInsets.zero,
-      backgroundColor: theme?.colorScheme.surface3,
+      backgroundColor: inversedColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all24),
       child: SizedBox(
         height: 0.8.sh,
@@ -390,11 +396,11 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
               children: [
                 Text(
                   widget.title,
-                  style: boldTextTheme?.title2,
+                  style: boldTextTheme?.title2.copyWith(color: primaryColor),
                 ),
                 const Spacer(),
                 IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
+                  icon: Icon(Icons.close, color: primaryColor),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ],

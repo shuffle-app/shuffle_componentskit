@@ -3,7 +3,7 @@ String? websiteValidator(String? value) {
     return null;
   } else if (value.contains('http://') || value.contains('https://')) {
     return null;
-  } else if (value.split('.').length<2 || (value.split('.').lastOrNull ?? '').length < 3) {
+  } else if (value.split('.').length < 2 || (value.split('.').lastOrNull ?? '').length < 3) {
     return 'Please enter a valid website';
   }
   return null;
@@ -14,6 +14,10 @@ String? emailValidator(String? value) {
     return null;
   } else if (!value.contains('@')) {
     return 'Please enter a valid email';
+  } else if (!value.contains('.')) {
+    return 'Please enter a valid email';
+  } else if (value.split('.').length < 2 || (value.split('.').last.length < 2)) {
+    return 'Please enter a valid email';
   }
   return null;
 }
@@ -21,7 +25,7 @@ String? emailValidator(String? value) {
 String? phoneNumberValidator(String? value) {
   if (value == null || value.isEmpty) {
     return null;
-  } else if (value.length < 10 || value.contains(RegExp(r'[^a-z]')) || value.contains(RegExp(r'[^A-Z]'))) {
+  } else if (value.length < 10) {
     return 'Please enter a valid phone number';
   }
   return null;
@@ -29,7 +33,7 @@ String? phoneNumberValidator(String? value) {
 
 String? titleValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Please enter a valid title';
+    return null;
   } else if (value.length < 3) {
     return 'Please enter a valid title';
   }
@@ -38,7 +42,7 @@ String? titleValidator(String? value) {
 
 String? descriptionValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Please enter a valid description';
+    return null;
   } else if (value.length < 20) {
     return 'Please enter a valid description';
   }

@@ -31,7 +31,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
     final PagingController<int, String> categoriesController =
     PagingController<int, String>(firstPageKey: 1, invisibleItemsThreshold: 1);
     Future.delayed(const Duration(seconds: 1), () {
-      categoriesController.appendLastPage(events.map((event) => event.eventType ?? 'category').toSet().toList());
+      categoriesController.appendLastPage(events.map((event) => event.eventType?.title ?? 'category').toSet().toList());
       itemsController
           .appendLastPage(
           events.where((element) => element.eventType == categoriesController.itemList?.first).toList());

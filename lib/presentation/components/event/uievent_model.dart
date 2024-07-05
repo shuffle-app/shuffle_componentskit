@@ -19,11 +19,11 @@ class UiEventModel extends Advertisable {
   dynamic schedule;
   String? description;
   String? location;
-  String? eventType;
+  UiKitTag? eventType;
   String? price;
   String? website;
   String? phone;
-  String? niche;
+  UiKitTag? niche;
   String? reviewStatus;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
@@ -127,7 +127,7 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Phone);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
-    } else if (eventType == null || eventType!.isEmpty) {
+    } else if (eventType == null || eventType!.title.isEmpty) {
       return S.current.XIsRequired(S.current.EventType);
     } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
@@ -184,10 +184,10 @@ class UiEventModel extends Advertisable {
     DateTime? endDate,
     String? description,
     String? location,
-    String? eventType,
+    UiKitTag? eventType,
     String? price,
     String? website,
-    String? niche,
+    UiKitTag? niche,
     String? phone,
     List<UiKitTag>? tags,
     List<UiKitTag>? baseTags,

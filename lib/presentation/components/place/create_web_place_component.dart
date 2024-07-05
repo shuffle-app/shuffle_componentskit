@@ -75,7 +75,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
   void initState() {
     super.initState();
     _titleController.text = widget.placeToEdit?.title ?? '';
-    _placeTypeController.text = widget.placeToEdit?.placeType ?? '';
+    _placeTypeController.text = widget.placeToEdit?.placeType?.title ?? '';
     widget.descriptionController.text = widget.placeToEdit?.description ?? '';
     _addressController.text = widget.placeToEdit?.location ?? '';
     _placeToEdit = widget.placeToEdit ??
@@ -159,7 +159,8 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -200,21 +201,12 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                           hintText: 'Enter place category',
                           borderRadius: BorderRadiusFoundation.all12,
                           onFieldSubmitted: (value) {
-                            _placeToEdit.placeType = value;
+                            _placeToEdit.placeType =
+                                _placeToEdit.placeType?.copyWith(title: value) ?? UiKitTag(title: value, icon: '');
                             setState(() {});
                             widget.onCategorySelected.call(value);
                           },
                         ),
-
-                        //TODO return when we will get a backend categories method
-                        // child: UiKitSuggestionField(
-                        //   initialValue: widget.placeToEdit?.placeType == null
-                        //       ? null
-                        //       : TextEditingValue(text: widget.placeToEdit?.placeType ?? ''),
-                        //   options: widget.onSuggest ?? (q) => Future.value([]),
-                        //   borderRadius: BorderRadiusFoundation.all12,
-                        //   fillColor: theme?.colorScheme.surface1,
-                        // ),
                       ),
                       SpacingFoundation.verticalSpace24,
                       WebFormField(
@@ -227,7 +219,8 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             if (baseTags != null) {
                               setState(() {
                                 _placeToEdit.baseTags = baseTags
-                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .map(
+                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
                                     .toList();
                               });
                             }
@@ -264,7 +257,8 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             if (uniqueTags != null) {
                               setState(() {
                                 _placeToEdit.tags = uniqueTags
-                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .map(
+                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
                                     .toList();
                               });
                             }
