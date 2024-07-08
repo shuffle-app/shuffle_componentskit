@@ -63,7 +63,7 @@ class ProgressBecomingInfluencerComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace2,
               LinearInfluencerIndicator(
                 sum: 50,
-                actualSum: reviewsProgress,
+                actualSum: reviewsProgress.toDouble(),
                 width: 1.sw,
               ),
               SpacingFoundation.verticalSpace16,
@@ -88,7 +88,7 @@ class ProgressBecomingInfluencerComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace2,
               LinearInfluencerIndicator(
                 sum: 50,
-                actualSum: videoReactionProgress,
+                actualSum: videoReactionProgress.toDouble(),
                 width: 1.sw,
               ),
             ],
