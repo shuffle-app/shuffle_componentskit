@@ -14,8 +14,8 @@ class CreatePlaceComponent extends StatefulWidget {
   final VoidCallback? onPlaceDeleted;
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
-  final Future<String?> Function()? onCategoryChanged;
-  final Future<String?> Function()? onNicheChanged;
+  final Future<UiKitTag?> Function()? onCategoryChanged;
+  final Future<UiKitTag?> Function()? onNicheChanged;
   final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
@@ -377,20 +377,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
-            UiKitFieldWithTagList(
-              title: S.of(context).PlaceType,
-              listUiKitTags: [
-                UiKitTag(title: _placeToEdit.placeType ?? '', icon: null),
-              ],
-              onTap: () {
-                widget.onCategoryChanged?.call().then((value) {
-                  setState(() {
-                    _placeToEdit.placeType = value ?? '';
-                  });
-                });
-              },
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
             Text(
               S.of(context).TypeOfContent,
               style: theme?.regularTextTheme.labelSmall,
@@ -424,14 +410,28 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ],
             ),
             SpacingFoundation.verticalSpace24,
+            UiKitFieldWithTagList(
+              title: S.of(context).PlaceType,
+              listUiKitTags: [
+                _placeToEdit.placeType ?? UiKitTag(title: '', icon: null),
+              ],
+              onTap: () {
+                widget.onCategoryChanged?.call().then((value) {
+                  setState(() {
+                    _placeToEdit.placeType = value;
+                  });
+                });
+              },
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
             if (_placeToEdit.contentType == 'business')
               UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.niche != null ? [UiKitTag(title: _placeToEdit.niche!, icon: null)] : null,
+                listUiKitTags: _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
                 title: S.of(context).PleaseSelectANiche,
                 onTap: () {
                   widget.onNicheChanged?.call().then((value) {
                     setState(() {
-                      _placeToEdit.niche = value ?? '';
+                      _placeToEdit.niche = value ;
                     });
                   });
                 },
@@ -456,7 +456,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
-            if (_placeToEdit.placeType != null && _placeToEdit.placeType!.isNotEmpty) ...[
+            if (_placeToEdit.placeType != null && _placeToEdit.placeType!.title.isNotEmpty) ...[
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.tags.isNotEmpty ? _placeToEdit.tags : null,
                 title: S.of(context).UniqueProperties,

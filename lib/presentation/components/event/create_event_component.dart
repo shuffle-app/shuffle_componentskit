@@ -14,8 +14,8 @@ class CreateEventComponent extends StatefulWidget {
   final VoidCallback? onEventDeleted;
   final Future Function(UiEventModel) onEventCreated;
   final Future<String?> Function()? getLocation;
-  final Future<String?> Function()? onCategoryChanged;
-  final Future<String?> Function()? onNicheChanged;
+  final Future<UiKitTag?> Function()? onCategoryChanged;
+  final Future<UiKitTag?> Function()? onNicheChanged;
   final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
@@ -158,6 +158,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
     return Form(
       key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: BlurredAppBarPage(
         title: S.of(context).Event,
         onIWidgetInfoString: S.current.ContentQualityNotice,
@@ -179,9 +180,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             label: S.of(context).Title,
             controller: _titleController,
             validator: titleValidator,
-            onChanged: (_) {
-              _formKey.currentState?.validate();
-            },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
@@ -202,9 +200,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               label: S.of(context).Description,
               controller: _descriptionController,
               expands: true,
-              onChanged: (_) {
-                _formKey.currentState?.validate();
-              },
               validator: descriptionValidator,
             ),
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -296,20 +291,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          UiKitFieldWithTagList(
-            title: S.of(context).EventType,
-            listUiKitTags: [
-              UiKitTag(title: _eventToEdit.eventType ?? '', icon: ''),
-            ],
-            onTap: () {
-              widget.onCategoryChanged?.call().then((value) {
-                setState(() {
-                  _eventToEdit.eventType = value ?? '';
-                });
-              });
-            },
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
           Text(
             S.of(context).TypeOfContent,
             style: theme?.regularTextTheme.labelSmall,
@@ -342,19 +323,34 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ],
           ),
           SpacingFoundation.verticalSpace24,
-          if (_eventToEdit.contentType == 'business')
+          UiKitFieldWithTagList(
+            title: S.of(context).EventType,
+            listUiKitTags: [
+              _eventToEdit.eventType ?? UiKitTag(title: '', icon: '')
+            ],
+            onTap: () {
+              widget.onCategoryChanged?.call().then((value) {
+                setState(() {
+                  _eventToEdit.eventType = value;
+                });
+              });
+            },
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
+          if (_eventToEdit.contentType == 'business') ...[
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.niche != null ? [UiKitTag(title: _eventToEdit.niche!, icon: '')] : null,
+              listUiKitTags: _eventToEdit.niche != null ? [_eventToEdit.niche ?? UiKitTag(title: '', icon: '')] : null,
               title: S.of(context).PleaseSelectANiche,
               onTap: () {
                 widget.onNicheChanged?.call().then((value) {
                   setState(() {
-                    _eventToEdit.niche = value ?? '';
+                    _eventToEdit.niche = value;
                   });
                 });
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
+            SpacingFoundation.verticalSpace24
+          ],
           UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
               title: S.of(context).BaseProperties,
@@ -373,7 +369,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 }
               }).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.isNotEmpty) ...[
+          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
             UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
               title: S.of(context).UniqueProperties,

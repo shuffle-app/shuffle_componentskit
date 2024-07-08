@@ -68,7 +68,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   final TextEditingController _personEmailController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
-  DateTimeRange _selectedDateRange = DateTimeRange(start: DateTime.now(), end: DateTime.now().add(const Duration(days: 31)));
+  DateTimeRange _selectedDateRange =
+      DateTimeRange(start: DateTime.now(), end: DateTime.now().add(const Duration(days: 31)));
 
   late UiEventModel _eventToEdit;
 
@@ -160,7 +161,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -196,7 +198,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,
                           onFieldSubmitted: (value) {
-                            _eventToEdit.eventType = value;
+                            _eventToEdit.eventType = _eventToEdit.eventType?.copyWith(title: value) ?? UiKitTag(title: value,icon: '');
                             setState(() {});
                             widget.onCategorySelected?.call(value);
                           },
@@ -213,7 +215,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                             if (baseTags != null) {
                               setState(() {
                                 _eventToEdit.baseTags = baseTags
-                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .map(
+                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
                                     .toList();
                               });
                             }
@@ -250,7 +253,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                             if (uniqueTags != null) {
                               setState(() {
                                 _eventToEdit.tags = uniqueTags
-                                    .map((e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
+                                    .map(
+                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
                                     .toList();
                               });
                             }

@@ -13,7 +13,7 @@ class UiPlaceModel {
   double? rating;
   String? title;
   String? source;
-  String? placeType;
+  UiKitTag? placeType;
   String? status;
   String? logo;
   List<UiDescriptionItemModel>? descriptionItems;
@@ -24,7 +24,7 @@ class UiPlaceModel {
   String? price;
   Future<List<HorizontalCaptionedImageData>?>? branches;
   dynamic schedule;
-  String? niche;
+  UiKitTag? niche;
   String? contentType;
   int? userPoints;
   String? currency;
@@ -92,7 +92,7 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Location);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
-    } else if (placeType == null || placeType!.isEmpty) {
+    } else if (placeType == null || placeType!.title.isEmpty) {
       return S.current.XIsRequired(S.current.PlaceType);
     }
 
@@ -109,7 +109,7 @@ class UiPlaceModel {
     double? rating,
     String? title,
     String? source,
-    String? placeType,
+    UiKitTag? placeType,
     String? status,
     String? logo,
     List<UiDescriptionItemModel>? descriptionItems,
@@ -120,7 +120,7 @@ class UiPlaceModel {
     String? price,
     Future<List<HorizontalCaptionedImageData>?>? branches,
     Object? schedule,
-    String? niche,
+    UiKitTag? niche,
     String? contentType,
     int? userPoints,
     String? currency,
