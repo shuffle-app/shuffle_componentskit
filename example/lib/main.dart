@@ -107,6 +107,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.uiKitTheme;
+
     final UiEventModel event = UiEventModel(
       id: 1,
       title: '80’s theme invites only party',
@@ -382,6 +384,124 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'points component',
+                onPressed: () {
+                  context.push(
+                    PointsComponent(
+                      onSpendCallBack: () {},
+                      onHistoryCallBack: () {},
+                      userPointsCount: 2650,
+                      listChallengeFeelings: [
+                        ItemPoints(
+                          title: S.of(context).Easy,
+                          getPoints: 10,
+                          actualSum: 0,
+                          sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgLikeIcon.path
+                              : GraphicsFoundation.instance.png.aNoBgBookingW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).Fair,
+                          getPoints: 20,
+                          actualSum: 1,
+                          sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgVictoryHands.path
+                              : GraphicsFoundation.instance.png.aNoBgTwoFingersUpW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).Hardcore,
+                          getPoints: 30,
+                          actualSum: 0,
+                          sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgIndexFinger.path
+                              : GraphicsFoundation.instance.png.aNoBgIndexFingerW.path,
+                        ),
+                      ],
+                      listItemPoint: [
+                        ItemPoints(
+                          title: S.of(context).Feedbacks(10).toLowerCase(),
+                          getPoints: 10,
+                          actualSum: 5,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgMessage.path
+                              : GraphicsFoundation.instance.png.aNoBgMessageBubbleW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).ShareCard(1),
+                          getPoints: 1,
+                          actualSum: 5,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgShare.path
+                              : GraphicsFoundation.instance.png.aNoBgShareW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).LoginToAppDaysInARow(7),
+                          getPoints: 10,
+                          actualSum: 2,
+                          sum: 7,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgWalkingMan.path
+                              : GraphicsFoundation.instance.png.aNoBgWalkingManW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).SpendHoursPerWeek(3),
+                          getPoints: 20,
+                          actualSum: 0.45,
+                          sum: 3,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgHourglass.path
+                              : GraphicsFoundation.instance.png.aNoBgHourglassW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).Bookigns,
+                          getPoints: 3,
+                          actualSum: 1,
+                          sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgBooking.path
+                              : GraphicsFoundation.instance.png.aNoBgBookingW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).Connects,
+                          getPoints: 2,
+                          actualSum: 0,
+                          sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgHandshake.path
+                              : GraphicsFoundation.instance.png.aNoBgHandshakeW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).CardOpening(10),
+                          getPoints: 5,
+                          actualSum: 0,
+                          sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgEye.path
+                              : GraphicsFoundation.instance.png.aNoBgEyeW.path,
+                        ),
+                        ItemPoints(
+                          title: S.of(context).OfferContent,
+                          getPoints: 10,
+                          actualSum: 0,
+                          sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgOpenHand.path
+                              : GraphicsFoundation.instance.png.aNoBgOpenHandW.path,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),
