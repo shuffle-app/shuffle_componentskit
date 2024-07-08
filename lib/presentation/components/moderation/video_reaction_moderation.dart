@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -26,8 +27,7 @@ class VideoReactionModeration extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
+          Row(
             children: [
               Text(
                 S.of(context).VideoReactions,
@@ -62,7 +62,7 @@ class VideoReactionModeration extends StatelessWidget {
                 crossAxisSpacing: SpacingFoundation.horizontalSpacing24,
                 mainAxisSpacing: SpacingFoundation.horizontalSpacing24,
                 crossAxisCount: 3,
-                mainAxisExtent: 0.7.sh,
+                mainAxisExtent:kIsWeb?254: 0.7.sh,
               ),
               itemBuilder: (context, index) {
                 final reactionPreviewModelItem =
@@ -78,7 +78,7 @@ class VideoReactionModeration extends StatelessWidget {
                 );
               },
             ).paddingSymmetric(
-                horizontal: SpacingFoundation.horizontalSpacing24),
+                horizontal: SpacingFoundation.horizontalSpacing32),
           )
         ],
       ),
