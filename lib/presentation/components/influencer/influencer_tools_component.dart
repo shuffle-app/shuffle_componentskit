@@ -111,8 +111,8 @@ class InfluencerToolsComponent extends StatelessWidget {
                       ),
                       SpacingFoundation.verticalSpace2,
                       LinearInfluencerIndicator(
-                        actualSum: e.actualProgress,
-                        sum: e.progress,
+                        actualSum: e.actualProgress.toDouble(),
+                        sum: e.progress.toDouble(),
                         width: 1.sw,
                       ),
                     ],
