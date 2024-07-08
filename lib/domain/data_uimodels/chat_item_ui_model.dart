@@ -1,5 +1,6 @@
-import 'package:shuffle_components_kit/domain/domain.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+
+import '../../shuffle_components_kit.dart';
 
 class ChatItemUiModel {
   final int id;
@@ -15,6 +16,8 @@ class ChatItemUiModel {
   final UiKitTag? tag;
   final bool isGroupChat;
   final List<ChatMemberModel>? members;
+  final ChatMemberModel? owner;
+  final List<UiKitTag>? contentTags;
   final bool userIsOwner;
   final DateTime creationDate;
   final DateTime deletionDate;
@@ -34,6 +37,8 @@ class ChatItemUiModel {
     required this.lastMessageTime,
     required this.creationDate,
     required this.deletionDate,
+    this.contentTags,
+    this.owner,
     this.contentId,
     this.contentType,
     this.members,
@@ -63,6 +68,7 @@ class ChatItemUiModel {
   }) {
     return ChatItemUiModel(
       id: id,
+      owner: owner,
       contentId: contentId ?? this.contentId,
       contentType: contentType ?? this.contentType,
       members: members ?? this.members,

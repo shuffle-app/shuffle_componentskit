@@ -127,6 +127,13 @@ class _InviteComponentState extends State<InviteComponent> {
                       rating: person.rating ?? 0,
                       avatarLink: person.avatarLink,
                       handShake: person.handshake,
+                      onDisabledTap: () {
+                        SnackBarUtils.show(
+                          context: context,
+                          message: S.of(context).AlreadyInvited,
+                          type: AppSnackBarType.warning,
+                        );
+                      },
                       onTap: (isInvited) => setState(() => person.isSelected = isInvited),
                     );
                   },

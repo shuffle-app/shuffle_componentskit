@@ -28,6 +28,7 @@ class AllChatsComponent extends StatelessWidget {
       autoImplyLeading: true,
       paginationController: controller,
       padding: EdgeInsets.symmetric(horizontal: horizontalMargin, vertical: verticalMargin),
+      bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing24,
       builderDelegate: PagedChildBuilderDelegate<ChatItemUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget().paddingOnly(bottom: 0.2.sh),
         noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(

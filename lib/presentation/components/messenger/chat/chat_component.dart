@@ -10,9 +10,10 @@ class ChatComponent extends StatelessWidget {
   final TextEditingController messageController;
   final PagingController<int, ChatMessageUiModel> pagingController;
   final ScrollController scrollController;
-  final ValueChanged<int>? onChatHeaderTapped;
-  final ValueChanged<int>? onAcceptInvitationTap;
-  final ValueChanged<int>? onDenyInvitationTap;
+  final VoidCallback? onInvitationPlaceTap;
+  final VoidCallback? onChatHeaderTapped;
+  final VoidCallback? onAcceptInvitationTap;
+  final VoidCallback? onDenyInvitationTap;
   final VoidCallback? onMessageSent;
   final VoidCallback? onAddMorePeople;
   final VoidCallback? onLeaveChat;
@@ -20,6 +21,8 @@ class ChatComponent extends StatelessWidget {
   final ChatItemUiModel chatItemUiModel;
   final ValueChanged<int>? onMessageVisible;
   final ValueChanged<int>? onReplyMessage;
+  final bool chatOwnerIsMe;
+  final bool isMultipleChat;
 
   const ChatComponent({
     super.key,
@@ -36,6 +39,9 @@ class ChatComponent extends StatelessWidget {
     this.onMessageSent,
     this.onMessageVisible,
     this.onReplyMessage,
+    this.chatOwnerIsMe = false,
+    this.isMultipleChat = false,
+    this.onInvitationPlaceTap,
   });
 
   @override
@@ -49,23 +55,14 @@ class ChatComponent extends StatelessWidget {
       canFoldAppBar: false,
       reverse: true,
       appBarTrailing: chatItemUiModel.isGroupChat
-          ? chatItemUiModel.userIsOwner
-              ? context.smallGradientButton(
-                  data: BaseUiKitButtonData(
-                    iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.profileplus,
-                    ),
-                    onPressed: onAddMorePeople,
-                  ),
-                )
-              : context.smallOutlinedButton(
-                  data: BaseUiKitButtonData(
-                    iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.logout,
-                    ),
-                    onPressed: onLeaveChat,
-                  ),
-                )
+          ? context.smallOutlinedButton(
+              data: BaseUiKitButtonData(
+                iconInfo: BaseUiKitButtonIconData(
+                  iconData: ShuffleUiKitIcons.logout,
+                ),
+                onPressed: onLeaveChat,
+              ),
+            )
           : context.smallGradientButton(
               data: BaseUiKitButtonData(
                 iconInfo: BaseUiKitButtonIconData(
@@ -75,67 +72,71 @@ class ChatComponent extends StatelessWidget {
               ),
             ),
       customTitle: Expanded(
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            context.userAvatar(
-              size: UserAvatarSize.x40x40,
-              type: chatItemUiModel.userType,
-              userName: chatItemUiModel.chatTitle,
-            ),
-            SpacingFoundation.horizontalSpace12,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          chatItemUiModel.chatTitle,
-                          style: theme?.boldTextTheme.caption1Bold.copyWith(overflow: TextOverflow.ellipsis),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => onChatHeaderTapped?.call(),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              context.userAvatar(
+                size: UserAvatarSize.x40x40,
+                type: chatItemUiModel.userType,
+                userName: chatItemUiModel.chatTitle,
+              ),
+              SpacingFoundation.horizontalSpace12,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            chatItemUiModel.chatTitle,
+                            style: theme?.boldTextTheme.caption1Bold.copyWith(overflow: TextOverflow.ellipsis),
+                          ),
                         ),
-                      ),
-                      SpacingFoundation.horizontalSpace12,
-                      if (chatItemUiModel.userType == UserTileType.influencer)
-                        GradientableWidget(
-                          gradient: GradientFoundation.defaultLinearGradient,
-                          child: ImageWidget(
+                        SpacingFoundation.horizontalSpace12,
+                        if (chatItemUiModel.userType == UserTileType.influencer)
+                          GradientableWidget(
+                            gradient: GradientFoundation.defaultLinearGradient,
+                            child: ImageWidget(
+                              svgAsset: GraphicsFoundation.instance.svg.star2,
+                              color: context.uiKitTheme?.colorScheme.inversePrimary,
+                              height: 16.w,
+                            ),
+                          ),
+                        if (chatItemUiModel.userType == UserTileType.premium)
+                          ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.star2,
                             color: context.uiKitTheme?.colorScheme.inversePrimary,
                             height: 16.w,
                           ),
-                        ),
-                      if (chatItemUiModel.userType == UserTileType.premium)
-                        ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.star2,
-                          color: context.uiKitTheme?.colorScheme.inversePrimary,
-                          height: 16.w,
-                        ),
-                      if (chatItemUiModel.userType == UserTileType.pro)
-                        GradientableWidget(
-                          gradient: GradientFoundation.premiumLinearGradient,
-                          child: Text(
-                            'pro',
-                            style: theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
+                        if (chatItemUiModel.userType == UserTileType.pro)
+                          GradientableWidget(
+                            gradient: GradientFoundation.premiumLinearGradient,
+                            child: Text(
+                              'pro',
+                              style: theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
-                  if (chatItemUiModel.subtitle != null)
-                    Text(
-                      chatItemUiModel.subtitle!,
-                      style: theme?.boldTextTheme.caption1Medium,
-                    ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical2),
-                  if (chatItemUiModel.tag != null)
-                    UiKitTagWidget(
-                      title: chatItemUiModel.tag!.title,
-                      icon: chatItemUiModel.tag!.icon,
+                      ],
                     ),
-                ],
+                    if (chatItemUiModel.subtitle != null)
+                      Text(
+                        chatItemUiModel.subtitle!,
+                        style: theme?.boldTextTheme.caption1Medium,
+                      ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical2),
+                    if (chatItemUiModel.tag != null)
+                      UiKitTagWidget(
+                        title: chatItemUiModel.tag!.title,
+                        icon: chatItemUiModel.tag!.icon,
+                      ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing40,
@@ -180,18 +181,20 @@ class ChatComponent extends StatelessWidget {
                   sentByMe: item.senderIsMe,
                   id: item.messageId,
                   child: UiKitInviteMessageContent(
-                    username: 'item.invitationData!.username',
-                    placeName: 'item.invitationData!.placeName',
-                    placeImagePath: 'item.invitationData!.placeImagePath',
-                    invitedPeopleAvatarPaths: ['item.invitationData!.invitedPeopleAvatarPaths'],
-                    userType: UserTileType.ordinary,
-                    onPlaceTap: () {},
-                    canDenyInvitation: true,
-                    onAcceptTap: () {},
-                    onDenyTap: () {},
-                    tags: [
-                      // item.invitationData!.tags,
-                    ],
+                    brightness: Brightness.light,
+                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty,
+                    onInvitePeopleTap: onAddMorePeople,
+                    username: item.invitationData!.username,
+                    placeName: item.invitationData!.placeName,
+                    placeImagePath: item.invitationData!.placeImagePath,
+                    invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
+                    userType: item.invitationData!.userType,
+                    onPlaceTap: () => onInvitationPlaceTap?.call(),
+                    canDenyInvitation: !item.senderIsMe && !chatOwnerIsMe,
+                    canAddMorePeople: chatOwnerIsMe && isMultipleChat,
+                    onAcceptTap: onAcceptInvitationTap,
+                    onDenyTap: onDenyInvitationTap,
+                    tags: item.invitationData?.tags ?? [],
                   ),
                 ),
               );
@@ -211,6 +214,36 @@ class ChatComponent extends StatelessWidget {
               ),
             );
           } else {
+            if (item.isInvitation && item.invitationData != null) {
+              return VisibilityDetector(
+                key: Key(item.messageId.toString()),
+                onVisibilityChanged: (info) {
+                  if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+                },
+                child: UiKitChatInCard(
+                  onReplyMessage: onReplyMessage,
+                  timeOfDay: item.timeSent,
+                  id: item.messageId,
+                  child: UiKitInviteMessageContent(
+                    brightness: Brightness.dark,
+                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty,
+                    username: item.invitationData!.username,
+                    placeName: item.invitationData!.placeName,
+                    placeImagePath: item.invitationData!.placeImagePath,
+                    invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
+                    userType: item.invitationData!.userType,
+                    onInvitePeopleTap: onAddMorePeople,
+                    onPlaceTap: () => onInvitationPlaceTap?.call(),
+                    canDenyInvitation: !item.senderIsMe && !chatOwnerIsMe,
+                    canAddMorePeople: chatOwnerIsMe && isMultipleChat,
+                    onAcceptTap: onAcceptInvitationTap,
+                    onDenyTap: onDenyInvitationTap,
+                    tags: item.invitationData?.tags ?? [],
+                  ),
+                ),
+              );
+            }
+
             return VisibilityDetector(
               key: Key(item.messageId.toString()),
               onVisibilityChanged: (info) {

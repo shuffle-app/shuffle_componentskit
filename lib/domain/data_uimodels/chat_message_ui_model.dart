@@ -9,6 +9,7 @@ class ChatMessageUiModel {
   final String? senderName;
   final bool isRead;
   final MessageType messageType;
+  final int? replyMessageId;
   final ChatMessageInvitationData? invitationData;
 
   bool get isInvitation => messageType == MessageType.invitation && invitationData != null;
@@ -19,6 +20,7 @@ class ChatMessageUiModel {
     required this.senderIsMe,
     required this.messageType,
     required this.isRead,
+    this.replyMessageId,
     this.senderName,
     this.message,
     this.infoMessageTitle,
@@ -54,9 +56,10 @@ class ChatMessageInvitationData {
   final int placeId;
   final String placeName;
   final String placeImagePath;
-  final List<String?> invitedPeopleAvatarPaths;
+  final List<InviteMessageUsersData> invitedPeopleAvatarPaths;
   final List<UiKitTag> tags;
   final String username;
+  final UserTileType userType;
 
   ChatMessageInvitationData({
     required this.username,
@@ -65,6 +68,7 @@ class ChatMessageInvitationData {
     required this.placeImagePath,
     required this.invitedPeopleAvatarPaths,
     required this.tags,
+    required this.userType,
   });
 }
 
