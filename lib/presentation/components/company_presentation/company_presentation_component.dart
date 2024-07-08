@@ -236,6 +236,7 @@ class CompanyPresentationComponent extends StatelessWidget {
             media: place.media,
             description: place.description,
             baseTags: place.baseTags,
+            isHide: false,
             uniqueTags: place.tags,
             horizontalMargin: horizontalMargin,
             actions: [
