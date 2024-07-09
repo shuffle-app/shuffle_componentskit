@@ -12,6 +12,7 @@ class InviteComponent extends StatefulWidget {
     this.invitedUser,
     this.initialDate,
     this.onRemoveUserOptionTap,
+    this.onDisabledUerTileTap,
     this.onAddWishTap,
     this.onInviteTap,
     this.changeDate,
@@ -26,10 +27,11 @@ class InviteComponent extends StatefulWidget {
 
   final UiInvitePersonModel? invitedUser;
   final VoidCallback? onRemoveUserOptionTap;
+  final VoidCallback? onDisabledUerTileTap;
   final void Function(String value, DateTime date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
   final DateTime? initialDate;
-  final ValueChanged<List<UiInvitePersonModel>>? onInviteTap;
+  final Future Function(List<UiInvitePersonModel>)? onInviteTap;
 
   @override
   State<InviteComponent> createState() => _InviteComponentState();
@@ -39,6 +41,7 @@ class _InviteComponentState extends State<InviteComponent> {
   late final TextEditingController _wishController = TextEditingController();
   late final ScrollController scrollController = ScrollController();
   DateTime? _date;
+  bool loading = false;
 
   @override
   void initState() {
@@ -86,12 +89,16 @@ class _InviteComponentState extends State<InviteComponent> {
             Text(S.of(context).InvitePeople, style: boldTextTheme?.subHeadline),
             context.smallGradientButton(
               data: BaseUiKitButtonData(
+                loading: loading,
                 text: S.of(context).Invite,
                 onPressed: widget.persons.where((e) => e.isSelected).isEmpty
                     ? null
                     : () {
+                        setState(() => loading = true);
                         final invitedPersons = widget.persons.where((e) => e.isSelected);
-                        widget.onInviteTap?.call(invitedPersons.toList());
+                        widget.onInviteTap
+                            ?.call(invitedPersons.toList())
+                            .whenComplete(() => setState(() => loading = false));
                       },
               ),
             ),
@@ -127,13 +134,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       rating: person.rating ?? 0,
                       avatarLink: person.avatarLink,
                       handShake: person.handshake,
-                      onDisabledTap: () {
-                        SnackBarUtils.show(
-                          context: context,
-                          message: S.of(context).AlreadyInvited,
-                          type: AppSnackBarType.warning,
-                        );
-                      },
+                      onDisabledTap: widget.onDisabledUerTileTap,
                       onTap: (isInvited) => setState(() => person.isSelected = isInvited),
                     );
                   },

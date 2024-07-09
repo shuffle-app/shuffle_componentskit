@@ -9,6 +9,8 @@ class ChatItemUiModel {
   final String chatTitle;
   final String? subtitle;
   final String? avatarUrl;
+  final String? contentTitle;
+  final String? contentAvatar;
   final String lastMessage;
   final DateTime lastMessageTime;
   final int? unreadMessageCount;
@@ -47,6 +49,8 @@ class ChatItemUiModel {
     this.subtitle,
     this.userType = UserTileType.ordinary,
     this.avatarUrl,
+    this.contentTitle,
+    this.contentAvatar,
   });
 
   ChatItemUiModel copyWith({
@@ -65,6 +69,9 @@ class ChatItemUiModel {
     DateTime? deletionDate,
     Type? contentType,
     int? contentId,
+    String? contentTitle,
+    String? contentAvatar,
+    List<UiKitTag>? contentTags,
   }) {
     return ChatItemUiModel(
       id: id,
@@ -79,6 +86,9 @@ class ChatItemUiModel {
       lastMessageTime: lastMessageTime ?? this.lastMessageTime,
       unreadMessageCount: unreadMessageCount ?? this.unreadMessageCount,
       userType: userType ?? this.userType,
+      contentTags: contentTags ?? this.contentTags,
+      contentTitle: contentTitle ?? this.contentTitle,
+      contentAvatar: contentAvatar ?? this.contentAvatar,
       tag: tag ?? this.tag,
       isGroupChat: isGroupChat ?? this.isGroupChat,
       userIsOwner: userIsOwner ?? this.userIsOwner,
