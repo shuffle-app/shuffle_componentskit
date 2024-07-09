@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -33,8 +34,7 @@ class _FeedbackModerationState extends State<FeedbackModeration> {
       ),
       child: Column(
         children: [
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
+          Row(
             children: [
               Text(
                 S.of(context).Feedback,
@@ -132,6 +132,7 @@ class FeedbackItem extends StatelessWidget {
       children: [
         Expanded(
           child: UiKitFeedbackCard(
+            avatarSize: kIsWeb ? const Size(40, 40) : null,
             avatarUrl: feedBackModel.avatarUrl,
             title: feedBackModel.title,
             datePosted:
