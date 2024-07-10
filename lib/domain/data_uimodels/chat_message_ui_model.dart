@@ -3,13 +3,17 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class ChatMessageUiModel {
   final DateTime timeSent;
   final int messageId;
+  final int senderId;
   final String? message;
   final String? infoMessageTitle;
   final bool senderIsMe;
   final String? senderName;
+  final String? senderAvatar;
+  final UserTileType? senderProfileType;
   final bool isRead;
   final MessageType messageType;
   final int? replyMessageId;
+  final String? replyMessageText;
   final ChatMessageInvitationData? invitationData;
 
   bool get isInvitation => messageType == MessageType.invitation && invitationData != null;
@@ -17,6 +21,7 @@ class ChatMessageUiModel {
   ChatMessageUiModel({
     required this.timeSent,
     required this.messageId,
+    required this.senderId,
     required this.senderIsMe,
     required this.messageType,
     required this.isRead,
@@ -25,11 +30,13 @@ class ChatMessageUiModel {
     this.message,
     this.infoMessageTitle,
     this.invitationData,
+    this.senderAvatar,
+    this.senderProfileType,
+    this.replyMessageText,
   });
 
   ChatMessageUiModel copyWith({
     DateTime? timeSent,
-    int? messageId,
     String? message,
     String? infoMessageTitle,
     bool? senderIsMe,
@@ -37,17 +44,26 @@ class ChatMessageUiModel {
     MessageType? messageType,
     ChatMessageInvitationData? invitationData,
     String? senderName,
+    String? senderAvatar,
+    UserTileType? senderProfileType,
+    int? replyMessageId,
+    String? replyMessageText,
   }) {
     return ChatMessageUiModel(
+      senderId: senderId,
+      messageId: messageId,
       timeSent: timeSent ?? this.timeSent,
       senderName: senderName ?? this.senderName,
-      messageId: messageId ?? this.messageId,
       message: message ?? this.message,
       infoMessageTitle: infoMessageTitle ?? this.infoMessageTitle,
       senderIsMe: senderIsMe ?? this.senderIsMe,
       isRead: isRead ?? this.isRead,
       messageType: messageType ?? this.messageType,
       invitationData: invitationData ?? this.invitationData,
+      senderAvatar: senderAvatar ?? this.senderAvatar,
+      senderProfileType: senderProfileType ?? this.senderProfileType,
+      replyMessageId: replyMessageId ?? this.replyMessageId,
+      replyMessageText: replyMessageText ?? this.replyMessageText,
     );
   }
 }

@@ -23,6 +23,8 @@ class ChatComponent extends StatelessWidget {
   final ValueChanged<int>? onReplyMessage;
   final bool chatOwnerIsMe;
   final bool isMultipleChat;
+  final ChatMessageUiModel? pinnedMessage;
+  final VoidCallback? onPinnedMessageTap;
 
   const ChatComponent({
     super.key,
@@ -42,6 +44,8 @@ class ChatComponent extends StatelessWidget {
     this.chatOwnerIsMe = false,
     this.isMultipleChat = false,
     this.onInvitationPlaceTap,
+    this.onPinnedMessageTap,
+    this.pinnedMessage,
   });
 
   @override
@@ -51,9 +55,26 @@ class ChatComponent extends StatelessWidget {
     return BlurredAppPageWithPagination(
       paginationController: pagingController,
       customToolbarBaseHeight: 100,
+      customToolbarHeight: 100,
       autoImplyLeading: true,
-      canFoldAppBar: false,
+      canFoldAppBar: true,
       reverse: true,
+      topFixedAddition: pinnedMessage != null
+          ? GestureDetector(
+              onTap: onPinnedMessageTap,
+              child: UiKitInfoText(
+                text: pinnedMessage!.message!,
+                title: pinnedMessage!.infoMessageTitle,
+                centerText: !pinnedMessage!.messageId.isNegative,
+              ).paddingOnly(
+                top: EdgeInsetsFoundation.vertical16,
+                bottom: EdgeInsetsFoundation.zero,
+                left: EdgeInsetsFoundation.horizontal20,
+                right: EdgeInsetsFoundation.horizontal20,
+              ),
+            )
+          : null,
+      scrollController: scrollController,
       appBarTrailing: chatItemUiModel.isGroupChat
           ? context.smallOutlinedButton(
               data: BaseUiKitButtonData(
@@ -82,6 +103,7 @@ class ChatComponent extends StatelessWidget {
                 size: UserAvatarSize.x40x40,
                 type: chatItemUiModel.userType,
                 userName: chatItemUiModel.chatTitle,
+                imageUrl: chatItemUiModel.avatarUrl,
               ),
               SpacingFoundation.horizontalSpace12,
               Expanded(
@@ -139,7 +161,8 @@ class ChatComponent extends StatelessWidget {
           ),
         ),
       ),
-      bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing40,
+      bodyBottomSpace:
+          kBottomNavigationBarHeight + (SpacingFoundation.verticalSpacing40 * 2) + SpacingFoundation.verticalSpacing4,
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),
@@ -221,6 +244,9 @@ class ChatComponent extends StatelessWidget {
                   if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
                 },
                 child: UiKitChatInCard(
+                  avatarUrl: item.senderAvatar,
+                  senderName: item.senderName,
+                  senderType: item.senderProfileType,
                   onReplyMessage: onReplyMessage,
                   timeOfDay: item.timeSent,
                   id: item.messageId,
@@ -250,6 +276,9 @@ class ChatComponent extends StatelessWidget {
                 if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
               },
               child: UiKitChatInCard(
+                avatarUrl: item.senderAvatar,
+                senderName: item.senderName,
+                senderType: item.senderProfileType,
                 onReplyMessage: onReplyMessage,
                 id: item.messageId,
                 timeOfDay: item.timeSent,
