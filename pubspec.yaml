@@ -14,10 +14,10 @@ dependencies:
 
   #main ui kit
   shuffle_uikit:
-#    path: ../shuffle_uikit
+  #  path: ../shuffle_uikit
     git:
       url: https://github.com/shuffle-app/shuffle_ui_kit.git
-      ref: master
+      ref: SFK-282
 
   #tools for config workers
   json_annotation: ^4.9.0
