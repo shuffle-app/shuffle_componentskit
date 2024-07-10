@@ -72,6 +72,7 @@ export 'profile/support_components/support_component.dart';
 export 'profile/support_components/web_content_component.dart';
 export 'profile/uiprofile_model.dart';
 export 'profile/points_component/points_component.dart';
+export 'profile/points_component/ui_points_model.dart';
 export 'profile_company/company_profile_component.dart';
 export 'profile_company/company_profile_edit/company_profile_edit_component.dart';
 export 'profile_company/ui_company_profile_model.dart';
