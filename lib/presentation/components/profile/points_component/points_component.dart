@@ -8,15 +8,15 @@ class PointsComponent extends StatelessWidget {
   final VoidCallback? onSpendCallBack;
   final VoidCallback? onHistoryCallBack;
   final int userPointsCount;
-  final List<UiPointsModel> listChallengeFeelings;
-  final List<UiPointsModel> listItemPoint;
+  final List<UiPointsModel>? listChallengeFeelings;
+  final List<UiPointsModel>? listItemPoint;
 
   PointsComponent({
     super.key,
     this.onSpendCallBack,
     this.onHistoryCallBack,
-    required this.listChallengeFeelings,
-    required this.listItemPoint,
+    this.listChallengeFeelings,
+    this.listItemPoint,
     required this.userPointsCount,
   });
 
@@ -77,72 +77,74 @@ class PointsComponent extends StatelessWidget {
               )
               .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
-          ColoredBox(
-            color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
-            child: GridView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              controller: _scrollController,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
-                mainAxisSpacing: SpacingFoundation.verticalSpacing6,
-              ),
-              itemCount: listItemPoint.length,
-              itemBuilder: (context, index) {
-                final itemPoits = listItemPoint[index];
+          listItemPoint != null
+              ? ColoredBox(
+                  color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
+                  child: GridView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
+                      mainAxisSpacing: SpacingFoundation.verticalSpacing6,
+                    ),
+                    itemCount: listItemPoint!.length,
+                    itemBuilder: (context, index) {
+                      final itemPoits = listItemPoint![index];
 
-                return UiKitCardWrapper(
-                  color: theme?.colorScheme.surface,
-                  borderRadius: BorderRadiusFoundation.all24,
-                  child: Stack(
-                    children: [
-                      ImageWidget(
-                        height: 1.sw <= 380 ? 70.h : 60.h,
-                        width: 90.w,
-                        fit: BoxFit.fitWidth,
-                        link: itemPoits.imagePath,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Spacer(),
-                          Text(
-                            itemPoits.title ?? S.of(context).NothingFound,
-                            style: theme?.boldTextTheme.caption3Medium,
-                            textAlign: TextAlign.right,
-                          ),
-                          Text(
-                            '${itemPoits.getPoints} ${S.of(context).PointsCount(itemPoits.getPoints)}',
-                            style: theme?.boldTextTheme.caption2Bold,
-                          ),
-                          SpacingFoundation.verticalSpace4,
-                          Text(
-                            '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
-                            style: theme?.regularTextTheme.labelSmall.copyWith(
-                              color: theme.colorScheme.darkNeutral900,
+                      return UiKitCardWrapper(
+                        color: theme?.colorScheme.surface,
+                        borderRadius: BorderRadiusFoundation.all24,
+                        child: Stack(
+                          children: [
+                            ImageWidget(
+                              height: 1.sw <= 380 ? 70.h : 60.h,
+                              width: 90.w,
+                              fit: BoxFit.fitWidth,
+                              link: itemPoits.imagePath,
                             ),
-                          ),
-                          SpacingFoundation.verticalSpace2,
-                          LinearInfluencerIndicator(
-                            actualSum: itemPoits.actualSum,
-                            sum: itemPoits.sum,
-                            width: 120.w,
-                          ),
-                          // SpacingFoundation.verticalSpace16,
-                        ],
-                      ).paddingAll(EdgeInsetsFoundation.all16)
-                    ],
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                const Spacer(),
+                                Text(
+                                  itemPoits.title ?? S.of(context).NothingFound,
+                                  style: theme?.boldTextTheme.caption3Medium,
+                                  textAlign: TextAlign.right,
+                                ),
+                                Text(
+                                  '${itemPoits.getPoints} ${S.of(context).PointsCount(itemPoits.getPoints)}',
+                                  style: theme?.boldTextTheme.caption2Bold,
+                                ),
+                                SpacingFoundation.verticalSpace4,
+                                Text(
+                                  '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
+                                  style: theme?.regularTextTheme.labelSmall.copyWith(
+                                    color: theme.colorScheme.darkNeutral900,
+                                  ),
+                                ),
+                                SpacingFoundation.verticalSpace2,
+                                LinearInfluencerIndicator(
+                                  actualSum: itemPoits.actualSum,
+                                  sum: itemPoits.sum,
+                                  width: 120.w,
+                                ),
+                                // SpacingFoundation.verticalSpace16,
+                              ],
+                            ).paddingAll(EdgeInsetsFoundation.all16)
+                          ],
+                        ),
+                      );
+                    },
+                  ).paddingOnly(
+                    left: SpacingFoundation.horizontalSpacing16,
+                    right: SpacingFoundation.horizontalSpacing16,
+                    bottom: SpacingFoundation.verticalSpacing8,
+                    top: SpacingFoundation.verticalSpacing16,
                   ),
-                );
-              },
-            ).paddingOnly(
-              left: SpacingFoundation.horizontalSpacing16,
-              right: SpacingFoundation.horizontalSpacing16,
-              bottom: SpacingFoundation.verticalSpacing8,
-              top: SpacingFoundation.verticalSpacing16,
-            ),
-          ),
+                )
+              : SpacingFoundation.none,
           ColoredBox(
             color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
             child: DecoratedBox(
@@ -158,52 +160,54 @@ class PointsComponent extends StatelessWidget {
                   ).paddingOnly(
                     bottom: SpacingFoundation.verticalSpacing8,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(
-                      listChallengeFeelings.length,
-                      (index) {
-                        final itemChallengeFeelings = listChallengeFeelings[index];
+                  listChallengeFeelings != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List.generate(
+                            listChallengeFeelings!.length,
+                            (index) {
+                              final itemChallengeFeelings = listChallengeFeelings![index];
 
-                        return Stack(
-                          children: [
-                            ImageWidget(
-                              height: 45.h,
-                              width: 45.w,
-                              fit: BoxFit.fitHeight,
-                              link: itemChallengeFeelings.imagePath,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SizedBox(height: 30.h),
-                                Text(
-                                  itemChallengeFeelings.title ?? S.of(context).NothingFound,
-                                  style: theme?.boldTextTheme.caption3Medium,
-                                ),
-                                Text(
-                                  '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
-                                  style: theme?.boldTextTheme.caption2Bold,
-                                ),
-                                Text(
-                                  '${parseDoubleToInt(itemChallengeFeelings.sum)}/${parseDoubleToInt(itemChallengeFeelings.actualSum)}',
-                                  style: theme?.regularTextTheme.labelSmall.copyWith(
-                                    color: theme.colorScheme.darkNeutral900,
+                              return Stack(
+                                children: [
+                                  ImageWidget(
+                                    height: 45.h,
+                                    width: 45.w,
+                                    fit: BoxFit.fitHeight,
+                                    link: itemChallengeFeelings.imagePath,
                                   ),
-                                ),
-                                SpacingFoundation.verticalSpace2,
-                                LinearInfluencerIndicator(
-                                  actualSum: itemChallengeFeelings.actualSum,
-                                  sum: itemChallengeFeelings.sum,
-                                  width: 70.w,
-                                )
-                              ],
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                  )
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      SizedBox(height: 30.h),
+                                      Text(
+                                        itemChallengeFeelings.title ?? S.of(context).NothingFound,
+                                        style: theme?.boldTextTheme.caption3Medium,
+                                      ),
+                                      Text(
+                                        '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
+                                        style: theme?.boldTextTheme.caption2Bold,
+                                      ),
+                                      Text(
+                                        '${parseDoubleToInt(itemChallengeFeelings.sum)}/${parseDoubleToInt(itemChallengeFeelings.actualSum)}',
+                                        style: theme?.regularTextTheme.labelSmall.copyWith(
+                                          color: theme.colorScheme.darkNeutral900,
+                                        ),
+                                      ),
+                                      SpacingFoundation.verticalSpace2,
+                                      LinearInfluencerIndicator(
+                                        actualSum: itemChallengeFeelings.actualSum,
+                                        sum: itemChallengeFeelings.sum,
+                                        width: 70.w,
+                                      )
+                                    ],
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                      : SpacingFoundation.none,
                 ],
               ).paddingAll(EdgeInsetsFoundation.all16),
             ).paddingOnly(
