@@ -5,16 +5,16 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:intl/intl.dart';
 
 class PointsComponent extends StatelessWidget {
-  final VoidCallback onSpendCallBack;
-  final VoidCallback onHistoryCallBack;
+  final VoidCallback? onSpendCallBack;
+  final VoidCallback? onHistoryCallBack;
   final int userPointsCount;
   final List<UiPointsModel> listChallengeFeelings;
   final List<UiPointsModel> listItemPoint;
 
   PointsComponent({
     super.key,
-    required this.onSpendCallBack,
-    required this.onHistoryCallBack,
+    this.onSpendCallBack,
+    this.onHistoryCallBack,
     required this.listChallengeFeelings,
     required this.listItemPoint,
     required this.userPointsCount,
@@ -108,7 +108,7 @@ class PointsComponent extends StatelessWidget {
                         children: [
                           const Spacer(),
                           Text(
-                            itemPoits.title,
+                            itemPoits.title ?? S.of(context).NothingFound,
                             style: theme?.boldTextTheme.caption3Medium,
                             textAlign: TextAlign.right,
                           ),
@@ -178,7 +178,7 @@ class PointsComponent extends StatelessWidget {
                               children: [
                                 SizedBox(height: 30.h),
                                 Text(
-                                  itemChallengeFeelings.title,
+                                  itemChallengeFeelings.title ?? S.of(context).NothingFound,
                                   style: theme?.boldTextTheme.caption3Medium,
                                 ),
                                 Text(
