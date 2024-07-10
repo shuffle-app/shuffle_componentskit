@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/influencer/linear_influencer_indicator.dart';
+import 'package:shuffle_components_kit/presentation/components/profile/points_component/ui_points_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:intl/intl.dart';
 
@@ -7,8 +8,8 @@ class PointsComponent extends StatelessWidget {
   final VoidCallback onSpendCallBack;
   final VoidCallback onHistoryCallBack;
   final int userPointsCount;
-  final List<ItemPoints> listChallengeFeelings;
-  final List<ItemPoints> listItemPoint;
+  final List<UiPointsModel> listChallengeFeelings;
+  final List<UiPointsModel> listItemPoint;
 
   PointsComponent({
     super.key,
@@ -48,6 +49,7 @@ class PointsComponent extends StatelessWidget {
           ),
         ),
         title: S.of(context).Points,
+        centerTitle: true,
         children: [
           SpacingFoundation.verticalSpace16,
           Row(
@@ -75,10 +77,8 @@ class PointsComponent extends StatelessWidget {
               )
               .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: theme?.colorScheme.surface2,
-            ),
+          ColoredBox(
+            color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
             child: GridView.builder(
               padding: EdgeInsets.zero,
               shrinkWrap: true,
@@ -92,15 +92,13 @@ class PointsComponent extends StatelessWidget {
               itemBuilder: (context, index) {
                 final itemPoits = listItemPoint[index];
 
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: theme?.colorScheme.surface,
-                    borderRadius: BorderRadiusFoundation.all24,
-                  ),
+                return UiKitCardWrapper(
+                  color: theme?.colorScheme.surface,
+                  borderRadius: BorderRadiusFoundation.all24,
                   child: Stack(
                     children: [
                       ImageWidget(
-                        height: 60.h,
+                        height: 1.sw <= 380 ? 70.h : 60.h,
                         width: 90.w,
                         fit: BoxFit.fitWidth,
                         link: itemPoits.imagePath,
@@ -145,10 +143,8 @@ class PointsComponent extends StatelessWidget {
               top: SpacingFoundation.verticalSpacing16,
             ),
           ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: theme?.colorScheme.surface2,
-            ),
+          ColoredBox(
+            color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: theme?.colorScheme.surface,
@@ -220,20 +216,4 @@ class PointsComponent extends StatelessWidget {
       ),
     );
   }
-}
-
-class ItemPoints {
-  final String title;
-  final int getPoints;
-  final double actualSum;
-  final double sum;
-  final String imagePath;
-
-  ItemPoints({
-    required this.title,
-    required this.getPoints,
-    required this.actualSum,
-    required this.sum,
-    required this.imagePath,
-  });
 }
