@@ -395,7 +395,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       onHistoryCallBack: () {},
                       userPointsCount: 2650,
                       listChallengeFeelings: [
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).Easy,
                           getPoints: 10,
                           actualSum: 0,
@@ -404,7 +404,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgLikeIcon.path
                               : GraphicsFoundation.instance.png.aNoBgBookingW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).Fair,
                           getPoints: 20,
                           actualSum: 1,
@@ -413,7 +413,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgVictoryHands.path
                               : GraphicsFoundation.instance.png.aNoBgTwoFingersUpW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).Hardcore,
                           getPoints: 30,
                           actualSum: 0,
@@ -424,7 +424,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ),
                       ],
                       listItemPoint: [
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).Feedbacks(10).toLowerCase(),
                           getPoints: 10,
                           actualSum: 5,
@@ -433,7 +433,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgMessage.path
                               : GraphicsFoundation.instance.png.aNoBgMessageBubbleW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).ShareCard(1),
                           getPoints: 1,
                           actualSum: 5,
@@ -442,7 +442,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgShare.path
                               : GraphicsFoundation.instance.png.aNoBgShareW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).LoginToAppDaysInARow(7),
                           getPoints: 10,
                           actualSum: 2,
@@ -451,7 +451,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgWalkingMan.path
                               : GraphicsFoundation.instance.png.aNoBgWalkingManW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).SpendHoursPerWeek(3),
                           getPoints: 20,
                           actualSum: 0.45,
@@ -460,7 +460,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgHourglass.path
                               : GraphicsFoundation.instance.png.aNoBgHourglassW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).Bookigns,
                           getPoints: 3,
                           actualSum: 1,
@@ -469,7 +469,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgBooking.path
                               : GraphicsFoundation.instance.png.aNoBgBookingW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).Connects,
                           getPoints: 2,
                           actualSum: 0,
@@ -478,7 +478,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgHandshake.path
                               : GraphicsFoundation.instance.png.aNoBgHandshakeW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).CardOpening(10),
                           getPoints: 5,
                           actualSum: 0,
@@ -487,7 +487,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               ? GraphicsFoundation.instance.png.aNoBgEye.path
                               : GraphicsFoundation.instance.png.aNoBgEyeW.path,
                         ),
-                        ItemPoints(
+                        UiPointsModel(
                           title: S.of(context).OfferContent,
                           getPoints: 10,
                           actualSum: 0,
