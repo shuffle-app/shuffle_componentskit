@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class LinearInfluencerIndicator extends StatelessWidget {
-  final int actualSum;
-  final int sum;
+  final double actualSum;
+  final double sum;
   final double? width;
 
   LinearInfluencerIndicator({
@@ -16,7 +16,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
   late final double _indicatorWidth = width ?? 256.w;
 
   double get _progressPosition => _indicatorWidth * (_progressValue / 120);
-  double get _progressValue => ((actualSum / sum) * 100);
+  double get _progressValue => ((actualSum / sum) * 120);
 
   double _getCurrentPosition(double currentPosition) {
     if (currentPosition > _indicatorWidth) {
