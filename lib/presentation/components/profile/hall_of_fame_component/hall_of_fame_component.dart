@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/profile/hall_of_fame_component/fame_item_dialog.dart';
 import 'package:shuffle_uikit/ui_kit/atoms/profile/ui_reward_progress_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -164,6 +165,13 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                   child: UiKitFameItem(
                     uiModel: e,
                     preserveDarkTheme: true,
+                    showModelViewerDialog: (context, filePath, filePoster, uiRewardProgressModel) =>
+                        showModelViewerDialog(
+                      context,
+                      filePath,
+                      filePoster,
+                      uiRewardProgressModel,
+                    ),
                     uiRewardProgressModel: UiRewardProgressModel(
                       title: e.title,
                       current: 50,
