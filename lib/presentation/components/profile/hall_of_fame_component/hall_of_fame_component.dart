@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/components/profile/hall_of_fame_component/fame_item_dialog.dart';
+import 'package:shuffle_components_kit/presentation/components/profile/hall_of_fame_component/show_model_viewer_dialog.dart';
 import 'package:shuffle_uikit/ui_kit/atoms/profile/ui_reward_progress_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -174,8 +174,8 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                     ),
                     uiRewardProgressModel: UiRewardProgressModel(
                       title: e.title,
-                      current: 50,
-                      total: 100,
+                      current: e.current,
+                      total: e.total,
                     ),
                   ),
                 ))
