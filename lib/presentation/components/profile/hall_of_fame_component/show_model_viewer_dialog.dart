@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/hall_of_fame_component/fame_item_dialog.dart';
-import 'package:shuffle_uikit/foundation/border_radius_foundation.dart';
-import 'package:shuffle_uikit/ui_kit/atoms/profile/ui_reward_progress_model.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 showModelViewerDialog(
   BuildContext context,
-  String filePath,
-  String filePoster,
-  UiRewardProgressModel? uiRewardProgressModel,
+  UiKitAchievementsModel uiKitAchievementsModel,
 ) =>
     showGeneralDialog(
         barrierColor: Colors.black.withOpacity(0.5),
@@ -32,9 +29,9 @@ showModelViewerDialog(
               borderRadius: BorderRadiusFoundation.all24,
             ),
             child: FameItemDialog(
-              filePath: filePath,
-              filePoster: filePoster,
-              uiRewardProgressModel: uiRewardProgressModel,
+              filePath: uiKitAchievementsModel.objectUrl ?? '',
+              filePoster: uiKitAchievementsModel.posterUrl ?? '',
+              uiRewardProgressModel: uiKitAchievementsModel.uiRewardProgressModel,
             ),
           );
         });
