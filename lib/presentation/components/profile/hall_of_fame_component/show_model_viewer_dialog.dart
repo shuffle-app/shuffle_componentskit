@@ -31,14 +31,6 @@ showModelViewerDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadiusFoundation.all24,
             ),
-            // child: SizedBox(
-            //     height: 0.4.sh,
-            //     child: UiKitBase3DViewer(
-            //       localPath: filePath,
-            //       poster: filePoster,
-            //       autoRotate: true,
-            //       // environmentImage: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/environment1.jpeg',
-            //     )),
             child: FameItemDialog(
               filePath: filePath,
               filePoster: filePoster,
