@@ -44,7 +44,7 @@ class FameItemDialog extends StatelessWidget {
                 uiRewardProgressModel?.title ?? S.of(context).NothingFound,
                 style: theme?.boldTextTheme.title2,
               ),
-              SizedBox(height: 35.h),
+              SizedBox(height: 1.sw <= 380 ? 25.h : 35.h),
               Center(
                 child: Stack(
                   alignment: Alignment.center,
@@ -76,7 +76,7 @@ class FameItemDialog extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 50.h),
+              SizedBox(height: 1.sw <= 380 ? 40.h : 50.h),
               if (description != null) ...[
                 Text(
                   description!,
