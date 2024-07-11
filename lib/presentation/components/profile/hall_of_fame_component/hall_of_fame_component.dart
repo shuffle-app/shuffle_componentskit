@@ -165,17 +165,9 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                   child: UiKitFameItem(
                     uiModel: e,
                     preserveDarkTheme: true,
-                    showModelViewerDialog: (context, filePath, filePoster, uiRewardProgressModel) =>
-                        showModelViewerDialog(
+                    onTap: () => showModelViewerDialog(
                       context,
-                      filePath,
-                      filePoster,
-                      uiRewardProgressModel,
-                    ),
-                    uiRewardProgressModel: UiRewardProgressModel(
-                      title: e.title,
-                      current: e.current,
-                      total: e.total,
+                      e,
                     ),
                   ),
                 ))
