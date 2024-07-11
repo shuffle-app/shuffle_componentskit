@@ -56,7 +56,7 @@ class UiProfileModel {
                   ? const InfluencerMemberPlate()
                   : null,
       onViewAllAchievements: onViewAllAchievements,
-      achievements: achievements.where((element) => element.asset != null || element.objectUrl != null).toList(),
+      achievements: achievements.where((element) => element.posterUrl != null || element.objectUrl != null).toList(),
       profileStats: [
         UiKitStats(
           title: S.current.Balance,
