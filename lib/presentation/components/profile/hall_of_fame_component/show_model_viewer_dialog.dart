@@ -32,6 +32,7 @@ showModelViewerDialog(
               filePath: uiKitAchievementsModel.objectUrl ?? '',
               filePoster: uiKitAchievementsModel.posterUrl ?? '',
               uiRewardProgressModel: uiKitAchievementsModel.uiRewardProgressModel,
+              description: uiKitAchievementsModel.description,
             ),
           );
         });
