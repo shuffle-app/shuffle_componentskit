@@ -12,9 +12,9 @@ class ChatMessageUiModel {
   final UserTileType? senderProfileType;
   final bool isRead;
   final MessageType messageType;
-  final int? replyMessageId;
-  final String? replyMessageText;
   final ChatMessageInvitationData? invitationData;
+  final ChatMessageUiModel? replyMessageModel;
+  final bool hasAcceptedInvite;
 
   bool get isInvitation => messageType == MessageType.invitation && invitationData != null;
 
@@ -25,15 +25,36 @@ class ChatMessageUiModel {
     required this.senderIsMe,
     required this.messageType,
     required this.isRead,
-    this.replyMessageId,
+    this.hasAcceptedInvite = false,
     this.senderName,
     this.message,
     this.infoMessageTitle,
     this.invitationData,
     this.senderAvatar,
     this.senderProfileType,
-    this.replyMessageText,
+    this.replyMessageModel,
   });
+
+  factory ChatMessageUiModel.replyMessage({
+    required int id,
+    required int senderId,
+    required String message,
+    required String senderAvatar,
+    required String senderName,
+    required UserTileType senderProfileType,
+  }) =>
+      ChatMessageUiModel(
+        timeSent: DateTime.now(),
+        messageId: id,
+        senderId: senderId,
+        senderIsMe: false,
+        message: message,
+        messageType: MessageType.message,
+        isRead: true,
+        senderAvatar: senderAvatar,
+        senderProfileType: senderProfileType,
+        senderName: senderName,
+      );
 
   ChatMessageUiModel copyWith({
     DateTime? timeSent,
@@ -46,8 +67,8 @@ class ChatMessageUiModel {
     String? senderName,
     String? senderAvatar,
     UserTileType? senderProfileType,
-    int? replyMessageId,
-    String? replyMessageText,
+    ChatMessageUiModel? replyMessageModel,
+    bool? hasAcceptedInvite,
   }) {
     return ChatMessageUiModel(
       senderId: senderId,
@@ -62,8 +83,8 @@ class ChatMessageUiModel {
       invitationData: invitationData ?? this.invitationData,
       senderAvatar: senderAvatar ?? this.senderAvatar,
       senderProfileType: senderProfileType ?? this.senderProfileType,
-      replyMessageId: replyMessageId ?? this.replyMessageId,
-      replyMessageText: replyMessageText ?? this.replyMessageText,
+      replyMessageModel: replyMessageModel ?? this.replyMessageModel,
+      hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
     );
   }
 }

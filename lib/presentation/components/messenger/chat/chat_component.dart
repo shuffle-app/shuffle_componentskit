@@ -80,6 +80,7 @@ class ChatComponent extends StatelessWidget {
               data: BaseUiKitButtonData(
                 iconInfo: BaseUiKitButtonIconData(
                   iconData: ShuffleUiKitIcons.logout,
+                  size: 16.h,
                 ),
                 onPressed: onLeaveChat,
               ),
@@ -213,7 +214,7 @@ class ChatComponent extends StatelessWidget {
                     invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
                     userType: item.invitationData!.userType,
                     onPlaceTap: () => onInvitationPlaceTap?.call(),
-                    canDenyInvitation: !item.senderIsMe && !chatOwnerIsMe,
+                    canDenyInvitation: false,
                     canAddMorePeople: chatOwnerIsMe && isMultipleChat,
                     onAcceptTap: onAcceptInvitationTap,
                     onDenyTap: onDenyInvitationTap,
@@ -228,13 +229,26 @@ class ChatComponent extends StatelessWidget {
               onVisibilityChanged: (info) {
                 if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
               },
-              child: UiKitChatOutCard(
-                onReplyMessage: onReplyMessage,
-                id: item.messageId,
-                timeOfDay: item.timeSent,
-                text: item.message,
-                sentByMe: item.senderIsMe,
-              ),
+              child: item.replyMessageModel == null
+                  ? UiKitChatOutCard(
+                      onReplyMessage: onReplyMessage,
+                      id: item.messageId,
+                      timeOfDay: item.timeSent,
+                      text: item.message,
+                      sentByMe: item.senderIsMe,
+                    )
+                  : UiKitChatCardWithReplyOut(
+                      id: item.messageId,
+                      onReplyMessage: onReplyMessage,
+                      onReplyMassageTap: () {},
+                      text: item.message,
+                      sentByMe: item.senderIsMe,
+                      replyText: item.replyMessageModel!.message!,
+                      timeOfDay: item.timeSent,
+                      replyUserAvatar: item.replyMessageModel!.senderAvatar!,
+                      replySenderName: item.replyMessageModel!.senderName!,
+                      replyUserType: item.replyMessageModel!.senderProfileType!,
+                    ),
             );
           } else {
             if (item.isInvitation && item.invitationData != null) {
@@ -260,7 +274,7 @@ class ChatComponent extends StatelessWidget {
                     userType: item.invitationData!.userType,
                     onInvitePeopleTap: onAddMorePeople,
                     onPlaceTap: () => onInvitationPlaceTap?.call(),
-                    canDenyInvitation: !item.senderIsMe && !chatOwnerIsMe,
+                    canDenyInvitation: !item.hasAcceptedInvite,
                     canAddMorePeople: chatOwnerIsMe && isMultipleChat,
                     onAcceptTap: onAcceptInvitationTap,
                     onDenyTap: onDenyInvitationTap,
@@ -275,15 +289,27 @@ class ChatComponent extends StatelessWidget {
               onVisibilityChanged: (info) {
                 if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
               },
-              child: UiKitChatInCard(
-                avatarUrl: item.senderAvatar,
-                senderName: item.senderName,
-                senderType: item.senderProfileType,
-                onReplyMessage: onReplyMessage,
-                id: item.messageId,
-                timeOfDay: item.timeSent,
-                text: item.message,
-              ),
+              child: item.replyMessageModel == null
+                  ? UiKitChatInCard(
+                      avatarUrl: item.senderAvatar,
+                      senderName: item.senderName,
+                      senderType: item.senderProfileType,
+                      onReplyMessage: onReplyMessage,
+                      id: item.messageId,
+                      timeOfDay: item.timeSent,
+                      text: item.message,
+                    )
+                  : UiKitChatCardWithReplyIn(
+                      id: item.messageId,
+                      onReplyMessage: onReplyMessage,
+                      onReplyMassageTap: () {},
+                      text: item.message,
+                      timeOfDay: item.timeSent,
+                      replyText: item.replyMessageModel!.message!,
+                      replyUserAvatar: item.replyMessageModel!.senderAvatar!,
+                      replyUserType: item.replyMessageModel!.senderProfileType!,
+                      replySenderName: item.replyMessageModel!.senderName!,
+                    ),
             );
           }
         },
