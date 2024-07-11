@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/influencer/linear_influencer_indicator.dart';
 import 'dart:math' as math;
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:shuffle_uikit/ui_kit/atoms/profile/ui_reward_progress_model.dart';
 
-class UiKitFameItemDialog extends StatelessWidget {
+class FameItemDialog extends StatelessWidget {
   final UiRewardProgressModel? uiRewardProgressModel;
   final String filePath;
   final String filePoster;
 
-  const UiKitFameItemDialog({
+  const FameItemDialog({
     super.key,
     this.uiRewardProgressModel,
     required this.filePath,

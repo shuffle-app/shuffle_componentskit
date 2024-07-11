@@ -39,7 +39,7 @@ showModelViewerDialog(
             //       autoRotate: true,
             //       // environmentImage: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/environment1.jpeg',
             //     )),
-            child: UiKitFameItemDialog(
+            child: FameItemDialog(
               filePath: filePath,
               filePoster: filePoster,
               uiRewardProgressModel: uiRewardProgressModel,
