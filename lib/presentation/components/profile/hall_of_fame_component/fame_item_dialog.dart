@@ -99,7 +99,7 @@ class UiKitFameItemDialog extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (uiRewardProgressModel != null) ...[
+                if (uiRewardProgressModel != null && uiRewardProgressModel?.total != null) ...[
                   SpacingFoundation.verticalSpace16,
                   Text(
                     S.of(context).ReviewsCount(uiRewardProgressModel?.total?.toInt() ?? 1),
