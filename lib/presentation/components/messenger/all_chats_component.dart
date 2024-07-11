@@ -6,11 +6,13 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class AllChatsComponent extends StatelessWidget {
   final PagingController<int, ChatItemUiModel> controller;
   final ValueChanged<int> onChatSelected;
+  final WidgetBuilder? firstPageProgressIndicatorBuilder;
 
   const AllChatsComponent({
     super.key,
     required this.controller,
     required this.onChatSelected,
+    this.firstPageProgressIndicatorBuilder,
   });
 
   @override
@@ -30,7 +32,7 @@ class AllChatsComponent extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: horizontalMargin, vertical: verticalMargin),
       bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing24,
       builderDelegate: PagedChildBuilderDelegate<ChatItemUiModel>(
-        firstPageProgressIndicatorBuilder: (context) => const LoadingWidget().paddingOnly(bottom: 0.2.sh),
+        firstPageProgressIndicatorBuilder: firstPageProgressIndicatorBuilder ?? (context) => const LoadingWidget().paddingOnly(bottom: 0.2.sh),
         noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
           message: S.of(context).NoMessagesYet,
         ).paddingOnly(bottom: 0.2.sh),
