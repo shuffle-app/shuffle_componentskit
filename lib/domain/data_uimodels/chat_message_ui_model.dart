@@ -5,6 +5,7 @@ class ChatMessageUiModel {
   final int messageId;
   final int senderId;
   final String? message;
+  final String? gradientableText;
   final String? infoMessageTitle;
   final bool senderIsMe;
   final String? senderName;
@@ -25,6 +26,7 @@ class ChatMessageUiModel {
     required this.senderIsMe,
     required this.messageType,
     required this.isRead,
+    this.gradientableText,
     this.hasAcceptedInvite = false,
     this.senderName,
     this.message,
@@ -69,6 +71,7 @@ class ChatMessageUiModel {
     UserTileType? senderProfileType,
     ChatMessageUiModel? replyMessageModel,
     bool? hasAcceptedInvite,
+    String? gradientableText,
   }) {
     return ChatMessageUiModel(
       senderId: senderId,
@@ -85,14 +88,16 @@ class ChatMessageUiModel {
       senderProfileType: senderProfileType ?? this.senderProfileType,
       replyMessageModel: replyMessageModel ?? this.replyMessageModel,
       hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
+      gradientableText: gradientableText ?? this.gradientableText,
     );
   }
 }
 
 class ChatMessageInvitationData {
-  final int placeId;
-  final String placeName;
-  final String placeImagePath;
+  final int contentId;
+  final String contentName;
+  final String contentImagePath;
+  final Type contentType;
   final List<InviteMessageUsersData> invitedPeopleAvatarPaths;
   final List<UiKitTag> tags;
   final String username;
@@ -100,13 +105,36 @@ class ChatMessageInvitationData {
 
   ChatMessageInvitationData({
     required this.username,
-    required this.placeId,
-    required this.placeName,
-    required this.placeImagePath,
+    required this.contentId,
+    required this.contentName,
+    required this.contentImagePath,
     required this.invitedPeopleAvatarPaths,
     required this.tags,
     required this.userType,
+    required this.contentType,
   });
+
+  ChatMessageInvitationData copyWith({
+    int? contentId,
+    String? contentName,
+    String? contentImagePath,
+    Type? contentType,
+    List<InviteMessageUsersData>? invitedPeopleAvatarPaths,
+    List<UiKitTag>? tags,
+    String? username,
+    UserTileType? userType,
+  }) {
+    return ChatMessageInvitationData(
+      contentId: contentId ?? this.contentId,
+      contentName: contentName ?? this.contentName,
+      contentImagePath: contentImagePath ?? this.contentImagePath,
+      contentType: contentType ?? this.contentType,
+      invitedPeopleAvatarPaths: invitedPeopleAvatarPaths ?? this.invitedPeopleAvatarPaths,
+      tags: tags ?? this.tags,
+      username: username ?? this.username,
+      userType: userType ?? this.userType,
+    );
+  }
 }
 
 enum MessageType { message, invitation, info }

@@ -21,6 +21,7 @@ class ChatItemUiModel {
   final ChatMemberModel? owner;
   final List<UiKitTag>? contentTags;
   final bool userIsOwner;
+  final bool hasAcceptedInvite;
   final DateTime creationDate;
   final DateTime deletionDate;
 
@@ -51,6 +52,7 @@ class ChatItemUiModel {
     this.avatarUrl,
     this.contentTitle,
     this.contentAvatar,
+    this.hasAcceptedInvite = false,
   });
 
   ChatItemUiModel copyWith({
@@ -72,10 +74,12 @@ class ChatItemUiModel {
     String? contentTitle,
     String? contentAvatar,
     List<UiKitTag>? contentTags,
+    bool? hasAcceptedInvite,
   }) {
     return ChatItemUiModel(
       id: id,
       owner: owner,
+      hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       contentId: contentId ?? this.contentId,
       contentType: contentType ?? this.contentType,
       members: members ?? this.members,

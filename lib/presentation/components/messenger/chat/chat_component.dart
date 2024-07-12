@@ -10,15 +10,15 @@ class ChatComponent extends StatelessWidget {
   final TextEditingController messageController;
   final PagingController<int, ChatMessageUiModel> pagingController;
   final ScrollController scrollController;
-  final VoidCallback? onInvitationPlaceTap;
-  final VoidCallback? onChatHeaderTapped;
+  final Function(int, Type)? onInvitationPlaceTap;
+  final Function(int, Type)? onChatHeaderTapped;
   final VoidCallback? onAcceptInvitationTap;
   final VoidCallback? onDenyInvitationTap;
   final VoidCallback? onMessageSent;
   final VoidCallback? onAddMorePeople;
   final VoidCallback? onLeaveChat;
   final VoidCallback? onInviteToAnotherPlace;
-  final ChatItemUiModel chatItemUiModel;
+  final ChatItemUiModel chatData;
   final ValueChanged<int>? onMessageVisible;
   final ValueChanged<int>? onReplyMessage;
   final bool chatOwnerIsMe;
@@ -31,7 +31,7 @@ class ChatComponent extends StatelessWidget {
     required this.messageController,
     required this.pagingController,
     required this.scrollController,
-    required this.chatItemUiModel,
+    required this.chatData,
     this.onInviteToAnotherPlace,
     this.onLeaveChat,
     this.onChatHeaderTapped,
@@ -52,7 +52,7 @@ class ChatComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-    return BlurredAppPageWithPagination(
+    return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
       customToolbarBaseHeight: 100,
       customToolbarHeight: 100,
@@ -75,8 +75,8 @@ class ChatComponent extends StatelessWidget {
             )
           : null,
       scrollController: scrollController,
-      appBarTrailing: chatItemUiModel.isGroupChat
-          ? context.smallOutlinedButton(
+      appBarTrailing: chatData.isGroupChat || chatData.hasAcceptedInvite || (chatData.members?.isEmpty ?? false)
+          ? context.midSizeOutlinedButton(
               data: BaseUiKitButtonData(
                 iconInfo: BaseUiKitButtonIconData(
                   iconData: ShuffleUiKitIcons.logout,
@@ -96,15 +96,19 @@ class ChatComponent extends StatelessWidget {
       customTitle: Expanded(
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => onChatHeaderTapped?.call(),
+          onTap: () {
+            if (chatData.isGroupChat && chatData.contentId != null && chatData.contentType != null) {
+              onChatHeaderTapped?.call(chatData.contentId!, chatData.contentType!);
+            }
+          },
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
               context.userAvatar(
                 size: UserAvatarSize.x40x40,
-                type: chatItemUiModel.userType,
-                userName: chatItemUiModel.chatTitle,
-                imageUrl: chatItemUiModel.avatarUrl,
+                type: chatData.userType,
+                userName: chatData.chatTitle,
+                imageUrl: chatData.avatarUrl,
               ),
               SpacingFoundation.horizontalSpace12,
               Expanded(
@@ -115,12 +119,12 @@ class ChatComponent extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            chatItemUiModel.chatTitle,
+                            chatData.chatTitle,
                             style: theme?.boldTextTheme.caption1Bold.copyWith(overflow: TextOverflow.ellipsis),
                           ),
                         ),
                         SpacingFoundation.horizontalSpace12,
-                        if (chatItemUiModel.userType == UserTileType.influencer)
+                        if (chatData.userType == UserTileType.influencer)
                           GradientableWidget(
                             gradient: GradientFoundation.defaultLinearGradient,
                             child: ImageWidget(
@@ -129,13 +133,13 @@ class ChatComponent extends StatelessWidget {
                               height: 16.w,
                             ),
                           ),
-                        if (chatItemUiModel.userType == UserTileType.premium)
+                        if (chatData.userType == UserTileType.premium)
                           ImageWidget(
                             svgAsset: GraphicsFoundation.instance.svg.star2,
                             color: context.uiKitTheme?.colorScheme.inversePrimary,
                             height: 16.w,
                           ),
-                        if (chatItemUiModel.userType == UserTileType.pro)
+                        if (chatData.userType == UserTileType.pro)
                           GradientableWidget(
                             gradient: GradientFoundation.premiumLinearGradient,
                             child: Text(
@@ -145,15 +149,15 @@ class ChatComponent extends StatelessWidget {
                           ),
                       ],
                     ),
-                    if (chatItemUiModel.subtitle != null)
+                    if (chatData.subtitle != null)
                       Text(
-                        chatItemUiModel.subtitle!,
+                        chatData.subtitle!,
                         style: theme?.boldTextTheme.caption1Medium,
                       ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical2),
-                    if (chatItemUiModel.tag != null)
+                    if (chatData.tag != null)
                       UiKitTagWidget(
-                        title: chatItemUiModel.tag!.title,
-                        icon: chatItemUiModel.tag!.icon,
+                        title: chatData.tag!.title,
+                        icon: chatData.tag!.icon,
                       ),
                   ],
                 ),
@@ -189,8 +193,14 @@ class ChatComponent extends StatelessWidget {
               child: UiKitInfoText(
                 text: item.message!,
                 title: item.infoMessageTitle,
+                gradientText: item.gradientableText,
                 centerText: !item.messageId.isNegative,
-              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal20),
+                textGradient: item.gradientableText != null ? GradientFoundation.defaultLinearGradient : null,
+              ).paddingOnly(
+                left: EdgeInsetsFoundation.horizontal20,
+                right: EdgeInsetsFoundation.horizontal20,
+                top: EdgeInsetsFoundation.vertical4,
+              ),
             );
           } else if (item.senderIsMe) {
             if (item.isInvitation && item.invitationData != null) {
@@ -206,14 +216,17 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   child: UiKitInviteMessageContent(
                     brightness: Brightness.light,
-                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty,
+                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     onInvitePeopleTap: onAddMorePeople,
                     username: item.invitationData!.username,
-                    placeName: item.invitationData!.placeName,
-                    placeImagePath: item.invitationData!.placeImagePath,
+                    placeName: item.invitationData!.contentName,
+                    placeImagePath: item.invitationData!.contentImagePath,
                     invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
                     userType: item.invitationData!.userType,
-                    onPlaceTap: () => onInvitationPlaceTap?.call(),
+                    onPlaceTap: () => onInvitationPlaceTap?.call(
+                      item.invitationData!.contentId,
+                      item.invitationData!.contentType,
+                    ),
                     canDenyInvitation: false,
                     canAddMorePeople: chatOwnerIsMe && isMultipleChat,
                     onAcceptTap: onAcceptInvitationTap,
@@ -266,15 +279,18 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   child: UiKitInviteMessageContent(
                     brightness: Brightness.dark,
-                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty,
+                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     username: item.invitationData!.username,
-                    placeName: item.invitationData!.placeName,
-                    placeImagePath: item.invitationData!.placeImagePath,
+                    placeName: item.invitationData!.contentName,
+                    placeImagePath: item.invitationData!.contentImagePath,
                     invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
                     userType: item.invitationData!.userType,
                     onInvitePeopleTap: onAddMorePeople,
-                    onPlaceTap: () => onInvitationPlaceTap?.call(),
-                    canDenyInvitation: !item.hasAcceptedInvite,
+                    onPlaceTap: () => onInvitationPlaceTap?.call(
+                      item.invitationData!.contentId,
+                      item.invitationData!.contentType,
+                    ),
+                    canDenyInvitation: !chatData.hasAcceptedInvite,
                     canAddMorePeople: chatOwnerIsMe && isMultipleChat,
                     onAcceptTap: onAcceptInvitationTap,
                     onDenyTap: onDenyInvitationTap,
