@@ -218,11 +218,11 @@ class ChatComponent extends StatelessWidget {
                     brightness: Brightness.light,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     onInvitePeopleTap: onAddMorePeople,
-                    username: item.invitationData!.username,
+                    username: item.invitationData!.senderUserName,
                     placeName: item.invitationData!.contentName,
                     placeImagePath: item.invitationData!.contentImagePath,
                     invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
-                    userType: item.invitationData!.userType,
+                    userType: item.invitationData!.senderUserType,
                     onPlaceTap: () => onInvitationPlaceTap?.call(
                       item.invitationData!.contentId,
                       item.invitationData!.contentType,
@@ -232,6 +232,14 @@ class ChatComponent extends StatelessWidget {
                     onAcceptTap: onAcceptInvitationTap,
                     onDenyTap: onDenyInvitationTap,
                     tags: item.invitationData?.tags ?? [],
+                    customMessageData: chatData.isGroupChat
+                        ? null
+                        : InviteCustomMessageData(
+                            senderUserName: item.invitationData!.senderUserName,
+                            receiverUserName: item.invitationData!.receiverUserName,
+                            senderUserType: item.invitationData!.senderUserType,
+                            receiverUserType: item.invitationData!.receiverUserType,
+                          ),
                   ),
                 ),
               );
@@ -280,11 +288,11 @@ class ChatComponent extends StatelessWidget {
                   child: UiKitInviteMessageContent(
                     brightness: Brightness.dark,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
-                    username: item.invitationData!.username,
+                    username: item.invitationData!.senderUserName,
                     placeName: item.invitationData!.contentName,
                     placeImagePath: item.invitationData!.contentImagePath,
                     invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
-                    userType: item.invitationData!.userType,
+                    userType: item.invitationData!.senderUserType,
                     onInvitePeopleTap: onAddMorePeople,
                     onPlaceTap: () => onInvitationPlaceTap?.call(
                       item.invitationData!.contentId,
@@ -295,6 +303,14 @@ class ChatComponent extends StatelessWidget {
                     onAcceptTap: onAcceptInvitationTap,
                     onDenyTap: onDenyInvitationTap,
                     tags: item.invitationData?.tags ?? [],
+                    customMessageData: chatData.isGroupChat
+                        ? null
+                        : InviteCustomMessageData(
+                            senderUserName: item.invitationData!.senderUserName,
+                            receiverUserName: item.invitationData!.receiverUserName,
+                            senderUserType: item.invitationData!.senderUserType,
+                            receiverUserType: item.invitationData!.receiverUserType,
+                          ),
                   ),
                 ),
               );

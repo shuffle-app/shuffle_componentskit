@@ -24,6 +24,7 @@ class ChatItemUiModel {
   final bool hasAcceptedInvite;
   final DateTime creationDate;
   final DateTime deletionDate;
+  final bool disabled;
 
   int? get membersCount => members?.length;
 
@@ -40,6 +41,7 @@ class ChatItemUiModel {
     required this.lastMessageTime,
     required this.creationDate,
     required this.deletionDate,
+    this.disabled = false,
     this.contentTags,
     this.owner,
     this.contentId,
@@ -75,6 +77,7 @@ class ChatItemUiModel {
     String? contentAvatar,
     List<UiKitTag>? contentTags,
     bool? hasAcceptedInvite,
+    bool? disabled,
   }) {
     return ChatItemUiModel(
       id: id,
@@ -98,6 +101,7 @@ class ChatItemUiModel {
       userIsOwner: userIsOwner ?? this.userIsOwner,
       creationDate: creationDate ?? this.creationDate,
       deletionDate: deletionDate ?? this.deletionDate,
+      disabled: disabled ?? this.disabled,
     );
   }
 }

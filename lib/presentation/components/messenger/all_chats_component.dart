@@ -42,6 +42,7 @@ class AllChatsComponent extends StatelessWidget {
         ),
         itemBuilder: (context, item, index) => UiKitMessageCard(
           key: ValueKey(item.unreadMessageCount),
+          disabled: item.disabled,
           name: item.chatTitle,
           subtitle: item.subtitle ?? item.tag?.title ?? '',
           subtitleIconPath: item.tag?.icon,

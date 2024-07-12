@@ -95,23 +95,31 @@ class ChatMessageUiModel {
 
 class ChatMessageInvitationData {
   final int contentId;
+  final int receiverId;
+  final int senderId;
   final String contentName;
   final String contentImagePath;
   final Type contentType;
   final List<InviteMessageUsersData> invitedPeopleAvatarPaths;
   final List<UiKitTag> tags;
-  final String username;
-  final UserTileType userType;
+  final String senderUserName;
+  final String receiverUserName;
+  final UserTileType senderUserType;
+  final UserTileType receiverUserType;
 
   ChatMessageInvitationData({
-    required this.username,
+    required this.receiverId,
+    required this.senderId,
+    required this.senderUserName,
+    required this.receiverUserName,
     required this.contentId,
     required this.contentName,
     required this.contentImagePath,
     required this.invitedPeopleAvatarPaths,
     required this.tags,
-    required this.userType,
+    required this.senderUserType,
     required this.contentType,
+    required this.receiverUserType,
   });
 
   ChatMessageInvitationData copyWith({
@@ -121,18 +129,26 @@ class ChatMessageInvitationData {
     Type? contentType,
     List<InviteMessageUsersData>? invitedPeopleAvatarPaths,
     List<UiKitTag>? tags,
-    String? username,
-    UserTileType? userType,
+    String? senderUserName,
+    String? receiverUserName,
+    UserTileType? senderUserType,
+    UserTileType? receiverUserType,
+    int? receiverId,
+    int? senderId,
   }) {
     return ChatMessageInvitationData(
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
       contentId: contentId ?? this.contentId,
       contentName: contentName ?? this.contentName,
       contentImagePath: contentImagePath ?? this.contentImagePath,
       contentType: contentType ?? this.contentType,
       invitedPeopleAvatarPaths: invitedPeopleAvatarPaths ?? this.invitedPeopleAvatarPaths,
       tags: tags ?? this.tags,
-      username: username ?? this.username,
-      userType: userType ?? this.userType,
+      senderUserName: senderUserName ?? this.senderUserName,
+      senderUserType: senderUserType ?? this.senderUserType,
+      receiverUserName: receiverUserName ?? this.receiverUserName,
+      receiverUserType: receiverUserType ?? this.receiverUserType,
     );
   }
 }

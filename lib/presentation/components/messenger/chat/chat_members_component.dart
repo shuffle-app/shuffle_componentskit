@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/ui_kit/molecules/tiles/user/ui_kit_chat_member_til
 
 class ChatMembersComponent extends StatelessWidget {
   final List<ChatMemberModel> members;
-  final ValueChanged<int>? onDelete;
+  final ValueChanged<ChatMemberModel>? onDelete;
   final bool canDeleteUsers;
 
   const ChatMembersComponent({
@@ -63,7 +63,7 @@ class ChatMembersComponent extends StatelessWidget {
                       userType: member.userType,
                       acceptedInvite: member.inviteAccepted ?? false,
                       canDelete: canDeleteUsers,
-                      onDelete: () => onDelete?.call(member.id),
+                      onDelete: () => onDelete?.call(member),
                     );
                   },
                   separatorBuilder: (context, index) => SpacingFoundation.verticalSpace8,
