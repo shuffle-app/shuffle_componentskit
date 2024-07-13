@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/domain.dart';
 import 'package:shuffle_components_kit/presentation/components/feed/uifeed_model.dart';
@@ -163,19 +161,19 @@ class ReactionViewComponent extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: canSwipeUp
                         ? [
-                      SpacingFoundation.verticalSpace24,
-                      ImageWidget(
-                        iconData: ShuffleUiKitIcons.chevronuplong,
-                        color: Colors.white,
-                        width: 48.w,
-                      ),
-                      SpacingFoundation.verticalSpace16,
-                      Text(
-                        contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
-                        style: boldTextTheme?.body,
-                        textAlign: TextAlign.center,
-                      ),
-                    ]
+                            SpacingFoundation.verticalSpace24,
+                            ImageWidget(
+                              iconData: ShuffleUiKitIcons.chevronuplong,
+                              color: Colors.white,
+                              width: 48.w,
+                            ),
+                            SpacingFoundation.verticalSpace16,
+                            Text(
+                              contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
+                              style: boldTextTheme?.body,
+                              textAlign: TextAlign.center,
+                            ),
+                          ]
                         : [],
                   ),
                 ),
