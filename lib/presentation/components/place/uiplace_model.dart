@@ -30,6 +30,7 @@ class UiPlaceModel {
   String? currency;
   TextEditingController houseNumberController;
   TextEditingController apartmentNumberController;
+  PlaceWeatherType? weatherType;
 
   UiPlaceModel({
     required this.id,
@@ -55,6 +56,7 @@ class UiPlaceModel {
     this.contentType = 'both',
     this.userPoints,
     this.currency,
+    this.weatherType,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
@@ -126,6 +128,7 @@ class UiPlaceModel {
     String? currency,
     TextEditingController? houseNumberController,
     TextEditingController? apartmentNumberController,
+    PlaceWeatherType? weatherType,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -150,6 +153,7 @@ class UiPlaceModel {
         niche: niche ?? this.niche,
         contentType: contentType ?? this.contentType,
         userPoints: userPoints ?? this.userPoints,
+        weatherType: weatherType ?? this.weatherType,
       );
 
   UiPlaceModel.empty()

@@ -33,6 +33,7 @@ class UiEventModel extends Advertisable {
   List<UiDescriptionItemModel>? descriptionItems;
   TextEditingController houseNumberController;
   TextEditingController apartmentNumberController;
+  PlaceWeatherType? weatherType;
 
   UiEventModel({
     required this.id,
@@ -61,6 +62,7 @@ class UiEventModel extends Advertisable {
     this.niche,
     this.currency,
     this.schedule,
+    this.weatherType,
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
@@ -196,6 +198,7 @@ class UiEventModel extends Advertisable {
     List<String>? weekdays,
     String? currency,
     String? reviewStatus,
+    PlaceWeatherType? weatherType,
     dynamic schedule,
   }) =>
       UiEventModel(
@@ -224,6 +227,7 @@ class UiEventModel extends Advertisable {
         currency: currency ?? this.currency,
         schedule: schedule ?? this.schedule,
         reviewStatus: reviewStatus ?? this.reviewStatus,
+        weatherType: weatherType ?? this.weatherType,
       );
 
   bool selectableDayPredicate(DateTime day) {
