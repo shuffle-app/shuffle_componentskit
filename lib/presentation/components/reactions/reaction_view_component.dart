@@ -146,7 +146,12 @@ class ReactionViewComponent extends StatelessWidget {
                 blurred: true,
                 small: true,
                 data: BaseUiKitButtonData(
-                  onPressed: () {},
+                  onPressed: () {
+                    FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                      intensities: [170, 200],
+                      pattern: [10, 5],
+                    ));
+                  },
                   iconInfo: BaseUiKitButtonIconData(
                     iconData: ShuffleUiKitIcons.heartbrokenfill,
                     color: Colors.white,
@@ -163,19 +168,19 @@ class ReactionViewComponent extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: canSwipeUp
                         ? [
-                      SpacingFoundation.verticalSpace24,
-                      ImageWidget(
-                        iconData: ShuffleUiKitIcons.chevronuplong,
-                        color: Colors.white,
-                        width: 48.w,
-                      ),
-                      SpacingFoundation.verticalSpace16,
-                      Text(
-                        contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
-                        style: boldTextTheme?.body,
-                        textAlign: TextAlign.center,
-                      ),
-                    ]
+                            SpacingFoundation.verticalSpace24,
+                            ImageWidget(
+                              iconData: ShuffleUiKitIcons.chevronuplong,
+                              color: Colors.white,
+                              width: 48.w,
+                            ),
+                            SpacingFoundation.verticalSpace16,
+                            Text(
+                              contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
+                              style: boldTextTheme?.body,
+                              textAlign: TextAlign.center,
+                            ),
+                          ]
                         : [],
                   ),
                 ),
@@ -186,7 +191,12 @@ class ReactionViewComponent extends StatelessWidget {
                 blurred: true,
                 small: true,
                 data: BaseUiKitButtonData(
-                  onPressed: () {},
+                  onPressed: () {
+                    FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                      intensities: [170, 200],
+                      pattern: [10, 5],
+                    ));
+                  },
                   iconInfo: BaseUiKitButtonIconData(
                     iconData: ShuffleUiKitIcons.heartfill,
                     color: Colors.white,
