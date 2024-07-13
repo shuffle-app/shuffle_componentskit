@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/hall_of_fame_component/show_model_viewer_dialog.dart';
-import 'package:shuffle_uikit/ui_kit/atoms/profile/ui_reward_progress_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';

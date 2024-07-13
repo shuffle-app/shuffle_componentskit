@@ -33,9 +33,9 @@ class CategoriesCreateComponent extends StatelessWidget {
   final List<UiModelCategoryParent> entertainmentCategories;
   final List<UiModelRelatedProperties>? relatedProperties;
   final List<UiModelCategoryParent> businessCategories;
-  final List<UiModelPropertiesCategory>? baseProperties;
-  final List<UiModelPropertiesCategory>? uniqueProperties;
-  final UiModelPropertiesCategory? selectedCategoryType;
+  final List<UiModelProperty>? baseProperties;
+  final List<UiModelProperty>? uniqueProperties;
+  final UiModelCategoryParent? selectedCategoryType;
   final VoidCallback onAddCategoriesTap;
   final VoidCallback onCategoryTypeAddTap;
   final ValueChanged<int> onCategoryPropertyTypeButtonTap;
@@ -49,8 +49,8 @@ class CategoriesCreateComponent extends StatelessWidget {
   final Future<List<String>> Function(String) propertySearchOptions;
   final Future<List<String>> Function(String) uniquePropertySearchOptions;
   final Future<List<String>> Function(String) relatedPropertySearchOptions;
-  final ValueChanged<int>? onSelectedPropertyTapped;
-  final ValueChanged<UiModelPropertiesCategory>? onSelectedUniquePropertyTapped;
+  final ValueChanged<UiModelProperty>? onSelectedPropertyTapped;
+  final ValueChanged<UiModelProperty>? onSelectedUniquePropertyTapped;
   final ValueChanged<UiModelRelatedProperties>? onSelectedRelatedPropertyTapped;
 
   @override
@@ -60,250 +60,253 @@ class CategoriesCreateComponent extends StatelessWidget {
       body: UiKitCardWrapper(
         borderRadius: BorderRadiusFoundation.all16,
         padding: EdgeInsets.symmetric(
-            horizontal: EdgeInsetsFoundation.horizontal32,
-            vertical: EdgeInsetsFoundation.vertical20),
+            horizontal: EdgeInsetsFoundation.horizontal32, vertical: EdgeInsetsFoundation.vertical20),
         color: uiKitTheme?.colorScheme.surface,
         child: Row(
           children: [
             Expanded(
-              child: PropertiesBorderedBox(
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        S.current.Categories,
-                        overflow: TextOverflow.ellipsis,
-                        style: uiKitTheme?.boldTextTheme.title1,
+              child: SingleChildScrollView(
+                child: PropertiesBorderedBox(
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          S.current.Categories,
+                          overflow: TextOverflow.ellipsis,
+                          style: uiKitTheme?.boldTextTheme.title1,
+                        ),
                       ),
-                    ),
-                    SpacingFoundation.horizontalSpace16,
-                    context.boxIconButton(
-                      data: BaseUiKitButtonData(
-                        onPressed: onAddCategoriesTap,
-                        backgroundColor:
-                            ColorsFoundation.primary200.withOpacity(0.3),
-                        iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.plus,
-                            size: kIsWeb ? 24 : 24.sp,
-                            color: ColorsFoundation.primary200),
+                      SpacingFoundation.horizontalSpace16,
+                      context.boxIconButton(
+                        data: BaseUiKitButtonData(
+                          onPressed: onAddCategoriesTap,
+                          backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                          iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.plus,
+                              size: kIsWeb ? 24 : 24.sp,
+                              color: ColorsFoundation.primary200),
+                        ),
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(
+                        color: uiKitTheme?.colorScheme.darkNeutral500.withOpacity(0.24),
+                        thickness: 2,
                       ),
-                    )
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Divider(
-                      color: uiKitTheme?.colorScheme.darkNeutral500
-                          .withOpacity(0.24),
-                      thickness: 2,
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    Text(
-                      S.current.Entertainment,
-                      style: uiKitTheme?.regularTextTheme.labelSmall,
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    ...entertainmentCategories.map(
-                      (e) {
-                        return UiKitExpansionTileWithIconButton(
-                          title: e.categoryTitle,
-                          onTap: onCategoryTypeAddTap,
-                          children: e.categoryTypes.map(
-                            (element) {
-                              return PropertiesTypeAnimatedButton(
-                                title: element.title,
-                                onTap: () {
-                                  onCategoryPropertyTypeButtonTap
-                                      .call(element.id);
-                                },
-                              );
+                      SpacingFoundation.verticalSpace16,
+                      Text(
+                        S.current.Entertainment,
+                        style: uiKitTheme?.regularTextTheme.labelSmall,
+                      ),
+                      SpacingFoundation.verticalSpace16,
+                      ...entertainmentCategories.map(
+                        (e) {
+                          // return UiKitExpansionTileWithIconButton(
+                          //   title: e.categoryTitle,
+                          //   onTap: onCategoryTypeAddTap,
+                          //   children: e.categoryTypes.map(
+                          //     (element) {
+                          //       return PropertiesTypeAnimatedButton(
+                          //         title: element.title,
+                          //         onTap: () {
+                          //           onCategoryPropertyTypeButtonTap.call(element.id);
+                          //         },
+                          //       );
+                          //     },
+                          //   ).toList(),
+                          // );
+                          return PropertiesTypeAnimatedButton(
+                            title: e.categoryTitle,
+                            onTap: () {
+                              onCategoryPropertyTypeButtonTap.call(e.categoryId);
                             },
-                          ).toList(),
-                        );
-                      },
-                    ),
-                    Divider(
-                      color: uiKitTheme?.colorScheme.darkNeutral500
-                          .withOpacity(0.24),
-                      thickness: 2,
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    Text(
-                      S.current.Business,
-                      style: uiKitTheme?.regularTextTheme.labelSmall,
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    ...businessCategories.map(
-                      (e) {
-                        return UiKitExpansionTileWithIconButton(
-                          title: e.categoryTitle,
-                          onTap: onCategoryTypeAddTap,
-                          children: e.categoryTypes.map(
-                            (element) {
-                              return PropertiesTypeAnimatedButton(
-                                title: element.title,
-                                onTap: () {
-                                  onCategoryPropertyTypeButtonTap
-                                      .call(element.id);
-                                },
-                              );
+                          );
+                        },
+                      ),
+                      Divider(
+                        color: uiKitTheme?.colorScheme.darkNeutral500.withOpacity(0.24),
+                        thickness: 2,
+                      ),
+                      SpacingFoundation.verticalSpace16,
+                      Text(
+                        S.current.Business,
+                        style: uiKitTheme?.regularTextTheme.labelSmall,
+                      ),
+                      SpacingFoundation.verticalSpace16,
+                      ...businessCategories.map(
+                        (e) {
+                          // return UiKitExpansionTileWithIconButton(
+                          //   title: e.categoryTitle,
+                          //   onTap: onCategoryTypeAddTap,
+                          //   children: e.categoryTypes.map(
+                          //     (element) {
+                          //       return PropertiesTypeAnimatedButton(
+                          //         title: element.title,
+                          //         onTap: () {
+                          //           onCategoryPropertyTypeButtonTap.call(element.id);
+                          //         },
+                          //       );
+                          //     },
+                          //   ).toList(),
+                          // );
+                          return PropertiesTypeAnimatedButton(
+                            title: e.categoryTitle,
+                            onTap: () {
+                              onCategoryPropertyTypeButtonTap.call(e.categoryId);
                             },
-                          ).toList(),
-                        );
-                      },
-                    ),
-                  ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             Expanded(
-              child: PropertiesBorderedBox(
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ImageWidget(
-                      link: selectedCategoryType?.iconPath ?? '',
-                      width: kIsWeb ? 24 : 24.sp,
-                      color: uiKitTheme?.themeMode == ThemeMode.light
-                          ? ColorsFoundation.surface
-                          : ColorsFoundation.lightSurface,
-                    ),
-                    SpacingFoundation.horizontalSpace4,
-                    Expanded(
-                      child: Text(
-                        selectedCategoryType?.title ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        style: uiKitTheme?.boldTextTheme.title2,
+              child: SingleChildScrollView(
+                child: PropertiesBorderedBox(
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ImageWidget(
+                        link: selectedCategoryType?.iconPath ?? '',
+                        width: kIsWeb ? 24 : 24.sp,
+                        color: uiKitTheme?.themeMode == ThemeMode.light
+                            ? ColorsFoundation.surface
+                            : ColorsFoundation.lightSurface,
                       ),
-                    ),
-                    SpacingFoundation.horizontalSpace16,
-                    context.boxIconButton(
-                      data: BaseUiKitButtonData(
-                        onPressed: onEditCategoryTypeTap,
-                        backgroundColor:
-                            ColorsFoundation.primary200.withOpacity(0.3),
-                        iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.pencil,
-                            size: kIsWeb ? 16 : 16.sp,
-                            color: ColorsFoundation.primary200),
+                      SpacingFoundation.horizontalSpace4,
+                      Expanded(
+                        child: Text(
+                          selectedCategoryType?.categoryTitle ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          style: uiKitTheme?.boldTextTheme.title2,
+                        ),
                       ),
-                    ),
-                    SpacingFoundation.horizontalSpace4,
-                    context.boxIconButton(
-                      data: BaseUiKitButtonData(
-                        onPressed: onDeleteCategoryTypeTap,
-                        backgroundColor:
-                            ColorsFoundation.danger.withOpacity(0.3),
-                        iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.trash,
-                            size: kIsWeb ? 16 : 16.sp,
-                            color: ColorsFoundation.danger),
+                      SpacingFoundation.horizontalSpace16,
+                      context.boxIconButton(
+                        data: BaseUiKitButtonData(
+                          onPressed: onEditCategoryTypeTap,
+                          backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                          iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.pencil,
+                              size: kIsWeb ? 16 : 16.sp,
+                              color: ColorsFoundation.primary200),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      S.current.BaseProperties,
-                      style: uiKitTheme?.boldTextTheme.subHeadline,
-                    ),
-                    SpacingFoundation.verticalSpace12,
-                    PropertiesSearchInput(
-                      options: propertySearchOptions,
-                      showAllOptions: true,
-                      onFieldSubmitted: onPropertyFieldSubmitted,
-                    ),
-                    SpacingFoundation.verticalSpace12,
-                    UiKitPropertiesCloud(
-                      child: Wrap(
-                              spacing: SpacingFoundation.horizontalSpacing12,
-                              runSpacing: SpacingFoundation.verticalSpacing12,
-                              children: (baseProperties ?? []).map(
-                                (e) {
-                                  return UiKitCloudChip(
-                                    iconPath: e.iconPath,
-                                    title: e.title,
-                                    onTap: () {
-                                      onSelectedPropertyTapped?.call(e.id);
-                                    },
-                                  );
-                                },
-                              ).toList())
-                          .paddingAll(EdgeInsetsFoundation.all24),
-                    ),
-                    SpacingFoundation.verticalSpace24,
-                    Text(
-                      S.current.UniqueProperties,
-                      style: uiKitTheme?.boldTextTheme.subHeadline,
-                    ),
-                    SpacingFoundation.verticalSpace12,
-                    PropertiesSearchInput(
-                      options: uniquePropertySearchOptions,
-                      showAllOptions: true,
-                      onFieldSubmitted: onUniquePropertyFieldSubmitted,
-                    ),
-                    SpacingFoundation.verticalSpace12,
-                    UiKitPropertiesCloud(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: onUniquePropertyEditTap,
-                                  backgroundColor: ColorsFoundation.primary200
-                                      .withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.pencil,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.primary200),
+                      SpacingFoundation.horizontalSpace4,
+                      context.boxIconButton(
+                        data: BaseUiKitButtonData(
+                          onPressed: onDeleteCategoryTypeTap,
+                          backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
+                          iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.trash,
+                              size: kIsWeb ? 16 : 16.sp,
+                              color: ColorsFoundation.danger),
+                        ),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.current.BaseProperties,
+                        style: uiKitTheme?.boldTextTheme.subHeadline,
+                      ),
+                      SpacingFoundation.verticalSpace12,
+                      PropertiesSearchInput(
+                        options: propertySearchOptions,
+                        showAllOptions: true,
+                        onFieldSubmitted: onPropertyFieldSubmitted,
+                      ),
+                      SpacingFoundation.verticalSpace12,
+                      UiKitPropertiesCloud(
+                        child: Wrap(
+                                spacing: SpacingFoundation.horizontalSpacing12,
+                                runSpacing: SpacingFoundation.verticalSpacing12,
+                                children: (baseProperties ?? []).map(
+                                  (e) {
+                                    return UiKitCloudChip(
+                                      iconPath: e.iconPath,
+                                      title: e.title,
+                                      onTap: () {
+                                        onSelectedPropertyTapped?.call(e);
+                                      },
+                                    );
+                                  },
+                                ).toList())
+                            .paddingAll(EdgeInsetsFoundation.all24),
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                      Text(
+                        S.current.UniqueProperties,
+                        style: uiKitTheme?.boldTextTheme.subHeadline,
+                      ),
+                      SpacingFoundation.verticalSpace12,
+                      PropertiesSearchInput(
+                        options: uniquePropertySearchOptions,
+                        showAllOptions: true,
+                        onFieldSubmitted: onUniquePropertyFieldSubmitted,
+                      ),
+                      SpacingFoundation.verticalSpace12,
+                      UiKitPropertiesCloud(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                context.boxIconButton(
+                                  data: BaseUiKitButtonData(
+                                    onPressed: onUniquePropertyEditTap,
+                                    backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                                    iconInfo: BaseUiKitButtonIconData(
+                                        iconData: ShuffleUiKitIcons.pencil,
+                                        size: kIsWeb ? 16 : 16.sp,
+                                        color: ColorsFoundation.primary200),
+                                  ),
                                 ),
-                              ),
-                              SpacingFoundation.horizontalSpace4,
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: onUniquePropertyDeleteTap,
-                                  backgroundColor:
-                                      ColorsFoundation.danger.withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.trash,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.danger),
+                                SpacingFoundation.horizontalSpace4,
+                                context.boxIconButton(
+                                  data: BaseUiKitButtonData(
+                                    onPressed: onUniquePropertyDeleteTap,
+                                    backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
+                                    iconInfo: BaseUiKitButtonIconData(
+                                        iconData: ShuffleUiKitIcons.trash,
+                                        size: kIsWeb ? 16 : 16.sp,
+                                        color: ColorsFoundation.danger),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ).paddingAll(EdgeInsetsFoundation.all4),
-                          Wrap(
-                                  spacing:
-                                      SpacingFoundation.horizontalSpacing12,
-                                  runSpacing:
-                                      SpacingFoundation.verticalSpacing12,
-                                  children: (uniqueProperties ?? []).map(
-                                    (e) {
-                                      return UiKitCloudChip(
-                                        title: e.title,
-                                        onTap: () {
-                                          onSelectedUniquePropertyTapped
-                                              ?.call(e);
-                                        },
-                                        iconPath: e.iconPath,
-                                        isSelectable: true,
-                                      );
-                                    },
-                                  ).toList())
-                              .paddingOnly(
-                                  left: EdgeInsetsFoundation.horizontal20,
-                                  right: EdgeInsetsFoundation.horizontal20,
-                                  bottom: EdgeInsetsFoundation.vertical20),
-                        ],
+                              ],
+                            ).paddingAll(EdgeInsetsFoundation.all4),
+                            Wrap(
+                                    spacing: SpacingFoundation.horizontalSpacing12,
+                                    runSpacing: SpacingFoundation.verticalSpacing12,
+                                    children: (uniqueProperties ?? []).map(
+                                      (e) {
+                                        return UiKitCloudChip(
+                                          title: e.title,
+                                          onTap: () {
+                                            onSelectedUniquePropertyTapped?.call(e);
+                                          },
+                                          iconPath: e.iconPath,
+                                          isSelectable: true,
+                                        );
+                                      },
+                                    ).toList())
+                                .paddingOnly(
+                                    left: EdgeInsetsFoundation.horizontal20,
+                                    right: EdgeInsetsFoundation.horizontal20,
+                                    bottom: EdgeInsetsFoundation.vertical20),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -339,13 +342,11 @@ class CategoriesCreateComponent extends StatelessWidget {
                               onTap: () {
                                 onSelectedRelatedPropertyTapped?.call(e);
                               },
-                            ).paddingSymmetric(
-                                vertical: EdgeInsetsFoundation.vertical6);
+                            ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical6);
                           },
                         ).toList(),
                       ).paddingSymmetric(
-                          horizontal: EdgeInsetsFoundation.horizontal20,
-                          vertical: EdgeInsetsFoundation.vertical14),
+                          horizontal: EdgeInsetsFoundation.horizontal20, vertical: EdgeInsetsFoundation.vertical14),
                     ),
                   ],
                 ),
