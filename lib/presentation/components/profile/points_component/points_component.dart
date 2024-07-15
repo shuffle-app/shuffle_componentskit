@@ -45,7 +45,7 @@ class PointsComponent extends StatelessWidget {
               iconData: ShuffleUiKitIcons.history,
               iconAlignment: Alignment.centerRight,
             ),
-            onPressed: () {},
+            onPressed: onHistoryCallBack,
           ),
         ),
         title: S.of(context).Points,
@@ -72,7 +72,7 @@ class PointsComponent extends StatelessWidget {
               .smallOutlinedButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).Spend.toUpperCase(),
-                  onPressed: () => onSpendCallBack,
+                  onPressed: onSpendCallBack,
                 ),
               )
               .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
@@ -145,6 +145,7 @@ class PointsComponent extends StatelessWidget {
                   ),
                 )
               : SpacingFoundation.none,
+          if(listChallengeFeelings != null)
           ColoredBox(
             color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
             child: DecoratedBox(
@@ -160,8 +161,8 @@ class PointsComponent extends StatelessWidget {
                   ).paddingOnly(
                     bottom: SpacingFoundation.verticalSpacing8,
                   ),
-                  listChallengeFeelings != null
-                      ? Row(
+
+                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: List.generate(
                             listChallengeFeelings!.length,
@@ -207,7 +208,7 @@ class PointsComponent extends StatelessWidget {
                             },
                           ),
                         )
-                      : SpacingFoundation.none,
+                      ,
                 ],
               ).paddingAll(EdgeInsetsFoundation.all16),
             ).paddingOnly(

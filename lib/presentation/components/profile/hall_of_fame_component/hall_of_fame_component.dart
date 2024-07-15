@@ -164,9 +164,10 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                   child: UiKitFameItem(
                     uiModel: e,
                     preserveDarkTheme: true,
-                    onTap: () => showModelViewerDialog(
+                    onTap: (cachedPathForModel) => showModelViewerDialog(
                       context,
                       e,
+                        cachedPathForModel
                     ),
                   ),
                 ))

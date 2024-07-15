@@ -8,28 +8,32 @@ class InviteComponent extends StatefulWidget {
     super.key,
     required this.persons,
     required this.onLoadMore,
-    this.invitedUser,
+    this.alreadyInvitedUserIds,
+    this.selfInvitationModel,
     this.initialDate,
     this.onRemoveUserOptionTap,
+    this.onDisabledUserTileTap,
     this.onAddWishTap,
     this.onInviteTap,
     this.changeDate,
+    this.isLoading = false,
   }) : assert(
-          invitedUser != null
-              ? onRemoveUserOptionTap != null
-              : changeDate != null,
+          selfInvitationModel != null ? onRemoveUserOptionTap != null : changeDate != null,
           'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
         );
 
   final List<UiInvitePersonModel> persons;
+  final List<int>? alreadyInvitedUserIds;
   final VoidCallback onLoadMore;
 
-  final UiInvitePersonModel? invitedUser;
+  final UiInvitePersonModel? selfInvitationModel;
   final VoidCallback? onRemoveUserOptionTap;
+  final VoidCallback? onDisabledUserTileTap;
   final void Function(String value, DateTime date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
   final DateTime? initialDate;
-  final ValueChanged<List<UiInvitePersonModel>>? onInviteTap;
+  final bool isLoading;
+  final Future Function(List<UiInvitePersonModel>)? onInviteTap;
 
   @override
   State<InviteComponent> createState() => _InviteComponentState();
@@ -39,6 +43,8 @@ class _InviteComponentState extends State<InviteComponent> {
   late final TextEditingController _wishController = TextEditingController();
   late final ScrollController scrollController = ScrollController();
   DateTime? _date;
+  bool loading = false;
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -58,8 +64,7 @@ class _InviteComponentState extends State<InviteComponent> {
   }
 
   void _scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       widget.onLoadMore.call();
     }
   }
@@ -76,6 +81,7 @@ class _InviteComponentState extends State<InviteComponent> {
     final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
     final regularTextTheme = theme?.regularTextTheme;
+    final colorScheme = theme?.colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,13 +93,16 @@ class _InviteComponentState extends State<InviteComponent> {
             Text(S.of(context).InvitePeople, style: boldTextTheme?.subHeadline),
             context.smallGradientButton(
               data: BaseUiKitButtonData(
+                loading: loading,
                 text: S.of(context).Invite,
                 onPressed: widget.persons.where((e) => e.isSelected).isEmpty
                     ? null
                     : () {
-                        final invitedPersons =
-                            widget.persons.where((e) => e.isSelected);
-                        widget.onInviteTap?.call(invitedPersons.toList());
+                        setState(() => loading = true);
+                        final invitedPersons = widget.persons.where((e) => e.isSelected);
+                        widget.onInviteTap
+                            ?.call(invitedPersons.toList())
+                            .whenComplete(() => setState(() => loading = false));
                       },
               ),
             ),
@@ -103,7 +112,7 @@ class _InviteComponentState extends State<InviteComponent> {
         UiKitCardWrapper(
           height: 0.5.sh - MediaQuery.viewInsetsOf(context).bottom,
           borderRadius: BorderRadius.zero,
-          color: ColorsFoundation.surface1,
+          color: colorScheme?.surface1,
           child: widget.persons.isEmpty
               ? Center(
                   child: Text(
@@ -122,37 +131,48 @@ class _InviteComponentState extends State<InviteComponent> {
 
                     return UiKitUserTileWithCheckbox(
                       name: person.name,
+                      disableSelection: widget.alreadyInvitedUserIds?.contains(person.id) ?? false,
                       subtitle: person.description,
                       isSelected: person.isSelected,
                       date: person.date,
                       rating: person.rating ?? 0,
                       avatarLink: person.avatarLink,
                       handShake: person.handshake,
-                      onTap: (isInvited) =>
-                          setState(() => person.isSelected = isInvited),
+                      onDisabledTap: widget.onDisabledUserTileTap,
+                      onTap: (isInvited) => setState(() => person.isSelected = isInvited),
                     );
                   },
-                  separatorBuilder: (_, __) =>
-                      SpacingFoundation.verticalSpace16,
+                  separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
                 ),
         ),
         SpacingFoundation.verticalSpace16,
-        widget.invitedUser != null
+        widget.selfInvitationModel != null && !isEditing
             ? UiKitUserTileWithOption(
-                date: widget.invitedUser!.date,
-                name: widget.invitedUser!.name,
-                type: widget.invitedUser!.userTileType,
-                subtitle: widget.invitedUser!.description,
+                date: widget.selfInvitationModel!.date,
+                name: widget.selfInvitationModel!.name,
+                type: widget.selfInvitationModel!.userTileType,
+                subtitle: widget.selfInvitationModel!.description,
                 onOptionTap: widget.onRemoveUserOptionTap!,
                 options: [
+                  UiKitPopUpMenuButtonOption(
+                    title: S.of(context).Edit,
+                    value: 'Edit',
+                    textColor: ColorsFoundation.error,
+                    onTap: () {
+                      setState(() {
+                        isEditing = true;
+                        _wishController.text = widget.selfInvitationModel!.description;
+                      });
+                    },
+                  ),
                   UiKitPopUpMenuButtonOption(
                     title: S.of(context).DeleteFromList,
                     value: 'Delete from list',
                     textColor: ColorsFoundation.error,
                     onTap: widget.onRemoveUserOptionTap,
-                  )
+                  ),
                 ],
-                avatarLink: widget.invitedUser!.avatarLink,
+                avatarLink: widget.selfInvitationModel!.avatarLink,
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,8 +180,7 @@ class _InviteComponentState extends State<InviteComponent> {
                   Text(
                     S.of(context).AddYourselfToList,
                     style: boldTextTheme?.subHeadline,
-                  ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16),
+                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                   SpacingFoundation.verticalSpace4,
                   Row(
                     mainAxisSize: MainAxisSize.max,
@@ -170,9 +189,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         blurred: false,
                         data: BaseUiKitButtonData(
                           onPressed: widget.initialDate == null
-                              ? () => widget.changeDate
-                                      ?.call()
-                                      .then((selectedDate) {
+                              ? () => widget.changeDate?.call().then((selectedDate) {
                                     if (selectedDate != null) {
                                       setState(() => _date = selectedDate);
                                     }
@@ -194,8 +211,7 @@ class _InviteComponentState extends State<InviteComponent> {
                               style: regularTextTheme?.body,
                             ),
                     ],
-                  ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16),
+                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                   SpacingFoundation.verticalSpace8,
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,14 +225,14 @@ class _InviteComponentState extends State<InviteComponent> {
                           minLines: 1,
                           maxSymbols: 100,
                           controller: _wishController,
-                          hintText:
-                              S.of(context).DescribeYourWishes.toUpperCase(),
+                          hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,
                         ),
                       ),
                       const Spacer(),
                       context.gradientButton(
                         data: BaseUiKitButtonData(
+                          loading: widget.isLoading,
                           onPressed: () {
                             if (_wishController.text.isEmpty) {
                               SnackBarUtils.show(
@@ -231,8 +247,10 @@ class _InviteComponentState extends State<InviteComponent> {
                                 type: AppSnackBarType.warning,
                               );
                             } else {
-                              widget.onAddWishTap
-                                  ?.call(_wishController.text, _date!);
+                              setState(() {
+                                isEditing = false;
+                              });
+                              widget.onAddWishTap?.call(_wishController.text, _date!);
                             }
                           },
                           iconInfo: BaseUiKitButtonIconData(
@@ -241,8 +259,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         ),
                       ),
                     ],
-                  ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16),
+                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 ],
               ),
         SpacingFoundation.verticalSpace16,

@@ -225,7 +225,7 @@ class MoodComponent extends StatelessWidget {
                     FutureBuilder(
                       future: onTabChanged.call(selectedLevel),
                       builder: (context, AsyncSnapshot<UiMoodGameContentModel> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.connectionState == ConnectionState.done && snapshot.data!= null) {
                           final todayContent = snapshot.data?.todayGameContent;
                           final tomorrowContent = snapshot.data?.tomorrowGameContent;
                           final dayAfterTomorrowContent = snapshot.data?.dayAfterTomorrowGameContent;

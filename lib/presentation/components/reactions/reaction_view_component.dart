@@ -11,6 +11,8 @@ class ReactionViewComponent extends StatelessWidget {
   final VoidCallback? onSingleTapLeft;
   final UiUniversalModel content;
   final VoidCallback? onPlaceNameTapped;
+  final VoidCallback? onVideoLiked;
+  final VoidCallback? onVideoDisliked;
   final VoidCallback? onSeeMorePopOverCallback;
   final bool Function()? onAuthorTapped;
   final VoidCallback? onVideoStarted;
@@ -27,6 +29,8 @@ class ReactionViewComponent extends StatelessWidget {
     this.onSingleTapRight,
     this.onSingleTapLeft,
     this.onVideoStarted,
+    this.onVideoLiked,
+    this.onVideoDisliked,
   });
 
   final videoProgressNotifier = ValueNotifier<double>(0);
@@ -144,7 +148,13 @@ class ReactionViewComponent extends StatelessWidget {
                 blurred: true,
                 small: true,
                 data: BaseUiKitButtonData(
-                  onPressed: () {},
+                  onPressed: () {
+                    onVideoDisliked?.call();
+                    FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                      intensities: [170, 200],
+                      pattern: [10, 5],
+                    ));
+                  },
                   iconInfo: BaseUiKitButtonIconData(
                     iconData: ShuffleUiKitIcons.heartbrokenfill,
                     color: Colors.white,
@@ -184,7 +194,13 @@ class ReactionViewComponent extends StatelessWidget {
                 blurred: true,
                 small: true,
                 data: BaseUiKitButtonData(
-                  onPressed: () {},
+                  onPressed: () {
+                    onVideoLiked?.call();
+                    FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                      intensities: [170, 200],
+                      pattern: [10, 5],
+                    ));
+                  },
                   iconInfo: BaseUiKitButtonIconData(
                     iconData: ShuffleUiKitIcons.heartfill,
                     color: Colors.white,
