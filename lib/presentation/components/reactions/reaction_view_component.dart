@@ -13,6 +13,8 @@ class ReactionViewComponent extends StatelessWidget {
   final VoidCallback? onSingleTapLeft;
   final UiUniversalModel content;
   final VoidCallback? onPlaceNameTapped;
+  final VoidCallback? onVideoLiked;
+  final VoidCallback? onVideoDisliked;
   final VoidCallback? onSeeMorePopOverCallback;
   final bool Function()? onAuthorTapped;
   final VoidCallback? onVideoStarted;
@@ -29,6 +31,8 @@ class ReactionViewComponent extends StatelessWidget {
     this.onSingleTapRight,
     this.onSingleTapLeft,
     this.onVideoStarted,
+    this.onVideoLiked,
+    this.onVideoDisliked,
   });
 
   final videoProgressNotifier = ValueNotifier<double>(0);
@@ -147,6 +151,7 @@ class ReactionViewComponent extends StatelessWidget {
                 small: true,
                 data: BaseUiKitButtonData(
                   onPressed: () {
+                    onVideoDisliked?.call();
                     FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
                       intensities: [170, 200],
                       pattern: [10, 5],
@@ -168,19 +173,19 @@ class ReactionViewComponent extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: canSwipeUp
                         ? [
-                            SpacingFoundation.verticalSpace24,
-                            ImageWidget(
-                              iconData: ShuffleUiKitIcons.chevronuplong,
-                              color: Colors.white,
-                              width: 48.w,
-                            ),
-                            SpacingFoundation.verticalSpace16,
-                            Text(
-                              contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
-                              style: boldTextTheme?.body,
-                              textAlign: TextAlign.center,
-                            ),
-                          ]
+                      SpacingFoundation.verticalSpace24,
+                      ImageWidget(
+                        iconData: ShuffleUiKitIcons.chevronuplong,
+                        color: Colors.white,
+                        width: 48.w,
+                      ),
+                      SpacingFoundation.verticalSpace16,
+                      Text(
+                        contentIsPlace ? S.current.MoreAboutThisPlace : S.current.MoreAboutThisEvent,
+                        style: boldTextTheme?.body,
+                        textAlign: TextAlign.center,
+                      ),
+                    ]
                         : [],
                   ),
                 ),
@@ -192,6 +197,7 @@ class ReactionViewComponent extends StatelessWidget {
                 small: true,
                 data: BaseUiKitButtonData(
                   onPressed: () {
+                    onVideoLiked?.call();
                     FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
                       intensities: [170, 200],
                       pattern: [10, 5],
