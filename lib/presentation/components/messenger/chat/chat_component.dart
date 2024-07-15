@@ -18,6 +18,7 @@ class ChatComponent extends StatelessWidget {
   final VoidCallback? onAddMorePeople;
   final VoidCallback? onLeaveChat;
   final VoidCallback? onInviteToAnotherPlace;
+  final ValueChanged<int>? onReplyMessageTap;
   final ChatItemUiModel chatData;
   final ValueChanged<int>? onMessageVisible;
   final ValueChanged<int>? onReplyMessage;
@@ -46,6 +47,7 @@ class ChatComponent extends StatelessWidget {
     this.onInvitationPlaceTap,
     this.onPinnedMessageTap,
     this.pinnedMessage,
+    this.onReplyMessageTap,
   });
 
   @override
@@ -261,7 +263,8 @@ class ChatComponent extends StatelessWidget {
                   : UiKitChatCardWithReplyOut(
                       id: item.messageId,
                       onReplyMessage: onReplyMessage,
-                      onReplyMassageTap: () {},
+                      replyMessageId: item.replyMessageModel!.messageId,
+                      onReplyMassageTap: onReplyMessageTap,
                       text: item.message,
                       sentByMe: item.senderIsMe,
                       replyText: item.replyMessageModel!.message!,
@@ -279,9 +282,11 @@ class ChatComponent extends StatelessWidget {
                   if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
                 },
                 child: UiKitChatInCard(
+                  showAvatar: chatData.isGroupChat,
                   avatarUrl: item.senderAvatar,
                   senderName: item.senderName,
                   senderType: item.senderProfileType,
+                  senderNickname: item.senderNickname ?? '',
                   onReplyMessage: onReplyMessage,
                   timeOfDay: item.timeSent,
                   id: item.messageId,
@@ -323,6 +328,7 @@ class ChatComponent extends StatelessWidget {
               },
               child: item.replyMessageModel == null
                   ? UiKitChatInCard(
+                      showAvatar: chatData.isGroupChat,
                       avatarUrl: item.senderAvatar,
                       senderName: item.senderName,
                       senderType: item.senderProfileType,
@@ -330,17 +336,24 @@ class ChatComponent extends StatelessWidget {
                       id: item.messageId,
                       timeOfDay: item.timeSent,
                       text: item.message,
+                      senderNickname: item.senderNickname ?? '',
                     )
                   : UiKitChatCardWithReplyIn(
+                      showAvatar: chatData.isGroupChat,
                       id: item.messageId,
                       onReplyMessage: onReplyMessage,
-                      onReplyMassageTap: () {},
+                      onReplyMassageTap: onReplyMessageTap,
                       text: item.message,
                       timeOfDay: item.timeSent,
+                      replyMessageId: item.replyMessageModel!.messageId,
                       replyText: item.replyMessageModel!.message!,
                       replyUserAvatar: item.replyMessageModel!.senderAvatar!,
                       replyUserType: item.replyMessageModel!.senderProfileType!,
                       replySenderName: item.replyMessageModel!.senderName!,
+                      senderNickname: item.senderNickname ?? '',
+                      senderName: item.senderName,
+                      senderType: item.senderProfileType,
+                      avatarUrl: item.senderAvatar,
                     ),
             );
           }

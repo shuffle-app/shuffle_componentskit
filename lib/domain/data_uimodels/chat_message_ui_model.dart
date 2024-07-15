@@ -10,6 +10,7 @@ class ChatMessageUiModel {
   final bool senderIsMe;
   final String? senderName;
   final String? senderAvatar;
+  final String? senderNickname;
   final UserTileType? senderProfileType;
   final bool isRead;
   final MessageType messageType;
@@ -35,6 +36,7 @@ class ChatMessageUiModel {
     this.senderAvatar,
     this.senderProfileType,
     this.replyMessageModel,
+    this.senderNickname,
   });
 
   factory ChatMessageUiModel.replyMessage({
@@ -43,6 +45,7 @@ class ChatMessageUiModel {
     required String message,
     required String senderAvatar,
     required String senderName,
+    required String senderNickname,
     required UserTileType senderProfileType,
   }) =>
       ChatMessageUiModel(
@@ -56,6 +59,7 @@ class ChatMessageUiModel {
         senderAvatar: senderAvatar,
         senderProfileType: senderProfileType,
         senderName: senderName,
+        senderNickname: senderNickname,
       );
 
   ChatMessageUiModel copyWith({
@@ -72,6 +76,7 @@ class ChatMessageUiModel {
     ChatMessageUiModel? replyMessageModel,
     bool? hasAcceptedInvite,
     String? gradientableText,
+    String? senderNickname,
   }) {
     return ChatMessageUiModel(
       senderId: senderId,
@@ -89,6 +94,7 @@ class ChatMessageUiModel {
       replyMessageModel: replyMessageModel ?? this.replyMessageModel,
       hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       gradientableText: gradientableText ?? this.gradientableText,
+      senderNickname: senderNickname ?? this.senderNickname,
     );
   }
 }

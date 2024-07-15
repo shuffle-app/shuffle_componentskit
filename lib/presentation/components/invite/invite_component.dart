@@ -78,6 +78,7 @@ class _InviteComponentState extends State<InviteComponent> {
     final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
     final regularTextTheme = theme?.regularTextTheme;
+    final colorScheme = theme?.colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +109,7 @@ class _InviteComponentState extends State<InviteComponent> {
         UiKitCardWrapper(
           height: 0.5.sh - MediaQuery.viewInsetsOf(context).bottom,
           borderRadius: BorderRadius.zero,
-          color: ColorsFoundation.surface1,
+          color: colorScheme?.surface1,
           child: widget.persons.isEmpty
               ? Center(
                   child: Text(
