@@ -134,6 +134,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       disableSelection: widget.alreadyInvitedUserIds?.contains(person.id) ?? false,
                       subtitle: person.description,
                       isSelected: person.isSelected,
+                      userTileType: person.userTileType,
                       date: person.date,
                       rating: person.rating ?? 0,
                       avatarLink: person.avatarLink,
@@ -157,7 +158,6 @@ class _InviteComponentState extends State<InviteComponent> {
                   UiKitPopUpMenuButtonOption(
                     title: S.of(context).Edit,
                     value: 'Edit',
-                    textColor: ColorsFoundation.error,
                     onTap: () {
                       setState(() {
                         isEditing = true;
