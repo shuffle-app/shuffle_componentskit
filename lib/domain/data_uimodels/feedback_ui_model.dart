@@ -9,7 +9,7 @@ class FeedbackUiModel {
   final int? feedbackRating;
   final UserTileType? feedbackAuthorType;
   final bool empty;
-  final int? helpfulCount;
+  int? helpfulCount;
   final bool? helpfulForUser;
   final int id;
   final int? placeId;
@@ -65,4 +65,12 @@ class FeedbackUiModel {
         eventId: eventId ?? this.eventId,
         onTap: onTap ?? this.onTap);
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FeedbackUiModel && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

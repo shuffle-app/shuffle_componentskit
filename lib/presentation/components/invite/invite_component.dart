@@ -9,30 +9,30 @@ class InviteComponent extends StatefulWidget {
     required this.persons,
     required this.onLoadMore,
     this.alreadyInvitedUserIds,
-    this.invitedUser,
+    this.selfInvitationModel,
     this.initialDate,
     this.onRemoveUserOptionTap,
     this.onDisabledUserTileTap,
     this.onAddWishTap,
     this.onInviteTap,
     this.changeDate,
-    required this.wishController,
+    this.isLoading = false,
   }) : assert(
-          invitedUser != null ? onRemoveUserOptionTap != null : changeDate != null,
+          selfInvitationModel != null ? onRemoveUserOptionTap != null : changeDate != null,
           'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
         );
 
   final List<UiInvitePersonModel> persons;
   final List<int>? alreadyInvitedUserIds;
   final VoidCallback onLoadMore;
-  final TextEditingController wishController;
 
-  final UiInvitePersonModel? invitedUser;
+  final UiInvitePersonModel? selfInvitationModel;
   final VoidCallback? onRemoveUserOptionTap;
   final VoidCallback? onDisabledUserTileTap;
   final void Function(String value, DateTime date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
   final DateTime? initialDate;
+  final bool isLoading;
   final Future Function(List<UiInvitePersonModel>)? onInviteTap;
 
   @override
@@ -40,9 +40,11 @@ class InviteComponent extends StatefulWidget {
 }
 
 class _InviteComponentState extends State<InviteComponent> {
+  late final TextEditingController _wishController = TextEditingController();
   late final ScrollController scrollController = ScrollController();
   DateTime? _date;
   bool loading = false;
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -70,7 +72,7 @@ class _InviteComponentState extends State<InviteComponent> {
   @override
   void dispose() {
     scrollController.dispose();
-    widget.wishController.dispose();
+    _wishController.dispose();
     super.dispose();
   }
 
@@ -143,71 +145,34 @@ class _InviteComponentState extends State<InviteComponent> {
                 ),
         ),
         SpacingFoundation.verticalSpace16,
-        widget.invitedUser != null
-            ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                SpacingFoundation.horizontalSpace12,
-                context
-                    .userAvatar(
-                      size: UserAvatarSize.x40x40,
-                      type: widget.invitedUser!.userTileType,
-                      userName: widget.invitedUser!.name,
-                      imageUrl: widget.invitedUser!.avatarLink,
-                    )
-                    .paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
-                SpacingFoundation.horizontalSpace12,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.invitedUser!.name, style: theme?.boldTextTheme.caption1Bold),
-                          const Spacer(),
-                          if (widget.invitedUser!.date != null) ...[
-                            Text(
-                              DateFormat('MMM dd').format(widget.invitedUser!.date!),
-                              style: theme?.boldTextTheme.caption1Medium.copyWith(
-                                color: theme.colorScheme.darkNeutral100,
-                              ),
-                            ),
-                            SpacingFoundation.horizontalSpace16,
-                          ],
-                          UiKitPopUpMenuButton(options: [
-                            UiKitPopUpMenuButtonOption(
-                              title: S.of(context).DeleteFromList,
-                              value: 'Delete from list',
-                              textColor: ColorsFoundation.error,
-                              onTap: widget.onRemoveUserOptionTap,
-                            )
-                          ]),
-                        ],
-                      ),
-                      if (widget.persons.where((e) => e.isSelected).isNotEmpty)
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: 0.15.sh,
-                            maxWidth: 0.75.sw,
-                          ),
-                          child: UiKitInputFieldNoIcon(
-                            minLines: 1,
-                            maxSymbols: 100,
-                            controller: widget.wishController,
-                            hintText: S.of(context).DescribeYourWishes.toUpperCase(),
-                            fillColor: theme?.colorScheme.surface1,
-                          ),
-                        )
-                      else
-                        Text(
-                          widget.invitedUser!.description,
-                          style: theme?.boldTextTheme.caption1Medium.copyWith(
-                            color: theme.colorScheme.darkNeutral900,
-                          ),
-                        )
-                    ],
+        widget.selfInvitationModel != null && !isEditing
+            ? UiKitUserTileWithOption(
+                date: widget.selfInvitationModel!.date,
+                name: widget.selfInvitationModel!.name,
+                type: widget.selfInvitationModel!.userTileType,
+                subtitle: widget.selfInvitationModel!.description,
+                onOptionTap: widget.onRemoveUserOptionTap!,
+                options: [
+                  UiKitPopUpMenuButtonOption(
+                    title: S.of(context).Edit,
+                    value: 'Edit',
+                    textColor: ColorsFoundation.error,
+                    onTap: () {
+                      setState(() {
+                        isEditing = true;
+                        _wishController.text = widget.selfInvitationModel!.description;
+                      });
+                    },
                   ),
-                ),
-              ])
+                  UiKitPopUpMenuButtonOption(
+                    title: S.of(context).DeleteFromList,
+                    value: 'Delete from list',
+                    textColor: ColorsFoundation.error,
+                    onTap: widget.onRemoveUserOptionTap,
+                  ),
+                ],
+                avatarLink: widget.selfInvitationModel!.avatarLink,
+              )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -258,7 +223,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         child: UiKitInputFieldNoIcon(
                           minLines: 1,
                           maxSymbols: 100,
-                          controller: widget.wishController,
+                          controller: _wishController,
                           hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,
                         ),
@@ -266,8 +231,9 @@ class _InviteComponentState extends State<InviteComponent> {
                       const Spacer(),
                       context.gradientButton(
                         data: BaseUiKitButtonData(
+                          loading: widget.isLoading,
                           onPressed: () {
-                            if (widget.wishController.text.isEmpty) {
+                            if (_wishController.text.isEmpty) {
                               SnackBarUtils.show(
                                 context: context,
                                 message: S.of(context).PleaseFillOutYourWishes,
@@ -280,7 +246,10 @@ class _InviteComponentState extends State<InviteComponent> {
                                 type: AppSnackBarType.warning,
                               );
                             } else {
-                              widget.onAddWishTap?.call(widget.wishController.text, _date!);
+                              setState(() {
+                                isEditing = false;
+                              });
+                              widget.onAddWishTap?.call(_wishController.text, _date!);
                             }
                           },
                           iconInfo: BaseUiKitButtonIconData(
