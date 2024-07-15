@@ -9,15 +9,16 @@ class InviteComponent extends StatefulWidget {
     required this.persons,
     required this.onLoadMore,
     this.alreadyInvitedUserIds,
-    this.invitedUser,
+    this.selfInvitationModel,
     this.initialDate,
     this.onRemoveUserOptionTap,
-    this.onDisabledUerTileTap,
+    this.onDisabledUserTileTap,
     this.onAddWishTap,
     this.onInviteTap,
     this.changeDate,
+    this.isLoading = false,
   }) : assert(
-          invitedUser != null ? onRemoveUserOptionTap != null : changeDate != null,
+          selfInvitationModel != null ? onRemoveUserOptionTap != null : changeDate != null,
           'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
         );
 
@@ -25,12 +26,13 @@ class InviteComponent extends StatefulWidget {
   final List<int>? alreadyInvitedUserIds;
   final VoidCallback onLoadMore;
 
-  final UiInvitePersonModel? invitedUser;
+  final UiInvitePersonModel? selfInvitationModel;
   final VoidCallback? onRemoveUserOptionTap;
-  final VoidCallback? onDisabledUerTileTap;
+  final VoidCallback? onDisabledUserTileTap;
   final void Function(String value, DateTime date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
   final DateTime? initialDate;
+  final bool isLoading;
   final Future Function(List<UiInvitePersonModel>)? onInviteTap;
 
   @override
@@ -42,6 +44,7 @@ class _InviteComponentState extends State<InviteComponent> {
   late final ScrollController scrollController = ScrollController();
   DateTime? _date;
   bool loading = false;
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -135,7 +138,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       rating: person.rating ?? 0,
                       avatarLink: person.avatarLink,
                       handShake: person.handshake,
-                      onDisabledTap: widget.onDisabledUerTileTap,
+                      onDisabledTap: widget.onDisabledUserTileTap,
                       onTap: (isInvited) => setState(() => person.isSelected = isInvited),
                     );
                   },
@@ -143,22 +146,33 @@ class _InviteComponentState extends State<InviteComponent> {
                 ),
         ),
         SpacingFoundation.verticalSpace16,
-        widget.invitedUser != null
+        widget.selfInvitationModel != null && !isEditing
             ? UiKitUserTileWithOption(
-                date: widget.invitedUser!.date,
-                name: widget.invitedUser!.name,
-                type: widget.invitedUser!.userTileType,
-                subtitle: widget.invitedUser!.description,
+                date: widget.selfInvitationModel!.date,
+                name: widget.selfInvitationModel!.name,
+                type: widget.selfInvitationModel!.userTileType,
+                subtitle: widget.selfInvitationModel!.description,
                 onOptionTap: widget.onRemoveUserOptionTap!,
                 options: [
+                  UiKitPopUpMenuButtonOption(
+                    title: S.of(context).Edit,
+                    value: 'Edit',
+                    textColor: ColorsFoundation.error,
+                    onTap: () {
+                      setState(() {
+                        isEditing = true;
+                        _wishController.text = widget.selfInvitationModel!.description;
+                      });
+                    },
+                  ),
                   UiKitPopUpMenuButtonOption(
                     title: S.of(context).DeleteFromList,
                     value: 'Delete from list',
                     textColor: ColorsFoundation.error,
                     onTap: widget.onRemoveUserOptionTap,
-                  )
+                  ),
                 ],
-                avatarLink: widget.invitedUser!.avatarLink,
+                avatarLink: widget.selfInvitationModel!.avatarLink,
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,6 +232,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       const Spacer(),
                       context.gradientButton(
                         data: BaseUiKitButtonData(
+                          loading: widget.isLoading,
                           onPressed: () {
                             if (_wishController.text.isEmpty) {
                               SnackBarUtils.show(
@@ -232,6 +247,9 @@ class _InviteComponentState extends State<InviteComponent> {
                                 type: AppSnackBarType.warning,
                               );
                             } else {
+                              setState(() {
+                                isEditing = false;
+                              });
                               widget.onAddWishTap?.call(_wishController.text, _date!);
                             }
                           },

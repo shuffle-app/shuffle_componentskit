@@ -185,6 +185,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                       onTap: () => showUiKitPopover(
                         context,
                         showButton: false,
+                        customMinHeight: 40.h,
                         title: Text(
                           hintTitle,
                           style: theme?.regularTextTheme.body.copyWith(

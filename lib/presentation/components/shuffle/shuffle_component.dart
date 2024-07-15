@@ -203,6 +203,10 @@ class ShuffleComponent extends StatelessWidget {
                         data: BaseUiKitButtonData(
                           onPressed: () {
                             shuffle.dislikeController.forward(from: 0);
+                            FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                              intensities: [170, 200],
+                              pattern: [10, 5],
+                            ));
                             onDislike?.call();
                           },
                           iconInfo: BaseUiKitButtonIconData(
@@ -216,7 +220,13 @@ class ShuffleComponent extends StatelessWidget {
                         context.bouncingButton(
                           blurred: true,
                           data: BaseUiKitButtonData(
-                            onPressed: () => onFavorite?.call(shuffle.items[indexNotifier.value].title),
+                            onPressed: () {
+                              FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                                intensities: [140, 150, 170, 200],
+                                pattern: [20, 15, 10, 5],
+                              ));
+                              onFavorite?.call(shuffle.items[indexNotifier.value].title);
+                            },
                             iconWidget: ValueListenableBuilder(
                               valueListenable: indexNotifier,
                               builder: (_, value, __) {
@@ -237,6 +247,10 @@ class ShuffleComponent extends StatelessWidget {
                         small: true,
                         data: BaseUiKitButtonData(
                           onPressed: () {
+                            FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                              intensities: [170, 200],
+                              pattern: [10, 5],
+                            ));
                             shuffle.likeController.forward(from: 0);
                           },
                           iconInfo: BaseUiKitButtonIconData(

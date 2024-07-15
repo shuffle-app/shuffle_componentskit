@@ -43,36 +43,34 @@ class SpinnerComponent extends StatelessWidget {
       children: [
         SizedBox(height: MediaQuery.of(context).viewPadding.top),
         spacing,
-    TitleWithHowItWorks(
-    title: S.of(context).SpinnerTitle,
-    textStyle: context.uiKitTheme?.boldTextTheme.title1,
-    shouldShow: spinner.showHowItWorks,
-    textAlign: TextAlign.center,
-    howItWorksWidget: HowItWorksWidget(
-
-                title: S.current.SpinnerHiwTitle,
-                subtitle: S.current.SpinnerHiwSubtitle,
-                hintTiles: [
-                  HintCardUiModel(
-                    title: S.current.SpinnerHiwHint(0),
-                    imageUrl: GraphicsFoundation.instance.png.givingLikeEmoji.path,
-                  ),
-                  HintCardUiModel(
-                    title: S.current.SpinnerHiwHint(1),
-                    imageUrl: GraphicsFoundation.instance.png.swipeCategory.path,
-                  ),
-                  HintCardUiModel(
-                    title: S.current.SpinnerHiwHint(2),
-                    imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
-                  ),
-                  HintCardUiModel(
-                    title: S.current.SpinnerHiwHint(3),
-                    imageUrl: GraphicsFoundation.instance.png.booking.path,
-                  ),
-                ],
-                onPop: onHowItWorksPoped,
+        TitleWithHowItWorks(
+          title: S.of(context).SpinnerTitle,
+          textStyle: context.uiKitTheme?.boldTextTheme.title1,
+          shouldShow: spinner.showHowItWorks,
+          textAlign: TextAlign.center,
+          howItWorksWidget: HowItWorksWidget(
+            title: S.current.SpinnerHiwTitle,
+            subtitle: S.current.SpinnerHiwSubtitle,
+            hintTiles: [
+              HintCardUiModel(
+                title: S.current.SpinnerHiwHint(0),
+                imageUrl: GraphicsFoundation.instance.png.givingLikeEmoji.path,
               ),
-
+              HintCardUiModel(
+                title: S.current.SpinnerHiwHint(1),
+                imageUrl: GraphicsFoundation.instance.png.swipeCategory.path,
+              ),
+              HintCardUiModel(
+                title: S.current.SpinnerHiwHint(2),
+                imageUrl: GraphicsFoundation.instance.png.choosePlan.path,
+              ),
+              HintCardUiModel(
+                title: S.current.SpinnerHiwHint(3),
+                imageUrl: GraphicsFoundation.instance.png.booking.path,
+              ),
+            ],
+            onPop: onHowItWorksPoped,
+          ),
         ),
         Expanded(
           child: LayoutBuilder(
@@ -156,7 +154,13 @@ class SpinnerComponent extends StatelessWidget {
                           ownerTileSubtitle: item.owner?.username,
                           ownerTileTitleTrailing: ownerTrailing,
                           onTap: () => onEventTap?.call(item.id),
-                          onFavoriteTap: () => onFavoriteTap?.call(item.id),
+                          onFavoriteTap: () {
+                            FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                              intensities: [140, 150, 170, 200],
+                              pattern: [20, 15, 10, 5],
+                            ));
+                            onFavoriteTap?.call(item.id);
+                          },
                         ).paddingOnly(
                           left: centerSingleItem
                               ? 0.15.sw

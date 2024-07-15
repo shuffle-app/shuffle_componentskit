@@ -5,9 +5,10 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 showModelViewerDialog(
   BuildContext context,
   UiKitAchievementsModel uiKitAchievementsModel,
+    String? cachedPathForModel
 ) =>
     showGeneralDialog(
-        barrierColor: Colors.black.withOpacity(0.5),
+        barrierColor: const Color(0xff2A2A2A),
         transitionBuilder: (context, a1, a2, widget) {
           return Transform.scale(
             scale: a1.value,
@@ -23,16 +24,16 @@ showModelViewerDialog(
         context: context,
         pageBuilder: (context, animation1, animation2) {
           return Dialog(
+            insetPadding:EdgeInsets.all(EdgeInsetsFoundation.all16),
             backgroundColor: Colors.transparent,
             clipBehavior: Clip.antiAlias,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadiusFoundation.all24,
             ),
             child: FameItemDialog(
-              filePath: uiKitAchievementsModel.objectUrl ?? '',
-              filePoster: uiKitAchievementsModel.posterUrl ?? '',
+              uiKitAchievementsModel: uiKitAchievementsModel,
               uiRewardProgressModel: uiKitAchievementsModel.uiRewardProgressModel,
-              description: uiKitAchievementsModel.description,
+                cachedPathForModel:cachedPathForModel
             ),
           );
         });

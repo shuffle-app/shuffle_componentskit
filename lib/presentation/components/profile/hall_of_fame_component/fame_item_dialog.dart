@@ -5,16 +5,14 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FameItemDialog extends StatelessWidget {
   final UiRewardProgressModel? uiRewardProgressModel;
-  final String filePath;
-  final String filePoster;
-  final String? description;
+  final String? cachedPathForModel;
+  final UiKitAchievementsModel uiKitAchievementsModel;
 
   const FameItemDialog({
     super.key,
     this.uiRewardProgressModel,
-    this.description,
-    required this.filePath,
-    required this.filePoster,
+    this.cachedPathForModel,
+    required this.uiKitAchievementsModel,
   });
 
   @override
@@ -26,7 +24,7 @@ class FameItemDialog extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: context.pop,
           child: ImageWidget(
             iconData: ShuffleUiKitIcons.cross,
             color: theme?.colorScheme.darkNeutral900,
@@ -36,12 +34,16 @@ class FameItemDialog extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         UiKitCardWrapper(
+          height: 0.7.sh,
+          width: double.infinity,
+          padding: EdgeInsets.all(EdgeInsetsFoundation.all24),
           color: theme?.colorScheme.surface,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                uiRewardProgressModel?.title ?? S.of(context).NothingFound,
+                uiKitAchievementsModel.title,
                 style: theme?.boldTextTheme.title2,
               ),
               SizedBox(height: 1.sw <= 380 ? 25.h : 35.h),
@@ -52,8 +54,8 @@ class FameItemDialog extends StatelessWidget {
                     Transform.rotate(
                       angle: 45 * math.pi / 180,
                       child: SizedBox(
-                        height: 1.sw <= 380 ? 150 : 250,
-                        width: 1.sw <= 380 ? 150 : 250,
+                        height: 0.6.sw,
+                        width: 0.6.sw,
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadiusFoundation.all24r,
@@ -65,21 +67,26 @@ class FameItemDialog extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 1.sw <= 380 ? 150 : 250,
-                      width: 1.sw <= 380 ? 150 : 250,
-                      child: UiKitBase3DViewer(
-                        localPath: filePath,
-                        poster: filePoster,
-                        autoRotate: true,
-                      ),
-                    ),
+                        height: 0.8.sw,
+                        width: 0.8.sw,
+                        child: UiKitBase3DViewer(
+                          key: UniqueKey(),
+                          localPath: cachedPathForModel ?? uiKitAchievementsModel.objectUrl!,
+                          poster: uiKitAchievementsModel.posterUrl,
+                          environmentImage:
+                              'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/21-ll.hdr',
+                          skyboxImage:
+                              'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/21.hdr',
+                          autoRotate: true,
+                          autoPlay: true,
+                        )),
                   ],
                 ),
               ),
-              SizedBox(height: 1.sw <= 380 ? 40.h : 50.h),
-              if (description != null) ...[
+              SpacingFoundation.verticalSpace16,
+              if (uiKitAchievementsModel.description != null) ...[
                 Text(
-                  description!,
+                  uiKitAchievementsModel.description!,
                   style: theme?.regularTextTheme.caption2,
                 ),
               ],
@@ -111,7 +118,7 @@ class FameItemDialog extends StatelessWidget {
                 ),
               ]
             ],
-          ).paddingAll(EdgeInsetsFoundation.all24),
+          ),
         )
       ],
     );
