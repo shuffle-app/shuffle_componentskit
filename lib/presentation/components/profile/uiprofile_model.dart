@@ -23,6 +23,7 @@ class UiProfileModel {
   final List<String>? tags;
   final List<int>? tagsIds;
   final List<String>? matchingInterests;
+  final VoidCallback? onCustomDonate;
   final VoidCallback? onViewAllAchievements;
   final List<UiKitAchievementsModel> achievements;
   final UserTileType userTileType;
@@ -48,6 +49,7 @@ class UiProfileModel {
       profileType: ProfileCardType.personal,
       showSupportShuffle: showSupportShuffle,
       onDonate: onDonate,
+      onCustomDonate: onCustomDonate,
       badge: userTileType == UserTileType.pro
           ? const ProMemberPlate()
           : userTileType == UserTileType.premium
@@ -83,6 +85,7 @@ class UiProfileModel {
     this.onShare,
     this.onPointsDetails,
     this.onDonate,
+    this.onCustomDonate,
     this.mindsetId,
     this.showSupportShuffle = false,
     this.onFollow,
@@ -138,6 +141,7 @@ class UiProfileModel {
           String? email,
           String? phone,
           int? points,
+          VoidCallback? onCustomDonate,
           bool? beInSearch}) =>
       UiProfileModel(
           onShare: onShare ?? this.onShare,
@@ -151,6 +155,7 @@ class UiProfileModel {
           onFollow: onFollow ?? this.onFollow,
           showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
           onDonate: onDonate ?? this.onDonate,
+          onCustomDonate: onCustomDonate ?? this.onCustomDonate,
           allInterests: allInterests ?? this.allInterests,
           favoriteTags: favoriteTags ?? this.favoriteTags,
           matchingInterests: matchingInterests ?? this.matchingInterests,

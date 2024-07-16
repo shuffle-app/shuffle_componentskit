@@ -11,9 +11,14 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
       required this.iconTextController,
       this.iconPath,
       required this.onIconTap,
-      required this.listIcons, this.onUploadIconTap});
+      required this.listIcons,
+      this.onCancleTap,
+      this.onSaveTap,
+      this.onUploadIconTap});
 
   final VoidCallback? onCloseTap;
+  final VoidCallback? onSaveTap;
+  final VoidCallback? onCancleTap;
   final bool isPlaceType;
   final TextEditingController titleTextController;
   final TextEditingController iconTextController;
@@ -45,9 +50,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
                 context.iconButtonNoPadding(
                   data: BaseUiKitButtonData(
                     onPressed: onCloseTap,
-                    iconInfo: BaseUiKitButtonIconData(
-                        iconData: ShuffleUiKitIcons.x,
-                        size: kIsWeb ? 24 : 24.sp),
+                    iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.x, size: kIsWeb ? 24 : 24.sp),
                   ),
                 )
               ],
@@ -75,7 +78,33 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
               onPressed: onUploadIconTap,
               onIconTap: onIconTap,
               listIconData: listIcons,
-            )
+            ),
+            SpacingFoundation.verticalSpace24,
+            Row(
+              children: [
+                Expanded(
+                  child: context.coloredButtonWithBorderRadius(
+                    borderRadius: BorderRadiusFoundation.all12,
+                    data: BaseUiKitButtonData(
+                      text: S.current.Save,
+                      onPressed: onSaveTap,
+                      backgroundColor: theme?.colorScheme.darkNeutral200,
+                    ),
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace16,
+                Expanded(
+                  child: context.coloredButtonWithBorderRadius(
+                    borderRadius: BorderRadiusFoundation.all12,
+                    data: BaseUiKitButtonData(
+                      text: S.current.Cancel,
+                      onPressed: onCancleTap,
+                      backgroundColor: theme?.colorScheme.darkNeutral200,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

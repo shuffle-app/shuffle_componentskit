@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/domain.dart';
 import 'package:shuffle_components_kit/presentation/components/feed/uifeed_model.dart';
@@ -13,6 +11,8 @@ class ReactionViewComponent extends StatelessWidget {
   final VoidCallback? onSingleTapLeft;
   final UiUniversalModel content;
   final VoidCallback? onPlaceNameTapped;
+  final VoidCallback? onVideoLiked;
+  final VoidCallback? onVideoDisliked;
   final VoidCallback? onSeeMorePopOverCallback;
   final bool Function()? onAuthorTapped;
   final VoidCallback? onVideoStarted;
@@ -29,6 +29,8 @@ class ReactionViewComponent extends StatelessWidget {
     this.onSingleTapRight,
     this.onSingleTapLeft,
     this.onVideoStarted,
+    this.onVideoLiked,
+    this.onVideoDisliked,
   });
 
   final videoProgressNotifier = ValueNotifier<double>(0);
@@ -147,6 +149,7 @@ class ReactionViewComponent extends StatelessWidget {
                 small: true,
                 data: BaseUiKitButtonData(
                   onPressed: () {
+                    onVideoDisliked?.call();
                     FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
                       intensities: [170, 200],
                       pattern: [10, 5],
@@ -192,6 +195,7 @@ class ReactionViewComponent extends StatelessWidget {
                 small: true,
                 data: BaseUiKitButtonData(
                   onPressed: () {
+                    onVideoLiked?.call();
                     FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
                       intensities: [170, 200],
                       pattern: [10, 5],

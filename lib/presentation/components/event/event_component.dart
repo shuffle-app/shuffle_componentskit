@@ -276,6 +276,7 @@ class _EventComponentState extends State<EventComponent> {
                       blurValue: 25,
                     ),
                 ],
+                weatherType: widget.event.weatherType,
               ),
             ],
           ).paddingSymmetric(horizontal: horizontalMargin),

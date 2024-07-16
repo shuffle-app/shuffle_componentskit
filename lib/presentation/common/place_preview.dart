@@ -122,6 +122,7 @@ class PlacePreview extends StatelessWidget {
                           media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
                           onTap: () => onTap?.call(place.id),
                           width: size.width - horizontalMargin * 2,
+                          weatherType: place.weatherType,
                         ),
                         if (!showFavoriteBtn)
                           ListenableBuilder(
