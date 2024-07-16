@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/influencer/linear_influencer_indicator.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/points_component/ui_points_model.dart';
+import 'package:shuffle_components_kit/presentation/components/profile/points_component/ui_user_points_progress_bar_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:intl/intl.dart';
+
+import 'row_gradient_circle.dart';
 
 class PointsComponent extends StatelessWidget {
   final VoidCallback? onSpendCallBack;
@@ -10,6 +13,7 @@ class PointsComponent extends StatelessWidget {
   final int userPointsCount;
   final List<UiPointsModel>? listChallengeFeelings;
   final List<UiPointsModel>? listItemPoint;
+  final UiUserPointsProgressBarModel? uiUserPointsProgressBarModel;
 
   PointsComponent({
     super.key,
@@ -17,10 +21,21 @@ class PointsComponent extends StatelessWidget {
     this.onHistoryCallBack,
     this.listChallengeFeelings,
     this.listItemPoint,
+    this.uiUserPointsProgressBarModel,
     required this.userPointsCount,
   });
 
   final ScrollController _scrollController = ScrollController();
+
+  LinearInfluencerIndicator _linearInfluencerIndicator(
+          UiUserPointsProgressBarModel? uiUserPointsProgressBarModel) =>
+      LinearInfluencerIndicator(
+        actualSum: uiUserPointsProgressBarModel?.actual ?? 0,
+        sum: uiUserPointsProgressBarModel?.sum ?? 100,
+        width: 215.w,
+        heingh: 12.h,
+        customGradient: GradientFoundation.goldGradient,
+      );
 
   String stringWithSpace(int text) {
     NumberFormat formatter = NumberFormat('#,###');
@@ -75,11 +90,92 @@ class PointsComponent extends StatelessWidget {
                   onPressed: onSpendCallBack,
                 ),
               )
-              .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+              .paddingSymmetric(
+                  horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: theme?.colorScheme.darkNeutral900.withOpacity(0.16),
+              borderRadius: BorderRadiusFoundation.all16,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                RowGradientCircle(
+                  level: uiUserPointsProgressBarModel?.level ?? 0,
+                ).paddingAll(EdgeInsetsFoundation.all8),
+                SpacingFoundation.horizontalSpace8,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          GradientableWidget(
+                            gradient: GradientFoundation.defaultLinearGradient,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Wiseacre of sands',
+                                    style: theme?.regularTextTheme.caption1
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SpacingFoundation.verticalSpace2,
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              _linearInfluencerIndicator(
+                                uiUserPointsProgressBarModel,
+                              ),
+                              Container(
+                                width: _linearInfluencerIndicator(
+                                  uiUserPointsProgressBarModel,
+                                ).progressPosition,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadiusFoundation.all40,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.white.withOpacity(0.8),
+                                      blurRadius: 8,
+                                    ),
+                                  ],
+                                ),
+                                child: _linearInfluencerIndicator(
+                                  uiUserPointsProgressBarModel,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            uiUserPointsProgressBarModel != null
+                                ? '${uiUserPointsProgressBarModel?.actual.toInt()}/${uiUserPointsProgressBarModel?.sum.toInt()}'
+                                : '',
+                            style: theme?.regularTextTheme.caption2.copyWith(
+                              color: theme.colorScheme.inverseBodyTypography,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ).paddingAll(EdgeInsetsFoundation.all8),
+          ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+          SpacingFoundation.verticalSpace24,
           listItemPoint != null
               ? ColoredBox(
-                  color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
+                  color:
+                      theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
                   child: GridView.builder(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
@@ -107,6 +203,15 @@ class PointsComponent extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
+                                itemPoits.showStar
+                                    ? ImageWidget(
+                                        link: GraphicsFoundation
+                                            .instance.svg.star2.path,
+                                        height: 12.h,
+                                        color:
+                                            theme?.colorScheme.bodyTypography,
+                                      )
+                                    : SpacingFoundation.none,
                                 const Spacer(),
                                 Text(
                                   itemPoits.title ?? S.of(context).NothingFound,
@@ -120,7 +225,8 @@ class PointsComponent extends StatelessWidget {
                                 SpacingFoundation.verticalSpace4,
                                 Text(
                                   '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
-                                  style: theme?.regularTextTheme.labelSmall.copyWith(
+                                  style: theme?.regularTextTheme.labelSmall
+                                      .copyWith(
                                     color: theme.colorScheme.darkNeutral900,
                                   ),
                                 ),
@@ -145,78 +251,79 @@ class PointsComponent extends StatelessWidget {
                   ),
                 )
               : SpacingFoundation.none,
-          if(listChallengeFeelings != null)
-          ColoredBox(
-            color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: theme?.colorScheme.surface,
-                borderRadius: BorderRadiusFoundation.all24,
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    S.of(context).ChallengeFeelings,
-                    style: theme?.boldTextTheme.caption1Bold,
-                  ).paddingOnly(
-                    bottom: SpacingFoundation.verticalSpacing8,
-                  ),
+          if (listChallengeFeelings != null)
+            ColoredBox(
+              color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: theme?.colorScheme.surface,
+                  borderRadius: BorderRadiusFoundation.all24,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      S.of(context).ChallengeFeelings,
+                      style: theme?.boldTextTheme.caption1Bold,
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(
+                        listChallengeFeelings!.length,
+                        (index) {
+                          final itemChallengeFeelings =
+                              listChallengeFeelings![index];
 
-                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(
-                            listChallengeFeelings!.length,
-                            (index) {
-                              final itemChallengeFeelings = listChallengeFeelings![index];
-
-                              return Stack(
+                          return Stack(
+                            children: [
+                              ImageWidget(
+                                height: 45.h,
+                                width: 45.w,
+                                fit: BoxFit.fitHeight,
+                                link: itemChallengeFeelings.imagePath,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  ImageWidget(
-                                    height: 45.h,
-                                    width: 45.w,
-                                    fit: BoxFit.fitHeight,
-                                    link: itemChallengeFeelings.imagePath,
+                                  SizedBox(height: 30.h),
+                                  Text(
+                                    itemChallengeFeelings.title ??
+                                        S.of(context).NothingFound,
+                                    style: theme?.boldTextTheme.caption3Medium,
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(height: 30.h),
-                                      Text(
-                                        itemChallengeFeelings.title ?? S.of(context).NothingFound,
-                                        style: theme?.boldTextTheme.caption3Medium,
-                                      ),
-                                      Text(
-                                        '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
-                                        style: theme?.boldTextTheme.caption2Bold,
-                                      ),
-                                      Text(
-                                        '${parseDoubleToInt(itemChallengeFeelings.sum)}/${parseDoubleToInt(itemChallengeFeelings.actualSum)}',
-                                        style: theme?.regularTextTheme.labelSmall.copyWith(
-                                          color: theme.colorScheme.darkNeutral900,
-                                        ),
-                                      ),
-                                      SpacingFoundation.verticalSpace2,
-                                      LinearInfluencerIndicator(
-                                        actualSum: itemChallengeFeelings.actualSum,
-                                        sum: itemChallengeFeelings.sum,
-                                        width: 70.w,
-                                      )
-                                    ],
+                                  Text(
+                                    '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
+                                    style: theme?.boldTextTheme.caption2Bold,
+                                  ),
+                                  Text(
+                                    '${parseDoubleToInt(itemChallengeFeelings.sum)}/${parseDoubleToInt(itemChallengeFeelings.actualSum)}',
+                                    style: theme?.regularTextTheme.labelSmall
+                                        .copyWith(
+                                      color: theme.colorScheme.darkNeutral900,
+                                    ),
+                                  ),
+                                  SpacingFoundation.verticalSpace2,
+                                  LinearInfluencerIndicator(
+                                    actualSum: itemChallengeFeelings.actualSum,
+                                    sum: itemChallengeFeelings.sum,
+                                    width: 70.w,
                                   )
                                 ],
-                              );
-                            },
-                          ),
-                        )
-                      ,
-                ],
-              ).paddingAll(EdgeInsetsFoundation.all16),
-            ).paddingOnly(
-              left: SpacingFoundation.horizontalSpacing16,
-              right: SpacingFoundation.horizontalSpacing16,
-              bottom: SpacingFoundation.verticalSpacing16,
-            ),
-          )
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ).paddingAll(EdgeInsetsFoundation.all16),
+              ).paddingOnly(
+                left: SpacingFoundation.horizontalSpacing16,
+                right: SpacingFoundation.horizontalSpacing16,
+                bottom: SpacingFoundation.verticalSpacing16,
+              ),
+            )
         ],
       ),
     );
