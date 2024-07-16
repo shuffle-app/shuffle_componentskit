@@ -53,6 +53,7 @@ class ChatComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final isLightThemeOn = theme?.themeMode == ThemeMode.light;
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
@@ -216,8 +217,9 @@ class ChatComponent extends StatelessWidget {
                   timeOfDay: item.timeSent,
                   sentByMe: item.senderIsMe,
                   id: item.messageId,
+                  brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                   child: UiKitInviteMessageContent(
-                    brightness: Brightness.light,
+                    brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     onInvitePeopleTap: onAddMorePeople,
                     username: item.invitationData!.senderUserName,
@@ -290,6 +292,7 @@ class ChatComponent extends StatelessWidget {
                   onReplyMessage: onReplyMessage,
                   timeOfDay: item.timeSent,
                   id: item.messageId,
+                  hasInvitation: true,
                   child: UiKitInviteMessageContent(
                     brightness: Brightness.dark,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
@@ -328,6 +331,7 @@ class ChatComponent extends StatelessWidget {
               },
               child: item.replyMessageModel == null
                   ? UiKitChatInCard(
+                      hasInvitation: false,
                       showAvatar: chatData.isGroupChat,
                       avatarUrl: item.senderAvatar,
                       senderName: item.senderName,
