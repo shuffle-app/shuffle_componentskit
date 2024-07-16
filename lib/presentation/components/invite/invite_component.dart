@@ -157,7 +157,7 @@ class _InviteComponentState extends State<InviteComponent> {
                   UiKitPopUpMenuButtonOption(
                     title: S.of(context).Edit,
                     value: 'Edit',
-                    textColor: ColorsFoundation.error,
+                    textColor: colorScheme?.surface,
                     onTap: () {
                       setState(() {
                         isEditing = true;

@@ -58,9 +58,8 @@ class ChatComponent extends StatelessWidget {
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
       customToolbarBaseHeight: 100,
-      customToolbarHeight: 100,
       autoImplyLeading: true,
-      canFoldAppBar: true,
+      canFoldAppBar: false,
       reverse: true,
       topFixedAddition: pinnedMessage != null
           ? GestureDetector(
@@ -167,7 +166,7 @@ class ChatComponent extends StatelessWidget {
               ),
             ],
           ),
-        ),
+        ).paddingOnly(bottom: EdgeInsetsFoundation.vertical4),
       ),
       bodyBottomSpace:
           kBottomNavigationBarHeight + (SpacingFoundation.verticalSpacing40 * 2) + SpacingFoundation.verticalSpacing4,
@@ -294,7 +293,7 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   hasInvitation: true,
                   child: UiKitInviteMessageContent(
-                    brightness: Brightness.dark,
+                    brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     username: item.invitationData!.senderUserName,
                     placeName: item.invitationData!.contentName,
