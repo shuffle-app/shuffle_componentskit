@@ -13,7 +13,8 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -67,13 +68,18 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
+                  ? GlobalComponent(
+                      globalConfiguration: configuration,
+                      child: const ComponentsTestPage())
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.18')
-                          .then((_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(body: Center(child: LoadingWidget()));
+                          .then(
+                              (_) => Future.delayed(const Duration(seconds: 1)))
+                          .then((_) => UiKitTheme.of(c).onThemeUpdated(
+                              themeMatcher(configuration.appConfig.theme)));
+                      return const Scaffold(
+                          body: Center(child: LoadingWidget()));
                     }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
@@ -90,7 +96,8 @@ class ComponentsTestPage extends StatefulWidget {
   State<ComponentsTestPage> createState() => _ComponentsTestPageState();
 }
 
-class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProviderStateMixin {
+class _ComponentsTestPageState extends State<ComponentsTestPage>
+    with TickerProviderStateMixin {
   late final likeController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 1, milliseconds: 500),
@@ -176,7 +183,12 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () => context.push(
                   PropertyManagementComponent(
                     propertySearchOptions: (value) async {
-                      return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
+                      return [
+                        'Active tiger',
+                        'Interested adventure',
+                        'Forever resting sloth',
+                        'Foodie'
+                      ];
                     },
                     onRecentlyAddedPropertyTapped: (value) {},
                     onPropertyFieldSubmitted: (value) async {
@@ -188,8 +200,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     onPropertyTypeTapped: (value) {},
                     allPropertyCategories: [
                       UiModelPropertiesCategory(title: 'Active tiger', id: 0),
-                      UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
-                      UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
+                      UiModelPropertiesCategory(
+                          title: 'Interested adventure', id: 1),
+                      UiModelPropertiesCategory(
+                          title: 'Forever resting sloth', id: 2),
                       UiModelPropertiesCategory(title: 'Foodie', id: 3),
                     ],
                     basePropertyTypesTap: (int) async {},
@@ -214,19 +228,23 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       subscriptionFeatures: [
                         SubscriptionDescriptionItem(
                           description: S.of(context).ProSubscriptionFeature2,
-                          imagePath: GraphicsFoundation.instance.png.scheduler.path,
+                          imagePath:
+                              GraphicsFoundation.instance.png.scheduler.path,
                         ),
                         SubscriptionDescriptionItem(
                           description: S.of(context).ProSubscriptionFeature4,
-                          imagePath: GraphicsFoundation.instance.png.presale.path,
+                          imagePath:
+                              GraphicsFoundation.instance.png.presale.path,
                         ),
                         SubscriptionDescriptionItem(
                           description: S.of(context).ProSubscriptionFeature5,
-                          imagePath: GraphicsFoundation.instance.png.upsales.path,
+                          imagePath:
+                              GraphicsFoundation.instance.png.upsales.path,
                         ),
                         SubscriptionDescriptionItem(
                           description: S.of(context).ProSubscriptionFeature6,
-                          imagePath: GraphicsFoundation.instance.png.statistics.path,
+                          imagePath:
+                              GraphicsFoundation.instance.png.statistics.path,
                         ),
                         SubscriptionDescriptionItem(
                           description: S.of(context).ProSubscriptionFeature7,
@@ -234,19 +252,24 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ),
                         SubscriptionDescriptionItem(
                           description: S.of(context).ProSubscriptionFeature3,
-                          imagePath: GraphicsFoundation.instance.png.pointGift.path,
+                          imagePath:
+                              GraphicsFoundation.instance.png.pointGift.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature1,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature1,
                           imagePath: GraphicsFoundation.instance.png.help.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature5,
-                          imagePath: GraphicsFoundation.instance.png.blackWhite.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature5,
+                          imagePath:
+                              GraphicsFoundation.instance.png.blackWhite.path,
                         ),
                         SubscriptionDescriptionItem(
                           description: S.of(context).ProSubscriptionFeature1,
-                          imagePath: GraphicsFoundation.instance.png.pROLabel.path,
+                          imagePath:
+                              GraphicsFoundation.instance.png.pROLabel.path,
                         ),
                       ],
                       configModel: ComponentModel.fromJson(
@@ -266,7 +289,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           'lorem ipsum dolor sit amet',
                         ],
                         userName: 'userName',
-                        userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+                        userAvatarUrl:
+                            GraphicsFoundation.instance.png.mockAvatar.path,
                         nickname: 'nickname',
                         offers: [
                           SubscriptionOfferModel(
@@ -306,36 +330,51 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     child: AccountSubscriptionComponent(
                       subscriptionFeatures: [
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature1,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature1,
                           imagePath: GraphicsFoundation.instance.png.help.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature3,
-                          imagePath: GraphicsFoundation.instance.png.reaction.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature3,
+                          imagePath:
+                              GraphicsFoundation.instance.png.reaction.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature4,
-                          imagePath: GraphicsFoundation.instance.png.favoritePlace.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature4,
+                          imagePath: GraphicsFoundation
+                              .instance.png.favoritePlace.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature5,
-                          imagePath: GraphicsFoundation.instance.png.blackWhite.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature5,
+                          imagePath:
+                              GraphicsFoundation.instance.png.blackWhite.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature7,
-                          imagePath: GraphicsFoundation.instance.png.shareStack.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature7,
+                          imagePath:
+                              GraphicsFoundation.instance.png.shareStack.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature8,
-                          imagePath: GraphicsFoundation.instance.png.scheduler.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature8,
+                          imagePath:
+                              GraphicsFoundation.instance.png.scheduler.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature2,
-                          imagePath: GraphicsFoundation.instance.png.shuffleLabel.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature2,
+                          imagePath:
+                              GraphicsFoundation.instance.png.shuffleLabel.path,
                         ),
                         SubscriptionDescriptionItem(
-                          description: S.of(context).PremiumSubscriptionFeature6,
-                          imagePath: GraphicsFoundation.instance.png.influencer.path,
+                          description:
+                              S.of(context).PremiumSubscriptionFeature6,
+                          imagePath:
+                              GraphicsFoundation.instance.png.influencer.path,
                         ),
                       ],
                       configModel: ComponentModel.fromJson(
@@ -359,7 +398,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         ),
                         userType: UserTileType.premium,
                         userName: 'userName',
-                        userAvatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
+                        userAvatarUrl:
+                            GraphicsFoundation.instance.png.mockAvatar.path,
                         nickname: 'nickname',
                         offers: [
                           SubscriptionOfferModel(
@@ -391,6 +431,12 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () {
                   context.push(
                     PointsComponent(
+                      uiUserPointsProgressBarModel:
+                          UiUserPointsProgressBarModel(
+                        actual: 90,
+                        level: 5,
+                        sum: 100,
+                      ),
                       onSpendCallBack: () {},
                       onHistoryCallBack: () {},
                       userPointsCount: 2650,
@@ -401,8 +447,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           actualSum: 0,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgLikeIcon.path
-                              : GraphicsFoundation.instance.png.aNoBgBookingW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgLikeIcon.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgBookingW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Fair,
@@ -410,8 +458,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           actualSum: 1,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgVictoryHands.path
-                              : GraphicsFoundation.instance.png.aNoBgTwoFingersUpW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgVictoryHands.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgTwoFingersUpW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Hardcore,
@@ -419,64 +469,55 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           actualSum: 0,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgIndexFinger.path
-                              : GraphicsFoundation.instance.png.aNoBgIndexFingerW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgIndexFinger.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgIndexFingerW.path,
                         ),
                       ],
                       listItemPoint: [
                         UiPointsModel(
-                          title: S.of(context).Feedbacks(10).toLowerCase(),
-                          getPoints: 10,
-                          actualSum: 5,
-                          sum: 10,
-                          imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgMessage.path
-                              : GraphicsFoundation.instance.png.aNoBgMessageBubbleW.path,
-                        ),
-                        UiPointsModel(
-                          title: S.of(context).ShareCard(1),
-                          getPoints: 1,
+                          title: S.of(context).ShareCard(10),
+                          getPoints: 5,
                           actualSum: 5,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
                               ? GraphicsFoundation.instance.png.aNoBgShare.path
-                              : GraphicsFoundation.instance.png.aNoBgShareW.path,
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgShareW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).LoginToAppDaysInARow(7),
+                          title: S.of(context).Bookigns(5),
+                          getPoints: 20,
+                          actualSum: 1,
+                          sum: 5,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgBooking.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgBookingW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).LoginInAppDaysInARow(7),
                           getPoints: 10,
                           actualSum: 2,
                           sum: 7,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgWalkingMan.path
-                              : GraphicsFoundation.instance.png.aNoBgWalkingManW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgWalkingMan.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgWalkingManW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).SpendHoursPerWeek(3),
-                          getPoints: 20,
+                          getPoints: 10,
                           actualSum: 0.45,
                           sum: 3,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgHourglass.path
-                              : GraphicsFoundation.instance.png.aNoBgHourglassW.path,
-                        ),
-                        UiPointsModel(
-                          title: S.of(context).Bookigns,
-                          getPoints: 3,
-                          actualSum: 1,
-                          sum: 1,
-                          imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgBooking.path
-                              : GraphicsFoundation.instance.png.aNoBgBookingW.path,
-                        ),
-                        UiPointsModel(
-                          title: S.of(context).Connects,
-                          getPoints: 2,
-                          actualSum: 0,
-                          sum: 1,
-                          imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgHandshake.path
-                              : GraphicsFoundation.instance.png.aNoBgHandshakeW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgHourglass.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgHourglassW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).CardOpening(10),
@@ -488,13 +529,83 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               : GraphicsFoundation.instance.png.aNoBgEyeW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).OfferContent,
+                          title: S.of(context).FeelingsGuesses(10),
+                          getPoints: 10,
+                          actualSum: 0,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgSmile.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgSmileW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).Connects(10),
+                          getPoints: 15,
+                          actualSum: 0,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgHandshake.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgHandshakeW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).InvitesCount(20),
+                          showStar: true,
+                          getPoints: 10,
+                          actualSum: 1,
+                          sum: 20,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgInvite.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgInviteW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).Feedbacks(10).toLowerCase(),
+                          showStar: true,
+                          getPoints: 5,
+                          actualSum: 5,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgMessage.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgMessageBubbleW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).ContentOffers(5),
+                          showStar: true,
                           getPoints: 10,
                           actualSum: 0,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgOpenHand.path
-                              : GraphicsFoundation.instance.png.aNoBgOpenHandW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgOpenHand.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgOpenHandW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).Reactions(10),
+                          showStar: true,
+                          getPoints: 10,
+                          actualSum: 5,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgVideoReaction.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgVideoReactionW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).StacksShares(5),
+                          showStar: true,
+                          getPoints: 5,
+                          actualSum: 0,
+                          sum: 5,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgStacks.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgStacksW.path,
                         ),
                       ],
                     ),
@@ -553,22 +664,40 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
           'Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, vitae aliquam nisl nisl sit amet nunc. '
           'Nulla facilisi',
       tags: [
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
-        UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'uniqueCheap',
+            icon: ShuffleUiKitIcons.cocktail,
+            unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+        UiKitTag(
+            title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
       ],
       type: '');
 
@@ -601,7 +730,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
     tags: [
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
-      UiKitTag(title: 'uniqueCheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
+      UiKitTag(
+          title: 'uniqueCheap',
+          icon: ShuffleUiKitIcons.cocktail,
+          unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
       UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
