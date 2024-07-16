@@ -5,30 +5,32 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../components.dart';
 
 class CategoriesCreateComponent extends StatelessWidget {
-  const CategoriesCreateComponent(
-      {super.key,
-      required this.onAddCategoriesTap,
-      required this.onCategoryTypeAddTap,
-      required this.onCategoryPropertyTypeButtonTap,
-      this.onEditCategoryTypeTap,
-      this.onDeleteCategoryTypeTap,
-      required this.propertySearchOptions,
-      this.onPropertyFieldSubmitted,
-      this.onSelectedPropertyTapped,
-      this.onUniquePropertyEditTap,
-      this.onUniquePropertyDeleteTap,
-      this.onUniquePropertyFieldSubmitted,
-      required this.uniquePropertySearchOptions,
-      this.onSelectedUniquePropertyTapped,
-      this.onRelatedPropertyFieldSubmitted,
-      required this.relatedPropertySearchOptions,
-      this.onSelectedRelatedPropertyTapped,
-      required this.entertainmentCategories,
-      required this.businessCategories,
-      this.selectedCategoryType,
-      this.baseProperties,
-      this.uniqueProperties,
-      this.relatedProperties});
+  const CategoriesCreateComponent({
+    super.key,
+    required this.onAddCategoriesTap,
+    required this.onCategoryTypeAddTap,
+    required this.onCategoryPropertyTypeButtonTap,
+    this.onEditCategoryTypeTap,
+    this.onDeleteCategoryTypeTap,
+    required this.propertySearchOptions,
+    this.onPropertyFieldSubmitted,
+    this.onSelectedPropertyTapped,
+    this.onUniquePropertyEditTap,
+    this.onUniquePropertyDeleteTap,
+    this.onUniquePropertyFieldSubmitted,
+    required this.uniquePropertySearchOptions,
+    this.onSelectedUniquePropertyTapped,
+    this.onRelatedPropertyFieldSubmitted,
+    required this.relatedPropertySearchOptions,
+    this.onSelectedRelatedPropertyTapped,
+    required this.entertainmentCategories,
+    required this.businessCategories,
+    this.selectedCategoryType,
+    this.baseProperties,
+    this.uniqueProperties,
+    this.relatedProperties,
+    required this.selectedCategoryId,
+  });
 
   final List<UiModelCategoryParent> entertainmentCategories;
   final List<UiModelRelatedProperties>? relatedProperties;
@@ -53,6 +55,8 @@ class CategoriesCreateComponent extends StatelessWidget {
   final ValueChanged<UiModelProperty>? onSelectedUniquePropertyTapped;
   final ValueChanged<UiModelRelatedProperties>? onSelectedRelatedPropertyTapped;
 
+  final int? selectedCategoryId;
+
   @override
   Widget build(BuildContext context) {
     final uiKitTheme = context.uiKitTheme;
@@ -63,6 +67,7 @@ class CategoriesCreateComponent extends StatelessWidget {
             horizontal: EdgeInsetsFoundation.horizontal32, vertical: EdgeInsetsFoundation.vertical20),
         color: uiKitTheme?.colorScheme.surface,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: SingleChildScrollView(
@@ -124,6 +129,7 @@ class CategoriesCreateComponent extends StatelessWidget {
                             onTap: () {
                               onCategoryPropertyTypeButtonTap.call(e.categoryId);
                             },
+                            isSelected: selectedCategoryId == e.categoryId,
                           );
                         },
                       ),
@@ -158,6 +164,7 @@ class CategoriesCreateComponent extends StatelessWidget {
                             onTap: () {
                               onCategoryPropertyTypeButtonTap.call(e.categoryId);
                             },
+                            isSelected: selectedCategoryId == e.categoryId,
                           );
                         },
                       ),

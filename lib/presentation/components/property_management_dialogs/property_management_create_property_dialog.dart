@@ -32,7 +32,6 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
     final theme = context.uiKitTheme;
     return UiKitCardWrapper(
       borderRadius: BorderRadiusFoundation.all32,
-      color: theme?.colorScheme.surface,
       padding: EdgeInsets.all(EdgeInsetsFoundation.all32),
       child: SingleChildScrollView(
         child: Column(
@@ -57,7 +56,6 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
             ),
             SpacingFoundation.verticalSpace24,
             UiKitCardWrapper(
-              color: ColorsFoundation.lightSurface,
               child: ValueListenableBuilder(
                 builder: (context, value, child) {
                   return UiKitIconedTitle(
