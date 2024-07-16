@@ -5,17 +5,21 @@ class LinearInfluencerIndicator extends StatelessWidget {
   final double actualSum;
   final double sum;
   final double? width;
+  final double? heingh;
+  final Gradient? customGradient;
 
   LinearInfluencerIndicator({
     super.key,
     required this.actualSum,
     required this.sum,
     this.width,
+    this.heingh,
+    this.customGradient,
   });
 
   late final double _indicatorWidth = width ?? 256.w;
 
-  double get _progressPosition => _indicatorWidth * (_progressValue / 120);
+  double get progressPosition => _indicatorWidth * (_progressValue / 120);
   double get _progressValue => ((actualSum / sum) * 120);
 
   double _getCurrentPosition(double currentPosition) {
@@ -38,16 +42,17 @@ class LinearInfluencerIndicator extends StatelessWidget {
           ColoredBox(
             color: colorScheme?.surface3 ?? Colors.white,
             child: SizedBox(
-              height: 6.h,
+              height: heingh ?? 6.h,
               width: _indicatorWidth,
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: AnimatedContainer(
-                  width: _getCurrentPosition(_progressPosition),
+                  width: _getCurrentPosition(progressPosition),
                   curve: Curves.ease,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadiusFoundation.all40,
-                    gradient: GradientFoundation.touchIdLinearGradient,
+                    gradient: customGradient ??
+                        GradientFoundation.touchIdLinearGradient,
                     color: Colors.white,
                   ),
                   duration: const Duration(milliseconds: 300),
