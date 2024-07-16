@@ -19,6 +19,7 @@ class PropertyManagementComponent extends StatefulWidget {
     required this.uniquePropertyTypesTap,
     required this.onRecentlyAddedPropertyTapped,
     required this.relatedProperties,
+    required this.selectedPropertyId,
   });
 
   final ValueChanged<int>? onPropertyTypeTapped;
@@ -32,6 +33,8 @@ class PropertyManagementComponent extends StatefulWidget {
   final Future<void> Function(int) uniquePropertyTypesTap;
   final ValueChanged<UiModelRelatedProperties>? onRecentlyAddedPropertyTapped;
   final List<UiModelRelatedProperties>? relatedProperties;
+
+  final int? selectedPropertyId;
 
   @override
   State<PropertyManagementComponent> createState() =>
@@ -95,6 +98,7 @@ class _PropertyManagementComponentState
                             selectedPropertiesCategory = element;
                           });
                         },
+                        isSelected: widget.selectedPropertyId == element.id,
                       );
                     })
                   ],
