@@ -41,14 +41,14 @@ class InviteToFavoritePlacesComponent extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                S.of(context).InviteToFavoritePlaces,
+                S.current.InviteToFavoritePlaces,
                 style: boldTextTheme?.subHeadline,
               ),
             ),
             SpacingFoundation.horizontalSpace16,
             context.smallGradientButton(
               data: BaseUiKitButtonData(
-                text: S.of(context).Invite,
+                text: S.current.Go,
                 onPressed: onInvite,
               ),
             ),
