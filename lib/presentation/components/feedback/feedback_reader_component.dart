@@ -32,7 +32,7 @@ class FeedbackReaderComponent extends StatelessWidget {
               avatarUrl: e.feedbackAuthorPhoto,
               helpfulCount: e.helpfulCount,
               datePosted: e.feedbackDateTime,
-              maxLines: 15,
+              maxLines: 100,
               rating: e.feedbackRating,
               customBackgroundColor: theme?.colorScheme.surface,
               userTileType: e.feedbackAuthorType);

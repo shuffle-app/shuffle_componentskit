@@ -14,7 +14,6 @@ class ChatComponent extends StatelessWidget {
   final Function(int, Type)? onChatHeaderTapped;
   final VoidCallback? onAcceptInvitationTap;
   final VoidCallback? onDenyInvitationTap;
-  final VoidCallback? onMessageSent;
   final VoidCallback? onAddMorePeople;
   final VoidCallback? onLeaveChat;
   final VoidCallback? onInviteToAnotherPlace;
@@ -39,7 +38,6 @@ class ChatComponent extends StatelessWidget {
     this.onAddMorePeople,
     this.onAcceptInvitationTap,
     this.onDenyInvitationTap,
-    this.onMessageSent,
     this.onMessageVisible,
     this.onReplyMessage,
     this.chatOwnerIsMe = false,
@@ -57,7 +55,7 @@ class ChatComponent extends StatelessWidget {
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
-      customToolbarBaseHeight: 100,
+      customToolbarBaseHeight: 95,
       autoImplyLeading: true,
       canFoldAppBar: false,
       reverse: true,
