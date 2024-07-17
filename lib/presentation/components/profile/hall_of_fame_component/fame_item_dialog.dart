@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/influencer/linear_influencer_indicator.dart';
 import 'dart:math' as math;
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class FameItemDialog extends StatelessWidget {
   final UiRewardProgressModel? uiRewardProgressModel;
@@ -18,6 +19,7 @@ class FameItemDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    debugPrint('FameItemDialog build with obj path $cachedPathForModel and env as $cachedEnvImage');
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -73,12 +75,28 @@ class FameItemDialog extends StatelessWidget {
                           key: UniqueKey(),
                           localPath: cachedPathForModel ?? uiKitAchievementsModel.objectUrl!,
                           poster: uiKitAchievementsModel.posterUrl,
-                          environmentImage:
-                              'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/21-ll.hdr',
-                          skyboxImage:
-                              'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/21.hdr',
+                          // environmentImage: 'legacy',
+                          // environmentImage:'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/environment1.jpeg',
+                          // environmentImage: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/Vestibule+4k+HDR.hdr',
+                          // cachedEnvImage ??
+                          //     'aircraft_workshop_01_1k.hdr',
+                          // skyboxImage:
+                          //     'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/21.hdr',
                           autoRotate: true,
-                          autoPlay: true,
+                          autoPlay: false,
+                          onWebViewCreated: (controller){
+                            controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+                            controller.setOnConsoleMessage((message) {
+                              debugPrint('Console Message from FameItemDialog: $message');
+                            });
+                            controller.runJavaScript('''
+                      var viewer = document.querySelector('#model-viewer');
+                      viewer.setAttribute('tone-mapping', 'neutral');
+                      viewer.setAttribute('environment-image', $cachedEnvImage);
+                      
+                      ''');
+                            controller.reload();
+                          },
                         )),
                   ],
                 ),
@@ -124,3 +142,5 @@ class FameItemDialog extends StatelessWidget {
     );
   }
 }
+
+String? cachedEnvImage;
