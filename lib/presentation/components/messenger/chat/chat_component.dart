@@ -55,7 +55,8 @@ class ChatComponent extends StatelessWidget {
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
-      customToolbarBaseHeight: 95,
+      // customToolbarBaseHeight: 95,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       autoImplyLeading: true,
       canFoldAppBar: false,
       reverse: true,
