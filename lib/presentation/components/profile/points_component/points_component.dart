@@ -145,78 +145,72 @@ class PointsComponent extends StatelessWidget {
                   ),
                 )
               : SpacingFoundation.none,
-          if(listChallengeFeelings != null)
-          ColoredBox(
-            color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: theme?.colorScheme.surface,
-                borderRadius: BorderRadiusFoundation.all24,
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    S.of(context).ChallengeFeelings,
-                    style: theme?.boldTextTheme.caption1Bold,
-                  ).paddingOnly(
-                    bottom: SpacingFoundation.verticalSpacing8,
-                  ),
-
-                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(
-                            listChallengeFeelings!.length,
-                            (index) {
-                              final itemChallengeFeelings = listChallengeFeelings![index];
-
-                              return Stack(
-                                children: [
-                                  ImageWidget(
-                                    height: 45.h,
-                                    width: 45.w,
-                                    fit: BoxFit.fitHeight,
-                                    link: itemChallengeFeelings.imagePath,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+          if (listChallengeFeelings != null)
+            ColoredBox(
+              color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: theme?.colorScheme.surface,
+                  borderRadius: BorderRadiusFoundation.all24,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      S.of(context).ChallengeFeelings,
+                      style: theme?.boldTextTheme.caption1Bold,
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: listChallengeFeelings
+                              ?.map((itemChallengeFeelings) => Stack(
                                     children: [
-                                      SizedBox(height: 30.h),
-                                      Text(
-                                        itemChallengeFeelings.title ?? S.of(context).NothingFound,
-                                        style: theme?.boldTextTheme.caption3Medium,
+                                      ImageWidget(
+                                        height: 45.h,
+                                        width: 45.w,
+                                        fit: BoxFit.fitHeight,
+                                        link: itemChallengeFeelings.imagePath,
                                       ),
-                                      Text(
-                                        '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
-                                        style: theme?.boldTextTheme.caption2Bold,
-                                      ),
-                                      Text(
-                                        '${parseDoubleToInt(itemChallengeFeelings.sum)}/${parseDoubleToInt(itemChallengeFeelings.actualSum)}',
-                                        style: theme?.regularTextTheme.labelSmall.copyWith(
-                                          color: theme.colorScheme.darkNeutral900,
-                                        ),
-                                      ),
-                                      SpacingFoundation.verticalSpace2,
-                                      LinearInfluencerIndicator(
-                                        actualSum: itemChallengeFeelings.actualSum,
-                                        sum: itemChallengeFeelings.sum,
-                                        width: 70.w,
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          SizedBox(height: 30.h),
+                                          Text(
+                                            itemChallengeFeelings.title ?? S.of(context).NothingFound,
+                                            style: theme?.boldTextTheme.caption3Medium,
+                                          ),
+                                          Text(
+                                            '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
+                                            style: theme?.boldTextTheme.caption2Bold,
+                                          ),
+                                          Text(
+                                            '${parseDoubleToInt(itemChallengeFeelings.actualSum)}/${parseDoubleToInt(itemChallengeFeelings.sum)}',
+                                            style: theme?.regularTextTheme.labelSmall.copyWith(
+                                              color: theme.colorScheme.darkNeutral900,
+                                            ),
+                                          ),
+                                          SpacingFoundation.verticalSpace2,
+                                          LinearInfluencerIndicator(
+                                            actualSum: itemChallengeFeelings.actualSum,
+                                            sum: itemChallengeFeelings.sum,
+                                            width: 70.w,
+                                          )
+                                        ],
                                       )
                                     ],
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        )
-                      ,
-                ],
-              ).paddingAll(EdgeInsetsFoundation.all16),
-            ).paddingOnly(
-              left: SpacingFoundation.horizontalSpacing16,
-              right: SpacingFoundation.horizontalSpacing16,
-              bottom: SpacingFoundation.verticalSpacing16,
-            ),
-          )
+                                  ))
+                              .toList() ??
+                          [],
+                    ),
+                  ],
+                ).paddingAll(EdgeInsetsFoundation.all16),
+              ).paddingOnly(
+                left: SpacingFoundation.horizontalSpacing16,
+                right: SpacingFoundation.horizontalSpacing16,
+                bottom: SpacingFoundation.verticalSpacing16,
+              ),
+            )
         ],
       ),
     );

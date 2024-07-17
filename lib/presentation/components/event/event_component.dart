@@ -325,8 +325,8 @@ class _EventComponentState extends State<EventComponent> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     _noReactions
-                        ? Expanded(child: Text(S.current.NoReactionsMessage, style: boldTextTheme?.body))
-                        : Text(S.current.ReactionsBy, style: boldTextTheme?.body),
+                        ? Expanded(child: Text(S.of(context).NoReactionsMessage, style: boldTextTheme?.body))
+                        : Text(S.of(context).ReactionsBy, style: boldTextTheme?.body),
                     if (!_noReactions) SpacingFoundation.horizontalSpace12,
                     if (!_noReactions) const Expanded(child: MemberPlate()),
                   ],
@@ -383,7 +383,7 @@ class _EventComponentState extends State<EventComponent> {
                 contentHeight: _noFeedbacks ? 0 : 0.28.sh,
                 color: colorScheme?.surface1,
                 title: Text(
-                  S.current.ReactionsByCritics,
+                  _noFeedbacks ? S.of(context).NoReviewsMessage : S.of(context).ReviewsByCritics,
                   style: boldTextTheme?.body,
                 ),
                 action: AnimatedSwitcher(
@@ -418,7 +418,7 @@ class _EventComponentState extends State<EventComponent> {
                           width: 1.sw,
                           child: Center(
                             child: Text(
-                              S.current.NoFeedbacksYet,
+                              S.of(context).NoFeedbacksYet,
                               style: boldTextTheme?.subHeadline,
                             ).paddingAll(EdgeInsetsFoundation.all16),
                           ),
