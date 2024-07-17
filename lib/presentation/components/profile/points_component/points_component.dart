@@ -69,7 +69,7 @@ class PointsComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
           context
-              .smallOutlinedButton(
+              .midSizeOutlinedButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).Spend.toUpperCase(),
                   onPressed: onSpendCallBack,
