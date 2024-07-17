@@ -196,6 +196,7 @@ class ChatComponent extends StatelessWidget {
                 text: item.message!,
                 title: item.infoMessageTitle,
                 gradientText: item.gradientableText,
+                additionalText: item.additionalText,
                 centerText: !item.messageId.isNegative,
                 textGradient: item.gradientableText != null ? GradientFoundation.defaultLinearGradient : null,
               ).paddingOnly(
@@ -218,6 +219,7 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                   child: UiKitInviteMessageContent(
+                    hasAcceptedInvite: item.invitationData!.hasAcceptedInvite,
                     brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     onInvitePeopleTap: onAddMorePeople,
@@ -293,7 +295,8 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   hasInvitation: true,
                   child: UiKitInviteMessageContent(
-                    brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
+                    hasAcceptedInvite: item.invitationData!.hasAcceptedInvite,
+                    brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     username: item.invitationData!.senderUserName,
                     placeName: item.invitationData!.contentName,
