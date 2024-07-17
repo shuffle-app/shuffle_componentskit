@@ -5,6 +5,7 @@ class ChatMessageUiModel {
   final int messageId;
   final int senderId;
   final String? message;
+  final String? additionalText;
   final String? gradientableText;
   final String? infoMessageTitle;
   final bool senderIsMe;
@@ -16,7 +17,7 @@ class ChatMessageUiModel {
   final MessageType messageType;
   final ChatMessageInvitationData? invitationData;
   final ChatMessageUiModel? replyMessageModel;
-  final bool hasAcceptedInvite;
+  final int? connectId;
 
   bool get isInvitation => messageType == MessageType.invitation && invitationData != null;
 
@@ -27,8 +28,9 @@ class ChatMessageUiModel {
     required this.senderIsMe,
     required this.messageType,
     required this.isRead,
+    this.additionalText,
+    this.connectId,
     this.gradientableText,
-    this.hasAcceptedInvite = false,
     this.senderName,
     this.message,
     this.infoMessageTitle,
@@ -74,13 +76,16 @@ class ChatMessageUiModel {
     String? senderAvatar,
     UserTileType? senderProfileType,
     ChatMessageUiModel? replyMessageModel,
-    bool? hasAcceptedInvite,
     String? gradientableText,
     String? senderNickname,
+    int? connectId,
+    String? additionalText,
   }) {
     return ChatMessageUiModel(
       senderId: senderId,
       messageId: messageId,
+      connectId: connectId ?? this.connectId,
+      additionalText: additionalText ?? this.additionalText,
       timeSent: timeSent ?? this.timeSent,
       senderName: senderName ?? this.senderName,
       message: message ?? this.message,
@@ -92,7 +97,6 @@ class ChatMessageUiModel {
       senderAvatar: senderAvatar ?? this.senderAvatar,
       senderProfileType: senderProfileType ?? this.senderProfileType,
       replyMessageModel: replyMessageModel ?? this.replyMessageModel,
-      hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       gradientableText: gradientableText ?? this.gradientableText,
       senderNickname: senderNickname ?? this.senderNickname,
     );
@@ -112,6 +116,7 @@ class ChatMessageInvitationData {
   final String receiverUserName;
   final UserTileType senderUserType;
   final UserTileType receiverUserType;
+  final bool hasAcceptedInvite;
 
   ChatMessageInvitationData({
     required this.receiverId,
@@ -126,6 +131,7 @@ class ChatMessageInvitationData {
     required this.senderUserType,
     required this.contentType,
     required this.receiverUserType,
+    required this.hasAcceptedInvite,
   });
 
   ChatMessageInvitationData copyWith({
@@ -141,8 +147,10 @@ class ChatMessageInvitationData {
     UserTileType? receiverUserType,
     int? receiverId,
     int? senderId,
+    bool? hasAcceptedInvite,
   }) {
     return ChatMessageInvitationData(
+      hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       senderId: senderId ?? this.senderId,
       receiverId: receiverId ?? this.receiverId,
       contentId: contentId ?? this.contentId,

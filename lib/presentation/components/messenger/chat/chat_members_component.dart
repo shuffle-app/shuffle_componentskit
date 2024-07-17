@@ -58,6 +58,7 @@ class ChatMembersComponent extends StatelessWidget {
 
                     return UiKitChatMemberUserTile(
                       name: member.name,
+                      avatarPath: member.avatarUrl,
                       invertThemeColors: true,
                       nickname: member.username,
                       userType: member.userType,

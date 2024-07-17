@@ -59,6 +59,7 @@ class ChatComponent extends StatelessWidget {
       autoImplyLeading: true,
       canFoldAppBar: false,
       reverse: true,
+      physics: const NeverScrollableScrollPhysics(),
       topFixedAddition: pinnedMessage != null
           ? GestureDetector(
               onTap: onPinnedMessageTap,
@@ -166,8 +167,10 @@ class ChatComponent extends StatelessWidget {
           ),
         ).paddingOnly(bottom: EdgeInsetsFoundation.vertical4),
       ),
-      bodyBottomSpace:
-          kBottomNavigationBarHeight + (SpacingFoundation.verticalSpacing40 * 2) + SpacingFoundation.verticalSpacing4,
+      bodyBottomSpace: kBottomNavigationBarHeight +
+          SpacingFoundation.verticalSpacing32 +
+          SpacingFoundation.verticalSpacing32 +
+          SpacingFoundation.verticalSpacing4,
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),
@@ -194,6 +197,7 @@ class ChatComponent extends StatelessWidget {
                 text: item.message!,
                 title: item.infoMessageTitle,
                 gradientText: item.gradientableText,
+                additionalText: item.additionalText,
                 centerText: !item.messageId.isNegative,
                 textGradient: item.gradientableText != null ? GradientFoundation.defaultLinearGradient : null,
               ).paddingOnly(
@@ -216,6 +220,7 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                   child: UiKitInviteMessageContent(
+                    hasAcceptedInvite: item.invitationData!.hasAcceptedInvite,
                     brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     onInvitePeopleTap: onAddMorePeople,
@@ -291,7 +296,8 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   hasInvitation: true,
                   child: UiKitInviteMessageContent(
-                    brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
+                    hasAcceptedInvite: item.invitationData!.hasAcceptedInvite,
+                    brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     username: item.invitationData!.senderUserName,
                     placeName: item.invitationData!.contentName,

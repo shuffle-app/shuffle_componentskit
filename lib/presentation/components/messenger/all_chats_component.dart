@@ -32,7 +32,8 @@ class AllChatsComponent extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: horizontalMargin, vertical: verticalMargin),
       bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing24,
       builderDelegate: PagedChildBuilderDelegate<ChatItemUiModel>(
-        firstPageProgressIndicatorBuilder: firstPageProgressIndicatorBuilder ?? (context) => const LoadingWidget().paddingOnly(bottom: 0.2.sh),
+        firstPageProgressIndicatorBuilder:
+            firstPageProgressIndicatorBuilder ?? (context) => const LoadingWidget().paddingOnly(bottom: 0.2.sh),
         noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
           message: S.of(context).NoMessagesYet,
         ).paddingOnly(bottom: 0.2.sh),
@@ -46,6 +47,7 @@ class AllChatsComponent extends StatelessWidget {
           name: item.chatTitle,
           subtitle: item.subtitle ?? item.tag?.title ?? '',
           subtitleIconPath: item.tag?.icon,
+          lastMessageSenderName: item.lastMessageSenderName,
           lastMessage: item.lastMessage,
           lastMessageTime: item.lastMessageTimeFormatted,
           avatarPath: item.avatarUrl ?? '',
