@@ -66,6 +66,7 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorKey,
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
+              // theme: UiKitThemeFoundation.lightTheme,
               //TODO: think about it
               home: configuration.isLoaded
                   ? GlobalComponent(
@@ -433,6 +434,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     PointsComponent(
                       uiUserPointsProgressBarModel:
                           UiUserPointsProgressBarModel(
+                        isMenGender: false,
                         actual: 90,
                         level: 5,
                         sum: 100,
