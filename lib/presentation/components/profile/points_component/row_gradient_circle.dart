@@ -12,6 +12,8 @@ class RowGradientCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.uiKitTheme;
+
     return Row(
       children: [
         DecoratedBox(
@@ -19,7 +21,7 @@ class RowGradientCircle extends StatelessWidget {
             boxShadow: level - 3 >= 0
                 ? [
                     BoxShadow(
-                      color: Colors.white.withOpacity(0.8),
+                      color: theme!.colorScheme.inversePrimary.withOpacity(0.5),
                       blurRadius: 10,
                       spreadRadius: 5,
                     )
@@ -29,6 +31,7 @@ class RowGradientCircle extends StatelessWidget {
           child: CustomPaint(
             size: const Size(8, 8),
             painter: GradientCircleWithSegmentedRingPainter(
+              theme: theme,
               customGradietn: GradientFoundation.bronzeGradient,
               level: level,
             ),
@@ -40,7 +43,7 @@ class RowGradientCircle extends StatelessWidget {
             boxShadow: level - 6 >= 0
                 ? [
                     BoxShadow(
-                      color: Colors.white.withOpacity(0.8),
+                      color: theme!.colorScheme.inversePrimary.withOpacity(0.8),
                       blurRadius: 10,
                       spreadRadius: 5,
                     )
@@ -50,6 +53,7 @@ class RowGradientCircle extends StatelessWidget {
           child: CustomPaint(
             size: const Size(8, 8),
             painter: GradientCircleWithSegmentedRingPainter(
+              theme: theme,
               customGradietn: GradientFoundation.silverGradient,
               level: level - 3,
             ),
@@ -71,6 +75,7 @@ class RowGradientCircle extends StatelessWidget {
           child: CustomPaint(
             size: const Size(8, 8),
             painter: GradientCircleWithSegmentedRingPainter(
+              theme: theme,
               customGradietn: GradientFoundation.goldGradient,
               level: level - 6,
             ),
