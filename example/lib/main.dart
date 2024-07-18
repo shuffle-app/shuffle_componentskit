@@ -210,6 +210,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                     basePropertyTypesTap: (int) async {},
                     uniquePropertyTypesTap: (int) async {},
                     relatedProperties: [],
+                    selectedPropertyId: 1,
                   ),
                 ),
                 text: 'show property management component',
@@ -484,9 +485,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 5,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgShare.path
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgMessage.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgShareW.path,
+                                  .instance.png.aNoBgMessageBubbleW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Bookigns(5),
@@ -494,10 +496,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 1,
                           sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgBooking.path
+                              ? GraphicsFoundation.instance.png.aNoBgShare.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgBookingW.path,
+                                  .instance.png.aNoBgShareW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).LoginInAppDaysInARow(7),
@@ -527,8 +528,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgEye.path
-                              : GraphicsFoundation.instance.png.aNoBgEyeW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgBooking.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgBookingW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).FeelingsGuesses(10),
@@ -536,9 +539,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgSmile.path
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgHandshake.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgSmileW.path,
+                                  .instance.png.aNoBgHandshakeW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Connects(10),
@@ -605,9 +609,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgStacks.path
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgOpenHand.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgStacksW.path,
+                                  .instance.png.aNoBgOpenHandW.path,
                         ),
                       ],
                     ),

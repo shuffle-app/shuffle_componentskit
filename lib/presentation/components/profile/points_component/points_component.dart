@@ -85,7 +85,7 @@ class PointsComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
           context
-              .smallOutlinedButton(
+              .midSizeOutlinedButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).Spend.toUpperCase(),
                   onPressed: onSpendCallBack,
@@ -277,52 +277,53 @@ class PointsComponent extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(
-                        listChallengeFeelings!.length,
-                        (index) {
-                          final itemChallengeFeelings =
-                              listChallengeFeelings![index];
-
-                          return Stack(
-                            children: [
-                              ImageWidget(
-                                height: 45.h,
-                                width: 45.w,
-                                fit: BoxFit.fitHeight,
-                                link: itemChallengeFeelings.imagePath,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  SizedBox(height: 30.h),
-                                  Text(
-                                    itemChallengeFeelings.title ??
-                                        S.of(context).NothingFound,
-                                    style: theme?.boldTextTheme.caption3Medium,
-                                  ),
-                                  Text(
-                                    '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
-                                    style: theme?.boldTextTheme.caption2Bold,
-                                  ),
-                                  Text(
-                                    '${parseDoubleToInt(itemChallengeFeelings.sum)}/${parseDoubleToInt(itemChallengeFeelings.actualSum)}',
-                                    style: theme?.regularTextTheme.labelSmall
-                                        .copyWith(
-                                      color: theme.colorScheme.darkNeutral900,
-                                    ),
-                                  ),
-                                  SpacingFoundation.verticalSpace2,
-                                  LinearInfluencerIndicator(
-                                    actualSum: itemChallengeFeelings.actualSum,
-                                    sum: itemChallengeFeelings.sum,
-                                    width: 70.w,
-                                  )
-                                ],
-                              )
-                            ],
-                          );
-                        },
-                      ),
+                      children: listChallengeFeelings
+                              ?.map((itemChallengeFeelings) => Stack(
+                                    children: [
+                                      ImageWidget(
+                                        height: 45.h,
+                                        width: 45.w,
+                                        fit: BoxFit.fitHeight,
+                                        link: itemChallengeFeelings.imagePath,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          SizedBox(height: 30.h),
+                                          Text(
+                                            itemChallengeFeelings.title ??
+                                                S.of(context).NothingFound,
+                                            style: theme
+                                                ?.boldTextTheme.caption3Medium,
+                                          ),
+                                          Text(
+                                            '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
+                                            style: theme
+                                                ?.boldTextTheme.caption2Bold,
+                                          ),
+                                          Text(
+                                            '${parseDoubleToInt(itemChallengeFeelings.actualSum)}/${parseDoubleToInt(itemChallengeFeelings.sum)}',
+                                            style: theme
+                                                ?.regularTextTheme.labelSmall
+                                                .copyWith(
+                                              color: theme
+                                                  .colorScheme.darkNeutral900,
+                                            ),
+                                          ),
+                                          SpacingFoundation.verticalSpace2,
+                                          LinearInfluencerIndicator(
+                                            actualSum:
+                                                itemChallengeFeelings.actualSum,
+                                            sum: itemChallengeFeelings.sum,
+                                            width: 70.w,
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ))
+                              .toList() ??
+                          [],
                     ),
                   ],
                 ).paddingAll(EdgeInsetsFoundation.all16),
@@ -331,7 +332,7 @@ class PointsComponent extends StatelessWidget {
                 right: SpacingFoundation.horizontalSpacing16,
                 bottom: SpacingFoundation.verticalSpacing16,
               ),
-            ),
+            )
         ],
       ),
     );

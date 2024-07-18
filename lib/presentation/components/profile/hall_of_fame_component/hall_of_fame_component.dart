@@ -135,10 +135,10 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                     javascriptChannels: {_channel},
                     // environmentImage: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/3dmodels/environments/6-ll.hdr',
                     onWebViewCreated: (WebViewController controller) {
+                      controller.setJavaScriptMode(JavaScriptMode.unrestricted);
                       setState(() {
                         this.controller = controller;
                       });
-                      controller.setJavaScriptMode(JavaScriptMode.unrestricted);
                       log('webview created with controller $controller', name: 'HallOfFameComponent');
                     },
                   ))
@@ -164,11 +164,7 @@ class _HallOfFameComponentState extends State<HallOfFameComponent> with WidgetsB
                   child: UiKitFameItem(
                     uiModel: e,
                     preserveDarkTheme: true,
-                    onTap: (cachedPathForModel) => showModelViewerDialog(
-                      context,
-                      e,
-                        cachedPathForModel
-                    ),
+                    onTap: (cachedPathForModel) => showModelViewerDialog(context, e, cachedPathForModel),
                   ),
                 ))
             .toList(),

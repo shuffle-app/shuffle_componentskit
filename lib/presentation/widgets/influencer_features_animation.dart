@@ -189,7 +189,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
     ];
 
     return UiKitCardWrapper(
-        height: 0.55.sh,
+        height: 0.57.sh,
         padding: EdgeInsets.all(SpacingFoundation.verticalSpacing16),
         gradient: theme?.themeMode == ThemeMode.light
             ? GradientFoundation.lightShunyGreyGradient.lerpTo(GradientFoundation.attentionCard, 0.25)
@@ -203,7 +203,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
                 GradientableWidget(
                   gradient: GradientFoundation.starLinearGradient,
                   child: ImageWidget(
-                    iconData: ShuffleUiKitIcons.gradientStar,
+                    svgAsset: GraphicsFoundation.instance.svg.shuffleCut,
                     color: Colors.white,
                     width: 0.0625.sw,
                     height: 0.0625.sw,
@@ -235,7 +235,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
                 GradientableWidget(
                   gradient: GradientFoundation.fameLinearGradient,
                   child: ImageWidget(
-                    iconData: ShuffleUiKitIcons.gradientStar,
+                    svgAsset: GraphicsFoundation.instance.svg.shuffleCut,
                     color: Colors.white,
                     width: 0.0625.sw,
                     height: 0.0625.sw,
@@ -267,7 +267,7 @@ class _GetBonusWrapper extends StatelessWidget {
                 Text('get bonus', style: context.uiKitTheme?.boldTextTheme.body),
                 SpacingFoundation.horizontalSpace2,
                 ImageWidget(
-                  iconData: ShuffleUiKitIcons.gradientStar,
+                  svgAsset: GraphicsFoundation.instance.svg.shuffleCut,
                   color: Colors.white,
                   width: 0.0625.sw,
                   height: 0.0625.sw,

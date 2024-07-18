@@ -13,6 +13,7 @@ class ChatItemUiModel {
   final String? contentAvatar;
   final String lastMessage;
   final DateTime lastMessageTime;
+  final String? lastMessageSenderName;
   final int? unreadMessageCount;
   final UserTileType userType;
   final UiKitTag? tag;
@@ -41,6 +42,7 @@ class ChatItemUiModel {
     required this.lastMessageTime,
     required this.creationDate,
     required this.deletionDate,
+    this.lastMessageSenderName,
     this.disabled = false,
     this.contentTags,
     this.owner,
@@ -78,10 +80,12 @@ class ChatItemUiModel {
     List<UiKitTag>? contentTags,
     bool? hasAcceptedInvite,
     bool? disabled,
+    String? lastMessageSenderName,
   }) {
     return ChatItemUiModel(
       id: id,
       owner: owner,
+      lastMessageSenderName: lastMessageSenderName ?? this.lastMessageSenderName,
       hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       contentId: contentId ?? this.contentId,
       contentType: contentType ?? this.contentType,
