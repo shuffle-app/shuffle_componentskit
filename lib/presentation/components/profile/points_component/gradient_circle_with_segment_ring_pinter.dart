@@ -6,21 +6,23 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class GradientCircleWithSegmentedRingPainter extends CustomPainter {
   final Gradient? customGradietn;
   final int level;
+  final UiKitThemeData? theme;
 
   GradientCircleWithSegmentedRingPainter({
     super.repaint,
     this.customGradietn,
     this.level = 0,
+    this.theme,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 1.5;
+    final radius = 1.sw <= 380 ? (size.width / 2) : (size.width / 1.5); //small
 
     // Background circle
     final backgroundPaint = Paint()
-      ..color = ColorsFoundation.surface1
+      ..color = theme?.colorScheme.surface1 ?? ColorsFoundation.surface1
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius + 5, backgroundPaint);
@@ -40,7 +42,7 @@ class GradientCircleWithSegmentedRingPainter extends CustomPainter {
       ..strokeWidth = 1.5; // Толщина кольца
 
     final transparentRingPaint = Paint()
-      ..color = ColorsFoundation.surface5
+      ..color = theme?.colorScheme.surface5 ?? ColorsFoundation.surface5
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
