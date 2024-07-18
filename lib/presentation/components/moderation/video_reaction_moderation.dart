@@ -62,15 +62,12 @@ class VideoReactionModeration extends StatelessWidget {
                 crossAxisSpacing: SpacingFoundation.horizontalSpacing24,
                 mainAxisSpacing: SpacingFoundation.horizontalSpacing24,
                 crossAxisCount: 3,
-                mainAxisExtent:kIsWeb?254: 0.7.sh,
+                childAspectRatio: 142/250
               ),
               itemBuilder: (context, index) {
                 final reactionPreviewModelItem =
                     reactionPreviewModelList[index];
-
                 return UiKitReactionPreview(
-                  customHeight: reactionPreviewModelItem.customHeight,
-                  customWidth: reactionPreviewModelItem.customWidth,
                   isEmpty: reactionPreviewModelItem.isEmpty,
                   imagePath: reactionPreviewModelItem.imagePath,
                   viewed: reactionPreviewModelItem.viewed,
