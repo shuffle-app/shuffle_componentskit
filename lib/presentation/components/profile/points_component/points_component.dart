@@ -5,6 +5,7 @@ import 'package:shuffle_components_kit/presentation/components/profile/points_co
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:intl/intl.dart';
 
+import 'rectangle_circle_animation.dart';
 import 'row_gradient_circle.dart';
 
 class PointsComponent extends StatelessWidget {
@@ -13,7 +14,7 @@ class PointsComponent extends StatelessWidget {
   final int userPointsCount;
   final List<UiPointsModel>? listChallengeFeelings;
   final List<UiPointsModel>? listItemPoint;
-  final UiUserPointsProgressBarModel? uiUserPointsProgressBarModel;
+  final UiUserPointsProgressBarModel uiUserPointsProgressBarModel;
 
   PointsComponent({
     super.key,
@@ -21,7 +22,7 @@ class PointsComponent extends StatelessWidget {
     this.onHistoryCallBack,
     this.listChallengeFeelings,
     this.listItemPoint,
-    this.uiUserPointsProgressBarModel,
+    required this.uiUserPointsProgressBarModel,
     required this.userPointsCount,
   });
 
@@ -32,7 +33,7 @@ class PointsComponent extends StatelessWidget {
       LinearInfluencerIndicator(
         actualSum: uiUserPointsProgressBarModel?.actual ?? 0,
         sum: uiUserPointsProgressBarModel?.sum ?? 100,
-        width: 215.w,
+        width: 1.sw <= 380 ? 180.w : 215.w,
         heingh: 12.h,
         customGradient: GradientFoundation.goldGradient,
       );
@@ -102,7 +103,7 @@ class PointsComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 RowGradientCircle(
-                  level: uiUserPointsProgressBarModel?.level ?? 0,
+                  level: uiUserPointsProgressBarModel.level,
                 ).paddingAll(EdgeInsetsFoundation.all8),
                 SpacingFoundation.horizontalSpace8,
                 Expanded(
@@ -117,7 +118,10 @@ class PointsComponent extends StatelessWidget {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: 'Wiseacre of sands',
+                                    text:
+                                        uiUserPointsProgressBarModel.isMenGender
+                                            ? S.of(context).WiseacreOfSands
+                                            : S.of(context).WiseacreLadyOfSands,
                                     style: theme?.regularTextTheme.caption1
                                         .copyWith(color: Colors.white),
                                   ),
@@ -144,7 +148,9 @@ class PointsComponent extends StatelessWidget {
                                   borderRadius: BorderRadiusFoundation.all40,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.white.withOpacity(0.8),
+                                      color: theme?.colorScheme.inversePrimary
+                                              .withOpacity(0.5) ??
+                                          Colors.white.withOpacity(0.8),
                                       blurRadius: 8,
                                     ),
                                   ],
@@ -156,9 +162,7 @@ class PointsComponent extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            uiUserPointsProgressBarModel != null
-                                ? '${uiUserPointsProgressBarModel?.actual.toInt()}/${uiUserPointsProgressBarModel?.sum.toInt()}'
-                                : '',
+                            '${uiUserPointsProgressBarModel.actual.toInt()}/${uiUserPointsProgressBarModel.sum.toInt()}',
                             style: theme?.regularTextTheme.caption2.copyWith(
                               color: theme.colorScheme.inverseBodyTypography,
                             ),
@@ -199,6 +203,10 @@ class PointsComponent extends StatelessWidget {
                               width: 90.w,
                               fit: BoxFit.fitWidth,
                               link: itemPoits.imagePath,
+                            ),
+                            const Align(
+                              alignment: Alignment.topCenter,
+                              child: TriangleAnimation(),
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -323,7 +331,7 @@ class PointsComponent extends StatelessWidget {
                 right: SpacingFoundation.horizontalSpacing16,
                 bottom: SpacingFoundation.verticalSpacing16,
               ),
-            )
+            ),
         ],
       ),
     );
