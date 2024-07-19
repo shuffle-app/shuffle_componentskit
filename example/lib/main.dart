@@ -66,6 +66,7 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorKey,
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
+              // theme: UiKitThemeFoundation.lightTheme,
               //TODO: think about it
               home: configuration.isLoaded
                   ? GlobalComponent(
@@ -432,6 +433,13 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 onPressed: () {
                   context.push(
                     PointsComponent(
+                      uiUserPointsProgressBarModel:
+                          UiUserPointsProgressBarModel(
+                        isMenGender: false,
+                        actual: 90,
+                        level: 5,
+                        sum: 100,
+                      ),
                       onSpendCallBack: () {},
                       onHistoryCallBack: () {},
                       userPointsCount: 2650,
@@ -472,8 +480,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                       ],
                       listItemPoint: [
                         UiPointsModel(
-                          title: S.of(context).Feedbacks(10).toLowerCase(),
-                          getPoints: 10,
+                          title: S.of(context).ShareCard(10),
+                          getPoints: 5,
                           actualSum: 5,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
@@ -483,17 +491,17 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                                   .instance.png.aNoBgMessageBubbleW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).ShareCard(1),
-                          getPoints: 1,
-                          actualSum: 5,
-                          sum: 10,
+                          title: S.of(context).Bookigns(5),
+                          getPoints: 20,
+                          actualSum: 1,
+                          sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
                               ? GraphicsFoundation.instance.png.aNoBgShare.path
                               : GraphicsFoundation
                                   .instance.png.aNoBgShareW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).LoginToAppDaysInARow(7),
+                          title: S.of(context).LoginInAppDaysInARow(7),
                           getPoints: 10,
                           actualSum: 2,
                           sum: 7,
@@ -505,7 +513,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         ),
                         UiPointsModel(
                           title: S.of(context).SpendHoursPerWeek(3),
-                          getPoints: 20,
+                          getPoints: 10,
                           actualSum: 0.45,
                           sum: 3,
                           imagePath: theme?.themeMode == ThemeMode.dark
@@ -515,9 +523,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                                   .instance.png.aNoBgHourglassW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).Bookigns,
-                          getPoints: 3,
-                          actualSum: 1,
+                          title: S.of(context).CardOpening(10),
+                          getPoints: 5,
+                          actualSum: 0,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
                               ? GraphicsFoundation
@@ -526,10 +534,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                                   .instance.png.aNoBgBookingW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).Connects,
-                          getPoints: 2,
+                          title: S.of(context).FeelingsGuesses(10),
+                          getPoints: 10,
                           actualSum: 0,
-                          sum: 1,
+                          sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
                               ? GraphicsFoundation
                                   .instance.png.aNoBgHandshake.path
@@ -537,19 +545,69 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                                   .instance.png.aNoBgHandshakeW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).CardOpening(10),
-                          getPoints: 5,
+                          title: S.of(context).Connects(10),
+                          getPoints: 15,
                           actualSum: 0,
-                          sum: 1,
+                          sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgEye.path
-                              : GraphicsFoundation.instance.png.aNoBgEyeW.path,
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgHandshake.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgHandshakeW.path,
                         ),
                         UiPointsModel(
-                          title: S.of(context).OfferContent,
+                          title: S.of(context).InvitesCount(20),
+                          showStar: true,
+                          getPoints: 10,
+                          actualSum: 1,
+                          sum: 20,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation.instance.png.aNoBgInvite.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgInviteW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).Feedbacks(10).toLowerCase(),
+                          showStar: true,
+                          getPoints: 5,
+                          actualSum: 5,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgMessage.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgMessageBubbleW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).ContentOffers(5),
+                          showStar: true,
                           getPoints: 10,
                           actualSum: 0,
                           sum: 1,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgOpenHand.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgOpenHandW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).Reactions(10),
+                          showStar: true,
+                          getPoints: 10,
+                          actualSum: 5,
+                          sum: 10,
+                          imagePath: theme?.themeMode == ThemeMode.dark
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgVideoReaction.path
+                              : GraphicsFoundation
+                                  .instance.png.aNoBgVideoReactionW.path,
+                        ),
+                        UiPointsModel(
+                          title: S.of(context).StacksShares(5),
+                          showStar: true,
+                          getPoints: 5,
+                          actualSum: 0,
+                          sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
                               ? GraphicsFoundation
                                   .instance.png.aNoBgOpenHand.path
