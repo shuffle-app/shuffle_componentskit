@@ -34,7 +34,7 @@ class PointsComponent extends StatelessWidget {
         actualSum: uiUserPointsProgressBarModel?.actual ?? 0,
         sum: uiUserPointsProgressBarModel?.sum ?? 100,
         width: 1.sw <= 380 ? 180.w : 200.w,
-        heingh: 12.h,
+        height: 12.h,
         customGradient: GradientFoundation.goldGradient,
       );
 

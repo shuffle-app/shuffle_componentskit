@@ -5,7 +5,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
   final double actualSum;
   final double sum;
   final double? width;
-  final double? heingh;
+  final double? height;
   final Gradient? customGradient;
 
   LinearInfluencerIndicator({
@@ -13,7 +13,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
     required this.actualSum,
     required this.sum,
     this.width,
-    this.heingh,
+    this.height,
     this.customGradient,
   });
 
@@ -42,7 +42,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
           ColoredBox(
             color: colorScheme?.surface3 ?? Colors.white,
             child: SizedBox(
-              height: heingh ?? 6.h,
+              height: height ?? 6.h,
               width: _indicatorWidth,
               child: Align(
                 alignment: Alignment.bottomLeft,
