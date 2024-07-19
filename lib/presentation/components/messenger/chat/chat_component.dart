@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -12,8 +14,8 @@ class ChatComponent extends StatelessWidget {
   final ScrollController scrollController;
   final Function(int, Type)? onInvitationPlaceTap;
   final Function(int, Type)? onChatHeaderTapped;
-  final VoidCallback? onAcceptInvitationTap;
-  final VoidCallback? onDenyInvitationTap;
+  final ValueChanged<int>? onAcceptInvitationTap;
+  final ValueChanged<int>? onDenyInvitationTap;
   final VoidCallback? onAddMorePeople;
   final VoidCallback? onLeaveChat;
   final VoidCallback? onInviteToAnotherPlace;
@@ -55,8 +57,8 @@ class ChatComponent extends StatelessWidget {
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
-      // customToolbarBaseHeight: 95,
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      customToolbarBaseHeight: 100,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
       autoImplyLeading: true,
       canFoldAppBar: false,
       reverse: true,
@@ -82,7 +84,6 @@ class ChatComponent extends StatelessWidget {
               data: BaseUiKitButtonData(
                 iconInfo: BaseUiKitButtonIconData(
                   iconData: ShuffleUiKitIcons.logout,
-                  size: 16.h,
                 ),
                 onPressed: onLeaveChat,
               ),
@@ -166,12 +167,17 @@ class ChatComponent extends StatelessWidget {
               ),
             ],
           ),
-        ).paddingOnly(bottom: EdgeInsetsFoundation.vertical4),
+        ),
       ),
       bodyBottomSpace: kBottomNavigationBarHeight +
           SpacingFoundation.verticalSpacing32 +
-          SpacingFoundation.verticalSpacing32 +
-          SpacingFoundation.verticalSpacing4,
+          (Platform.isAndroid
+              ? chatData.isGroupChat
+                  ? SpacingFoundation.verticalSpacing16
+                  : SpacingFoundation.verticalSpacing6
+              : chatData.isGroupChat
+                  ? SpacingFoundation.verticalSpacing40
+                  : SpacingFoundation.verticalSpacing32),
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),
@@ -221,7 +227,7 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                   child: UiKitInviteMessageContent(
-                    hasAcceptedInvite: item.invitationData!.hasAcceptedInvite,
+                    hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
                     brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     onInvitePeopleTap: onAddMorePeople,
@@ -236,8 +242,10 @@ class ChatComponent extends StatelessWidget {
                     ),
                     canDenyInvitation: false,
                     canAddMorePeople: chatOwnerIsMe && isMultipleChat,
-                    onAcceptTap: onAcceptInvitationTap,
-                    onDenyTap: onDenyInvitationTap,
+                    onAcceptTap: () {
+                      if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                    },
+                    onDenyTap: () => onDenyInvitationTap?.call(item.invitationData!.contentId),
                     tags: item.invitationData?.tags ?? [],
                     customMessageData: chatData.isGroupChat
                         ? null
@@ -297,7 +305,7 @@ class ChatComponent extends StatelessWidget {
                   id: item.messageId,
                   hasInvitation: true,
                   child: UiKitInviteMessageContent(
-                    hasAcceptedInvite: item.invitationData!.hasAcceptedInvite,
+                    hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
                     brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
                     showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
                     username: item.invitationData!.senderUserName,
@@ -312,8 +320,10 @@ class ChatComponent extends StatelessWidget {
                     ),
                     canDenyInvitation: !chatData.hasAcceptedInvite,
                     canAddMorePeople: chatOwnerIsMe && isMultipleChat,
-                    onAcceptTap: onAcceptInvitationTap,
-                    onDenyTap: onDenyInvitationTap,
+                    onAcceptTap: () {
+                      if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                    },
+                    onDenyTap: () => onDenyInvitationTap?.call(item.invitationData!.contentId),
                     tags: item.invitationData?.tags ?? [],
                     customMessageData: chatData.isGroupChat
                         ? null
