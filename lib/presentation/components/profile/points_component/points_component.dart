@@ -15,6 +15,7 @@ class PointsComponent extends StatelessWidget {
   final List<UiPointsModel>? listChallengeFeelings;
   final List<UiPointsModel>? listItemPoint;
   final UiUserPointsProgressBarModel uiUserPointsProgressBarModel;
+  final UserTileType userType;
 
   PointsComponent({
     super.key,
@@ -22,6 +23,7 @@ class PointsComponent extends StatelessWidget {
     this.onHistoryCallBack,
     this.listChallengeFeelings,
     this.listItemPoint,
+    this.userType = UserTileType.ordinary,
     required this.uiUserPointsProgressBarModel,
     required this.userPointsCount,
   });
@@ -211,7 +213,8 @@ class PointsComponent extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                itemPoits.showStar
+                                userType == UserTileType.premium &&
+                                        itemPoits.showStar
                                     ? ImageWidget(
                                         link: GraphicsFoundation
                                             .instance.svg.star2.path,
@@ -231,16 +234,30 @@ class PointsComponent extends StatelessWidget {
                                   style: theme?.boldTextTheme.caption2Bold,
                                 ),
                                 SpacingFoundation.verticalSpace4,
-                                Text(
-                                  '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
-                                  style: theme?.regularTextTheme.labelSmall
-                                      .copyWith(
-                                    color: theme.colorScheme.darkNeutral900,
-                                  ),
-                                ),
+                                userType != UserTileType.premium &&
+                                        itemPoits.showStar
+                                    ? ImageWidget(
+                                        link: GraphicsFoundation
+                                            .instance.svg.star2.path,
+                                        height: 12.h,
+                                        color:
+                                            theme?.colorScheme.bodyTypography,
+                                      )
+                                    : Text(
+                                        '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
+                                        style: theme
+                                            ?.regularTextTheme.labelSmall
+                                            .copyWith(
+                                          color:
+                                              theme.colorScheme.darkNeutral900,
+                                        ),
+                                      ),
                                 SpacingFoundation.verticalSpace2,
                                 LinearInfluencerIndicator(
-                                  actualSum: itemPoits.actualSum,
+                                  actualSum: userType != UserTileType.premium &&
+                                          itemPoits.showStar
+                                      ? 0
+                                      : itemPoits.actualSum,
                                   sum: itemPoits.sum,
                                   width: 120.w,
                                 ),
