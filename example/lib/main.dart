@@ -433,6 +433,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 onPressed: () {
                   context.push(
                     PointsComponent(
+                      userType: UserTileType.pro,
                       uiUserPointsProgressBarModel:
                           UiUserPointsProgressBarModel(
                         isMenGender: false,
@@ -485,10 +486,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 5,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgMessage.path
+                              ? GraphicsFoundation.instance.png.aNoBgShare.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgMessageBubbleW.path,
+                                  .instance.png.aNoBgShareW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Bookigns(5),
@@ -496,9 +496,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 1,
                           sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgShare.path
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgBooking.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgShareW.path,
+                                  .instance.png.aNoBgBookingW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).LoginInAppDaysInARow(7),
@@ -528,10 +529,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgBooking.path
-                              : GraphicsFoundation
-                                  .instance.png.aNoBgBookingW.path,
+                              ? GraphicsFoundation.instance.png.aNoBgEye.path
+                              : GraphicsFoundation.instance.png.aNoBgEyeW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).FeelingsGuesses(10),
@@ -539,10 +538,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgHandshake.path
+                              ? GraphicsFoundation.instance.png.aNoBgSmile.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgHandshakeW.path,
+                                  .instance.png.aNoBgSmileW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Connects(10),
@@ -609,10 +607,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgOpenHand.path
+                              ? GraphicsFoundation.instance.png.aNoBgStacks.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgOpenHandW.path,
+                                  .instance.png.aNoBgStacksW.path,
                         ),
                       ],
                     ),
