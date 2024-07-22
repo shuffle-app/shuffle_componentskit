@@ -31,14 +31,35 @@ class PointsComponent extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
   LinearInfluencerIndicator _linearInfluencerIndicator(
-          UiUserPointsProgressBarModel? uiUserPointsProgressBarModel) =>
-      LinearInfluencerIndicator(
-        actualSum: uiUserPointsProgressBarModel?.actual ?? 0,
-        sum: uiUserPointsProgressBarModel?.sum ?? 100,
-        width: 1.sw <= 380 ? 180.w : 200.w,
-        height: 12.h,
-        customGradient: GradientFoundation.goldGradient,
-      );
+    UiUserPointsProgressBarModel? uiUserPointsProgressBarModel,
+    Color? customColor,
+  ) {
+    Gradient getCustomGradient() {
+      if (uiUserPointsProgressBarModel != null) {
+        if (uiUserPointsProgressBarModel.level < 3) {
+          return GradientFoundation.bronzeGradient;
+        } else if (3 <= uiUserPointsProgressBarModel.level &&
+            uiUserPointsProgressBarModel.level < 6) {
+          return GradientFoundation.silverGradient;
+        } else if (6 <= uiUserPointsProgressBarModel.level) {
+          return GradientFoundation.goldGradient;
+        } else {
+          return GradientFoundation.bronzeGradient;
+        }
+      } else {
+        return GradientFoundation.bronzeGradient;
+      }
+    }
+
+    return LinearInfluencerIndicator(
+      actualSum: uiUserPointsProgressBarModel?.actual ?? 0,
+      sum: uiUserPointsProgressBarModel?.sum ?? 100,
+      width: 1.sw <= 380 ? 185.w : 205.w,
+      height: 1.sw <= 380 ? 16.h : 12.h,
+      customGradient: getCustomGradient(),
+      customColor: customColor,
+    );
+  }
 
   String stringWithSpace(int text) {
     NumberFormat formatter = NumberFormat('#,###');
@@ -96,84 +117,108 @@ class PointsComponent extends StatelessWidget {
               .paddingSymmetric(
                   horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: theme?.colorScheme.darkNeutral900.withOpacity(0.16),
-              borderRadius: BorderRadiusFoundation.all16,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+          UiKitCardWrapper(
+            color: theme?.colorScheme.surface2,
+            borderRadius: BorderRadiusFoundation.all16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                RowGradientCircle(
-                  level: uiUserPointsProgressBarModel.level,
-                ).paddingAll(EdgeInsetsFoundation.all8),
-                SpacingFoundation.horizontalSpace8,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        children: [
-                          GradientableWidget(
-                            gradient: GradientFoundation.defaultLinearGradient,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        uiUserPointsProgressBarModel.isMenGender
-                                            ? S.of(context).WiseacreOfSands
-                                            : S.of(context).WiseacreLadyOfSands,
-                                    style: theme?.regularTextTheme.caption1
-                                        .copyWith(color: Colors.white),
+                Stack(
+                  children: [
+                    GradientableWidget(
+                      gradient: GradientFoundation.defaultLinearGradient,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: uiUserPointsProgressBarModel.isMenGender
+                                  ? S.of(context).WiseacreOfSands
+                                  : S.of(context).WiseacreLadyOfSands,
+                              style: theme?.regularTextTheme.caption1
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.h),
+                // SpacingFoundation.verticalSpace4,
+                Row(
+                  children: [
+                    RowGradientCircle(
+                      level: uiUserPointsProgressBarModel.level,
+                    ).paddingAll(EdgeInsetsFoundation.all8),
+                    SpacingFoundation.horizontalSpace4,
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Stack(
+                          children: [
+                            _linearInfluencerIndicator(
+                              uiUserPointsProgressBarModel,
+                              ColorsFoundation.neutral16,
+                            ),
+                            Container(
+                              width: _linearInfluencerIndicator(
+                                uiUserPointsProgressBarModel,
+                                null,
+                              ).progressPosition,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadiusFoundation.all40,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: theme?.colorScheme.inversePrimary
+                                            .withOpacity(0.5) ??
+                                        Colors.white.withOpacity(0.8),
+                                    blurRadius: 8,
                                   ),
                                 ],
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SpacingFoundation.verticalSpace2,
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              _linearInfluencerIndicator(
+                              child: _linearInfluencerIndicator(
                                 uiUserPointsProgressBarModel,
+                                null,
                               ),
-                              Container(
-                                width: _linearInfluencerIndicator(
-                                  uiUserPointsProgressBarModel,
-                                ).progressPosition,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadiusFoundation.all40,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: theme?.colorScheme.inversePrimary
-                                              .withOpacity(0.5) ??
-                                          Colors.white.withOpacity(0.8),
-                                      blurRadius: 8,
-                                    ),
-                                  ],
+                            ),
+                          ],
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${uiUserPointsProgressBarModel.actual.toInt()}/',
+                                style:
+                                    theme?.regularTextTheme.caption2.copyWith(
+                                  color: uiUserPointsProgressBarModel.actual >=
+                                          (uiUserPointsProgressBarModel.sum /
+                                              2.2)
+                                      ? ColorsFoundation
+                                          .lightBodyTypographyColor
+                                      : ColorsFoundation.mutedText,
                                 ),
-                                child: _linearInfluencerIndicator(
-                                  uiUserPointsProgressBarModel,
+                              ),
+                              TextSpan(
+                                text:
+                                    '${uiUserPointsProgressBarModel.sum.toInt()}',
+                                style:
+                                    theme?.regularTextTheme.caption2.copyWith(
+                                  color: uiUserPointsProgressBarModel.actual >
+                                          (uiUserPointsProgressBarModel.sum /
+                                              1.5)
+                                      ? ColorsFoundation
+                                          .lightBodyTypographyColor
+                                      : ColorsFoundation.mutedText,
                                 ),
                               ),
                             ],
                           ),
-                          Text(
-                            '${uiUserPointsProgressBarModel.actual.toInt()}/${uiUserPointsProgressBarModel.sum.toInt()}',
-                            style: theme?.regularTextTheme.caption2.copyWith(
-                              color: theme.colorScheme.inverseBodyTypography,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                )
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ],
             ).paddingAll(EdgeInsetsFoundation.all8),
           ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
@@ -201,8 +246,8 @@ class PointsComponent extends StatelessWidget {
                         child: Stack(
                           children: [
                             ImageWidget(
-                              height: 1.sw <= 380 ? 70.h : 60.h,
-                              width: 90.w,
+                              height: 1.sw <= 380 ? 75.h : 65.h,
+                              width: 85.w,
                               fit: BoxFit.fitWidth,
                               link: itemPoits.imagePath,
                             ),
@@ -248,8 +293,7 @@ class PointsComponent extends StatelessWidget {
                                         style: theme
                                             ?.regularTextTheme.labelSmall
                                             .copyWith(
-                                          color:
-                                              theme.colorScheme.darkNeutral900,
+                                          color: ColorsFoundation.mutedText,
                                         ),
                                       ),
                                 SpacingFoundation.verticalSpace2,
@@ -279,27 +323,23 @@ class PointsComponent extends StatelessWidget {
           if (listChallengeFeelings != null)
             ColoredBox(
               color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: theme?.colorScheme.surface,
-                  borderRadius: BorderRadiusFoundation.all24,
-                ),
+              child: UiKitCardWrapper(
+                color: theme?.colorScheme.surface,
                 child: Column(
                   children: [
                     Text(
                       S.of(context).ChallengeFeelings,
                       style: theme?.boldTextTheme.caption1Bold,
-                    ).paddingOnly(
-                      bottom: SpacingFoundation.verticalSpacing8,
-                    ),
+                    ).paddingOnly(bottom: SpacingFoundation.verticalSpacing8),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: listChallengeFeelings
-                              ?.map((itemChallengeFeelings) => Stack(
+                              ?.map(
+                                (itemChallengeFeelings) => Expanded(
+                                  child: Stack(
                                     children: [
                                       ImageWidget(
-                                        height: 45.h,
-                                        width: 45.w,
+                                        height: 1.sw <= 380 ? 60.h : 45.h,
+                                        width: 1.sw <= 380 ? 55.w : 45.w,
                                         fit: BoxFit.fitHeight,
                                         link: itemChallengeFeelings.imagePath,
                                       ),
@@ -309,8 +349,7 @@ class PointsComponent extends StatelessWidget {
                                         children: [
                                           SizedBox(height: 30.h),
                                           Text(
-                                            itemChallengeFeelings.title ??
-                                                S.of(context).NothingFound,
+                                            '${parseDoubleToInt(itemChallengeFeelings.sum)} ${itemChallengeFeelings.title}',
                                             style: theme
                                                 ?.boldTextTheme.caption3Medium,
                                           ),
@@ -318,14 +357,14 @@ class PointsComponent extends StatelessWidget {
                                             '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
                                             style: theme
                                                 ?.boldTextTheme.caption2Bold,
+                                            textAlign: TextAlign.right,
                                           ),
                                           Text(
                                             '${parseDoubleToInt(itemChallengeFeelings.actualSum)}/${parseDoubleToInt(itemChallengeFeelings.sum)}',
                                             style: theme
                                                 ?.regularTextTheme.labelSmall
                                                 .copyWith(
-                                              color: theme
-                                                  .colorScheme.darkNeutral900,
+                                              color: ColorsFoundation.mutedText,
                                             ),
                                           ),
                                           SpacingFoundation.verticalSpace2,
@@ -333,12 +372,16 @@ class PointsComponent extends StatelessWidget {
                                             actualSum:
                                                 itemChallengeFeelings.actualSum,
                                             sum: itemChallengeFeelings.sum,
-                                            width: 70.w,
+                                            width: 65.w,
                                           )
                                         ],
-                                      )
+                                      ).paddingSymmetric(
+                                          horizontal: SpacingFoundation
+                                              .horizontalSpacing8)
                                     ],
-                                  ))
+                                  ),
+                                ),
+                              )
                               .toList() ??
                           [],
                     ),
