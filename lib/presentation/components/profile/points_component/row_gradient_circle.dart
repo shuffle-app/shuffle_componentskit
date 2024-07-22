@@ -21,9 +21,9 @@ class RowGradientCircle extends StatelessWidget {
             boxShadow: level - 3 >= 0
                 ? [
                     BoxShadow(
-                      color: theme!.colorScheme.inversePrimary.withOpacity(0.5),
+                      color: theme!.colorScheme.inversePrimary.withOpacity(0.3),
                       blurRadius: 10,
-                      spreadRadius: 5,
+                      spreadRadius: 8,
                     )
                   ]
                 : null,
@@ -43,9 +43,9 @@ class RowGradientCircle extends StatelessWidget {
             boxShadow: level - 6 >= 0
                 ? [
                     BoxShadow(
-                      color: theme!.colorScheme.inversePrimary.withOpacity(0.8),
+                      color: theme!.colorScheme.inversePrimary.withOpacity(0.3),
                       blurRadius: 10,
-                      spreadRadius: 5,
+                      spreadRadius: 8,
                     )
                   ]
                 : null,
@@ -65,9 +65,9 @@ class RowGradientCircle extends StatelessWidget {
             boxShadow: level - 9 >= 0
                 ? [
                     BoxShadow(
-                      color: Colors.white.withOpacity(0.8),
+                      color: theme!.colorScheme.inversePrimary.withOpacity(0.3),
                       blurRadius: 10,
-                      spreadRadius: 5,
+                      spreadRadius: 8,
                     )
                   ]
                 : null,
