@@ -619,7 +619,58 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                   );
                 },
               ),
-            )
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show profile',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentShuffleModel.fromJson(
+                      configuration.appConfig.content['profile']),
+                  ComponentBuilder(
+                    child: Scaffold(
+                      body: ProfileComponent(
+                        profile: UiProfileModel(
+                          onViewAllAchievements: () =>
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                            content: Text(
+                              'Yay! A SnackBar!',
+                            ),
+                          )),
+                          achievements: [
+                            UiKitAchievementsModel(
+                              title: 'test1',
+                              posterUrl:
+                                  'https://purepng.com/public/uploads/large/purepng.com-gold-cup-trophygolden-cupgoldtrophymedal-1421526534837pvf6x.png',
+                            ),
+                            UiKitAchievementsModel(
+                              title: 'test2',
+                              posterUrl:
+                                  'https://purepng.com/public/uploads/large/purepng.com-gold-cup-trophygolden-cupgoldtrophymedal-1421526534837pvf6x.png',
+                            ),
+                            UiKitAchievementsModel(
+                              title: 'test3',
+                              posterUrl:
+                                  'https://purepng.com/public/uploads/large/purepng.com-gold-cup-trophygolden-cupgoldtrophymedal-1421526534837pvf6x.png',
+                            ),
+                          ],
+                          showSupportShuffle: true,
+                          name: 'Marry Williams',
+                          nickname: '@marywill',
+                          description:
+                              'Just walking here and there trying to find something unique and interesting to show you!',
+                          avatarUrl: 'assets/images/png/profile_avatar.png',
+                          // interests: ['Restaurants', 'Hookah', 'Roller Coaster', 'Swimmings'],
+                          // followers: 2650,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
