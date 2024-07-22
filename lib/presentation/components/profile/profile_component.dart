@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/domain/config_models/profile/component_profile_model.dart';
@@ -27,7 +29,8 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<int>? onRecommendedUserCardChanged;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
-  final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
+  final PagingController<int, VideoReactionUiModel>?
+      videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
   final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
   final int? unreadMessagesCount;
@@ -69,10 +72,15 @@ class ProfileComponent extends StatelessWidget {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
-    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
+            GlobalConfiguration().appConfig.content;
+    final ComponentProfileModel model =
+        ComponentProfileModel.fromJson(config['profile']);
+    final horizontalMargin =
+        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin =
+        (model.positionModel?.verticalMargin ?? 0).toDouble();
+    final AutoSizeGroup _statsConstGroup = AutoSizeGroup();
 
     return BlurredAppBarPage(
       centerTitle: true,
@@ -114,6 +122,55 @@ class ProfileComponent extends StatelessWidget {
       children: [
         verticalMargin.heightBox,
         profile.cardWidget.paddingSymmetric(horizontal: horizontalMargin),
+        SpacingFoundation.verticalSpace24,
+        SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              UiKitStatsActionCard(
+                group: _statsConstGroup,
+                stats: UiKitStats(
+                  title: S.current.Balance,
+                  value: '${profile.balance ?? 100}\$',
+                  actionButton: context.smallOutlinedButton(
+                    blurred: false,
+                    data: BaseUiKitButtonData(
+                      onPressed: profile.onBalanceDetails,
+                      iconInfo: BaseUiKitButtonIconData(
+                        size: 10.h,
+                        iconData: ShuffleUiKitIcons.chevronright,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              UiKitStatsActionCard(
+                group: _statsConstGroup,
+                stats: UiKitStats(
+                  title: S.current.Points,
+                  value: profile.points?.toString() ?? '0',
+                  actionButton: context.smallOutlinedButton(
+                    data: BaseUiKitButtonData(
+                      onPressed: profile.onPointsDetails,
+                      iconInfo: BaseUiKitButtonIconData(
+                        size: 10.h,
+                        iconData: ShuffleUiKitIcons.chevronright,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              UiKitSupportShuffle(
+                onCustomDonate: profile.onCustomDonate,
+                onDonate: profile.onDonate,
+              ),
+            ],
+          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.all16),
+        ),
         if (showRecommendedUsers) ...[
           SpacingFoundation.verticalSpace24,
           SizedBox(
@@ -138,7 +195,8 @@ class ProfileComponent extends StatelessWidget {
                   ),
                   HintCardUiModel(
                     title: S.current.ProfileFindSomeoneHiwHint(2),
-                    imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
+                    imageUrl:
+                        GraphicsFoundation.instance.png.pointsReputation.path,
                   ),
                   HintCardUiModel(
                     title: S.current.ProfileFindSomeoneHiwHint(3),
@@ -162,7 +220,8 @@ class ProfileComponent extends StatelessWidget {
                 userPoints: user?.userPointsBalance ?? 0,
                 sameInterests: user?.commonInterests ?? 0,
                 userTileType: user?.userTileType ?? UserTileType.ordinary,
-                onAvatarTapped: () => onRecommendedUserAvatarPressed?.call(user!),
+                onAvatarTapped: () =>
+                    onRecommendedUserAvatarPressed?.call(user!),
                 onMessage: onRecommendedUserMessagePressed,
               );
             },
@@ -212,14 +271,17 @@ class ProfileComponent extends StatelessWidget {
                     viewed: reaction.isViewed,
                     onTap: () => onReactionTapped?.call(reaction),
                   ).paddingOnly(
-                    left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
+                    left: index == 0
+                        ? EdgeInsetsFoundation.all16
+                        : EdgeInsetsFoundation.zero,
                   );
                 },
                 pagingController: videoReactionsPagingController!,
               ),
             ),
           ),
-        if (videoReactionsPagingController != null) SpacingFoundation.verticalSpace24,
+        if (videoReactionsPagingController != null)
+          SpacingFoundation.verticalSpace24,
         if (feedbackPagingController != null)
           ValueListenableBuilder(
             valueListenable: feedbackPagingController!,
@@ -250,7 +312,8 @@ class ProfileComponent extends StatelessWidget {
                       ).paddingAll(EdgeInsetsFoundation.all16)
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
                         spacing: SpacingFoundation.horizontalSpacing8,
-                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                        shimmerLoadingChild: SizedBox(
+                            width: 0.95.sw, child: const UiKitFeedbackCard()),
                         itemBuilder: (context, feedback, index) {
                           return SizedBox(
                             width: 0.95.sw,
@@ -261,9 +324,15 @@ class ProfileComponent extends StatelessWidget {
                               companyAnswered: false,
                               text: feedback.feedbackText,
                               isHelpful: feedback.helpfulForUser,
-                              helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                              onPressed: () => onFeedbackCardPressed?.call(feedback),
-                            ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
+                              helpfulCount: feedback.helpfulCount == 0
+                                  ? null
+                                  : feedback.helpfulCount,
+                              onPressed: () =>
+                                  onFeedbackCardPressed?.call(feedback),
+                            ).paddingOnly(
+                                left: index == 0
+                                    ? EdgeInsetsFoundation.all16
+                                    : 0),
                           );
                         },
                         pagingController: feedbackPagingController!,

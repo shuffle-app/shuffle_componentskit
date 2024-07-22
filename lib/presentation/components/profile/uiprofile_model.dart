@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiProfileModel {
   final VoidCallback? onShare;
   final VoidCallback? onPointsDetails;
+  final VoidCallback? onBalanceDetails;
+  final VoidCallback? onCalendarTap;
   final String? nickname;
   final String? name;
   final String? email;
@@ -30,6 +33,7 @@ class UiProfileModel {
   final String? specialization;
   final List<String>? socialLinks;
   final int? points;
+  final int? balance;
   final bool? beInSearch;
 
   ProfileCard get cardWidget {
@@ -58,24 +62,23 @@ class UiProfileModel {
                   ? const InfluencerMemberPlate()
                   : null,
       onViewAllAchievements: onViewAllAchievements,
-      achievements: achievements.where((element) => element.posterUrl != null || element.objectUrl != null).toList(),
-      profileStats: [
-        UiKitStats(
-          title: S.current.Balance,
-          value: '0',
-          actionButton: SmallOrdinaryButton(
-            text: S.current.Details.toUpperCase(),
-            group: _statsConstGroup,
-          ),
+      achievements: achievements
+          .where((element) =>
+              element.posterUrl != null || element.objectUrl != null)
+          .toList(),
+      profileWidgets: [
+        ProfileContentWidget(
+          title: S.current.ToPlan,
+          group: _statsConstGroup,
+          onCalendarTap: onCalendarTap,
+          showCalendart: true,
         ),
-        UiKitStats(
-          title: S.current.Points,
-          value: points?.toString() ?? '0',
-          actionButton: SmallOrdinaryButton(
-            text: S.current.Details.toUpperCase(),
-            group: _statsConstGroup,
-            onPressed: onPointsDetails,
-          ),
+        ProfileContentWidget(
+          title: S.current.HallOfFame,
+          group: _statsConstGroup,
+          showHallOfFrame: true,
+          achievements: achievements,
+          onViewAllAchievements: onViewAllAchievements,
         ),
       ],
     );
@@ -84,6 +87,8 @@ class UiProfileModel {
   UiProfileModel({
     this.onShare,
     this.onPointsDetails,
+    this.onBalanceDetails,
+    this.onCalendarTap,
     this.onDonate,
     this.onCustomDonate,
     this.mindsetId,
@@ -109,6 +114,7 @@ class UiProfileModel {
     this.favoriteTagsIds,
     this.email,
     this.points,
+    this.balance,
     this.phone,
   });
 
@@ -124,6 +130,8 @@ class UiProfileModel {
           int? mindsetId,
           VoidCallback? onFollow,
           VoidCallback? onPointsDetails,
+          VoidCallback? onBalanceDetails,
+          VoidCallback? onCalendarTap,
           bool? showSupportShuffle,
           ValueChanged<int>? onDonate,
           List<String>? allInterests,
@@ -141,37 +149,43 @@ class UiProfileModel {
           String? email,
           String? phone,
           int? points,
+          int? balance,
           VoidCallback? onCustomDonate,
           bool? beInSearch}) =>
       UiProfileModel(
-          onShare: onShare ?? this.onShare,
-          onPointsDetails: onPointsDetails ?? this.onPointsDetails,
-          nickname: nickname ?? this.nickname,
-          name: name ?? this.name,
-          description: description ?? this.description,
-          avatarUrl: avatarUrl ?? this.avatarUrl,
-          userCredo: userCredo ?? this.userCredo,
-          followers: followers ?? this.followers,
-          onFollow: onFollow ?? this.onFollow,
-          showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
-          onDonate: onDonate ?? this.onDonate,
-          onCustomDonate: onCustomDonate ?? this.onCustomDonate,
-          allInterests: allInterests ?? this.allInterests,
-          favoriteTags: favoriteTags ?? this.favoriteTags,
-          matchingInterests: matchingInterests ?? this.matchingInterests,
-          onViewAllAchievements: onViewAllAchievements ?? this.onViewAllAchievements,
-          achievements: achievements ?? this.achievements,
-          userTileType: userTileType ?? this.userTileType,
-          specialization: specialization ?? this.specialization,
-          socialLinks: socialLinks ?? this.socialLinks,
-          tags: tags ?? this.tags,
-          mindsetId: mindsetId ?? this.mindsetId,
-          tagsIds: tagsIds ?? this.tagsIds,
-          email: email ?? this.email,
-          phone: phone ?? this.phone,
-          beInSearch: beInSearch ?? this.beInSearch,
-          favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
-          points: points ?? this.points);
+        onShare: onShare ?? this.onShare,
+        onPointsDetails: onPointsDetails ?? this.onPointsDetails,
+        onBalanceDetails: onBalanceDetails ?? this.onBalanceDetails,
+        onCalendarTap: onCalendarTap ?? this.onCalendarTap,
+        nickname: nickname ?? this.nickname,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        avatarUrl: avatarUrl ?? this.avatarUrl,
+        userCredo: userCredo ?? this.userCredo,
+        followers: followers ?? this.followers,
+        onFollow: onFollow ?? this.onFollow,
+        showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
+        onDonate: onDonate ?? this.onDonate,
+        onCustomDonate: onCustomDonate ?? this.onCustomDonate,
+        allInterests: allInterests ?? this.allInterests,
+        favoriteTags: favoriteTags ?? this.favoriteTags,
+        matchingInterests: matchingInterests ?? this.matchingInterests,
+        onViewAllAchievements:
+            onViewAllAchievements ?? this.onViewAllAchievements,
+        achievements: achievements ?? this.achievements,
+        userTileType: userTileType ?? this.userTileType,
+        specialization: specialization ?? this.specialization,
+        socialLinks: socialLinks ?? this.socialLinks,
+        tags: tags ?? this.tags,
+        mindsetId: mindsetId ?? this.mindsetId,
+        tagsIds: tagsIds ?? this.tagsIds,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        beInSearch: beInSearch ?? this.beInSearch,
+        favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
+        points: points ?? this.points,
+        balance: balance ?? this.balance,
+      );
 }
 
 final AutoSizeGroup _statsConstGroup = AutoSizeGroup();
