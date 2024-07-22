@@ -63,7 +63,7 @@ class ChatMembersComponent extends StatelessWidget {
                       nickname: member.username,
                       userType: member.userType,
                       acceptedInvite: member.inviteAccepted ?? false,
-                      canDelete: canDeleteUsers,
+                      canDelete: canDeleteUsers && member.canBeKicked,
                       onDelete: () => onDelete?.call(member),
                     );
                   },

@@ -79,7 +79,10 @@ class ChatComponent extends StatelessWidget {
             )
           : null,
       scrollController: scrollController,
-      appBarTrailing: chatData.isGroupChat || chatData.hasAcceptedInvite || (chatData.members?.isEmpty ?? false)
+      appBarTrailing: (chatData.isGroupChat && !chatData.userIsOwner) ||
+              chatData.hasAcceptedInvite ||
+              (chatData.members?.isEmpty ?? false) ||
+              chatData.readOnlyChat
           ? context.midSizeOutlinedButton(
               data: BaseUiKitButtonData(
                 iconInfo: BaseUiKitButtonIconData(
@@ -169,6 +172,7 @@ class ChatComponent extends StatelessWidget {
           ),
         ),
       ),
+      hideBottomSpace: chatData.readOnlyChat,
       bodyBottomSpace: kBottomNavigationBarHeight +
           SpacingFoundation.verticalSpacing32 +
           (Platform.isAndroid
@@ -241,11 +245,13 @@ class ChatComponent extends StatelessWidget {
                       item.invitationData!.contentType,
                     ),
                     canDenyInvitation: false,
-                    canAddMorePeople: chatOwnerIsMe && isMultipleChat,
+                    canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                     onAcceptTap: () {
                       if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
                     },
-                    onDenyTap: () => onDenyInvitationTap?.call(item.invitationData!.contentId),
+                    onDenyTap: () {
+                      if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                    },
                     tags: item.invitationData?.tags ?? [],
                     customMessageData: chatData.isGroupChat
                         ? null
@@ -318,12 +324,18 @@ class ChatComponent extends StatelessWidget {
                       item.invitationData!.contentId,
                       item.invitationData!.contentType,
                     ),
-                    canDenyInvitation: !chatData.hasAcceptedInvite,
-                    canAddMorePeople: chatOwnerIsMe && isMultipleChat,
+                    canDenyInvitation: chatData.readOnlyChat
+                        ? false
+                        : chatData.isGroupChat
+                            ? !item.invitationData!.hasAcceptedInvite
+                            : !chatData.hasAcceptedInvite,
+                    canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                     onAcceptTap: () {
                       if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
                     },
-                    onDenyTap: () => onDenyInvitationTap?.call(item.invitationData!.contentId),
+                    onDenyTap: () {
+                      if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                    },
                     tags: item.invitationData?.tags ?? [],
                     customMessageData: chatData.isGroupChat
                         ? null

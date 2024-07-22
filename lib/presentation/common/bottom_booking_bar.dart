@@ -50,7 +50,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (widget.isInviteEnable ?? true)
+        if (widget.isInviteEnable ?? true && widget.onMagnify != null)
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
             transitionBuilder: (child, animation) {
@@ -65,9 +65,8 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
               children: [
                 UiKitMessageCloud(
                   message: S.of(context).InviteList,
-                  subtitle: (inviteCount ?? 0) == 0
-                      ? S.of(context).BeFirstToInvite
-                      : S.of(context).Users(inviteCount ?? 0),
+                  subtitle:
+                      (inviteCount ?? 0) == 0 ? S.of(context).BeFirstToInvite : S.of(context).Users(inviteCount ?? 0),
                 ),
                 SpacingFoundation.horizontalSpace16,
               ],
@@ -80,8 +79,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                context.uiKitTheme?.colorScheme.surface.withOpacity(0.5) ??
-                    Colors.transparent,
+                context.uiKitTheme?.colorScheme.surface.withOpacity(0.5) ?? Colors.transparent,
                 context.uiKitTheme?.colorScheme.surface ?? Colors.transparent,
               ],
             ),
@@ -116,7 +114,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                     ),
                   ),
                   SpacingFoundation.horizontalSpace12,
-                  if ((widget.model.showMagnify ?? true) && inviteCount == null)
+                  if ((widget.model.showMagnify ?? true) && inviteCount == null && widget.onMagnify != null)
                     context.outlinedButton(
                       blurred: true,
                       data: BaseUiKitButtonData(
@@ -126,7 +124,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                         ),
                       ),
                     ),
-                  if ((widget.model.showMagnify ?? true) && inviteCount != null)
+                  if ((widget.model.showMagnify ?? true) && inviteCount != null && widget.onMagnify != null)
                     UiKitLightUpAnimation(
                       onStarted: () => setState(() => animationEnded = false),
                       onFinished: () => setState(() => animationEnded = true),
@@ -143,10 +141,8 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                 ];
               }(),
             ).paddingSymmetric(
-              vertical:
-                  (widget.model.positionModel?.verticalMargin ?? 0).toDouble(),
-              horizontal: (widget.model.positionModel?.horizontalMargin ?? 0)
-                  .toDouble(),
+              vertical: (widget.model.positionModel?.verticalMargin ?? 0).toDouble(),
+              horizontal: (widget.model.positionModel?.horizontalMargin ?? 0).toDouble(),
             ),
           ),
         ),

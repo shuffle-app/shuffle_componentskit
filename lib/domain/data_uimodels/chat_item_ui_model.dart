@@ -26,6 +26,7 @@ class ChatItemUiModel {
   final DateTime creationDate;
   final DateTime deletionDate;
   final bool disabled;
+  final bool readOnlyChat;
 
   int? get membersCount => members?.length;
 
@@ -43,6 +44,7 @@ class ChatItemUiModel {
     required this.creationDate,
     required this.deletionDate,
     this.lastMessageSenderName,
+    this.readOnlyChat = false,
     this.disabled = false,
     this.contentTags,
     this.owner,
@@ -81,10 +83,12 @@ class ChatItemUiModel {
     bool? hasAcceptedInvite,
     bool? disabled,
     String? lastMessageSenderName,
+    bool? readOnlyChat,
   }) {
     return ChatItemUiModel(
       id: id,
       owner: owner,
+      readOnlyChat: readOnlyChat ?? this.readOnlyChat,
       lastMessageSenderName: lastMessageSenderName ?? this.lastMessageSenderName,
       hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       contentId: contentId ?? this.contentId,
