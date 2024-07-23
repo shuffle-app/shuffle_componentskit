@@ -433,11 +433,12 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 onPressed: () {
                   context.push(
                     PointsComponent(
+                      userType: UserTileType.pro,
                       uiUserPointsProgressBarModel:
                           UiUserPointsProgressBarModel(
                         isMenGender: false,
                         actual: 90,
-                        level: 5,
+                        level: 2,
                         sum: 100,
                       ),
                       onSpendCallBack: () {},
@@ -448,7 +449,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           title: S.of(context).Easy,
                           getPoints: 10,
                           actualSum: 0,
-                          sum: 1,
+                          sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
                               ? GraphicsFoundation
                                   .instance.png.aNoBgLikeIcon.path
@@ -458,8 +459,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                         UiPointsModel(
                           title: S.of(context).Fair,
                           getPoints: 20,
-                          actualSum: 1,
-                          sum: 1,
+                          actualSum: 4,
+                          sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
                               ? GraphicsFoundation
                                   .instance.png.aNoBgVictoryHands.path
@@ -485,10 +486,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 5,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgMessage.path
+                              ? GraphicsFoundation.instance.png.aNoBgShare.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgMessageBubbleW.path,
+                                  .instance.png.aNoBgShareW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Bookigns(5),
@@ -496,9 +496,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 1,
                           sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation.instance.png.aNoBgShare.path
+                              ? GraphicsFoundation
+                                  .instance.png.aNoBgBooking.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgShareW.path,
+                                  .instance.png.aNoBgBookingW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).LoginInAppDaysInARow(7),
@@ -528,10 +529,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 1,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgBooking.path
-                              : GraphicsFoundation
-                                  .instance.png.aNoBgBookingW.path,
+                              ? GraphicsFoundation.instance.png.aNoBgEye.path
+                              : GraphicsFoundation.instance.png.aNoBgEyeW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).FeelingsGuesses(10),
@@ -539,10 +538,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 10,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgHandshake.path
+                              ? GraphicsFoundation.instance.png.aNoBgSmile.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgHandshakeW.path,
+                                  .instance.png.aNoBgSmileW.path,
                         ),
                         UiPointsModel(
                           title: S.of(context).Connects(10),
@@ -609,10 +607,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                           actualSum: 0,
                           sum: 5,
                           imagePath: theme?.themeMode == ThemeMode.dark
-                              ? GraphicsFoundation
-                                  .instance.png.aNoBgOpenHand.path
+                              ? GraphicsFoundation.instance.png.aNoBgStacks.path
                               : GraphicsFoundation
-                                  .instance.png.aNoBgOpenHandW.path,
+                                  .instance.png.aNoBgStacksW.path,
                         ),
                       ],
                     ),
@@ -671,6 +668,57 @@ class _ComponentsTestPageState extends State<ComponentsTestPage>
                 ),
               ),
             ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show spent points component',
+                onPressed: () => context.push(
+                  SpentPointsComponent(
+                    balance: 1234,
+                    onHistoryTap: () {},
+                    onDiscountTap: (value) {},
+                    discountsList: List.generate(
+                      6,
+                      (index) {
+                        return UiModelDiscounts(
+                          buttonTitle: '30% discount '
+                              '(-1500)',
+                          barcode: '189576975672367',
+                          contentShortUiModel: ContentShortUiModel(
+                            imageUrl:
+                                GraphicsFoundation.instance.png.place.path,
+                            title: 'La Vue Citytel Group',
+                            tags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.club,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
           ],
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/domain/config_models/profile/component_profile_model.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:intl/intl.dart';
 
 //ignore_for_file: no-empty-block
 
@@ -64,6 +65,11 @@ class ProfileComponent extends StatelessWidget {
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
+
+  String stringWithSpace(int text) {
+    NumberFormat formatter = NumberFormat('#,###');
+    return formatter.format(text).replaceAll(',', ' ');
+  }
 
   // bool get _noVideoReactions => videoReactionsPagingController?.itemList?.isEmpty ?? true;
 
@@ -136,9 +142,9 @@ class ProfileComponent extends StatelessWidget {
               //   stats: UiKitStats(
               //     title: S.current.Balance,
               //     value: '${profile.balance ?? 100}\$',
-              //     actionButton: context.smallOutlinedButton(
-              //       blurred: false,
+              //     actionButton: context.smallOutlinedButton(       
               //       data: BaseUiKitButtonData(
+              //         backgroundColor: Colors.transparent,
               //         onPressed: profile.onBalanceDetails,
               //         iconInfo: BaseUiKitButtonIconData(
               //           size: 10.h,
@@ -153,9 +159,10 @@ class ProfileComponent extends StatelessWidget {
                 group: _statsConstGroup,
                 stats: UiKitStats(
                   title: S.current.Points,
-                  value: profile.points?.toString() ?? '0',
+                  value: stringWithSpace(profile.points ?? 0),
                   actionButton: context.smallOutlinedButton(
                     data: BaseUiKitButtonData(
+                      backgroundColor: Colors.transparent,
                       onPressed: profile.onPointsDetails,
                       iconInfo: BaseUiKitButtonIconData(
                         size: 10.h,

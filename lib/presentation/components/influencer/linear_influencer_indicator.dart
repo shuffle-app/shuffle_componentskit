@@ -7,6 +7,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
   final double? width;
   final double? height;
   final Gradient? customGradient;
+  final Color? customColor;
 
   LinearInfluencerIndicator({
     super.key,
@@ -15,6 +16,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
     this.width,
     this.height,
     this.customGradient,
+    this.customColor,
   });
 
   late final double _indicatorWidth = width ?? 256.w;
@@ -33,6 +35,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.uiKitTheme?.colorScheme;
+    final Color? color = customColor ?? colorScheme?.surface3;
 
     return ClipRRect(
       borderRadius: BorderRadiusFoundation.all40,
@@ -40,7 +43,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
         alignment: Alignment.centerLeft,
         children: [
           ColoredBox(
-            color: colorScheme?.surface3 ?? Colors.white,
+            color: color ?? Colors.white,
             child: SizedBox(
               height: height ?? 6.h,
               width: _indicatorWidth,

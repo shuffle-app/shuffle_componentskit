@@ -71,7 +71,7 @@ class UiProfileModel {
           title: S.current.ToPlan,
           group: _statsConstGroup,
           onCalendarTap: onCalendarTap,
-          showCalendart: true,
+          showCalendar: true,
         ),
         ProfileContentWidget(
           title: S.current.HallOfFame,

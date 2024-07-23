@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:intl/intl.dart';
 
 import '../../components.dart';
 
@@ -17,6 +18,11 @@ class SpentPointsComponent extends StatelessWidget {
   final List<UiModelDiscounts>? discountsList;
   final ValueChanged<UiModelDiscounts>? onDiscountTap;
 
+  String stringWithSpace(int text) {
+    NumberFormat formatter = NumberFormat('#,###');
+    return formatter.format(text).replaceAll(',', ' ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final uiKitTheme = context.uiKitTheme;
@@ -33,7 +39,7 @@ class SpentPointsComponent extends StatelessWidget {
         ),
         customTitle: Expanded(
           child: Text(
-            S.current.SpentMyPoints,
+            S.current.Spend,
             style: context.uiKitTheme?.boldTextTheme.title1,
             maxLines: 2,
             textAlign: TextAlign.center,
@@ -44,17 +50,21 @@ class SpentPointsComponent extends StatelessWidget {
             EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace16,
-          Text(
-            S.current.Balance,
-            style: uiKitTheme?.regularTextTheme.caption1.copyWith(
-                color: ColorsFoundation.mutedText,
-                fontWeight: FontWeight.normal),
-            textAlign: TextAlign.center,
-          ),
-          SpacingFoundation.verticalSpace2,
-          Text('${balance ?? 0} ${S.current.Points}',
-              style: uiKitTheme?.boldTextTheme.title2,
-              textAlign: TextAlign.center),
+          Row(
+            children: [
+              Text(
+                S.of(context).Balance,
+                style: uiKitTheme?.regularTextTheme.caption1.copyWith(
+                  color: uiKitTheme.colorScheme.darkNeutral900,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '${stringWithSpace(balance ?? 0)} ${S.of(context).PointsCount(2650)}',
+                style: uiKitTheme?.boldTextTheme.subHeadline,
+              ),
+            ],
+          ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace24,
           ...List.generate(
             discountsList?.length ?? 0,
