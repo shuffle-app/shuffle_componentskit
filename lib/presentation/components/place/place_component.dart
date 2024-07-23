@@ -31,6 +31,7 @@ class PlaceComponent extends StatefulWidget {
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
+  final bool showInviteList;
 
   const PlaceComponent({
     super.key,
@@ -41,6 +42,7 @@ class PlaceComponent extends StatefulWidget {
     required this.eventFeedbackLoaderCallback,
     required this.canLeaveFeedbackCallback,
     required this.canLeaveFeedbackForEventCallback,
+    this.showInviteList = true,
     this.onFeedbackTap,
     this.onReactionTap,
     this.onAddFeedbackTapped,

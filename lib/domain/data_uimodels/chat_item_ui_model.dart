@@ -26,6 +26,8 @@ class ChatItemUiModel {
   final DateTime creationDate;
   final DateTime deletionDate;
   final bool disabled;
+  final bool readOnlyChat;
+  final List<ChatMessageUiModel>? firstPageMessages;
 
   int? get membersCount => members?.length;
 
@@ -43,6 +45,7 @@ class ChatItemUiModel {
     required this.creationDate,
     required this.deletionDate,
     this.lastMessageSenderName,
+    this.readOnlyChat = false,
     this.disabled = false,
     this.contentTags,
     this.owner,
@@ -57,6 +60,7 @@ class ChatItemUiModel {
     this.contentTitle,
     this.contentAvatar,
     this.hasAcceptedInvite = false,
+    this.firstPageMessages,
   });
 
   ChatItemUiModel copyWith({
@@ -81,10 +85,13 @@ class ChatItemUiModel {
     bool? hasAcceptedInvite,
     bool? disabled,
     String? lastMessageSenderName,
+    bool? readOnlyChat,
+    List<ChatMessageUiModel>? firstPageMessages,
   }) {
     return ChatItemUiModel(
       id: id,
       owner: owner,
+      readOnlyChat: readOnlyChat ?? this.readOnlyChat,
       lastMessageSenderName: lastMessageSenderName ?? this.lastMessageSenderName,
       hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       contentId: contentId ?? this.contentId,
@@ -106,6 +113,7 @@ class ChatItemUiModel {
       creationDate: creationDate ?? this.creationDate,
       deletionDate: deletionDate ?? this.deletionDate,
       disabled: disabled ?? this.disabled,
+      firstPageMessages: firstPageMessages ?? this.firstPageMessages,
     );
   }
 }

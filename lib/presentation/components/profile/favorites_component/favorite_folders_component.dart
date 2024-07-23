@@ -6,38 +6,58 @@ class FavoriteFoldersComponent extends StatelessWidget {
   const FavoriteFoldersComponent({
     super.key,
     this.onShareTap,
-    required this.places,
+    this.onEditTap,
+    this.onRenameTap,
+    this.onDeleteTap,
+    this.onDoneTap,
+    required this.content,
+    required this.folderName,
   });
 
   final VoidCallback? onShareTap;
-  final List<PlacePreview> places;
+  final VoidCallback? onEditTap;
+  final VoidCallback? onRenameTap;
+  final VoidCallback? onDeleteTap;
+  final VoidCallback? onDoneTap;
+  final List<Widget> content;
+  final String folderName;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlurredAppBarPage(
-        customToolbarBaseHeight: 0.13.sh,
+        // customToolbarBaseHeight: 0.13.sh,
         autoImplyLeading: true,
         centerTitle: true,
-        appBarTrailing: context.iconButtonNoPadding(
-          data: BaseUiKitButtonData(
-            onPressed: onShareTap,
-            iconInfo: BaseUiKitButtonIconData(
-              iconData: ShuffleUiKitIcons.share,
-              color: ColorsFoundation.mutedText,
-            ),
-          ),
-        ),
-        customTitle: Expanded(
-          child: Text(
-            S.current.TheBestTechConf,
-            style: context.uiKitTheme?.boldTextTheme.title1,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        childrenPadding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-        children: places,
+        appBarTrailing: onDoneTap != null
+            ? context.smallOutlinedButton(
+                data: BaseUiKitButtonData(
+                    onPressed: onDoneTap, iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.check)))
+            : UiKitPopUpMenuButton(options: [
+                UiKitPopUpMenuButtonOption(
+                  title: S.of(context).Share,
+                  value: 'share',
+                  onTap: onShareTap,
+                ),
+                UiKitPopUpMenuButtonOption(
+                  title: S.of(context).Edit,
+                  value: 'edit',
+                  onTap: onEditTap,
+                ),
+                UiKitPopUpMenuButtonOption(
+                  title: S.of(context).Rename,
+                  value: 'rename',
+                  onTap: onRenameTap,
+                ),
+                UiKitPopUpMenuButtonOption(
+                  title: S.of(context).Delete,
+                  value: 'delete',
+                  onTap: onDeleteTap,
+                ),
+              ]),
+        title: folderName,
+        childrenPadding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.all16),
+        children: content,
       ),
     );
   }
