@@ -108,6 +108,7 @@ export 'spinner/ui_upcoming_event_spinner_model.dart';
 export 'spinner/uispinner_model.dart';
 export 'spinner/upcoming_events_spinner_component.dart';
 export 'subscriptions/account_subscription_component.dart';
+export 'subscriptions/account_subscription_bottom_bar.dart';
 export 'subscriptions/additional_info_premium.dart';
 export 'subscriptions/company_subscription_component.dart';
 export 'subscriptions/company_subscription_model.dart';

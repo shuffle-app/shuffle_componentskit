@@ -59,7 +59,8 @@ class SearchSocialContentTypeRecommendationComponent extends StatelessWidget {
             recommended: index % 2 == 0,
             availableWidth: 1.sw - (horizontalMargin * 2),
             onPressed: () => onContentPressed?.call(''),
-            imageUrl: GraphicsFoundation.instance.png.mockAdBanner4.path,
+            imageUrl:
+                'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/app-ads-banners/mock_ad_banner_4.png',
           ).paddingOnly(
             bottom: SpacingFoundation.verticalSpacing16,
             left: horizontalMargin,

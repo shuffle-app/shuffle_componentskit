@@ -53,9 +53,9 @@ class ReactionViewComponent extends StatelessWidget {
   }
 
   void _tapUpHandler(TapUpDetails details) {
-    if (details.globalPosition.dx > 0.3.sw && onSingleTapRight != null) {
+    if (details.globalPosition.dx > 0.8.sw && onSingleTapRight != null) {
       onSingleTapRight?.call();
-    } else if (details.globalPosition.dx < 0.3.sw && onSingleTapLeft != null) {
+    } else if (details.globalPosition.dx < 0.2.sw && onSingleTapLeft != null) {
       onSingleTapLeft?.call();
     }
   }

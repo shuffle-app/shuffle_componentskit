@@ -123,30 +123,32 @@ class ProfileComponent extends StatelessWidget {
         verticalMargin.heightBox,
         profile.cardWidget.paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace24,
+        Center(child:
         SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              UiKitStatsActionCard(
-                group: _statsConstGroup,
-                stats: UiKitStats(
-                  title: S.current.Balance,
-                  value: '${profile.balance ?? 100}\$',
-                  actionButton: context.smallOutlinedButton(
-                    blurred: false,
-                    data: BaseUiKitButtonData(
-                      onPressed: profile.onBalanceDetails,
-                      iconInfo: BaseUiKitButtonIconData(
-                        size: 10.h,
-                        iconData: ShuffleUiKitIcons.chevronright,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SpacingFoundation.horizontalSpace16,
+              // UiKitStatsActionCard(
+              //   group: _statsConstGroup,
+              //   stats: UiKitStats(
+              //     title: S.current.Balance,
+              //     value: '${profile.balance ?? 100}\$',
+              //     actionButton: context.smallOutlinedButton(
+              //       blurred: false,
+              //       data: BaseUiKitButtonData(
+              //         onPressed: profile.onBalanceDetails,
+              //         iconInfo: BaseUiKitButtonIconData(
+              //           size: 10.h,
+              //           iconData: ShuffleUiKitIcons.chevronright,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SpacingFoundation.horizontalSpace16,
               UiKitStatsActionCard(
                 group: _statsConstGroup,
                 stats: UiKitStats(
@@ -170,7 +172,7 @@ class ProfileComponent extends StatelessWidget {
               ),
             ],
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.all16),
-        ),
+        )),
         if (showRecommendedUsers) ...[
           SpacingFoundation.verticalSpace24,
           SizedBox(
@@ -211,19 +213,23 @@ class ProfileComponent extends StatelessWidget {
           UiKitHorizontalScroll3D(
             onItemChanged: onRecommendedUserCardChanged,
             itemBuilder: (BuildContext context, int index) {
-              final user = recommendedUsers?[index];
+              try {
+                final user = recommendedUsers?[index];
 
-              return UiKitFindSomeoneCard(
-                avatarUrl: user?.userAvatar,
-                userNickName: user?.userNickname ?? '',
-                userName: user?.userName ?? '',
-                userPoints: user?.userPointsBalance ?? 0,
-                sameInterests: user?.commonInterests ?? 0,
-                userTileType: user?.userTileType ?? UserTileType.ordinary,
-                onAvatarTapped: () =>
-                    onRecommendedUserAvatarPressed?.call(user!),
-                onMessage: onRecommendedUserMessagePressed,
-              );
+                return UiKitFindSomeoneCard(
+                  avatarUrl: user?.userAvatar,
+                  userNickName: user?.userNickname ?? '',
+                  userName: user?.userName ?? '',
+                  userPoints: user?.userPointsBalance ?? 0,
+                  sameInterests: user?.commonInterests ?? 0,
+                  userTileType: user?.userTileType ?? UserTileType.ordinary,
+                  onAvatarTapped: () =>
+                      onRecommendedUserAvatarPressed?.call(user!),
+                  onMessage: onRecommendedUserMessagePressed,
+                );
+              } catch (e) {
+                return const SizedBox.shrink();
+              }
             },
             itemCount: recommendedUsers?.length ?? 3,
           ),
