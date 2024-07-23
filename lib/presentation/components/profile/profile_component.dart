@@ -133,7 +133,7 @@ class ProfileComponent extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           child: Row(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               UiKitStatsActionCard(
                 group: _statsConstGroup,
@@ -141,8 +141,8 @@ class ProfileComponent extends StatelessWidget {
                   title: S.current.Balance,
                   value: '${stringWithSpace(profile.balance ?? 0)}\$',
                   actionButton: context.smallOutlinedButton(
-                    blurred: false,
                     data: BaseUiKitButtonData(
+                      backgroundColor: Colors.transparent,
                       onPressed: profile.onBalanceDetails,
                       iconInfo: BaseUiKitButtonIconData(
                         size: 10.h,
@@ -160,6 +160,7 @@ class ProfileComponent extends StatelessWidget {
                   value: stringWithSpace(profile.points ?? 0),
                   actionButton: context.smallOutlinedButton(
                     data: BaseUiKitButtonData(
+                      backgroundColor: Colors.transparent,
                       onPressed: profile.onPointsDetails,
                       iconInfo: BaseUiKitButtonIconData(
                         size: 10.h,
