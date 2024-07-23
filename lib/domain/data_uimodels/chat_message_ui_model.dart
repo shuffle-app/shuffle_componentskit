@@ -18,6 +18,7 @@ class ChatMessageUiModel {
   final ChatMessageInvitationData? invitationData;
   final ChatMessageUiModel? replyMessageModel;
   final int? connectId;
+  final bool isLastMessageToDate;
 
   bool get isInvitation => messageType == MessageType.invitation && invitationData != null;
 
@@ -28,6 +29,7 @@ class ChatMessageUiModel {
     required this.senderIsMe,
     required this.messageType,
     required this.isRead,
+    required this.isLastMessageToDate,
     this.additionalText,
     this.connectId,
     this.gradientableText,
@@ -49,6 +51,7 @@ class ChatMessageUiModel {
     required String senderName,
     required String senderNickname,
     required UserTileType senderProfileType,
+    required bool isLastMessageToDate,
   }) =>
       ChatMessageUiModel(
         timeSent: DateTime.now(),
@@ -62,6 +65,7 @@ class ChatMessageUiModel {
         senderProfileType: senderProfileType,
         senderName: senderName,
         senderNickname: senderNickname,
+        isLastMessageToDate: isLastMessageToDate,
       );
 
   ChatMessageUiModel copyWith({
@@ -80,6 +84,7 @@ class ChatMessageUiModel {
     String? senderNickname,
     int? connectId,
     String? additionalText,
+    bool? isLastMessageToDate,
   }) {
     return ChatMessageUiModel(
       senderId: senderId,
@@ -99,6 +104,7 @@ class ChatMessageUiModel {
       replyMessageModel: replyMessageModel ?? this.replyMessageModel,
       gradientableText: gradientableText ?? this.gradientableText,
       senderNickname: senderNickname ?? this.senderNickname,
+      isLastMessageToDate: isLastMessageToDate ?? this.isLastMessageToDate,
     );
   }
 }

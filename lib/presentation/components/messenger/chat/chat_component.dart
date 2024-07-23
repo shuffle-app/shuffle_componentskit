@@ -204,17 +204,23 @@ class ChatComponent extends StatelessWidget {
               onVisibilityChanged: (info) {
                 if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
               },
-              child: UiKitInfoText(
-                text: item.message!,
-                title: item.infoMessageTitle,
-                gradientText: item.gradientableText,
-                additionalText: item.additionalText,
-                centerText: !item.messageId.isNegative,
-                textGradient: item.gradientableText != null ? GradientFoundation.defaultLinearGradient : null,
-              ).paddingOnly(
-                left: EdgeInsetsFoundation.horizontal20,
-                right: EdgeInsetsFoundation.horizontal20,
-                top: EdgeInsetsFoundation.vertical4,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                  UiKitInfoText(
+                    text: item.message!,
+                    title: item.infoMessageTitle,
+                    gradientText: item.gradientableText,
+                    additionalText: item.additionalText,
+                    centerText: !item.messageId.isNegative,
+                    textGradient: item.gradientableText != null ? GradientFoundation.defaultLinearGradient : null,
+                  ).paddingOnly(
+                    left: EdgeInsetsFoundation.horizontal20,
+                    right: EdgeInsetsFoundation.horizontal20,
+                    top: EdgeInsetsFoundation.vertical4,
+                  ),
+                ],
               ),
             );
           } else if (item.senderIsMe) {
@@ -224,44 +230,50 @@ class ChatComponent extends StatelessWidget {
                 onVisibilityChanged: (info) {
                   if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
                 },
-                child: UiKitChatOutCard(
-                  onReplyMessage: onReplyMessage,
-                  timeOfDay: item.timeSent,
-                  sentByMe: item.senderIsMe,
-                  id: item.messageId,
-                  brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
-                  child: UiKitInviteMessageContent(
-                    hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
-                    brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
-                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
-                    onInvitePeopleTap: onAddMorePeople,
-                    username: item.invitationData!.senderUserName,
-                    placeName: item.invitationData!.contentName,
-                    placeImagePath: item.invitationData!.contentImagePath,
-                    invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
-                    userType: item.invitationData!.senderUserType,
-                    onPlaceTap: () => onInvitationPlaceTap?.call(
-                      item.invitationData!.contentId,
-                      item.invitationData!.contentType,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                    UiKitChatOutCard(
+                      onReplyMessage: onReplyMessage,
+                      timeOfDay: item.timeSent,
+                      sentByMe: item.senderIsMe,
+                      id: item.messageId,
+                      brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
+                      child: UiKitInviteMessageContent(
+                        hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
+                        brightness: isLightThemeOn ? Brightness.dark : Brightness.light,
+                        showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
+                        onInvitePeopleTap: onAddMorePeople,
+                        username: item.invitationData!.senderUserName,
+                        placeName: item.invitationData!.contentName,
+                        placeImagePath: item.invitationData!.contentImagePath,
+                        invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
+                        userType: item.invitationData!.senderUserType,
+                        onPlaceTap: () => onInvitationPlaceTap?.call(
+                          item.invitationData!.contentId,
+                          item.invitationData!.contentType,
+                        ),
+                        canDenyInvitation: false,
+                        canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
+                        onAcceptTap: () {
+                          if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                        },
+                        onDenyTap: () {
+                          if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                        },
+                        tags: item.invitationData?.tags ?? [],
+                        customMessageData: chatData.isGroupChat
+                            ? null
+                            : InviteCustomMessageData(
+                                senderUserName: item.invitationData!.senderUserName,
+                                receiverUserName: item.invitationData!.receiverUserName,
+                                senderUserType: item.invitationData!.senderUserType,
+                                receiverUserType: item.invitationData!.receiverUserType,
+                              ),
+                      ),
                     ),
-                    canDenyInvitation: false,
-                    canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
-                    onAcceptTap: () {
-                      if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
-                    },
-                    onDenyTap: () {
-                      if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
-                    },
-                    tags: item.invitationData?.tags ?? [],
-                    customMessageData: chatData.isGroupChat
-                        ? null
-                        : InviteCustomMessageData(
-                            senderUserName: item.invitationData!.senderUserName,
-                            receiverUserName: item.invitationData!.receiverUserName,
-                            senderUserType: item.invitationData!.senderUserType,
-                            receiverUserType: item.invitationData!.receiverUserType,
-                          ),
-                  ),
+                  ],
                 ),
               );
             }
@@ -271,27 +283,33 @@ class ChatComponent extends StatelessWidget {
               onVisibilityChanged: (info) {
                 if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
               },
-              child: item.replyMessageModel == null
-                  ? UiKitChatOutCard(
-                      onReplyMessage: onReplyMessage,
-                      id: item.messageId,
-                      timeOfDay: item.timeSent,
-                      text: item.message,
-                      sentByMe: item.senderIsMe,
-                    )
-                  : UiKitChatCardWithReplyOut(
-                      id: item.messageId,
-                      onReplyMessage: onReplyMessage,
-                      replyMessageId: item.replyMessageModel!.messageId,
-                      onReplyMassageTap: onReplyMessageTap,
-                      text: item.message,
-                      sentByMe: item.senderIsMe,
-                      replyText: item.replyMessageModel!.message!,
-                      timeOfDay: item.timeSent,
-                      replyUserAvatar: item.replyMessageModel!.senderAvatar!,
-                      replySenderName: item.replyMessageModel!.senderName!,
-                      replyUserType: item.replyMessageModel!.senderProfileType!,
-                    ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                  item.replyMessageModel == null
+                      ? UiKitChatOutCard(
+                          onReplyMessage: onReplyMessage,
+                          id: item.messageId,
+                          timeOfDay: item.timeSent,
+                          text: item.message,
+                          sentByMe: item.senderIsMe,
+                        )
+                      : UiKitChatCardWithReplyOut(
+                          id: item.messageId,
+                          onReplyMessage: onReplyMessage,
+                          replyMessageId: item.replyMessageModel!.messageId,
+                          onReplyMassageTap: onReplyMessageTap,
+                          text: item.message,
+                          sentByMe: item.senderIsMe,
+                          replyText: item.replyMessageModel!.message!,
+                          timeOfDay: item.timeSent,
+                          replyUserAvatar: item.replyMessageModel!.senderAvatar!,
+                          replySenderName: item.replyMessageModel!.senderName!,
+                          replyUserType: item.replyMessageModel!.senderProfileType!,
+                        ),
+                ],
+              ),
             );
           } else {
             if (item.isInvitation && item.invitationData != null) {
@@ -300,52 +318,58 @@ class ChatComponent extends StatelessWidget {
                 onVisibilityChanged: (info) {
                   if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
                 },
-                child: UiKitChatInCard(
-                  showAvatar: chatData.isGroupChat,
-                  avatarUrl: item.senderAvatar,
-                  senderName: item.senderName,
-                  senderType: item.senderProfileType,
-                  senderNickname: item.senderNickname ?? '',
-                  onReplyMessage: onReplyMessage,
-                  timeOfDay: item.timeSent,
-                  id: item.messageId,
-                  hasInvitation: true,
-                  child: UiKitInviteMessageContent(
-                    hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
-                    brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
-                    showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
-                    username: item.invitationData!.senderUserName,
-                    placeName: item.invitationData!.contentName,
-                    placeImagePath: item.invitationData!.contentImagePath,
-                    invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
-                    userType: item.invitationData!.senderUserType,
-                    onInvitePeopleTap: onAddMorePeople,
-                    onPlaceTap: () => onInvitationPlaceTap?.call(
-                      item.invitationData!.contentId,
-                      item.invitationData!.contentType,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                    UiKitChatInCard(
+                      showAvatar: chatData.isGroupChat,
+                      avatarUrl: item.senderAvatar,
+                      senderName: item.senderName,
+                      senderType: item.senderProfileType,
+                      senderNickname: item.senderNickname ?? '',
+                      onReplyMessage: onReplyMessage,
+                      timeOfDay: item.timeSent,
+                      id: item.messageId,
+                      hasInvitation: true,
+                      child: UiKitInviteMessageContent(
+                        hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
+                        brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
+                        showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
+                        username: item.invitationData!.senderUserName,
+                        placeName: item.invitationData!.contentName,
+                        placeImagePath: item.invitationData!.contentImagePath,
+                        invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
+                        userType: item.invitationData!.senderUserType,
+                        onInvitePeopleTap: onAddMorePeople,
+                        onPlaceTap: () => onInvitationPlaceTap?.call(
+                          item.invitationData!.contentId,
+                          item.invitationData!.contentType,
+                        ),
+                        canDenyInvitation: chatData.readOnlyChat
+                            ? false
+                            : chatData.isGroupChat
+                                ? !item.invitationData!.hasAcceptedInvite
+                                : !chatData.hasAcceptedInvite,
+                        canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
+                        onAcceptTap: () {
+                          if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                        },
+                        onDenyTap: () {
+                          if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                        },
+                        tags: item.invitationData?.tags ?? [],
+                        customMessageData: chatData.isGroupChat
+                            ? null
+                            : InviteCustomMessageData(
+                                senderUserName: item.invitationData!.senderUserName,
+                                receiverUserName: item.invitationData!.receiverUserName,
+                                senderUserType: item.invitationData!.senderUserType,
+                                receiverUserType: item.invitationData!.receiverUserType,
+                              ),
+                      ),
                     ),
-                    canDenyInvitation: chatData.readOnlyChat
-                        ? false
-                        : chatData.isGroupChat
-                            ? !item.invitationData!.hasAcceptedInvite
-                            : !chatData.hasAcceptedInvite,
-                    canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
-                    onAcceptTap: () {
-                      if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
-                    },
-                    onDenyTap: () {
-                      if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
-                    },
-                    tags: item.invitationData?.tags ?? [],
-                    customMessageData: chatData.isGroupChat
-                        ? null
-                        : InviteCustomMessageData(
-                            senderUserName: item.invitationData!.senderUserName,
-                            receiverUserName: item.invitationData!.receiverUserName,
-                            senderUserType: item.invitationData!.senderUserType,
-                            receiverUserType: item.invitationData!.receiverUserType,
-                          ),
-                  ),
+                  ],
                 ),
               );
             }
@@ -355,36 +379,42 @@ class ChatComponent extends StatelessWidget {
               onVisibilityChanged: (info) {
                 if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
               },
-              child: item.replyMessageModel == null
-                  ? UiKitChatInCard(
-                      hasInvitation: false,
-                      showAvatar: chatData.isGroupChat,
-                      avatarUrl: item.senderAvatar,
-                      senderName: item.senderName,
-                      senderType: item.senderProfileType,
-                      onReplyMessage: onReplyMessage,
-                      id: item.messageId,
-                      timeOfDay: item.timeSent,
-                      text: item.message,
-                      senderNickname: item.senderNickname ?? '',
-                    )
-                  : UiKitChatCardWithReplyIn(
-                      showAvatar: chatData.isGroupChat,
-                      id: item.messageId,
-                      onReplyMessage: onReplyMessage,
-                      onReplyMassageTap: onReplyMessageTap,
-                      text: item.message,
-                      timeOfDay: item.timeSent,
-                      replyMessageId: item.replyMessageModel!.messageId,
-                      replyText: item.replyMessageModel!.message!,
-                      replyUserAvatar: item.replyMessageModel!.senderAvatar!,
-                      replyUserType: item.replyMessageModel!.senderProfileType!,
-                      replySenderName: item.replyMessageModel!.senderName!,
-                      senderNickname: item.senderNickname ?? '',
-                      senderName: item.senderName,
-                      senderType: item.senderProfileType,
-                      avatarUrl: item.senderAvatar,
-                    ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                  item.replyMessageModel == null
+                      ? UiKitChatInCard(
+                          hasInvitation: false,
+                          showAvatar: chatData.isGroupChat,
+                          avatarUrl: item.senderAvatar,
+                          senderName: item.senderName,
+                          senderType: item.senderProfileType,
+                          onReplyMessage: onReplyMessage,
+                          id: item.messageId,
+                          timeOfDay: item.timeSent,
+                          text: item.message,
+                          senderNickname: item.senderNickname ?? '',
+                        )
+                      : UiKitChatCardWithReplyIn(
+                          showAvatar: chatData.isGroupChat,
+                          id: item.messageId,
+                          onReplyMessage: onReplyMessage,
+                          onReplyMassageTap: onReplyMessageTap,
+                          text: item.message,
+                          timeOfDay: item.timeSent,
+                          replyMessageId: item.replyMessageModel!.messageId,
+                          replyText: item.replyMessageModel!.message!,
+                          replyUserAvatar: item.replyMessageModel!.senderAvatar!,
+                          replyUserType: item.replyMessageModel!.senderProfileType!,
+                          replySenderName: item.replyMessageModel!.senderName!,
+                          senderNickname: item.senderNickname ?? '',
+                          senderName: item.senderName,
+                          senderType: item.senderProfileType,
+                          avatarUrl: item.senderAvatar,
+                        ),
+                ],
+              ),
             );
           }
         },
