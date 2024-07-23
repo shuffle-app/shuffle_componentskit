@@ -4,6 +4,7 @@ import 'package:shuffle_components_kit/presentation/components/profile/points_co
 import 'package:shuffle_components_kit/presentation/components/profile/points_component/ui_user_points_progress_bar_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:intl/intl.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'rectangle_circle_animation.dart';
 import 'row_gradient_circle.dart';
@@ -29,6 +30,7 @@ class PointsComponent extends StatelessWidget {
   });
 
   final ScrollController _scrollController = ScrollController();
+  final AutoSizeGroup challengeFeelingsGroup = AutoSizeGroup();
 
   LinearInfluencerIndicator _linearInfluencerIndicator(
     UiUserPointsProgressBarModel? uiUserPointsProgressBarModel,
@@ -59,6 +61,34 @@ class PointsComponent extends StatelessWidget {
       customGradient: getCustomGradient(),
       customColor: customColor,
     );
+  }
+
+  String getLevelTitle() {
+    if (uiUserPointsProgressBarModel.level < 3) {
+      switch (uiUserPointsProgressBarModel.isMenGender) {
+        case true:
+          return S.current.TravelerMen;
+        default:
+          return S.current.TravelerWom;
+      }
+    } else if (3 <= uiUserPointsProgressBarModel.level &&
+        uiUserPointsProgressBarModel.level < 6) {
+      switch (uiUserPointsProgressBarModel.isMenGender) {
+        case true:
+          return S.current.SeekingWandererMen;
+        default:
+          return S.current.SeekingWandererWom;
+      }
+    } else if (6 <= uiUserPointsProgressBarModel.level) {
+      switch (uiUserPointsProgressBarModel.isMenGender) {
+        case true:
+          return S.current.WiseacreOfSands;
+        default:
+          return S.current.WiseacreLadyOfSands;
+      }
+    } else {
+      return S.current.TravelerMen;
+    }
   }
 
   String stringWithSpace(int text) {
@@ -101,7 +131,7 @@ class PointsComponent extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${stringWithSpace(userPointsCount)} ${S.of(context).PointsCount(2650)}',
+                '${stringWithSpace(userPointsCount)} ${S.of(context).PointsCount(userPointsCount)}',
                 style: theme?.boldTextTheme.subHeadline,
               ),
             ],
@@ -131,9 +161,7 @@ class PointsComponent extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: uiUserPointsProgressBarModel.isMenGender
-                                  ? S.of(context).WiseacreOfSands
-                                  : S.of(context).WiseacreLadyOfSands,
+                              text: getLevelTitle(),
                               style: theme?.regularTextTheme.caption1
                                   .copyWith(color: Colors.white),
                             ),
@@ -142,9 +170,7 @@ class PointsComponent extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-                SizedBox(height: 4.h),
-                // SpacingFoundation.verticalSpace4,
+                ).paddingOnly(bottom: SpacingFoundation.verticalSpacing4),
                 Row(
                   children: [
                     RowGradientCircle(
@@ -353,8 +379,10 @@ class PointsComponent extends StatelessWidget {
                                             style: theme
                                                 ?.boldTextTheme.caption3Medium,
                                           ),
-                                          Text(
+                                          AutoSizeText(
                                             '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
+                                            maxLines: 1,
+                                            group: challengeFeelingsGroup,
                                             style: theme
                                                 ?.boldTextTheme.caption2Bold,
                                             textAlign: TextAlign.right,
