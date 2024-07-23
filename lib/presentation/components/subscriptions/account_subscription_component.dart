@@ -8,13 +8,11 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class AccountSubscriptionComponent extends StatefulWidget {
+class AccountSubscriptionComponent extends StatelessWidget {
   final UiSubscriptionModel uiModel;
-  final ValueChanged<SubscriptionOfferModel>? onSubscribe;
+  final ValueChanged<SubscriptionOfferModel>? onOfferSelected;
   final ComponentModel configModel;
   final String title;
-  final bool isLoading;
-  final VoidCallback? onRestorePurchase;
   final List<SubscriptionDescriptionItem> subscriptionFeatures;
 
   const AccountSubscriptionComponent({
@@ -23,64 +21,14 @@ class AccountSubscriptionComponent extends StatefulWidget {
     required this.configModel,
     required this.title,
     required this.subscriptionFeatures,
-    this.onSubscribe,
-    this.isLoading = false,
-    this.onRestorePurchase,
+    this.onOfferSelected,
   });
 
-  @override
-  State<AccountSubscriptionComponent> createState() => _AccountSubscriptionComponentState();
-}
-
-class _AccountSubscriptionComponentState extends State<AccountSubscriptionComponent> {
-  SubscriptionOfferModel? _selectedOffer;
-  bool _isLoading = false;
-  final _autoSizeGroup = AutoSizeGroup();
-
-  String _buttonText() {
-    if (widget.uiModel.userType == UserTileType.premium) {
-      return S.of(context).GoPremium.toUpperCase();
-    } else if (widget.uiModel.userType == UserTileType.pro) {
-      return S.of(context).GoProFree.toUpperCase();
-    } else {
-      return S
-          .of(context)
-          .UpgradeForNmoney(
-            _selectedOffer == null
-                ? ''
-                : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
-                    ? S.of(context).ForFormattedPrice(S.of(context).Free)
-                    : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
-          )
-          .toUpperCase();
-    }
-  }
-
-  @override
-  void initState() {
-    _selectedOffer = widget.uiModel.selectedInitialOffer;
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant AccountSubscriptionComponent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.isLoading != oldWidget.isLoading) {
-      setState(() {
-        _isLoading = widget.isLoading;
-      });
-    }
-    if (widget.uiModel.selectedInitialOffer != _selectedOffer) {
-      setState(() {
-        _selectedOffer = widget.uiModel.selectedInitialOffer;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    final verticalMargin = (widget.configModel.positionModel?.verticalMargin ?? 0).toDouble();
-    final horizontalMargin = (widget.configModel.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (configModel.positionModel?.verticalMargin ?? 0).toDouble();
+    final horizontalMargin = (configModel.positionModel?.horizontalMargin ?? 0).toDouble();
     final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
     final regularTextTheme = theme?.regularTextTheme;
@@ -91,16 +39,16 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            widget.title,
+            title,
             style: boldTextTheme?.title1,
           ),
           SpacingFoundation.verticalSpace16,
           context.userTile(
             data: BaseUiKitUserTileData(
-              username: widget.uiModel.nickname,
-              avatarUrl: widget.uiModel.userAvatarUrl,
-              name: widget.uiModel.userName,
-              type: widget.uiModel.userType,
+              username: uiModel.nickname,
+              avatarUrl: uiModel.userAvatarUrl,
+              name: uiModel.userName,
+              type: uiModel.userType,
               showBadge: true,
             ),
           ),
@@ -109,15 +57,15 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
-              children: widget.uiModel.offers.map(
+              children: uiModel.offers.map(
                 (e) {
                   double padding = 0;
-                  if (e != widget.uiModel.offers.last) padding = EdgeInsetsFoundation.vertical16;
+                  if (e != uiModel.offers.last) padding = EdgeInsetsFoundation.vertical16;
 
                   return SubscriptionOfferWidget(
                     autoSizeGroup: _autoSizeGroup,
-                    selected: _selectedOffer == e,
-                    onTap: () => setState(() => _selectedOffer = e),
+                    selected: uiModel.selectedInitialOffer == e,
+                    onTap: () => onOfferSelected?.call(e),
                     model: e,
                     bottomInset: padding,
                   );
@@ -125,9 +73,9 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               ).toList(),
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
-          if (_selectedOffer?.trialDaysAvailable != null &&
-              _selectedOffer!.trialDaysAvailable! > 0 &&
-              widget.uiModel.userType == UserTileType.pro) ...[
+          if (uiModel.selectedInitialOffer?.trialDaysAvailable != null &&
+              uiModel.selectedInitialOffer!.trialDaysAvailable! > 0 &&
+              uiModel.userType == UserTileType.pro) ...[
             SpacingFoundation.verticalSpace16,
             UiKitCardWrapper(
               gradient: theme?.themeMode == ThemeMode.light
@@ -137,7 +85,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
               child: Stack(
                 children: [
                   Text(
-                    '${S.of(context).YouGetAccessToTrial}  ${_selectedOffer!.trialDaysAvailable} ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)}',
+                    '${S.of(context).YouGetAccessToTrial}  ${uiModel.selectedInitialOffer!.trialDaysAvailable} ${S.of(context).Days(uiModel.selectedInitialOffer!.trialDaysAvailable!)}',
                     style: regularTextTheme?.body,
                   ),
                   GradientableWidget(
@@ -150,7 +98,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                             style: boldTextTheme?.body.copyWith(color: Colors.transparent),
                           ),
                           TextSpan(
-                            text: '${_selectedOffer!.trialDaysAvailable!}',
+                            text: '${uiModel.selectedInitialOffer!.trialDaysAvailable!}',
                             style: regularTextTheme?.body.copyWith(color: Colors.white),
                           )
                         ],
@@ -164,7 +112,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                         children: [
                           TextSpan(
                             text:
-                                '${S.of(context).YouGetAccessToTrial}  ${_selectedOffer!.trialDaysAvailable!} ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)} ',
+                                '${S.of(context).YouGetAccessToTrial}  ${uiModel.selectedInitialOffer!.trialDaysAvailable!} ${S.of(context).Days(uiModel.selectedInitialOffer!.trialDaysAvailable!)} ',
                             style: regularTextTheme?.body.copyWith(color: Colors.transparent),
                           ),
                           TextSpan(
@@ -181,12 +129,12 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
           ],
           SpacingFoundation.verticalSpace16,
           ...List.generate(
-            widget.subscriptionFeatures.length,
+            subscriptionFeatures.length,
             (index) {
               final indexIsEven = index.isEven;
 
               double bottimPaddign = SpacingFoundation.verticalSpacing16;
-              if (index == widget.subscriptionFeatures.length - 1) bottimPaddign = SpacingFoundation.zero;
+              if (index == subscriptionFeatures.length - 1) bottimPaddign = SpacingFoundation.zero;
 
               return UiKitCardWrapper(
                       gradient: theme?.themeMode == ThemeMode.light
@@ -198,7 +146,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                                 Expanded(
                                   flex: 4,
                                   child: Text(
-                                    widget.subscriptionFeatures[index].description,
+                                    subscriptionFeatures[index].description,
                                     style: regularTextTheme?.body,
                                   ).paddingOnly(
                                     left: SpacingFoundation.horizontalSpacing16,
@@ -209,7 +157,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                                 Expanded(
                                   flex: 1,
                                   child: ImageWidget(
-                                    link: widget.subscriptionFeatures[index].imagePath,
+                                    link: subscriptionFeatures[index].imagePath,
                                   ).paddingOnly(
                                     left: SpacingFoundation.horizontalSpacing2,
                                     right: SpacingFoundation.horizontalSpacing8,
@@ -222,7 +170,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                                 Expanded(
                                   flex: 1,
                                   child: ImageWidget(
-                                    link: widget.subscriptionFeatures[index].imagePath,
+                                    link: subscriptionFeatures[index].imagePath,
                                   ).paddingOnly(
                                     right: SpacingFoundation.horizontalSpacing2,
                                     left: SpacingFoundation.horizontalSpacing8,
@@ -231,7 +179,7 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                                 Expanded(
                                   flex: 4,
                                   child: Text(
-                                    widget.subscriptionFeatures[index].description,
+                                    subscriptionFeatures[index].description,
                                     style: regularTextTheme?.body,
                                   ).paddingOnly(
                                     right: SpacingFoundation.horizontalSpacing16,
@@ -244,55 +192,10 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
                   .paddingOnly(bottom: bottimPaddign);
             },
           ),
-          if (widget.uiModel.additionalInfo != null) ...[
+          if (uiModel.additionalInfo != null) ...[
             SpacingFoundation.verticalSpace24,
-            widget.uiModel.additionalInfo!
+            uiModel.additionalInfo!
           ],
-          SpacingFoundation.verticalSpace24,
-          context.gradientButton(
-            data: BaseUiKitButtonData(
-              loading: _isLoading,
-              autoSizeGroup: AutoSizeGroup(),
-              fit: ButtonFit.fitWidth,
-              text: _buttonText(),
-              onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
-            ),
-          ),
-          TextButton(
-            onPressed: widget.onRestorePurchase,
-            child: Text(
-              S.current.RestorePurchase,
-              style: boldTextTheme?.caption1Bold,
-            ),
-          ),
-          if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0) ...[
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Cancel any time in ${Platform.isIOS ? 'AppStore' : 'Play Store'}',
-                    style: regularTextTheme?.caption3))
-          ],
-          Align(
-              alignment: Alignment.centerLeft,
-              child: RichText(
-                  text: TextSpan(
-                children: [
-                  TextSpan(
-                      text: S.of(context).TermsOfService,
-                      style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => launchUrlString(widget.uiModel.termsOfServiceUrl)),
-                  TextSpan(
-                    text: S.of(context).AndWithWhitespaces.toLowerCase(),
-                    style: regularTextTheme?.caption3,
-                  ),
-                  TextSpan(
-                      text: S.of(context).PrivacyPolicy,
-                      style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.darkNeutral600),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => launchUrlString(widget.uiModel.privacyPolicyUrl)),
-                ],
-              ))),
-          SpacingFoundation.verticalSpace24,
         ],
       ).paddingSymmetric(
         vertical: verticalMargin,
@@ -301,3 +204,5 @@ class _AccountSubscriptionComponentState extends State<AccountSubscriptionCompon
     );
   }
 }
+
+final AutoSizeGroup _autoSizeGroup = AutoSizeGroup();

@@ -18,7 +18,7 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: context.pop,
           child: ImageWidget(
             iconData: ShuffleUiKitIcons.cross,
             color: theme?.colorScheme.darkNeutral900,
@@ -41,10 +41,13 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
               UiKitSymbolsCounterInputFieldNoFill(
                 controller: titleController,
                 enabled: true,
+                autofocus: true,
                 obscureText: false,
                 maxSymbols: 25,
+                textInputAction: TextInputAction.done,
                 maxLines: 2,
                 minLines: 1,
+                onFieldSubmitted: (_)=> onConfirm,
                 customFocusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                         width: 2,

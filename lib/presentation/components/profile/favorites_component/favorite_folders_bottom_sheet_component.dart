@@ -8,11 +8,13 @@ class FavoriteFoldersBottomSheetComponent extends StatelessWidget {
     this.onAddToMyFavorites,
     required this.places,
     required this.personName,
+    required this.folderName,
   });
 
   final VoidCallback? onAddToMyFavorites;
   final List<PlacePreview> places;
   final String personName;
+  final String folderName;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class FavoriteFoldersBottomSheetComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         Text(
-          S.current.TheBestTechnologiesConf,
+          folderName,
           style: context.uiKitTheme?.boldTextTheme.title2,
         ),
         SpacingFoundation.verticalSpace16,
