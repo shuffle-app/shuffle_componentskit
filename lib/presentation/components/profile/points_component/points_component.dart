@@ -382,10 +382,11 @@ class PointsComponent extends StatelessWidget {
                                           AutoSizeText(
                                             '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
                                             maxLines: 1,
+                                            minFontSize: 8,
                                             group: challengeFeelingsGroup,
+                                            textAlign: TextAlign.right,
                                             style: theme
                                                 ?.boldTextTheme.caption2Bold,
-                                            textAlign: TextAlign.right,
                                           ),
                                           Text(
                                             '${parseDoubleToInt(itemChallengeFeelings.actualSum)}/${parseDoubleToInt(itemChallengeFeelings.sum)}',
