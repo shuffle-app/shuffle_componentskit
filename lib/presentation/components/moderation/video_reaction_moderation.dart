@@ -5,12 +5,10 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class VideoReactionModeration extends StatelessWidget {
   final List<ReactionPreviewUiModel> reactionPreviewModelList;
-  final Function() deleteFunction;
   final Function() sortFunction;
 
   const VideoReactionModeration({
     super.key,
-    required this.deleteFunction,
     required this.sortFunction,
     required this.reactionPreviewModelList,
   });
@@ -34,17 +32,6 @@ class VideoReactionModeration extends StatelessWidget {
                 style: textTheme?.title1,
               ),
               const Spacer(),
-              context.coloredButtonWithBorderRadius(
-                data: BaseUiKitButtonData(
-                  fit: ButtonFit.hugContent,
-                  textColor: theme?.colorScheme.inversePrimary,
-                  backgroundColor:
-                      theme?.colorScheme.darkNeutral900.withOpacity(0.68),
-                  text: S.of(context).ShowDeleted,
-                  onPressed: deleteFunction,
-                ),
-              ),
-              SpacingFoundation.horizontalSpace12,
               context.iconButtonNoPadding(
                 data: BaseUiKitButtonData(
                   onPressed: sortFunction,
