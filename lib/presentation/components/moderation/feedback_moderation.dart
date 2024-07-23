@@ -4,13 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FeedbackModeration extends StatefulWidget {
-  final Function() deleteFunction;
   final Function() sortFunction;
   final List<FeedbackModerationUiModel> feedbackUiModelList;
 
   const FeedbackModeration({
     super.key,
-    required this.deleteFunction,
     required this.sortFunction,
     required this.feedbackUiModelList,
   });
@@ -20,8 +18,6 @@ class FeedbackModeration extends StatefulWidget {
 }
 
 class _FeedbackModerationState extends State<FeedbackModeration> {
-  bool showCompanyItem = false;
-
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
@@ -41,17 +37,6 @@ class _FeedbackModerationState extends State<FeedbackModeration> {
                 style: textTheme?.title1,
               ),
               const Spacer(),
-              context.coloredButtonWithBorderRadius(
-                data: BaseUiKitButtonData(
-                  fit: ButtonFit.hugContent,
-                  textColor: theme?.colorScheme.inversePrimary,
-                  backgroundColor:
-                      theme?.colorScheme.darkNeutral900.withOpacity(0.68),
-                  text: S.of(context).ShowDeleted,
-                  onPressed: widget.deleteFunction,
-                ),
-              ),
-              SpacingFoundation.horizontalSpace12,
               context.iconButtonNoPadding(
                 data: BaseUiKitButtonData(
                   onPressed: widget.sortFunction,
@@ -63,48 +48,26 @@ class _FeedbackModerationState extends State<FeedbackModeration> {
             ],
           ).paddingAll(EdgeInsetsFoundation.all24),
           Expanded(
-            child: ListView.builder(
+            child: ListView(
               padding: EdgeInsetsDirectional.zero,
-              itemCount: widget.feedbackUiModelList.length,
-              itemBuilder: (context, index) {
-                final feedbackUiModel = widget.feedbackUiModelList[index];
-                final bool companyFeedbackIsNotEmpty = widget
-                    .feedbackUiModelList[index]
-                    .companyFeedbackItemUiModel
-                    .isNotEmpty;
-
-                return Column(
-                  children: [
-                    FeedbackItem(
-                      feedBackModel: feedbackUiModel.feedbackItemUiModel,
-                      showExpand: companyFeedbackIsNotEmpty,
-                      onSubmit: (showExpandIsTap) {
-                        setState(() {
-                          showCompanyItem = showExpandIsTap;
-                        });
-                      },
-                    ).paddingOnly(
-                      bottom: SpacingFoundation.verticalSpacing24,
-                    ),
-                    if (showCompanyItem) ...[
-                      Column(
-                        children: List.generate(
-                          feedbackUiModel.companyFeedbackItemUiModel.length,
-                          (index) {
-                            return FeedbackItem(
-                              feedBackModel: feedbackUiModel
-                                  .companyFeedbackItemUiModel[index],
-                              showExpand: false,
-                            ).paddingOnly(
-                              bottom: SpacingFoundation.verticalSpacing24,
-                            );
-                          },
-                        ),
-                      )
-                    ],
-                  ],
-                );
-              },
+              children: List.generate(
+                widget.feedbackUiModelList.length,
+                (index) {
+                  final feedbackUiModel = widget.feedbackUiModelList[index];
+                  final bool companyFeedbackIsNotEmpty = widget
+                      .feedbackUiModelList[index]
+                      .companyFeedbackItemUiModel
+                      .isNotEmpty;
+                  return FeedbackItem(
+                    feedBackModel: feedbackUiModel.feedbackItemUiModel,
+                    companyFeedbackItemUiModel:
+                        feedbackUiModel.companyFeedbackItemUiModel,
+                    showExpand: companyFeedbackIsNotEmpty,
+                  ).paddingOnly(
+                    bottom: SpacingFoundation.verticalSpacing24,
+                  );
+                },
+              ),
             ).paddingSymmetric(
                 horizontal: SpacingFoundation.horizontalSpacing24),
           )
@@ -114,49 +77,97 @@ class _FeedbackModerationState extends State<FeedbackModeration> {
   }
 }
 
-class FeedbackItem extends StatelessWidget {
+class FeedbackItem extends StatefulWidget {
   final FeedbackItemUiModel feedBackModel;
+  final List<FeedbackItemUiModel>? companyFeedbackItemUiModel;
   final bool showExpand;
-  final Function(bool showExpandIsTap)? onSubmit;
+  final bool? isLast;
+  final VoidCallback? onExpandedTap;
 
   const FeedbackItem({
     super.key,
     required this.feedBackModel,
     required this.showExpand,
-    this.onSubmit,
+    this.companyFeedbackItemUiModel,
+    this.isLast,
+    this.onExpandedTap,
   });
 
   @override
+  State<FeedbackItem> createState() => _FeedbackItemState();
+}
+
+class _FeedbackItemState extends State<FeedbackItem> {
+  bool showExpandIsTap = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: UiKitFeedbackCard(
-            avatarSize: kIsWeb ? const Size(40, 40) : null,
-            avatarUrl: feedBackModel.avatarUrl,
-            title: feedBackModel.title,
-            datePosted:
-                feedBackModel.datePosted?.subtract(const Duration(days: 2)),
-            rating: feedBackModel.rating,
-            companyAnswered: feedBackModel.companyAnswered,
-            helpfulCount: feedBackModel.helpfulCount,
-            text: feedBackModel.text,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: UiKitFeedbackCard(
+                avatarSize: kIsWeb ? const Size(40, 40) : null,
+                avatarUrl: widget.feedBackModel.avatarUrl,
+                title: widget.feedBackModel.title,
+                datePosted: widget.feedBackModel.datePosted
+                    ?.subtract(const Duration(days: 2)),
+                rating: widget.feedBackModel.rating,
+                companyAnswered: widget.feedBackModel.companyAnswered,
+                helpfulCount: widget.feedBackModel.helpfulCount,
+                text: widget.feedBackModel.text,
+                maxLines: 20,
+              ),
+            ),
+            SpacingFoundation.horizontalSpace16,
+            Expanded(
+              child: UiKitFeedbackInfo(
+                isModerated: widget.feedBackModel.isModerated,
+                onModerated: widget.feedBackModel.onModerated,
+                dateTime: widget.feedBackModel.datePosted ?? DateTime.now(),
+                removeFunction: widget.feedBackModel.removeFunction,
+                userName: widget.feedBackModel.title ?? '',
+                expandThreadIsOpen: showExpandIsTap,
+                responsesFromCompanyToReview: getShowExpandValue(
+                    currentValue: showExpandIsTap,
+                    isExpanded: widget.showExpand),
+                onSubmit: (widget.isLast ?? false)
+                    ? widget.onExpandedTap!
+                    : () {
+                        setState(() {
+                          showExpandIsTap = !showExpandIsTap;
+                        });
+                      },
+              ),
+            ),
+          ],
         ),
-        SpacingFoundation.horizontalSpace16,
-        Expanded(
-          child: UiKitFeedbackInfo(
-            dateTime: feedBackModel.datePosted ?? DateTime.now(),
-            removeFunction: feedBackModel.removeFunction,
-            userName: feedBackModel.title ?? '',
-            responsesFromCompanytoReview: showExpand,
-            onSubmit: (expandThreadIsOpen) {
-              if (onSubmit != null) {
-                onSubmit!(expandThreadIsOpen);
-              }
+        if (showExpandIsTap) ...[
+          SpacingFoundation.verticalSpace24,
+          ...List.generate(
+            widget.companyFeedbackItemUiModel?.length ?? 0,
+            (index) {
+              return FeedbackItem(
+                feedBackModel: widget.companyFeedbackItemUiModel![index],
+                showExpand:
+                    index == widget.companyFeedbackItemUiModel!.length - 1,
+                onExpandedTap:
+                    index == widget.companyFeedbackItemUiModel!.length - 1
+                        ? () {
+                            setState(() {
+                              showExpandIsTap = !showExpandIsTap;
+                            });
+                          }
+                        : null,
+                isLast: index == widget.companyFeedbackItemUiModel!.length - 1,
+              ).paddingOnly(
+                bottom: SpacingFoundation.verticalSpacing24,
+              );
             },
           ),
-        ),
+        ]
       ],
     );
   }
@@ -180,6 +191,8 @@ class FeedbackItemUiModel {
   final bool? companyAnswered;
   final int? helpfulCount;
   final String? text;
+  final bool isModerated;
+  final VoidCallback onModerated;
   final VoidCallback removeFunction;
 
   FeedbackItemUiModel({
@@ -191,5 +204,21 @@ class FeedbackItemUiModel {
     required this.helpfulCount,
     required this.text,
     required this.removeFunction,
+    required this.isModerated,
+    required this.onModerated,
   });
+}
+
+bool getShowExpandValue(
+    {required bool isExpanded, required bool currentValue, bool? isLast}) {
+  if (isLast != null) {
+    return true;
+  } else if (!isExpanded) {
+    return false;
+  } else if (isExpanded && currentValue) {
+    return false;
+  } else if (isExpanded && !currentValue) {
+    return true;
+  }
+  return false;
 }
