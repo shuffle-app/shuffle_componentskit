@@ -272,7 +272,7 @@ class PointsComponent extends StatelessWidget {
                         child: Stack(
                           children: [
                             ImageWidget(
-                              height: 1.sw <= 380 ? 75.h : 65.h,
+                              height: 1.sw <= 380 ? 85.h : 75.h,
                               width: 85.w,
                               fit: BoxFit.fitWidth,
                               link: itemPoits.imagePath,
