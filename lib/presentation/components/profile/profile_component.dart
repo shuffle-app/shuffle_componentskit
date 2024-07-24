@@ -129,32 +129,32 @@ class ProfileComponent extends StatelessWidget {
         verticalMargin.heightBox,
         profile.cardWidget.paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace24,
-        Center(child:
-        SingleChildScrollView(
+        Center(
+            child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // UiKitStatsActionCard(
-              //   group: _statsConstGroup,
-              //   stats: UiKitStats(
-              //     title: S.current.Balance,
-              //     value: '${profile.balance ?? 100}\$',
-              //     actionButton: context.smallOutlinedButton(       
-              //       data: BaseUiKitButtonData(
-              //         backgroundColor: Colors.transparent,
-              //         onPressed: profile.onBalanceDetails,
-              //         iconInfo: BaseUiKitButtonIconData(
-              //           size: 10.h,
-              //           iconData: ShuffleUiKitIcons.chevronright,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SpacingFoundation.horizontalSpace16,
+              UiKitStatsActionCard(
+                group: _statsConstGroup,
+                stats: UiKitStats(
+                  title: S.current.Balance,
+                  value: '${profile.balance ?? 0}\$',
+                  actionButton: context.smallOutlinedButton(
+                    data: BaseUiKitButtonData(
+                      backgroundColor: Colors.transparent,
+                      onPressed: profile.onBalanceDetails,
+                      iconInfo: BaseUiKitButtonIconData(
+                        size: 10.h,
+                        iconData: ShuffleUiKitIcons.chevronright,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SpacingFoundation.horizontalSpace16,
               UiKitStatsActionCard(
                 group: _statsConstGroup,
                 stats: UiKitStats(
