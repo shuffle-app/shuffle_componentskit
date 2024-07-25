@@ -30,8 +30,7 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<int>? onRecommendedUserCardChanged;
   final VoidCallback? onRecommendedUserMessagePressed;
   final ValueChanged<HangoutRecommendation>? onRecommendedUserAvatarPressed;
-  final PagingController<int, VideoReactionUiModel>?
-      videoReactionsPagingController;
+  final PagingController<int, VideoReactionUiModel>? videoReactionsPagingController;
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
   final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
   final int? unreadMessagesCount;
@@ -78,14 +77,10 @@ class ProfileComponent extends StatelessWidget {
     final textTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentProfileModel model =
-        ComponentProfileModel.fromJson(config['profile']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final AutoSizeGroup _statsConstGroup = AutoSizeGroup();
 
     return BlurredAppBarPage(
@@ -137,41 +132,45 @@ class ProfileComponent extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              UiKitStatsActionCard(
-                group: _statsConstGroup,
-                stats: UiKitStats(
-                  title: S.current.Balance,
-                  value: '${profile.balance ?? 0}\$',
-                  actionButton: context.smallOutlinedButton(
-                    data: BaseUiKitButtonData(
-                      backgroundColor: Colors.transparent,
-                      onPressed: profile.onBalanceDetails,
-                      iconInfo: BaseUiKitButtonIconData(
-                        size: 10.h,
-                        iconData: ShuffleUiKitIcons.chevronright,
+              GestureDetector(
+                  onTap: profile.onBalanceDetails,
+                  child: UiKitStatsActionCard(
+                    group: _statsConstGroup,
+                    stats: UiKitStats(
+                      title: S.current.Balance,
+                      value: '${profile.balance ?? 0}\$',
+                      actionButton: context.smallOutlinedButton(
+                        data: BaseUiKitButtonData(
+                          backgroundColor: Colors.transparent,
+                          onPressed: () {},
+                          iconInfo: BaseUiKitButtonIconData(
+                            size: 10.h,
+                            iconData: ShuffleUiKitIcons.chevronright,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
+                  )),
               SpacingFoundation.horizontalSpace16,
-              UiKitStatsActionCard(
-                group: _statsConstGroup,
-                stats: UiKitStats(
-                  title: S.current.Points,
-                  value: stringWithSpace(profile.points ?? 0),
-                  actionButton: context.smallOutlinedButton(
-                    data: BaseUiKitButtonData(
-                      backgroundColor: Colors.transparent,
-                      onPressed: profile.onPointsDetails,
-                      iconInfo: BaseUiKitButtonIconData(
-                        size: 10.h,
-                        iconData: ShuffleUiKitIcons.chevronright,
+              GestureDetector(
+                  onTap: profile.onPointsDetails,
+                  child: UiKitStatsActionCard(
+                    group: _statsConstGroup,
+                    stats: UiKitStats(
+                      title: S.current.Points,
+                      value: stringWithSpace(profile.points ?? 0),
+                      actionButton: context.smallOutlinedButton(
+                        data: BaseUiKitButtonData(
+                          backgroundColor: Colors.transparent,
+                          onPressed: () {},
+                          iconInfo: BaseUiKitButtonIconData(
+                            size: 10.h,
+                            iconData: ShuffleUiKitIcons.chevronright,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
+                  )),
               SpacingFoundation.horizontalSpace16,
               UiKitSupportShuffle(
                 onCustomDonate: profile.onCustomDonate,
@@ -204,8 +203,7 @@ class ProfileComponent extends StatelessWidget {
                   ),
                   HintCardUiModel(
                     title: S.current.ProfileFindSomeoneHiwHint(2),
-                    imageUrl:
-                        GraphicsFoundation.instance.png.pointsReputation.path,
+                    imageUrl: GraphicsFoundation.instance.png.pointsReputation.path,
                   ),
                   HintCardUiModel(
                     title: S.current.ProfileFindSomeoneHiwHint(3),
@@ -230,8 +228,7 @@ class ProfileComponent extends StatelessWidget {
                   userPoints: user?.userPointsBalance ?? 0,
                   sameInterests: user?.commonInterests ?? 0,
                   userTileType: user?.userTileType ?? UserTileType.ordinary,
-                  onAvatarTapped: () =>
-                      onRecommendedUserAvatarPressed?.call(user!),
+                  onAvatarTapped: () => onRecommendedUserAvatarPressed?.call(user!),
                   onMessage: onRecommendedUserMessagePressed,
                 );
               } catch (e) {
@@ -284,17 +281,14 @@ class ProfileComponent extends StatelessWidget {
                     viewed: reaction.isViewed,
                     onTap: () => onReactionTapped?.call(reaction),
                   ).paddingOnly(
-                    left: index == 0
-                        ? EdgeInsetsFoundation.all16
-                        : EdgeInsetsFoundation.zero,
+                    left: index == 0 ? EdgeInsetsFoundation.all16 : EdgeInsetsFoundation.zero,
                   );
                 },
                 pagingController: videoReactionsPagingController!,
               ),
             ),
           ),
-        if (videoReactionsPagingController != null)
-          SpacingFoundation.verticalSpace24,
+        if (videoReactionsPagingController != null) SpacingFoundation.verticalSpace24,
         if (feedbackPagingController != null)
           ValueListenableBuilder(
             valueListenable: feedbackPagingController!,
@@ -325,8 +319,7 @@ class ProfileComponent extends StatelessWidget {
                       ).paddingAll(EdgeInsetsFoundation.all16)
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
                         spacing: SpacingFoundation.horizontalSpacing8,
-                        shimmerLoadingChild: SizedBox(
-                            width: 0.95.sw, child: const UiKitFeedbackCard()),
+                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
                         itemBuilder: (context, feedback, index) {
                           return SizedBox(
                             width: 0.95.sw,
@@ -337,15 +330,9 @@ class ProfileComponent extends StatelessWidget {
                               companyAnswered: false,
                               text: feedback.feedbackText,
                               isHelpful: feedback.helpfulForUser,
-                              helpfulCount: feedback.helpfulCount == 0
-                                  ? null
-                                  : feedback.helpfulCount,
-                              onPressed: () =>
-                                  onFeedbackCardPressed?.call(feedback),
-                            ).paddingOnly(
-                                left: index == 0
-                                    ? EdgeInsetsFoundation.all16
-                                    : 0),
+                              helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                              onPressed: () => onFeedbackCardPressed?.call(feedback),
+                            ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
                           );
                         },
                         pagingController: feedbackPagingController!,

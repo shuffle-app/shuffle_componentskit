@@ -33,8 +33,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
     Future.delayed(const Duration(seconds: 1), () {
       categoriesController.appendLastPage(events.map((event) => event.eventType?.title ?? 'category').toSet().toList());
       itemsController
-          .appendLastPage(
-          events.where((element) => element.eventType == categoriesController.itemList?.first).toList());
+          .appendLastPage(events.where((element) => element.eventType?.title == categoriesController.itemList?.first).toList());
     });
     final cardsScroll = ScrollController();
     final UiUpcomingEventsSpinnerModel uiModel = UiUpcomingEventsSpinnerModel(
@@ -42,7 +41,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
         cardsScrollController: cardsScroll,
         onSpinChangedCategory: (value) {
           itemsController.refresh();
-          itemsController.appendLastPage(events.where((element) => element.eventType == value).toList());
+          itemsController.appendLastPage(events.where((element) => element.eventType?.title == value).toList());
           cardsScroll.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.bounceIn);
         });
 
