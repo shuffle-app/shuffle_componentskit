@@ -3,22 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class PropertyManagementCreatePropertyDialog extends StatelessWidget {
-  const PropertyManagementCreatePropertyDialog(
-      {super.key,
-      this.onCloseTap,
-      required this.isPlaceType,
-      required this.titleTextController,
-      required this.iconTextController,
-      this.iconPath,
-      required this.onIconTap,
-      required this.listIcons,
-      this.onCancleTap,
-      this.onSaveTap,
-      this.onUploadIconTap});
+  const PropertyManagementCreatePropertyDialog({
+    super.key,
+    this.onCloseTap,
+    required this.isPlaceType,
+    required this.titleTextController,
+    required this.iconTextController,
+    this.iconPath,
+    required this.onIconTap,
+    required this.listIcons,
+    this.onCancelTap,
+    this.onSaveTap,
+    this.onUploadIconTap,
+    required this.iconsScrollController,
+  });
 
   final VoidCallback? onCloseTap;
   final VoidCallback? onSaveTap;
-  final VoidCallback? onCancleTap;
+  final VoidCallback? onCancelTap;
   final bool isPlaceType;
   final TextEditingController titleTextController;
   final TextEditingController iconTextController;
@@ -26,6 +28,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
   final ValueChanged<String> onIconTap;
   final List<String> listIcons;
   final VoidCallback? onUploadIconTap;
+  final ScrollController iconsScrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,9 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    isPlaceType ? S.current.AddPlaceType : S.current.AddProperty,
+                    isPlaceType
+                        ? S.current.AddPlaceType
+                        : S.current.AddProperty,
                     style: theme?.boldTextTheme.title1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -49,7 +54,9 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
                 context.iconButtonNoPadding(
                   data: BaseUiKitButtonData(
                     onPressed: onCloseTap,
-                    iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.x, size: kIsWeb ? 24 : 24.sp),
+                    iconInfo: BaseUiKitButtonIconData(
+                        iconData: ShuffleUiKitIcons.x,
+                        size: kIsWeb ? 24 : 24.sp),
                   ),
                 )
               ],
@@ -76,6 +83,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
               onPressed: onUploadIconTap,
               onIconTap: onIconTap,
               listIconData: listIcons,
+              iconsScrollController: iconsScrollController,
             ),
             SpacingFoundation.verticalSpace24,
             Row(
@@ -96,7 +104,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
                     borderRadius: BorderRadiusFoundation.all12,
                     data: BaseUiKitButtonData(
                       text: S.current.Cancel,
-                      onPressed: onCancleTap,
+                      onPressed: onCancelTap,
                       backgroundColor: theme?.colorScheme.darkNeutral200,
                     ),
                   ),
