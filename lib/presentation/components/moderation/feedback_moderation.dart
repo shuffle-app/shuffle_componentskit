@@ -33,7 +33,9 @@ class _FeedbackModerationState extends State<FeedbackModeration> {
           Row(
             children: [
               Text(
-                S.of(context).Feedback,
+                S
+                    .of(context)
+                    .Feedback,
                 style: textTheme?.title1,
               ),
               const Spacer(),
@@ -50,27 +52,25 @@ class _FeedbackModerationState extends State<FeedbackModeration> {
           Expanded(
             child: ListView(
               padding: EdgeInsetsDirectional.zero,
-              children: List.generate(
-                widget.feedbackUiModelList.length,
-                (index) {
-                  final feedbackUiModel = widget.feedbackUiModelList[index];
-                  final bool companyFeedbackIsNotEmpty = widget
-                      .feedbackUiModelList[index]
-                      .companyFeedbackItemUiModel
-                      .isNotEmpty;
-                  return FeedbackItem(
-                    feedBackModel: feedbackUiModel.feedbackItemUiModel,
-                    companyFeedbackItemUiModel:
-                        feedbackUiModel.companyFeedbackItemUiModel,
-                    showExpand: companyFeedbackIsNotEmpty,
-                  ).paddingOnly(
-                    bottom: SpacingFoundation.verticalSpacing24,
-                  );
-                },
-              ),
-            ).paddingSymmetric(
-                horizontal: SpacingFoundation.horizontalSpacing24),
-          )
+              children:
+              widget.feedbackUiModelList.map((e) {
+                final feedbackUiModel = e;
+                final bool companyFeedbackIsNotEmpty = e
+                    .companyFeedbackItemUiModel
+                    .isNotEmpty;
+                return FeedbackItem(
+                  feedBackModel: feedbackUiModel.feedbackItemUiModel,
+                  companyFeedbackItemUiModel:
+                  feedbackUiModel.companyFeedbackItemUiModel,
+                  showExpand: companyFeedbackIsNotEmpty,
+                ).paddingOnly(
+                  bottom: SpacingFoundation.verticalSpacing24,
+                );
+              }).toList(),
+            ),
+          ).paddingSymmetric(
+              horizontal: SpacingFoundation.horizontalSpacing24),
+
         ],
       ),
     );
@@ -136,37 +136,38 @@ class _FeedbackItemState extends State<FeedbackItem> {
                 onSubmit: (widget.isLast ?? false)
                     ? widget.onExpandedTap!
                     : () {
-                        setState(() {
-                          showExpandIsTap = !showExpandIsTap;
-                        });
-                      },
+                  setState(() {
+                    showExpandIsTap = !showExpandIsTap;
+                  });
+                },
               ),
             ),
           ],
         ),
         if (showExpandIsTap) ...[
           SpacingFoundation.verticalSpace24,
-          ...List.generate(
-            widget.companyFeedbackItemUiModel?.length ?? 0,
-            (index) {
-              return FeedbackItem(
-                feedBackModel: widget.companyFeedbackItemUiModel![index],
-                showExpand:
-                    index == widget.companyFeedbackItemUiModel!.length - 1,
-                onExpandedTap:
-                    index == widget.companyFeedbackItemUiModel!.length - 1
-                        ? () {
-                            setState(() {
-                              showExpandIsTap = !showExpandIsTap;
-                            });
-                          }
-                        : null,
-                isLast: index == widget.companyFeedbackItemUiModel!.length - 1,
-              ).paddingOnly(
-                bottom: SpacingFoundation.verticalSpacing24,
-              );
-            },
-          ),
+          ...?
+          widget.companyFeedbackItemUiModel?.indexed.map((e) {
+            final index = e.$1;
+
+            return FeedbackItem(
+              feedBackModel: widget.companyFeedbackItemUiModel![index],
+              showExpand:
+              index == widget.companyFeedbackItemUiModel!.length - 1,
+              onExpandedTap:
+              index == widget.companyFeedbackItemUiModel!.length - 1
+                  ? () {
+                setState(() {
+                  showExpandIsTap = !showExpandIsTap;
+                });
+              }
+                  : null,
+              isLast: index == widget.companyFeedbackItemUiModel!.length - 1,
+            ).paddingOnly(
+              bottom: SpacingFoundation.verticalSpacing24,
+            );
+          }).toList() ?? []
+
         ]
       ],
     );
@@ -209,8 +210,7 @@ class FeedbackItemUiModel {
   });
 }
 
-bool getShowExpandValue(
-    {required bool isExpanded, required bool currentValue, bool? isLast}) {
+bool getShowExpandValue({required bool isExpanded, required bool currentValue, bool? isLast}) {
   if (isLast != null) {
     return true;
   } else if (!isExpanded) {
