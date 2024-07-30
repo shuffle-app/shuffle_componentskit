@@ -3,8 +3,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FavoriteCreateFolderComponent extends StatelessWidget {
-  const FavoriteCreateFolderComponent(
-      {super.key, required this.titleController, this.onConfirm});
+  const FavoriteCreateFolderComponent({super.key, required this.titleController, this.onConfirm});
 
   final TextEditingController titleController;
   final VoidCallback? onConfirm;
@@ -33,9 +32,11 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                S.of(context).EnterTitle,
+                S
+                    .of(context)
+                    .EnterTitle,
                 style:
-                    theme?.boldTextTheme.title2.copyWith(color: Colors.black),
+                theme?.boldTextTheme.title2.copyWith(color: Colors.black),
               ),
               SpacingFoundation.verticalSpace12,
               UiKitSymbolsCounterInputFieldNoFill(
@@ -47,7 +48,7 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 maxLines: 2,
                 minLines: 1,
-                onFieldSubmitted: (_)=> onConfirm,
+                onFieldSubmitted: (_) => onConfirm,
                 customFocusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                         width: 2,
@@ -57,57 +58,40 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
                         width: 2,
                         color: context.uiKitTheme!.colorScheme.darkNeutral400)),
                 customInputTextColor:
-                    context.uiKitTheme?.colorScheme.inverseBodyTypography,
+                context.uiKitTheme?.colorScheme.inverseBodyTypography,
               ),
               SpacingFoundation.verticalSpace16,
-              KeyboardVisibilityBuilder(
-                builder: (context, isKeyboardVisible) {
-                  return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    transitionBuilder: (child, animation) => SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(0, 1),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      ),
-                    ),
-                    child: isKeyboardVisible
-                        ? const SizedBox()
-                        : SizedBox(
-                            height: kBottomNavigationBarHeight,
-                            child: ListenableBuilder(
-                              builder: (context, child) {
-                                if (titleController.text.isEmpty) {
-                                  return context.button(
-                                    data: BaseUiKitButtonData(
-                                      text: S.current.Confirm,
-                                      onPressed: null,
-                                      fit: ButtonFit.fitWidth,
-                                    ),
-                                  );
-                                } else {
-                                  return context.button(
-                                    data: BaseUiKitButtonData(
-                                      text: S.current.Confirm,
-                                      backgroundColor: context
-                                          .uiKitTheme?.colorScheme.surface,
-                                      textColor: context
-                                          .uiKitTheme?.colorScheme.onSurface,
-                                      onPressed: onConfirm,
-                                      fit: ButtonFit.fitWidth,
-                                    ),
-                                  );
-                                }
-                              },
-                              listenable: titleController,
-                            ),
-                          ),
-                  );
-                },
-              )
+              SizedBox(
+                height: kBottomNavigationBarHeight,
+                child: ListenableBuilder(
+                  builder: (context, child) {
+                    if (titleController.text.isEmpty) {
+                      return context.button(
+                        data: BaseUiKitButtonData(
+                          text: S.current.Confirm,
+                          onPressed: null,
+                          fit: ButtonFit.fitWidth,
+                        ),
+                      );
+                    } else {
+                      return context.button(
+                        data: BaseUiKitButtonData(
+                          text: S.current.Confirm,
+                          backgroundColor: context
+                              .uiKitTheme?.colorScheme.surface,
+                          textColor: context
+                              .uiKitTheme?.colorScheme.onSurface,
+                          onPressed: onConfirm,
+                          fit: ButtonFit.fitWidth,
+                        ),
+                      );
+                    }
+                  },
+                  listenable: titleController,
+                ),
+              ),
+
+
             ],
           ).paddingAll(EdgeInsetsFoundation.all16),
         ),

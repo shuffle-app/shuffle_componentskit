@@ -142,7 +142,6 @@ class ProfileComponent extends StatelessWidget {
                       actionButton: context.smallOutlinedButton(
                         data: BaseUiKitButtonData(
                           backgroundColor: Colors.transparent,
-                          onPressed: () {},
                           iconInfo: BaseUiKitButtonIconData(
                             size: 10.h,
                             iconData: ShuffleUiKitIcons.chevronright,
@@ -162,7 +161,6 @@ class ProfileComponent extends StatelessWidget {
                       actionButton: context.smallOutlinedButton(
                         data: BaseUiKitButtonData(
                           backgroundColor: Colors.transparent,
-                          onPressed: () {},
                           iconInfo: BaseUiKitButtonIconData(
                             size: 10.h,
                             iconData: ShuffleUiKitIcons.chevronright,

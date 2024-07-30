@@ -456,7 +456,6 @@ class CompanyPresentationComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           BottomBookingBar(
             onBook: () {},
-            isInviteEnable: false,
             model: ComponentPlaceModel.fromJson(
                         configuration.appConfig.content['place'])
                     .bookingElementModel ??

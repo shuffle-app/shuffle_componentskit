@@ -1,11 +1,11 @@
-class UiModelRelatedProperties {
+class UiModelRelatedProperty {
   final String title;
   final int id;
-  final List<String> linkedMainSets;
+  final List<String> linkedMindsets;
 
-  UiModelRelatedProperties({
+  UiModelRelatedProperty({
     required this.title,
     required this.id,
-    required this.linkedMainSets,
+    required this.linkedMindsets,
   });
 }

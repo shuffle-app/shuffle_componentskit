@@ -23,7 +23,7 @@ class PropertyManagementComponent extends StatefulWidget {
   });
 
   final ValueChanged<int>? onPropertyTypeTapped;
-  final List<UiModelPropertiesCategory> allPropertyCategories;
+  final List<UiModelCategory> allPropertyCategories;
   final VoidCallback? onAddPropertyTypeTap;
   final VoidCallback? onEditPropertyTypeTap;
   final VoidCallback? onDeletePropertyTypeTap;
@@ -31,23 +31,20 @@ class PropertyManagementComponent extends StatefulWidget {
   final Future<void> Function(int) basePropertyTypesTap;
   final Future<UiModelProperty> Function(String) onPropertyFieldSubmitted;
   final Future<void> Function(int) uniquePropertyTypesTap;
-  final ValueChanged<UiModelRelatedProperties>? onRecentlyAddedPropertyTapped;
-  final List<UiModelRelatedProperties>? relatedProperties;
+  final ValueChanged<UiModelRelatedProperty>? onRecentlyAddedPropertyTapped;
+  final List<UiModelRelatedProperty>? relatedProperties;
 
   final int? selectedPropertyId;
 
   @override
-  State<PropertyManagementComponent> createState() =>
-      _PropertyManagementComponentState();
+  State<PropertyManagementComponent> createState() => _PropertyManagementComponentState();
 }
 
-class _PropertyManagementComponentState
-    extends State<PropertyManagementComponent> {
-  UiModelPropertiesCategory? selectedPropertiesCategory;
+class _PropertyManagementComponentState extends State<PropertyManagementComponent> {
+  UiModelCategory? selectedCategory;
   List<UiModelProperty> selectedBaseProperties = [];
   List<UiModelProperty> selectedUniqueProperties = [];
-  late List<UiModelPropertiesCategory> allPropertyCategories =
-      widget.allPropertyCategories;
+  late List<UiModelCategory> allPropertyCategories = widget.allPropertyCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +53,7 @@ class _PropertyManagementComponentState
       body: UiKitCardWrapper(
         borderRadius: BorderRadiusFoundation.all16,
         padding: EdgeInsets.symmetric(
-            horizontal: EdgeInsetsFoundation.horizontal32,
-            vertical: EdgeInsetsFoundation.vertical20),
+            horizontal: EdgeInsetsFoundation.horizontal32, vertical: EdgeInsetsFoundation.vertical20),
         color: uiKitTheme?.colorScheme.surface,
         child: Row(
           children: [
@@ -77,8 +73,7 @@ class _PropertyManagementComponentState
                     context.boxIconButton(
                       data: BaseUiKitButtonData(
                         onPressed: widget.onAddPropertyTypeTap,
-                        backgroundColor:
-                            ColorsFoundation.primary200.withOpacity(0.3),
+                        backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
                             size: kIsWeb ? 24 : 24.sp,
@@ -90,12 +85,12 @@ class _PropertyManagementComponentState
                 child: Column(
                   children: [
                     SpacingFoundation.verticalSpace24,
-                    ...(widget.allPropertyCategories ?? []).map((element) {
+                    ...(widget.allPropertyCategories).map((element) {
                       return PropertiesTypeAnimatedButton(
                         title: element.title,
                         onTap: () {
                           setState(() {
-                            selectedPropertiesCategory = element;
+                            selectedCategory = element;
                           });
                         },
                         isSelected: widget.selectedPropertyId == element.id,
@@ -113,7 +108,7 @@ class _PropertyManagementComponentState
                   children: [
                     Expanded(
                       child: Text(
-                        selectedPropertiesCategory?.title ?? 'Empty',
+                        selectedCategory?.title ?? 'Empty',
                         overflow: TextOverflow.ellipsis,
                         style: uiKitTheme?.boldTextTheme.title2,
                       ),
@@ -122,8 +117,7 @@ class _PropertyManagementComponentState
                     context.boxIconButton(
                       data: BaseUiKitButtonData(
                         onPressed: widget.onEditPropertyTypeTap,
-                        backgroundColor:
-                            ColorsFoundation.primary200.withOpacity(0.3),
+                        backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.pencil,
                             size: kIsWeb ? 16 : 16.sp,
@@ -134,8 +128,7 @@ class _PropertyManagementComponentState
                     context.boxIconButton(
                       data: BaseUiKitButtonData(
                         onPressed: widget.onDeletePropertyTypeTap,
-                        backgroundColor:
-                            ColorsFoundation.danger.withOpacity(0.3),
+                        backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.trash,
                             size: kIsWeb ? 16 : 16.sp,
@@ -159,7 +152,8 @@ class _PropertyManagementComponentState
                       onFieldSubmitted: (value) {
                         widget.onPropertyFieldSubmitted.call(value).then(
                           (v) {
-                            selectedPropertiesCategory?.baseProperties?.add(v);
+                            selectedCategory = selectedCategory
+                                ?.copyWith(categoryProperties: [v, ...selectedCategory!.categoryProperties]);
                             _updateAllPropertyCategories();
                           },
                         );
@@ -171,21 +165,17 @@ class _PropertyManagementComponentState
                               spacing: SpacingFoundation.horizontalSpacing12,
                               runSpacing: SpacingFoundation.verticalSpacing12,
                               children:
-                                  (selectedPropertiesCategory?.baseProperties ??
-                                          [])
-                                      .map((element) {
+                                  (selectedCategory?.categoryProperties.where((e) => !e.unique) ?? []).map((element) {
                                 return UiKitCloudChip(
                                   title: element.title,
                                   onTap: () {
-                                    widget.basePropertyTypesTap
-                                        .call(element.id)
-                                        .then(
+                                    widget.basePropertyTypesTap.call(element.id!).then(
                                       (value) {
-                                        selectedPropertiesCategory
-                                            ?.baseProperties
-                                            ?.removeWhere(
-                                          (e) => e.id == element.id,
-                                        );
+                                        selectedCategory = selectedCategory?.copyWith(categoryProperties: [
+                                          ...selectedCategory!.categoryProperties.where(
+                                            (e) => e.id != element.id,
+                                          )
+                                        ]);
                                         _updateAllPropertyCategories();
                                       },
                                     );
@@ -199,43 +189,22 @@ class _PropertyManagementComponentState
                       child: Wrap(
                               spacing: SpacingFoundation.horizontalSpacing12,
                               runSpacing: SpacingFoundation.verticalSpacing12,
-                              children: (selectedPropertiesCategory
-                                          ?.uniqueProperties ??
-                                      [])
-                                  .map((element) {
+                              children:
+                                  (selectedCategory?.categoryProperties.where((e) => e.unique) ?? []).map((element) {
                                 return UiKitCloudChip(
                                   title: element.title,
-                                  isSelectable: true,
-                                  initialSelect: element.isSelected,
+                                  // selected: element.isSelected,
                                   onTap: () {
-                                    widget.uniquePropertyTypesTap
-                                        .call(element.id)
-                                        .then(
+                                    widget.uniquePropertyTypesTap.call(element.id!).then(
                                       (value) {
-                                        final uniquePropertyIndex =
-                                            selectedPropertiesCategory
-                                                ?.uniqueProperties
-                                                ?.indexWhere(
+                                        final uniquePropertyIndex = selectedCategory?.uniqueProperties.indexWhere(
                                           (e) => e.id == element.id,
                                         );
-                                        if (uniquePropertyIndex != null &&
-                                            uniquePropertyIndex >= 0) {
+                                        if (uniquePropertyIndex != null && uniquePropertyIndex >= 0) {
                                           final selectedUniqueProperty =
-                                              selectedPropertiesCategory
-                                                  ?.uniqueProperties?[
-                                                      uniquePropertyIndex]
-                                                  .copyWith(
-                                            isSelected:
-                                                !(selectedPropertiesCategory
-                                                        ?.uniqueProperties?[
-                                                            uniquePropertyIndex]
-                                                        .isSelected ??
-                                                    false),
-                                          );
+                                              selectedCategory?.uniqueProperties[uniquePropertyIndex].copyWith();
                                           if (selectedUniqueProperty != null) {
-                                            selectedPropertiesCategory
-                                                        ?.uniqueProperties?[
-                                                    uniquePropertyIndex] =
+                                            selectedCategory?.uniqueProperties[uniquePropertyIndex] =
                                                 selectedUniqueProperty;
                                           }
                                         }
@@ -270,8 +239,7 @@ class _PropertyManagementComponentState
                       children: [
                         Text(
                           S.current.Date,
-                          style: uiKitTheme?.regularTextTheme.labelLarge
-                              .copyWith(color: ColorsFoundation.mutedText),
+                          style: uiKitTheme?.regularTextTheme.labelLarge.copyWith(color: ColorsFoundation.mutedText),
                         ),
                         SpacingFoundation.horizontalSpace8,
                         Icon(
@@ -290,8 +258,7 @@ class _PropertyManagementComponentState
                       child: Wrap(
                               spacing: SpacingFoundation.horizontalSpacing12,
                               runSpacing: SpacingFoundation.verticalSpacing12,
-                              children: (widget.relatedProperties ?? [])
-                                  .map((element) {
+                              children: (widget.relatedProperties ?? []).map((element) {
                                 return UiKitCloudChip(
                                   title: element.title,
                                   onTap: () {
@@ -314,11 +281,9 @@ class _PropertyManagementComponentState
   }
 
   _updateAllPropertyCategories() {
-    final selectedCategoryIndex = allPropertyCategories
-        .indexWhere((e) => e.id == selectedPropertiesCategory?.id);
+    final selectedCategoryIndex = allPropertyCategories.indexWhere((e) => e.id == selectedCategory?.id);
     if (selectedCategoryIndex >= 0) {
-      allPropertyCategories[selectedCategoryIndex] =
-          selectedPropertiesCategory!;
+      allPropertyCategories[selectedCategoryIndex] = selectedCategory!;
     }
     setState(() {});
   }

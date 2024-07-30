@@ -6,13 +6,13 @@ class PropertyManagementCreateTitleDialog extends StatelessWidget {
   const PropertyManagementCreateTitleDialog(
       {super.key,
       this.onCloseTap,
-      required this.isBusiness,
+      required this.isEvent,
       required this.onCreateTap,
       required this.onCancelTap,
       required this.titleController});
 
   final VoidCallback? onCloseTap;
-  final bool isBusiness;
+  final bool isEvent;
   final ValueChanged<String> onCreateTap;
   final VoidCallback onCancelTap;
   final TextEditingController titleController;
@@ -30,7 +30,7 @@ class PropertyManagementCreateTitleDialog extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  isBusiness ? S.current.Business : S.current.Entertainment,
+                  isEvent ? S.current.Event : S.current.Place,
                   style: theme?.boldTextTheme.title1,
                   overflow: TextOverflow.ellipsis,
                 ),

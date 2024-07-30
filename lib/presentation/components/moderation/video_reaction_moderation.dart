@@ -5,11 +5,11 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class VideoReactionModeration extends StatelessWidget {
   final List<ReactionPreviewUiModel> reactionPreviewModelList;
-  final Function() sortFunction;
+  final VoidCallback? sortFunction;
 
   const VideoReactionModeration({
     super.key,
-    required this.sortFunction,
+    this.sortFunction,
     required this.reactionPreviewModelList,
   });
 
@@ -28,32 +28,36 @@ class VideoReactionModeration extends StatelessWidget {
           Row(
             children: [
               Text(
-                S.of(context).VideoReactions,
+                S
+                    .of(context)
+                    .VideoReactions,
                 style: textTheme?.title1,
               ),
               const Spacer(),
-              context.iconButtonNoPadding(
-                data: BaseUiKitButtonData(
-                  onPressed: sortFunction,
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: ShuffleUiKitIcons.arrowssort,
+              if (sortFunction != null)
+                context.iconButtonNoPadding(
+                  data: BaseUiKitButtonData(
+                    onPressed: sortFunction,
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.arrowssort,
+                    ),
                   ),
-                ),
-              )
+                )
             ],
           ).paddingAll(EdgeInsetsFoundation.all24),
           Expanded(
             child: GridView.builder(
+
+              addAutomaticKeepAlives: false,
+              shrinkWrap: true,
               itemCount: reactionPreviewModelList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: SpacingFoundation.horizontalSpacing24,
-                mainAxisSpacing: SpacingFoundation.horizontalSpacing24,
-                crossAxisCount: 3,
-                childAspectRatio: 142/250
-              ),
+                  crossAxisSpacing: SpacingFoundation.horizontalSpacing24,
+                  mainAxisSpacing: SpacingFoundation.horizontalSpacing24,
+                  crossAxisCount: 3,
+                  childAspectRatio: 142 / 250),
               itemBuilder: (context, index) {
-                final reactionPreviewModelItem =
-                    reactionPreviewModelList[index];
+                final reactionPreviewModelItem = reactionPreviewModelList[index];
                 return UiKitReactionPreview(
                   isEmpty: reactionPreviewModelItem.isEmpty,
                   imagePath: reactionPreviewModelItem.imagePath,
@@ -61,8 +65,7 @@ class VideoReactionModeration extends StatelessWidget {
                   onTap: reactionPreviewModelItem.onTap,
                 );
               },
-            ).paddingSymmetric(
-                horizontal: SpacingFoundation.horizontalSpacing32),
+            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing32),
           )
         ],
       ),

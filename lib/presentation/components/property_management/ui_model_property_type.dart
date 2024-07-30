@@ -1,27 +1,38 @@
-class UiModelProperty {
-  final String title;
-  final int id;
-  final String? iconPath;
-  final bool? isSelected;
+import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/property_management/ui_model_related_properties.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-  UiModelProperty(  {
-    required this.title,
-    required this.id,
-    this.iconPath,
-    this.isSelected,
+class UiModelProperty extends UiKitTag {
+  final List<UiModelRelatedProperty>? relatedProperties;
+
+  UiModelProperty({
+    required super.title,
+    required super.id,
+    required super.icon,
+    super.unique,
+    this.relatedProperties,
+    super.iconColor,
+    super.textColor,
   });
 
+  @override
   UiModelProperty copyWith({
+    bool? isSelected,
+    List<UiModelRelatedProperty>? relatedProperties,
     String? title,
     int? id,
-    String? iconPath,
-    bool? isSelected,
-  }) {
-    return UiModelProperty(
-      title: title ?? this.title,
-      id: id ?? this.id,
-      iconPath: iconPath ?? this.iconPath,
-      isSelected: isSelected ?? this.isSelected,
-    );
-  }
+    dynamic icon,
+    bool? unique,
+    Color? iconColor,
+    Color? textColor,
+  }) =>
+      UiModelProperty(
+        title: title ?? this.title,
+        id: id ?? this.id,
+        icon: icon ?? this.icon,
+        unique: unique ?? this.unique,
+        relatedProperties: relatedProperties ?? this.relatedProperties,
+        iconColor: iconColor ?? this.iconColor,
+        textColor: textColor ?? this.textColor,
+      );
 }
