@@ -217,7 +217,6 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                                   return UiKitCloudChip(
                                     iconPath: e.icon,
                                     title: e.title,
-                                    selected: selectedProperty == e,
                                     onTap: () {
                                       setState(() {
                                         selectedProperty = e;
@@ -277,14 +276,14 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                                       (widget.selectedCategory?.categoryProperties.where((e) => e.unique) ?? []).map(
                                     (e) {
                                       return UiKitCloudChip(
-                                          title: e.title,
-                                          onTap: () {
-                                            setState(() {
-                                              selectedProperty = e;
-                                            });
-                                          },
-                                          iconPath: e.icon,
-                                          selected: selectedProperty == e);
+                                        title: e.title,
+                                        onTap: () {
+                                          setState(() {
+                                            selectedProperty = e;
+                                          });
+                                        },
+                                        iconPath: e.icon,
+                                      );
                                     },
                                   ).toList())
                               .paddingOnly(

@@ -34,6 +34,8 @@ class UiEventModel extends Advertisable {
   TextEditingController houseNumberController;
   TextEditingController apartmentNumberController;
   PlaceWeatherType? weatherType;
+  List<FeedbackUiModel>? reviews;
+  List<VideoReactionUiModel>? reactions;
 
   UiEventModel({
     required this.id,
@@ -63,6 +65,8 @@ class UiEventModel extends Advertisable {
     this.currency,
     this.schedule,
     this.weatherType,
+    this.reviews,
+    this.reactions,
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
@@ -200,6 +204,8 @@ class UiEventModel extends Advertisable {
     String? reviewStatus,
     PlaceWeatherType? weatherType,
     dynamic schedule,
+    List<FeedbackUiModel>? reviews,
+    List<VideoReactionUiModel>? reactions,
   }) =>
       UiEventModel(
         id: id,
@@ -228,6 +234,8 @@ class UiEventModel extends Advertisable {
         schedule: schedule ?? this.schedule,
         reviewStatus: reviewStatus ?? this.reviewStatus,
         weatherType: weatherType ?? this.weatherType,
+        reviews: reviews ?? this.reviews,
+        reactions: reactions ?? this.reactions,
       );
 
   bool selectableDayPredicate(DateTime day) {
@@ -237,4 +245,7 @@ class UiEventModel extends Advertisable {
     }
     return day.isAfter(startDate!) && day.isBefore(endDate!);
   }
+
+  Map<int, int?>? get feedbacksHelpfulCounts =>
+      <int, int?>{}..addEntries(reviews?.map((e) => MapEntry<int, int?>(e.id, e.helpfulCount)) ?? []);
 }
