@@ -53,6 +53,8 @@ class _EventComponentState extends State<EventComponent> {
 
   Set<int> likedReviews = {};
 
+  List<String> currentUpsalesItem = [];
+
   bool get _noFeedbacks => feedbackPagingController.itemList?.isEmpty ?? true;
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
@@ -72,6 +74,7 @@ class _EventComponentState extends State<EventComponent> {
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
+      _getUpsalesItems();
       setState(() {});
     });
   }
@@ -139,6 +142,18 @@ class _EventComponentState extends State<EventComponent> {
       setState(() {
         reactionsPagingController.refresh();
       });
+    }
+  }
+
+  void _getUpsalesItems() {
+    if (widget.event.upsalesItems != null) {
+      widget.event.upsalesItems?.forEach(
+        (element) {
+          if (element.trim().isNotEmpty) {
+            currentUpsalesItem.add(element);
+          }
+        },
+      );
     }
   }
 
@@ -313,7 +328,39 @@ class _EventComponentState extends State<EventComponent> {
               });
             },
           ).paddingSymmetric(horizontal: horizontalMargin)),
-          SpacingFoundation.verticalSpace16
+        ],
+        if (currentUpsalesItem.isNotEmpty) ...[
+          SpacingFoundation.verticalSpace24,
+          UiKitCardWrapper(
+            color: theme?.colorScheme.surface2,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).UpsalesAvailable,
+                        style: theme?.boldTextTheme.body,
+                      ),
+                      SpacingFoundation.verticalSpace2,
+                      Text(
+                        currentUpsalesItem.map((e) => e.trim()).join(', '),
+                        style: theme?.regularTextTheme.caption2,
+                      )
+                    ],
+                  ).paddingAll(EdgeInsetsFoundation.all16),
+                ),
+                ImageWidget(
+                  height: 45.h,
+                  fit: BoxFit.fitWidth,
+                  link: GraphicsFoundation.instance.png.merch.path,
+                ),
+                SpacingFoundation.horizontalSpace16,
+              ],
+            ),
+          ).paddingSymmetric(horizontal: horizontalMargin),
+          SpacingFoundation.verticalSpace24,
         ],
         if (!_noReactions || widget.canLeaveVideoReaction)
           ValueListenableBuilder(
@@ -374,7 +421,10 @@ class _EventComponentState extends State<EventComponent> {
                 ),
               );
             },
-          ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+          ).paddingOnly(
+            bottom: EdgeInsetsFoundation.vertical24,
+            top: SpacingFoundation.verticalSpacing16,
+          ),
         if (!_noFeedbacks || (canLeaveFeedback ?? false))
           ValueListenableBuilder(
             valueListenable: feedbackPagingController,
