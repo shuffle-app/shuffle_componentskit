@@ -861,17 +861,17 @@
             "properties": {
               "немного повеселиться": {
                 "duration": 1500,
-                "imageLink": "assets/images/png/onboarding_mock_1.png",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/onboarding_mock_1.png",
                 "sortNumber": 1
               },
               "просто расслабиться": {
                 "duration": 1500,
-                "imageLink": "assets/images/png/onboarding_mock_2.png",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/onboarding_mock_2.png",
                 "sortNumber": 3
               },
               "вариации досуга и бизнеса": {
                 "duration": 1500,
-                "imageLink": "assets/images/png/onboarding_mock_3.png",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/onboarding_mock_3.png",
                 "sortNumber": 2
               }
             }
@@ -1356,6 +1356,80 @@
       "builder_type": "dialog",
       "vertical_margin": 24,
       "horizontal_margin": 24
+    },
+    "search_social_page": {
+      "content": {
+        "body": {
+          "horizontal_list": {
+            "properties": {
+              "Clothes": {
+                "type": "place",
+                "color": "#62355C",
+                "imageLink": "assets/images/png/clothing.png",
+                "sortNumber": 3
+              },
+              "Doctors": {
+                "type": "services",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/search-social/Doctor.png",
+                "sortNumber": 5
+              },
+              "Parcels": {
+                "type": "place",
+                "color": "#62355C",
+                "imageLink": "assets/images/png/parcel.png",
+                "sortNumber": 5
+              },
+              "Manicure": {
+                "type": "services",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/search-social/manicure.png",
+                "sortNumber": 1
+              },
+              "Pharmacy": {
+                "type": "place",
+                "color": "#E74424",
+                "imageLink": "assets/images/png/pharmacy_plus.png",
+                "sortNumber": 1
+              },
+              "Products": {
+                "type": "place",
+                "color": "#FDC74F",
+                "imageLink": "assets/images/png/grocery.png",
+                "sortNumber": 2
+              },
+              "Training": {
+                "type": "services",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/search-social/coach.png",
+                "sortNumber": 2
+              },
+              "Accountant": {
+                "type": "services",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/search-social/Accountant.png",
+                "sortNumber": 3
+              },
+              "Transportation": {
+                "type": "place",
+                "color": "#FDC74F",
+                "imageLink": "assets/images/png/delivery-truck.png",
+                "sortNumber": 4
+              },
+              "Real Estate Consulting": {
+                "type": "services",
+                "imageLink": "https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/search-social/real.png",
+                "sortNumber": 4
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0",
+      "builder_type": "page",
+      "position_model": {
+        "version": "1.0.0",
+        "body_alignment": "center",
+        "title_alignment": "center",
+        "vertical_margin": 16,
+        "horizontal_margin": 16
+      }
     },
     "search_business": {
       "content": {
