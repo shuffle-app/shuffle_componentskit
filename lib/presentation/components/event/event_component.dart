@@ -360,7 +360,6 @@ class _EventComponentState extends State<EventComponent> {
               ],
             ),
           ).paddingSymmetric(horizontal: horizontalMargin),
-          SpacingFoundation.verticalSpace24,
         ],
         if (!_noReactions || widget.canLeaveVideoReaction)
           ValueListenableBuilder(
@@ -423,7 +422,7 @@ class _EventComponentState extends State<EventComponent> {
             },
           ).paddingOnly(
             bottom: EdgeInsetsFoundation.vertical24,
-            top: SpacingFoundation.verticalSpacing16,
+            top: EdgeInsetsFoundation.vertical24,
           ),
         if (!_noFeedbacks || (canLeaveFeedback ?? false))
           ValueListenableBuilder(
