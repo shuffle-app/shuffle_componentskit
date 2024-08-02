@@ -5,6 +5,7 @@ import '../../../shuffle_components_kit.dart';
 
 class UiEventModel extends Advertisable {
   final int id;
+  bool upsalesSwitcher;
   String? title;
   UiOwnerModel? owner;
   List<BaseUiKitMedia> media;
@@ -34,9 +35,11 @@ class UiEventModel extends Advertisable {
   TextEditingController houseNumberController;
   TextEditingController apartmentNumberController;
   PlaceWeatherType? weatherType;
+  List<String>? upsalesItems;
 
   UiEventModel({
     required this.id,
+    this.upsalesSwitcher = false,
     this.title,
     this.favorite,
     this.owner,
@@ -63,6 +66,7 @@ class UiEventModel extends Advertisable {
     this.currency,
     this.schedule,
     this.weatherType,
+    this.upsalesItems,
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
@@ -96,6 +100,7 @@ class UiEventModel extends Advertisable {
 
   UiEventModel.advertisement({
     this.id = -1,
+    this.upsalesSwitcher = false,
     this.title,
     this.favorite,
     this.owner,
@@ -133,6 +138,8 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.EventType);
     } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
+    } else if ((upsalesItems == null || upsalesItems!.isEmpty) && upsalesSwitcher) {
+      return S.current.XIsRequired(S.current.Upsales);
     }
 
     return null;
@@ -140,6 +147,7 @@ class UiEventModel extends Advertisable {
 
   UiEventModel.empty()
       : id = -1,
+        upsalesSwitcher = false,
         title = null,
         owner = null,
         media = const [],
@@ -163,6 +171,7 @@ class UiEventModel extends Advertisable {
         descriptionItems = const [],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
+        upsalesItems = const [],
         super(isAdvertisement: false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
@@ -175,6 +184,7 @@ class UiEventModel extends Advertisable {
   // copy with method
 
   UiEventModel copyWith({
+    bool? upsalesSwitcher,
     String? title,
     UiOwnerModel? owner,
     List<BaseUiKitMedia>? media,
@@ -199,10 +209,12 @@ class UiEventModel extends Advertisable {
     String? currency,
     String? reviewStatus,
     PlaceWeatherType? weatherType,
+    List<String>? upsalesItems,
     dynamic schedule,
   }) =>
       UiEventModel(
         id: id,
+        upsalesSwitcher: upsalesSwitcher ?? this.upsalesSwitcher,
         title: title ?? this.title,
         owner: owner ?? this.owner,
         media: media ?? this.media,
@@ -228,6 +240,7 @@ class UiEventModel extends Advertisable {
         schedule: schedule ?? this.schedule,
         reviewStatus: reviewStatus ?? this.reviewStatus,
         weatherType: weatherType ?? this.weatherType,
+        upsalesItems: upsalesItems ?? this.upsalesItems,
       );
 
   bool selectableDayPredicate(DateTime day) {
