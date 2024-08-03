@@ -12,7 +12,7 @@ class FavoriteFoldersBottomSheetComponent extends StatelessWidget {
   });
 
   final VoidCallback? onAddToMyFavorites;
-  final List<PlacePreview> places;
+  final List<Widget> places;
   final String personName;
   final String folderName;
 

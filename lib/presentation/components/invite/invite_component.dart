@@ -16,7 +16,6 @@ class InviteComponent extends StatefulWidget {
     this.onAddWishTap,
     this.onInviteTap,
     this.changeDate,
-    this.isLoading = false,
   }) : assert(
           selfInvitationModel != null ? onRemoveUserOptionTap != null : changeDate != null,
           'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
@@ -29,10 +28,9 @@ class InviteComponent extends StatefulWidget {
   final UiInvitePersonModel? selfInvitationModel;
   final VoidCallback? onRemoveUserOptionTap;
   final VoidCallback? onDisabledUserTileTap;
-  final void Function(String value, DateTime date)? onAddWishTap;
+  final Future Function(String value, DateTime date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
   final DateTime? initialDate;
-  final bool isLoading;
   final Future Function(List<UiInvitePersonModel>)? onInviteTap;
 
   @override
@@ -233,7 +231,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       const Spacer(),
                       context.gradientButton(
                         data: BaseUiKitButtonData(
-                          loading: widget.isLoading,
+                          loading: loading,
                           onPressed: () {
                             if (_wishController.text.isEmpty) {
                               SnackBarUtils.show(
@@ -250,8 +248,9 @@ class _InviteComponentState extends State<InviteComponent> {
                             } else {
                               setState(() {
                                 isEditing = false;
+                                loading = true;
                               });
-                              widget.onAddWishTap?.call(_wishController.text, _date!);
+                              widget.onAddWishTap?.call(_wishController.text, _date!).whenComplete(() => setState(() => loading = false));
                             }
                           },
                           iconInfo: BaseUiKitButtonIconData(
