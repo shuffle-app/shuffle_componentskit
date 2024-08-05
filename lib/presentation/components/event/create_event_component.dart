@@ -130,6 +130,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   void didUpdateWidget(covariant CreateEventComponent oldWidget) {
     if (oldWidget.eventToEdit != widget.eventToEdit) {
+      _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
+      _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
       _titleController.text = widget.eventToEdit?.title ?? '';
       _descriptionController.text = widget.eventToEdit?.description ?? '';
       _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
