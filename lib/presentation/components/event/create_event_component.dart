@@ -44,6 +44,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _upsalesController = TextEditingController();
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -51,9 +52,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
 
+  late bool _upsalesSwitcher;
+
   @override
   void initState() {
     super.initState();
+    _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
     _titleController.text = widget.eventToEdit?.title ?? '';
     _descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
@@ -63,6 +67,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
+    _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
   }
 
   _onVideoDeleted(int index) {
@@ -125,6 +130,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   void didUpdateWidget(covariant CreateEventComponent oldWidget) {
     if (oldWidget.eventToEdit != widget.eventToEdit) {
+      _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
+      _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
       _titleController.text = widget.eventToEdit?.title ?? '';
       _descriptionController.text = widget.eventToEdit?.description ?? '';
       _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
@@ -325,9 +332,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           UiKitFieldWithTagList(
             title: S.of(context).EventType,
-            listUiKitTags: [
-              _eventToEdit.eventType ?? UiKitTag(title: '', icon: '')
-            ],
+            listUiKitTags: [_eventToEdit.eventType ?? UiKitTag(title: '', icon: '')],
             onTap: () {
               widget.onCategoryChanged?.call().then((value) {
                 setState(() {
@@ -368,6 +373,35 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   });
                 }
               }).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  S.of(context).UpsalesAvailable,
+                  style: theme?.regularTextTheme.labelSmall,
+                ),
+              ),
+              const Spacer(),
+              UiKitGradientSwitch(
+                onChanged: (value) {
+                  setState(() {
+                    _upsalesSwitcher = !_upsalesSwitcher;
+                  });
+                },
+                switchedOn: _upsalesSwitcher,
+              ),
+            ],
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          if (_upsalesSwitcher) ...[
+            SpacingFoundation.verticalSpace24,
+            UiKitInputFieldNoFill(
+              label: S.of(context).Upsales,
+              controller: _upsalesController,
+              validator: upsalesValidator,
+              hintText: S.of(context).UpsalesAvailableHint,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+          ],
           SpacingFoundation.verticalSpace24,
           if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
             UiKitFieldWithTagList(
@@ -470,6 +504,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.website = _websiteController.text;
                   _eventToEdit.phone = _phoneController.text;
                   _eventToEdit.price = _priceController.text;
+                  _eventToEdit.upsalesItems = _upsalesSwitcher
+                      ? (_upsalesController.text.isNotEmpty
+                          ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
+                          : null)
+                      : null;
                   widget.onEventCreated.call(_eventToEdit);
                 },
               ),

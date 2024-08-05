@@ -313,7 +313,46 @@ class _EventComponentState extends State<EventComponent> {
               });
             },
           ).paddingSymmetric(horizontal: horizontalMargin)),
-          SpacingFoundation.verticalSpace16
+          SpacingFoundation.verticalSpace24,
+        ],
+        if (widget.event.upsalesItems != null) ...[
+          UiKitCardWrapper(
+            color: theme?.colorScheme.surface2,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).UpsalesAvailable,
+                        style: theme?.boldTextTheme.body,
+                      ),
+                      SpacingFoundation.verticalSpace2,
+                      Text(
+                        widget.event.upsalesItems!
+                            .map((e) {
+                              if (e.isNotEmpty) {
+                                return e.trim();
+                              }
+                            })
+                            .nonNulls
+                            .join(', '),
+                        style: theme?.regularTextTheme.caption2,
+                      )
+                    ],
+                  ).paddingAll(EdgeInsetsFoundation.all16),
+                ),
+                ImageWidget(
+                  height: 45.h,
+                  fit: BoxFit.fitWidth,
+                  link: GraphicsFoundation.instance.png.merch.path,
+                ),
+                SpacingFoundation.horizontalSpace16,
+              ],
+            ),
+          ).paddingSymmetric(horizontal: horizontalMargin),
+          SpacingFoundation.verticalSpace24,
         ],
         if (!_noReactions || widget.canLeaveVideoReaction)
           ValueListenableBuilder(
