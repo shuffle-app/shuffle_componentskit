@@ -34,6 +34,7 @@ class UiEventModel extends Advertisable {
   TextEditingController houseNumberController;
   TextEditingController apartmentNumberController;
   PlaceWeatherType? weatherType;
+  List<String>? upsalesItems;
 
   UiEventModel({
     required this.id,
@@ -63,6 +64,7 @@ class UiEventModel extends Advertisable {
     this.currency,
     this.schedule,
     this.weatherType,
+    this.upsalesItems,
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (scheduleString != null)
@@ -133,6 +135,8 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.EventType);
     } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
+    } else if (upsalesValidator(upsalesItems?.join(',')) != null) {
+      return S.current.XIsRequired(S.current.Upsales);
     }
 
     return null;
@@ -163,6 +167,7 @@ class UiEventModel extends Advertisable {
         descriptionItems = const [],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
+        upsalesItems = const [],
         super(isAdvertisement: false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
@@ -199,6 +204,7 @@ class UiEventModel extends Advertisable {
     String? currency,
     String? reviewStatus,
     PlaceWeatherType? weatherType,
+    List<String>? upsalesItems,
     dynamic schedule,
   }) =>
       UiEventModel(
@@ -228,6 +234,7 @@ class UiEventModel extends Advertisable {
         schedule: schedule ?? this.schedule,
         reviewStatus: reviewStatus ?? this.reviewStatus,
         weatherType: weatherType ?? this.weatherType,
+        upsalesItems: upsalesItems ?? this.upsalesItems,
       );
 
   bool selectableDayPredicate(DateTime day) {
