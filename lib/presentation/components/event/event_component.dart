@@ -53,8 +53,6 @@ class _EventComponentState extends State<EventComponent> {
 
   Set<int> likedReviews = {};
 
-  List<String> currentUpsalesItem = [];
-
   bool get _noFeedbacks => feedbackPagingController.itemList?.isEmpty ?? true;
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
@@ -74,7 +72,6 @@ class _EventComponentState extends State<EventComponent> {
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
-      _getUpsalesItems();
       setState(() {});
     });
   }
@@ -142,18 +139,6 @@ class _EventComponentState extends State<EventComponent> {
       setState(() {
         reactionsPagingController.refresh();
       });
-    }
-  }
-
-  void _getUpsalesItems() {
-    if (widget.event.upsalesItems != null) {
-      widget.event.upsalesItems?.forEach(
-        (element) {
-          if (element.trim().isNotEmpty) {
-            currentUpsalesItem.add(element);
-          }
-        },
-      );
     }
   }
 
@@ -329,7 +314,7 @@ class _EventComponentState extends State<EventComponent> {
             },
           ).paddingSymmetric(horizontal: horizontalMargin)),
         ],
-        if (currentUpsalesItem.isNotEmpty) ...[
+        if (widget.event.upsalesItems != null) ...[
           SpacingFoundation.verticalSpace24,
           UiKitCardWrapper(
             color: theme?.colorScheme.surface2,
@@ -345,7 +330,14 @@ class _EventComponentState extends State<EventComponent> {
                       ),
                       SpacingFoundation.verticalSpace2,
                       Text(
-                        currentUpsalesItem.map((e) => e.trim()).join(', '),
+                        widget.event.upsalesItems!
+                            .map((e) {
+                              if (e.isNotEmpty) {
+                                return e.trim();
+                              }
+                            })
+                            .nonNulls
+                            .join(', '),
                         style: theme?.regularTextTheme.caption2,
                       )
                     ],
