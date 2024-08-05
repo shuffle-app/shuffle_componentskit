@@ -35,84 +35,83 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
     final theme = context.uiKitTheme;
     return UiKitCardWrapper(
       borderRadius: BorderRadiusFoundation.all32,
-      padding: EdgeInsets.all(EdgeInsetsFoundation.all32),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    isPlaceType
-                        ? S.current.AddPlaceType
-                        : S.current.AddProperty,
-                    style: theme?.boldTextTheme.title1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+      padding: EdgeInsets.all(EdgeInsetsFoundation.all20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  isPlaceType
+                      ? S.current.AddPlaceType
+                      : S.current.AddProperty,
+                  style: theme?.boldTextTheme.title1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                context.iconButtonNoPadding(
-                  data: BaseUiKitButtonData(
-                    onPressed: onCloseTap,
-                    iconInfo: BaseUiKitButtonIconData(
-                        iconData: ShuffleUiKitIcons.x,
-                        size: kIsWeb ? 24 : 24.sp),
-                  ),
-                )
-              ],
-            ),
-            SpacingFoundation.verticalSpace24,
-            UiKitCardWrapper(
-              child: ValueListenableBuilder(
-                builder: (context, value, child) {
-                  return UiKitIconedTitle(
-                    title: titleTextController.text,
-                    icon: iconPath ?? '',
-                  );
-                },
-                valueListenable: titleTextController,
               ),
+              context.iconButtonNoPadding(
+                data: BaseUiKitButtonData(
+                  onPressed: onCloseTap,
+                  iconInfo: BaseUiKitButtonIconData(
+                      iconData: ShuffleUiKitIcons.x,
+                      size: kIsWeb ? 24 : 24.sp),
+                ),
+              )
+            ],
+          ),
+          SpacingFoundation.verticalSpace16,
+          UiKitCardWrapper(
+            child: ValueListenableBuilder(
+              builder: (context, value, child) {
+                return UiKitIconedTitle(
+                  title: titleTextController.text,
+                  icon: iconPath ?? '',
+                );
+              },
+              valueListenable: titleTextController,
             ),
-            SpacingFoundation.verticalSpace24,
-            UiKitInputFilledWithTitle(
-              title: S.current.Title,
-              controller: titleTextController,
-            ),
-            SpacingFoundation.verticalSpace24,
-            PlaceIconSelector(
+          ),
+          SpacingFoundation.verticalSpace16,
+          UiKitInputFilledWithTitle(
+            title: S.current.Title,
+            controller: titleTextController,
+          ),
+          SpacingFoundation.verticalSpace16,
+          PlaceIconSelector(
               onPressed: onUploadIconTap,
               onIconTap: onIconTap,
               listIconData: listIcons,
               iconsScrollController: iconsScrollController,
-            ),
-            SpacingFoundation.verticalSpace24,
-            Row(
-              children: [
-                Expanded(
-                  child: context.coloredButtonWithBorderRadius(
-                    borderRadius: BorderRadiusFoundation.all12,
-                    data: BaseUiKitButtonData(
-                      text: S.current.Save,
-                      onPressed: onSaveTap,
-                      backgroundColor: theme?.colorScheme.darkNeutral200,
-                    ),
+              iconTextController: iconTextController
+          ),
+          SpacingFoundation.verticalSpace24,
+          Row(
+            children: [
+              Expanded(
+                child: context.coloredButtonWithBorderRadius(
+                  borderRadius: BorderRadiusFoundation.all12,
+                  data: BaseUiKitButtonData(
+                    text: S.current.Save,
+                    onPressed: onSaveTap,
+                    backgroundColor: theme?.colorScheme.darkNeutral200,
                   ),
                 ),
-                SpacingFoundation.horizontalSpace16,
-                Expanded(
-                  child: context.coloredButtonWithBorderRadius(
-                    borderRadius: BorderRadiusFoundation.all12,
-                    data: BaseUiKitButtonData(
-                      text: S.current.Cancel,
-                      onPressed: onCancelTap,
-                      backgroundColor: theme?.colorScheme.darkNeutral200,
-                    ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              Expanded(
+                child: context.coloredButtonWithBorderRadius(
+                  borderRadius: BorderRadiusFoundation.all12,
+                  data: BaseUiKitButtonData(
+                    text: S.current.Cancel,
+                    onPressed: onCancelTap,
+                    backgroundColor: theme?.colorScheme.darkNeutral200,
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
