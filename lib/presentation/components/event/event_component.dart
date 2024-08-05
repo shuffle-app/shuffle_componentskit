@@ -313,9 +313,9 @@ class _EventComponentState extends State<EventComponent> {
               });
             },
           ).paddingSymmetric(horizontal: horizontalMargin)),
+          SpacingFoundation.verticalSpace24,
         ],
         if (widget.event.upsalesItems != null) ...[
-          SpacingFoundation.verticalSpace24,
           UiKitCardWrapper(
             color: theme?.colorScheme.surface2,
             child: Row(
@@ -352,6 +352,7 @@ class _EventComponentState extends State<EventComponent> {
               ],
             ),
           ).paddingSymmetric(horizontal: horizontalMargin),
+          SpacingFoundation.verticalSpace24,
         ],
         if (!_noReactions || widget.canLeaveVideoReaction)
           ValueListenableBuilder(
@@ -412,10 +413,7 @@ class _EventComponentState extends State<EventComponent> {
                 ),
               );
             },
-          ).paddingOnly(
-            bottom: EdgeInsetsFoundation.vertical24,
-            top: EdgeInsetsFoundation.vertical24,
-          ),
+          ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
         if (!_noFeedbacks || (canLeaveFeedback ?? false))
           ValueListenableBuilder(
             valueListenable: feedbackPagingController,
