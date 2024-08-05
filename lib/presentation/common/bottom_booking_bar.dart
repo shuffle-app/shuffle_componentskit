@@ -81,7 +81,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
               end: Alignment.bottomCenter,
               colors: [
                 Colors.transparent,
-                context.uiKitTheme?.colorScheme.surface.withOpacity(0.5) ?? Colors.transparent,
+                context.uiKitTheme?.colorScheme.surface.withOpacity(0.7) ?? Colors.transparent,
                 context.uiKitTheme?.colorScheme.surface.withOpacity(0.8) ?? Colors.transparent,
                 context.uiKitTheme?.colorScheme.surface ?? Colors.transparent,
               ],

@@ -3,6 +3,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 part 'first_body.dart';
+
 part 'last_body.dart';
 
 class WelcomeComponent extends StatefulWidget {
@@ -16,13 +17,16 @@ class WelcomeComponent extends StatefulWidget {
     this.onFinished,
   }) {
     model = ComponentModel.fromJson(GlobalConfiguration().appConfig.content['welcome']);
-    final rawItems =
-        model.content.body?.entries.firstWhere((element) => element.key == ContentItemType.onboardingCard).value.properties;
+    final rawItems = model.content.body?.entries
+        .firstWhere((element) => element.key == ContentItemType.onboardingCard)
+        .value
+        .properties;
     firstBodyItem = OnBoardingPageItem(
       title: '',
       imageLink: (rawItems?.isNotEmpty ?? false)
-          ? rawItems?.entries.first.value.imageLink ?? GraphicsFoundation.instance.png.welcomeSlide1.path
-          : GraphicsFoundation.instance.png.welcomeSlide1.path,
+          ? rawItems?.entries.first.value.imageLink ??
+              'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/welcome_slide_1.png'
+          : 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/welcome_slide_1.png',
       autoSwitchDuration: (rawItems?.isNotEmpty ?? false)
           ? rawItems?.entries.first.value.duration ?? const Duration(milliseconds: 5000)
           : const Duration(milliseconds: 5000),
@@ -30,8 +34,9 @@ class WelcomeComponent extends StatefulWidget {
     lastBodyItem = OnBoardingPageItem(
       title: '',
       imageLink: (rawItems?.isNotEmpty ?? false)
-          ? rawItems?.entries.last.value.imageLink ?? GraphicsFoundation.instance.png.welcomeSlide2.path
-          : GraphicsFoundation.instance.png.welcomeSlide2.path,
+          ? rawItems?.entries.last.value.imageLink ??
+              'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/welcome_slide_2.png'
+          : 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/welcome_slide_2.png',
       autoSwitchDuration: (rawItems?.isNotEmpty ?? false)
           ? rawItems?.entries.last.value.duration ?? const Duration(milliseconds: 5000)
           : const Duration(milliseconds: 5000),

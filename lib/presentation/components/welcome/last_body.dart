@@ -21,8 +21,8 @@ class _LastBody extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        ImageWidget(
-          rasterAsset: GraphicsFoundation.instance.png.welcomeSlide2,
+        const ImageWidget(
+          link: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/welcome_slide_2.png',
           fit: BoxFit.cover,
         ),
         Positioned(

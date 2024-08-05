@@ -20,17 +20,17 @@ class OnboardingComponent extends StatefulWidget {
     // items.sort((a, b) => (rawItems?[a.title]?.sortNumber ?? 0).compareTo((rawItems?[b.title]?.sortNumber ?? 0)));
     items = [
       OnBoardingPageItem(
-        imageLink: GraphicsFoundation.instance.png.onboardingMock1.path,
+        imageLink: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/onboarding_mock_1.png',
         title: S.current.OnboardingSlide1,
         autoSwitchDuration: const Duration(milliseconds: 1500),
       ),
       OnBoardingPageItem(
-        imageLink: GraphicsFoundation.instance.png.onboardingMock3.path,
+        imageLink: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/onboarding_mock_3.png',
         title: S.current.OnboardingSlide2,
         autoSwitchDuration: const Duration(milliseconds: 1500),
       ),
       OnBoardingPageItem(
-        imageLink: GraphicsFoundation.instance.png.onboardingMock2.path,
+        imageLink: 'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/onboarding/onboarding_mock_2.png',
         title: S.current.OnboardingSlide3,
         autoSwitchDuration: const Duration(milliseconds: 1500),
       ),

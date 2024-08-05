@@ -22,7 +22,7 @@ class PlacePreview extends StatelessWidget {
   final ValueChanged<int>? onCheckIn;
   final bool isCheckedIn;
 
-   PlacePreview({
+  PlacePreview({
     super.key,
     required this.onTap,
     required this.place,
@@ -40,33 +40,33 @@ class PlacePreview extends StatelessWidget {
     this.isCheckedIn = false,
   });
 
-  PlacePreview.eventPreview(
-      {super.key,
-      required this.onTap,
-      required UiEventModel event,
-      required this.model,
-      this.onFavoriteChanged,
-      this.cellSize,
-      this.updatedAt,
-      this.shouldVisitAt,
-      this.status,
-      this.reviewsIndicator,
-      this.showFavoriteBtn = false,
-      this.showFavoriteHint = false,
-      this.onCheckIn,
-      this.isCheckedIn = false,
-      this.isFavorite})
+  PlacePreview.eventPreview({super.key,
+    required this.onTap,
+    required UiEventModel event,
+    required this.model,
+    this.onFavoriteChanged,
+    this.cellSize,
+    this.updatedAt,
+    this.shouldVisitAt,
+    this.status,
+    this.reviewsIndicator,
+    this.showFavoriteBtn = false,
+    this.showFavoriteHint = false,
+    this.onCheckIn,
+    this.isCheckedIn = false,
+    this.isFavorite})
       : place = UiPlaceModel(
-            id: event.id,
-            title: event.title ?? '',
-            description: event.description ?? '',
-            media: event.media,
-            weekdays: event.weekdays,
-            scheduleString: event.scheduleString,
-            location: event.location,
-            placeType: event.eventType,
-            tags: event.tags,
-            baseTags: event.baseTags);
+      id: event.id,
+      title: event.title ?? '',
+      description: event.description ?? '',
+      media: event.media,
+      weekdays: event.weekdays,
+      weatherType: event.weatherType,
+      scheduleString: event.scheduleString,
+      location: event.location,
+      placeType: event.eventType,
+      tags: event.tags,
+      baseTags: event.baseTags);
 
   @override
   Widget build(BuildContext context) {
@@ -84,107 +84,109 @@ class PlacePreview extends StatelessWidget {
         children: [
           StreamBuilder<bool>(
               stream: isFavorite ?? Stream.value(false),
-              builder: (context, snapshot) => Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onLongPressStart: showFavoriteBtn
-                        ? null
-                        : (event) {
-                            FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
-                              intensities: [140, 150, 170, 200],
-                              pattern: [20, 15, 10, 5],
-                            ));
-                          },
-                    onLongPress: showFavoriteBtn
-                        ? null
-                        : () {
-                            if (onFavoriteChanged != null) {
-                              onFavoriteChanged!();
-                              if (snapshot.data ?? false) {
-                                _animationNotifier.value = LottieAnimation(
-                                  lottiePath: GraphicsFoundation.instance.animations.lottie.starOutline.path,
-                                );
-                              } else {
-                                _animationNotifier.value = LottieAnimation(
-                                  lottiePath: GraphicsFoundation.instance.animations.lottie.starFill.path,
-                                );
-                              }
-                              Future.delayed(const Duration(milliseconds: 1500), () {
-                                _animationNotifier.value = null;
-                              });
-                            }
-                          },
-                    child: Stack(
-                      clipBehavior: Clip.none,
+              builder: (context, snapshot) =>
+                  Align(
                       alignment: Alignment.center,
-                      children: [
-                        UiKitPhotoSlider(
-                          media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
-                          onTap: () => onTap?.call(place.id),
-                          width: size.width - horizontalMargin * 2,
-                          weatherType: place.weatherType,
-                        ),
-                        if (!showFavoriteBtn)
-                          ListenableBuilder(
-                              listenable: _animationNotifier,
-                              builder: (context, child) {
-                                return _animationNotifier.value ??
-                                    (showFavoriteHint
-                                        ? const DelayAndDisposeAnimationWrapper(
-                                            delay: Duration(milliseconds: 500),
-                                            durationToDelay: Duration(milliseconds: 1700 * 5),
-                                            child: UiKitLongTapHintAnimation(
-                                              duration: Duration(milliseconds: 1700),
-                                            ),
-                                          )
-                                        : const SizedBox.shrink());
-                              }),
-                        if (showFavoriteBtn)
-                          Positioned(
-                            top: -5.h,
-                            right: -5.w,
-                            child: context.smallButton(
-                              blurred: true,
-                              data: BaseUiKitButtonData(
-                                onPressed: onFavoriteChanged,
-                                iconInfo: BaseUiKitButtonIconData(
-                                  iconData:
-                                      (snapshot.data ?? false) ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
-                                  size: (snapshot.data ?? false) ? 15.w : null,
-                                ),
-                              ),
+                      child: GestureDetector(
+                        onLongPressStart: showFavoriteBtn
+                            ? null
+                            : (event) {
+                          FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                            intensities: [140, 150, 170, 200],
+                            pattern: [20, 15, 10, 5],
+                          ));
+                        },
+                        onLongPress: showFavoriteBtn
+                            ? null
+                            : () {
+                          if (onFavoriteChanged != null) {
+                            onFavoriteChanged!();
+                            if (snapshot.data ?? false) {
+                              _animationNotifier.value = LottieAnimation(
+                                lottiePath: GraphicsFoundation.instance.animations.lottie.starOutline.path,
+                              );
+                            } else {
+                              _animationNotifier.value = LottieAnimation(
+                                lottiePath: GraphicsFoundation.instance.animations.lottie.starFill.path,
+                              );
+                            }
+                            Future.delayed(const Duration(milliseconds: 1500), () {
+                              _animationNotifier.value = null;
+                            });
+                          }
+                        },
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                          children: [
+                            UiKitPhotoSlider(
+                              media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
+                              onTap: () => onTap?.call(place.id),
+                              width: size.width - horizontalMargin * 2,
+                              weatherType: place.weatherType,
                             ),
-                          )
-                        else if ((shouldVisitAt?.isAtSameDay ?? false) && onCheckIn!=null)
-                          Positioned(
-                              top: -10.h,
-                              right: -5.w,
-                              child: UiKitCheckInChip(
-                                onPressed: () => onCheckIn?.call(place.id),
-                                isChecked: isCheckedIn,
-                              )),
-                        if (status != null && status!.isNotEmpty)
-                          ClipRRect(
-                            borderRadius: BorderRadiusFoundation.all24,
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                              child: SizedBox(
-                                width: size.width - horizontalMargin * 2,
-                                height: cellSize?.height ?? 156.h,
-                                child: Center(
-                                  child: Text(
-                                    '$status\n${DateFormat('dd.MM.yy').format(updatedAt ?? DateTime.now())}',
-                                    textAlign: TextAlign.center,
-                                    style: theme?.boldTextTheme.body,
+                            if (!showFavoriteBtn)
+                              ListenableBuilder(
+                                  listenable: _animationNotifier,
+                                  builder: (context, child) {
+                                    return _animationNotifier.value ??
+                                        (showFavoriteHint
+                                            ? const DelayAndDisposeAnimationWrapper(
+                                          delay: Duration(milliseconds: 500),
+                                          durationToDelay: Duration(milliseconds: 1700 * 5),
+                                          child: UiKitLongTapHintAnimation(
+                                            duration: Duration(milliseconds: 1700),
+                                          ),
+                                        )
+                                            : const SizedBox.shrink());
+                                  }),
+                            if (showFavoriteBtn)
+                              Positioned(
+                                top: -5.h,
+                                right: -5.w,
+                                child: context.smallButton(
+                                  blurred: true,
+                                  data: BaseUiKitButtonData(
+                                    onPressed: onFavoriteChanged,
+                                    iconInfo: BaseUiKitButtonIconData(
+                                      iconData:
+                                      (snapshot.data ?? false) ? ShuffleUiKitIcons.star : ShuffleUiKitIcons.staroutline,
+                                      size: (snapshot.data ?? false) ? 15.w : null,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            else
+                              if ((shouldVisitAt?.isAtSameDay ?? false) && onCheckIn != null)
+                                Positioned(
+                                    top: -10.h,
+                                    right: -5.w,
+                                    child: UiKitCheckInChip(
+                                      onPressed: () => onCheckIn?.call(place.id),
+                                      isChecked: isCheckedIn,
+                                    )),
+                            if (status != null && status!.isNotEmpty)
+                              ClipRRect(
+                                borderRadius: BorderRadiusFoundation.all24,
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                                  child: SizedBox(
+                                    width: size.width - horizontalMargin * 2,
+                                    height: cellSize?.height ?? 156.h,
+                                    child: Center(
+                                      child: Text(
+                                        '$status\n${DateFormat('dd.MM.yy').format(updatedAt ?? DateTime.now())}',
+                                        textAlign: TextAlign.center,
+                                        style: theme?.boldTextTheme.body,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        if (reviewsIndicator != null) Positioned(bottom: -8.h, left: 0, child: reviewsIndicator!)
-                      ],
-                    ),
-                  ))),
+                            if (reviewsIndicator != null) Positioned(bottom: -8.h, left: 0, child: reviewsIndicator!)
+                          ],
+                        ),
+                      ))),
           if (calculatedOpacity == 1) ...[
             SpacingFoundation.verticalSpace8,
             Text(place.title ?? '', style: theme?.boldTextTheme.caption1Bold)
