@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -5,7 +7,6 @@ import '../../../shuffle_components_kit.dart';
 
 class UiEventModel extends Advertisable {
   final int id;
-  bool upsalesSwitcher;
   String? title;
   UiOwnerModel? owner;
   List<BaseUiKitMedia> media;
@@ -39,7 +40,6 @@ class UiEventModel extends Advertisable {
 
   UiEventModel({
     required this.id,
-    this.upsalesSwitcher = false,
     this.title,
     this.favorite,
     this.owner,
@@ -100,7 +100,6 @@ class UiEventModel extends Advertisable {
 
   UiEventModel.advertisement({
     this.id = -1,
-    this.upsalesSwitcher = false,
     this.title,
     this.favorite,
     this.owner,
@@ -138,7 +137,7 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.EventType);
     } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
-    } else if ((upsalesItems == null || upsalesItems!.isEmpty) && upsalesSwitcher) {
+    } else if (upsalesValidator(upsalesItems?.join(',')) != null) {
       return S.current.XIsRequired(S.current.Upsales);
     }
 
@@ -147,7 +146,6 @@ class UiEventModel extends Advertisable {
 
   UiEventModel.empty()
       : id = -1,
-        upsalesSwitcher = false,
         title = null,
         owner = null,
         media = const [],
@@ -184,7 +182,6 @@ class UiEventModel extends Advertisable {
   // copy with method
 
   UiEventModel copyWith({
-    bool? upsalesSwitcher,
     String? title,
     UiOwnerModel? owner,
     List<BaseUiKitMedia>? media,
@@ -214,7 +211,6 @@ class UiEventModel extends Advertisable {
   }) =>
       UiEventModel(
         id: id,
-        upsalesSwitcher: upsalesSwitcher ?? this.upsalesSwitcher,
         title: title ?? this.title,
         owner: owner ?? this.owner,
         media: media ?? this.media,

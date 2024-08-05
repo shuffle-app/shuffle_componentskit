@@ -57,7 +57,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   void initState() {
     super.initState();
-    _upsalesSwitcher = widget.eventToEdit?.upsalesSwitcher ?? false;
+    _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
     _titleController.text = widget.eventToEdit?.title ?? '';
     _descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
@@ -507,7 +507,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
                           : null)
                       : null;
-                  _eventToEdit.upsalesSwitcher = _upsalesSwitcher;
                   widget.onEventCreated.call(_eventToEdit);
                 },
               ),
