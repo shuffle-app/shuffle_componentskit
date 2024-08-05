@@ -35,6 +35,8 @@ class UiProfileModel {
   final int? points;
   final int? balance;
   final bool? beInSearch;
+  final VoidCallback? onTelegramPressed;
+  final VoidCallback? onWhatsappPressed;
 
   ProfileCard get cardWidget {
     return ProfileCard(
@@ -62,10 +64,7 @@ class UiProfileModel {
                   ? const InfluencerMemberPlate()
                   : null,
       onViewAllAchievements: onViewAllAchievements,
-      achievements: achievements
-          .where((element) =>
-              element.posterUrl != null || element.objectUrl != null)
-          .toList(),
+      achievements: achievements.where((element) => element.posterUrl != null || element.objectUrl != null).toList(),
       profileWidgets: [
         ProfileContentWidget(
           title: S.current.ToPlan,
@@ -82,6 +81,31 @@ class UiProfileModel {
         ),
       ],
     );
+  }
+
+  ProfileCard get cardWidgetPublic {
+    if (userTileType == UserTileType.pro) {
+      return ProfileCard(
+        profileCardBody: ProPublicProfileCardBody(
+          registrationDate: DateTime.now(),
+          onTelegramPressed: onTelegramPressed,
+          onWhatsappPressed: onWhatsappPressed,
+          name: name,
+          nickname: nickname,
+          avatarUrl: avatarUrl,
+          interests: allInterests,
+          matchingInterests: matchingInterests,
+          onShare: onShare,
+          onFollow: onFollow,
+          phone: phone,
+          email: email,
+          followers: followers ?? 0,
+        ),
+        badge: const ProMemberPlate(),
+      );
+    } else {
+      return ProfileCard();
+    }
   }
 
   UiProfileModel({
@@ -116,42 +140,47 @@ class UiProfileModel {
     this.points,
     this.balance,
     this.phone,
+    this.onTelegramPressed,
+    this.onWhatsappPressed,
   });
 
   /// write [copyWith] method
 
-  UiProfileModel copyWith(
-          {String? nickname,
-          String? name,
-          String? description,
-          String? avatarUrl,
-          String? userCredo,
-          int? followers,
-          int? mindsetId,
-          VoidCallback? onFollow,
-          VoidCallback? onPointsDetails,
-          VoidCallback? onBalanceDetails,
-          VoidCallback? onCalendarTap,
-          bool? showSupportShuffle,
-          ValueChanged<int>? onDonate,
-          List<String>? allInterests,
-          List<String>? favoriteTags,
-          List<String>? matchingInterests,
-          VoidCallback? onViewAllAchievements,
-          List<UiKitAchievementsModel>? achievements,
-          UserTileType? userTileType,
-          VoidCallback? onShare,
-          String? specialization,
-          List<String>? socialLinks,
-          List<String>? tags,
-          List<int>? tagsIds,
-          List<int>? favoriteTagsIds,
-          String? email,
-          String? phone,
-          int? points,
-          int? balance,
-          VoidCallback? onCustomDonate,
-          bool? beInSearch}) =>
+  UiProfileModel copyWith({
+    String? nickname,
+    String? name,
+    String? description,
+    String? avatarUrl,
+    String? userCredo,
+    int? followers,
+    int? mindsetId,
+    VoidCallback? onFollow,
+    VoidCallback? onPointsDetails,
+    VoidCallback? onBalanceDetails,
+    VoidCallback? onCalendarTap,
+    bool? showSupportShuffle,
+    ValueChanged<int>? onDonate,
+    List<String>? allInterests,
+    List<String>? favoriteTags,
+    List<String>? matchingInterests,
+    VoidCallback? onViewAllAchievements,
+    List<UiKitAchievementsModel>? achievements,
+    UserTileType? userTileType,
+    VoidCallback? onShare,
+    String? specialization,
+    List<String>? socialLinks,
+    List<String>? tags,
+    List<int>? tagsIds,
+    List<int>? favoriteTagsIds,
+    String? email,
+    String? phone,
+    int? points,
+    int? balance,
+    VoidCallback? onCustomDonate,
+    bool? beInSearch,
+    VoidCallback? onTelegramPressed,
+    VoidCallback? onWhatsappPressed,
+  }) =>
       UiProfileModel(
         onShare: onShare ?? this.onShare,
         onPointsDetails: onPointsDetails ?? this.onPointsDetails,
@@ -170,8 +199,7 @@ class UiProfileModel {
         allInterests: allInterests ?? this.allInterests,
         favoriteTags: favoriteTags ?? this.favoriteTags,
         matchingInterests: matchingInterests ?? this.matchingInterests,
-        onViewAllAchievements:
-            onViewAllAchievements ?? this.onViewAllAchievements,
+        onViewAllAchievements: onViewAllAchievements ?? this.onViewAllAchievements,
         achievements: achievements ?? this.achievements,
         userTileType: userTileType ?? this.userTileType,
         specialization: specialization ?? this.specialization,
@@ -185,6 +213,8 @@ class UiProfileModel {
         favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
         points: points ?? this.points,
         balance: balance ?? this.balance,
+        onTelegramPressed: onTelegramPressed ?? this.onTelegramPressed,
+        onWhatsappPressed: onWhatsappPressed ?? this.onWhatsappPressed,
       );
 }
 

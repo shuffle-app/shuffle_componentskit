@@ -246,6 +246,6 @@ class UiEventModel extends Advertisable {
     return day.isAfter(startDate!) && day.isBefore(endDate!);
   }
 
-  Map<int, int?>? get feedbacksHelpfulCounts =>
-      <int, int?>{}..addEntries(reviews?.map((e) => MapEntry<int, int?>(e.id, e.helpfulCount)) ?? []);
+  Map<int, int>? get feedbacksHelpfulCounts =>
+      <int, int>{}..addEntries(reviews?.map((e) => MapEntry<int, int>(e.id, e.helpfulCount ?? 0)) ?? []);
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:shuffle_uikit/ui_models/charts/chart_data.dart';
 
 import '../../../../domain/config_models/profile/component_profile_model.dart';
 
@@ -14,10 +13,12 @@ class PublicProfileComponent extends StatelessWidget {
   final ValueChanged<FeedbackUiModel>? onFeedbackLiked;
   final ValueChanged<VideoReactionUiModel>? onVideoReactionTapped;
   final ValueChanged<FeedbackUiModel>? onFeedbackTapped;
+  final Map<int, int?> feedbacksHelpfulCountsData;
 
   const PublicProfileComponent({
     super.key,
     required this.uiProfileModel,
+    required this.feedbacksHelpfulCountsData,
     this.profileStats,
     this.bookingsAndInvitesChartData,
     this.events,
@@ -42,7 +43,7 @@ class PublicProfileComponent extends StatelessWidget {
       bodyBottomSpace: verticalMargin,
       children: [
         verticalMargin.heightBox,
-        uiProfileModel.cardWidget.paddingSymmetric(horizontal: horizontalMargin),
+        uiProfileModel.cardWidgetPublic.paddingSymmetric(horizontal: horizontalMargin),
         if (profileStats != null)
           ProfileHighlights(
             placesVisited: profileStats!.placesVisited,
@@ -50,17 +51,14 @@ class PublicProfileComponent extends StatelessWidget {
             points: profileStats!.points,
           ).paddingOnly(left: horizontalMargin, right: horizontalMargin, bottom: SpacingFoundation.verticalSpacing16),
         if (bookingsAndInvitesChartData != null)
-          UiKitLineChart(chartData: bookingsAndInvitesChartData!).paddingOnly(
-            left: horizontalMargin,
-            right: horizontalMargin,
-            bottom: SpacingFoundation.verticalSpacing16,
-          ),
+          UiKitLineChart(chartData: bookingsAndInvitesChartData!).paddingAll(horizontalMargin),
         if (events != null)
           UiKitExpandableList(
             items: events!
                 .map<Widget>(
                   (event) => UiKitProUserProfileEventCard(
                     title: event.title ?? '',
+                    previewImage: event.verticalPreview?.link ?? '',
                     contentDate: event.startDate ?? DateTime.now(),
                     properties: [...event.tags, ...event.baseTags],
                     videoReactions: event.reactions
@@ -84,7 +82,7 @@ class PublicProfileComponent extends StatelessWidget {
                             text: feedback.feedbackText,
                             rating: feedback.feedbackRating,
                             isHelpful: feedback.helpfulForUser,
-                            helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                            helpfulCount: feedbacksHelpfulCountsData[feedback.id],
                             onPressed: () {
                               if (onFeedbackTapped != null) {
                                 onFeedbackTapped?.call(feedback);
