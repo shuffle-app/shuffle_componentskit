@@ -42,15 +42,14 @@ String? titleValidator(String? value) {
 
 String? upsalesValidator(String? value) {
   if (value == null || value.trim().isEmpty) {
-    return 'Please enter a valid title';
+    return null;
   } else if (value.trim().length < 3) {
     return 'Please enter a valid title';
-  } else if (RegExp(r'^[,\s]+$').hasMatch(value)) {
+  } else if (RegExp(r'^[\s@#\$%\^&\*\(\)\[\]\{\};:,.<>?\\|`~!]+$').hasMatch(value)) {
     return 'Please enter a valid title';
   }
   return null;
 }
-
 
 String? descriptionValidator(String? value) {
   if (value == null || value.isEmpty) {
