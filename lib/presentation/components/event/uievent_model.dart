@@ -34,6 +34,8 @@ class UiEventModel extends Advertisable {
   TextEditingController houseNumberController;
   TextEditingController apartmentNumberController;
   PlaceWeatherType? weatherType;
+  List<FeedbackUiModel>? reviews;
+  List<VideoReactionUiModel>? reactions;
   List<String>? upsalesItems;
 
   UiEventModel({
@@ -64,6 +66,8 @@ class UiEventModel extends Advertisable {
     this.currency,
     this.schedule,
     this.weatherType,
+    this.reviews,
+    this.reactions,
     this.upsalesItems,
     bool? isAdvertisement,
   })  : descriptionItems = [
@@ -206,6 +210,8 @@ class UiEventModel extends Advertisable {
     PlaceWeatherType? weatherType,
     List<String>? upsalesItems,
     dynamic schedule,
+    List<FeedbackUiModel>? reviews,
+    List<VideoReactionUiModel>? reactions,
   }) =>
       UiEventModel(
         id: id,
@@ -234,6 +240,8 @@ class UiEventModel extends Advertisable {
         schedule: schedule ?? this.schedule,
         reviewStatus: reviewStatus ?? this.reviewStatus,
         weatherType: weatherType ?? this.weatherType,
+        reviews: reviews ?? this.reviews,
+        reactions: reactions ?? this.reactions,
         upsalesItems: upsalesItems ?? this.upsalesItems,
       );
 
@@ -244,4 +252,7 @@ class UiEventModel extends Advertisable {
     }
     return day.isAfter(startDate!) && day.isBefore(endDate!);
   }
+
+  Map<int, int>? get feedbacksHelpfulCounts =>
+      <int, int>{}..addEntries(reviews?.map((e) => MapEntry<int, int>(e.id, e.helpfulCount ?? 0)) ?? []);
 }
