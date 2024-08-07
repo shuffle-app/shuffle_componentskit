@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shuffle_components_kit/presentation/components/add_link_components/add_link_component.dart';
+import 'package:shuffle_components_kit/presentation/components/add_link_components/select_booking_link_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -45,6 +47,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _upsalesController = TextEditingController();
+  late final TextEditingController _bookingUrlController = TextEditingController();
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
@@ -57,6 +60,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   void initState() {
     super.initState();
+    _bookingUrlController.text = widget.eventToEdit?.bookingUrl ?? '';
     _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
     _titleController.text = widget.eventToEdit?.title ?? '';
     _descriptionController.text = widget.eventToEdit?.description ?? '';
@@ -130,6 +134,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   void didUpdateWidget(covariant CreateEventComponent oldWidget) {
     if (oldWidget.eventToEdit != widget.eventToEdit) {
+      _bookingUrlController.text = widget.eventToEdit?.bookingUrl ?? '';
       _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
       _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
       _titleController.text = widget.eventToEdit?.title ?? '';
@@ -489,6 +494,42 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               textAlign: TextAlign.center,
             ).paddingSymmetric(horizontal: horizontalPadding)
           ],
+          SpacingFoundation.verticalSpace24,
+          SafeArea(
+            top: false,
+            child: context.button(
+              data: BaseUiKitButtonData(
+                fit: ButtonFit.fitWidth,
+                autoSizeGroup: AutoSizeGroup(),
+                text: S.of(context).CreateBookingLink.toUpperCase(),
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    isWidgetScrollable: true,
+                    topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                    child: SelectBookingLinkComponent(
+                      onExternalTap: () => showUiKitGeneralFullScreenDialog(
+                        context,
+                        GeneralDialogData(
+                          isWidgetScrollable: true,
+                          topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                          child: AddLinkComponent(
+                            onSave: () {
+                              _eventToEdit.bookingUrl = _bookingUrlController.text;
+                              context.pop();
+                            },
+                            linkController: _bookingUrlController,
+                          ),
+                        ),
+                      ),
+                      //TODO implement a booking page
+                      onBookingTap: () {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           SafeArea(
             top: false,
