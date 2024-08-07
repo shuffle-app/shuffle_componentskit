@@ -37,6 +37,7 @@ class UiEventModel extends Advertisable {
   List<FeedbackUiModel>? reviews;
   List<VideoReactionUiModel>? reactions;
   List<String>? upsalesItems;
+  String? bookingUrl;
 
   UiEventModel({
     required this.id,
@@ -70,6 +71,7 @@ class UiEventModel extends Advertisable {
     this.reactions,
     this.upsalesItems,
     bool? isAdvertisement,
+    this.bookingUrl,
   })  : descriptionItems = [
           if (scheduleString != null)
             UiDescriptionItemModel(
@@ -172,6 +174,7 @@ class UiEventModel extends Advertisable {
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         upsalesItems = const [],
+        bookingUrl = null,
         super(isAdvertisement: false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
@@ -212,6 +215,7 @@ class UiEventModel extends Advertisable {
     dynamic schedule,
     List<FeedbackUiModel>? reviews,
     List<VideoReactionUiModel>? reactions,
+    String? bookingUrl,
   }) =>
       UiEventModel(
         id: id,
@@ -243,6 +247,7 @@ class UiEventModel extends Advertisable {
         reviews: reviews ?? this.reviews,
         reactions: reactions ?? this.reactions,
         upsalesItems: upsalesItems ?? this.upsalesItems,
+        bookingUrl: bookingUrl ?? this.bookingUrl,
       );
 
   bool selectableDayPredicate(DateTime day) {
