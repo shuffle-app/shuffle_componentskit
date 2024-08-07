@@ -19,7 +19,7 @@ class AddLinkComponent extends StatefulWidget {
 }
 
 class _AddLinkComponentState extends State<AddLinkComponent> {
-  bool isCurrentLink = false;
+  bool isLinkValid = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -27,6 +27,7 @@ class _AddLinkComponentState extends State<AddLinkComponent> {
     final theme = context.uiKitTheme;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SpacingFoundation.verticalSpace16,
         Text(
@@ -39,11 +40,12 @@ class _AddLinkComponentState extends State<AddLinkComponent> {
           child: UiKitInputFieldNoFill(
             label: 'URL',
             keyboardType: TextInputType.url,
+            hintText: 'https://yoursite.com',
             controller: widget.linkController,
             validator: websiteValidator,
             onChanged: (value) {
               setState(() {
-                isCurrentLink = _formKey.currentState!.validate();
+                isLinkValid = _formKey.currentState!.validate();
               });
             },
           ),
@@ -55,7 +57,7 @@ class _AddLinkComponentState extends State<AddLinkComponent> {
             data: BaseUiKitButtonData(
               fit: ButtonFit.fitWidth,
               text: S.of(context).Save.toUpperCase(),
-              onPressed: isCurrentLink ? widget.onSave : null,
+              onPressed: isLinkValid ? widget.onSave : null,
             ),
           ),
         ),
