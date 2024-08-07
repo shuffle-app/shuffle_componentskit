@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shuffle_components_kit/presentation/components/place/add_link_components/add_link_component.dart';
-import 'package:shuffle_components_kit/presentation/components/place/add_link_components/select_booking_link_component.dart';
+import 'package:shuffle_components_kit/presentation/components/add_link_components/add_link_component.dart';
+import 'package:shuffle_components_kit/presentation/components/add_link_components/select_booking_link_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -152,6 +152,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _videos.clear();
       _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
       _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
       _descriptionController.text = widget.placeToEdit?.description ?? '';
       _websiteController.text = widget.placeToEdit?.website ?? '';
       _phoneController.text = widget.placeToEdit?.phone ?? '';
