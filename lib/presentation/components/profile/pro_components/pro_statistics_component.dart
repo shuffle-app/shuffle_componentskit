@@ -13,13 +13,13 @@ class ProStatisticsComponent extends StatelessWidget {
   final TabController tabController;
   final ValueChanged<String?>? onTabTapped;
 
-  final _tabs = [
-    UiKitCustomTab(title: 'General', customValue: 'general'),
-    UiKitCustomTab(title: 'Organic', customValue: 'organic'),
-    UiKitCustomTab(title: 'Promotion', customValue: 'promotion'),
+  final _tabs = const [
+    CustomTabData(title: 'General', customValue: 'general'),
+    CustomTabData(title: 'Organic', customValue: 'organic'),
+    CustomTabData(title: 'Promotion', customValue: 'promotion'),
   ];
 
-  ProStatisticsComponent({
+  const ProStatisticsComponent({
     Key? key,
     required this.uniqueStatisticsModel,
     required this.viewsAndVisitorsStat,
