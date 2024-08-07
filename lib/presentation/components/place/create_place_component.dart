@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shuffle_components_kit/presentation/components/add_link_components/add_link_component.dart';
+import 'package:shuffle_components_kit/presentation/components/add_link_components/select_booking_link_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -44,6 +46,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _locationController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   late final TextEditingController _priceController = TextEditingController();
+  late final TextEditingController _bookingUrlController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UiPlaceModel _placeToEdit;
 
@@ -53,6 +56,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   @override
   void initState() {
     super.initState();
+    _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
     _titleController.text = widget.placeToEdit?.title ?? '';
     _descriptionController.text = widget.placeToEdit?.description ?? '';
     _locationController.text = widget.placeToEdit?.location ?? '';
@@ -148,6 +152,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _videos.clear();
       _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
       _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
       _descriptionController.text = widget.placeToEdit?.description ?? '';
       _websiteController.text = widget.placeToEdit?.website ?? '';
       _phoneController.text = widget.placeToEdit?.phone ?? '';
@@ -426,12 +431,13 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             SpacingFoundation.verticalSpace24,
             if (_placeToEdit.contentType == 'business')
               UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
+                listUiKitTags:
+                    _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
                 title: S.of(context).PleaseSelectANiche,
                 onTap: () {
                   widget.onNicheChanged?.call().then((value) {
                     setState(() {
-                      _placeToEdit.niche = value ;
+                      _placeToEdit.niche = value;
                     });
                   });
                 },
@@ -477,6 +483,42 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ).paddingSymmetric(horizontal: horizontalPadding),
               SpacingFoundation.verticalSpace24,
             ],
+            SafeArea(
+              top: false,
+              child: context.button(
+                data: BaseUiKitButtonData(
+                  fit: ButtonFit.fitWidth,
+                  autoSizeGroup: AutoSizeGroup(),
+                  text: S.of(context).CreateBookingLink.toUpperCase(),
+                  onPressed: () => showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      isWidgetScrollable: true,
+                      topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                      child: SelectBookingLinkComponent(
+                        onExternalTap: () => showUiKitGeneralFullScreenDialog(
+                          context,
+                          GeneralDialogData(
+                            isWidgetScrollable: true,
+                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                            child: AddLinkComponent(
+                              onSave: () {
+                                _placeToEdit.bookingUrl = _bookingUrlController.text;
+                                context.pop();
+                              },
+                              linkController: _bookingUrlController,
+                            ),
+                          ),
+                        ),
+                        //TODO implement a booking page
+                        onBookingTap: () {},
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
             SafeArea(
               top: false,
               child: context.gradientButton(
