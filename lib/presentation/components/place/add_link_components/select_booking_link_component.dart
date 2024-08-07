@@ -16,6 +16,7 @@ class SelectBookingLinkComponent extends StatelessWidget {
     final theme = context.uiKitTheme;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SpacingFoundation.verticalSpace16,
         Text(
