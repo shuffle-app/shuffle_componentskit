@@ -13,13 +13,13 @@ class ProStatisticsComponent extends StatelessWidget {
   final TabController tabController;
   final ValueChanged<String?>? onTabTapped;
 
-  final _tabs = const [
-    CustomTabData(title: 'General', customValue: 'general'),
-    CustomTabData(title: 'Organic', customValue: 'organic'),
-    CustomTabData(title: 'Promotion', customValue: 'promotion'),
+  final _tabs = [
+    CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
+    CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
+    CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
   ];
 
-  const ProStatisticsComponent({
+  ProStatisticsComponent({
     Key? key,
     required this.uniqueStatisticsModel,
     required this.viewsAndVisitorsStat,
@@ -39,7 +39,7 @@ class ProStatisticsComponent extends StatelessWidget {
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: 'Pro Statistics',
+      title: S.current.Statistics,
       autoImplyLeading: true,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
