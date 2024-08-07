@@ -46,8 +46,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _locationController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   late final TextEditingController _priceController = TextEditingController();
-  late final TextEditingController _externalLinkController = TextEditingController();
-  late final TextEditingController _bookingLinkController = TextEditingController();
+  late final TextEditingController _bookingUrlController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UiPlaceModel _placeToEdit;
 
@@ -57,8 +56,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   @override
   void initState() {
     super.initState();
-    _externalLinkController.text = widget.placeToEdit?.externalLink ?? '';
-    _bookingLinkController.text = widget.placeToEdit?.bookingLink ?? '';
+    _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
     _titleController.text = widget.placeToEdit?.title ?? '';
     _descriptionController.text = widget.placeToEdit?.description ?? '';
     _locationController.text = widget.placeToEdit?.location ?? '';
@@ -504,10 +502,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
                             child: AddLinkComponent(
                               onSave: () {
-                                _placeToEdit.externalLink = _externalLinkController.text;
+                                _placeToEdit.website = _websiteController.text;
                                 context.pop();
                               },
-                              linkController: _externalLinkController,
+                              linkController: _websiteController,
                             ),
                           ),
                         ),
@@ -518,10 +516,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
                             child: AddLinkComponent(
                               onSave: () {
-                                _placeToEdit.bookingLink = _bookingLinkController.text;
+                                _placeToEdit.bookingUrl = _bookingUrlController.text;
                                 context.pop();
                               },
-                              linkController: _bookingLinkController,
+                              linkController: _bookingUrlController,
                             ),
                           ),
                         ),
