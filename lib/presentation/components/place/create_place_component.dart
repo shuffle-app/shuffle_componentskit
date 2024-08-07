@@ -502,20 +502,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
                             child: AddLinkComponent(
                               onSave: () {
-                                _placeToEdit.website = _websiteController.text;
-                                context.pop();
-                              },
-                              linkController: _websiteController,
-                            ),
-                          ),
-                        ),
-                        onBookingTap: () => showUiKitGeneralFullScreenDialog(
-                          context,
-                          GeneralDialogData(
-                            isWidgetScrollable: true,
-                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                            child: AddLinkComponent(
-                              onSave: () {
                                 _placeToEdit.bookingUrl = _bookingUrlController.text;
                                 context.pop();
                               },
@@ -523,6 +509,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             ),
                           ),
                         ),
+                        //TODO implement a booking page
+                        onBookingTap: () {},
                       ),
                     ),
                   ),
