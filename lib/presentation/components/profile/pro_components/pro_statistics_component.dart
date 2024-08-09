@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/unique_statistics_model.dart';
+import 'package:shuffle_components_kit/presentation/components/event/uievent_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ProStatisticsComponent extends StatelessWidget {
@@ -12,6 +13,10 @@ class ProStatisticsComponent extends StatelessWidget {
   final List<UiKitMiniChartData> miniChartData;
   final TabController tabController;
   final ValueChanged<String?>? onTabTapped;
+  final VoidCallback? onFeedbackStatActionTapped;
+  final bool loadingVisitorsStatistics;
+  final ValueChanged<String>? onStatisticsPopupMenuItemTapped;
+  final List<UiEventModel>? events;
 
   final _tabs = [
     CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
@@ -30,6 +35,10 @@ class ProStatisticsComponent extends StatelessWidget {
     required this.tabController,
     this.viewsAndVisitorsAdditionalData,
     this.onTabTapped,
+    this.onFeedbackStatActionTapped,
+    this.loadingVisitorsStatistics = false,
+    this.onStatisticsPopupMenuItemTapped,
+    this.events,
   }) : super(key: key);
 
   @override
@@ -51,7 +60,9 @@ class ProStatisticsComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
+          loading: loadingVisitorsStatistics,
           chartData: viewsAndVisitorsStat,
+          popUpMenuItemSelected: onStatisticsPopupMenuItemTapped,
           chartAdditionalData: viewsAndVisitorsAdditionalData,
         ),
         SpacingFoundation.verticalSpace16,
@@ -61,6 +72,7 @@ class ProStatisticsComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
           chartData: bookingAndFavorites,
+          action: onFeedbackStatActionTapped,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
@@ -183,6 +195,29 @@ class ProStatisticsComponent extends StatelessWidget {
             ],
           ),
         ),
+        if (events != null && events!.isNotEmpty)
+          Text(
+            S.current.Events,
+            style: boldTextTheme?.title1,
+            textAlign: TextAlign.start,
+          ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical16),
+        if (events != null && events!.isNotEmpty)
+          ListView.separated(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final event = events!.elementAt(index);
+
+              return UiKitContentPreviewTile(
+                avatarPath: event.verticalPreview?.link ?? event.owner?.logo,
+                title: event.title ?? '',
+                subtitle: event.eventType?.title,
+                onTap: () {},
+              );
+            },
+            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+            itemCount: events!.length,
+          ),
         SpacingFoundation.bottomNavigationBarSpacing,
       ],
     );
