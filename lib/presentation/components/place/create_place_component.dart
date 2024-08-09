@@ -48,7 +48,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   late UiPlaceModel _placeToEdit;
+  late BookingUiModel _bookingUiModel;
 
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
@@ -72,6 +74,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
+    _bookingUiModel = widget.placeToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
   }
 
   // _onVideoDeleted(int index) {
@@ -159,6 +162,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _priceController.text = widget.placeToEdit?.price ?? '';
       _titleController.text = widget.placeToEdit?.title ?? '';
       _locationController.text = widget.placeToEdit?.location ?? '';
+      _bookingUiModel = widget.placeToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -510,8 +514,13 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             ),
                           ),
                         ),
-                        //TODO implement a booking page
-                        onBookingTap: () {},
+                        onBookingTap: () => context.push(
+                          CreateBookingComponent(
+                            onBookingCreated: (bookingUiModel) {
+                              _bookingUiModel = bookingUiModel;
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -533,6 +542,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     _placeToEdit.description = _descriptionController.text;
                     _placeToEdit.price = _priceController.text;
                     _placeToEdit.media = [..._photos, ..._videos];
+                    _placeToEdit.bookingUiModel = _bookingUiModel;
                     widget.onPlaceCreated.call(_placeToEdit);
                   },
                 ),
