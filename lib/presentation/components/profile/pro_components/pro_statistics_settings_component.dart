@@ -4,7 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ProStatisticsSettingsComponent extends StatelessWidget {
   final List<TitledFilterModel<String>> filters;
-  final FilterValueChanged<TitledFilterItem<String>?>? onFilterValueChanged;
+  final FilterValueChanged<TitledFilterItem<String>>? onFilterValueChanged;
 
   const ProStatisticsSettingsComponent({
     Key? key,
@@ -30,9 +30,15 @@ class ProStatisticsSettingsComponent extends StatelessWidget {
 
             return UiKitTitledFilter<String>(
               model: filter,
-              onItemSelected: (item) => onFilterValueChanged?.call(parentIndex, item),
-              onItemDeselected: (item) => onFilterValueChanged?.call(parentIndex, item),
-            );
+              onItemSelected: (item) => onFilterValueChanged?.call(
+                parentIndex,
+                item.copyWith(selected: true),
+              ),
+              onItemDeselected: (item) => onFilterValueChanged?.call(
+                parentIndex,
+                item.copyWith(selected: false),
+              ),
+            ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
           },
         ),
         SpacingFoundation.verticalSpace24,
