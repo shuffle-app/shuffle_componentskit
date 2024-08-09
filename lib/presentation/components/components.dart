@@ -116,3 +116,4 @@ export 'subscriptions/ui_subscription_model.dart';
 export 'suggest_place/suggest_place_component.dart';
 export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
+export 'booking_component/create_booking_component.dart';
