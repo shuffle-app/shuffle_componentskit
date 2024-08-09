@@ -51,6 +51,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
+  late BookingUiModel _bookingUiModel;
 
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
@@ -72,6 +73,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
+    _bookingUiModel = widget.eventToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
   }
 
   _onVideoDeleted(int index) {
@@ -148,6 +150,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      _bookingUiModel = widget.eventToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -522,8 +525,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           ),
                         ),
                       ),
-                      //TODO implement a booking page
-                      onBookingTap: () {},
+                      onBookingTap: () => context.push(
+                        CreateBookingComponent(
+                          onBookingCreated: (bookingUiModel) {
+                            _bookingUiModel = bookingUiModel;
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -545,6 +553,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.website = _websiteController.text;
                   _eventToEdit.phone = _phoneController.text;
                   _eventToEdit.price = _priceController.text;
+                  _eventToEdit.bookingUiModel = _bookingUiModel;
                   _eventToEdit.upsalesItems = _upsalesSwitcher
                       ? (_upsalesController.text.isNotEmpty
                           ? _upsalesController.text.split(',').map((e) => e.trim()).toList()

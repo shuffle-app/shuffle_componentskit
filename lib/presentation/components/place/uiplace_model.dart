@@ -32,6 +32,7 @@ class UiPlaceModel {
   TextEditingController apartmentNumberController;
   PlaceWeatherType? weatherType;
   String? bookingUrl;
+  BookingUiModel? bookingUiModel;
 
   UiPlaceModel({
     required this.id,
@@ -59,6 +60,7 @@ class UiPlaceModel {
     this.currency,
     this.weatherType,
     this.bookingUrl,
+    this.bookingUiModel,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
@@ -132,6 +134,7 @@ class UiPlaceModel {
     TextEditingController? apartmentNumberController,
     PlaceWeatherType? weatherType,
     String? bookingUrl,
+    BookingUiModel? bookingUiModel,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -158,6 +161,7 @@ class UiPlaceModel {
         userPoints: userPoints ?? this.userPoints,
         weatherType: weatherType ?? this.weatherType,
         bookingUrl: bookingUrl ?? this.bookingUrl,
+        bookingUiModel: bookingUiModel ?? this.bookingUiModel,
       );
 
   UiPlaceModel.empty()
@@ -169,6 +173,7 @@ class UiPlaceModel {
         tags = const [],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
+        bookingUiModel = null,
         baseTags = const [] {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
