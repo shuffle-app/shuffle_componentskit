@@ -1,6 +1,7 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UpsaleUiModel {
+  int id;
   BaseUiKitMedia? photo;
   String? description;
   String? limit;
@@ -9,6 +10,7 @@ class UpsaleUiModel {
   String? currency;
 
   UpsaleUiModel({
+    required this.id,
     this.photo,
     this.description,
     this.limit,
@@ -18,6 +20,7 @@ class UpsaleUiModel {
   });
 
   UpsaleUiModel copyWith({
+    int? id,
     BaseUiKitMedia? photo,
     String? description,
     String? limit,
@@ -26,6 +29,7 @@ class UpsaleUiModel {
     String? currency,
   }) {
     return UpsaleUiModel(
+      id: id ?? this.id,
       photo: photo ?? this.photo,
       description: description ?? this.description,
       limit: limit ?? this.limit,
