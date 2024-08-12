@@ -99,7 +99,9 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                   return null;
                 },
                 onChanged: (value) {
-                  _formKey.currentState!.validate();
+                  setState(() {
+                    _formKey.currentState!.validate();
+                  });
                 },
               ),
             ),
