@@ -34,11 +34,23 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
   @override
   void initState() {
     super.initState();
-    _subsUiModel = widget.subsUiModel ?? SubsUiModel();
+    _subsUiModel = widget.subsUiModel ?? SubsUiModel(id: -1);
     _titleController.text = widget.subsUiModel?.title ?? '';
     _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
     _descriptionController.text = widget.subsUiModel?.description ?? '';
     _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
+  }
+
+  @override
+  void didUpdateWidget(covariant CereatSubsComponent oldWidget) {
+    if (oldWidget.subsUiModel != oldWidget.subsUiModel) {
+      _subsUiModel = widget.subsUiModel ?? SubsUiModel(id: -1);
+      _titleController.text = widget.subsUiModel?.title ?? '';
+      _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
+      _descriptionController.text = widget.subsUiModel?.description ?? '';
+      _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   _onAddPhoto() async {

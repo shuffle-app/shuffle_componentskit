@@ -33,11 +33,23 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   @override
   void initState() {
     super.initState();
-    _upsaleUiModel = widget.upsaleUiModel ?? UpsaleUiModel();
+    _upsaleUiModel = widget.upsaleUiModel ?? UpsaleUiModel(id: -1);
     _priceController.text = widget.upsaleUiModel?.price ?? '';
     _limitController.text = widget.upsaleUiModel?.limit ?? '';
     _descriptionController.text = widget.upsaleUiModel?.description ?? '';
     _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
+  }
+
+  @override
+  void didUpdateWidget(covariant CreateUpsalesComponent oldWidget) {
+    if (oldWidget.upsaleUiModel != oldWidget.upsaleUiModel) {
+      _upsaleUiModel = widget.upsaleUiModel ?? UpsaleUiModel(id: -1);
+      _priceController.text = widget.upsaleUiModel?.price ?? '';
+      _limitController.text = widget.upsaleUiModel?.limit ?? '';
+      _descriptionController.text = widget.upsaleUiModel?.description ?? '';
+      _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   _onAddPhoto() async {
