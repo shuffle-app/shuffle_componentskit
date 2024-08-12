@@ -187,38 +187,39 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     .paddingOnly(top: 4),
                 SpacingFoundation.horizontalSpace12,
                 if (_subsUiMoldels.isNotEmpty)
-                  ...List.generate(
-                    _subsUiMoldels.length,
-                    (index) {
-                      final sabsItem = _subsUiMoldels[index];
+                  SizedBox(
+                    height: 0.23.sh,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _subsUiMoldels.length,
+                      separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                      itemBuilder: (context, index) {
+                        final sabsItem = _subsUiMoldels[index];
 
-                      double padding = SpacingFoundation.horizontalSpacing8;
-                      if (sabsItem == _subsUiMoldels.last) {
-                        padding = 0;
-                      }
-
-                      return SubsOrUpsaleItem(
-                        limit: sabsItem.bookingLimit,
-                        titleOrPrice: sabsItem.title,
-                        photoLink: sabsItem.photo?.link,
-                        actualLimit: sabsItem.actualbookingLimit,
-                        description: sabsItem.description,
-                        removeItem: () => _removeSubsItem(index),
-                        onEdit: () {
-                          context.push(
-                            CereatSubsComponent(
-                              onSave: (subsUiModel) {
-                                setState(() {
-                                  _bookingUiModel.subsUiModel?[index] = subsUiModel;
-                                });
-                              },
-                              subsUiModel: sabsItem,
-                            ),
-                          );
-                        },
-                      ).paddingOnly(right: padding);
-                    },
-                  )
+                        return SubsOrUpsaleItem(
+                          limit: sabsItem.bookingLimit,
+                          titleOrPrice: sabsItem.title,
+                          photoLink: sabsItem.photo?.link,
+                          actualLimit: sabsItem.actualbookingLimit,
+                          description: sabsItem.description,
+                          removeItem: () => _removeSubsItem(index),
+                          onEdit: () {
+                            context.push(
+                              CereatSubsComponent(
+                                onSave: (subsUiModel) {
+                                  setState(() {
+                                    _bookingUiModel.subsUiModel?[index] = subsUiModel;
+                                  });
+                                },
+                                subsUiModel: sabsItem,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
               ],
             ),
           ),
@@ -273,44 +274,44 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     .paddingOnly(top: 4),
                 SpacingFoundation.horizontalSpace12,
                 if (_upsaleUiModels.isNotEmpty)
-                  ...List.generate(
-                    _upsaleUiModels.length,
-                    (index) {
-                      final upsaleItem = _upsaleUiModels[index];
+                  SizedBox(
+                    height: 0.20.sh,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _upsaleUiModels.length,
+                      separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                      itemBuilder: (context, index) {
+                        final upsaleItem = _upsaleUiModels[index];
 
-                      double padding = SpacingFoundation.horizontalSpacing8;
-                      if (upsaleItem == _upsaleUiModels.last) {
-                        padding = 0;
-                      }
-
-                      return SubsOrUpsaleItem(
-                        description: upsaleItem.description,
-                        limit: upsaleItem.limit,
-                        actualLimit: upsaleItem.actualLimit,
-                        photoLink: upsaleItem.photo?.link,
-                        titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
-                            ? upsaleItem.price
-                            : S.of(context).Free,
-                        removeItem: () => _removeUpsaleItem(index),
-                        onEdit: () {
-                          context.push(
-                            CreateUpsalesComponent(
-                              onSave: (upsaleUiModel) {
-                                setState(() {
-                                  _bookingUiModel.upsaleUiModel?[index] = upsaleUiModel;
-                                });
-                              },
-                              upsaleUiModel: upsaleItem,
-                            ),
-                          );
-                        },
-                      ).paddingOnly(right: padding);
-                    },
+                        return SubsOrUpsaleItem(
+                          description: upsaleItem.description,
+                          limit: upsaleItem.limit,
+                          actualLimit: upsaleItem.actualLimit,
+                          photoLink: upsaleItem.photo?.link,
+                          titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
+                              ? upsaleItem.price
+                              : S.of(context).Free,
+                          removeItem: () => _removeUpsaleItem(index),
+                          onEdit: () {
+                            context.push(
+                              CreateUpsalesComponent(
+                                onSave: (upsaleUiModel) {
+                                  setState(() {
+                                    _bookingUiModel.upsaleUiModel?[index] = upsaleUiModel;
+                                  });
+                                },
+                                upsaleUiModel: upsaleItem,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
               ],
             ),
           ),
-          SpacingFoundation.verticalSpace24,
           SafeArea(
             child: context.gradientButton(
               data: BaseUiKitButtonData(
