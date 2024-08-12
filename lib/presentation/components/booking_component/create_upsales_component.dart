@@ -152,6 +152,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
               ),
             ),
           ),
+          SpacingFoundation.verticalSpace24,
         ],
       ),
       bottomNavigationBar: context

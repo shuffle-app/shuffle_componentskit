@@ -128,7 +128,8 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                   _limitController.text = stringWithSpace(int.parse(value));
                 });
               },
-            )
+            ),
+            SpacingFoundation.verticalSpace24,
           ],
         ),
       ),
