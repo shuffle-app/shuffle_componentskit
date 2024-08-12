@@ -51,7 +51,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
-  late BookingUiModel _bookingUiModel;
+  late BookingUiModel? _bookingUiModel;
 
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
@@ -73,7 +73,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
-    _bookingUiModel = widget.eventToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
+    _bookingUiModel = widget.eventToEdit?.bookingUiModel;
   }
 
   _onVideoDeleted(int index) {

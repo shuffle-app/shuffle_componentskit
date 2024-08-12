@@ -50,7 +50,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiPlaceModel _placeToEdit;
-  late BookingUiModel _bookingUiModel;
+  late BookingUiModel? _bookingUiModel;
 
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
@@ -74,7 +74,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
-    _bookingUiModel = widget.placeToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
+    _bookingUiModel = widget.placeToEdit?.bookingUiModel;
   }
 
   // _onVideoDeleted(int index) {
