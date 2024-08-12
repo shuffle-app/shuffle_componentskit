@@ -162,7 +162,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _priceController.text = widget.placeToEdit?.price ?? '';
       _titleController.text = widget.placeToEdit?.title ?? '';
       _locationController.text = widget.placeToEdit?.location ?? '';
-      _bookingUiModel = widget.placeToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
+      _bookingUiModel = widget.placeToEdit?.bookingUiModel;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -494,36 +494,40 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   fit: ButtonFit.fitWidth,
                   autoSizeGroup: AutoSizeGroup(),
                   text: S.of(context).CreateBookingLink.toUpperCase(),
-                  onPressed: () => showUiKitGeneralFullScreenDialog(
-                    context,
-                    GeneralDialogData(
-                      isWidgetScrollable: true,
-                      topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                      child: SelectBookingLinkComponent(
-                        onExternalTap: () => showUiKitGeneralFullScreenDialog(
-                          context,
-                          GeneralDialogData(
-                            isWidgetScrollable: true,
-                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                            child: AddLinkComponent(
-                              onSave: () {
-                                _placeToEdit.bookingUrl = _bookingUrlController.text;
-                                context.pop();
+                  onPressed: () {
+                    _bookingUiModel ??= BookingUiModel(id: -1);
+
+                    showUiKitGeneralFullScreenDialog(
+                      context,
+                      GeneralDialogData(
+                        isWidgetScrollable: true,
+                        topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                        child: SelectBookingLinkComponent(
+                          onExternalTap: () => showUiKitGeneralFullScreenDialog(
+                            context,
+                            GeneralDialogData(
+                              isWidgetScrollable: true,
+                              topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                              child: AddLinkComponent(
+                                onSave: () {
+                                  _placeToEdit.bookingUrl = _bookingUrlController.text;
+                                  context.pop();
+                                },
+                                linkController: _bookingUrlController,
+                              ),
+                            ),
+                          ),
+                          onBookingTap: () => context.push(
+                            CreateBookingComponent(
+                              onBookingCreated: (bookingUiModel) {
+                                _bookingUiModel = bookingUiModel;
                               },
-                              linkController: _bookingUrlController,
                             ),
                           ),
                         ),
-                        onBookingTap: () => context.push(
-                          CreateBookingComponent(
-                            onBookingCreated: (bookingUiModel) {
-                              _bookingUiModel = bookingUiModel;
-                            },
-                          ),
-                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding),

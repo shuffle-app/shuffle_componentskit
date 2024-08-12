@@ -150,7 +150,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
-      _bookingUiModel = widget.eventToEdit?.bookingUiModel ?? BookingUiModel(id: -1);
+      _bookingUiModel = widget.eventToEdit?.bookingUiModel;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -505,36 +505,40 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 fit: ButtonFit.fitWidth,
                 autoSizeGroup: AutoSizeGroup(),
                 text: S.of(context).CreateBookingLink.toUpperCase(),
-                onPressed: () => showUiKitGeneralFullScreenDialog(
-                  context,
-                  GeneralDialogData(
-                    isWidgetScrollable: true,
-                    topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                    child: SelectBookingLinkComponent(
-                      onExternalTap: () => showUiKitGeneralFullScreenDialog(
-                        context,
-                        GeneralDialogData(
-                          isWidgetScrollable: true,
-                          topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                          child: AddLinkComponent(
-                            onSave: () {
-                              _eventToEdit.bookingUrl = _bookingUrlController.text;
-                              context.pop();
+                onPressed: () {
+                  _bookingUiModel ??= BookingUiModel(id: -1);
+
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      isWidgetScrollable: true,
+                      topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                      child: SelectBookingLinkComponent(
+                        onExternalTap: () => showUiKitGeneralFullScreenDialog(
+                          context,
+                          GeneralDialogData(
+                            isWidgetScrollable: true,
+                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                            child: AddLinkComponent(
+                              onSave: () {
+                                _eventToEdit.bookingUrl = _bookingUrlController.text;
+                                context.pop();
+                              },
+                              linkController: _bookingUrlController,
+                            ),
+                          ),
+                        ),
+                        onBookingTap: () => context.push(
+                          CreateBookingComponent(
+                            onBookingCreated: (bookingUiModel) {
+                              _bookingUiModel = bookingUiModel;
                             },
-                            linkController: _bookingUrlController,
                           ),
                         ),
                       ),
-                      onBookingTap: () => context.push(
-                        CreateBookingComponent(
-                          onBookingCreated: (bookingUiModel) {
-                            _bookingUiModel = bookingUiModel;
-                          },
-                        ),
-                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ).paddingSymmetric(horizontal: horizontalPadding),
