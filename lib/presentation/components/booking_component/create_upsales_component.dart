@@ -26,8 +26,6 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UpsaleUiModel _upsaleUiModel;
 
-  late int descriptionLenght = _descriptionController.text.length;
-
   BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
 
   @override
@@ -93,33 +91,21 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
             link: _photo.link,
           ),
           SpacingFoundation.verticalSpace24,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              IntrinsicHeight(
-                child: Form(
-                  key: _formKey,
-                  child: UiKitInputFieldNoFill(
-                    label: S.of(context).Description,
-                    controller: _descriptionController,
-                    validator: descriptionValidator,
-                    expands: true,
-                    inputFormatters: [MaxLengthTextInputFormatter(150)],
-                    onChanged: (value) {
-                      _formKey.currentState!.validate();
-                      setState(() {
-                        descriptionLenght = value.length;
-                      });
-                    },
-                  ),
-                ),
+          IntrinsicHeight(
+            child: Form(
+              key: _formKey,
+              child: UiKitInputFieldNoFill(
+                label: S.of(context).Description,
+                expands: true,
+                maxSymbols: 150,
+                validator: descriptionValidator,
+                controller: _descriptionController,
+                inputFormatters: [MaxLengthTextInputFormatter(150)],
+                onChanged: (value) {
+                  _formKey.currentState!.validate();
+                },
               ),
-              SpacingFoundation.verticalSpace4,
-              Text(
-                '${descriptionLenght}/150',
-                style: theme?.boldTextTheme.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
-              )
-            ],
+            ),
           ),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(

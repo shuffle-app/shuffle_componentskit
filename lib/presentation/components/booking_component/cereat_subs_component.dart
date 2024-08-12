@@ -26,9 +26,6 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late SubsUiModel _subsUiModel;
 
-  int titleLenght = 0;
-  int descriptionLenght = 0;
-
   BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
 
   @override
@@ -70,8 +67,6 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.uiKitTheme;
-
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -88,63 +83,39 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
               link: _photo.link,
             ),
             SpacingFoundation.verticalSpace24,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                IntrinsicHeight(
-                  child: UiKitInputFieldNoFill(
-                    label: S.of(context).Title,
-                    expands: true,
-                    controller: _titleController,
-                    inputFormatters: [MaxLengthTextInputFormatter(45)],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return S.of(context).PleaseEnterValidTitle;
-                      } else if (value.length < 3) {
-                        return S.of(context).PleaseEnterValidTitle;
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      _formKey.currentState!.validate();
-                      setState(() {
-                        titleLenght = value.length;
-                      });
-                    },
-                  ),
-                ),
-                SpacingFoundation.verticalSpace4,
-                Text(
-                  '${titleLenght}/45',
-                  style: theme?.boldTextTheme.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
-                )
-              ],
+            IntrinsicHeight(
+              child: UiKitInputFieldNoFill(
+                label: S.of(context).Title,
+                expands: true,
+                maxSymbols: 45,
+                controller: _titleController,
+                inputFormatters: [MaxLengthTextInputFormatter(45)],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return S.of(context).PleaseEnterValidTitle;
+                  } else if (value.length < 3) {
+                    return S.of(context).PleaseEnterValidTitle;
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  _formKey.currentState!.validate();
+                },
+              ),
             ),
             SpacingFoundation.verticalSpace24,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                IntrinsicHeight(
-                  child: UiKitInputFieldNoFill(
-                    label: S.of(context).Description,
-                    expands: true,
-                    controller: _descriptionController,
-                    inputFormatters: [MaxLengthTextInputFormatter(150)],
-                    validator: descriptionValidator,
-                    onChanged: (value) {
-                      _formKey.currentState!.validate();
-                      setState(() {
-                        descriptionLenght = value.length;
-                      });
-                    },
-                  ),
-                ),
-                SpacingFoundation.verticalSpace4,
-                Text(
-                  '${descriptionLenght}/150',
-                  style: theme?.boldTextTheme.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
-                )
-              ],
+            IntrinsicHeight(
+              child: UiKitInputFieldNoFill(
+                label: S.of(context).Description,
+                expands: true,
+                maxSymbols: 150,
+                validator: descriptionValidator,
+                controller: _descriptionController,
+                inputFormatters: [MaxLengthTextInputFormatter(150)],
+                onChanged: (value) {
+                  _formKey.currentState!.validate();
+                },
+              ),
             ),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
