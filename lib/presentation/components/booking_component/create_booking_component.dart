@@ -141,86 +141,84 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
             S.of(context).CreateSubs,
             style: theme?.boldTextTheme.title2,
           ),
-          SpacingFoundation.verticalSpace12,
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                context
-                    .badgeButtonNoValue(
-                      data: BaseUiKitButtonData(
-                        onPressed: () {
-                          context.push(
-                            CereatSubsComponent(
-                              onSave: (subsUiModel) {
-                                setState(() {
-                                  _subsUiMoldels.add(subsUiModel);
-                                });
+          SpacingFoundation.verticalSpace16,
+          SizedBox(
+            height: _subsUiMoldels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: _subsUiMoldels.length + 1,
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      context
+                          .badgeButtonNoValue(
+                            data: BaseUiKitButtonData(
+                              onPressed: () {
+                                context.push(
+                                  CereatSubsComponent(
+                                    onSave: (subsUiModel) {
+                                      setState(() {
+                                        _subsUiMoldels.add(subsUiModel);
+                                      });
+                                    },
+                                  ),
+                                );
                               },
-                            ),
-                          );
-                        },
-                        iconWidget: DecoratedBox(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            border: Border.fromBorderSide(
-                              BorderSide(
-                                color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
-                                width: 2,
+                              iconWidget: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  border: Border.fromBorderSide(
+                                    BorderSide(
+                                      color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadiusFoundation.all12,
+                                ),
+                                child: GradientableWidget(
+                                  gradient: GradientFoundation.defaultLinearGradient,
+                                  child: const ImageWidget(
+                                    iconData: ShuffleUiKitIcons.gradientPlus,
+                                    height: 45,
+                                    width: 45,
+                                  ).paddingAll(EdgeInsetsFoundation.all32),
+                                ),
                               ),
                             ),
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                          child: GradientableWidget(
-                            gradient: GradientFoundation.defaultLinearGradient,
-                            child: const ImageWidget(
-                              iconData: ShuffleUiKitIcons.gradientPlus,
-                              height: 45,
-                              width: 45,
-                            ).paddingAll(EdgeInsetsFoundation.all32),
-                          ),
-                        ),
-                      ),
-                    )
-                    .paddingOnly(top: 4),
-                SpacingFoundation.horizontalSpace12,
-                if (_subsUiMoldels.isNotEmpty)
-                  SizedBox(
-                    height: 1.sw <= 380 ? 0.31.sh : 0.23.sh,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _subsUiMoldels.length,
-                      separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
-                      itemBuilder: (context, index) {
-                        final sabsItem = _subsUiMoldels[index];
+                          )
+                          .paddingOnly(top: 4),
+                    ],
+                  );
+                } else {
+                  final sabsItem = _subsUiMoldels[index - 1];
 
-                        return SubsOrUpsaleItem(
-                          limit: sabsItem.bookingLimit,
-                          titleOrPrice: sabsItem.title,
-                          photoLink: sabsItem.photo?.link,
-                          actualLimit: sabsItem.actualbookingLimit,
-                          description: sabsItem.description,
-                          removeItem: () => _removeSubsItem(index),
-                          onEdit: () {
-                            context.push(
-                              CereatSubsComponent(
-                                onSave: (subsUiModel) {
-                                  setState(() {
-                                    _bookingUiModel.subsUiModel?[index] = subsUiModel;
-                                  });
-                                },
-                                subsUiModel: sabsItem,
-                              ),
-                            );
+                  return SubsOrUpsaleItem(
+                    limit: sabsItem.bookingLimit,
+                    titleOrPrice: sabsItem.title,
+                    photoLink: sabsItem.photo?.link,
+                    actualLimit: sabsItem.actualbookingLimit,
+                    description: sabsItem.description,
+                    removeItem: () => _removeSubsItem(index - 1),
+                    onEdit: () {
+                      context.push(
+                        CereatSubsComponent(
+                          onSave: (subsUiModel) {
+                            setState(() {
+                              _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
+                            });
                           },
-                        );
-                      },
-                    ),
-                  ),
-              ],
+                          subsUiModel: sabsItem,
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
           SpacingFoundation.verticalSpace24,
@@ -228,88 +226,86 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
             S.of(context).CreateUpsales,
             style: theme?.boldTextTheme.title2,
           ),
-          SpacingFoundation.verticalSpace12,
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                context
-                    .badgeButtonNoValue(
-                      data: BaseUiKitButtonData(
-                        onPressed: () {
-                          context.push(
-                            CreateUpsalesComponent(
-                              onSave: (upsaleUiModel) {
-                                setState(() {
-                                  _upsaleUiModels.add(upsaleUiModel);
-                                });
+          SpacingFoundation.verticalSpace16,
+          SizedBox(
+            height: _upsaleUiModels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
+            child: ListView.separated(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: _upsaleUiModels.length + 1,
+              separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      context
+                          .badgeButtonNoValue(
+                            data: BaseUiKitButtonData(
+                              onPressed: () {
+                                context.push(
+                                  CreateUpsalesComponent(
+                                    onSave: (upsaleUiModel) {
+                                      setState(() {
+                                        _upsaleUiModels.add(upsaleUiModel);
+                                      });
+                                    },
+                                  ),
+                                );
                               },
-                            ),
-                          );
-                        },
-                        iconWidget: DecoratedBox(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            border: Border.fromBorderSide(
-                              BorderSide(
-                                color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
-                                width: 2,
+                              iconWidget: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  border: Border.fromBorderSide(
+                                    BorderSide(
+                                      color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadiusFoundation.all12,
+                                ),
+                                child: GradientableWidget(
+                                  gradient: GradientFoundation.defaultLinearGradient,
+                                  child: const ImageWidget(
+                                    iconData: ShuffleUiKitIcons.gradientPlus,
+                                    height: 45,
+                                    width: 45,
+                                  ).paddingAll(EdgeInsetsFoundation.all32),
+                                ),
                               ),
                             ),
-                            borderRadius: BorderRadiusFoundation.all12,
-                          ),
-                          child: GradientableWidget(
-                            gradient: GradientFoundation.defaultLinearGradient,
-                            child: const ImageWidget(
-                              iconData: ShuffleUiKitIcons.gradientPlus,
-                              height: 45,
-                              width: 45,
-                            ).paddingAll(EdgeInsetsFoundation.all32),
-                          ),
-                        ),
-                      ),
-                    )
-                    .paddingOnly(top: 4),
-                SpacingFoundation.horizontalSpace12,
-                if (_upsaleUiModels.isNotEmpty)
-                  SizedBox(
-                    height: 1.sw <= 380 ? 0.27.sh : 0.20.sh,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _upsaleUiModels.length,
-                      separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
-                      itemBuilder: (context, index) {
-                        final upsaleItem = _upsaleUiModels[index];
+                          )
+                          .paddingOnly(top: 4),
+                    ],
+                  );
+                } else {
+                  final upsaleItem = _upsaleUiModels[index - 1];
 
-                        return SubsOrUpsaleItem(
-                          description: upsaleItem.description,
-                          limit: upsaleItem.limit,
-                          actualLimit: upsaleItem.actualLimit,
-                          photoLink: upsaleItem.photo?.link,
-                          titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
-                              ? upsaleItem.price
-                              : S.of(context).Free,
-                          removeItem: () => _removeUpsaleItem(index),
-                          onEdit: () {
-                            context.push(
-                              CreateUpsalesComponent(
-                                onSave: (upsaleUiModel) {
-                                  setState(() {
-                                    _bookingUiModel.upsaleUiModel?[index] = upsaleUiModel;
-                                  });
-                                },
-                                upsaleUiModel: upsaleItem,
-                              ),
-                            );
+                  return SubsOrUpsaleItem(
+                    description: upsaleItem.description,
+                    limit: upsaleItem.limit,
+                    isSubs: false,
+                    actualLimit: upsaleItem.actualLimit,
+                    photoLink: upsaleItem.photo?.link,
+                    titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
+                        ? upsaleItem.price
+                        : S.of(context).Free,
+                    removeItem: () => _removeUpsaleItem(index - 1),
+                    onEdit: () {
+                      context.push(
+                        CreateUpsalesComponent(
+                          onSave: (upsaleUiModel) {
+                            setState(() {
+                              _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
+                            });
                           },
-                        );
-                      },
-                    ),
-                  ),
-              ],
+                          upsaleUiModel: upsaleItem,
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
           SafeArea(
