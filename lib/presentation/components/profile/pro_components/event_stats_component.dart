@@ -3,7 +3,8 @@ import 'package:shuffle_components_kit/domain/data_uimodels/unique_statistics_mo
 import 'package:shuffle_components_kit/presentation/components/event/uievent_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class ProStatisticsComponent extends StatelessWidget {
+class EventStatisticsComponent extends StatelessWidget {
+  final TabController tabController;
   final UniqueStatisticsModel uniqueStatisticsModel;
   final UiKitLineChartData<num> viewsAndVisitorsStat;
   final UiKitLineChartAdditionalData? viewsAndVisitorsAdditionalData;
@@ -11,13 +12,12 @@ class ProStatisticsComponent extends StatelessWidget {
   final UiKitLineChartData<num> bookingAndFavorites;
   final UiKitLineChartData<num> invites;
   final List<UiKitMiniChartData> miniChartData;
-  final TabController tabController;
   final ValueChanged<String?>? onTabTapped;
   final ValueChanged<UiEventModel>? onEventTapped;
   final VoidCallback? onFeedbackStatActionTapped;
   final bool loadingVisitorsStatistics;
   final ValueChanged<String>? onStatisticsPopupMenuItemTapped;
-  final List<UiEventModel>? events;
+  final String title;
 
   final _tabs = [
     CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
@@ -25,7 +25,7 @@ class ProStatisticsComponent extends StatelessWidget {
     CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
   ];
 
-  ProStatisticsComponent({
+  EventStatisticsComponent({
     Key? key,
     required this.uniqueStatisticsModel,
     required this.viewsAndVisitorsStat,
@@ -33,13 +33,13 @@ class ProStatisticsComponent extends StatelessWidget {
     required this.bookingAndFavorites,
     required this.invites,
     required this.miniChartData,
+    required this.title,
     required this.tabController,
     this.viewsAndVisitorsAdditionalData,
     this.onTabTapped,
     this.onFeedbackStatActionTapped,
     this.loadingVisitorsStatistics = false,
     this.onStatisticsPopupMenuItemTapped,
-    this.events,
     this.onEventTapped,
   }) : super(key: key);
 
@@ -47,11 +47,19 @@ class ProStatisticsComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
+    final linesCount = title.length / 15;
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: S.current.Statistics,
+      title: title,
       autoImplyLeading: true,
+      canFoldAppBar: false,
+      expandTitle: true,
+      customToolbarBaseHeight: linesCount > 1
+          ? 0.125.sh
+          : linesCount >= 2
+              ? 0.175
+              : null,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,
@@ -197,29 +205,6 @@ class ProStatisticsComponent extends StatelessWidget {
             ],
           ),
         ),
-        if (events != null && events!.isNotEmpty)
-          Text(
-            S.current.Events,
-            style: boldTextTheme?.title1,
-            textAlign: TextAlign.start,
-          ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical16),
-        if (events != null && events!.isNotEmpty)
-          ListView.separated(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final event = events!.elementAt(index);
-
-              return UiKitContentPreviewTile(
-                avatarPath: event.verticalPreview?.link ?? event.owner?.logo,
-                title: event.title ?? '',
-                subtitle: event.eventType?.title,
-                onTap: () => onEventTapped?.call(event),
-              );
-            },
-            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-            itemCount: events!.length,
-          ),
         SpacingFoundation.bottomNavigationBarSpacing,
       ],
     );

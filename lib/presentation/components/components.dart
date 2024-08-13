@@ -61,6 +61,7 @@ export 'profile/notifications_component/notifications_list_component.dart';
 export 'profile/points_component/points_component.dart';
 export 'profile/points_component/ui_points_model.dart';
 export 'profile/points_component/ui_user_points_progress_bar_model.dart';
+export 'profile/pro_components/event_stats_component.dart';
 export 'profile/pro_components/eventlist_component.dart';
 export 'profile/pro_components/pro_statistics_component.dart';
 export 'profile/pro_components/pro_statistics_settings_component.dart';
