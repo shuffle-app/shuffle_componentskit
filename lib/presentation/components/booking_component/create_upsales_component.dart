@@ -100,7 +100,6 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                 maxSymbols: 150,
                 validator: descriptionValidator,
                 controller: _descriptionController,
-                inputFormatters: [MaxLengthTextInputFormatter(150)],
                 onChanged: (value) {
                   _formKey.currentState!.validate();
                 },

@@ -89,7 +89,6 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                 expands: true,
                 maxSymbols: 45,
                 controller: _titleController,
-                inputFormatters: [MaxLengthTextInputFormatter(45)],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return S.of(context).PleaseEnterValidTitle;
@@ -113,7 +112,6 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                 maxSymbols: 150,
                 validator: descriptionValidator,
                 controller: _descriptionController,
-                inputFormatters: [MaxLengthTextInputFormatter(150)],
                 onChanged: (value) {
                   _formKey.currentState!.validate();
                 },
