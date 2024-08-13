@@ -382,6 +382,27 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 }
               }).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
+          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
+              title: S.of(context).UniqueProperties,
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  selectedTags: _eventToEdit.tags,
+                  title: S.of(context).UniqueProperties,
+                  allTags: widget.propertiesOptions('unique'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _eventToEdit.tags.clear();
+                    _eventToEdit.tags.addAll(newTags);
+                  });
+                }
+              },
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+          ],
           Row(
             children: [
               Expanded(
@@ -405,33 +426,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
               label: S.of(context).Upsales,
-              controller: _upsalesController,
+              maxSymbols: 25,
               validator: upsalesValidator,
+              controller: _upsalesController,
               hintText: S.of(context).UpsalesAvailableHint,
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
-          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
-            UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
-              title: S.of(context).UniqueProperties,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.tags,
-                  title: S.of(context).UniqueProperties,
-                  allTags: widget.propertiesOptions('unique'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.tags.clear();
-                    _eventToEdit.tags.addAll(newTags);
-                  });
-                }
-              },
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
-          ],
           Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
