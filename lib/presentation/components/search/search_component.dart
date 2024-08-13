@@ -272,7 +272,7 @@ class SearchComponent extends StatelessWidget {
                       children: search.filterChips!
                           .map(
                             (e) => UiKitTitledFilterChip(
-                              selected: search.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
+                              selected: search.activeFilterChips?.contains(e.title) ?? false,
                               title: e.title,
                               onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                               icon: e.icon,
@@ -285,12 +285,12 @@ class SearchComponent extends StatelessWidget {
               ),
             ],
             SpacingFoundation.verticalSpace24,
-            ...search.places.map((e) => UiKitCompactOrderedRatingCard(
-                    order: search.places.indexOf(e) + 1,
+            ...search.content.map((e) => UiKitCompactOrderedRatingCard(
+                    order: search.content.indexOf(e) + 1,
                     rating: e.rating,
                     title: e.title,
                     imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
-                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id))
+                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id,e.type))
                 .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12)),
             kBottomNavigationBarHeight.heightBox,
           ],

@@ -3,15 +3,15 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiSearchModel {
-  final List<UiPlaceModel> places;
+  final List<UiUniversalModel> content;
   final List<UiKitTag>? filterChips;
-  final List<UiKitTag>? activeFilterChips;
+  final List<String>? activeFilterChips;
   final String heroSearchTag;
   final bool showHowItWorks;
 
   UiSearchModel({
     required this.heroSearchTag,
-    required this.places,
+    required this.content,
     this.filterChips,
     this.showHowItWorks = false,
     this.activeFilterChips,

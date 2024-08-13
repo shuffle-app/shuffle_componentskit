@@ -51,6 +51,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UiEventModel _eventToEdit;
+  late BookingUiModel? _bookingUiModel;
 
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
@@ -72,6 +73,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
+    _bookingUiModel = widget.eventToEdit?.bookingUiModel;
   }
 
   _onVideoDeleted(int index) {
@@ -148,6 +150,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      _bookingUiModel = widget.eventToEdit?.bookingUiModel;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -379,6 +382,27 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 }
               }).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
+          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
+            UiKitFieldWithTagList(
+              listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
+              title: S.of(context).UniqueProperties,
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  positionModel: model.positionModel,
+                  selectedTags: _eventToEdit.tags,
+                  title: S.of(context).UniqueProperties,
+                  allTags: widget.propertiesOptions('unique'),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    _eventToEdit.tags.clear();
+                    _eventToEdit.tags.addAll(newTags);
+                  });
+                }
+              },
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+          ],
           Row(
             children: [
               Expanded(
@@ -402,33 +426,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
               label: S.of(context).Upsales,
-              controller: _upsalesController,
+              maxSymbols: 25,
               validator: upsalesValidator,
+              controller: _upsalesController,
               hintText: S.of(context).UpsalesAvailableHint,
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
-          if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
-            UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
-              title: S.of(context).UniqueProperties,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.tags,
-                  title: S.of(context).UniqueProperties,
-                  allTags: widget.propertiesOptions('unique'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.tags.clear();
-                    _eventToEdit.tags.addAll(newTags);
-                  });
-                }
-              },
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
-          ],
           Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
@@ -502,31 +506,40 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 fit: ButtonFit.fitWidth,
                 autoSizeGroup: AutoSizeGroup(),
                 text: S.of(context).CreateBookingLink.toUpperCase(),
-                onPressed: () => showUiKitGeneralFullScreenDialog(
-                  context,
-                  GeneralDialogData(
-                    isWidgetScrollable: true,
-                    topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                    child: SelectBookingLinkComponent(
-                      onExternalTap: () => showUiKitGeneralFullScreenDialog(
-                        context,
-                        GeneralDialogData(
-                          isWidgetScrollable: true,
-                          topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                          child: AddLinkComponent(
-                            onSave: () {
-                              _eventToEdit.bookingUrl = _bookingUrlController.text;
-                              context.pop();
+                onPressed: () {
+                  _bookingUiModel ??= BookingUiModel(id: -1);
+
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      isWidgetScrollable: true,
+                      topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                      child: SelectBookingLinkComponent(
+                        onExternalTap: () => showUiKitGeneralFullScreenDialog(
+                          context,
+                          GeneralDialogData(
+                            isWidgetScrollable: true,
+                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                            child: AddLinkComponent(
+                              onSave: () {
+                                _eventToEdit.bookingUrl = _bookingUrlController.text;
+                                context.pop();
+                              },
+                              linkController: _bookingUrlController,
+                            ),
+                          ),
+                        ),
+                        onBookingTap: () => context.push(
+                          CreateBookingComponent(
+                            onBookingCreated: (bookingUiModel) {
+                              _bookingUiModel = bookingUiModel;
                             },
-                            linkController: _bookingUrlController,
                           ),
                         ),
                       ),
-                      //TODO implement a booking page
-                      onBookingTap: () {},
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -545,6 +558,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.website = _websiteController.text;
                   _eventToEdit.phone = _phoneController.text;
                   _eventToEdit.price = _priceController.text;
+                  _eventToEdit.bookingUiModel = _bookingUiModel;
                   _eventToEdit.upsalesItems = _upsalesSwitcher
                       ? (_upsalesController.text.isNotEmpty
                           ? _upsalesController.text.split(',').map((e) => e.trim()).toList()

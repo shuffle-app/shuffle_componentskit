@@ -48,7 +48,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   late UiPlaceModel _placeToEdit;
+  late BookingUiModel? _bookingUiModel;
 
   final List<BaseUiKitMedia> _videos = [];
   final List<BaseUiKitMedia> _photos = [];
@@ -72,6 +74,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
+    _bookingUiModel = widget.placeToEdit?.bookingUiModel;
   }
 
   // _onVideoDeleted(int index) {
@@ -159,6 +162,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _priceController.text = widget.placeToEdit?.price ?? '';
       _titleController.text = widget.placeToEdit?.title ?? '';
       _locationController.text = widget.placeToEdit?.location ?? '';
+      _bookingUiModel = widget.placeToEdit?.bookingUiModel;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -490,31 +494,40 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   fit: ButtonFit.fitWidth,
                   autoSizeGroup: AutoSizeGroup(),
                   text: S.of(context).CreateBookingLink.toUpperCase(),
-                  onPressed: () => showUiKitGeneralFullScreenDialog(
-                    context,
-                    GeneralDialogData(
-                      isWidgetScrollable: true,
-                      topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                      child: SelectBookingLinkComponent(
-                        onExternalTap: () => showUiKitGeneralFullScreenDialog(
-                          context,
-                          GeneralDialogData(
-                            isWidgetScrollable: true,
-                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                            child: AddLinkComponent(
-                              onSave: () {
-                                _placeToEdit.bookingUrl = _bookingUrlController.text;
-                                context.pop();
+                  onPressed: () {
+                    _bookingUiModel ??= BookingUiModel(id: -1);
+
+                    showUiKitGeneralFullScreenDialog(
+                      context,
+                      GeneralDialogData(
+                        isWidgetScrollable: true,
+                        topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                        child: SelectBookingLinkComponent(
+                          onExternalTap: () => showUiKitGeneralFullScreenDialog(
+                            context,
+                            GeneralDialogData(
+                              isWidgetScrollable: true,
+                              topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                              child: AddLinkComponent(
+                                onSave: () {
+                                  _placeToEdit.bookingUrl = _bookingUrlController.text;
+                                  context.pop();
+                                },
+                                linkController: _bookingUrlController,
+                              ),
+                            ),
+                          ),
+                          onBookingTap: () => context.push(
+                            CreateBookingComponent(
+                              onBookingCreated: (bookingUiModel) {
+                                _bookingUiModel = bookingUiModel;
                               },
-                              linkController: _bookingUrlController,
                             ),
                           ),
                         ),
-                        //TODO implement a booking page
-                        onBookingTap: () {},
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding),
@@ -533,6 +546,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     _placeToEdit.description = _descriptionController.text;
                     _placeToEdit.price = _priceController.text;
                     _placeToEdit.media = [..._photos, ..._videos];
+                    _placeToEdit.bookingUiModel = _bookingUiModel;
                     widget.onPlaceCreated.call(_placeToEdit);
                   },
                 ),

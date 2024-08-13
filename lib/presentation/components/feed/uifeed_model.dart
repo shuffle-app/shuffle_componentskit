@@ -35,6 +35,7 @@ class UiUniversalModel extends Advertisable {
   final int id;
   final String type;
   final String? source;
+  final double? rating;
   final List<BaseUiKitMedia> media;
   final String description;
   final List<UiKitTag> tags;
@@ -45,6 +46,7 @@ class UiUniversalModel extends Advertisable {
   final String? location;
   final Stream<bool>? isFavorite;
   final VoidCallback? onFavoriteChanged;
+  final PlaceWeatherType? weatherType;
   DateTime? shouldVisitAt;
 
   UiUniversalModel({
@@ -54,6 +56,7 @@ class UiUniversalModel extends Advertisable {
     required this.description,
     required this.tags,
     this.baseTags,
+    this.rating,
     this.website,
     this.weekdays,
     this.location,
@@ -62,6 +65,7 @@ class UiUniversalModel extends Advertisable {
     this.isFavorite,
     this.onFavoriteChanged,
     this.shouldVisitAt,
+    this.weatherType,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -71,6 +75,7 @@ class UiUniversalModel extends Advertisable {
     this.description = '',
     this.tags = const [],
     this.baseTags,
+    this.rating,
     this.website,
     this.weekdays,
     this.location,
@@ -79,6 +84,7 @@ class UiUniversalModel extends Advertisable {
     this.isFavorite,
     this.onFavoriteChanged,
     this.shouldVisitAt,
+    this.weatherType,
   }) : super(isAdvertisement: true);
 
   UiUniversalModel.checkIn({
@@ -89,6 +95,7 @@ class UiUniversalModel extends Advertisable {
     this.tags = const [],
     this.baseTags,
     this.website,
+    this.rating,
     this.weekdays,
     this.location,
     this.source,
@@ -96,25 +103,28 @@ class UiUniversalModel extends Advertisable {
     this.isFavorite,
     this.onFavoriteChanged,
     this.shouldVisitAt,
+    this.weatherType,
   }) : super(isAdvertisement: false);
 
   factory UiUniversalModel.fromPlaceUiModel(UiPlaceModel placeModel) => UiUniversalModel(
-        id: placeModel.id,
-        type: 'place',
-        media: placeModel.media,
-        description: placeModel.description,
-        tags: placeModel.tags,
-        title: placeModel.title,
-      );
+      id: placeModel.id,
+      type: 'place',
+      media: placeModel.media,
+      rating: placeModel.rating,
+      description: placeModel.description,
+      tags: placeModel.tags,
+      title: placeModel.title,
+      weatherType: placeModel.weatherType);
 
   factory UiUniversalModel.fromEventUiModel(UiEventModel eventModel) => UiUniversalModel(
-        id: eventModel.id,
-        type: 'event',
-        media: eventModel.media,
-        description: eventModel.description ?? '',
-        tags: eventModel.tags,
-        title: eventModel.title,
-      );
+      id: eventModel.id,
+      type: 'event',
+      media: eventModel.media,
+      description: eventModel.description ?? '',
+      tags: eventModel.tags,
+      rating: eventModel.rating,
+      title: eventModel.title,
+      weatherType: eventModel.weatherType);
 
   factory UiUniversalModel.empty() => UiUniversalModel(
         id: -1,
