@@ -121,3 +121,7 @@ export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
 export 'booking_component/create_booking_component.dart';
 export 'booking_component/booking_ui_model/booking_ui_model.dart';
+export 'bookings_request/booking_request_component.dart';
+export 'bookings_request/bookings_request_ui_models/bookings_event_ui_model.dart';
+export 'bookings_request/bookings_request_ui_models/bookings_place_or_even_ui_model.dart';
+export 'bookings_request/bookings_request_ui_models/user_item_ui_model.dart';
