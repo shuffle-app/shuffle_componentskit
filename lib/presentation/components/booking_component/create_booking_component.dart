@@ -124,6 +124,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                 _bookingLimitController.text = stringWithSpace(int.parse(value));
               });
             },
+            onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
           ),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
@@ -135,6 +136,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                 _bookingLimitPerOneController.text = stringWithSpace(int.parse(value));
               });
             },
+            onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
           ),
           SpacingFoundation.verticalSpace24,
           Text(

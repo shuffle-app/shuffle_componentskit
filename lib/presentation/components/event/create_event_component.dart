@@ -430,6 +430,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               validator: upsalesValidator,
               controller: _upsalesController,
               hintText: S.of(context).UpsalesAvailableHint,
+              onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
