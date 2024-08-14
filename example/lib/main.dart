@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -712,6 +713,85 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         availableTimeTemplates: [],
                         propertiesOptions: (p0) => [],
                         onEventCreated: (UiEventModel model) async {},
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'booking reques',
+                onPressed: () {
+                  context.push(
+                    BookingRequestComponent(
+                      contactByEmail: (id) => log('id $id'),
+                      contactByMessage: (id) => log('id $id'),
+                      fullRefund: (id) {
+                        log('id $id');
+                      },
+                      partialRefund: (id) {
+                        log('id $id');
+                      },
+                      refundEveryone: (list) {
+                        log('list $list');
+                      },
+                      places: List.generate(
+                        12,
+                        (index) => BookingsPlaceOrEventUiModel(
+                          id: index,
+                          description: 'test $index',
+                          title: 'testeMain',
+                          imageUrl: GraphicsFoundation.instance.png.avatars.avatar.path,
+                          usersList: List.generate(
+                            25,
+                            (index) {
+                              return UserItemUiModel(
+                                id: index,
+                                tiketsCount: 0,
+                                avatarUrl: GraphicsFoundation.instance.png.avatars.avatar2.path,
+                                isSelected: false,
+                                name: 'test $index',
+                                nickName: '@nickName $index',
+                                productsCount: 0,
+                                type: index.isEven ? UserTileType.influencer : UserTileType.pro,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      events: List.generate(
+                        12,
+                        (index) => BookingsEventUiModel(
+                          id: index,
+                          title: 'testeMain',
+                          description: 'test $index',
+                          events: List.generate(
+                            2,
+                            (index) => BookingsPlaceOrEventUiModel(
+                              id: index,
+                              description: 'test $index',
+                              title: 'testeMain',
+                              imageUrl: GraphicsFoundation.instance.png.avatars.avatar.path,
+                              usersList: List.generate(
+                                13,
+                                (index) {
+                                  return UserItemUiModel(
+                                    id: index,
+                                    tiketsCount: 3,
+                                    avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+                                    isSelected: false,
+                                    name: 'test $index',
+                                    nickName: '@nickName $index',
+                                    productsCount: 0,
+                                    type: index.isEven ? UserTileType.influencer : UserTileType.pro,
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   );
