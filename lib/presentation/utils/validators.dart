@@ -9,6 +9,17 @@ String? websiteValidator(String? value) {
   return null;
 }
 
+String? bookingWebsiteValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return null;
+  } else if (RegExp(r'^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$').hasMatch(value)) {
+    return null;
+  } else if (value.split('.').length < 2 || (value.split('.').lastOrNull ?? '').length < 2) {
+    return 'Please enter a valid website';
+  }
+  return null;
+}
+
 String? emailValidator(String? value) {
   if (value == null || value.isEmpty) {
     return null;

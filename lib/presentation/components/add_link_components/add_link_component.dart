@@ -42,12 +42,13 @@ class _AddLinkComponentState extends State<AddLinkComponent> {
             keyboardType: TextInputType.url,
             hintText: 'https://yoursite.com',
             controller: widget.linkController,
-            validator: websiteValidator,
+            validator: bookingWebsiteValidator,
             onChanged: (value) {
               setState(() {
                 isLinkValid = _formKey.currentState!.validate();
               });
             },
+            onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
           ),
         ),
         SpacingFoundation.verticalSpace24,
