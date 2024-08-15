@@ -32,6 +32,8 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
   final List<SubsUiModel> _subsUiMoldels = [];
   final List<UpsaleUiModel> _upsaleUiModels = [];
 
+  int _allSubsLimitCount = 0;
+
   @override
   void initState() {
     super.initState();
@@ -41,11 +43,13 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
     _bookingLimitPerOneController.text = widget.bookingUiModel?.bookingLimitPerOne ?? '';
     _subsUiMoldels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
     _upsaleUiModels.addAll(_bookingUiModel.upsaleUiModel != null ? _bookingUiModel.upsaleUiModel! : []);
+    _countSubsLimit();
   }
 
   _removeSubsItem(int index) {
     setState(() {
       _subsUiMoldels.removeAt(index);
+      _countSubsLimit();
     });
   }
 
@@ -53,6 +57,16 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
     setState(() {
       _upsaleUiModels.removeAt(index);
     });
+  }
+
+  void _countSubsLimit() {
+    _allSubsLimitCount = 0;
+    for (var element in _subsUiMoldels) {
+      if (element.bookingLimit != null) {
+        _allSubsLimitCount += int.tryParse(element.bookingLimit!.replaceAll(' ', '')) ?? 0;
+      }
+    }
+    _formKey.currentState?.validate();
   }
 
   @override
@@ -66,6 +80,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
       _upsaleUiModels.clear();
       _subsUiMoldels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
       _upsaleUiModels.addAll(_bookingUiModel.upsaleUiModel != null ? _bookingUiModel.upsaleUiModel! : []);
+      _countSubsLimit();
     }
 
     super.didUpdateWidget(oldWidget);
@@ -123,6 +138,16 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               controller: _bookingLimitController,
               keyboardType: TextInputType.number,
               inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
+              validator: (value) {
+                if (value != null && value.isNotEmpty) {
+                  final newValue = int.parse(value.replaceAll(' ', ''));
+
+                  if (newValue < _allSubsLimitCount) {
+                    return S.of(context).LimitLessSumLimitsSubs;
+                  }
+                }
+                return null;
+              },
               onChanged: (value) {
                 setState(() {
                   _formKey.currentState?.validate();
@@ -141,7 +166,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                   final newValue = int.parse(value.replaceAll(' ', ''));
 
                   if (newValue >= int.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
-                    return 'Limit for one must be less than total limit';
+                    return S.of(context).LimitLessTotalLimit;
                   }
                   return null;
                 } else {
@@ -149,7 +174,9 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                 }
               },
               onChanged: (value) {
-                _formKey.currentState?.validate();
+                setState(() {
+                  _formKey.currentState?.validate();
+                });
               },
               onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
             ),
@@ -181,6 +208,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                                       onSave: (subsUiModel) {
                                         setState(() {
                                           _subsUiMoldels.add(subsUiModel);
+                                          _countSubsLimit();
                                         });
                                       },
                                     ),
@@ -220,12 +248,16 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       photoLink: sabsItem.photo?.link,
                       actualLimit: sabsItem.actualbookingLimit,
                       description: sabsItem.description,
-                      removeItem: () => _removeSubsItem(index - 1),
+                      removeItem: () {
+                        _formKey.currentState?.validate();
+                        _removeSubsItem(index - 1);
+                      },
                       onEdit: () {
                         context.push(
                           CereatSubsComponent(
                             onSave: (subsUiModel) {
                               setState(() {
+                                _countSubsLimit();
                                 _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
                               });
                             },
@@ -331,13 +363,17 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                 data: BaseUiKitButtonData(
                   text: S.of(context).Save.toUpperCase(),
                   onPressed: () {
-                    _bookingUiModel.price = _priceController.text;
-                    _bookingUiModel.bookingLimit = _bookingLimitController.text;
-                    _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
-                    _bookingUiModel.subsUiModel = _subsUiMoldels;
-                    _bookingUiModel.upsaleUiModel = _upsaleUiModels;
-                    widget.onBookingCreated(_bookingUiModel);
-                    context.pop();
+                    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                      _bookingUiModel.price = _priceController.text;
+                      _bookingUiModel.bookingLimit = _bookingLimitController.text.isEmpty
+                          ? _allSubsLimitCount.toString()
+                          : _bookingLimitController.text;
+                      _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
+                      _bookingUiModel.subsUiModel = _subsUiMoldels;
+                      _bookingUiModel.upsaleUiModel = _upsaleUiModels;
+                      widget.onBookingCreated(_bookingUiModel);
+                      context.pop();
+                    }
                   },
                 ),
               ),
