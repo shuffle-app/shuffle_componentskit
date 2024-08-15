@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import 'booking_list_component.dart';
 import 'booking_request_event_item.dart';
 
 class BookingRequestComponent extends StatefulWidget {
-  final List<BookingsPlaceOrEventUiModel>? places;
-  final List<BookingsEventUiModel>? events;
-  final Function(int)? fullRefund;
-  final Function(int)? partialRefund;
-  final Function(List<UserItemUiModel>?)? refundEveryone;
-  final Function(int id)? contactByMessage;
-  final Function(int id)? contactByEmail;
   final BookingUiModel? bookingUiModel;
-  final Function(BookingUiModel)? onBookingEdit;
+  final List<BookingsEventUiModel>? events;
+  final List<BookingsPlaceOrEventUiModel>? places;
+  final ValueChanged<int>? fullRefund;
+  final ValueChanged<int>? partialRefund;
+  final ValueChanged<int>? contactByMessage;
+  final ValueChanged<String?>? contactByEmail;
+  final ValueChanged<BookingUiModel>? onBookingEdit;
+  final ValueChanged<List<UserItemUiModel>?>? refundEveryone;
+  final VoidCallback? onGoAheadTap;
+  final ValueChanged<int>? onContactTap;
 
   const BookingRequestComponent({
     super.key,
@@ -27,6 +28,8 @@ class BookingRequestComponent extends StatefulWidget {
     this.contactByEmail,
     this.bookingUiModel,
     this.onBookingEdit,
+    this.onContactTap,
+    this.onGoAheadTap,
   });
 
   @override
@@ -95,6 +98,8 @@ class _BookingRequestComponentState extends State<BookingRequestComponent> {
                         bookingsPlaceItemUiModel: element,
                         bookingUiModel: widget.bookingUiModel,
                         onBookingEdit: widget.onBookingEdit,
+                        onGoAheadTap: widget.onGoAheadTap,
+                        onContactTap: widget.onContactTap,
                       ),
                     ),
                   );
@@ -129,6 +134,8 @@ class _BookingRequestComponentState extends State<BookingRequestComponent> {
                         bookingsPlaceItemUiModel: element.events?.firstWhere((element) => element.id == id),
                         bookingUiModel: widget.bookingUiModel,
                         onBookingEdit: widget.onBookingEdit,
+                        onGoAheadTap: widget.onGoAheadTap,
+                        onContactTap: widget.onContactTap,
                       ),
                     ),
                   );
