@@ -124,10 +124,23 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
               label: S.of(context).BookingLimit,
               controller: _limitController,
               keyboardType: TextInputType.number,
-              inputFormatters: [OnlyNumbersFormatter()],
+              validator: (value) {
+                if (value != null && value.isEmpty) {
+                  return S.of(context).PleaseEnterLimit;
+                } else if (value != null && value.isNotEmpty) {
+                  final newValue = int.parse(value.replaceAll(' ', ''));
+
+                  if (newValue <= 0) {
+                    return S.of(context).PleaseEnterCurrentLimit;
+                  }
+                  return null;
+                }
+                return null;
+              },
+              inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
               onChanged: (value) {
                 setState(() {
-                  _limitController.text = stringWithSpace(int.parse(value));
+                  _formKey.currentState?.validate();
                 });
               },
               onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
