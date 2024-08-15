@@ -45,8 +45,6 @@ class BookingUiModel {
   String? validateCreation() {
     if (bookingLimit == null || bookingLimit!.isEmpty) {
       return S.current.XIsRequired(S.current.BookingLimit);
-    } else if (bookingLimitPerOne == null || bookingLimitPerOne!.isEmpty) {
-      return S.current.XIsRequired(S.current.BookingLimitPerOne);
     }
 
     return null;
