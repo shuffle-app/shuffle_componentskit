@@ -101,9 +101,9 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
                       setState(() {
                         if (averageSelected) {
-                          _priceController.text = '$averagePrice $currency';
+                          _priceController.text = averagePrice.isNotEmpty ? '$averagePrice $currency' : '0 $currency';
                         } else {
-                          _priceController.text = rangePrice1;
+                          _priceController.text = rangePrice1.isNotEmpty ? '$rangePrice1 $currency' : '0 $currency';
                           if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
                             _priceController.text += '-$rangePrice2 $currency';
                           }
@@ -122,10 +122,10 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               label: S.of(context).BookingLimit,
               controller: _bookingLimitController,
               keyboardType: TextInputType.number,
-              inputFormatters: [PriceWithSpacesFormatter()],
+              inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
               onChanged: (value) {
                 setState(() {
-                  // _bookingLimitController.text = stringWithSpace(int.parse(value));
+                  _formKey.currentState?.validate();
                 });
               },
               onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
@@ -135,12 +135,12 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               label: S.of(context).BookingLimitPerOne,
               controller: _bookingLimitPerOneController,
               keyboardType: TextInputType.number,
-              inputFormatters: [PriceWithSpacesFormatter()],
+              inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
               validator: (value) {
                 if ((value != null && value.isNotEmpty) && (_bookingLimitController.text != '')) {
-                  final newValue = double.parse(value.replaceAll(' ', ''));
+                  final newValue = int.parse(value.replaceAll(' ', ''));
 
-                  if (newValue >= double.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
+                  if (newValue >= int.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
                     return 'Limit for one must be less than total limit';
                   }
                   return null;
