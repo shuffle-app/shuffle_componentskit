@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+import 'user_booking_list_item.dart';
+
 class BookingListComponent extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
-  final Function(int id)? fullRefund;
-  final Function(int id)? partialRefund;
-  final Function(List<UserItemUiModel>?)? refundEveryone;
-  final Function(int id)? contactByMessage;
-  final Function(int id)? contactByEmail;
   final BookingUiModel? bookingUiModel;
-  final Function(BookingUiModel)? onBookingEdit;
+  final ValueChanged<int>? fullRefund;
+  final ValueChanged<int>? partialRefund;
+  final ValueChanged<int>? contactByMessage;
+  final ValueChanged<String?>? contactByEmail;
+  final ValueChanged<List<UserItemUiModel>?>? refundEveryone;
+  final ValueChanged<BookingUiModel>? onBookingEdit;
+  final VoidCallback? onGoAheadTap;
+  final ValueChanged<int>? onContactTap;
 
   const BookingListComponent({
     super.key,
@@ -22,6 +26,8 @@ class BookingListComponent extends StatefulWidget {
     this.contactByMessage,
     this.bookingUiModel,
     this.onBookingEdit,
+    this.onContactTap,
+    this.onGoAheadTap,
   });
 
   @override
@@ -30,6 +36,47 @@ class BookingListComponent extends StatefulWidget {
 
 class _BookingListComponentState extends State<BookingListComponent> {
   bool chekBoxOn = false;
+  List<List<UserItemUiModel>> groupedUsers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    sortedUserList();
+    groupUserList();
+  }
+
+  void sortedUserList() {
+    if (widget.bookingsPlaceItemUiModel?.usersList != null && widget.bookingsPlaceItemUiModel!.usersList!.isNotEmpty) {
+      widget.bookingsPlaceItemUiModel!.usersList!.sort((a, b) {
+        if (a.tiketsCount != b.tiketsCount) {
+          return b.tiketsCount.compareTo(a.tiketsCount);
+        }
+
+        int productsA = a.productsCount ?? 0;
+        int productsB = b.productsCount ?? 0;
+
+        return productsB.compareTo(productsA);
+      });
+    }
+  }
+
+  void groupUserList() {
+    List<UserItemUiModel> currentGroup = [];
+    final userList = widget.bookingsPlaceItemUiModel?.usersList;
+    if (userList != null && userList.isNotEmpty) {
+      for (var i = 0; i < userList.length; i++) {
+        if (i == 0 ||
+            (userList[i].tiketsCount == userList[i - 1].tiketsCount &&
+                (userList[i].productsCount ?? 0) == (userList[i - 1].productsCount ?? 0))) {
+          currentGroup.add(userList[i]);
+        } else {
+          groupedUsers.add(currentGroup);
+          currentGroup = [userList[i]];
+        }
+      }
+      groupedUsers.add(currentGroup);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +116,7 @@ class _BookingListComponentState extends State<BookingListComponent> {
                   onTap: () {
                     context.push(
                       CreateBookingComponent(
-                        onBookingCreated: (value) {
-                          if (widget.onBookingEdit != null) {
-                            return widget.onBookingEdit!(value);
-                          }
-                        },
+                        onBookingCreated: (value) => widget.onBookingEdit?.call(value),
                         bookingUiModel: widget.bookingUiModel,
                       ),
                     );
@@ -86,221 +129,44 @@ class _BookingListComponentState extends State<BookingListComponent> {
               ],
             ],
           ),
-          if (widget.bookingsPlaceItemUiModel?.usersList != null &&
-              widget.bookingsPlaceItemUiModel!.usersList!.isNotEmpty) ...[
+          if (groupedUsers.isNotEmpty) ...[
             ListView.separated(
-              itemCount: widget.bookingsPlaceItemUiModel!.usersList!.length,
+              itemCount: groupedUsers.length,
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               controller: ScrollController(),
               separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
               itemBuilder: (context, index) {
-                final element = widget.bookingsPlaceItemUiModel!.usersList![index];
-
                 return Column(
-                  children: [
-                    if ((element.productsCount != null && element.productsCount! > 0) || element.tiketsCount > 1) ...[
-                      Row(
-                        children: [
-                          if (element.tiketsCount > 1) ...[
-                            Text(
-                              S.of(context).Tickets(element.tiketsCount),
-                              style: theme?.boldTextTheme.caption1Bold.copyWith(
-                                color: ColorsFoundation.mutedText,
-                              ),
-                            ),
-                            SpacingFoundation.horizontalSpace12,
-                          ],
-                          if (element.productsCount != null && element.productsCount! > 0) ...[
-                            Text(
-                              S.of(context).Products(element.productsCount!),
-                              style: theme?.boldTextTheme.caption1Bold.copyWith(
-                                color: ColorsFoundation.mutedText,
-                              ),
-                            ),
-                          ]
-                        ],
-                      ),
-                      SpacingFoundation.verticalSpace2,
-                    ],
-                    GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          chekBoxOn = !chekBoxOn;
-                        });
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          context.userAvatar(
-                            size: UserAvatarSize.x40x40,
-                            type: element.type ?? UserTileType.ordinary,
-                            userName: element.name ?? '',
-                            imageUrl: element.avatarUrl,
+                  children: groupedUsers[index]
+                      .map(
+                        (e) => UserBookingListItem(
+                          element: e,
+                          isFirst: e == groupedUsers[index].first,
+                          checkBox: chekBoxOn,
+                          onLongPress: () => setState(() {
+                            chekBoxOn = !chekBoxOn;
+                          }),
+                          onCheckBoxTap: () => setState(() {
+                            e.isSelected = !e.isSelected;
+                          }),
+                          contactByEmail: widget.contactByEmail,
+                          contactByMessage: widget.contactByMessage,
+                          fullRefund: widget.fullRefund,
+                          partialRefund: widget.partialRefund,
+                          onRequestsRefund: () => getRefundBookingDialogUiKit(
+                            context: context,
+                            userName: e.name,
+                            allTicket: e.tiketsCount,
+                            allUpsale: e.productsCount ?? 0,
+                            ticketRefun: e.requestRefunUiModel?.ticketRefun ?? 0,
+                            upsaleRefun: e.requestRefunUiModel?.upsaleRefun ?? 0,
+                            onContactTap: () => widget.onContactTap?.call(e.id),
+                            onGoAheadTap: () => widget.onGoAheadTap?.call(),
                           ),
-                          SpacingFoundation.horizontalSpace12,
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      element.name ?? '',
-                                      style: theme?.boldTextTheme.caption1Medium,
-                                    ),
-                                    if (element.type == UserTileType.influencer) ...[
-                                      SpacingFoundation.horizontalSpace8,
-                                      const GradientableWidget(
-                                        gradient: GradientFoundation.badgeIcon,
-                                        child: ImageWidget(
-                                          iconData: ShuffleUiKitIcons.gradientStar,
-                                        ),
-                                      )
-                                    ]
-                                  ],
-                                ),
-                                Text(
-                                  element.nickName ?? '',
-                                  style: theme?.boldTextTheme.caption1Bold.copyWith(
-                                    color: ColorsFoundation.mutedText,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (chekBoxOn) ...[
-                            UiKitCheckbox(
-                              isActive: element.isSelected,
-                              onChanged: () {
-                                setState(() {
-                                  element.isSelected = !element.isSelected;
-                                });
-                              },
-                            )
-                          ] else ...[
-                            PopupMenuButton(
-                              icon: const ImageWidget(iconData: ShuffleUiKitIcons.morevert),
-                              splashRadius: 1,
-                              menuPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadiusFoundation.all16,
-                              ),
-                              itemBuilder: (BuildContext context) => [
-                                PopupMenuItem(
-                                  value: 0,
-                                  child: Text(
-                                    S.of(context).FullRefund,
-                                    style: theme?.boldTextTheme.caption2Medium.copyWith(
-                                      color: theme.colorScheme.inverseBodyTypography,
-                                    ),
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  value: 1,
-                                  child: Text(
-                                    S.of(context).PartialRefund,
-                                    style: theme?.boldTextTheme.caption2Medium.copyWith(
-                                      color: theme.colorScheme.inverseBodyTypography,
-                                    ),
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  value: 2,
-                                  child: Text(
-                                    S.of(context).Contact,
-                                    style: theme?.boldTextTheme.caption2Medium.copyWith(
-                                      color: theme.colorScheme.inverseBodyTypography,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                              onSelected: (value) {
-                                if (value == 0) {
-                                  if (widget.fullRefund != null) {
-                                    widget.fullRefund!(element.id);
-                                  }
-                                } else if (value == 1) {
-                                  if (widget.partialRefund != null) {
-                                    widget.partialRefund!(element.id);
-                                  }
-                                } else {
-                                  showUiKitAlertDialog(
-                                    context,
-                                    AlertDialogData(
-                                      defaultButtonText: '',
-                                      insetPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
-                                      title: Text(
-                                        '${S.of(context).ContactWith} ${element.name}',
-                                        style: theme?.boldTextTheme.title2.copyWith(
-                                          color: theme.colorScheme.inverseHeadingTypography,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      actions: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                S.of(context).ByMessage,
-                                                style: theme?.boldTextTheme.body.copyWith(
-                                                  color: theme.colorScheme.inverseBodyTypography,
-                                                ),
-                                              ),
-                                            ),
-                                            context.smallOutlinedButton(
-                                              data: BaseUiKitButtonData(
-                                                borderColor: theme?.colorScheme.primary,
-                                                backgroundColor: Colors.transparent,
-                                                iconInfo: BaseUiKitButtonIconData(
-                                                  iconData: ShuffleUiKitIcons.chevronright,
-                                                  color: theme?.colorScheme.primary,
-                                                ),
-                                                onPressed: () => widget.contactByMessage != null
-                                                    ? widget.contactByMessage!(element.id)
-                                                    : null,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        SpacingFoundation.verticalSpace16,
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                S.of(context).ByEmail,
-                                                style: theme?.boldTextTheme.body.copyWith(
-                                                  color: theme.colorScheme.inverseBodyTypography,
-                                                ),
-                                              ),
-                                            ),
-                                            context.smallOutlinedButton(
-                                              data: BaseUiKitButtonData(
-                                                borderColor: theme?.colorScheme.primary,
-                                                backgroundColor: Colors.transparent,
-                                                iconInfo: BaseUiKitButtonIconData(
-                                                  iconData: ShuffleUiKitIcons.chevronright,
-                                                  color: theme?.colorScheme.primary,
-                                                ),
-                                                onPressed: () => widget.contactByEmail != null
-                                                    ? widget.contactByEmail!(element.id)
-                                                    : null,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              },
-                            )
-                          ]
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      )
+                      .toList(),
                 );
               },
             ),
@@ -312,15 +178,10 @@ class _BookingListComponentState extends State<BookingListComponent> {
                   fit: ButtonFit.fitWidth,
                   text: S.of(context).RefundEveryone.toUpperCase(),
                   onPressed: () {
-                    if (widget.refundEveryone != null) {
-                      widget.refundEveryone!(
-                        widget.bookingsPlaceItemUiModel?.usersList!
-                            .where(
-                              (element) => element.isSelected,
-                            )
-                            .toList(),
-                      );
-                    }
+                    chekBoxOn
+                        ? widget.refundEveryone?.call(
+                            widget.bookingsPlaceItemUiModel?.usersList!.where((element) => element.isSelected).toList())
+                        : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.usersList!);
                   },
                 ),
               ),
@@ -329,19 +190,6 @@ class _BookingListComponentState extends State<BookingListComponent> {
           ],
         ],
       ),
-      //TODO
-      // bottomNavigationBar: context
-      //     .outlinedButton(
-      //       data: BaseUiKitButtonData(
-      //         text: 'Refund everyone'.toUpperCase(),
-      //         onPressed: () {},
-      //       ),
-      //     )
-      //     .paddingOnly(
-      //       left: EdgeInsetsFoundation.all16,
-      //       right: EdgeInsetsFoundation.all16,
-      //       bottom: EdgeInsetsFoundation.vertical24,
-      //     ),
     );
   }
 }
