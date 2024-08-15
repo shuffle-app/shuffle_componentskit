@@ -26,6 +26,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _bookingLimitController = TextEditingController();
   final TextEditingController _bookingLimitPerOneController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late BookingUiModel _bookingUiModel;
 
   final List<SubsUiModel> _subsUiMoldels = [];
@@ -75,259 +76,275 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
     final theme = context.uiKitTheme;
 
     return Scaffold(
-      body: BlurredAppBarPage(
-        title: S.of(context).Booking,
-        centerTitle: true,
-        autoImplyLeading: true,
-        childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-        children: [
-          SpacingFoundation.verticalSpace16,
-          UiKitInputFieldNoFill(
-            label: S.of(context).Price,
-            onTap: () => showUiKitGeneralFullScreenDialog(
-              context,
-              GeneralDialogData(
-                topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
-                useRootNavigator: false,
-                child: PriceSelectorComponent(
-                  isPriceRangeSelected: _priceController.text.contains('-'),
-                  initialPriceRangeStart: _priceController.text.split('-').first,
-                  initialPriceRangeEnd:
-                      _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                  initialCurrency: _bookingUiModel.currency,
-                  onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
-                    setState(() {
-                      if (averageSelected) {
-                        _priceController.text = '$averagePrice $currency';
-                      } else {
-                        _priceController.text = rangePrice1;
-                        if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
-                          _priceController.text += '-$rangePrice2 $currency';
+      body: Form(
+        key: _formKey,
+        child: BlurredAppBarPage(
+          title: S.of(context).Booking,
+          centerTitle: true,
+          autoImplyLeading: true,
+          childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+          children: [
+            SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
+              label: S.of(context).Price,
+              onTap: () => showUiKitGeneralFullScreenDialog(
+                context,
+                GeneralDialogData(
+                  topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
+                  useRootNavigator: false,
+                  child: PriceSelectorComponent(
+                    isPriceRangeSelected: _priceController.text.contains('-'),
+                    initialPriceRangeStart: _priceController.text.split('-').first,
+                    initialPriceRangeEnd:
+                        _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                    initialCurrency: _bookingUiModel.currency,
+                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
+                      setState(() {
+                        if (averageSelected) {
+                          _priceController.text = '$averagePrice $currency';
+                        } else {
+                          _priceController.text = rangePrice1;
+                          if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
+                            _priceController.text += '-$rangePrice2 $currency';
+                          }
                         }
-                      }
-                      _bookingUiModel.currency = currency;
-                    });
+                        _bookingUiModel.currency = currency;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              readOnly: true,
+              controller: _priceController,
+            ),
+            SpacingFoundation.verticalSpace24,
+            UiKitInputFieldNoFill(
+              label: S.of(context).BookingLimit,
+              controller: _bookingLimitController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [PriceWithSpacesFormatter()],
+              onChanged: (value) {
+                setState(() {
+                  // _bookingLimitController.text = stringWithSpace(int.parse(value));
+                });
+              },
+              onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
+            ),
+            SpacingFoundation.verticalSpace24,
+            UiKitInputFieldNoFill(
+              label: S.of(context).BookingLimitPerOne,
+              controller: _bookingLimitPerOneController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [PriceWithSpacesFormatter()],
+              validator: (value) {
+                if ((value != null && value.isNotEmpty) && (_bookingLimitController.text != '')) {
+                  final newValue = double.parse(value.replaceAll(' ', ''));
+
+                  if (newValue >= double.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
+                    return 'Limit for one must be less than total limit';
+                  }
+                  return null;
+                } else {
+                  return null;
+                }
+              },
+              onChanged: (value) {
+                _formKey.currentState?.validate();
+              },
+              onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
+            ),
+            SpacingFoundation.verticalSpace24,
+            Text(
+              S.of(context).CreateSubs,
+              style: theme?.boldTextTheme.title2,
+            ),
+            SpacingFoundation.verticalSpace16,
+            SizedBox(
+              height: _subsUiMoldels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: _subsUiMoldels.length + 1,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        context
+                            .badgeButtonNoValue(
+                              data: BaseUiKitButtonData(
+                                onPressed: () {
+                                  context.push(
+                                    CereatSubsComponent(
+                                      onSave: (subsUiModel) {
+                                        setState(() {
+                                          _subsUiMoldels.add(subsUiModel);
+                                        });
+                                      },
+                                    ),
+                                  );
+                                },
+                                iconWidget: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    border: Border.fromBorderSide(
+                                      BorderSide(
+                                        color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    borderRadius: BorderRadiusFoundation.all12,
+                                  ),
+                                  child: GradientableWidget(
+                                    gradient: GradientFoundation.defaultLinearGradient,
+                                    child: const ImageWidget(
+                                      iconData: ShuffleUiKitIcons.gradientPlus,
+                                      height: 45,
+                                      width: 45,
+                                    ).paddingAll(EdgeInsetsFoundation.all32),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .paddingOnly(top: 4),
+                      ],
+                    );
+                  } else {
+                    final sabsItem = _subsUiMoldels[index - 1];
+
+                    return SubsOrUpsaleItem(
+                      limit: sabsItem.bookingLimit,
+                      titleOrPrice: sabsItem.title,
+                      photoLink: sabsItem.photo?.link,
+                      actualLimit: sabsItem.actualbookingLimit,
+                      description: sabsItem.description,
+                      removeItem: () => _removeSubsItem(index - 1),
+                      onEdit: () {
+                        context.push(
+                          CereatSubsComponent(
+                            onSave: (subsUiModel) {
+                              setState(() {
+                                _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
+                              });
+                            },
+                            subsUiModel: sabsItem,
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace24,
+            Text(
+              S.of(context).CreateUpsales,
+              style: theme?.boldTextTheme.title2,
+            ),
+            SpacingFoundation.verticalSpace16,
+            SizedBox(
+              height:
+                  _upsaleUiModels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
+              child: ListView.separated(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: _upsaleUiModels.length + 1,
+                separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        context
+                            .badgeButtonNoValue(
+                              data: BaseUiKitButtonData(
+                                onPressed: () {
+                                  context.push(
+                                    CreateUpsalesComponent(
+                                      onSave: (upsaleUiModel) {
+                                        setState(() {
+                                          _upsaleUiModels.add(upsaleUiModel);
+                                        });
+                                      },
+                                    ),
+                                  );
+                                },
+                                iconWidget: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    border: Border.fromBorderSide(
+                                      BorderSide(
+                                        color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    borderRadius: BorderRadiusFoundation.all12,
+                                  ),
+                                  child: GradientableWidget(
+                                    gradient: GradientFoundation.defaultLinearGradient,
+                                    child: const ImageWidget(
+                                      iconData: ShuffleUiKitIcons.gradientPlus,
+                                      height: 45,
+                                      width: 45,
+                                    ).paddingAll(EdgeInsetsFoundation.all32),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .paddingOnly(top: 4),
+                      ],
+                    );
+                  } else {
+                    final upsaleItem = _upsaleUiModels[index - 1];
+
+                    return SubsOrUpsaleItem(
+                      description: upsaleItem.description,
+                      limit: upsaleItem.limit,
+                      isSubs: false,
+                      actualLimit: upsaleItem.actualLimit,
+                      photoLink: upsaleItem.photo?.link,
+                      titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
+                          ? upsaleItem.price
+                          : S.of(context).Free,
+                      removeItem: () => _removeUpsaleItem(index - 1),
+                      onEdit: () {
+                        context.push(
+                          CreateUpsalesComponent(
+                            onSave: (upsaleUiModel) {
+                              setState(() {
+                                _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
+                              });
+                            },
+                            upsaleUiModel: upsaleItem,
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+            SafeArea(
+              child: context.gradientButton(
+                data: BaseUiKitButtonData(
+                  text: S.of(context).Save.toUpperCase(),
+                  onPressed: () {
+                    _bookingUiModel.price = _priceController.text;
+                    _bookingUiModel.bookingLimit = _bookingLimitController.text;
+                    _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
+                    _bookingUiModel.subsUiModel = _subsUiMoldels;
+                    _bookingUiModel.upsaleUiModel = _upsaleUiModels;
+                    widget.onBookingCreated(_bookingUiModel);
+                    context.pop();
                   },
                 ),
               ),
             ),
-            readOnly: true,
-            controller: _priceController,
-          ),
-          SpacingFoundation.verticalSpace24,
-          UiKitInputFieldNoFill(
-            label: S.of(context).BookingLimit,
-            controller: _bookingLimitController,
-            keyboardType: TextInputType.number,
-            onChanged: (value) {
-              setState(() {
-                _bookingLimitController.text = stringWithSpace(int.parse(value));
-              });
-            },
-            onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
-          ),
-          SpacingFoundation.verticalSpace24,
-          UiKitInputFieldNoFill(
-            label: S.of(context).BookingLimitPerOne,
-            controller: _bookingLimitPerOneController,
-            keyboardType: TextInputType.number,
-            onChanged: (value) {
-              setState(() {
-                _bookingLimitPerOneController.text = stringWithSpace(int.parse(value));
-              });
-            },
-            onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
-          ),
-          SpacingFoundation.verticalSpace24,
-          Text(
-            S.of(context).CreateSubs,
-            style: theme?.boldTextTheme.title2,
-          ),
-          SpacingFoundation.verticalSpace16,
-          SizedBox(
-            height: _subsUiMoldels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: _subsUiMoldels.length + 1,
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      context
-                          .badgeButtonNoValue(
-                            data: BaseUiKitButtonData(
-                              onPressed: () {
-                                context.push(
-                                  CereatSubsComponent(
-                                    onSave: (subsUiModel) {
-                                      setState(() {
-                                        _subsUiMoldels.add(subsUiModel);
-                                      });
-                                    },
-                                  ),
-                                );
-                              },
-                              iconWidget: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  border: Border.fromBorderSide(
-                                    BorderSide(
-                                      color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  borderRadius: BorderRadiusFoundation.all12,
-                                ),
-                                child: GradientableWidget(
-                                  gradient: GradientFoundation.defaultLinearGradient,
-                                  child: const ImageWidget(
-                                    iconData: ShuffleUiKitIcons.gradientPlus,
-                                    height: 45,
-                                    width: 45,
-                                  ).paddingAll(EdgeInsetsFoundation.all32),
-                                ),
-                              ),
-                            ),
-                          )
-                          .paddingOnly(top: 4),
-                    ],
-                  );
-                } else {
-                  final sabsItem = _subsUiMoldels[index - 1];
-
-                  return SubsOrUpsaleItem(
-                    limit: sabsItem.bookingLimit,
-                    titleOrPrice: sabsItem.title,
-                    photoLink: sabsItem.photo?.link,
-                    actualLimit: sabsItem.actualbookingLimit,
-                    description: sabsItem.description,
-                    removeItem: () => _removeSubsItem(index - 1),
-                    onEdit: () {
-                      context.push(
-                        CereatSubsComponent(
-                          onSave: (subsUiModel) {
-                            setState(() {
-                              _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
-                            });
-                          },
-                          subsUiModel: sabsItem,
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          ),
-          SpacingFoundation.verticalSpace24,
-          Text(
-            S.of(context).CreateUpsales,
-            style: theme?.boldTextTheme.title2,
-          ),
-          SpacingFoundation.verticalSpace16,
-          SizedBox(
-            height: _upsaleUiModels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
-            child: ListView.separated(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: _upsaleUiModels.length + 1,
-              separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      context
-                          .badgeButtonNoValue(
-                            data: BaseUiKitButtonData(
-                              onPressed: () {
-                                context.push(
-                                  CreateUpsalesComponent(
-                                    onSave: (upsaleUiModel) {
-                                      setState(() {
-                                        _upsaleUiModels.add(upsaleUiModel);
-                                      });
-                                    },
-                                  ),
-                                );
-                              },
-                              iconWidget: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  border: Border.fromBorderSide(
-                                    BorderSide(
-                                      color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  borderRadius: BorderRadiusFoundation.all12,
-                                ),
-                                child: GradientableWidget(
-                                  gradient: GradientFoundation.defaultLinearGradient,
-                                  child: const ImageWidget(
-                                    iconData: ShuffleUiKitIcons.gradientPlus,
-                                    height: 45,
-                                    width: 45,
-                                  ).paddingAll(EdgeInsetsFoundation.all32),
-                                ),
-                              ),
-                            ),
-                          )
-                          .paddingOnly(top: 4),
-                    ],
-                  );
-                } else {
-                  final upsaleItem = _upsaleUiModels[index - 1];
-
-                  return SubsOrUpsaleItem(
-                    description: upsaleItem.description,
-                    limit: upsaleItem.limit,
-                    isSubs: false,
-                    actualLimit: upsaleItem.actualLimit,
-                    photoLink: upsaleItem.photo?.link,
-                    titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
-                        ? upsaleItem.price
-                        : S.of(context).Free,
-                    removeItem: () => _removeUpsaleItem(index - 1),
-                    onEdit: () {
-                      context.push(
-                        CreateUpsalesComponent(
-                          onSave: (upsaleUiModel) {
-                            setState(() {
-                              _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
-                            });
-                          },
-                          upsaleUiModel: upsaleItem,
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          ),
-          SafeArea(
-            child: context.gradientButton(
-              data: BaseUiKitButtonData(
-                text: S.of(context).Save.toUpperCase(),
-                onPressed: () {
-                  _bookingUiModel.price = _priceController.text;
-                  _bookingUiModel.bookingLimit = _bookingLimitController.text;
-                  _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
-                  _bookingUiModel.subsUiModel = _subsUiMoldels;
-                  _bookingUiModel.upsaleUiModel = _upsaleUiModels;
-                  widget.onBookingCreated(_bookingUiModel);
-                  context.pop();
-                },
-              ),
-            ),
-          ),
-          SpacingFoundation.verticalSpace24,
-        ],
+            SpacingFoundation.verticalSpace24,
+          ],
+        ),
       ),
     );
   }
