@@ -7,7 +7,7 @@ class BookingRequestEventItemUiKit extends StatelessWidget {
   final String? title;
   final String? description;
   final List<BookingsPlaceOrEventUiModel>? events;
-  final Function(int id)? onTap;
+  final ValueChanged<int>? onTap;
 
   const BookingRequestEventItemUiKit({
     super.key,
@@ -41,7 +41,7 @@ class BookingRequestEventItemUiKit extends StatelessWidget {
               title: e.title,
               description: e.description,
               imageUrl: e.imageUrl,
-              onTap: () => onTap != null ? onTap!(e.id) : null,
+              onTap: () => onTap?.call(e.id),
             ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
           ),
       ],
