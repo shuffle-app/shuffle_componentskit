@@ -1,5 +1,7 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+import 'request_refun_ui_model.dart';
+
 class UserItemUiModel {
   final int id;
   final String? name;
@@ -8,7 +10,10 @@ class UserItemUiModel {
   final UserTileType? type;
   final int tiketsCount;
   final int? productsCount;
+  final String? email;
+  final RequestRefunUiModel? requestRefunUiModel;
   bool isSelected;
+
   UserItemUiModel({
     required this.id,
     required this.tiketsCount,
@@ -18,6 +23,8 @@ class UserItemUiModel {
     this.type,
     this.productsCount,
     this.isSelected = false,
+    this.email,
+    this.requestRefunUiModel,
   });
 
   UserItemUiModel copyWith({
@@ -28,6 +35,8 @@ class UserItemUiModel {
     UserTileType? type,
     int? tiketsCount,
     int? productsCount,
+    String? email,
+    RequestRefunUiModel? requestRefunUiModel,
   }) {
     return UserItemUiModel(
       id: id ?? this.id,
@@ -37,6 +46,8 @@ class UserItemUiModel {
       type: type ?? this.type,
       tiketsCount: tiketsCount ?? this.tiketsCount,
       productsCount: productsCount ?? this.productsCount,
+      email: email ?? this.email,
+      requestRefunUiModel: requestRefunUiModel ?? this.requestRefunUiModel,
     );
   }
 }
