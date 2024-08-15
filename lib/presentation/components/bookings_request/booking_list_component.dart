@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-
-import 'bookings_request_ui_models/bookings_place_or_even_ui_model.dart';
-import 'bookings_request_ui_models/user_item_ui_model.dart';
 
 class BookingListComponent extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
@@ -11,6 +9,8 @@ class BookingListComponent extends StatefulWidget {
   final Function(List<UserItemUiModel>?)? refundEveryone;
   final Function(int id)? contactByMessage;
   final Function(int id)? contactByEmail;
+  final BookingUiModel? bookingUiModel;
+  final Function(BookingUiModel)? onBookingEdit;
 
   const BookingListComponent({
     super.key,
@@ -20,6 +20,8 @@ class BookingListComponent extends StatefulWidget {
     this.refundEveryone,
     this.contactByEmail,
     this.contactByMessage,
+    this.bookingUiModel,
+    this.onBookingEdit,
   });
 
   @override
@@ -41,17 +43,49 @@ class _BookingListComponentState extends State<BookingListComponent> {
         customToolbarBaseHeight: 1.sw <= 380 ? 0.18.sh : 0.13.sh,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
-          SpacingFoundation.verticalSpace16,
-          Text(
-            widget.bookingsPlaceItemUiModel?.title ?? '',
-            style: theme?.boldTextTheme.title2,
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SpacingFoundation.verticalSpace16,
+                    Text(
+                      widget.bookingsPlaceItemUiModel?.title ?? '',
+                      style: theme?.boldTextTheme.title2,
+                    ),
+                    SpacingFoundation.verticalSpace2,
+                    Text(
+                      widget.bookingsPlaceItemUiModel?.description ?? '',
+                      style: theme?.boldTextTheme.caption2Bold.copyWith(color: ColorsFoundation.mutedText),
+                    ),
+                    SpacingFoundation.verticalSpace16,
+                  ],
+                ),
+              ),
+              if (widget.bookingsPlaceItemUiModel?.usersList == null ||
+                  widget.bookingsPlaceItemUiModel!.usersList!.isEmpty) ...[
+                GestureDetector(
+                  onTap: () {
+                    context.push(
+                      CreateBookingComponent(
+                        onBookingCreated: (value) {
+                          if (widget.onBookingEdit != null) {
+                            return widget.onBookingEdit!(value);
+                          }
+                        },
+                        bookingUiModel: widget.bookingUiModel,
+                      ),
+                    );
+                  },
+                  child: ImageWidget(
+                    link: GraphicsFoundation.instance.svg.pencil.path,
+                    color: theme?.colorScheme.inversePrimary,
+                  ),
+                ),
+              ],
+            ],
           ),
-          SpacingFoundation.verticalSpace2,
-          Text(
-            widget.bookingsPlaceItemUiModel?.description ?? '',
-            style: theme?.boldTextTheme.caption2Bold.copyWith(color: ColorsFoundation.mutedText),
-          ),
-          SpacingFoundation.verticalSpace16,
           if (widget.bookingsPlaceItemUiModel?.usersList != null &&
               widget.bookingsPlaceItemUiModel!.usersList!.isNotEmpty) ...[
             ListView.separated(

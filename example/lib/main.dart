@@ -726,6 +726,14 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () {
                   context.push(
                     BookingRequestComponent(
+                      bookingUiModel: BookingUiModel(
+                        id: -1,
+                        bookingLimit: '10',
+                        bookingLimitPerOne: '5',
+                      ),
+                      onBookingEdit: (p0) {
+                        log('BookingUiModel ${p0.price}');
+                      },
                       contactByEmail: (id) => log('id $id'),
                       contactByMessage: (id) => log('id $id'),
                       fullRefund: (id) {
@@ -744,21 +752,21 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           description: 'test $index',
                           title: 'testeMain',
                           imageUrl: GraphicsFoundation.instance.png.avatars.avatar.path,
-                          usersList: List.generate(
-                            25,
-                            (index) {
-                              return UserItemUiModel(
-                                id: index,
-                                tiketsCount: 0,
-                                avatarUrl: GraphicsFoundation.instance.png.avatars.avatar2.path,
-                                isSelected: false,
-                                name: 'test $index',
-                                nickName: '@nickName $index',
-                                productsCount: 0,
-                                type: index.isEven ? UserTileType.influencer : UserTileType.pro,
-                              );
-                            },
-                          ),
+                          // usersList: List.generate(
+                          //   25,
+                          //   (index) {
+                          //     return UserItemUiModel(
+                          //       id: index,
+                          //       tiketsCount: 0,
+                          //       avatarUrl: GraphicsFoundation.instance.png.avatars.avatar2.path,
+                          //       isSelected: false,
+                          //       name: 'test $index',
+                          //       nickName: '@nickName $index',
+                          //       productsCount: 0,
+                          //       type: index.isEven ? UserTileType.influencer : UserTileType.pro,
+                          //     );
+                          //   },
+                          // ),
                         ),
                       ),
                       events: List.generate(

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import 'booking_list_component.dart';
 import 'booking_request_event_item.dart';
-import 'bookings_request_ui_models/bookings_event_ui_model.dart';
-import 'bookings_request_ui_models/bookings_place_or_even_ui_model.dart';
-import 'bookings_request_ui_models/user_item_ui_model.dart';
 
 class BookingRequestComponent extends StatefulWidget {
   final List<BookingsPlaceOrEventUiModel>? places;
@@ -15,6 +13,8 @@ class BookingRequestComponent extends StatefulWidget {
   final Function(List<UserItemUiModel>?)? refundEveryone;
   final Function(int id)? contactByMessage;
   final Function(int id)? contactByEmail;
+  final BookingUiModel? bookingUiModel;
+  final Function(BookingUiModel)? onBookingEdit;
 
   const BookingRequestComponent({
     super.key,
@@ -25,6 +25,8 @@ class BookingRequestComponent extends StatefulWidget {
     this.refundEveryone,
     this.contactByMessage,
     this.contactByEmail,
+    this.bookingUiModel,
+    this.onBookingEdit,
   });
 
   @override
@@ -91,6 +93,8 @@ class _BookingRequestComponentState extends State<BookingRequestComponent> {
                         contactByEmail: widget.contactByEmail,
                         contactByMessage: widget.contactByMessage,
                         bookingsPlaceItemUiModel: element,
+                        bookingUiModel: widget.bookingUiModel,
+                        onBookingEdit: widget.onBookingEdit,
                       ),
                     ),
                   );
@@ -123,6 +127,8 @@ class _BookingRequestComponentState extends State<BookingRequestComponent> {
                         contactByEmail: widget.contactByEmail,
                         contactByMessage: widget.contactByMessage,
                         bookingsPlaceItemUiModel: element.events?.firstWhere((element) => element.id == id),
+                        bookingUiModel: widget.bookingUiModel,
+                        onBookingEdit: widget.onBookingEdit,
                       ),
                     ),
                   );
