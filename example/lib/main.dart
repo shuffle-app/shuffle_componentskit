@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -726,6 +727,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () {
                   context.push(
                     BookingRequestComponent(
+                      onContactTap: (value) => log('value $value'),
+                      onGoAheadTap: () => log('onGoAheadTap'),
                       bookingUiModel: BookingUiModel(
                         id: -1,
                         bookingLimit: '10',
@@ -735,10 +738,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         log('BookingUiModel ${p0.price}');
                       },
                       contactByEmail: (id) => log('id $id'),
-                      contactByMessage: (id) => log('id $id'),
-                      fullRefund: (id) {
-                        log('id $id');
-                      },
+                      contactByMessage: (email) => log('id $email'),
+                      fullRefund: (value) => log('id $value'),
                       partialRefund: (id) {
                         log('id $id');
                       },
@@ -787,13 +788,20 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 (index) {
                                   return UserItemUiModel(
                                     id: index,
-                                    tiketsCount: 3,
+                                    tiketsCount: math.Random().nextInt(10) + 1,
                                     avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
                                     isSelected: false,
                                     name: 'test $index',
                                     nickName: '@nickName $index',
-                                    productsCount: 0,
+                                    productsCount: math.Random().nextInt(10),
                                     type: index.isEven ? UserTileType.influencer : UserTileType.pro,
+                                    email: 'test@emal.index$index',
+                                    requestRefunUiModel: index.isEven
+                                        ? RequestRefunUiModel(
+                                            ticketRefun: 3,
+                                            upsaleRefun: 3,
+                                          )
+                                        : null,
                                   );
                                 },
                               ),
