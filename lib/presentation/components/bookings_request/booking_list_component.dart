@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'user_booking_list_item.dart';
 
@@ -84,7 +85,14 @@ class _BookingListComponentState extends State<BookingListComponent> {
 
     return Scaffold(
       body: BlurredAppBarPage(
-        title: S.of(context).BookingList,
+        customTitle: Expanded(
+          child: AutoSizeText(
+            S.of(context).BookingList,
+            style: theme?.boldTextTheme.title1,
+            textAlign: TextAlign.center,
+            wrapWords: false,
+          ),
+        ),
         centerTitle: true,
         autoImplyLeading: true,
         customToolbarBaseHeight: 1.sw <= 380 ? 0.18.sh : 0.13.sh,
