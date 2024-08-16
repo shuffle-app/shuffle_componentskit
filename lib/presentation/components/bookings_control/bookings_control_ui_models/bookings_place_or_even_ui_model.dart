@@ -1,17 +1,17 @@
-import 'user_item_ui_model.dart';
+import 'user_bookings_control_ui_molde.dart';
 
 class BookingsPlaceOrEventUiModel {
   final int id;
   final String? title;
   final String? description;
   final String? imageUrl;
-  final List<UserItemUiModel>? usersList;
+  final List<UserBookingsControlUiModel>? users;
   BookingsPlaceOrEventUiModel({
     required this.id,
     this.title,
     this.description,
     this.imageUrl,
-    this.usersList,
+    this.users,
   });
 
   BookingsPlaceOrEventUiModel copyWith({
@@ -19,14 +19,14 @@ class BookingsPlaceOrEventUiModel {
     String? title,
     String? description,
     String? imageUrl,
-    List<UserItemUiModel>? usersList,
+    List<UserBookingsControlUiModel>? users,
   }) {
     return BookingsPlaceOrEventUiModel(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
-      usersList: usersList ?? this.usersList,
+      users: users ?? this.users,
     );
   }
 }

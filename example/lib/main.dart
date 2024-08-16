@@ -726,7 +726,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'booking reques',
                 onPressed: () {
                   context.push(
-                    BookingRequestComponent(
+                    BookingsControlComponent(
                       onContactTap: (value) => log('value $value'),
                       onGoAheadTap: () => log('onGoAheadTap'),
                       bookingUiModel: BookingUiModel(
@@ -753,7 +753,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           description: 'test $index',
                           title: 'testeMain',
                           imageUrl: GraphicsFoundation.instance.png.avatars.avatar.path,
-                          // usersList: List.generate(
+                          // users: List.generate(
                           //   25,
                           //   (index) {
                           //     return UserItemUiModel(
@@ -782,18 +782,18 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               id: index,
                               description: 'test $index',
                               title: 'testeMain',
-                              imageUrl: GraphicsFoundation.instance.png.avatars.avatar.path,
-                              usersList: List.generate(
+                              imageUrl: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                              users: List.generate(
                                 13,
                                 (index) {
-                                  return UserItemUiModel(
+                                  return UserBookingsControlUiModel(
                                     id: index,
-                                    tiketsCount: math.Random().nextInt(10) + 1,
+                                    tiketsCount: math.Random().nextInt(2) + 1,
                                     avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
                                     isSelected: false,
                                     name: 'test $index',
                                     nickName: '@nickName $index',
-                                    productsCount: math.Random().nextInt(10),
+                                    productsCount: math.Random().nextInt(2),
                                     type: index.isEven ? UserTileType.influencer : UserTileType.pro,
                                     email: 'test@emal.index$index',
                                     requestRefunUiModel: index.isEven

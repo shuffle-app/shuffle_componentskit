@@ -2,7 +2,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import 'request_refun_ui_model.dart';
 
-class UserItemUiModel {
+class UserBookingsControlUiModel {
   final int id;
   final String? name;
   final String? nickName;
@@ -14,7 +14,7 @@ class UserItemUiModel {
   final RequestRefunUiModel? requestRefunUiModel;
   bool isSelected;
 
-  UserItemUiModel({
+  UserBookingsControlUiModel({
     required this.id,
     required this.tiketsCount,
     this.name,
@@ -27,7 +27,7 @@ class UserItemUiModel {
     this.requestRefunUiModel,
   });
 
-  UserItemUiModel copyWith({
+  UserBookingsControlUiModel copyWith({
     int? id,
     String? name,
     String? nickName,
@@ -38,7 +38,7 @@ class UserItemUiModel {
     String? email,
     RequestRefunUiModel? requestRefunUiModel,
   }) {
-    return UserItemUiModel(
+    return UserBookingsControlUiModel(
       id: id ?? this.id,
       name: name ?? this.name,
       nickName: nickName ?? this.nickName,

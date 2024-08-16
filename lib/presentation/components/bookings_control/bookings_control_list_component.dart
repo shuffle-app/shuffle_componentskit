@@ -3,21 +3,21 @@ import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-import 'user_booking_list_item.dart';
+import 'users_bookings_control.dart';
 
-class BookingListComponent extends StatefulWidget {
+class BookingsControlListComponent extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
   final BookingUiModel? bookingUiModel;
   final ValueChanged<int>? fullRefund;
   final ValueChanged<int>? partialRefund;
   final ValueChanged<int>? contactByMessage;
   final ValueChanged<String?>? contactByEmail;
-  final ValueChanged<List<UserItemUiModel>?>? refundEveryone;
+  final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
   final ValueChanged<BookingUiModel>? onBookingEdit;
   final VoidCallback? onGoAheadTap;
   final ValueChanged<int>? onContactTap;
 
-  const BookingListComponent({
+  const BookingsControlListComponent({
     super.key,
     this.bookingsPlaceItemUiModel,
     this.fullRefund,
@@ -32,12 +32,12 @@ class BookingListComponent extends StatefulWidget {
   });
 
   @override
-  State<BookingListComponent> createState() => _BookingListComponentState();
+  State<BookingsControlListComponent> createState() => _BookingsControlListComponentState();
 }
 
-class _BookingListComponentState extends State<BookingListComponent> {
+class _BookingsControlListComponentState extends State<BookingsControlListComponent> {
   bool chekBoxOn = false;
-  List<List<UserItemUiModel>> groupedUsers = [];
+  List<List<UserBookingsControlUiModel>> groupedUsers = [];
 
   @override
   void initState() {
@@ -47,8 +47,8 @@ class _BookingListComponentState extends State<BookingListComponent> {
   }
 
   void sortedUserList() {
-    if (widget.bookingsPlaceItemUiModel?.usersList != null && widget.bookingsPlaceItemUiModel!.usersList!.isNotEmpty) {
-      widget.bookingsPlaceItemUiModel!.usersList!.sort((a, b) {
+    if (widget.bookingsPlaceItemUiModel?.users != null && widget.bookingsPlaceItemUiModel!.users!.isNotEmpty) {
+      widget.bookingsPlaceItemUiModel!.users!.sort((a, b) {
         if (a.tiketsCount != b.tiketsCount) {
           return b.tiketsCount.compareTo(a.tiketsCount);
         }
@@ -62,8 +62,8 @@ class _BookingListComponentState extends State<BookingListComponent> {
   }
 
   void groupUserList() {
-    List<UserItemUiModel> currentGroup = [];
-    final userList = widget.bookingsPlaceItemUiModel?.usersList;
+    List<UserBookingsControlUiModel> currentGroup = [];
+    final userList = widget.bookingsPlaceItemUiModel?.users;
     if (userList != null && userList.isNotEmpty) {
       for (var i = 0; i < userList.length; i++) {
         if (i == 0 ||
@@ -118,8 +118,8 @@ class _BookingListComponentState extends State<BookingListComponent> {
                   ],
                 ),
               ),
-              if (widget.bookingsPlaceItemUiModel?.usersList == null ||
-                  widget.bookingsPlaceItemUiModel!.usersList!.isEmpty) ...[
+              if (widget.bookingsPlaceItemUiModel?.users == null ||
+                  widget.bookingsPlaceItemUiModel!.users!.isEmpty) ...[
                 GestureDetector(
                   onTap: () {
                     context.push(
@@ -148,7 +148,7 @@ class _BookingListComponentState extends State<BookingListComponent> {
                 return Column(
                   children: groupedUsers[index]
                       .map(
-                        (e) => UserBookingListItem(
+                        (e) => UsersBookingsControl(
                           element: e,
                           isFirst: e == groupedUsers[index].first,
                           checkBox: chekBoxOn,
@@ -188,8 +188,8 @@ class _BookingListComponentState extends State<BookingListComponent> {
                   onPressed: () {
                     chekBoxOn
                         ? widget.refundEveryone?.call(
-                            widget.bookingsPlaceItemUiModel?.usersList!.where((element) => element.isSelected).toList())
-                        : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.usersList!);
+                            widget.bookingsPlaceItemUiModel?.users!.where((element) => element.isSelected).toList())
+                        : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!);
                   },
                 ),
               ),

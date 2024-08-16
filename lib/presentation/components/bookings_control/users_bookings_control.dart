@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import 'bookings_request_ui_models/user_item_ui_model.dart';
+import 'bookings_control_ui_models/user_bookings_control_ui_molde.dart';
 
-class UserBookingListItem extends StatelessWidget {
+class UsersBookingsControl extends StatelessWidget {
   final bool isFirst;
   final bool checkBox;
-  final UserItemUiModel element;
+  final UserBookingsControlUiModel element;
   final VoidCallback? onLongPress;
   final VoidCallback? onCheckBoxTap;
   final ValueChanged<int>? contactByMessage;
@@ -15,7 +15,7 @@ class UserBookingListItem extends StatelessWidget {
   final ValueChanged<String?>? contactByEmail;
   final VoidCallback? onRequestsRefund;
 
-  const UserBookingListItem({
+  const UsersBookingsControl({
     super.key,
     required this.element,
     this.isFirst = false,

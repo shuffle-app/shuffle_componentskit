@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import 'bookings_request_ui_models/bookings_place_or_even_ui_model.dart';
+import 'bookings_control_ui_models/bookings_place_or_even_ui_model.dart';
 
-class BookingRequestEventItemUiKit extends StatelessWidget {
+class BookingsControlEventUiKit extends StatelessWidget {
   final String? title;
   final String? description;
   final List<BookingsPlaceOrEventUiModel>? events;
   final ValueChanged<int>? onTap;
 
-  const BookingRequestEventItemUiKit({
+  const BookingsControlEventUiKit({
     super.key,
     this.title,
     this.description,
@@ -37,7 +37,7 @@ class BookingRequestEventItemUiKit extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         if (events != null && events!.isNotEmpty)
           ...events!.map(
-            (e) => BookingRequestPlaceItemUiKit(
+            (e) => BookingsControlPlaceItemUiKit(
               title: e.title,
               description: e.description,
               imageUrl: e.imageUrl,

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import 'booking_request_event_item.dart';
+import 'bookings_control_event_item.dart';
 
-class BookingRequestComponent extends StatefulWidget {
+class BookingsControlComponent extends StatefulWidget {
   final BookingUiModel? bookingUiModel;
   final List<BookingsEventUiModel>? events;
   final List<BookingsPlaceOrEventUiModel>? places;
@@ -13,11 +13,11 @@ class BookingRequestComponent extends StatefulWidget {
   final ValueChanged<int>? contactByMessage;
   final ValueChanged<String?>? contactByEmail;
   final ValueChanged<BookingUiModel>? onBookingEdit;
-  final ValueChanged<List<UserItemUiModel>?>? refundEveryone;
+  final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
   final VoidCallback? onGoAheadTap;
   final ValueChanged<int>? onContactTap;
 
-  const BookingRequestComponent({
+  const BookingsControlComponent({
     super.key,
     this.places,
     this.events,
@@ -33,10 +33,10 @@ class BookingRequestComponent extends StatefulWidget {
   });
 
   @override
-  State<BookingRequestComponent> createState() => _BookingRequestComponentState();
+  State<BookingsControlComponent> createState() => _BookingsControlComponentState();
 }
 
-class _BookingRequestComponentState extends State<BookingRequestComponent> {
+class _BookingsControlComponentState extends State<BookingsControlComponent> {
   String selectedTab = 'place';
 
   @override
@@ -84,12 +84,12 @@ class _BookingRequestComponentState extends State<BookingRequestComponent> {
                 itemBuilder: (context, index) {
                   final element = widget.places![index];
 
-                  return BookingRequestPlaceItemUiKit(
+                  return BookingsControlPlaceItemUiKit(
                     title: element.title,
                     description: element.description,
                     imageUrl: element.imageUrl,
                     onTap: () => context.push(
-                      BookingListComponent(
+                      BookingsControlListComponent(
                         fullRefund: widget.fullRefund,
                         partialRefund: widget.partialRefund,
                         refundEveryone: widget.refundEveryone,
@@ -120,12 +120,12 @@ class _BookingRequestComponentState extends State<BookingRequestComponent> {
                 itemBuilder: (context, index) {
                   final element = widget.events![index];
 
-                  return BookingRequestEventItemUiKit(
+                  return BookingsControlEventUiKit(
                     title: element.title,
                     description: element.description,
                     events: element.events,
                     onTap: (id) => context.push(
-                      BookingListComponent(
+                      BookingsControlListComponent(
                         fullRefund: widget.fullRefund,
                         partialRefund: widget.partialRefund,
                         refundEveryone: widget.refundEveryone,
