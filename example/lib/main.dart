@@ -753,21 +753,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           description: 'test $index',
                           title: 'testeMain',
                           imageUrl: GraphicsFoundation.instance.png.avatars.avatar.path,
-                          // users: List.generate(
-                          //   25,
-                          //   (index) {
-                          //     return UserItemUiModel(
-                          //       id: index,
-                          //       tiketsCount: 0,
-                          //       avatarUrl: GraphicsFoundation.instance.png.avatars.avatar2.path,
-                          //       isSelected: false,
-                          //       name: 'test $index',
-                          //       nickName: '@nickName $index',
-                          //       productsCount: 0,
-                          //       type: index.isEven ? UserTileType.influencer : UserTileType.pro,
-                          //     );
-                          //   },
-                          // ),
                         ),
                       ),
                       events: List.generate(
