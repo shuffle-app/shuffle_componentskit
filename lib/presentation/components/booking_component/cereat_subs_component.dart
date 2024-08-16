@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -143,7 +144,7 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                   _formKey.currentState?.validate();
                 });
               },
-              onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
+              onTapOutside: (p0) => SystemChannels.textInput.invokeMethod('TextInput.hide'),
             ),
             SpacingFoundation.verticalSpace24,
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -118,7 +119,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                 _limitController.text = stringWithSpace(int.parse(value));
               });
             },
-            onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
+            onTapOutside: (p0) => SystemChannels.textInput.invokeMethod('TextInput.hide'),
           ),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(

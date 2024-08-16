@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/presentation/common/price_selector_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/booking_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
@@ -153,7 +154,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                   _formKey.currentState?.validate();
                 });
               },
-              onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
+              onTapOutside: (p0) => SystemChannels.textInput.invokeMethod('TextInput.hide'),
             ),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
@@ -178,7 +179,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                   _formKey.currentState?.validate();
                 });
               },
-              onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
+              onTapOutside: (p0) => SystemChannels.textInput.invokeMethod('TextInput.hide'),
             ),
             SpacingFoundation.verticalSpace24,
             Text(
