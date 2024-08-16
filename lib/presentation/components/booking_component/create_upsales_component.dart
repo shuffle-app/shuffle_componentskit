@@ -139,9 +139,9 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                   onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
                     setState(() {
                       if (averageSelected) {
-                        _priceController.text = '$averagePrice $currency';
+                        _priceController.text = averagePrice.isNotEmpty ? '$averagePrice $currency' : '0 $currency';
                       } else {
-                        _priceController.text = rangePrice1;
+                        _priceController.text = rangePrice1.isNotEmpty ? '$rangePrice1 $currency' : '0 $currency';
                         if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
                           _priceController.text += '-$rangePrice2 $currency';
                         }
