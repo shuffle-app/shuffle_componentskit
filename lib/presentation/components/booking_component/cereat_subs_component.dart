@@ -75,6 +75,7 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
           title: S.of(context).Subs,
           centerTitle: true,
           autoImplyLeading: true,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           children: [
             SpacingFoundation.verticalSpace16,

@@ -98,6 +98,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
           title: S.of(context).Booking,
           centerTitle: true,
           autoImplyLeading: true,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           children: [
             SpacingFoundation.verticalSpace16,

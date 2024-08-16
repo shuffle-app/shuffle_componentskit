@@ -83,6 +83,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
         customToolbarBaseHeight: 1.sw <= 380 ? 0.17.sh : 0.12.sh,
         centerTitle: true,
         autoImplyLeading: true,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           SpacingFoundation.verticalSpace16,
