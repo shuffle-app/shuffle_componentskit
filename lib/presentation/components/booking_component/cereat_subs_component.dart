@@ -103,7 +103,6 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                     _formKey.currentState!.validate();
                   });
                 },
-                onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
               ),
             ),
             SpacingFoundation.verticalSpace24,
@@ -117,7 +116,6 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                 onChanged: (value) {
                   _formKey.currentState!.validate();
                 },
-                onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
               ),
             ),
             SpacingFoundation.verticalSpace24,
@@ -144,7 +142,6 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                   _formKey.currentState?.validate();
                 });
               },
-              onTapOutside: (p0) => SystemChannels.textInput.invokeMethod('TextInput.hide'),
             ),
             SpacingFoundation.verticalSpace24,
           ],

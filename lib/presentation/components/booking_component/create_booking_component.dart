@@ -154,7 +154,6 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                   _formKey.currentState?.validate();
                 });
               },
-              onTapOutside: (p0) => SystemChannels.textInput.invokeMethod('TextInput.hide'),
             ),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
@@ -179,7 +178,6 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                   _formKey.currentState?.validate();
                 });
               },
-              onTapOutside: (p0) => SystemChannels.textInput.invokeMethod('TextInput.hide'),
             ),
             SpacingFoundation.verticalSpace24,
             Text(

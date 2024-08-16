@@ -48,7 +48,6 @@ class _AddLinkComponentState extends State<AddLinkComponent> {
                 isLinkValid = _formKey.currentState!.validate();
               });
             },
-            onTapOutside: (p0) => FocusManager.instance.primaryFocus?.unfocus(),
           ),
         ),
         SpacingFoundation.verticalSpace24,
