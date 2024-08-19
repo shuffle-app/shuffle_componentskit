@@ -21,7 +21,7 @@ class ViewHistoryPointComponent extends StatefulWidget {
 }
 
 class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
-  int tabValue = 0;
+  String selectedTab = 'Accrual';
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +33,21 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         UiKitCustomTabBar(
+          selectedTab: selectedTab,
           onTappedTab: (value) {
-            // widget.onTabChange?.call(value);
             setState(() {
-              tabValue = value;
+              widget.onTabChange?.call(value);
+              selectedTab = ['Activation', 'Accrual'][value];
             });
           },
           tabs: [
             UiKitCustomTab(
               title: S.current.Activation,
+              customValue: 'Activation',
             ),
             UiKitCustomTab(
               title: S.current.Accrual,
+              customValue: 'Accrual',
             ),
           ],
         ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
@@ -54,37 +57,24 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
             padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
             pagingController: widget.pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-              noItemsFoundIndicatorBuilder: (_) => const UnderDevelopment(),
+              noItemsFoundIndicatorBuilder: (_) => Center(
+                child: Text(
+                  S.of(context).NothingFound,
+                  style: context.uiKitTheme?.boldTextTheme.body,
+                ),
+              ),
               itemBuilder: (context, item, index) {
-                if (item.contentShortUiModel != null && tabValue == 0) {
-                  return ViewHistoryActivationWidget(
-                    onTap: widget.onTapBarCode,
-                    activationModel: item.contentShortUiModel,
-                  );
-                } else if (item.uiModelViewHistoryAccrual != null && tabValue == 1) {
-                  return UiKitPointsHistoryTile(
-                    isLast: index == widget.pagingController.itemList!.length - 1,
-                    title: item.uiModelViewHistoryAccrual?.title ?? '',
-                    points: item.uiModelViewHistoryAccrual?.points ?? 0,
-                    dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),
-                  );
-                }
-                if (index == 0) {
-                  return const UnderDevelopment();
-                } else {
-                  return SpacingFoundation.none;
-                }
-                // return item.contentShortUiModel != null
-                //     ? ViewHistoryActivationWidget(
-                //         onTap: onTapBarCode,
-                //         activationModel: item.contentShortUiModel,
-                //       )
-                //     : UiKitPointsHistoryTile(
-                //         isLast: index == pagingController.itemList!.length - 1,
-                //         title: item.uiModelViewHistoryAccrual?.title ?? '',
-                //         points: item.uiModelViewHistoryAccrual?.points ?? 0,
-                //         dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),
-                //       );
+                return item.contentShortUiModel != null
+                    ? ViewHistoryActivationWidget(
+                        onTap: widget.onTapBarCode,
+                        activationModel: item.contentShortUiModel,
+                      )
+                    : UiKitPointsHistoryTile(
+                        isLast: index == widget.pagingController.itemList!.length - 1,
+                        title: item.uiModelViewHistoryAccrual?.title ?? '',
+                        points: item.uiModelViewHistoryAccrual?.points ?? 0,
+                        dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),
+                      );
               },
             ),
           ),
