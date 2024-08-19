@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -74,6 +75,7 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
           title: S.of(context).Subs,
           centerTitle: true,
           autoImplyLeading: true,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           children: [
             SpacingFoundation.verticalSpace16,
@@ -122,10 +124,23 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
               label: S.of(context).BookingLimit,
               controller: _limitController,
               keyboardType: TextInputType.number,
-              inputFormatters: [OnlyNumbersFormatter()],
+              validator: (value) {
+                if (value != null && value.isEmpty) {
+                  return S.of(context).PleaseEnterLimit;
+                } else if (value != null && value.isNotEmpty) {
+                  final newValue = int.parse(value.replaceAll(' ', ''));
+
+                  if (newValue <= 0) {
+                    return S.of(context).PleaseEnterCurrentLimit;
+                  }
+                  return null;
+                }
+                return null;
+              },
+              inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
               onChanged: (value) {
                 setState(() {
-                  _limitController.text = stringWithSpace(int.parse(value));
+                  _formKey.currentState?.validate();
                 });
               },
             ),
