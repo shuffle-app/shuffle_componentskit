@@ -145,6 +145,7 @@ class PointsComponent extends StatelessWidget {
             ],
           ),
         ),
+        centerTitle: showHIW ? true : false,
         children: [
           SpacingFoundation.verticalSpace16,
           Row(
