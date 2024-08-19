@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/influencer/linear_influencer_indicator.dart';
-import 'package:shuffle_components_kit/presentation/components/profile/points_component/ui_points_model.dart';
-import 'package:shuffle_components_kit/presentation/components/profile/points_component/ui_user_points_progress_bar_model.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -12,6 +11,7 @@ import 'row_gradient_circle.dart';
 class PointsComponent extends StatelessWidget {
   final VoidCallback? onSpendCallBack;
   final VoidCallback? onHistoryCallBack;
+  final bool showHIW;
   final int userPointsCount;
   final List<UiPointsModel>? listChallengeFeelings;
   final List<UiPointsModel>? listItemPoint;
@@ -27,6 +27,7 @@ class PointsComponent extends StatelessWidget {
     this.userType = UserTileType.ordinary,
     required this.uiUserPointsProgressBarModel,
     required this.userPointsCount,
+    this.showHIW = false,
   });
 
   final ScrollController _scrollController = ScrollController();
@@ -117,8 +118,33 @@ class PointsComponent extends StatelessWidget {
             onPressed: onHistoryCallBack,
           ),
         ),
-        title: S.of(context).Points,
-        centerTitle: true,
+        customTitle: TitleWithHowItWorks(
+          title: S.of(context).Points,
+          textStyle: theme?.boldTextTheme.title1,
+          shouldShow: showHIW,
+          howItWorksWidget: HowItWorksWidget(
+            title: S.of(context).PointsAre,
+            subtitle: S.of(context).ShuffleExchangeSystem,
+            hintTiles: [
+              HintCardUiModel(
+                title: S.of(context).PointsHiwItems(0),
+                imageUrl: GraphicsFoundation.instance.png.reputation.path,
+              ),
+              HintCardUiModel(
+                title: S.of(context).PointsHiwItems(1),
+                imageUrl: GraphicsFoundation.instance.png.encreaseRaiting.path,
+              ),
+              HintCardUiModel(
+                title: S.of(context).PointsHiwItems(2),
+                imageUrl: GraphicsFoundation.instance.png.action.path,
+              ),
+              HintCardUiModel(
+                title: S.of(context).PointsHiwItems(3),
+                imageUrl: GraphicsFoundation.instance.png.earning.path,
+              ),
+            ],
+          ),
+        ),
         children: [
           SpacingFoundation.verticalSpace16,
           Row(
