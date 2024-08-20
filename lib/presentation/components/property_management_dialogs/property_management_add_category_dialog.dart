@@ -48,7 +48,7 @@ class PropertyManagementAddCategoryDialog extends StatelessWidget {
                 child: context.coloredButtonWithBorderRadius(
                   borderRadius: BorderRadiusFoundation.all12,
                   data: BaseUiKitButtonData(
-                      text: S.current.Place,
+                      text: S.current.Entertainment,
                       onPressed: onCreateLeisure,
                       backgroundColor: theme?.colorScheme.darkNeutral200),
                 ),
@@ -58,7 +58,7 @@ class PropertyManagementAddCategoryDialog extends StatelessWidget {
                 child: context.coloredButtonWithBorderRadius(
                   borderRadius: BorderRadiusFoundation.all12,
                   data: BaseUiKitButtonData(
-                      text: S.current.Event,
+                      text: S.current.Business,
                       onPressed: onCreateBusiness,
                       backgroundColor: theme?.colorScheme.darkNeutral200),
                 ),

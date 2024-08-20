@@ -82,6 +82,8 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
   @override
   Widget build(BuildContext context) {
     final uiKitTheme = context.uiKitTheme;
+    debugPrint('CategoriesCreateComponent build here with selectedProperty: ${selectedProperty?.title}');
+
     return Scaffold(
       body: UiKitCardWrapper(
         borderRadius: BorderRadiusFoundation.all16,
@@ -159,6 +161,7 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                     ),
                   )),
             ),
+            SpacingFoundation.horizontalSpace16,
             Flexible(
               child: PropertiesBorderedBox(
                 title: widget.selectedCategory?.icon != null
@@ -297,11 +300,13 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                                       return UiKitCloudChip(
                                         title: e.title,
                                         onTap: () {
-                                          if (selectedProperty == e) {
-                                            selectedProperty = null;
-                                          } else {
-                                            selectedProperty = e;
-                                          }
+                                          setState(() {
+                                            if (selectedProperty == e) {
+                                              selectedProperty = null;
+                                            } else {
+                                              selectedProperty = e;
+                                            }
+                                          });
                                         },
                                         iconPath: e.icon,
                                         selected: e == selectedProperty,
@@ -319,6 +324,7 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                 ),
               ),
             ),
+            SpacingFoundation.horizontalSpace16,
             Flexible(
               child: PropertiesBorderedBox(
                 title: Row(

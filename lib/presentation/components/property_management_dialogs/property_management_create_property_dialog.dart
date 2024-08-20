@@ -6,7 +6,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
   const PropertyManagementCreatePropertyDialog({
     super.key,
     this.onCloseTap,
-    required this.isPlaceType,
+    required this.isCategory,
     required this.titleTextController,
     required this.iconTextController,
     this.iconPath,
@@ -21,7 +21,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
   final VoidCallback? onCloseTap;
   final VoidCallback? onSaveTap;
   final VoidCallback? onCancelTap;
-  final bool isPlaceType;
+  final bool isCategory;
   final TextEditingController titleTextController;
   final TextEditingController iconTextController;
   final String? iconPath;
@@ -43,7 +43,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  isPlaceType
+                  isCategory
                       ? S.current.AddPlaceType
                       : S.current.AddProperty,
                   style: theme?.boldTextTheme.title1,
@@ -94,7 +94,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
                   data: BaseUiKitButtonData(
                     text: S.current.Save,
                     onPressed: onSaveTap,
-                    backgroundColor: theme?.colorScheme.darkNeutral200,
+                    backgroundColor: ColorsFoundation.info,
                   ),
                 ),
               ),
@@ -105,7 +105,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
                   data: BaseUiKitButtonData(
                     text: S.current.Cancel,
                     onPressed: onCancelTap,
-                    backgroundColor: theme?.colorScheme.darkNeutral200,
+                    backgroundColor: ColorsFoundation.danger,
                   ),
                 ),
               ),
