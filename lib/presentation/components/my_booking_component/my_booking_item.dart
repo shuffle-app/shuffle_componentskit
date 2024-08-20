@@ -87,7 +87,7 @@ class MyBookingItem extends StatelessWidget {
           ],
         ),
         SpacingFoundation.verticalSpace2,
-        if (myBookingUiModel?.product != null) ...[
+        if (myBookingUiModel?.product != null && myBookingUiModel!.product! > 0) ...[
           Row(
             children: [
               Expanded(
