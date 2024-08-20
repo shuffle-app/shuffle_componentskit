@@ -27,6 +27,8 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<int?>? onNichePressed;
   final bool hasFavourites;
   final bool canShowVideoReactions;
+  final ValueNotifier<double>? subscribedUpdatesNotifier;
+  final List<UiProfileModel>? subscribedProfiles;
 
   const FeedComponent({
     super.key,
@@ -51,6 +53,8 @@ class FeedComponent extends StatelessWidget {
     this.onListItemPressed,
     this.onAdvertisementPressed,
     this.onLoadMoreChips,
+    this.subscribedUpdatesNotifier,
+    this.subscribedProfiles,
   });
 
   @override
@@ -85,6 +89,23 @@ class FeedComponent extends StatelessWidget {
         SizedBox(
           height: MediaQuery.viewPaddingOf(context).top,
         ).wrapSliverBox,
+        if (subscribedUpdatesNotifier != null)
+          UiKitAnimatedPullToShowRow(
+            progressNotifier: subscribedUpdatesNotifier!,
+            noChildrenText: S.current.DontLiveAlone,
+            children: subscribedProfiles
+                    ?.map(
+                      (profile) => context.userAvatar(
+                        size: UserAvatarSize.x40x40,
+                        type: profile.userTileType,
+                        userName: profile.nickname ?? '',
+                        imageUrl: profile.avatarUrl,
+                        badgeValue: profile.updatesCount,
+                      ),
+                    )
+                    .toList() ??
+                [],
+          ).wrapSliverBox,
         if (showBusinessContent) ...[
           if (feed.recommendedBusinessEvents != null && feed.recommendedBusinessEvents!.isNotEmpty) ...[
             Text(
@@ -197,7 +218,7 @@ class FeedComponent extends StatelessWidget {
                 .wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
             SizedBox(
-              height: 0.285.sw*1.7,
+              height: 0.285.sw * 1.7,
               width: 1.sw,
               child: PagedListView<int, VideoReactionUiModel>.separated(
                 scrollDirection: Axis.horizontal,
@@ -207,7 +228,7 @@ class FeedComponent extends StatelessWidget {
                     child: UiKitShimmerProgressIndicator(
                       gradient: GradientFoundation.greyGradient,
                       child: UiKitReactionPreview(
-                        customHeight: 0.285.sw*1.7,
+                        customHeight: 0.285.sw * 1.7,
                         customWidth: 0.285.sw,
                         imagePath: GraphicsFoundation.instance.png.place.path,
                       ).paddingOnly(left: horizontalMargin),
@@ -218,7 +239,7 @@ class FeedComponent extends StatelessWidget {
                     child: UiKitShimmerProgressIndicator(
                       gradient: GradientFoundation.greyGradient,
                       child: UiKitReactionPreview(
-                        customHeight: 0.285.sw*1.7,
+                        customHeight: 0.285.sw * 1.7,
                         customWidth: 0.285.sw,
                         imagePath: GraphicsFoundation.instance.png.place.path,
                       ),
@@ -229,7 +250,7 @@ class FeedComponent extends StatelessWidget {
                     if (index == 0) leftPadding = horizontalMargin;
 
                     return UiKitReactionPreview(
-                      customHeight: 0.285.sw*1.7,
+                      customHeight: 0.285.sw * 1.7,
                       customWidth: 0.285.sw,
                       imagePath: item.previewImageUrl ?? '',
                       viewed: item.isViewed,
