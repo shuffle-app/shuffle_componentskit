@@ -13,15 +13,14 @@ class UiModelCategory extends UiKitTag {
 
   List<UiModelProperty> get baseProperties => categoryProperties.where((e) => !e.unique).toList();
 
-  UiModelCategory({
-    required super.title,
-    required this.id,
-    required this.categoryProperties,
-    required super.icon,
-    super.iconColor,
-    super.textColor,
-    super.unique,
-  });
+  UiModelCategory(
+      {required super.title,
+      required this.id,
+      required this.categoryProperties,
+      required super.icon,
+      super.iconColor,
+      super.textColor,
+      super.unique});
 
   @override
   UiModelCategory copyWith({
@@ -42,4 +41,12 @@ class UiModelCategory extends UiKitTag {
         textColor: textColor ?? this.textColor,
         unique: unique ?? this.unique,
       );
+
+  @override
+  bool operator ==(Object other) {
+    return other is UiModelCategory && id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

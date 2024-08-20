@@ -5,15 +5,14 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class UiModelProperty extends UiKitTag {
   final List<UiModelRelatedProperty>? relatedProperties;
 
-  UiModelProperty({
-    required super.title,
-    required super.id,
-    required super.icon,
-    super.unique,
-    this.relatedProperties,
-    super.iconColor,
-    super.textColor,
-  });
+  UiModelProperty(
+      {required super.title,
+      required super.id,
+      required super.icon,
+      super.unique,
+      this.relatedProperties,
+      super.iconColor,
+      super.textColor});
 
   @override
   UiModelProperty copyWith({
@@ -35,4 +34,12 @@ class UiModelProperty extends UiKitTag {
         iconColor: iconColor ?? this.iconColor,
         textColor: textColor ?? this.textColor,
       );
+
+  @override
+  bool operator ==(Object other) {
+    return other is UiModelProperty && id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

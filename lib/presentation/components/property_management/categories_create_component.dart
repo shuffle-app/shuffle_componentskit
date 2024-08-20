@@ -41,7 +41,7 @@ class CategoriesCreateComponent extends StatefulWidget {
   final ValueChanged<UiModelProperty>? onUniquePropertyDeleteTap;
   final ValueChanged<String>? onPropertyFieldSubmitted;
   final ValueChanged<String>? onUniquePropertyFieldSubmitted;
-  final ValueChanged<String>? onRelatedPropertyFieldSubmitted;
+  final ValueChanged<(String, UiModelProperty?)>? onRelatedPropertyFieldSubmitted;
   final Future<List<String>> Function(String) propertySearchOptions;
   final Future<List<String>> Function(String) uniquePropertySearchOptions;
   final Future<List<String>> Function(String) relatedPropertySearchOptions;
@@ -58,9 +58,23 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
   @override
   void didUpdateWidget(covariant CategoriesCreateComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedCategory != oldWidget.selectedCategory) {
+    if (widget.selectedCategory != oldWidget.selectedCategory ||
+        widget.selectedCategory?.uniqueProperties.length != oldWidget.selectedCategory?.uniqueProperties.length ||
+        widget.selectedCategory?.baseProperties.length != oldWidget.selectedCategory?.baseProperties.length) {}
+    setState(() {
+      selectedProperty = null;
+    });
+    if (selectedProperty != null &&
+        selectedProperty?.relatedProperties?.length !=
+            (selectedProperty!.unique
+                    ? widget.selectedCategory?.uniqueProperties.firstWhere((e) => e.id == selectedProperty?.id)
+                    : widget.selectedCategory?.baseProperties.firstWhere((e) => e.id == selectedProperty?.id))
+                ?.relatedProperties
+                ?.length) {
       setState(() {
-        selectedProperty = null;
+        selectedProperty = (selectedProperty!.unique
+            ? widget.selectedCategory?.uniqueProperties.firstWhere((e) => e.id == selectedProperty?.id)
+            : widget.selectedCategory?.baseProperties.firstWhere((e) => e.id == selectedProperty?.id));
       });
     }
   }
@@ -217,9 +231,14 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                                   return UiKitCloudChip(
                                     iconPath: e.icon,
                                     title: e.title,
+                                    selected: e == selectedProperty,
                                     onTap: () {
                                       setState(() {
-                                        selectedProperty = e;
+                                        if (selectedProperty == e) {
+                                          selectedProperty = null;
+                                        } else {
+                                          selectedProperty = e;
+                                        }
                                       });
                                     },
                                   );
@@ -278,11 +297,14 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                                       return UiKitCloudChip(
                                         title: e.title,
                                         onTap: () {
-                                          setState(() {
+                                          if (selectedProperty == e) {
+                                            selectedProperty = null;
+                                          } else {
                                             selectedProperty = e;
-                                          });
+                                          }
                                         },
                                         iconPath: e.icon,
+                                        selected: e == selectedProperty,
                                       );
                                     },
                                   ).toList())
@@ -316,7 +338,8 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                     PropertiesSearchInput(
                       options: widget.relatedPropertySearchOptions,
                       showAllOptions: true,
-                      onFieldSubmitted: widget.onRelatedPropertyFieldSubmitted,
+                      onFieldSubmitted: (title) =>
+                          widget.onRelatedPropertyFieldSubmitted?.call((title, selectedProperty)),
                     ),
                     SpacingFoundation.verticalSpace16,
                     UiKitPropertiesCloud(

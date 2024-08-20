@@ -6,21 +6,21 @@ import 'package:image_picker/image_picker.dart';
 
 import 'booking_ui_model/subs_or_upsale_ui_model.dart';
 
-class CereatSubsComponent extends StatefulWidget {
+class CreateSubsComponent extends StatefulWidget {
   final SubsUiModel? subsUiModel;
   final Function(SubsUiModel subsUiModel) onSave;
 
-  const CereatSubsComponent({
+  const CreateSubsComponent({
     super.key,
     this.subsUiModel,
     required this.onSave,
   });
 
   @override
-  State<CereatSubsComponent> createState() => _CereatSubsComponentState();
+  State<CreateSubsComponent> createState() => _CreateSubsComponentState();
 }
 
-class _CereatSubsComponentState extends State<CereatSubsComponent> {
+class _CreateSubsComponentState extends State<CreateSubsComponent> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
@@ -40,7 +40,7 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
   }
 
   @override
-  void didUpdateWidget(covariant CereatSubsComponent oldWidget) {
+  void didUpdateWidget(covariant CreateSubsComponent oldWidget) {
     if (oldWidget.subsUiModel != oldWidget.subsUiModel) {
       _subsUiModel = widget.subsUiModel ?? SubsUiModel(id: -1);
       _titleController.text = widget.subsUiModel?.title ?? '';

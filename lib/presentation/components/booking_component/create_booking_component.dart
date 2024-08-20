@@ -4,7 +4,7 @@ import 'package:shuffle_components_kit/presentation/common/price_selector_compon
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/booking_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
-import 'package:shuffle_components_kit/presentation/components/booking_component/cereat_subs_component.dart';
+import 'package:shuffle_components_kit/presentation/components/booking_component/create_subs_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_upsales_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -204,7 +204,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                               data: BaseUiKitButtonData(
                                 onPressed: () {
                                   context.push(
-                                    CereatSubsComponent(
+                                    CreateSubsComponent(
                                       onSave: (subsUiModel) {
                                         setState(() {
                                           _subsUiMoldels.add(subsUiModel);
@@ -254,7 +254,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       },
                       onEdit: () {
                         context.push(
-                          CereatSubsComponent(
+                          CreateSubsComponent(
                             onSave: (subsUiModel) {
                               setState(() {
                                 _countSubsLimit();
