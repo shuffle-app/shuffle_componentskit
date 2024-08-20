@@ -53,7 +53,7 @@ class MyBookingItem extends StatelessWidget {
                     iconData: ShuffleUiKitIcons.alertcircle,
                     size: 14.h,
                   ),
-                  onPressed: () => onAlertCircleTap,
+                  onPressed: onAlertCircleTap,
                 ),
               )
             ] else ...[
