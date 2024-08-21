@@ -1,9 +1,9 @@
-class RequestRefunUiModel {
-  final int ticketRefun;
-  final int upsaleRefun;
+class RequestRefundUiModel {
+  final int ticketRefund;
+  final int upsaleRefund;
 
-  RequestRefunUiModel({
-    this.ticketRefun = 0,
-    this.upsaleRefun = 0,
+  RequestRefundUiModel({
+    this.ticketRefund = 0,
+    this.upsaleRefund = 0,
   });
 }
