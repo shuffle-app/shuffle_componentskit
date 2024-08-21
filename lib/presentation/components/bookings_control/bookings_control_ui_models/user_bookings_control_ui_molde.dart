@@ -1,53 +1,37 @@
-import 'package:shuffle_uikit/shuffle_uikit.dart';
-
-import 'request_refun_ui_model.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 
 class UserBookingsControlUiModel {
   final int id;
-  final String? name;
-  final String? nickName;
-  final String? avatarUrl;
-  final UserTileType? type;
+  final UiProfileModel? profile;
   final int tiketsCount;
   final int? productsCount;
-  final String? email;
-  final RequestRefunUiModel? requestRefunUiModel;
+  final RequestRefundUiModel? requestRefunUiModel;
   bool isSelected;
 
   UserBookingsControlUiModel({
     required this.id,
     required this.tiketsCount,
-    this.name,
-    this.nickName,
-    this.avatarUrl,
-    this.type,
+    this.profile,
     this.productsCount,
-    this.isSelected = false,
-    this.email,
     this.requestRefunUiModel,
+    this.isSelected = false,
   });
 
   UserBookingsControlUiModel copyWith({
     int? id,
-    String? name,
-    String? nickName,
-    String? avatarUrl,
-    UserTileType? type,
+    UiProfileModel? profile,
     int? tiketsCount,
     int? productsCount,
-    String? email,
-    RequestRefunUiModel? requestRefunUiModel,
+    RequestRefundUiModel? requestRefunUiModel,
+    bool? isSelected,
   }) {
     return UserBookingsControlUiModel(
       id: id ?? this.id,
-      name: name ?? this.name,
-      nickName: nickName ?? this.nickName,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      type: type ?? this.type,
+      profile: profile ?? this.profile,
       tiketsCount: tiketsCount ?? this.tiketsCount,
       productsCount: productsCount ?? this.productsCount,
-      email: email ?? this.email,
       requestRefunUiModel: requestRefunUiModel ?? this.requestRefunUiModel,
+      isSelected: isSelected ?? this.isSelected,
     );
   }
 }
