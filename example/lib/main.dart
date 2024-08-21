@@ -727,24 +727,131 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () {
                   context.push(
                     BookingsControlComponent(
-                      onContactTap: (value) => log('value $value'),
-                      onGoAheadTap: () => log('onGoAheadTap'),
-                      bookingUiModel: BookingUiModel(
-                        id: -1,
-                        bookingLimit: '10',
-                        bookingLimitPerOne: '5',
-                      ),
-                      onBookingEdit: (p0) {
-                        log('BookingUiModel ${p0.price}');
+                      onPlaceItemTap: (value) {
+                        context.push(
+                          BookingsControlListComponent(
+                            bookingsPlaceItemUiModel: value,
+                            bookingUiModel: BookingUiModel(
+                              id: -1,
+                              bookingLimit: '10',
+                              bookingLimitPerOne: '5',
+                            ),
+                            onBookingEdit: (model) {
+                              context.push(
+                                CreateBookingComponent(
+                                  onBookingCreated: (value) {},
+                                  bookingUiModel: model,
+                                ),
+                              );
+                            },
+                          ),
+                        );
                       },
-                      contactByEmail: (id) => log('id $id'),
-                      contactByMessage: (email) => log('id $email'),
-                      fullRefund: (value) => log('id $value'),
-                      partialRefund: (id) {
-                        log('id $id');
-                      },
-                      refundEveryone: (list) {
-                        log('list $list');
+                      onEventItemTap: (value) {
+                        context.push(
+                          BookingsControlListComponent(
+                            onRequestsRefund: (value) {
+                              getRefundBookingDialogUiKit(
+                                context: context,
+                                userName: value.name,
+                                allTicket: value.tiketsCount,
+                                allUpsale: value.productsCount ?? 0,
+                                ticketRefun: value.requestRefunUiModel?.ticketRefun ?? 0,
+                                upsaleRefun: value.requestRefunUiModel?.upsaleRefun ?? 0,
+                                onContactTap: () {},
+                                onGoAheadTap: () {},
+                              );
+                            },
+                            onPopupMenuSelected: (index, userId) {
+                              if (index == 0) {
+                                log('fullRefund $userId');
+                              } else if (index == 1) {
+                                log('partialRefund $userId');
+                              } else {
+                                showUiKitAlertDialog(
+                                  context,
+                                  AlertDialogData(
+                                    defaultButtonText: '',
+                                    insetPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
+                                    title: Text(
+                                      '${S.of(context).ContactWith} userName',
+                                      style: theme?.boldTextTheme.title2.copyWith(
+                                        color: theme.colorScheme.inverseHeadingTypography,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    actions: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              S.of(context).ByMessage,
+                                              style: theme?.boldTextTheme.body.copyWith(
+                                                color: theme.colorScheme.inverseBodyTypography,
+                                              ),
+                                            ),
+                                          ),
+                                          context.smallOutlinedButton(
+                                            data: BaseUiKitButtonData(
+                                              borderColor: theme?.colorScheme.primary,
+                                              backgroundColor: Colors.transparent,
+                                              iconInfo: BaseUiKitButtonIconData(
+                                                iconData: ShuffleUiKitIcons.chevronright,
+                                                color: theme?.colorScheme.primary,
+                                              ),
+                                              onPressed: () {},
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SpacingFoundation.verticalSpace16,
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              S.of(context).ByEmail,
+                                              style: theme?.boldTextTheme.body.copyWith(
+                                                color: theme.colorScheme.inverseBodyTypography,
+                                              ),
+                                            ),
+                                          ),
+                                          context.smallOutlinedButton(
+                                            data: BaseUiKitButtonData(
+                                              borderColor: theme?.colorScheme.primary,
+                                              backgroundColor: Colors.transparent,
+                                              iconInfo: BaseUiKitButtonIconData(
+                                                iconData: ShuffleUiKitIcons.chevronright,
+                                                color: theme?.colorScheme.primary,
+                                              ),
+                                              onPressed: () {},
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                            refundEveryone: (list) {
+                              log('list $list');
+                            },
+                            bookingsPlaceItemUiModel: value,
+                            bookingUiModel: BookingUiModel(
+                              id: -1,
+                              bookingLimit: '10',
+                              bookingLimitPerOne: '5',
+                            ),
+                            onBookingEdit: (model) {
+                              context.push(
+                                CreateBookingComponent(
+                                  onBookingCreated: (value) {},
+                                  bookingUiModel: model,
+                                ),
+                              );
+                            },
+                          ),
+                        );
                       },
                       places: List.generate(
                         12,
