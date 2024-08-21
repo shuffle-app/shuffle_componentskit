@@ -4,8 +4,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../components.dart';
 
-class CategoriesCreateComponent extends StatefulWidget {
-  const CategoriesCreateComponent({
+class CategoriesManageComponent extends StatefulWidget {
+  const CategoriesManageComponent({
     super.key,
     required this.onAddCategory,
     required this.onCategorySelect,
@@ -14,8 +14,8 @@ class CategoriesCreateComponent extends StatefulWidget {
     this.isEntertainmentSelected = false,
     required this.propertySearchOptions,
     this.onPropertyFieldSubmitted,
-    this.onUniquePropertyEdit,
-    this.onUniquePropertyDeleteTap,
+    this.onPropertyEdit,
+    this.onPropertyDeleteTap,
     this.onUniquePropertyFieldSubmitted,
     required this.uniquePropertySearchOptions,
     this.onRelatedPropertyFieldSubmitted,
@@ -36,27 +36,27 @@ class CategoriesCreateComponent extends StatefulWidget {
   final VoidCallback? onLoadMoreCategories;
   final ValueChanged<int> onCategorySelect;
   final VoidCallback? onEditSelectedCategory;
-  final ValueChanged<UiModelProperty>? onUniquePropertyEdit;
+  final ValueChanged<UiModelProperty>? onPropertyEdit;
   final VoidCallback? onDeleteSelectedCategory;
-  final ValueChanged<UiModelProperty>? onUniquePropertyDeleteTap;
+  final ValueChanged<UiModelProperty>? onPropertyDeleteTap;
   final ValueChanged<String>? onPropertyFieldSubmitted;
   final ValueChanged<String>? onUniquePropertyFieldSubmitted;
   final ValueChanged<(String, UiModelProperty?)>? onRelatedPropertyFieldSubmitted;
   final Future<List<String>> Function(String) propertySearchOptions;
   final Future<List<String>> Function(String) uniquePropertySearchOptions;
   final Future<List<String>> Function(String) relatedPropertySearchOptions;
-  final ValueChanged<UiModelRelatedProperty>? onSelectedRelatedPropertyTapped;
+  final ValueChanged<(UiModelProperty,UiModelRelatedProperty)>? onSelectedRelatedPropertyTapped;
   final bool isEntertainmentSelected;
 
   @override
-  State<CategoriesCreateComponent> createState() => _CategoriesCreateComponentState();
+  State<CategoriesManageComponent> createState() => _CategoriesManageComponentState();
 }
 
-class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
+class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
   UiModelProperty? selectedProperty;
 
   @override
-  void didUpdateWidget(covariant CategoriesCreateComponent oldWidget) {
+  void didUpdateWidget(covariant CategoriesManageComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedCategory != oldWidget.selectedCategory ||
         widget.selectedCategory?.uniqueProperties.length != oldWidget.selectedCategory?.uniqueProperties.length ||
@@ -226,28 +226,56 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                     ),
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
-                      child: Wrap(
-                              spacing: SpacingFoundation.horizontalSpacing12,
-                              runSpacing: SpacingFoundation.verticalSpacing12,
-                              children: (widget.selectedCategory?.categoryProperties.where((e) => !e.unique) ?? []).map(
-                                (e) {
-                                  return UiKitCloudChip(
-                                    iconPath: e.icon,
-                                    title: e.title,
-                                    selected: e == selectedProperty,
-                                    onTap: () {
-                                      setState(() {
-                                        if (selectedProperty == e) {
-                                          selectedProperty = null;
-                                        } else {
-                                          selectedProperty = e;
-                                        }
-                                      });
-                                    },
-                                  );
-                                },
-                              ).toList())
-                          .paddingAll(EdgeInsetsFoundation.all24),
+                      child: Column(children: [
+                        if (selectedProperty != null && !selectedProperty!.unique)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              context.boxIconButton(
+                                data: BaseUiKitButtonData(
+                                  onPressed: () => widget.onPropertyEdit?.call(selectedProperty!),
+                                  backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                                  iconInfo: BaseUiKitButtonIconData(
+                                      iconData: ShuffleUiKitIcons.pencil,
+                                      size: kIsWeb ? 16 : 16.sp,
+                                      color: ColorsFoundation.primary200),
+                                ),
+                              ),
+                              SpacingFoundation.horizontalSpace4,
+                              context.boxIconButton(
+                                data: BaseUiKitButtonData(
+                                  onPressed: () => widget.onPropertyDeleteTap?.call(selectedProperty!),
+                                  backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
+                                  iconInfo: BaseUiKitButtonIconData(
+                                      iconData: ShuffleUiKitIcons.trash,
+                                      size: kIsWeb ? 16 : 16.sp,
+                                      color: ColorsFoundation.danger),
+                                ),
+                              ),
+                            ],
+                          ).paddingAll(EdgeInsetsFoundation.all4),
+                        Wrap(
+                            spacing: SpacingFoundation.horizontalSpacing12,
+                            runSpacing: SpacingFoundation.verticalSpacing12,
+                            children: (widget.selectedCategory?.categoryProperties.where((e) => !e.unique) ?? []).map(
+                              (e) {
+                                return UiKitCloudChip(
+                                  iconPath: e.icon,
+                                  title: e.title,
+                                  selected: e == selectedProperty,
+                                  onTap: () {
+                                    setState(() {
+                                      if (selectedProperty == e) {
+                                        selectedProperty = null;
+                                      } else {
+                                        selectedProperty = e;
+                                      }
+                                    });
+                                  },
+                                );
+                              },
+                            ).toList())
+                      ]).paddingAll(EdgeInsetsFoundation.all24),
                     ),
                     SpacingFoundation.verticalSpace24,
                     Text(
@@ -270,7 +298,7 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                               children: [
                                 context.boxIconButton(
                                   data: BaseUiKitButtonData(
-                                    onPressed: () => widget.onUniquePropertyEdit?.call(selectedProperty!),
+                                    onPressed: () => widget.onPropertyEdit?.call(selectedProperty!),
                                     backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                                     iconInfo: BaseUiKitButtonIconData(
                                         iconData: ShuffleUiKitIcons.pencil,
@@ -281,7 +309,7 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                                 SpacingFoundation.horizontalSpace4,
                                 context.boxIconButton(
                                   data: BaseUiKitButtonData(
-                                    onPressed: () => widget.onUniquePropertyDeleteTap?.call(selectedProperty!),
+                                    onPressed: () => widget.onPropertyDeleteTap?.call(selectedProperty!),
                                     backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
                                     iconInfo: BaseUiKitButtonIconData(
                                         iconData: ShuffleUiKitIcons.trash,
@@ -354,6 +382,7 @@ class _CategoriesCreateComponentState extends State<CategoriesCreateComponent> {
                           (e) {
                             return UiKitCloudChipWithDesc(
                               title: e.title,
+                              onTap: ()=>widget.onSelectedRelatedPropertyTapped?.call((selectedProperty!,e)),
                               description: e.linkedMindsets.join(', '),
                             ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical6);
                           },

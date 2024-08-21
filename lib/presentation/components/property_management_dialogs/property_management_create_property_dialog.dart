@@ -32,6 +32,7 @@ class PropertyManagementCreatePropertyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("dialog build here with iconPath $iconPath");
     final theme = context.uiKitTheme;
     return UiKitCardWrapper(
       borderRadius: BorderRadiusFoundation.all32,

@@ -65,22 +65,22 @@ class PointsComponent extends StatelessWidget {
   }
 
   String getLevelTitle() {
-    if (uiUserPointsProgressBarModel.level < 3) {
+    if (uiUserPointsProgressBarModel.level < 1) {
       switch (uiUserPointsProgressBarModel.isMenGender) {
         case true:
           return S.current.TravelerMen;
         default:
           return S.current.TravelerWom;
       }
-    } else if (3 <= uiUserPointsProgressBarModel.level &&
-        uiUserPointsProgressBarModel.level < 6) {
+    } else if (1 <= uiUserPointsProgressBarModel.level &&
+        uiUserPointsProgressBarModel.level < 2) {
       switch (uiUserPointsProgressBarModel.isMenGender) {
         case true:
           return S.current.SeekingWandererMen;
         default:
           return S.current.SeekingWandererWom;
       }
-    } else if (6 <= uiUserPointsProgressBarModel.level) {
+    } else if (2 <= uiUserPointsProgressBarModel.level) {
       switch (uiUserPointsProgressBarModel.isMenGender) {
         case true:
           return S.current.WiseacreOfSands;
