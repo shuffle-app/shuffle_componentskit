@@ -6,12 +6,15 @@ class BookingsPlaceOrEventUiModel {
   final String? description;
   final String? imageUrl;
   final List<UserBookingsControlUiModel>? users;
+  final List<BookingsPlaceOrEventUiModel>? events;
+
   BookingsPlaceOrEventUiModel({
     required this.id,
     this.title,
     this.description,
     this.imageUrl,
     this.users,
+    this.events,
   });
 
   BookingsPlaceOrEventUiModel copyWith({
