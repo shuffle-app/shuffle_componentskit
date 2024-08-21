@@ -5,24 +5,30 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'bookings_control_event_item.dart';
 
 class BookingsControlComponent extends StatelessWidget {
-  final List<BookingsEventUiModel>? events;
-  final List<BookingsPlaceOrEventUiModel>? places;
+  final List<BookingsPlaceOrEventUiModel>? placesOrEvents;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onPlaceItemTap;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onEventItemTap;
 
   BookingsControlComponent({
     super.key,
-    this.places,
-    this.events,
+    this.placesOrEvents,
     this.onPlaceItemTap,
     this.onEventItemTap,
   });
 
   final ValueNotifier<bool> tabChange = ValueNotifier(true);
+  final places = [];
+  final events = [];
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+
+    placesOrEvents?.forEach(
+      (element) {
+        element.events != null ? events.add(element) : places.add(element);
+      },
+    );
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -55,13 +61,13 @@ class BookingsControlComponent extends StatelessWidget {
             builder: (context, value, child) {
               return tabChange.value == true
                   ? ListView.separated(
-                      itemCount: places!.length,
+                      itemCount: places.length,
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       controller: ScrollController(),
                       separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
                       itemBuilder: (context, index) {
-                        final element = places![index];
+                        final element = places[index];
 
                         return BookingsControlPlaceItemUiKit(
                           title: element.title,
@@ -72,7 +78,7 @@ class BookingsControlComponent extends StatelessWidget {
                       },
                     )
                   : ListView.separated(
-                      itemCount: events!.length,
+                      itemCount: events.length,
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       controller: ScrollController(),
@@ -81,7 +87,7 @@ class BookingsControlComponent extends StatelessWidget {
                         thickness: 2.0,
                       ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
                       itemBuilder: (context, index) {
-                        final element = events![index];
+                        final element = events[index];
 
                         return BookingsControlEventUiKit(
                           title: element.title,
