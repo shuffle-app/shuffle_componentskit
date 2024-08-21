@@ -9,24 +9,18 @@ class UsersBookingsControl extends StatelessWidget {
   final UserBookingsControlUiModel element;
   final VoidCallback? onLongPress;
   final VoidCallback? onCheckBoxTap;
-  final ValueChanged<int>? contactByMessage;
-  final ValueChanged<int>? fullRefund;
-  final ValueChanged<int>? partialRefund;
-  final ValueChanged<String?>? contactByEmail;
   final VoidCallback? onRequestsRefund;
+  final Function(int index, int userId)? onPopupMenuSelected;
 
   const UsersBookingsControl({
     super.key,
     required this.element,
     this.isFirst = false,
     this.checkBox = false,
-    this.fullRefund,
     this.onLongPress,
-    this.partialRefund,
     this.onCheckBoxTap,
-    this.contactByEmail,
-    this.contactByMessage,
     this.onRequestsRefund,
+    this.onPopupMenuSelected,
   });
 
   @override
@@ -162,81 +156,7 @@ class UsersBookingsControl extends StatelessWidget {
                       ),
                     ),
                   ],
-                  onSelected: (value) {
-                    if (value == 0) {
-                      fullRefund?.call(element.id);
-                    } else if (value == 1) {
-                      partialRefund?.call(element.id);
-                    } else {
-                      showUiKitAlertDialog(
-                        context,
-                        AlertDialogData(
-                          defaultButtonText: '',
-                          insetPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
-                          title: Text(
-                            '${S.of(context).ContactWith} ${element.name}',
-                            style: theme?.boldTextTheme.title2.copyWith(
-                              color: theme.colorScheme.inverseHeadingTypography,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          actions: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    S.of(context).ByMessage,
-                                    style: theme?.boldTextTheme.body.copyWith(
-                                      color: theme.colorScheme.inverseBodyTypography,
-                                    ),
-                                  ),
-                                ),
-                                context.smallOutlinedButton(
-                                  data: BaseUiKitButtonData(
-                                    borderColor: theme?.colorScheme.primary,
-                                    backgroundColor: Colors.transparent,
-                                    iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.chevronright,
-                                      color: theme?.colorScheme.primary,
-                                    ),
-                                    onPressed: () {
-                                      contactByMessage?.call(element.id);
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                            SpacingFoundation.verticalSpace16,
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    S.of(context).ByEmail,
-                                    style: theme?.boldTextTheme.body.copyWith(
-                                      color: theme.colorScheme.inverseBodyTypography,
-                                    ),
-                                  ),
-                                ),
-                                context.smallOutlinedButton(
-                                  data: BaseUiKitButtonData(
-                                    borderColor: theme?.colorScheme.primary,
-                                    backgroundColor: Colors.transparent,
-                                    iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.chevronright,
-                                      color: theme?.colorScheme.primary,
-                                    ),
-                                    onPressed: () {
-                                      contactByEmail?.call(element.email);
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
+                  onSelected: (value) => onPopupMenuSelected?.call(value, element.id),
                 )
               ]
             ],

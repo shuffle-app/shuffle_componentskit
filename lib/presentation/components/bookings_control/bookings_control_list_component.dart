@@ -8,27 +8,19 @@ import 'users_bookings_control.dart';
 class BookingsControlListComponent extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
   final BookingUiModel? bookingUiModel;
-  final ValueChanged<int>? fullRefund;
-  final ValueChanged<int>? partialRefund;
-  final ValueChanged<int>? contactByMessage;
-  final ValueChanged<String?>? contactByEmail;
+  final ValueChanged<BookingUiModel?>? onBookingEdit;
+  final Function(int index, int userId)? onPopupMenuSelected;
+  final ValueChanged<UserBookingsControlUiModel>? onRequestsRefund;
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
-  final ValueChanged<BookingUiModel>? onBookingEdit;
-  final VoidCallback? onGoAheadTap;
-  final ValueChanged<int>? onContactTap;
 
   const BookingsControlListComponent({
     super.key,
     this.bookingsPlaceItemUiModel,
-    this.fullRefund,
-    this.partialRefund,
     this.refundEveryone,
-    this.contactByEmail,
-    this.contactByMessage,
     this.bookingUiModel,
     this.onBookingEdit,
-    this.onContactTap,
-    this.onGoAheadTap,
+    this.onPopupMenuSelected,
+    this.onRequestsRefund,
   });
 
   @override
@@ -121,14 +113,7 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
               if (widget.bookingsPlaceItemUiModel?.users == null ||
                   widget.bookingsPlaceItemUiModel!.users!.isEmpty) ...[
                 GestureDetector(
-                  onTap: () {
-                    context.push(
-                      CreateBookingComponent(
-                        onBookingCreated: (value) => widget.onBookingEdit?.call(value),
-                        bookingUiModel: widget.bookingUiModel,
-                      ),
-                    );
-                  },
+                  onTap: () => widget.onBookingEdit?.call(widget.bookingUiModel),
                   child: ImageWidget(
                     link: GraphicsFoundation.instance.svg.pencil.path,
                     color: theme?.colorScheme.inversePrimary,
@@ -158,20 +143,8 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
                           onCheckBoxTap: () => setState(() {
                             e.isSelected = !e.isSelected;
                           }),
-                          contactByEmail: widget.contactByEmail,
-                          contactByMessage: widget.contactByMessage,
-                          fullRefund: widget.fullRefund,
-                          partialRefund: widget.partialRefund,
-                          onRequestsRefund: () => getRefundBookingDialogUiKit(
-                            context: context,
-                            userName: e.name,
-                            allTicket: e.tiketsCount,
-                            allUpsale: e.productsCount ?? 0,
-                            ticketRefun: e.requestRefunUiModel?.ticketRefun ?? 0,
-                            upsaleRefun: e.requestRefunUiModel?.upsaleRefun ?? 0,
-                            onContactTap: () => widget.onContactTap?.call(e.id),
-                            onGoAheadTap: () => widget.onGoAheadTap?.call(),
-                          ),
+                          onPopupMenuSelected: widget.onPopupMenuSelected,
+                          onRequestsRefund: () => widget.onRequestsRefund?.call(e),
                         ),
                       )
                       .toList(),
