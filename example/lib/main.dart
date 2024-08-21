@@ -753,11 +753,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                             onRequestsRefund: (value) {
                               getRefundBookingDialogUiKit(
                                 context: context,
-                                userName: value.name,
+                                userName: value.profile?.name ?? '',
                                 allTicket: value.tiketsCount,
                                 allUpsale: value.productsCount ?? 0,
-                                ticketRefun: value.requestRefunUiModel?.ticketRefun ?? 0,
-                                upsaleRefun: value.requestRefunUiModel?.upsaleRefun ?? 0,
                                 onContactTap: () {},
                                 onGoAheadTap: () {},
                               );
@@ -853,52 +851,46 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           ),
                         );
                       },
-                      places: List.generate(
+                      placesOrEvents: List.generate(
                         12,
                         (index) => BookingsPlaceOrEventUiModel(
                           id: index,
-                          description: 'test $index',
-                          title: 'testeMain',
-                          imageUrl: GraphicsFoundation.instance.png.avatars.avatar.path,
-                        ),
-                      ),
-                      events: List.generate(
-                        12,
-                        (index) => BookingsEventUiModel(
-                          id: index,
                           title: 'testeMain',
                           description: 'test $index',
-                          events: List.generate(
-                            2,
-                            (index) => BookingsPlaceOrEventUiModel(
-                              id: index,
-                              description: 'test $index',
-                              title: 'testeMain',
-                              imageUrl: GraphicsFoundation.instance.png.avatars.avatar3.path,
-                              users: List.generate(
-                                13,
-                                (index) {
-                                  return UserBookingsControlUiModel(
+                          events: index.isEven
+                              ? List.generate(
+                                  math.Random().nextInt(5) + 1,
+                                  (index) => BookingsPlaceOrEventUiModel(
                                     id: index,
-                                    tiketsCount: math.Random().nextInt(2) + 1,
-                                    avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
-                                    isSelected: false,
-                                    name: 'test $index',
-                                    nickName: '@nickName $index',
-                                    productsCount: math.Random().nextInt(2),
-                                    type: index.isEven ? UserTileType.influencer : UserTileType.pro,
-                                    email: 'test@emal.index$index',
-                                    requestRefunUiModel: index.isEven
-                                        ? RequestRefunUiModel(
-                                            ticketRefun: 3,
-                                            upsaleRefun: 3,
-                                          )
-                                        : null,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
+                                    description: 'test $index',
+                                    title: 'testeMain',
+                                    imageUrl: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                                    users: List.generate(
+                                      13,
+                                      (index) {
+                                        return UserBookingsControlUiModel(
+                                          id: index,
+                                          tiketsCount: math.Random().nextInt(2) + 1,
+                                          profile: UiProfileModel(
+                                            name: 'test $index',
+                                            nickname: '@nickName $index',
+                                            avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+                                            userTileType: index.isEven ? UserTileType.influencer : UserTileType.pro,
+                                            email: 'test@emal.index$index',
+                                          ),
+                                          productsCount: math.Random().nextInt(2),
+                                          requestRefunUiModel: index.isEven
+                                              ? RequestRefundUiModel(
+                                                  ticketRefund: 3,
+                                                  upsaleRefund: 3,
+                                                )
+                                              : null,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : null,
                         ),
                       ),
                     ),
