@@ -41,14 +41,13 @@ class UsersBookingsControl extends StatelessWidget {
                 ),
                 SpacingFoundation.horizontalSpace12,
               ],
-              if (element.productsCount! >= 1) ...[
+              if (element.productsCount! >= 1)
                 Text(
                   S.of(context).Products(element.productsCount!),
                   style: theme?.boldTextTheme.caption1Bold.copyWith(
                     color: ColorsFoundation.mutedText,
                   ),
                 ),
-              ]
             ],
           ),
           SpacingFoundation.verticalSpace2,
@@ -64,13 +63,13 @@ class UsersBookingsControl extends StatelessWidget {
                 children: [
                   context.userAvatar(
                     size: UserAvatarSize.x40x40,
-                    type: element.type ?? UserTileType.ordinary,
-                    userName: element.name ?? '',
-                    imageUrl: element.avatarUrl,
+                    type: element.profile?.userTileType ?? UserTileType.ordinary,
+                    userName: element.profile?.name ?? '',
+                    imageUrl: element.profile?.avatarUrl,
                   ),
                   if (element.requestRefunUiModel != null &&
-                      element.requestRefunUiModel!.ticketRefun > 0 &&
-                      element.requestRefunUiModel!.upsaleRefun > 0) ...[
+                      element.requestRefunUiModel!.ticketRefund > 0 &&
+                      element.requestRefunUiModel!.upsaleRefund > 0) ...[
                     Container(
                       width: 10,
                       height: 10,
@@ -91,10 +90,10 @@ class UsersBookingsControl extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          element.name ?? '',
+                          element.profile?.name ?? '',
                           style: theme?.boldTextTheme.caption1Medium,
                         ),
-                        if (element.type == UserTileType.influencer) ...[
+                        if (element.profile?.userTileType == UserTileType.influencer) ...[
                           SpacingFoundation.horizontalSpace8,
                           const GradientableWidget(
                             gradient: GradientFoundation.badgeIcon,
@@ -106,7 +105,7 @@ class UsersBookingsControl extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      element.nickName ?? '',
+                      element.profile?.nickname ?? '',
                       style: theme?.boldTextTheme.caption1Bold.copyWith(
                         color: ColorsFoundation.mutedText,
                       ),
@@ -114,51 +113,49 @@ class UsersBookingsControl extends StatelessWidget {
                   ],
                 ),
               ),
-              if (checkBox) ...[
-                UiKitCheckbox(
-                  isActive: element.isSelected,
-                  onChanged: onCheckBoxTap,
-                )
-              ] else ...[
-                PopupMenuButton(
-                  icon: const ImageWidget(iconData: ShuffleUiKitIcons.morevert),
-                  splashRadius: 1,
-                  menuPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusFoundation.all16,
-                  ),
-                  itemBuilder: (BuildContext context) => [
-                    PopupMenuItem(
-                      value: 0,
-                      child: Text(
-                        S.of(context).FullRefund,
-                        style: theme?.boldTextTheme.caption2Medium.copyWith(
-                          color: theme.colorScheme.inverseBodyTypography,
-                        ),
+              checkBox
+                  ? UiKitCheckbox(
+                      isActive: element.isSelected,
+                      onChanged: onCheckBoxTap,
+                    )
+                  : PopupMenuButton(
+                      icon: const ImageWidget(iconData: ShuffleUiKitIcons.morevert),
+                      splashRadius: 1,
+                      menuPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusFoundation.all16,
                       ),
-                    ),
-                    PopupMenuItem(
-                      value: 1,
-                      child: Text(
-                        S.of(context).PartialRefund,
-                        style: theme?.boldTextTheme.caption2Medium.copyWith(
-                          color: theme.colorScheme.inverseBodyTypography,
+                      itemBuilder: (BuildContext context) => [
+                        PopupMenuItem(
+                          value: 0,
+                          child: Text(
+                            S.of(context).FullRefund,
+                            style: theme?.boldTextTheme.caption2Medium.copyWith(
+                              color: theme.colorScheme.inverseBodyTypography,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 2,
-                      child: Text(
-                        S.of(context).Contact,
-                        style: theme?.boldTextTheme.caption2Medium.copyWith(
-                          color: theme.colorScheme.inverseBodyTypography,
+                        PopupMenuItem(
+                          value: 1,
+                          child: Text(
+                            S.of(context).PartialRefund,
+                            style: theme?.boldTextTheme.caption2Medium.copyWith(
+                              color: theme.colorScheme.inverseBodyTypography,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                  onSelected: (value) => onPopupMenuSelected?.call(value, element.id),
-                )
-              ]
+                        PopupMenuItem(
+                          value: 2,
+                          child: Text(
+                            S.of(context).Contact,
+                            style: theme?.boldTextTheme.caption2Medium.copyWith(
+                              color: theme.colorScheme.inverseBodyTypography,
+                            ),
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) => onPopupMenuSelected?.call(value, element.id),
+                    )
             ],
           ),
         ),
