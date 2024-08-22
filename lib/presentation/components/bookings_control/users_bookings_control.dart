@@ -29,21 +29,21 @@ class UsersBookingsControl extends StatelessWidget {
 
     return Column(
       children: [
-        if (element.productsCount != null && isFirst) ...[
+        if (element.ticketUiModel?.totalUpsalesCount != null && isFirst) ...[
           Row(
             children: [
-              if (element.tiketsCount >= 1) ...[
+              if (element.ticketUiModel!.ticketsCount >= 1) ...[
                 Text(
-                  S.of(context).Tickets(element.tiketsCount),
+                  S.of(context).Tickets(element.ticketUiModel!.ticketsCount),
                   style: theme?.boldTextTheme.caption1Bold.copyWith(
                     color: ColorsFoundation.mutedText,
                   ),
                 ),
                 SpacingFoundation.horizontalSpace12,
               ],
-              if (element.productsCount! >= 1)
+              if (element.ticketUiModel!.totalUpsalesCount >= 1)
                 Text(
-                  S.of(context).Products(element.productsCount!),
+                  S.of(context).Products(element.ticketUiModel!.totalUpsalesCount),
                   style: theme?.boldTextTheme.caption1Bold.copyWith(
                     color: ColorsFoundation.mutedText,
                   ),
@@ -54,7 +54,7 @@ class UsersBookingsControl extends StatelessWidget {
         ],
         GestureDetector(
           onLongPress: onLongPress,
-          onTap: element.requestRefunUiModel != null ? onRequestsRefund : null,
+          onTap: element.ticketUiModel != null ? onRequestsRefund : null,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -67,9 +67,7 @@ class UsersBookingsControl extends StatelessWidget {
                     userName: element.profile?.name ?? '',
                     imageUrl: element.profile?.avatarUrl,
                   ),
-                  if (element.requestRefunUiModel != null &&
-                      element.requestRefunUiModel!.ticketRefund > 0 &&
-                      element.requestRefunUiModel!.upsaleRefund > 0) ...[
+                  if (element.ticketUiModel != null) ...[
                     Container(
                       width: 10,
                       height: 10,

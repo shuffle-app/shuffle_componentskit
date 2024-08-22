@@ -43,12 +43,13 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
   void sortedUserList() {
     if (widget.bookingsPlaceItemUiModel?.users != null && widget.bookingsPlaceItemUiModel!.users!.isNotEmpty) {
       widget.bookingsPlaceItemUiModel!.users!.sort((a, b) {
-        if (a.tiketsCount != b.tiketsCount) {
-          return b.tiketsCount.compareTo(a.tiketsCount);
+        if (a.ticketUiModel != null &&
+            b.ticketUiModel != null &&
+            a.ticketUiModel!.ticketsCount != b.ticketUiModel!.ticketsCount) {
+          return b.ticketUiModel!.ticketsCount.compareTo(a.ticketUiModel!.ticketsCount);
         }
-
-        int productsA = a.productsCount ?? 0;
-        int productsB = b.productsCount ?? 0;
+        int productsA = a.ticketUiModel?.totalUpsalesCount ?? 0;
+        int productsB = b.ticketUiModel?.totalUpsalesCount ?? 0;
 
         return productsB.compareTo(productsA);
       });
@@ -61,8 +62,9 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
     if (userList != null && userList.isNotEmpty) {
       for (var i = 0; i < userList.length; i++) {
         if (i == 0 ||
-            (userList[i].tiketsCount == userList[i - 1].tiketsCount &&
-                (userList[i].productsCount ?? 0) == (userList[i - 1].productsCount ?? 0))) {
+            (userList[i].ticketUiModel?.ticketsCount == userList[i - 1].ticketUiModel?.ticketsCount &&
+                (userList[i].ticketUiModel?.totalUpsalesCount ?? 0) ==
+                    (userList[i - 1].ticketUiModel?.totalUpsalesCount ?? 0))) {
           currentGroup.add(userList[i]);
         } else {
           groupedUsers.add(currentGroup);

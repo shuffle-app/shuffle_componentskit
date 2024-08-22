@@ -1,9 +1,32 @@
-class RequestRefundUiModel {
-  final int ticketRefund;
-  final int upsaleRefund;
+import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
+import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 
-  RequestRefundUiModel({
-    this.ticketRefund = 0,
-    this.upsaleRefund = 0,
+class TicketUiModel {
+  final int ticketsCount;
+  final List<TicketItem<UpsaleUiModel>?>? upsales;
+  final List<TicketItem<SubsUiModel>?>? subs;
+
+  TicketUiModel({
+    this.ticketsCount = 0,
+    this.upsales,
+    this.subs,
+  });
+
+  int get totalUpsalesCount {
+    if (upsales == null) {
+      return 0;
+    }
+
+    return upsales!.fold(0, (sum, item) => sum + (item?.count ?? 0));
+  }
+}
+
+class TicketItem<T> {
+  final int? count;
+  final T? item;
+
+  TicketItem({
+    this.count,
+    this.item,
   });
 }

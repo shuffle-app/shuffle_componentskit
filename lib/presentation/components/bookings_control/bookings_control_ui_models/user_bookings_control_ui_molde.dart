@@ -3,34 +3,26 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 class UserBookingsControlUiModel {
   final int id;
   final UiProfileModel? profile;
-  final int tiketsCount;
-  final int? productsCount;
-  final RequestRefundUiModel? requestRefunUiModel;
+  final TicketUiModel? ticketUiModel;
   bool isSelected;
 
   UserBookingsControlUiModel({
     required this.id,
-    required this.tiketsCount,
     this.profile,
-    this.productsCount,
-    this.requestRefunUiModel,
+    this.ticketUiModel,
     this.isSelected = false,
   });
 
   UserBookingsControlUiModel copyWith({
     int? id,
     UiProfileModel? profile,
-    int? tiketsCount,
-    int? productsCount,
-    RequestRefundUiModel? requestRefunUiModel,
+    TicketUiModel? ticketUiModel,
     bool? isSelected,
   }) {
     return UserBookingsControlUiModel(
       id: id ?? this.id,
       profile: profile ?? this.profile,
-      tiketsCount: tiketsCount ?? this.tiketsCount,
-      productsCount: productsCount ?? this.productsCount,
-      requestRefunUiModel: requestRefunUiModel ?? this.requestRefunUiModel,
+      ticketUiModel: ticketUiModel ?? this.ticketUiModel,
       isSelected: isSelected ?? this.isSelected,
     );
   }
