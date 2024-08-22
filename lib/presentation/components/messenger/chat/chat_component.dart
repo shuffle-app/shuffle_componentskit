@@ -27,6 +27,8 @@ class ChatComponent extends StatelessWidget {
   final bool isMultipleChat;
   final ChatMessageUiModel? pinnedMessage;
   final VoidCallback? onPinnedMessageTap;
+  final void Function(int userId, UserTileType userType)? onProfileTapped;
+  final double keyboardPadding;
 
   const ChatComponent({
     super.key,
@@ -48,6 +50,8 @@ class ChatComponent extends StatelessWidget {
     this.onPinnedMessageTap,
     this.pinnedMessage,
     this.onReplyMessageTap,
+    this.onProfileTapped,
+    this.keyboardPadding = 0,
   });
 
   @override
@@ -57,12 +61,12 @@ class ChatComponent extends StatelessWidget {
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
-      customToolbarBaseHeight: 100,
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
       autoImplyLeading: true,
       canFoldAppBar: false,
       reverse: true,
       physics: const NeverScrollableScrollPhysics(),
+      keyboardPadding: keyboardPadding,
       topFixedAddition: pinnedMessage != null
           ? GestureDetector(
               onTap: onPinnedMessageTap,
@@ -180,7 +184,7 @@ class ChatComponent extends StatelessWidget {
                   ? SpacingFoundation.verticalSpacing16
                   : SpacingFoundation.verticalSpacing6
               : chatData.isGroupChat
-                  ? SpacingFoundation.verticalSpacing40
+                  ? SpacingFoundation.verticalSpacing40 + SpacingFoundation.verticalSpacing16
                   : SpacingFoundation.verticalSpacing32),
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
@@ -257,10 +261,10 @@ class ChatComponent extends StatelessWidget {
                         canDenyInvitation: false,
                         canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                         onAcceptTap: () {
-                          if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                          onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         onDenyTap: () {
-                          if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                          onDenyInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         tags: item.invitationData?.tags ?? [],
                         customMessageData: chatData.isGroupChat
@@ -323,6 +327,10 @@ class ChatComponent extends StatelessWidget {
                   children: [
                     if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                     UiKitChatInCard(
+                      onUsernameTapped: () => onProfileTapped?.call(
+                        item.senderId,
+                        item.senderProfileType ?? UserTileType.ordinary,
+                      ),
                       showAvatar: chatData.isGroupChat,
                       avatarUrl: item.senderAvatar,
                       senderName: item.senderName,
@@ -353,10 +361,10 @@ class ChatComponent extends StatelessWidget {
                                 : !chatData.hasAcceptedInvite,
                         canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                         onAcceptTap: () {
-                          if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                          onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         onDenyTap: () {
-                          if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                          onDenyInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         tags: item.invitationData?.tags ?? [],
                         customMessageData: chatData.isGroupChat
@@ -385,6 +393,10 @@ class ChatComponent extends StatelessWidget {
                   if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                   item.replyMessageModel == null
                       ? UiKitChatInCard(
+                          onUsernameTapped: () => onProfileTapped?.call(
+                            item.senderId,
+                            item.senderProfileType ?? UserTileType.ordinary,
+                          ),
                           hasInvitation: false,
                           showAvatar: chatData.isGroupChat,
                           avatarUrl: item.senderAvatar,
@@ -397,6 +409,10 @@ class ChatComponent extends StatelessWidget {
                           senderNickname: item.senderNickname ?? '',
                         )
                       : UiKitChatCardWithReplyIn(
+                          onUsernameTapped: () => onProfileTapped?.call(
+                            item.senderId,
+                            item.senderProfileType ?? UserTileType.ordinary,
+                          ),
                           showAvatar: chatData.isGroupChat,
                           id: item.messageId,
                           onReplyMessage: onReplyMessage,
