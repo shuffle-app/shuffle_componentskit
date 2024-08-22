@@ -644,6 +644,31 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show My Booking Component',
+                onPressed: () {
+                  context.push(
+                    MyBookingComponent(
+                      onAlertCircleTap: () {},
+                      myBookingUiModel: List.generate(
+                        10,
+                        (index) => MyBookingUiModel(
+                          id: index,
+                          currency: 'AED',
+                          name: 'TEst $index',
+                          product: 1,
+                          ticket: 1,
+                          total: 100,
+                          isPast: index.isEven ? true : false,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show spent points component',
                 onPressed: () => context.push(
                   SpentPointsComponent(
