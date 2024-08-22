@@ -39,12 +39,11 @@ class PointsComponent extends StatelessWidget {
   ) {
     Gradient getCustomGradient() {
       if (uiUserPointsProgressBarModel != null) {
-        if (uiUserPointsProgressBarModel.level < 3) {
+        if (uiUserPointsProgressBarModel.level < 1) {
           return GradientFoundation.bronzeGradient;
-        } else if (3 <= uiUserPointsProgressBarModel.level &&
-            uiUserPointsProgressBarModel.level < 6) {
+        } else if (1 <= uiUserPointsProgressBarModel.level && uiUserPointsProgressBarModel.level < 2) {
           return GradientFoundation.silverGradient;
-        } else if (6 <= uiUserPointsProgressBarModel.level) {
+        } else if (2 <= uiUserPointsProgressBarModel.level) {
           return GradientFoundation.goldGradient;
         } else {
           return GradientFoundation.bronzeGradient;
@@ -72,8 +71,7 @@ class PointsComponent extends StatelessWidget {
         default:
           return S.current.TravelerWom;
       }
-    } else if (1 <= uiUserPointsProgressBarModel.level &&
-        uiUserPointsProgressBarModel.level < 2) {
+    } else if (1 <= uiUserPointsProgressBarModel.level && uiUserPointsProgressBarModel.level < 2) {
       switch (uiUserPointsProgressBarModel.isMenGender) {
         case true:
           return S.current.SeekingWandererMen;
@@ -104,6 +102,11 @@ class PointsComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+
+    final linearProgress = _linearInfluencerIndicator(
+      uiUserPointsProgressBarModel,
+      ColorsFoundation.neutral16,
+    );
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -171,8 +174,7 @@ class PointsComponent extends StatelessWidget {
                   onPressed: onSpendCallBack,
                 ),
               )
-              .paddingSymmetric(
-                  horizontal: SpacingFoundation.horizontalSpacing16),
+              .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
             color: theme?.colorScheme.surface2,
@@ -189,8 +191,7 @@ class PointsComponent extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: getLevelTitle(),
-                              style: theme?.regularTextTheme.caption1
-                                  .copyWith(color: Colors.white),
+                              style: theme?.regularTextTheme.caption1.copyWith(color: Colors.white),
                             ),
                           ],
                         ),
@@ -202,6 +203,7 @@ class PointsComponent extends StatelessWidget {
                   children: [
                     RowGradientCircle(
                       level: uiUserPointsProgressBarModel.level,
+                        progressInCircle: (uiUserPointsProgressBarModel.actual / 33).toInt(),
                     ).paddingAll(EdgeInsetsFoundation.all8),
                     SpacingFoundation.horizontalSpace4,
                     Stack(
@@ -209,30 +211,20 @@ class PointsComponent extends StatelessWidget {
                       children: [
                         Stack(
                           children: [
-                            _linearInfluencerIndicator(
-                              uiUserPointsProgressBarModel,
-                              ColorsFoundation.neutral16,
-                            ),
+                            linearProgress,
                             Container(
-                              width: _linearInfluencerIndicator(
-                                uiUserPointsProgressBarModel,
-                                null,
-                              ).progressPosition,
+                              width: linearProgress.progressPosition,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadiusFoundation.all40,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: theme?.colorScheme.inversePrimary
-                                            .withOpacity(0.5) ??
+                                    color: theme?.colorScheme.inversePrimary.withOpacity(0.5) ??
                                         Colors.white.withOpacity(0.8),
                                     blurRadius: 8,
                                   ),
                                 ],
                               ),
-                              child: _linearInfluencerIndicator(
-                                uiUserPointsProgressBarModel,
-                                null,
-                              ),
+                              child: linearProgress,
                             ),
                           ],
                         ),
@@ -240,28 +232,18 @@ class PointsComponent extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text:
-                                    '${uiUserPointsProgressBarModel.actual.toInt()}/',
-                                style:
-                                    theme?.regularTextTheme.caption2.copyWith(
-                                  color: uiUserPointsProgressBarModel.actual >=
-                                          (uiUserPointsProgressBarModel.sum /
-                                              2.2)
-                                      ? ColorsFoundation
-                                          .lightBodyTypographyColor
+                                text: '${uiUserPointsProgressBarModel.actual.toInt()}/',
+                                style: theme?.regularTextTheme.caption2.copyWith(
+                                  color: uiUserPointsProgressBarModel.actual >= (uiUserPointsProgressBarModel.sum / 2.2)
+                                      ? ColorsFoundation.lightBodyTypographyColor
                                       : ColorsFoundation.mutedText,
                                 ),
                               ),
                               TextSpan(
-                                text:
-                                    '${uiUserPointsProgressBarModel.sum.toInt()}',
-                                style:
-                                    theme?.regularTextTheme.caption2.copyWith(
-                                  color: uiUserPointsProgressBarModel.actual >
-                                          (uiUserPointsProgressBarModel.sum /
-                                              1.5)
-                                      ? ColorsFoundation
-                                          .lightBodyTypographyColor
+                                text: '${uiUserPointsProgressBarModel.sum.toInt()}',
+                                style: theme?.regularTextTheme.caption2.copyWith(
+                                  color: uiUserPointsProgressBarModel.actual > (uiUserPointsProgressBarModel.sum / 1.5)
+                                      ? ColorsFoundation.lightBodyTypographyColor
                                       : ColorsFoundation.mutedText,
                                 ),
                               ),
@@ -278,8 +260,7 @@ class PointsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace24,
           listItemPoint != null
               ? ColoredBox(
-                  color:
-                      theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
+                  color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
                   child: GridView.builder(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
@@ -311,14 +292,11 @@ class PointsComponent extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                userType == UserTileType.premium &&
-                                        itemPoits.showStar
+                                userType == UserTileType.premium && itemPoits.showStar
                                     ? ImageWidget(
-                                        link: GraphicsFoundation
-                                            .instance.svg.star2.path,
+                                        link: GraphicsFoundation.instance.svg.star2.path,
                                         height: 12.h,
-                                        color:
-                                            theme?.colorScheme.bodyTypography,
+                                        color: theme?.colorScheme.bodyTypography,
                                       )
                                     : SpacingFoundation.none,
                                 const Spacer(),
@@ -332,29 +310,22 @@ class PointsComponent extends StatelessWidget {
                                   style: theme?.boldTextTheme.caption2Bold,
                                 ),
                                 SpacingFoundation.verticalSpace4,
-                                userType != UserTileType.premium &&
-                                        itemPoits.showStar
+                                userType != UserTileType.premium && itemPoits.showStar
                                     ? ImageWidget(
-                                        link: GraphicsFoundation
-                                            .instance.svg.star2.path,
+                                        link: GraphicsFoundation.instance.svg.star2.path,
                                         height: 12.h,
-                                        color:
-                                            theme?.colorScheme.bodyTypography,
+                                        color: theme?.colorScheme.bodyTypography,
                                       )
                                     : Text(
                                         '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
-                                        style: theme
-                                            ?.regularTextTheme.labelSmall
-                                            .copyWith(
+                                        style: theme?.regularTextTheme.labelSmall.copyWith(
                                           color: ColorsFoundation.mutedText,
                                         ),
                                       ),
                                 SpacingFoundation.verticalSpace2,
                                 LinearInfluencerIndicator(
-                                  actualSum: userType != UserTileType.premium &&
-                                          itemPoits.showStar
-                                      ? 0
-                                      : itemPoits.actualSum,
+                                  actualSum:
+                                      userType != UserTileType.premium && itemPoits.showStar ? 0 : itemPoits.actualSum,
                                   sum: itemPoits.sum,
                                   width: 120.w,
                                 ),
@@ -397,14 +368,12 @@ class PointsComponent extends StatelessWidget {
                                         link: itemChallengeFeelings.imagePath,
                                       ),
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
                                           SizedBox(height: 30.h),
                                           Text(
                                             '${parseDoubleToInt(itemChallengeFeelings.sum)} ${itemChallengeFeelings.title}',
-                                            style: theme
-                                                ?.boldTextTheme.caption3Medium,
+                                            style: theme?.boldTextTheme.caption3Medium,
                                           ),
                                           AutoSizeText(
                                             '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
@@ -412,28 +381,22 @@ class PointsComponent extends StatelessWidget {
                                             minFontSize: 8,
                                             group: challengeFeelingsGroup,
                                             textAlign: TextAlign.right,
-                                            style: theme
-                                                ?.boldTextTheme.caption2Bold,
+                                            style: theme?.boldTextTheme.caption2Bold,
                                           ),
                                           Text(
                                             '${parseDoubleToInt(itemChallengeFeelings.actualSum)}/${parseDoubleToInt(itemChallengeFeelings.sum)}',
-                                            style: theme
-                                                ?.regularTextTheme.labelSmall
-                                                .copyWith(
+                                            style: theme?.regularTextTheme.labelSmall.copyWith(
                                               color: ColorsFoundation.mutedText,
                                             ),
                                           ),
                                           SpacingFoundation.verticalSpace2,
                                           LinearInfluencerIndicator(
-                                            actualSum:
-                                                itemChallengeFeelings.actualSum,
+                                            actualSum: itemChallengeFeelings.actualSum,
                                             sum: itemChallengeFeelings.sum,
                                             width: 65.w,
                                           )
                                         ],
-                                      ).paddingSymmetric(
-                                          horizontal: SpacingFoundation
-                                              .horizontalSpacing8)
+                                      ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8)
                                     ],
                                   ),
                                 ),
