@@ -730,6 +730,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       onPlaceItemTap: (value) {
                         context.push(
                           BookingsControlListComponent(
+                            canBookingEdit: true,
                             bookingsPlaceItemUiModel: value,
                             bookingUiModel: BookingUiModel(
                               id: -1,
