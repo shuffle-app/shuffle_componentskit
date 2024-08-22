@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'booking_ui_model/subs_or_upsale_ui_model.dart';
 
-class CereatSubsComponent extends StatefulWidget {
+class CreateSubsComponent extends StatefulWidget {
   final SubsUiModel? subsUiModel;
   final Function(SubsUiModel subsUiModel) onSave;
 
-  const CereatSubsComponent({
+  const CreateSubsComponent({
     super.key,
     this.subsUiModel,
     required this.onSave,
   });
 
   @override
-  State<CereatSubsComponent> createState() => _CereatSubsComponentState();
+  State<CreateSubsComponent> createState() => _CreateSubsComponentState();
 }
 
-class _CereatSubsComponentState extends State<CereatSubsComponent> {
+class _CreateSubsComponentState extends State<CreateSubsComponent> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
@@ -40,7 +38,7 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
   }
 
   @override
-  void didUpdateWidget(covariant CereatSubsComponent oldWidget) {
+  void didUpdateWidget(covariant CreateSubsComponent oldWidget) {
     if (oldWidget.subsUiModel != oldWidget.subsUiModel) {
       _subsUiModel = widget.subsUiModel ?? SubsUiModel(id: -1);
       _titleController.text = widget.subsUiModel?.title ?? '';
@@ -112,10 +110,17 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
                 label: S.of(context).Description,
                 expands: true,
                 maxSymbols: 150,
-                validator: descriptionValidator,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.trim().isEmpty) {
+                    return S.of(context).PleaseEnterValidDescription;
+                  }
+                  return null;
+                },
                 controller: _descriptionController,
                 onChanged: (value) {
-                  _formKey.currentState!.validate();
+                  setState(() {
+                    _formKey.currentState!.validate();
+                  });
                 },
               ),
             ),
@@ -154,9 +159,9 @@ class _CereatSubsComponentState extends State<CereatSubsComponent> {
               text: S.of(context).Save.toUpperCase(),
               onPressed: () {
                 if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _subsUiModel.title = _titleController.text;
+                  _subsUiModel.title = _titleController.text.trim();
                   _subsUiModel.bookingLimit = _limitController.text;
-                  _subsUiModel.description = _descriptionController.text;
+                  _subsUiModel.description = _descriptionController.text.trim();
                   _subsUiModel.photo = _photo;
                   widget.onSave(_subsUiModel);
                   context.pop();

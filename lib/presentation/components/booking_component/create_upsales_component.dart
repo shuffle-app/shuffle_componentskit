@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -100,10 +99,17 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                 label: S.of(context).Description,
                 expands: true,
                 maxSymbols: 150,
-                validator: descriptionValidator,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return S.of(context).PleaseEnterValidDescription;
+                  }
+                  return null;
+                },
                 controller: _descriptionController,
                 onChanged: (value) {
-                  _formKey.currentState!.validate();
+                  setState(() {
+                    _formKey.currentState!.validate();
+                  });
                 },
               ),
             ),
@@ -162,7 +168,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
               text: S.of(context).Save.toUpperCase(),
               onPressed: () {
                 if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _upsaleUiModel.description = _descriptionController.text;
+                  _upsaleUiModel.description = _descriptionController.text.trim();
                   _upsaleUiModel.limit = _limitController.text;
                   _upsaleUiModel.price = _priceController.text;
                   _upsaleUiModel.photo = _photo;

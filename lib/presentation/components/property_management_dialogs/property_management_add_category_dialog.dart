@@ -6,12 +6,12 @@ class PropertyManagementAddCategoryDialog extends StatelessWidget {
   const PropertyManagementAddCategoryDialog(
       {super.key,
       this.onCloseTap,
-      required this.onPlaceCreate,
-      required this.onEventCreate});
+      required this.onCreateLeisure,
+      required this.onCreateBusiness});
 
   final VoidCallback? onCloseTap;
-  final VoidCallback onPlaceCreate;
-  final VoidCallback onEventCreate;
+  final VoidCallback onCreateLeisure;
+  final VoidCallback onCreateBusiness;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +48,8 @@ class PropertyManagementAddCategoryDialog extends StatelessWidget {
                 child: context.coloredButtonWithBorderRadius(
                   borderRadius: BorderRadiusFoundation.all12,
                   data: BaseUiKitButtonData(
-                      text: S.current.Place,
-                      onPressed: onPlaceCreate,
+                      text: S.current.Entertainment,
+                      onPressed: onCreateLeisure,
                       backgroundColor: theme?.colorScheme.darkNeutral200),
                 ),
               ),
@@ -58,8 +58,8 @@ class PropertyManagementAddCategoryDialog extends StatelessWidget {
                 child: context.coloredButtonWithBorderRadius(
                   borderRadius: BorderRadiusFoundation.all12,
                   data: BaseUiKitButtonData(
-                      text: S.current.Event,
-                      onPressed: onEventCreate,
+                      text: S.current.Business,
+                      onPressed: onCreateBusiness,
                       backgroundColor: theme?.colorScheme.darkNeutral200),
                 ),
               ),

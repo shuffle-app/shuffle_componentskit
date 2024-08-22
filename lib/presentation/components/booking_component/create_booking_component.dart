@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/presentation/common/price_selector_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/booking_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
-import 'package:shuffle_components_kit/presentation/components/booking_component/cereat_subs_component.dart';
+import 'package:shuffle_components_kit/presentation/components/booking_component/create_subs_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_upsales_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -163,10 +162,15 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               keyboardType: TextInputType.number,
               inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
               validator: (value) {
-                if ((value != null && value.isNotEmpty) && (_bookingLimitController.text != '')) {
+                if ((value != null && value.isNotEmpty)) {
                   final newValue = int.parse(value.replaceAll(' ', ''));
 
-                  if (newValue >= int.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
+                  if ((_bookingLimitController.text != '') &&
+                      newValue >= int.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
+                    return S.of(context).LimitLessTotalLimit;
+                  } else if (_allSubsLimitCount > 0 &&
+                      newValue >= _allSubsLimitCount &&
+                      _bookingLimitController.text.isEmpty) {
                     return S.of(context).LimitLessTotalLimit;
                   }
                   return null;
@@ -204,7 +208,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                               data: BaseUiKitButtonData(
                                 onPressed: () {
                                   context.push(
-                                    CereatSubsComponent(
+                                    CreateSubsComponent(
                                       onSave: (subsUiModel) {
                                         setState(() {
                                           _subsUiMoldels.add(subsUiModel);
@@ -254,7 +258,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       },
                       onEdit: () {
                         context.push(
-                          CereatSubsComponent(
+                          CreateSubsComponent(
                             onSave: (subsUiModel) {
                               setState(() {
                                 _countSubsLimit();
