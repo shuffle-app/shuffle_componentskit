@@ -12,6 +12,7 @@ class BookingsControlListComponent extends StatefulWidget {
   final Function(int index, int userId)? onPopupMenuSelected;
   final ValueChanged<UserBookingsControlUiModel>? onRequestsRefund;
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
+  final bool canBookingEdit;
 
   const BookingsControlListComponent({
     super.key,
@@ -21,6 +22,7 @@ class BookingsControlListComponent extends StatefulWidget {
     this.onBookingEdit,
     this.onPopupMenuSelected,
     this.onRequestsRefund,
+    this.canBookingEdit = false,
   });
 
   @override
@@ -110,8 +112,7 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
                   ],
                 ),
               ),
-              if (widget.bookingsPlaceItemUiModel?.users == null ||
-                  widget.bookingsPlaceItemUiModel!.users!.isEmpty) ...[
+              if (widget.canBookingEdit)
                 GestureDetector(
                   onTap: () => widget.onBookingEdit?.call(widget.bookingUiModel),
                   child: ImageWidget(
@@ -119,7 +120,6 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
                     color: theme?.colorScheme.inversePrimary,
                   ),
                 ),
-              ],
             ],
           ),
           if (groupedUsers.isNotEmpty) ...[
