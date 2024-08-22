@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -112,10 +110,17 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
                 label: S.of(context).Description,
                 expands: true,
                 maxSymbols: 150,
-                validator: descriptionValidator,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.trim().isEmpty) {
+                    return S.of(context).PleaseEnterValidDescription;
+                  }
+                  return null;
+                },
                 controller: _descriptionController,
                 onChanged: (value) {
-                  _formKey.currentState!.validate();
+                  setState(() {
+                    _formKey.currentState!.validate();
+                  });
                 },
               ),
             ),
@@ -154,9 +159,9 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
               text: S.of(context).Save.toUpperCase(),
               onPressed: () {
                 if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _subsUiModel.title = _titleController.text;
+                  _subsUiModel.title = _titleController.text.trim();
                   _subsUiModel.bookingLimit = _limitController.text;
-                  _subsUiModel.description = _descriptionController.text;
+                  _subsUiModel.description = _descriptionController.text.trim();
                   _subsUiModel.photo = _photo;
                   widget.onSave(_subsUiModel);
                   context.pop();
