@@ -755,8 +755,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               getRefundBookingDialogUiKit(
                                 context: context,
                                 userName: value.profile?.name ?? '',
-                                allTicket: value.tiketsCount,
-                                allUpsale: value.productsCount ?? 0,
+                                allTicket: value.ticketUiModel?.ticketsCount ?? 0,
+                                allUpsale: value.ticketUiModel?.totalUpsalesCount ?? 0,
                                 onContactTap: () {},
                                 onGoAheadTap: () {},
                               );
@@ -871,7 +871,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                       (index) {
                                         return UserBookingsControlUiModel(
                                           id: index,
-                                          tiketsCount: math.Random().nextInt(2) + 1,
                                           profile: UiProfileModel(
                                             name: 'test $index',
                                             nickname: '@nickName $index',
@@ -879,11 +878,23 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                             userTileType: index.isEven ? UserTileType.influencer : UserTileType.pro,
                                             email: 'test@emal.index$index',
                                           ),
-                                          productsCount: math.Random().nextInt(2),
-                                          requestRefunUiModel: index.isEven
-                                              ? RequestRefundUiModel(
-                                                  ticketRefund: 3,
-                                                  upsaleRefund: 3,
+                                          ticketUiModel: index.isEven
+                                              ? TicketUiModel(
+                                                  ticketsCount: math.Random().nextInt(4) + 1,
+                                                  upsales: List.generate(
+                                                    2,
+                                                    (index) => TicketItem(
+                                                      count: math.Random().nextInt(4),
+                                                      item: null,
+                                                    ),
+                                                  ),
+                                                  subs: List.generate(
+                                                    5,
+                                                    (index) => TicketItem(
+                                                      count: math.Random().nextInt(4),
+                                                      item: null,
+                                                    ),
+                                                  ),
                                                 )
                                               : null,
                                         );
