@@ -44,7 +44,12 @@ class UiModelCategory extends UiKitTag {
 
   @override
   bool operator ==(Object other) {
-    return other is UiModelCategory && id == other.id;
+    return other is UiModelCategory &&
+        id == other.id &&
+        categoryProperties.map((e) => e.id).every(other.categoryProperties.map((e) => e.id).contains) &&
+        categoryProperties
+            .map((e) => e.relatedProperties?.map((e) => e.id).toList())
+            .every(other.categoryProperties.map((e) => e.relatedProperties?.map((e) => e.id).toList()).contains);
   }
 
   @override
