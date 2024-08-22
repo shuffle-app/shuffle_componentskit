@@ -64,48 +64,43 @@ class BookingsControlComponent extends StatelessWidget {
                     ],
                   ),
                   SpacingFoundation.verticalSpace24,
-                  tabValue.value == true
-                      ? ListView.separated(
-                          itemCount: places.length,
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          controller: ScrollController(),
-                          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-                          itemBuilder: (context, index) {
-                            final element = places[index];
-
-                            return BookingsControlPlaceItemUiKit(
-                              title: element.title,
-                              description: element.description,
-                              imageUrl: element.imageUrl,
-                              onTap: () => onPlaceItemTap?.call(element),
-                            );
-                          },
-                        )
-                      : ListView.separated(
-                          itemCount: events.length,
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          controller: ScrollController(),
-                          separatorBuilder: (context, index) => Divider(
+                  ListView.separated(
+                    itemCount: tabValue.value ? places.length : events.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    controller: ScrollController(),
+                    separatorBuilder: (context, index) => tabValue.value
+                        ? SpacingFoundation.verticalSpace16
+                        : Divider(
                             color: theme?.colorScheme.surface2,
                             thickness: 2.0,
                           ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                          itemBuilder: (context, index) {
-                            final element = events[index];
+                    itemBuilder: (context, index) {
+                      if (tabValue.value) {
+                        final element = places[index];
 
-                            return BookingsControlEventUiKit(
-                              title: element.title,
-                              description: element.description,
-                              events: element.events,
-                              onTap: (id) {
-                                onEventItemTap?.call(
-                                  element.events?.firstWhere((element) => element.id == id),
-                                );
-                              },
+                        return BookingsControlPlaceItemUiKit(
+                          title: element.title,
+                          description: element.description,
+                          imageUrl: element.imageUrl,
+                          onTap: () => onPlaceItemTap?.call(element),
+                        );
+                      } else {
+                        final element = events[index];
+
+                        return BookingsControlEventUiKit(
+                          title: element.title,
+                          description: element.description,
+                          events: element.events,
+                          onTap: (id) {
+                            onEventItemTap?.call(
+                              element.events?.firstWhere((element) => element.id == id),
                             );
                           },
-                        ),
+                        );
+                      }
+                    },
+                  )
                 ],
               );
             },
