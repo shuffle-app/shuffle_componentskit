@@ -16,7 +16,7 @@ class BookingsControlComponent extends StatelessWidget {
     this.onEventItemTap,
   });
 
-  final ValueNotifier<bool> tabChange = ValueNotifier(true);
+  final ValueNotifier<bool> tabValue = ValueNotifier(true);
   final places = [];
   final events = [];
 
@@ -38,69 +38,76 @@ class BookingsControlComponent extends StatelessWidget {
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           SpacingFoundation.verticalSpace16,
-          UiKitCustomTabBar(
-            onTappedTab: (index) {
-              if (index == 0) {
-                tabChange.value = true;
-              } else {
-                tabChange.value = false;
-              }
-            },
-            tabs: [
-              UiKitCustomTab(
-                title: S.of(context).Place.toUpperCase(),
-              ),
-              UiKitCustomTab(
-                title: S.of(context).Events.toUpperCase(),
-              ),
-            ],
-          ),
-          SpacingFoundation.verticalSpace24,
           ValueListenableBuilder(
-            valueListenable: tabChange,
+            valueListenable: tabValue,
             builder: (context, value, child) {
-              return tabChange.value == true
-                  ? ListView.separated(
-                      itemCount: places.length,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      controller: ScrollController(),
-                      separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-                      itemBuilder: (context, index) {
-                        final element = places[index];
+              return Column(
+                children: [
+                  UiKitCustomTabBar(
+                    selectedTab: tabValue.value.toString(),
+                    onTappedTab: (index) {
+                      if (index == 0) {
+                        tabValue.value = true;
+                      } else {
+                        tabValue.value = false;
+                      }
+                    },
+                    tabs: [
+                      UiKitCustomTab(
+                        title: S.of(context).Place.toUpperCase(),
+                        customValue: 'true',
+                      ),
+                      UiKitCustomTab(
+                        title: S.of(context).Events.toUpperCase(),
+                        customValue: 'false',
+                      ),
+                    ],
+                  ),
+                  SpacingFoundation.verticalSpace24,
+                  tabValue.value == true
+                      ? ListView.separated(
+                          itemCount: places.length,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          controller: ScrollController(),
+                          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+                          itemBuilder: (context, index) {
+                            final element = places[index];
 
-                        return BookingsControlPlaceItemUiKit(
-                          title: element.title,
-                          description: element.description,
-                          imageUrl: element.imageUrl,
-                          onTap: () => onPlaceItemTap?.call(element),
-                        );
-                      },
-                    )
-                  : ListView.separated(
-                      itemCount: events.length,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      controller: ScrollController(),
-                      separatorBuilder: (context, index) => Divider(
-                        color: theme?.colorScheme.surface2,
-                        thickness: 2.0,
-                      ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                      itemBuilder: (context, index) {
-                        final element = events[index];
-
-                        return BookingsControlEventUiKit(
-                          title: element.title,
-                          description: element.description,
-                          events: element.events,
-                          onTap: (id) {
-                            onEventItemTap?.call(
-                              element.events?.firstWhere((element) => element.id == id),
+                            return BookingsControlPlaceItemUiKit(
+                              title: element.title,
+                              description: element.description,
+                              imageUrl: element.imageUrl,
+                              onTap: () => onPlaceItemTap?.call(element),
                             );
                           },
-                        );
-                      },
-                    );
+                        )
+                      : ListView.separated(
+                          itemCount: events.length,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          controller: ScrollController(),
+                          separatorBuilder: (context, index) => Divider(
+                            color: theme?.colorScheme.surface2,
+                            thickness: 2.0,
+                          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                          itemBuilder: (context, index) {
+                            final element = events[index];
+
+                            return BookingsControlEventUiKit(
+                              title: element.title,
+                              description: element.description,
+                              events: element.events,
+                              onTap: (id) {
+                                onEventItemTap?.call(
+                                  element.events?.firstWhere((element) => element.id == id),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ],
+              );
             },
           ),
         ],
