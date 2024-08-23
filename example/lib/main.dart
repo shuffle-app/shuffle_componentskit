@@ -729,7 +729,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     BookingsControlComponent(
                       onPlaceItemTap: (value) {
                         context.push(
-                          BookingsControlListComponent(
+                          BookingsControlUserList(
                             canBookingEdit: true,
                             bookingsPlaceItemUiModel: value,
                             bookingUiModel: BookingUiModel(
@@ -750,13 +750,15 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       },
                       onEventItemTap: (value) {
                         context.push(
-                          BookingsControlListComponent(
+                          BookingsControlUserList(
                             onRequestsRefund: (value) {
                               getRefundBookingDialogUiKit(
                                 context: context,
                                 userName: value.profile?.name ?? '',
                                 allTicket: value.ticketUiModel?.ticketsCount ?? 0,
                                 allUpsale: value.ticketUiModel?.totalUpsalesCount ?? 0,
+                                ticketRefun: math.Random().nextInt(4) + 1,
+                                upsaleRefun: math.Random().nextInt(4) + 1,
                                 onContactTap: () {},
                                 onGoAheadTap: () {},
                               );
@@ -878,25 +880,30 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                             userTileType: index.isEven ? UserTileType.influencer : UserTileType.pro,
                                             email: 'test@emal.index$index',
                                           ),
-                                          ticketUiModel: index.isEven
-                                              ? TicketUiModel(
-                                                  ticketsCount: math.Random().nextInt(4) + 1,
-                                                  upsales: List.generate(
-                                                    2,
-                                                    (index) => TicketItem(
-                                                      count: math.Random().nextInt(4),
-                                                      item: null,
-                                                    ),
-                                                  ),
-                                                  subs: List.generate(
-                                                    5,
-                                                    (index) => TicketItem(
-                                                      count: math.Random().nextInt(4),
-                                                      item: null,
-                                                    ),
-                                                  ),
+                                          refundUiModel: index.isEven
+                                              ? RefundUiModel(
+                                                  ticketRefund: math.Random().nextInt(4) + 1,
+                                                  upsaleRefund: math.Random().nextInt(4) + 1,
                                                 )
                                               : null,
+                                          ticketUiModel: TicketUiModel(
+                                            id: index,
+                                            ticketsCount: math.Random().nextInt(4) + 1,
+                                            upsales: List.generate(
+                                              2,
+                                              (index) => TicketItem(
+                                                count: math.Random().nextInt(4) + 1,
+                                                item: null,
+                                              ),
+                                            ),
+                                            subs: List.generate(
+                                              5,
+                                              (index) => TicketItem(
+                                                count: math.Random().nextInt(4),
+                                                item: null,
+                                              ),
+                                            ),
+                                          ),
                                         );
                                       },
                                     ),
