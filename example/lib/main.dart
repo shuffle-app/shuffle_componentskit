@@ -882,8 +882,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                           ),
                                           refundUiModel: index.isEven
                                               ? TicketUiModel.refund(
-                                                  ticketRefund: math.Random().nextInt(4) + 1,
-                                                  upsaleRefund: math.Random().nextInt(4) + 1,
+                                                  ticketsCount: math.Random().nextInt(4) + 1,
+                                                  upsales: List.generate(
+                                                    3,
+                                                    (index) => TicketItem(count: math.Random().nextInt(4) + 1),
+                                                  ),
                                                 )
                                               : null,
                                           ticketUiModel: TicketUiModel(
