@@ -41,6 +41,6 @@ class FeedbackReaderComponent extends StatelessWidget {
             divider.paddingSymmetric(vertical: EdgeInsetsFoundation.vertical16),
         itemCount: reviews.length,
       ),
-    ).paddingOnly(top: EdgeInsetsFoundation.vertical16);
+    ).paddingOnly(top: EdgeInsetsFoundation.vertical16, bottom: EdgeInsetsFoundation.vertical24);
   }
 }
