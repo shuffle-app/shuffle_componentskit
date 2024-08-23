@@ -19,7 +19,7 @@ class BookingsControlEventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.uiKitTheme;
+    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,12 +27,12 @@ class BookingsControlEventItem extends StatelessWidget {
       children: [
         Text(
           title ?? '',
-          style: theme?.boldTextTheme.title2,
+          style: boldTextTheme?.title2,
         ),
         SpacingFoundation.verticalSpace2,
         Text(
           description ?? '',
-          style: theme?.boldTextTheme.caption2Bold.copyWith(color: ColorsFoundation.mutedText),
+          style: boldTextTheme?.caption2Bold.copyWith(color: ColorsFoundation.mutedText),
         ),
         SpacingFoundation.verticalSpace16,
         if (events != null && events!.isNotEmpty)

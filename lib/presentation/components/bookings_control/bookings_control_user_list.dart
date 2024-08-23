@@ -9,7 +9,7 @@ class BookingsControlUserList extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
   final BookingUiModel? bookingUiModel;
   final ValueChanged<BookingUiModel?>? onBookingEdit;
-  final Function(int index, int userId)? onPopupMenuSelected;
+  final Function(String? value, int userId)? onPopupMenuSelected;
   final ValueChanged<UserBookingsControlUiModel>? onRequestsRefund;
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
   final bool canBookingEdit;
@@ -83,13 +83,14 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final boldTextTheme = theme?.boldTextTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
         customTitle: Expanded(
           child: AutoSizeText(
             S.of(context).BookingList,
-            style: theme?.boldTextTheme.title1,
+            style: boldTextTheme?.title1,
             textAlign: TextAlign.center,
             wrapWords: false,
           ),
@@ -108,12 +109,12 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                     SpacingFoundation.verticalSpace16,
                     Text(
                       widget.bookingsPlaceItemUiModel?.title ?? '',
-                      style: theme?.boldTextTheme.title2,
+                      style: boldTextTheme?.title2,
                     ),
                     SpacingFoundation.verticalSpace2,
                     Text(
                       widget.bookingsPlaceItemUiModel?.description ?? '',
-                      style: theme?.boldTextTheme.caption2Bold.copyWith(color: ColorsFoundation.mutedText),
+                      style: boldTextTheme?.caption2Bold.copyWith(color: ColorsFoundation.mutedText),
                     ),
                     groupedUsers.isNotEmpty ? SpacingFoundation.verticalSpace16 : SpacingFoundation.verticalSpace24,
                   ],
@@ -130,40 +131,40 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
             ],
           ),
           if (groupedUsers.isNotEmpty) ...[
-            ListView.separated(
-              itemCount: groupedUsers.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              controller: ScrollController(),
-              separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: groupedUsers[index]
-                      .map(
-                        (e) => UsersBookingsControl(
-                          element: e,
-                          isFirst: e == groupedUsers[index].first,
-                          checkBox: checkBoxOn,
-                          onLongPress: () => setState(() {
-                            checkBoxOn = !checkBoxOn;
-                          }),
-                          onCheckBoxTap: () => setState(() {
-                            e.isSelected = !e.isSelected;
-                          }),
-                          onPopupMenuSelected: widget.onPopupMenuSelected,
-                          onRequestsRefund: () => widget.onRequestsRefund?.call(e),
-                        ),
-                      )
-                      .toList(),
-                );
-              },
+            ...groupedUsers.map(
+              (group) => Column(
+                children: group
+                    .map(
+                      (e) => UsersBookingsControl(
+                        element: e,
+                        isFirst: e == group.first,
+                        checkBox: checkBoxOn,
+                        onLongPress: () => setState(() {
+                          checkBoxOn = !checkBoxOn;
+                        }),
+                        onCheckBoxTap: () => setState(() {
+                          e.isSelected = !e.isSelected;
+                        }),
+                        onPopupMenuSelected: widget.onPopupMenuSelected,
+                        onRequestsRefund: () => widget.onRequestsRefund?.call(e),
+                      ).paddingOnly(bottom: group.last == e ? SpacingFoundation.verticalSpacing16 : 0),
+                    )
+                    .toList(),
+              ),
             ),
             SpacingFoundation.verticalSpace24,
-            SafeArea(
-              top: false,
-              child: context.outlinedButton(
+          ] else
+            Text(
+              S.of(context).NoBookingsYet,
+              style: boldTextTheme?.body,
+            )
+        ],
+      ),
+      bottomNavigationBar: groupedUsers.isNotEmpty
+          ? context
+              .outlinedButton(
+                showOnCenter: false,
                 data: BaseUiKitButtonData(
-                  fit: ButtonFit.fitWidth,
                   text: S.of(context).RefundEveryone.toUpperCase(),
                   onPressed: () {
                     checkBoxOn
@@ -172,16 +173,13 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                         : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!);
                   },
                 ),
-              ),
-            ),
-            SpacingFoundation.verticalSpace24,
-          ] else
-            Text(
-              S.of(context).NoBookingsYet,
-              style: theme?.boldTextTheme.body,
-            )
-        ],
-      ),
+              )
+              .paddingOnly(
+                left: EdgeInsetsFoundation.all16,
+                right: EdgeInsetsFoundation.all16,
+                bottom: EdgeInsetsFoundation.vertical24,
+              )
+          : null,
     );
   }
 }
