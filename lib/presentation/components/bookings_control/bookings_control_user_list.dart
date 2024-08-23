@@ -5,7 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import 'users_bookings_control.dart';
 
-class BookingsControlListComponent extends StatefulWidget {
+class BookingsControlUserList extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
   final BookingUiModel? bookingUiModel;
   final ValueChanged<BookingUiModel?>? onBookingEdit;
@@ -14,7 +14,7 @@ class BookingsControlListComponent extends StatefulWidget {
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
   final bool canBookingEdit;
 
-  const BookingsControlListComponent({
+  const BookingsControlUserList({
     super.key,
     this.bookingsPlaceItemUiModel,
     this.refundEveryone,
@@ -26,11 +26,11 @@ class BookingsControlListComponent extends StatefulWidget {
   });
 
   @override
-  State<BookingsControlListComponent> createState() => _BookingsControlListComponentState();
+  State<BookingsControlUserList> createState() => _BookingsControlUserListState();
 }
 
-class _BookingsControlListComponentState extends State<BookingsControlListComponent> {
-  bool chekBoxOn = false;
+class _BookingsControlUserListState extends State<BookingsControlUserList> {
+  bool checkBoxOn = false;
   List<List<UserBookingsControlUiModel>> groupedUsers = [];
 
   @override
@@ -41,38 +41,43 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
   }
 
   void sortedUserList() {
-    if (widget.bookingsPlaceItemUiModel?.users != null && widget.bookingsPlaceItemUiModel!.users!.isNotEmpty) {
-      widget.bookingsPlaceItemUiModel!.users!.sort((a, b) {
-        if (a.ticketUiModel != null &&
-            b.ticketUiModel != null &&
-            a.ticketUiModel!.ticketsCount != b.ticketUiModel!.ticketsCount) {
-          return b.ticketUiModel!.ticketsCount.compareTo(a.ticketUiModel!.ticketsCount);
+    final users = widget.bookingsPlaceItemUiModel?.users;
+    if (users != null && users.isNotEmpty) {
+      users.sort((a, b) {
+        final ticketComparison = (b.ticketUiModel?.ticketsCount ?? 0).compareTo(a.ticketUiModel?.ticketsCount ?? 0);
+        if (ticketComparison != 0) {
+          return ticketComparison;
         }
-        int productsA = a.ticketUiModel?.totalUpsalesCount ?? 0;
-        int productsB = b.ticketUiModel?.totalUpsalesCount ?? 0;
 
-        return productsB.compareTo(productsA);
+        final upsalesA = a.ticketUiModel?.totalUpsalesCount ?? 0;
+        final upsalesB = b.ticketUiModel?.totalUpsalesCount ?? 0;
+
+        return upsalesB.compareTo(upsalesA);
       });
     }
   }
 
   void groupUserList() {
+    final List<UserBookingsControlUiModel> users = widget.bookingsPlaceItemUiModel?.users ?? [];
+    if (users.isEmpty) return;
+
     List<UserBookingsControlUiModel> currentGroup = [];
-    final userList = widget.bookingsPlaceItemUiModel?.users;
-    if (userList != null && userList.isNotEmpty) {
-      for (var i = 0; i < userList.length; i++) {
-        if (i == 0 ||
-            (userList[i].ticketUiModel?.ticketsCount == userList[i - 1].ticketUiModel?.ticketsCount &&
-                (userList[i].ticketUiModel?.totalUpsalesCount ?? 0) ==
-                    (userList[i - 1].ticketUiModel?.totalUpsalesCount ?? 0))) {
-          currentGroup.add(userList[i]);
-        } else {
-          groupedUsers.add(currentGroup);
-          currentGroup = [userList[i]];
-        }
+    groupedUsers.clear();
+
+    for (int i = 0; i < users.length; i++) {
+      final currentUser = users[i];
+
+      if (i == 0 ||
+          (currentUser.ticketUiModel?.ticketsCount == users[i - 1].ticketUiModel?.ticketsCount &&
+              (currentUser.ticketUiModel?.totalUpsalesCount ?? 0) ==
+                  (users[i - 1].ticketUiModel?.totalUpsalesCount ?? 0))) {
+        currentGroup.add(currentUser);
+      } else {
+        groupedUsers.add(currentGroup);
+        currentGroup = [currentUser];
       }
-      groupedUsers.add(currentGroup);
     }
+    groupedUsers.add(currentGroup);
   }
 
   @override
@@ -110,7 +115,7 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
                       widget.bookingsPlaceItemUiModel?.description ?? '',
                       style: theme?.boldTextTheme.caption2Bold.copyWith(color: ColorsFoundation.mutedText),
                     ),
-                    SpacingFoundation.verticalSpace16,
+                    groupedUsers.isNotEmpty ? SpacingFoundation.verticalSpace16 : SpacingFoundation.verticalSpace24,
                   ],
                 ),
               ),
@@ -138,9 +143,9 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
                         (e) => UsersBookingsControl(
                           element: e,
                           isFirst: e == groupedUsers[index].first,
-                          checkBox: chekBoxOn,
+                          checkBox: checkBoxOn,
                           onLongPress: () => setState(() {
-                            chekBoxOn = !chekBoxOn;
+                            checkBoxOn = !checkBoxOn;
                           }),
                           onCheckBoxTap: () => setState(() {
                             e.isSelected = !e.isSelected;
@@ -161,7 +166,7 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
                   fit: ButtonFit.fitWidth,
                   text: S.of(context).RefundEveryone.toUpperCase(),
                   onPressed: () {
-                    chekBoxOn
+                    checkBoxOn
                         ? widget.refundEveryone?.call(
                             widget.bookingsPlaceItemUiModel?.users!.where((element) => element.isSelected).toList())
                         : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!);
@@ -170,7 +175,11 @@ class _BookingsControlListComponentState extends State<BookingsControlListCompon
               ),
             ),
             SpacingFoundation.verticalSpace24,
-          ],
+          ] else
+            Text(
+              'No bookings yet',
+              style: theme?.boldTextTheme.body,
+            )
         ],
       ),
     );

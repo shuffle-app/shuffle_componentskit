@@ -3,13 +3,13 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import 'bookings_control_ui_models/bookings_place_or_even_ui_model.dart';
 
-class BookingsControlEventUiKit extends StatelessWidget {
+class BookingsControlEventItem extends StatelessWidget {
   final String? title;
   final String? description;
   final List<BookingsPlaceOrEventUiModel>? events;
   final ValueChanged<int>? onTap;
 
-  const BookingsControlEventUiKit({
+  const BookingsControlEventItem({
     super.key,
     this.title,
     this.description,

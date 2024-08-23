@@ -2,11 +2,13 @@ import 'package:shuffle_components_kit/presentation/components/booking_component
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 
 class TicketUiModel {
+  final int id;
   final int ticketsCount;
   final List<TicketItem<UpsaleUiModel>?>? upsales;
   final List<TicketItem<SubsUiModel>?>? subs;
 
   TicketUiModel({
+    required this.id,
     this.ticketsCount = 0,
     this.upsales,
     this.subs,
