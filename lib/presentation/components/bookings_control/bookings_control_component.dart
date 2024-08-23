@@ -40,58 +40,60 @@ class BookingsControlComponent extends StatelessWidget {
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           SpacingFoundation.verticalSpace16,
-          UiKitCustomTabBar(
-            onTappedTab: (index) => tabValue.value = index == 0,
-            tabs: [
-              UiKitCustomTab(
-                title: S.of(context).Place.toUpperCase(),
-                customValue: 'true',
-              ),
-              UiKitCustomTab(
-                title: S.of(context).Events.toUpperCase(),
-                customValue: 'false',
-              ),
-            ],
-          ),
-          SpacingFoundation.verticalSpace24,
           ValueListenableBuilder(
             valueListenable: tabValue,
             builder: (context, value, child) {
               return Column(
-                children: tabValue.value
-                    ? places.map(
-                        (element) {
-                          return BookingsControlPlaceItemUiKit(
-                            title: element.title,
-                            description: element.description,
-                            imageUrl: element.imageUrl,
-                            onTap: () => onPlaceItemTap?.call(element),
-                          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16);
-                        },
-                      ).toList()
-                    : events.map(
-                        (element) {
-                          return Column(
-                            children: [
-                              BookingsControlEventItem(
-                                title: element.title,
-                                description: element.description,
-                                events: element.events,
-                                onTap: (id) {
-                                  onEventItemTap?.call(
-                                    element.events?.firstWhere((element) => element.id == id),
-                                  );
-                                },
-                              ),
-                              if (element != events.last)
-                                Divider(
-                                  color: theme?.colorScheme.surface2,
-                                  thickness: 2.0,
-                                ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                            ],
-                          );
-                        },
-                      ).toList(),
+                children: [
+                  UiKitCustomTabBar(
+                    onTappedTab: (index) => tabValue.value = index == 0,
+                    tabs: [
+                      UiKitCustomTab(
+                        title: S.of(context).Place.toUpperCase(),
+                        customValue: 'true',
+                      ),
+                      UiKitCustomTab(
+                        title: S.of(context).Events.toUpperCase(),
+                        customValue: 'false',
+                      ),
+                    ],
+                  ),
+                  SpacingFoundation.verticalSpace24,
+                  ...tabValue.value
+                      ? places.map(
+                          (element) {
+                            return BookingsControlPlaceItemUiKit(
+                              title: element.title,
+                              description: element.description,
+                              imageUrl: element.imageUrl,
+                              onTap: () => onPlaceItemTap?.call(element),
+                            ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16);
+                          },
+                        ).toList()
+                      : events.map(
+                          (element) {
+                            return Column(
+                              children: [
+                                BookingsControlEventItem(
+                                  title: element.title,
+                                  description: element.description,
+                                  events: element.events,
+                                  onTap: (id) {
+                                    onEventItemTap?.call(
+                                      element.events?.firstWhere((element) => element.id == id),
+                                    );
+                                  },
+                                ),
+                                if (element != events.last)
+                                  Divider(
+                                    color: theme?.colorScheme.surface2,
+                                    thickness: 2.0,
+                                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                              ],
+                            );
+                          },
+                        ).toList(),
+                ],
               );
             },
           ),
