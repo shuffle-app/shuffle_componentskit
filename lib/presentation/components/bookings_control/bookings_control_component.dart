@@ -17,18 +17,16 @@ class BookingsControlComponent extends StatelessWidget {
   });
 
   final ValueNotifier<bool> tabValue = ValueNotifier(true);
-  final places = [];
-  final events = [];
+  final List<BookingsPlaceOrEventUiModel> places = [];
+  final List<BookingsPlaceOrEventUiModel> events = [];
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-    placesOrEvents?.forEach(
-      (element) {
-        element.events != null ? events.add(element) : places.add(element);
-      },
-    );
+    for (var element in placesOrEvents ?? []) {
+      element.events != null ? events.add(element) : places.add(element);
+    }
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -45,13 +43,7 @@ class BookingsControlComponent extends StatelessWidget {
                 children: [
                   UiKitCustomTabBar(
                     selectedTab: tabValue.value.toString(),
-                    onTappedTab: (index) {
-                      if (index == 0) {
-                        tabValue.value = true;
-                      } else {
-                        tabValue.value = false;
-                      }
-                    },
+                    onTappedTab: (index) => tabValue.value = index == 0,
                     tabs: [
                       UiKitCustomTab(
                         title: S.of(context).Place.toUpperCase(),
@@ -88,7 +80,7 @@ class BookingsControlComponent extends StatelessWidget {
                       } else {
                         final element = events[index];
 
-                        return BookingsControlEventUiKit(
+                        return BookingsControlEventItem(
                           title: element.title,
                           description: element.description,
                           events: element.events,
