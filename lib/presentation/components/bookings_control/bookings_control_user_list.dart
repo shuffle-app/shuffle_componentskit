@@ -161,24 +161,26 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
         ],
       ),
       bottomNavigationBar: groupedUsers.isNotEmpty
-          ? context
-              .outlinedButton(
-                showOnCenter: false,
-                data: BaseUiKitButtonData(
-                  text: S.of(context).RefundEveryone.toUpperCase(),
-                  onPressed: () {
-                    checkBoxOn
-                        ? widget.refundEveryone?.call(
-                            widget.bookingsPlaceItemUiModel?.users!.where((element) => element.isSelected).toList())
-                        : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!);
-                  },
-                ),
-              )
-              .paddingOnly(
-                left: EdgeInsetsFoundation.all16,
-                right: EdgeInsetsFoundation.all16,
-                bottom: EdgeInsetsFoundation.vertical24,
-              )
+          ? SizedBox(
+              height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
+              child: context
+                  .outlinedButton(
+                    data: BaseUiKitButtonData(
+                      text: S.of(context).RefundEveryone.toUpperCase(),
+                      onPressed: () {
+                        checkBoxOn
+                            ? widget.refundEveryone?.call(
+                                widget.bookingsPlaceItemUiModel?.users!.where((element) => element.isSelected).toList())
+                            : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!);
+                      },
+                    ),
+                  )
+                  .paddingOnly(
+                    left: EdgeInsetsFoundation.all16,
+                    right: EdgeInsetsFoundation.all16,
+                    bottom: EdgeInsetsFoundation.vertical24,
+                  ),
+            )
           : null,
     );
   }
