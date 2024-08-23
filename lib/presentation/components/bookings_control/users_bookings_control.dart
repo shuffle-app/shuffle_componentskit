@@ -10,7 +10,7 @@ class UsersBookingsControl extends StatelessWidget {
   final VoidCallback? onLongPress;
   final VoidCallback? onCheckBoxTap;
   final VoidCallback? onRequestsRefund;
-  final Function(int index, int userId)? onPopupMenuSelected;
+  final Function(String? value, int userId)? onPopupMenuSelected;
 
   const UsersBookingsControl({
     super.key,
@@ -26,6 +26,7 @@ class UsersBookingsControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final boldTextTheme = theme?.boldTextTheme;
 
     return Column(
       children: [
@@ -35,7 +36,7 @@ class UsersBookingsControl extends StatelessWidget {
               if (element.ticketUiModel!.ticketsCount >= 1) ...[
                 Text(
                   S.of(context).Tickets(element.ticketUiModel!.ticketsCount),
-                  style: theme?.boldTextTheme.caption1Bold.copyWith(
+                  style: boldTextTheme?.caption1Bold.copyWith(
                     color: ColorsFoundation.mutedText,
                   ),
                 ),
@@ -44,7 +45,7 @@ class UsersBookingsControl extends StatelessWidget {
               if (element.ticketUiModel!.totalUpsalesCount >= 1)
                 Text(
                   S.of(context).Products(element.ticketUiModel!.totalUpsalesCount),
-                  style: theme?.boldTextTheme.caption1Bold.copyWith(
+                  style: boldTextTheme?.caption1Bold.copyWith(
                     color: ColorsFoundation.mutedText,
                   ),
                 ),
@@ -90,7 +91,7 @@ class UsersBookingsControl extends StatelessWidget {
                       children: [
                         Text(
                           element.profile?.name ?? '',
-                          style: theme?.boldTextTheme.caption1Medium,
+                          style: boldTextTheme?.caption1Medium,
                         ),
                         if (element.profile?.userTileType == UserTileType.influencer) ...[
                           SpacingFoundation.horizontalSpace8,
@@ -105,7 +106,7 @@ class UsersBookingsControl extends StatelessWidget {
                     ),
                     Text(
                       element.profile?.nickname ?? '',
-                      style: theme?.boldTextTheme.caption1Bold.copyWith(
+                      style: boldTextTheme?.caption1Bold.copyWith(
                         color: ColorsFoundation.mutedText,
                       ),
                     ),
@@ -126,29 +127,29 @@ class UsersBookingsControl extends StatelessWidget {
                       ),
                       itemBuilder: (BuildContext context) => [
                         PopupMenuItem(
-                          value: 0,
+                          value: 'refund',
                           child: Text(
                             S.of(context).FullRefund,
-                            style: theme?.boldTextTheme.caption2Medium.copyWith(
-                              color: theme.colorScheme.inverseBodyTypography,
+                            style: boldTextTheme?.caption2Medium.copyWith(
+                              color: theme?.colorScheme.inverseBodyTypography,
                             ),
                           ),
                         ),
                         PopupMenuItem(
-                          value: 1,
+                          value: 'partialrefund',
                           child: Text(
                             S.of(context).PartialRefund,
-                            style: theme?.boldTextTheme.caption2Medium.copyWith(
-                              color: theme.colorScheme.inverseBodyTypography,
+                            style: boldTextTheme?.caption2Medium.copyWith(
+                              color: theme?.colorScheme.inverseBodyTypography,
                             ),
                           ),
                         ),
                         PopupMenuItem(
-                          value: 2,
+                          value: 'contact',
                           child: Text(
                             S.of(context).Contact,
-                            style: theme?.boldTextTheme.caption2Medium.copyWith(
-                              color: theme.colorScheme.inverseBodyTypography,
+                            style: boldTextTheme?.caption2Medium.copyWith(
+                              color: theme?.colorScheme.inverseBodyTypography,
                             ),
                           ),
                         ),
