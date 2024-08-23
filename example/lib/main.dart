@@ -763,10 +763,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 onGoAheadTap: () {},
                               );
                             },
-                            onPopupMenuSelected: (index, userId) {
-                              if (index == 0) {
+                            onPopupMenuSelected: (str, userId) {
+                              if (str == 'refund') {
                                 log('fullRefund $userId');
-                              } else if (index == 1) {
+                              } else if (str == 'partialrefund') {
                                 log('partialRefund $userId');
                               } else {
                                 showUiKitAlertDialog(
@@ -869,7 +869,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                     title: 'testeMain',
                                     imageUrl: GraphicsFoundation.instance.png.avatars.avatar3.path,
                                     users: List.generate(
-                                      13,
+                                      100,
                                       (index) {
                                         return UserBookingsControlUiModel(
                                           id: index,
