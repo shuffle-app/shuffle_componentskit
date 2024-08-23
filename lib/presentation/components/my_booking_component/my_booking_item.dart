@@ -24,6 +24,7 @@ class MyBookingItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final boldTextTheme = theme?.boldTextTheme;
 
     return Column(
       children: [
@@ -41,11 +42,11 @@ class MyBookingItem extends StatelessWidget {
             Expanded(
               child: Text(
                 myBookingUiModel?.name ?? S.of(context).NothingFound,
-                style: theme?.boldTextTheme.body,
+                style: boldTextTheme?.body,
               ),
             ),
             SpacingFoundation.horizontalSpace12,
-            if (myBookingUiModel?.isPast ?? false) ...[
+            if (myBookingUiModel?.isPast ?? false)
               context.outlinedButton(
                 padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
                 data: BaseUiKitButtonData(
@@ -56,7 +57,7 @@ class MyBookingItem extends StatelessWidget {
                   onPressed: onAlertCircleTap,
                 ),
               )
-            ] else ...[
+            else
               context.iconButtonNoPadding(
                 data: BaseUiKitButtonData(
                   onPressed: () => onBarCodeTap?.call(myBookingUiModel?.id),
@@ -65,7 +66,6 @@ class MyBookingItem extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
           ],
         ),
         SpacingFoundation.verticalSpace16,
@@ -74,14 +74,14 @@ class MyBookingItem extends StatelessWidget {
             Expanded(
               child: Text(
                 S.of(context).Ticket,
-                style: theme?.boldTextTheme.labelLarge,
+                style: boldTextTheme?.labelLarge,
               ),
             ),
             Expanded(
               flex: 2,
               child: Text(
                 '${myBookingUiModel?.ticket ?? '1'}',
-                style: theme?.boldTextTheme.subHeadline,
+                style: boldTextTheme?.subHeadline,
               ),
             ),
           ],
@@ -93,14 +93,14 @@ class MyBookingItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   S.of(context).Product,
-                  style: theme?.boldTextTheme.labelLarge,
+                  style: boldTextTheme?.labelLarge,
                 ),
               ),
               Expanded(
                 flex: 2,
                 child: Text(
                   myBookingUiModel!.product.toString(),
-                  style: theme?.boldTextTheme.subHeadline,
+                  style: boldTextTheme?.subHeadline,
                 ),
               ),
             ],
@@ -112,14 +112,14 @@ class MyBookingItem extends StatelessWidget {
             Expanded(
               child: Text(
                 S.of(context).Total,
-                style: theme?.boldTextTheme.labelLarge,
+                style: boldTextTheme?.labelLarge,
               ),
             ),
             Expanded(
               flex: 2,
               child: Text(
                 '${myBookingUiModel?.total ?? '0'} ${myBookingUiModel?.currency ?? ''}',
-                style: theme?.boldTextTheme.subHeadline,
+                style: boldTextTheme?.subHeadline,
               ),
             ),
           ],
