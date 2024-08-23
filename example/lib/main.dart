@@ -881,7 +881,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                             email: 'test@emal.index$index',
                                           ),
                                           refundUiModel: index.isEven
-                                              ? RefundUiModel(
+                                              ? TicketUiModel.refund(
                                                   ticketRefund: math.Random().nextInt(4) + 1,
                                                   upsaleRefund: math.Random().nextInt(4) + 1,
                                                 )
