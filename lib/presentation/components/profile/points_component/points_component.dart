@@ -97,7 +97,7 @@ class PointsComponent extends StatelessWidget {
     return formatter.format(text).replaceAll(',', ' ');
   }
 
-  String parseDoubleToInt(double text) {
+  String parseDoubleToInt(num text) {
     return text.toString().replaceAll(RegExp(r'([.]*0)(?!.*\d)'), '');
   }
 
@@ -259,6 +259,7 @@ class PointsComponent extends StatelessWidget {
                     itemCount: listItemPoint!.length,
                     itemBuilder: (context, index) {
                       final itemPoits = listItemPoint![index];
+                      print(itemPoits.actualSum > itemPoits.sum);
 
                       return UiKitCardWrapper(
                         color: theme?.colorScheme.surface,
