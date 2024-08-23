@@ -41,11 +41,11 @@ class PointsComponent extends StatelessWidget {
   ) {
     Gradient getCustomGradient() {
       if (uiUserPointsProgressBarModel != null) {
-        if (uiUserPointsProgressBarModel.level < 3) {
+        if (uiUserPointsProgressBarModel.level < 1) {
           return GradientFoundation.bronzeGradient;
-        } else if (3 <= uiUserPointsProgressBarModel.level && uiUserPointsProgressBarModel.level < 6) {
+        } else if (1 <= uiUserPointsProgressBarModel.level && uiUserPointsProgressBarModel.level < 2) {
           return GradientFoundation.silverGradient;
-        } else if (6 <= uiUserPointsProgressBarModel.level) {
+        } else if (2 <= uiUserPointsProgressBarModel.level) {
           return GradientFoundation.goldGradient;
         } else {
           return GradientFoundation.bronzeGradient;
@@ -200,6 +200,7 @@ class PointsComponent extends StatelessWidget {
                   children: [
                     RowGradientCircle(
                       level: uiUserPointsProgressBarModel.level,
+                        progressInCircle: (uiUserPointsProgressBarModel.actual / 33).toInt(),
                     ).paddingAll(EdgeInsetsFoundation.all8),
                     SpacingFoundation.horizontalSpace4,
                     Expanded(

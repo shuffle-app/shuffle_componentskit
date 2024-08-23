@@ -41,23 +41,9 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
   @override
   void didUpdateWidget(covariant MindsetsManageComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedMindset != oldWidget.selectedMindset ||
-        widget.selectedMindset?.uniqueProperties.length != oldWidget.selectedMindset?.uniqueProperties.length ||
-        widget.selectedMindset?.baseProperties.length != oldWidget.selectedMindset?.baseProperties.length) {}
-    setState(() {
-      selectedTag = null;
-    });
-    if (selectedTag != null &&
-        selectedTag?.relatedProperties?.length !=
-            (selectedTag!.unique
-                    ? widget.selectedMindset?.uniqueProperties.firstWhere((e) => e.id == selectedTag?.id)
-                    : widget.selectedMindset?.baseProperties.firstWhere((e) => e.id == selectedTag?.id))
-                ?.relatedProperties
-                ?.length) {
+    if (widget.selectedMindset != oldWidget.selectedMindset) {
       setState(() {
-        selectedTag = (selectedTag!.unique
-            ? widget.selectedMindset?.uniqueProperties.firstWhere((e) => e.id == selectedTag?.id)
-            : widget.selectedMindset?.baseProperties.firstWhere((e) => e.id == selectedTag?.id));
+        selectedTag = null;
       });
     }
   }
@@ -65,7 +51,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
   @override
   Widget build(BuildContext context) {
     final uiKitTheme = context.uiKitTheme;
-    debugPrint('CategoriesCreateComponent build here with selectedProperty: ${selectedTag?.title}');
+    debugPrint('MindsetsManageComponent build here with selectedProperty: ${selectedTag?.title}');
 
     return Scaffold(
       body: UiKitCardWrapper(
@@ -135,7 +121,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
             SpacingFoundation.horizontalSpace16,
             Flexible(
               child: PropertiesBorderedBox(
-                title: widget.selectedMindset?.icon != null
+                title: widget.selectedMindset != null
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
