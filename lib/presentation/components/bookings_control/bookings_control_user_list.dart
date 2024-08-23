@@ -177,7 +177,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
             SpacingFoundation.verticalSpace24,
           ] else
             Text(
-              'No bookings yet',
+              S.of(context).NoBookingsYet,
               style: theme?.boldTextTheme.body,
             )
         ],
