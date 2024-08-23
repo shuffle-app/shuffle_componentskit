@@ -43,23 +43,17 @@ class MyBookingComponent extends StatelessWidget {
             style: theme?.boldTextTheme.title2,
           ),
           SpacingFoundation.verticalSpace16,
-          ListView.separated(
-            shrinkWrap: true,
-            controller: ScrollController(),
-            itemCount: myBookingUiModelUpcoming?.length ?? 0,
-            padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
-            separatorBuilder: (_, __) => SizedBox(height: SpacingFoundation.verticalSpacing32),
-            itemBuilder: (context, index) {
-              return MyBookingItem(
-                myBookingUiModel: myBookingUiModelUpcoming?[index],
-                onAlertCircleTap: onAlertCircleTap,
-                onBarCodeTap: onBarCodeTap,
-                onFullRefundTap: onFullRefundTap,
-                onLeaveFeedbackTap: onLeaveFeedbackTap,
-                onPartialRefundTap: onPartialRefundTap,
-              );
-            },
-          ),
+          for (int index = 0; index < (myBookingUiModelUpcoming?.length ?? 0); index++) ...[
+            MyBookingItem(
+              myBookingUiModel: myBookingUiModelUpcoming?[index],
+              onAlertCircleTap: onAlertCircleTap,
+              onBarCodeTap: onBarCodeTap,
+              onFullRefundTap: onFullRefundTap,
+              onLeaveFeedbackTap: onLeaveFeedbackTap,
+              onPartialRefundTap: onPartialRefundTap,
+            ),
+            SizedBox(height: SpacingFoundation.verticalSpacing32),
+          ],
           SizedBox(height: SpacingFoundation.verticalSpacing32),
           Row(
             children: [
@@ -90,23 +84,17 @@ class MyBookingComponent extends StatelessWidget {
             ],
           ),
           SpacingFoundation.verticalSpace16,
-          ListView.separated(
-            shrinkWrap: true,
-            controller: ScrollController(),
-            itemCount: myBookingUiModelPast?.length ?? 0,
-            padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
-            separatorBuilder: (_, __) => SizedBox(height: SpacingFoundation.verticalSpacing32),
-            itemBuilder: (context, index) {
-              return MyBookingItem(
-                myBookingUiModel: myBookingUiModelPast?[index],
-                onAlertCircleTap: onAlertCircleTap,
-                onBarCodeTap: onBarCodeTap,
-                onFullRefundTap: onFullRefundTap,
-                onLeaveFeedbackTap: onLeaveFeedbackTap,
-                onPartialRefundTap: onPartialRefundTap,
-              );
-            },
-          ),
+          for (int index = 0; index < (myBookingUiModelPast?.length ?? 0); index++) ...[
+            MyBookingItem(
+              myBookingUiModel: myBookingUiModelPast?[index],
+              onAlertCircleTap: onAlertCircleTap,
+              onBarCodeTap: onBarCodeTap,
+              onFullRefundTap: onFullRefundTap,
+              onLeaveFeedbackTap: onLeaveFeedbackTap,
+              onPartialRefundTap: onPartialRefundTap,
+            ),
+            SizedBox(height: SpacingFoundation.verticalSpacing32),
+          ],
         ],
       ),
     );
