@@ -14,6 +14,13 @@ class TicketUiModel {
     this.subs,
   });
 
+  TicketUiModel.refund({
+    this.id = -1,
+    this.ticketsCount = 0,
+    this.upsales,
+    this.subs,
+  });
+
   int get totalUpsalesCount {
     if (upsales == null) {
       return 0;
