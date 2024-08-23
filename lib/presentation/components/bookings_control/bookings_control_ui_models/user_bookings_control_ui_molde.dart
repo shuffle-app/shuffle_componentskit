@@ -4,7 +4,7 @@ class UserBookingsControlUiModel {
   final int id;
   final UiProfileModel? profile;
   final TicketUiModel? ticketUiModel;
-  final RefundUiModel? refundUiModel;
+  final TicketUiModel? refundUiModel;
   bool isSelected;
 
   UserBookingsControlUiModel({
@@ -19,7 +19,7 @@ class UserBookingsControlUiModel {
     int? id,
     UiProfileModel? profile,
     TicketUiModel? ticketUiModel,
-    RefundUiModel? refundUiModel,
+    TicketUiModel? refundUiModel,
     bool? isSelected,
   }) {
     return UserBookingsControlUiModel(
