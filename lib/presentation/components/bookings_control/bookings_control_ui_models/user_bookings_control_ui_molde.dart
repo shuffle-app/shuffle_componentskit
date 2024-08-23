@@ -4,12 +4,14 @@ class UserBookingsControlUiModel {
   final int id;
   final UiProfileModel? profile;
   final TicketUiModel? ticketUiModel;
+  final RefundUiModel? refundUiModel;
   bool isSelected;
 
   UserBookingsControlUiModel({
     required this.id,
     this.profile,
     this.ticketUiModel,
+    this.refundUiModel,
     this.isSelected = false,
   });
 
@@ -17,12 +19,14 @@ class UserBookingsControlUiModel {
     int? id,
     UiProfileModel? profile,
     TicketUiModel? ticketUiModel,
+    RefundUiModel? refundUiModel,
     bool? isSelected,
   }) {
     return UserBookingsControlUiModel(
       id: id ?? this.id,
       profile: profile ?? this.profile,
       ticketUiModel: ticketUiModel ?? this.ticketUiModel,
+      refundUiModel: refundUiModel ?? this.refundUiModel,
       isSelected: isSelected ?? this.isSelected,
     );
   }

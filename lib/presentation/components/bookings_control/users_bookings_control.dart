@@ -54,7 +54,7 @@ class UsersBookingsControl extends StatelessWidget {
         ],
         GestureDetector(
           onLongPress: onLongPress,
-          onTap: element.ticketUiModel != null ? onRequestsRefund : null,
+          onTap: element.refundUiModel != null ? onRequestsRefund : null,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -67,16 +67,17 @@ class UsersBookingsControl extends StatelessWidget {
                     userName: element.profile?.name ?? '',
                     imageUrl: element.profile?.avatarUrl,
                   ),
-                  if (element.ticketUiModel != null) ...[
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
+                  if (element.refundUiModel != null)
+                    const DecoratedBox(
+                      decoration: BoxDecoration(
                         color: ColorsFoundation.error,
                         shape: BoxShape.circle,
                       ),
-                    ),
-                  ]
+                      child: SizedBox(
+                        width: 10,
+                        height: 10,
+                      ),
+                    )
                 ],
               ),
               SpacingFoundation.horizontalSpace12,
