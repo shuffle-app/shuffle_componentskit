@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import 'bookings_control_ui_models/user_bookings_control_ui_molde.dart';
+import 'bookings_control_ui_models/user_bookings_control_ui_model.dart';
 
 class UsersBookingsControl extends StatelessWidget {
   final bool isFirst;

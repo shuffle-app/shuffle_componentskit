@@ -1,4 +1,4 @@
-import 'user_bookings_control_ui_molde.dart';
+import 'user_bookings_control_ui_model.dart';
 
 class BookingsPlaceOrEventUiModel {
   final int id;
