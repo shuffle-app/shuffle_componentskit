@@ -110,6 +110,7 @@ class ChatMessageUiModel {
 }
 
 class ChatMessageInvitationData {
+  final int connectId;
   final int contentId;
   final int receiverId;
   final int senderId;
@@ -138,6 +139,7 @@ class ChatMessageInvitationData {
     required this.contentType,
     required this.receiverUserType,
     required this.hasAcceptedInvite,
+    required this.connectId,
   });
 
   ChatMessageInvitationData copyWith({
@@ -154,8 +156,10 @@ class ChatMessageInvitationData {
     int? receiverId,
     int? senderId,
     bool? hasAcceptedInvite,
+    int? connectId,
   }) {
     return ChatMessageInvitationData(
+      connectId: connectId ?? this.connectId,
       hasAcceptedInvite: hasAcceptedInvite ?? this.hasAcceptedInvite,
       senderId: senderId ?? this.senderId,
       receiverId: receiverId ?? this.receiverId,

@@ -1,9 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/components/influencer/linear_influencer_indicator.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:intl/intl.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 import 'rectangle_circle_animation.dart';
 import 'row_gradient_circle.dart';
@@ -33,6 +33,8 @@ class PointsComponent extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   final AutoSizeGroup challengeFeelingsGroup = AutoSizeGroup();
 
+  double get progressIndicatorHeight => 1.sw <= 380 ? 16.h : 12.h;
+
   LinearInfluencerIndicator _linearInfluencerIndicator(
     UiUserPointsProgressBarModel? uiUserPointsProgressBarModel,
     Color? customColor,
@@ -56,8 +58,8 @@ class PointsComponent extends StatelessWidget {
     return LinearInfluencerIndicator(
       actualSum: uiUserPointsProgressBarModel?.actual ?? 0,
       sum: uiUserPointsProgressBarModel?.sum ?? 100,
-      width: 1.sw <= 380 ? 185.w : 205.w,
-      height: 1.sw <= 380 ? 16.h : 12.h,
+      width: 1.sw <= 380 ? 185.w : 215.w,
+      height: progressIndicatorHeight,
       customGradient: getCustomGradient(),
       customColor: customColor,
     );
@@ -95,18 +97,13 @@ class PointsComponent extends StatelessWidget {
     return formatter.format(text).replaceAll(',', ' ');
   }
 
-  String parseDoubleToInt(double text) {
+  String parseDoubleToInt(num text) {
     return text.toString().replaceAll(RegExp(r'([.]*0)(?!.*\d)'), '');
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-
-    final linearProgress = _linearInfluencerIndicator(
-      uiUserPointsProgressBarModel,
-      ColorsFoundation.neutral16,
-    );
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -203,54 +200,43 @@ class PointsComponent extends StatelessWidget {
                   children: [
                     RowGradientCircle(
                       level: uiUserPointsProgressBarModel.level,
-                        progressInCircle: (uiUserPointsProgressBarModel.actual / 33).toInt(),
+                      progressInCircle: (uiUserPointsProgressBarModel.actual / 33).toInt(),
                     ).paddingAll(EdgeInsetsFoundation.all8),
                     SpacingFoundation.horizontalSpace4,
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Stack(
-                          children: [
-                            linearProgress,
-                            Container(
-                              width: linearProgress.progressPosition,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadiusFoundation.all40,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: theme?.colorScheme.inversePrimary.withOpacity(0.5) ??
-                                        Colors.white.withOpacity(0.8),
-                                    blurRadius: 8,
-                                  ),
-                                ],
-                              ),
-                              child: linearProgress,
-                            ),
-                          ],
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '${uiUserPointsProgressBarModel.actual.toInt()}/',
-                                style: theme?.regularTextTheme.caption2.copyWith(
-                                  color: uiUserPointsProgressBarModel.actual >= (uiUserPointsProgressBarModel.sum / 2.2)
-                                      ? ColorsFoundation.lightBodyTypographyColor
-                                      : ColorsFoundation.mutedText,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '${uiUserPointsProgressBarModel.sum.toInt()}',
-                                style: theme?.regularTextTheme.caption2.copyWith(
-                                  color: uiUserPointsProgressBarModel.actual > (uiUserPointsProgressBarModel.sum / 1.5)
-                                      ? ColorsFoundation.lightBodyTypographyColor
-                                      : ColorsFoundation.mutedText,
-                                ),
-                              ),
-                            ],
+                    Expanded(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          _linearInfluencerIndicator(
+                            uiUserPointsProgressBarModel,
+                            ColorsFoundation.neutral16,
                           ),
-                        ),
-                      ],
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${uiUserPointsProgressBarModel.actual.toInt()}/',
+                                  style: theme?.regularTextTheme.caption2.copyWith(
+                                    color:
+                                        uiUserPointsProgressBarModel.actual >= (uiUserPointsProgressBarModel.sum / 2.2)
+                                            ? ColorsFoundation.lightBodyTypographyColor
+                                            : ColorsFoundation.mutedText,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '${uiUserPointsProgressBarModel.sum.toInt()}',
+                                  style: theme?.regularTextTheme.caption2.copyWith(
+                                    color:
+                                        uiUserPointsProgressBarModel.actual > (uiUserPointsProgressBarModel.sum / 1.5)
+                                            ? ColorsFoundation.lightBodyTypographyColor
+                                            : ColorsFoundation.mutedText,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -273,6 +259,7 @@ class PointsComponent extends StatelessWidget {
                     itemCount: listItemPoint!.length,
                     itemBuilder: (context, index) {
                       final itemPoits = listItemPoint![index];
+                      print(itemPoits.actualSum > itemPoits.sum);
 
                       return UiKitCardWrapper(
                         color: theme?.colorScheme.surface,

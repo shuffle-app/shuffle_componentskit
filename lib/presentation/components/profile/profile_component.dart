@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/domain/config_models/profile/component_profile_model.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:intl/intl.dart';
 
 //ignore_for_file: no-empty-block
 
@@ -214,6 +213,7 @@ class ProfileComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace24,
           UiKitHorizontalScroll3D(
+            key: ValueKey(recommendedUsers?.length ?? 3),
             onItemChanged: onRecommendedUserCardChanged,
             itemBuilder: (BuildContext context, int index) {
               try {

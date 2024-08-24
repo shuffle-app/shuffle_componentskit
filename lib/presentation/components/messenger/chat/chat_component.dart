@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
@@ -27,6 +25,8 @@ class ChatComponent extends StatelessWidget {
   final bool isMultipleChat;
   final ChatMessageUiModel? pinnedMessage;
   final VoidCallback? onPinnedMessageTap;
+  final void Function(int userId, UserTileType userType)? onProfileTapped;
+  final double keyboardPadding;
 
   const ChatComponent({
     super.key,
@@ -48,6 +48,8 @@ class ChatComponent extends StatelessWidget {
     this.onPinnedMessageTap,
     this.pinnedMessage,
     this.onReplyMessageTap,
+    this.onProfileTapped,
+    this.keyboardPadding = 0,
   });
 
   @override
@@ -57,12 +59,12 @@ class ChatComponent extends StatelessWidget {
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
-      customToolbarBaseHeight: 100,
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
       autoImplyLeading: true,
       canFoldAppBar: false,
       reverse: true,
       physics: const NeverScrollableScrollPhysics(),
+      keyboardPadding: keyboardPadding,
       topFixedAddition: pinnedMessage != null
           ? GestureDetector(
               onTap: onPinnedMessageTap,
@@ -91,12 +93,15 @@ class ChatComponent extends StatelessWidget {
                 onPressed: onLeaveChat,
               ),
             )
-          : context.smallGradientButton(
-              data: BaseUiKitButtonData(
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.profileplus,
+          : SizedBox.fromSize(
+              size: Size(0.125.sw, 0.125.sw),
+              child: context.smallGradientButton(
+                data: BaseUiKitButtonData(
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.profileplus,
+                  ),
+                  onPressed: onInviteToAnotherPlace,
                 ),
-                onPressed: onInviteToAnotherPlace,
               ),
             ),
       customTitle: Expanded(
@@ -105,6 +110,20 @@ class ChatComponent extends StatelessWidget {
           onTap: () {
             if (chatData.isGroupChat && chatData.contentId != null && chatData.contentType != null) {
               onChatHeaderTapped?.call(chatData.contentId!, chatData.contentType!);
+            } else if (!chatData.isGroupChat) {
+              final owner = chatData.owner;
+              print(owner?.name);
+              if (owner == null) return;
+
+              if (!chatData.userIsOwner) {
+                onProfileTapped?.call(owner.id, owner.userType);
+              } else {
+                final member = chatData.members?.firstWhere((member) => member.id != owner.id);
+                print(member?.name);
+                if (member == null) return;
+
+                onProfileTapped?.call(member.id, member.userType);
+              }
             }
           },
           child: Row(
@@ -130,35 +149,16 @@ class ChatComponent extends StatelessWidget {
                           ),
                         ),
                         SpacingFoundation.horizontalSpace12,
-                        if (chatData.userType == UserTileType.influencer)
-                          GradientableWidget(
-                            gradient: GradientFoundation.defaultLinearGradient,
-                            child: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.star2,
-                              color: context.uiKitTheme?.colorScheme.inversePrimary,
-                              height: 16.w,
-                            ),
-                          ),
-                        if (chatData.userType == UserTileType.premium)
-                          ImageWidget(
-                            svgAsset: GraphicsFoundation.instance.svg.star2,
-                            color: context.uiKitTheme?.colorScheme.inversePrimary,
-                            height: 16.w,
-                          ),
-                        if (chatData.userType == UserTileType.pro)
-                          GradientableWidget(
-                            gradient: GradientFoundation.premiumLinearGradient,
-                            child: Text(
-                              'pro',
-                              style: theme?.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
-                            ),
-                          ),
+                        if (chatData.userType == UserTileType.influencer) InfluencerAccountMark(),
+                        if (chatData.userType == UserTileType.premium) PremiumAccountMark(),
+                        if (chatData.userType == UserTileType.pro) ProAccountMark(),
                       ],
                     ),
                     if (chatData.subtitle != null)
                       Text(
                         chatData.subtitle!,
-                        style: theme?.boldTextTheme.caption1Medium,
+                        maxLines: 1,
+                        style: theme?.boldTextTheme.caption1Medium.copyWith(overflow: TextOverflow.ellipsis),
                       ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical2),
                     if (chatData.tag != null)
                       UiKitTagWidget(
@@ -173,15 +173,9 @@ class ChatComponent extends StatelessWidget {
         ),
       ),
       hideBottomSpace: chatData.readOnlyChat,
+      bottomSheetHeight: 1.sw * 0.275,
       bodyBottomSpace: kBottomNavigationBarHeight +
-          SpacingFoundation.verticalSpacing32 +
-          (Platform.isAndroid
-              ? chatData.isGroupChat
-                  ? SpacingFoundation.verticalSpacing16
-                  : SpacingFoundation.verticalSpacing6
-              : chatData.isGroupChat
-                  ? SpacingFoundation.verticalSpacing40
-                  : SpacingFoundation.verticalSpacing32),
+          (chatData.isGroupChat ? SpacingFoundation.verticalSpacing16 : SpacingFoundation.verticalSpacing4),
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),
@@ -257,10 +251,10 @@ class ChatComponent extends StatelessWidget {
                         canDenyInvitation: false,
                         canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                         onAcceptTap: () {
-                          if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                          onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         onDenyTap: () {
-                          if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                          onDenyInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         tags: item.invitationData?.tags ?? [],
                         customMessageData: chatData.isGroupChat
@@ -323,6 +317,10 @@ class ChatComponent extends StatelessWidget {
                   children: [
                     if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                     UiKitChatInCard(
+                      onUsernameTapped: () => onProfileTapped?.call(
+                        item.senderId,
+                        item.senderProfileType ?? UserTileType.ordinary,
+                      ),
                       showAvatar: chatData.isGroupChat,
                       avatarUrl: item.senderAvatar,
                       senderName: item.senderName,
@@ -353,10 +351,10 @@ class ChatComponent extends StatelessWidget {
                                 : !chatData.hasAcceptedInvite,
                         canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                         onAcceptTap: () {
-                          if (item.connectId != null) onAcceptInvitationTap?.call(item.connectId!);
+                          onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         onDenyTap: () {
-                          if (item.connectId != null) onDenyInvitationTap?.call(item.connectId!);
+                          onDenyInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
                         },
                         tags: item.invitationData?.tags ?? [],
                         customMessageData: chatData.isGroupChat
@@ -385,6 +383,10 @@ class ChatComponent extends StatelessWidget {
                   if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                   item.replyMessageModel == null
                       ? UiKitChatInCard(
+                          onUsernameTapped: () => onProfileTapped?.call(
+                            item.senderId,
+                            item.senderProfileType ?? UserTileType.ordinary,
+                          ),
                           hasInvitation: false,
                           showAvatar: chatData.isGroupChat,
                           avatarUrl: item.senderAvatar,
@@ -397,6 +399,10 @@ class ChatComponent extends StatelessWidget {
                           senderNickname: item.senderNickname ?? '',
                         )
                       : UiKitChatCardWithReplyIn(
+                          onUsernameTapped: () => onProfileTapped?.call(
+                            item.senderId,
+                            item.senderProfileType ?? UserTileType.ordinary,
+                          ),
                           showAvatar: chatData.isGroupChat,
                           id: item.messageId,
                           onReplyMessage: onReplyMessage,
