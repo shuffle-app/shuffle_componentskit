@@ -29,8 +29,8 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late BookingUiModel _bookingUiModel;
 
-  final List<SubsUiModel> _subsUiModels = [];
-  final List<UpsaleUiModel> _upsaleUiModels = [];
+  final List<SubsUiModel> _subsUiModels = List.empty(growable: true);
+  final List<UpsaleUiModel> _upsaleUiModels = List.empty(growable: true);
 
   int _allSubsLimitCount = 0;
 
