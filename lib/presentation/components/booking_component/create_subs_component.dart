@@ -153,7 +153,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
               text: S.of(context).Save.toUpperCase(),
               onPressed: () {
                 if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _subsUiModel.title = _titleController.text;
+                  _subsUiModel.title = _titleController.text.trim();
                   _subsUiModel.bookingLimit = _limitController.text;
                   _subsUiModel.description = _descriptionController.text;
                   _subsUiModel.photo = _photo;
