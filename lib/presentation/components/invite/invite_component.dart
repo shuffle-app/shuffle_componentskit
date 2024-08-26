@@ -222,7 +222,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         ),
                         child: UiKitInputFieldNoIcon(
                           minLines: 1,
-                          maxSymbols: 100,
+                          maxSymbols: 25,
                           controller: _wishController,
                           hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,

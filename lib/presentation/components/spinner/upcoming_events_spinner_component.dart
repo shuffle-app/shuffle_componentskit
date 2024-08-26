@@ -108,7 +108,7 @@ class UpcomingEventsSpinnerComponent extends StatelessWidget {
                       title: item.title,
                       scheduleString: item.scheduleString?.replaceAll('\n', ', '),
                       favourite: favoriteValue.data as bool? ?? item.favorite,
-                      photoLink: item.media
+                      photoLink: item.verticalPreview?.link ?? item.media
                           .firstWhere((element) => element.type == UiKitMediaType.image)
                           .link,
                       ownerTileTitle: item.owner?.name,
