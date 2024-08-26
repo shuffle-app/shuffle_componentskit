@@ -68,6 +68,26 @@ class MyBookingItem extends StatelessWidget {
               ),
           ],
         ),
+        SpacingFoundation.verticalSpace2,
+        if (myBookingUiModel?.dateTime != null)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                formatDifference(myBookingUiModel!.dateTime!.toLocal()),
+                style: boldTextTheme?.caption3Medium.copyWith(
+                  color: ColorsFoundation.mutedText,
+                ),
+              ),
+              SpacingFoundation.horizontalSpace8,
+              Text(
+                formatChatMessageDate(myBookingUiModel!.dateTime!.toLocal()),
+                style: boldTextTheme?.caption3Medium.copyWith(
+                  color: ColorsFoundation.mutedText,
+                ),
+              ),
+            ],
+          ),
         SpacingFoundation.verticalSpace16,
         Row(
           children: [
