@@ -80,14 +80,15 @@ class MyBookingItem extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Text(
-                '${myBookingUiModel?.ticket ?? '1'}',
+                '${myBookingUiModel?.ticketUiModel?.ticketsCount ?? '1'}',
                 style: boldTextTheme?.subHeadline,
               ),
             ),
           ],
         ),
         SpacingFoundation.verticalSpace2,
-        if (myBookingUiModel?.product != null && myBookingUiModel!.product! > 0) ...[
+        if (myBookingUiModel?.ticketUiModel?.totalUpsalesCount != null &&
+            myBookingUiModel!.ticketUiModel!.totalUpsalesCount > 0) ...[
           Row(
             children: [
               Expanded(
@@ -99,7 +100,7 @@ class MyBookingItem extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  myBookingUiModel!.product.toString(),
+                  myBookingUiModel!.ticketUiModel!.totalUpsalesCount.toString(),
                   style: boldTextTheme?.subHeadline,
                 ),
               ),
