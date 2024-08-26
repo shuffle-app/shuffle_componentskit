@@ -531,6 +531,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         ),
                         onBookingTap: () => context.push(
                           CreateBookingComponent(
+                            bookingUiModel: _bookingUiModel,
                             onBookingCreated: (bookingUiModel) {
                               _bookingUiModel = bookingUiModel;
                             },

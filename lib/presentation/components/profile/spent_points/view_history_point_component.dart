@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/point_history_universal_model.dart';
-import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ViewHistoryPointComponent extends StatelessWidget {
+class ViewHistoryPointComponent extends StatefulWidget {
   const ViewHistoryPointComponent({
     super.key,
     this.onTapBarCode,
@@ -18,6 +17,13 @@ class ViewHistoryPointComponent extends StatelessWidget {
   final PagingController<int, PointHistoryUniversalModel> pagingController;
 
   @override
+  State<ViewHistoryPointComponent> createState() => _ViewHistoryPointComponentState();
+}
+
+class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
+  String selectedTab = 'Accrual';
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlurredAppBarPage(
@@ -27,15 +33,21 @@ class ViewHistoryPointComponent extends StatelessWidget {
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         UiKitCustomTabBar(
+          selectedTab: selectedTab,
           onTappedTab: (value) {
-            onTabChange?.call(value);
+            setState(() {
+              widget.onTabChange?.call(value);
+              selectedTab = ['Activation', 'Accrual'][value];
+            });
           },
           tabs: [
             UiKitCustomTab(
               title: S.current.Activation,
+              customValue: 'Activation',
             ),
             UiKitCustomTab(
               title: S.current.Accrual,
+              customValue: 'Accrual',
             ),
           ],
         ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
@@ -43,17 +55,22 @@ class ViewHistoryPointComponent extends StatelessWidget {
           height: 0.75.sh,
           child: PagedListView<int, PointHistoryUniversalModel>(
             padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
-            pagingController: pagingController,
+            pagingController: widget.pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-              noItemsFoundIndicatorBuilder: (_) => const UnderDevelopment(),
+              noItemsFoundIndicatorBuilder: (_) => Center(
+                child: Text(
+                  S.of(context).NothingFound,
+                  style: context.uiKitTheme?.boldTextTheme.body,
+                ),
+              ),
               itemBuilder: (context, item, index) {
                 return item.contentShortUiModel != null
                     ? ViewHistoryActivationWidget(
-                        onTap: onTapBarCode,
+                        onTap: widget.onTapBarCode,
                         activationModel: item.contentShortUiModel,
                       )
                     : UiKitPointsHistoryTile(
-                        isLast: index == pagingController.itemList!.length - 1,
+                        isLast: index == widget.pagingController.itemList!.length - 1,
                         title: item.uiModelViewHistoryAccrual?.title ?? '',
                         points: item.uiModelViewHistoryAccrual?.points ?? 0,
                         dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),

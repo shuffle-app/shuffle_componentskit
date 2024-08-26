@@ -82,6 +82,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
         customToolbarBaseHeight: 1.sw <= 380 ? 0.17.sh : 0.12.sh,
         centerTitle: true,
         autoImplyLeading: true,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           SpacingFoundation.verticalSpace16,
@@ -98,10 +99,17 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                 label: S.of(context).Description,
                 expands: true,
                 maxSymbols: 150,
-                validator: descriptionValidator,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return S.of(context).PleaseEnterValidDescription;
+                  }
+                  return null;
+                },
                 controller: _descriptionController,
                 onChanged: (value) {
-                  _formKey.currentState!.validate();
+                  setState(() {
+                    _formKey.currentState!.validate();
+                  });
                 },
               ),
             ),
@@ -137,9 +145,9 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                   onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
                     setState(() {
                       if (averageSelected) {
-                        _priceController.text = '$averagePrice $currency';
+                        _priceController.text = averagePrice.isNotEmpty ? '$averagePrice $currency' : '0 $currency';
                       } else {
-                        _priceController.text = rangePrice1;
+                        _priceController.text = rangePrice1.isNotEmpty ? '$rangePrice1 $currency' : '0 $currency';
                         if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
                           _priceController.text += '-$rangePrice2 $currency';
                         }
@@ -160,7 +168,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
               text: S.of(context).Save.toUpperCase(),
               onPressed: () {
                 if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _upsaleUiModel.description = _descriptionController.text;
+                  _upsaleUiModel.description = _descriptionController.text.trim();
                   _upsaleUiModel.limit = _limitController.text;
                   _upsaleUiModel.price = _priceController.text;
                   _upsaleUiModel.photo = _photo;
