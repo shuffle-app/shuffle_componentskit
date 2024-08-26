@@ -655,12 +655,44 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         10,
                         (index) => MyBookingUiModel(
                           id: index,
-                          currency: 'AED',
                           name: 'TEst $index',
-                          product: 1,
-                          ticket: 1,
+                          eventModel: index.isEven
+                              ? UiEventModel(
+                                  id: -1,
+                                  currency: 'AED',
+                                  description: '',
+                                  tags: [],
+                                  bookingUiModel: BookingUiModel(
+                                    id: -1,
+                                    selectedDateTime: DateTime(2024, 8, 1),
+                                  ),
+                                )
+                              : null,
+                          placeModel: index.isEven
+                              ? null
+                              : UiPlaceModel(
+                                  id: -1,
+                                  description: '',
+                                  tags: [],
+                                  currency: 'RUB',
+                                  bookingUiModel: BookingUiModel(
+                                    id: -1,
+                                    selectedDateTime: DateTime(2024, 8, 30),
+                                  ),
+                                ),
+                          ticketUiModel: TicketUiModel(
+                            ticketsCount: index,
+                            id: -1,
+                            upsales: [
+                              TicketItem(
+                                count: 0,
+                              ),
+                              TicketItem(
+                                count: 2,
+                              ),
+                            ],
+                          ),
                           total: 100,
-                          isPast: index.isEven ? true : false,
                         ),
                       ),
                     ),
