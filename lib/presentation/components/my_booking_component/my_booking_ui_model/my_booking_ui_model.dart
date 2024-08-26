@@ -36,4 +36,13 @@ class MyBookingUiModel {
     }
     return null;
   }
+
+  DateTime? get dateTime {
+    if (eventModel != null) {
+      return eventModel?.bookingUiModel?.selectedDateTime;
+    } else if (placeModel != null) {
+      return placeModel?.bookingUiModel?.selectedDateTime;
+    }
+    return null;
+  }
 }
