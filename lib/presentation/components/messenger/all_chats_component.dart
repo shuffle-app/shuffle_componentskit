@@ -33,10 +33,10 @@ class AllChatsComponent extends StatelessWidget {
       bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing24,
       builderDelegate: PagedChildBuilderDelegate<ChatItemUiModel>(
         firstPageProgressIndicatorBuilder:
-            firstPageProgressIndicatorBuilder ?? (context) => const LoadingWidget().paddingOnly(bottom: 0.2.sh),
+            firstPageProgressIndicatorBuilder ?? (context) => const LoadingWidget().paddingOnly(bottom: 0.15.sh),
         noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
           message: S.of(context).NoMessagesYet,
-        ).paddingOnly(bottom: 0.2.sh),
+        ).paddingOnly(bottom: 0.15.sh),
         newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
           gradient: GradientFoundation.greyGradient,
           child: UiKitMessageCard.empty(),

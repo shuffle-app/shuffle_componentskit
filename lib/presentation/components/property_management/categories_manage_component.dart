@@ -157,7 +157,7 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
             SpacingFoundation.horizontalSpace16,
             Flexible(
               child: PropertiesBorderedBox(
-                title: widget.selectedCategory?.icon != null
+                title: widget.selectedCategory != null
                     ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

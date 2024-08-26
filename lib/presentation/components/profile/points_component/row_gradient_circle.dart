@@ -4,10 +4,12 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class RowGradientCircle extends StatelessWidget {
   final int level;
+  final int progressInCircle;
 
   const RowGradientCircle({
     super.key,
     this.level = 0,
+    this.progressInCircle = 0,
   });
 
   @override
@@ -18,7 +20,7 @@ class RowGradientCircle extends StatelessWidget {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            boxShadow: level - 3 >= 0
+            boxShadow: level >= 1
                 ? [
                     BoxShadow(
                       color: theme!.colorScheme.inversePrimary.withOpacity(0.3),
@@ -32,15 +34,15 @@ class RowGradientCircle extends StatelessWidget {
             size: const Size(8, 8),
             painter: GradientCircleWithSegmentedRingPainter(
               theme: theme,
-              customGradietn: GradientFoundation.bronzeGradient,
-              level: level,
+              customGradient: GradientFoundation.bronzeGradient,
+              level: level >= 1 ? 3 : progressInCircle,
             ),
           ),
         ),
         SpacingFoundation.horizontalSpace20,
         DecoratedBox(
           decoration: BoxDecoration(
-            boxShadow: level - 6 >= 0
+            boxShadow: level >= 2
                 ? [
                     BoxShadow(
                       color: theme!.colorScheme.inversePrimary.withOpacity(0.3),
@@ -54,15 +56,19 @@ class RowGradientCircle extends StatelessWidget {
             size: const Size(8, 8),
             painter: GradientCircleWithSegmentedRingPainter(
               theme: theme,
-              customGradietn: GradientFoundation.silverGradient,
-              level: level - 3,
+              customGradient: GradientFoundation.silverGradient,
+              level: level < 1
+                  ? 0
+                  : level >= 2
+                      ? 3
+                      : progressInCircle,
             ),
           ),
         ),
         SpacingFoundation.horizontalSpace20,
         DecoratedBox(
           decoration: BoxDecoration(
-            boxShadow: level - 9 >= 0
+            boxShadow: level > 2
                 ? [
                     BoxShadow(
                       color: theme!.colorScheme.inversePrimary.withOpacity(0.3),
@@ -76,8 +82,12 @@ class RowGradientCircle extends StatelessWidget {
             size: const Size(8, 8),
             painter: GradientCircleWithSegmentedRingPainter(
               theme: theme,
-              customGradietn: GradientFoundation.goldGradient,
-              level: level - 6,
+              customGradient: GradientFoundation.goldGradient,
+              level: level < 2
+                  ? 0
+                  : level >= 3
+                      ? 3
+                      : progressInCircle,
             ),
           ),
         ),

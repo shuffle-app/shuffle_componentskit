@@ -28,7 +28,7 @@ class InviteComponent extends StatefulWidget {
   final UiInvitePersonModel? selfInvitationModel;
   final VoidCallback? onRemoveUserOptionTap;
   final VoidCallback? onDisabledUserTileTap;
-  final Future Function(String value, DateTime date)? onAddWishTap;
+  final Future Function(String value, DateTime? date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
   final DateTime? initialDate;
   final Future Function(List<UiInvitePersonModel>)? onInviteTap;
@@ -222,7 +222,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         ),
                         child: UiKitInputFieldNoIcon(
                           minLines: 1,
-                          maxSymbols: 100,
+                          maxSymbols: 25,
                           controller: _wishController,
                           hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,
@@ -233,25 +233,13 @@ class _InviteComponentState extends State<InviteComponent> {
                         data: BaseUiKitButtonData(
                           loading: loading,
                           onPressed: () {
-                            if (_wishController.text.isEmpty) {
-                              SnackBarUtils.show(
-                                context: context,
-                                message: S.of(context).PleaseFillOutYourWishes,
-                                type: AppSnackBarType.warning,
-                              );
-                            } else if (_date == null) {
-                              SnackBarUtils.show(
-                                context: context,
-                                message: S.of(context).PleaseFillOutDate,
-                                type: AppSnackBarType.warning,
-                              );
-                            } else {
-                              setState(() {
-                                isEditing = false;
-                                loading = true;
-                              });
-                              widget.onAddWishTap?.call(_wishController.text, _date!).whenComplete(() => setState(() => loading = false));
-                            }
+                            setState(() {
+                              isEditing = false;
+                              loading = true;
+                            });
+                            widget.onAddWishTap?.call(_wishController.text, _date).whenComplete(
+                                  () => setState(() => loading = false),
+                                );
                           },
                           iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
