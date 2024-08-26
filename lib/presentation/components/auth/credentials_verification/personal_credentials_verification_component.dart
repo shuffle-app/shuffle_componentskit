@@ -292,7 +292,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   controller: tabController,
                   children: [
                     UiKitCardWrapper(
-                      borderRadius: BorderRadiusFoundation.all32,
+                      borderRadius: BorderRadiusFoundation.all28,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
