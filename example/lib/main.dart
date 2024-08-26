@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
+import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -737,6 +739,206 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         availableTimeTemplates: [],
                         propertiesOptions: (p0) => [],
                         onEventCreated: (UiEventModel model) async {},
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'booking reques',
+                onPressed: () {
+                  context.push(
+                    BookingsControlComponent(
+                      onPlaceItemTap: (value) {
+                        context.push(
+                          BookingsControlUserList(
+                            canBookingEdit: true,
+                            bookingsPlaceItemUiModel: value,
+                            bookingUiModel: BookingUiModel(
+                              id: -1,
+                              bookingLimit: '10',
+                              bookingLimitPerOne: '5',
+                            ),
+                            onBookingEdit: (model) {
+                              context.push(
+                                CreateBookingComponent(
+                                  onBookingCreated: (value) {},
+                                  bookingUiModel: model,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      onEventItemTap: (value) {
+                        context.push(
+                          BookingsControlUserList(
+                            onRequestsRefund: (value) {
+                              getRefundBookingDialogUiKit(
+                                context: context,
+                                userName: value.profile?.name ?? '',
+                                allTicket: value.ticketUiModel?.ticketsCount ?? 0,
+                                allUpsale: value.ticketUiModel?.totalUpsalesCount ?? 0,
+                                ticketRefun: math.Random().nextInt(4) + 1,
+                                upsaleRefun: math.Random().nextInt(4) + 1,
+                                onContactTap: () {},
+                                onGoAheadTap: () {},
+                              );
+                            },
+                            onPopupMenuSelected: (str, userId) {
+                              if (str == 'refund') {
+                                log('fullRefund $userId');
+                              } else if (str == 'partialrefund') {
+                                log('partialRefund $userId');
+                              } else {
+                                showUiKitAlertDialog(
+                                  context,
+                                  AlertDialogData(
+                                    defaultButtonText: '',
+                                    insetPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
+                                    title: Text(
+                                      '${S.of(context).ContactWith} userName',
+                                      style: theme?.boldTextTheme.title2.copyWith(
+                                        color: theme.colorScheme.inverseHeadingTypography,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    actions: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              S.of(context).ByMessage,
+                                              style: theme?.boldTextTheme.body.copyWith(
+                                                color: theme.colorScheme.inverseBodyTypography,
+                                              ),
+                                            ),
+                                          ),
+                                          context.smallOutlinedButton(
+                                            data: BaseUiKitButtonData(
+                                              borderColor: theme?.colorScheme.primary,
+                                              backgroundColor: Colors.transparent,
+                                              iconInfo: BaseUiKitButtonIconData(
+                                                iconData: ShuffleUiKitIcons.chevronright,
+                                                color: theme?.colorScheme.primary,
+                                              ),
+                                              onPressed: () {},
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SpacingFoundation.verticalSpace16,
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              S.of(context).ByEmail,
+                                              style: theme?.boldTextTheme.body.copyWith(
+                                                color: theme.colorScheme.inverseBodyTypography,
+                                              ),
+                                            ),
+                                          ),
+                                          context.smallOutlinedButton(
+                                            data: BaseUiKitButtonData(
+                                              borderColor: theme?.colorScheme.primary,
+                                              backgroundColor: Colors.transparent,
+                                              iconInfo: BaseUiKitButtonIconData(
+                                                iconData: ShuffleUiKitIcons.chevronright,
+                                                color: theme?.colorScheme.primary,
+                                              ),
+                                              onPressed: () {},
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                            refundEveryone: (list) {
+                              log('list $list');
+                            },
+                            bookingsPlaceItemUiModel: value,
+                            bookingUiModel: BookingUiModel(
+                              id: -1,
+                              bookingLimit: '10',
+                              bookingLimitPerOne: '5',
+                            ),
+                            onBookingEdit: (model) {
+                              context.push(
+                                CreateBookingComponent(
+                                  onBookingCreated: (value) {},
+                                  bookingUiModel: model,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      placesOrEvents: List.generate(
+                        12,
+                        (index) => BookingsPlaceOrEventUiModel(
+                          id: index,
+                          title: 'testeMain',
+                          description: 'test $index',
+                          events: index.isEven
+                              ? List.generate(
+                                  math.Random().nextInt(5) + 1,
+                                  (index) => BookingsPlaceOrEventUiModel(
+                                    id: index,
+                                    description: 'test $index',
+                                    title: 'testeMain',
+                                    imageUrl: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                                    users: List.generate(
+                                      100,
+                                      (index) {
+                                        return UserBookingsControlUiModel(
+                                          id: index,
+                                          profile: UiProfileModel(
+                                            name: 'test $index',
+                                            nickname: '@nickName $index',
+                                            avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+                                            userTileType: index.isEven ? UserTileType.influencer : UserTileType.pro,
+                                            email: 'test@emal.index$index',
+                                          ),
+                                          refundUiModel: index.isEven
+                                              ? TicketUiModel.refund(
+                                                  ticketsCount: math.Random().nextInt(4) + 1,
+                                                  upsales: List.generate(
+                                                    3,
+                                                    (index) => TicketItem(count: math.Random().nextInt(4) + 1),
+                                                  ),
+                                                )
+                                              : null,
+                                          ticketUiModel: TicketUiModel(
+                                            id: index,
+                                            ticketsCount: math.Random().nextInt(4) + 1,
+                                            upsales: List.generate(
+                                              2,
+                                              (index) => TicketItem(
+                                                count: math.Random().nextInt(4) + 1,
+                                                item: null,
+                                              ),
+                                            ),
+                                            subs: List.generate(
+                                              5,
+                                              (index) => TicketItem(
+                                                count: math.Random().nextInt(4),
+                                                item: null,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : null,
+                        ),
                       ),
                     ),
                   );

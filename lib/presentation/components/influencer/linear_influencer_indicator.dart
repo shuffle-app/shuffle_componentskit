@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -8,6 +10,7 @@ class LinearInfluencerIndicator extends StatelessWidget {
   final double? height;
   final Gradient? customGradient;
   final Color? customColor;
+  final List<BoxShadow>? shadows;
 
   LinearInfluencerIndicator({
     super.key,
@@ -17,9 +20,10 @@ class LinearInfluencerIndicator extends StatelessWidget {
     this.height,
     this.customGradient,
     this.customColor,
+    this.shadows,
   });
 
-  late final double _indicatorWidth = width ?? 256.w;
+  late final double _indicatorWidth = width ?? 0.8.sw;
 
   double get progressPosition => _indicatorWidth * (_progressValue / 120);
   double get _progressValue => ((actualSum / sum) * 120);
@@ -46,17 +50,17 @@ class LinearInfluencerIndicator extends StatelessWidget {
             color: color ?? Colors.white,
             child: SizedBox(
               height: height ?? 6.h,
-              width: _indicatorWidth,
+              width: max(_indicatorWidth, height ?? 6.h),
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: AnimatedContainer(
-                  width: _getCurrentPosition(progressPosition),
+                  width: progressPosition == 0 ? 0 : max(_getCurrentPosition(progressPosition), height ?? 6.h),
                   curve: Curves.ease,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadiusFoundation.all40,
-                    gradient: customGradient ??
-                        GradientFoundation.touchIdLinearGradient,
+                    gradient: customGradient ?? GradientFoundation.touchIdLinearGradient,
                     color: Colors.white,
+                    boxShadow: shadows,
                   ),
                   duration: const Duration(milliseconds: 300),
                 ),

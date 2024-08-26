@@ -2,18 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class PropertyManagementCreateTitleDialog extends StatelessWidget {
-  const PropertyManagementCreateTitleDialog(
+class PropertyManagementEditOnlyTitleDialog extends StatelessWidget {
+  const PropertyManagementEditOnlyTitleDialog(
       {super.key,
       this.onCloseTap,
-      required this.isEvent,
-      required this.onCreateTap,
+      required this.onEditTap,
       required this.onCancelTap,
       required this.titleController});
 
   final VoidCallback? onCloseTap;
-  final bool isEvent;
-  final ValueChanged<String> onCreateTap;
+  final ValueChanged<String> onEditTap;
   final VoidCallback onCancelTap;
   final TextEditingController titleController;
 
@@ -30,7 +28,7 @@ class PropertyManagementCreateTitleDialog extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  isEvent ? S.current.Event : S.current.Place,
+                   S.current.Tags,
                   style: theme?.boldTextTheme.title1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -57,9 +55,9 @@ class PropertyManagementCreateTitleDialog extends StatelessWidget {
                   borderRadius: BorderRadiusFoundation.all12,
                   data: BaseUiKitButtonData(
                     backgroundColor: ColorsFoundation.info,
-                    text: S.current.Create,
+                    text: S.current.Edit,
                     onPressed: () {
-                      onCreateTap.call(titleController.text);
+                      onEditTap.call(titleController.text);
                     },
                   ),
                 ),

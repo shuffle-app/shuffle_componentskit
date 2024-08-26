@@ -162,10 +162,15 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               keyboardType: TextInputType.number,
               inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
               validator: (value) {
-                if ((value != null && value.isNotEmpty) && (_bookingLimitController.text != '')) {
+                if ((value != null && value.isNotEmpty)) {
                   final newValue = int.parse(value.replaceAll(' ', ''));
 
-                  if (newValue >= int.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
+                  if ((_bookingLimitController.text != '') &&
+                      newValue >= int.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
+                    return S.of(context).LimitLessTotalLimit;
+                  } else if (_allSubsLimitCount > 0 &&
+                      newValue >= _allSubsLimitCount &&
+                      _bookingLimitController.text.isEmpty) {
                     return S.of(context).LimitLessTotalLimit;
                   }
                   return null;

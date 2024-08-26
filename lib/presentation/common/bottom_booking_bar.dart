@@ -8,7 +8,7 @@ class BottomBookingBar extends StatefulWidget {
   final VoidCallback? onBook;
   final VoidCallback? onMagnify;
   final bool isLoading;
-  final Future<int>? usersCountInInviteList;
+  final Future<int?>? usersCountInInviteList;
 
   const BottomBookingBar({
     super.key,
@@ -117,17 +117,7 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                     ),
                   ),
                   SpacingFoundation.horizontalSpace12,
-                  if ((widget.model.showMagnify ?? true) && inviteCount == null && widget.onMagnify != null)
-                    context.outlinedButton(
-                      blurred: true,
-                      data: BaseUiKitButtonData(
-                        onPressed: widget.onMagnify,
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.searchpeople,
-                        ),
-                      ),
-                    ),
-                  if ((widget.model.showMagnify ?? true) && inviteCount != null && widget.onMagnify != null)
+                  if ((widget.model.showMagnify ?? true) && widget.onMagnify != null)
                     UiKitLightUpAnimation(
                       onStarted: () => setState(() => animationEnded = false),
                       onFinished: () => setState(() => animationEnded = true),
