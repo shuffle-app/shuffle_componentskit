@@ -704,6 +704,42 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show personal credential verification',
+                onPressed: () => buildComponent(
+                  context,
+                  PersonalCredentialVerificationModel.fromJson(
+                    configuration.appConfig.content['personal_credentials_verification'],
+                  ),
+                  ComponentBuilder(
+                    child: PersonalCredentialsVerificationComponent(
+                      uiModel: UiPersonalCredentialsVerificationModel(),
+                      credentialsController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
+                      passwordController: TextEditingController(),
+                      onSocialsLogin: (socialsLoginData) {
+                        if (socialsLoginData.provider.toLowerCase() == 'email') {
+                          showUiKitGeneralFullScreenDialog(
+                            context,
+                            GeneralDialogData(
+                              isWidgetScrollable: true,
+                              topPadding: 1.sw <= 380 ? 0.3.sh : 0.48.sh,
+                              child: VerificationWithEmail(
+                                context: context,
+                                credentialsController: TextEditingController(),
+                                passwordController: TextEditingController(),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'create event',
                 onPressed: () {
                   context.push(
