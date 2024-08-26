@@ -1,19 +1,39 @@
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+
 class MyBookingUiModel {
   final int id;
   final String? name;
-  final int? ticket;
-  final int? product;
+  final TicketUiModel? ticketUiModel;
+  final UiEventModel? eventModel;
+  final UiPlaceModel? placeModel;
   final int? total;
-  final String? currency;
-  final bool isPast;
 
   MyBookingUiModel({
     required this.id,
     this.name,
-    this.ticket,
-    this.product,
+    this.ticketUiModel,
     this.total,
-    this.currency,
-    this.isPast = false,
-  });
+    this.eventModel,
+    this.placeModel,
+  }) : assert(eventModel != null || placeModel != null, 'At least one of eventModel or placeModel must be non-null.');
+
+  bool get isPast {
+    final selectedDateTime =
+        eventModel?.bookingUiModel?.selectedDateTime ?? placeModel?.bookingUiModel?.selectedDateTime;
+
+    if (selectedDateTime != null) {
+      return DateTime.now().isAfter(selectedDateTime);
+    } else {
+      return false;
+    }
+  }
+
+  String? get currency {
+    if (eventModel != null) {
+      return eventModel?.currency;
+    } else if (placeModel != null) {
+      return placeModel?.currency;
+    }
+    return null;
+  }
 }
