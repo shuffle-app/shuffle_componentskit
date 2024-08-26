@@ -56,7 +56,7 @@ class PointsComponent extends StatelessWidget {
     }
 
     return LinearInfluencerIndicator(
-      actualSum: uiUserPointsProgressBarModel?.actual ?? 0,
+      actualSum: (uiUserPointsProgressBarModel?.actual ?? 0) %100,
       sum: uiUserPointsProgressBarModel?.sum ?? 100,
       width: 1.sw <= 380 ? 185.w : 215.w,
       height: progressIndicatorHeight,
@@ -200,7 +200,7 @@ class PointsComponent extends StatelessWidget {
                   children: [
                     RowGradientCircle(
                       level: uiUserPointsProgressBarModel.level,
-                      progressInCircle: (uiUserPointsProgressBarModel.actual / 33).toInt(),
+                      progressInCircle: ((uiUserPointsProgressBarModel.actual /100) / 33).toInt(),
                     ).paddingAll(EdgeInsetsFoundation.all8),
                     SpacingFoundation.horizontalSpace4,
                     Expanded(
@@ -215,10 +215,10 @@ class PointsComponent extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${uiUserPointsProgressBarModel.actual.toInt()}/',
+                                  text: '${(uiUserPointsProgressBarModel.actual %100).floor()}/',
                                   style: theme?.regularTextTheme.caption2.copyWith(
                                     color:
-                                        uiUserPointsProgressBarModel.actual >= (uiUserPointsProgressBarModel.sum / 2.2)
+                                    (uiUserPointsProgressBarModel.actual %100).floor() >= (uiUserPointsProgressBarModel.sum / 2.2)
                                             ? ColorsFoundation.lightBodyTypographyColor
                                             : ColorsFoundation.mutedText,
                                   ),
@@ -227,7 +227,7 @@ class PointsComponent extends StatelessWidget {
                                   text: '${uiUserPointsProgressBarModel.sum.toInt()}',
                                   style: theme?.regularTextTheme.caption2.copyWith(
                                     color:
-                                        uiUserPointsProgressBarModel.actual > (uiUserPointsProgressBarModel.sum / 1.5)
+                                    (uiUserPointsProgressBarModel.actual %100).floor() > (uiUserPointsProgressBarModel.sum / 1.5)
                                             ? ColorsFoundation.lightBodyTypographyColor
                                             : ColorsFoundation.mutedText,
                                   ),
