@@ -122,3 +122,4 @@ export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
 export 'booking_component/create_booking_component.dart';
 export 'booking_component/booking_ui_model/booking_ui_model.dart';
+export 'auth/credentials_verification/verification_with_email.dart';
