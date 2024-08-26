@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shuffle_components_kit/presentation/common/price_selector_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/booking_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
-import 'package:shuffle_components_kit/presentation/components/booking_component/cereat_subs_component.dart';
+import 'package:shuffle_components_kit/presentation/components/booking_component/create_subs_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_upsales_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -30,7 +29,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late BookingUiModel _bookingUiModel;
 
-  final List<SubsUiModel> _subsUiMoldels = [];
+  final List<SubsUiModel> _subsUiModels = [];
   final List<UpsaleUiModel> _upsaleUiModels = [];
 
   int _allSubsLimitCount = 0;
@@ -42,14 +41,14 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
     _priceController.text = widget.bookingUiModel?.price ?? '';
     _bookingLimitController.text = widget.bookingUiModel?.bookingLimit ?? '';
     _bookingLimitPerOneController.text = widget.bookingUiModel?.bookingLimitPerOne ?? '';
-    _subsUiMoldels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
+    _subsUiModels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
     _upsaleUiModels.addAll(_bookingUiModel.upsaleUiModel != null ? _bookingUiModel.upsaleUiModel! : []);
     _countSubsLimit();
   }
 
   _removeSubsItem(int index) {
     setState(() {
-      _subsUiMoldels.removeAt(index);
+      _subsUiModels.removeAt(index);
       _countSubsLimit();
     });
   }
@@ -62,7 +61,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
 
   void _countSubsLimit() {
     _allSubsLimitCount = 0;
-    for (var element in _subsUiMoldels) {
+    for (var element in _subsUiModels) {
       if (element.bookingLimit != null) {
         _allSubsLimitCount += int.tryParse(element.bookingLimit!.replaceAll(' ', '')) ?? 0;
       }
@@ -77,9 +76,9 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
       _priceController.text = widget.bookingUiModel?.price ?? '';
       _bookingLimitController.text = widget.bookingUiModel?.bookingLimit ?? '';
       _bookingLimitPerOneController.text = widget.bookingUiModel?.bookingLimitPerOne ?? '';
-      _subsUiMoldels.clear();
+      _subsUiModels.clear();
       _upsaleUiModels.clear();
-      _subsUiMoldels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
+      _subsUiModels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
       _upsaleUiModels.addAll(_bookingUiModel.upsaleUiModel != null ? _bookingUiModel.upsaleUiModel! : []);
       _countSubsLimit();
     }
@@ -187,10 +186,10 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
             ),
             SpacingFoundation.verticalSpace16,
             SizedBox(
-              height: _subsUiMoldels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
+              height: _subsUiModels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
               child: ListView.separated(
                 shrinkWrap: true,
-                itemCount: _subsUiMoldels.length + 1,
+                itemCount: _subsUiModels.length + 1,
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
                 separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
@@ -204,10 +203,10 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                               data: BaseUiKitButtonData(
                                 onPressed: () {
                                   context.push(
-                                    CereatSubsComponent(
+                                    CreateSubsComponent(
                                       onSave: (subsUiModel) {
                                         setState(() {
-                                          _subsUiMoldels.add(subsUiModel);
+                                          _subsUiModels.add(subsUiModel);
                                           _countSubsLimit();
                                         });
                                       },
@@ -240,7 +239,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       ],
                     );
                   } else {
-                    final sabsItem = _subsUiMoldels[index - 1];
+                    final sabsItem = _subsUiModels[index - 1];
 
                     return SubsOrUpsaleItem(
                       limit: sabsItem.bookingLimit,
@@ -254,7 +253,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       },
                       onEdit: () {
                         context.push(
-                          CereatSubsComponent(
+                          CreateSubsComponent(
                             onSave: (subsUiModel) {
                               setState(() {
                                 _countSubsLimit();
@@ -369,7 +368,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                           ? _allSubsLimitCount.toString()
                           : _bookingLimitController.text;
                       _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
-                      _bookingUiModel.subsUiModel = _subsUiMoldels;
+                      _bookingUiModel.subsUiModel = _subsUiModels;
                       _bookingUiModel.upsaleUiModel = _upsaleUiModels;
                       widget.onBookingCreated(_bookingUiModel);
                       context.pop();
