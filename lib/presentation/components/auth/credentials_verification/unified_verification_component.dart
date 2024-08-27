@@ -9,8 +9,8 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class PersonalCredentialsVerificationComponent extends StatefulWidget {
-  final UiPersonalCredentialsVerificationModel uiModel;
+class UnifiedVerificationComponent extends StatefulWidget {
+  final UiUnifiedVerificationModel uiModel;
   final VoidCallback? onSubmit;
   final TextEditingController credentialsController;
   final TextEditingController passwordController;
@@ -23,7 +23,7 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
   final bool? hasPasswordError;
   final List<LocaleModel>? availableLocales;
 
-  const PersonalCredentialsVerificationComponent({
+  const UnifiedVerificationComponent({
     super.key,
     required this.uiModel,
     required this.formKey,
@@ -40,10 +40,10 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
   });
 
   @override
-  State<PersonalCredentialsVerificationComponent> createState() => _PersonalCredentialsVerificationComponentState();
+  State<UnifiedVerificationComponent> createState() => _UnifiedVerificationComponentState();
 }
 
-class _PersonalCredentialsVerificationComponentState extends State<PersonalCredentialsVerificationComponent>
+class _UnifiedVerificationComponentState extends State<UnifiedVerificationComponent>
     with SingleTickerProviderStateMixin {
   String? _selectedTab;
   late final tabController = TabController(length: 2, vsync: this);
@@ -143,7 +143,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   }
 
   @override
-  void didUpdateWidget(covariant PersonalCredentialsVerificationComponent oldWidget) {
+  void didUpdateWidget(covariant UnifiedVerificationComponent oldWidget) {
     if (oldWidget.hasPasswordError != widget.hasPasswordError) {
       setState(() {
         hasPasswordError = widget.hasPasswordError ?? false;
@@ -310,70 +310,18 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                         ],
                       ),
                     ),
-                    Column(
-                      children: [
-                        if (authType == RegistrationType.phone) ...[
-                          UiKitCountrySelector(
-                            selectedCountry: widget.uiModel.selectedCountry,
-                            title: countrySelectorTitle,
-                            onSelected: (country) => widget.onCountrySelected?.call(country),
-                          ),
-                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                          UiKitCardWrapper(
-                            color: ColorsFoundation.surface1,
-                            borderRadius: BorderRadiusFoundation.max,
-                            child: UiKitPhoneNumberInput(
-                              enabled: true,
-                              controller: widget.credentialsController,
-                              countryCode: widget.uiModel.selectedCountry?.countryPhoneCode ?? '',
-                              fillColor: ColorsFoundation.surface3,
-                              validator: widget.credentialsValidator,
-                            ).paddingAll(EdgeInsetsFoundation.all4),
-                          ),
-                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                        ],
-                        if (authType == RegistrationType.email) ...[
-                          UiKitWrappedInputField.uiKitInputFieldNoIcon(
-                            enabled: true,
-                            hintText: S.of(context).Email.toUpperCase(),
-                            controller: widget.credentialsController,
-                            fillColor: colorScheme?.surface3,
-                            validator: widget.credentialsValidator,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
-                          ),
-                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                          UiKitWrappedInputField.uiKitInputFieldRightIcon(
-                            obscureText: obscurePassword,
-                            enabled: true,
-                            hintText: S.of(context).Password.toUpperCase(),
-                            controller: widget.passwordController,
-                            fillColor: colorScheme?.surface3,
-                            validator: widget.passwordValidator,
-                            icon: GestureDetector(
-                              onTap: () => setState(() => obscurePassword = !obscurePassword),
-                              child: obscurePassword
-                                  ? ImageWidget(
-                                      iconData: ShuffleUiKitIcons.view,
-                                      color: colorScheme?.darkNeutral900,
-                                    )
-                                  : const GradientableWidget(
-                                      gradient: GradientFoundation.defaultRadialGradient,
-                                      child: ImageWidget(
-                                        iconData: ShuffleUiKitIcons.eyeoff,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                            ),
-                          ),
-                          SpacingFoundation.verticalSpace2,
-                          Text(
-                            S.current.PasswordHint,
-                            style: regTextTheme?.caption4,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ],
+                    EmailVerificationForm(
+                      credentialsController: widget.credentialsController,
+                      passwordController: widget.passwordController,
+                      authType: authType,
+                      countrySelectorTitle: countrySelectorTitle,
+                      credentialsValidator: widget.credentialsValidator,
+                      isSmallScreen: isSmallScreen,
+                      loading: widget.loading,
+                      onCountrySelected: widget.onCountrySelected,
+                      onSubmit: widget.onSubmit,
+                      passwordValidator: widget.passwordValidator,
+                      uiModel: widget.uiModel,
                     ),
                   ],
                 ),
