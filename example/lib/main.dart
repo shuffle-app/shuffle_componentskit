@@ -121,6 +121,21 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
         type: UserTileType.ordinary,
         onTap: () {},
       ),
+      bookingUiModel: BookingUiModel(
+        showSabsInContentCard: true,
+        id: -1,
+        subsUiModel: List.generate(
+          10,
+          (index) => SubsUiModel(
+            id: index,
+            actualbookingLimit: index.toString(),
+            bookingLimit: (index + 1).toString(),
+            description: 'I am Leonardo Messi, be the best ;)',
+            photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+            title: 'I am Leonardo Messi',
+          ),
+        ),
+      ),
       media: [
         UiKitMediaVideo(link: 'assets/images/png/place.png'),
         UiKitMediaPhoto(
@@ -706,6 +721,81 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show place',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentPlaceModel.fromJson(configuration.appConfig.content['place']),
+                  ComponentBuilder(
+                    child: PlaceComponent(
+                      canLeaveFeedbackCallback: (placeId) async => false,
+                      canLeaveFeedbackForEventCallback: (eventId) async => false,
+                      place: place.copyWith(
+                        bookingUiModel: BookingUiModel(
+                          showSabsInContentCard: true,
+                          id: -1,
+                          subsUiModel: List.generate(
+                            10,
+                            (index) => SubsUiModel(
+                              id: index,
+                              actualbookingLimit: index.toString(),
+                              bookingLimit: (index + 1).toString(),
+                              description: 'I am Leonardo Messi, be the best ;)',
+                              photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+                              title: 'I am Leonardo Messi',
+                            ),
+                          ),
+                        ),
+                      ),
+                      placeReactionLoaderCallback: (int page, int contentId) async {
+                        return [];
+                      },
+                      eventReactionLoaderCallback: (int page, int contentId) async {
+                        return [];
+                      },
+                      placeFeedbackLoaderCallback: (int page, int contentId) async {
+                        return [];
+                      },
+                      eventFeedbackLoaderCallback: (int page, int contentId) async {
+                        return [];
+                      },
+                    ),
+                    bottomBar: BottomBookingBar(
+                      model:
+                          ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
+                              BookingElementModel(version: '0'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show event',
+                onPressed: () => buildComponent(
+                  context,
+                  ComponentEventModel.fromJson(configuration.appConfig.content['event']),
+                  ComponentBuilder(
+                    child: EventComponent(
+                      canLeaveFeedback: (eventId) async {
+                        return false;
+                      },
+                      event: event,
+                      feedbackLoaderCallback: (page, conentId) => [] as Future<List<FeedbackUiModel>>,
+                      reactionsLoaderCallback: (page, conentId) => [] as Future<List<VideoReactionUiModel>>,
+                    ),
+                    bottomBar: BottomBookingBar(
+                      model:
+                          ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
+                              BookingElementModel(version: '0'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'create event',
                 onPressed: () {
                   context.push(
@@ -992,6 +1082,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 
   final UiPlaceModel place = UiPlaceModel(
     title: 'title',
+
     id: 1,
     media: [
       UiKitMediaVideo(
