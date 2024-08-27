@@ -11,6 +11,7 @@ class BookingUiModel {
   String? bookingLimitPerOne;
   List<SubsUiModel>? subsUiModel;
   List<UpsaleUiModel>? upsaleUiModel;
+  bool showSabsInContentCard;
 
   BookingUiModel({
     required this.id,
@@ -20,6 +21,7 @@ class BookingUiModel {
     this.bookingLimitPerOne,
     this.subsUiModel,
     this.upsaleUiModel,
+    this.showSabsInContentCard = false,
   });
 
   BookingUiModel copyWith({
