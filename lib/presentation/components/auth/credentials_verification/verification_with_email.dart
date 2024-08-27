@@ -5,7 +5,6 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class VerificationWithEmail extends StatefulWidget {
-  final BuildContext context;
   final TextEditingController credentialsController;
   final TextEditingController passwordController;
   final VoidCallback? onSubmit;
@@ -15,7 +14,6 @@ class VerificationWithEmail extends StatefulWidget {
 
   const VerificationWithEmail({
     super.key,
-    required this.context,
     required this.credentialsController,
     required this.passwordController,
     this.onSubmit,
@@ -35,7 +33,6 @@ class _VerificationWithEmailState extends State<VerificationWithEmail> {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final regTextTheme = theme?.regularTextTheme;
-    final colorScheme = context.uiKitTheme?.colorScheme;
 
     return Column(
       children: [
@@ -45,44 +42,13 @@ class _VerificationWithEmailState extends State<VerificationWithEmail> {
           style: theme?.boldTextTheme.title2,
         ),
         SpacingFoundation.verticalSpace16,
-        UiKitWrappedInputField.uiKitInputFieldNoIcon(
-          enabled: true,
-          hintText: S.of(context).Email.toUpperCase(),
-          controller: widget.credentialsController,
-          fillColor: colorScheme?.surface3,
-          validator: widget.credentialsValidator,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-        ),
-        SpacingFoundation.verticalSpace16,
-        UiKitWrappedInputField.uiKitInputFieldRightIcon(
-          obscureText: obscurePassword,
-          enabled: true,
-          hintText: S.of(context).Password.toUpperCase(),
-          controller: widget.passwordController,
-          fillColor: colorScheme?.surface3,
-          validator: widget.passwordValidator,
-          icon: GestureDetector(
-            onTap: () => setState(() => obscurePassword = !obscurePassword),
-            child: obscurePassword
-                ? ImageWidget(
-                    iconData: ShuffleUiKitIcons.view,
-                    color: colorScheme?.darkNeutral900,
-                  )
-                : const GradientableWidget(
-                    gradient: GradientFoundation.defaultRadialGradient,
-                    child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.eyeoff,
-                      color: Colors.white,
-                    ),
-                  ),
-          ),
-        ),
-        SpacingFoundation.verticalSpace2,
-        Text(
-          S.current.PasswordHint,
-          style: theme?.regularTextTheme.caption4,
-          textAlign: TextAlign.center,
+        EmailVerificationForm(
+          credentialsController: widget.credentialsController,
+          passwordController: widget.passwordController,
+          loading: widget.loading,
+          credentialsValidator: widget.credentialsValidator,
+          passwordValidator: widget.passwordValidator,
+          onSubmit: widget.onSubmit,
         ),
         Column(
           children: [
