@@ -44,7 +44,7 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
                 enabled: true,
                 autofocus: true,
                 obscureText: false,
-                maxSymbols: 25,
+                maxSymbols: 15,
                 textInputAction: TextInputAction.done,
                 maxLines: 2,
                 minLines: 1,

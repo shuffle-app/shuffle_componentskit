@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class GradientCircleWithSegmentedRingPainter extends CustomPainter {
-  final Gradient? customGradietn;
+  final Gradient? customGradient;
   final int level;
   final UiKitThemeData? theme;
 
   GradientCircleWithSegmentedRingPainter({
     super.repaint,
-    this.customGradietn,
+    this.customGradient,
     this.level = 0,
     this.theme,
   });
@@ -29,7 +29,7 @@ class GradientCircleWithSegmentedRingPainter extends CustomPainter {
 
     // Gradient circle
     final rect = Rect.fromCircle(center: center, radius: radius);
-    final gradient = customGradietn ?? GradientFoundation.bronzeGradient;
+    final gradient = customGradient ?? GradientFoundation.bronzeGradient;
 
     final gradientPaint = Paint()
       ..shader = gradient.createShader(rect)
