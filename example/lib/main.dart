@@ -713,7 +713,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     configuration.appConfig.content['personal_credentials_verification'],
                   ),
                   ComponentBuilder(
-                    child: PersonalCredentialsVerificationComponent(
+                    child: UnifiedVerificationComponent(
                       uiModel: UiPersonalCredentialsVerificationModel(),
                       credentialsController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
