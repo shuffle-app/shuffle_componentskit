@@ -20,8 +20,8 @@ abstract class InfluencerFeedItem {
 
 class UpdatesFeedItem extends InfluencerFeedItem {
   final List<UiKitMediaPhoto>? newPhotos;
-  final List<UiKitMediaVideo>? newVideos;
-  final List<FeedbackUiModel>? newFeedbacks;
+  final List<VideoUpdateItem>? newVideos;
+  final List<ReviewsUpdateItem>? newFeedbacks;
   final List<VideoReactionUiModel>? newVideoReactions;
   final List<VoiceMessageUiModel>? newVoices;
   final List<EntertainmentRouteUiModel>? newRoutes;
@@ -30,6 +30,7 @@ class UpdatesFeedItem extends InfluencerFeedItem {
   final List<PersonalTopUiModel>? newPersonalTops;
   final List<PersonalRespectUiModel>? newPersonalRespects;
   final CommentsUpdateUiModel? commentsUpdate;
+  final List<UiUniversalModel>? newContent;
 
   UpdatesFeedItem({
     required super.speciality,
@@ -48,6 +49,7 @@ class UpdatesFeedItem extends InfluencerFeedItem {
     this.newPersonalTops,
     this.newPersonalRespects,
     this.commentsUpdate,
+    this.newContent,
   });
 }
 
@@ -58,6 +60,7 @@ class PostFeedItem extends InfluencerFeedItem {
   final int fireReactionsCount;
   final int sunglassesReactionsCount;
   final int smileyReactionsCount;
+  final bool newMark;
 
   PostFeedItem({
     required super.speciality,
@@ -71,5 +74,28 @@ class PostFeedItem extends InfluencerFeedItem {
     required this.fireReactionsCount,
     required this.sunglassesReactionsCount,
     required this.smileyReactionsCount,
+    this.newMark = false,
+  });
+}
+
+class VideoUpdateItem {
+  final String previewImage;
+  final String? subtitle;
+  final UiKitMediaVideo media;
+
+  VideoUpdateItem({
+    required this.previewImage,
+    required this.media,
+    this.subtitle,
+  });
+}
+
+class ReviewsUpdateItem {
+  final String previewImage;
+  final String? subtitle;
+
+  ReviewsUpdateItem({
+    required this.previewImage,
+    this.subtitle,
   });
 }

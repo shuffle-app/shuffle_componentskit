@@ -48,6 +48,7 @@ class UiUniversalModel extends Advertisable {
   final VoidCallback? onFavoriteChanged;
   final PlaceWeatherType? weatherType;
   DateTime? shouldVisitAt;
+  final String? placeName;
 
   UiUniversalModel({
     required this.id,
@@ -66,6 +67,7 @@ class UiUniversalModel extends Advertisable {
     this.onFavoriteChanged,
     this.shouldVisitAt,
     this.weatherType,
+    this.placeName,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -85,6 +87,7 @@ class UiUniversalModel extends Advertisable {
     this.onFavoriteChanged,
     this.shouldVisitAt,
     this.weatherType,
+    this.placeName,
   }) : super(isAdvertisement: true);
 
   UiUniversalModel.checkIn({
@@ -104,6 +107,7 @@ class UiUniversalModel extends Advertisable {
     this.onFavoriteChanged,
     this.shouldVisitAt,
     this.weatherType,
+    this.placeName,
   }) : super(isAdvertisement: false);
 
   factory UiUniversalModel.fromPlaceUiModel(UiPlaceModel placeModel) => UiUniversalModel(
@@ -118,6 +122,7 @@ class UiUniversalModel extends Advertisable {
 
   factory UiUniversalModel.fromEventUiModel(UiEventModel eventModel) => UiUniversalModel(
       id: eventModel.id,
+      placeName: eventModel.owner?.name,
       type: 'event',
       media: eventModel.media,
       description: eventModel.description ?? '',

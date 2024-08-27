@@ -85,10 +85,9 @@ class FeedComponent extends StatelessWidget {
     }
 
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
-        SizedBox(
-          height: MediaQuery.viewPaddingOf(context).top,
-        ).wrapSliverBox,
+        MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox,
         if (subscribedUpdatesNotifier != null)
           UiKitAnimatedPullToShowRow(
             progressNotifier: subscribedUpdatesNotifier!,
