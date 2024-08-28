@@ -28,6 +28,7 @@ class VideoReactionUiModel {
     required this.authorId,
     required this.parentContentType,
     required this.parentContentId,
+    required this.authorType,
     this.placeName,
     this.eventName,
     this.placeId,
@@ -41,7 +42,6 @@ class VideoReactionUiModel {
     this.videoReactionDateTime,
     this.answeredCompanyId,
     this.eventDate,
-    this.authorType = UserTileType.ordinary,
     this.nextReactionId,
     this.previousReactionId,
     this.isViewed = false,
@@ -53,8 +53,8 @@ class VideoReactionUiModel {
 
   bool get isReactionForPlace => parentContentType == 'place';
 
-  factory VideoReactionUiModel.empty() =>
-      VideoReactionUiModel(id: -1, authorId: -1, parentContentType: '', parentContentId: -1);
+  factory VideoReactionUiModel.empty() => VideoReactionUiModel(
+      id: -1, authorId: -1, parentContentType: '', parentContentId: -1, authorType: UserTileType.ordinary);
 
   VideoReactionUiModel copyWith({
     String? videoUrl,
@@ -71,7 +71,8 @@ class VideoReactionUiModel {
     String? placeName,
     int? nextReactionId,
     int? previousReactionId,
-    bool? isViewed
+    bool? isViewed,
+    UserTileType? authorType,
   }) {
     return VideoReactionUiModel(
       id: id,
@@ -92,7 +93,8 @@ class VideoReactionUiModel {
       answeredCompanyId: answeredCompanyId ?? this.answeredCompanyId,
       nextReactionId: nextReactionId ?? this.nextReactionId,
       previousReactionId: previousReactionId ?? this.previousReactionId,
-      isViewed: isViewed?? this.isViewed,
+      isViewed: isViewed ?? this.isViewed,
+      authorType: authorType ?? this.authorType,
     );
   }
 

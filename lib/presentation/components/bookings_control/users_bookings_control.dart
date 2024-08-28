@@ -121,7 +121,7 @@ class UsersBookingsControl extends StatelessWidget {
                   : PopupMenuButton(
                       icon: const ImageWidget(iconData: ShuffleUiKitIcons.morevert),
                       splashRadius: 1,
-                      menuPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
+                      // menuPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadiusFoundation.all16,
                       ),
