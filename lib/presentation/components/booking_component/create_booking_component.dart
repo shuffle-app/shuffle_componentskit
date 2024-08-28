@@ -190,7 +190,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               style: theme?.boldTextTheme.title2,
             ),
             SpacingFoundation.verticalSpace16,
-            if (_subsUiMoldels.isNotEmpty)
+            if (_subsUiModels.isNotEmpty)
               Row(
                 children: [
                   Expanded(
@@ -276,7 +276,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       removeItem: () {
                         _formKey.currentState?.validate();
                         _removeSubsItem(index - 1);
-                        if (_subsUiMoldels.isEmpty) {
+                        if (_subsUiModels.isEmpty) {
                           _bookingUiModel.showSabsInContentCard = false;
                         }
                       },
