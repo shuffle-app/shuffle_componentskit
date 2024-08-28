@@ -161,7 +161,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
                 if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
                   _subsUiModel.title = _titleController.text.trim();
                   _subsUiModel.bookingLimit = _limitController.text;
-                  _subsUiModel.description = _descriptionController.text;
+                  _subsUiModel.description = _descriptionController.text.trim();
                   _subsUiModel.photo = _photo;
                   widget.onSave(_subsUiModel);
                   context.pop();
