@@ -11,7 +11,6 @@ class EmailVerificationForm extends StatefulWidget {
   final String? Function(String?)? passwordValidator;
   final String? countrySelectorTitle;
   final ValueChanged<CountryModel>? onCountrySelected;
-  final VoidCallback? onSubmit;
   final bool? loading;
   final bool isSmallScreen;
 
@@ -25,7 +24,6 @@ class EmailVerificationForm extends StatefulWidget {
     this.passwordValidator,
     this.countrySelectorTitle,
     this.onCountrySelected,
-    this.onSubmit,
     this.loading,
     this.isSmallScreen = false,
   });
