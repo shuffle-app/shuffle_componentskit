@@ -6,7 +6,7 @@ import 'my_booking_ui_model/my_booking_ui_model.dart';
 
 class MyBookingComponent extends StatelessWidget {
   final List<MyBookingUiModel>? myBookingUiModel;
-  final VoidCallback? onAlertCircleTap;
+  final ValueChanged<int?>? onAlertCircleTap;
   final ValueChanged<int?>? onBarCodeTap;
   final ValueChanged<int?>? onLeaveFeedbackTap;
   final ValueChanged<int?>? onFullRefundTap;
@@ -47,7 +47,7 @@ class MyBookingComponent extends StatelessWidget {
           for (int index = 0; index < (myBookingUiModelUpcoming?.length ?? 0); index++)
             MyBookingItem(
               myBookingUiModel: myBookingUiModelUpcoming?[index],
-              onAlertCircleTap: onAlertCircleTap,
+              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelUpcoming?[index].id),
               onBarCodeTap: onBarCodeTap,
               onFullRefundTap: onFullRefundTap,
               onLeaveFeedbackTap: onLeaveFeedbackTap,
@@ -90,7 +90,7 @@ class MyBookingComponent extends StatelessWidget {
           for (int index = 0; index < (myBookingUiModelPast?.length ?? 0); index++)
             MyBookingItem(
               myBookingUiModel: myBookingUiModelPast?[index],
-              onAlertCircleTap: onAlertCircleTap,
+              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelPast?[index].id),
               onBarCodeTap: onBarCodeTap,
               onFullRefundTap: onFullRefundTap,
               onLeaveFeedbackTap: onLeaveFeedbackTap,
