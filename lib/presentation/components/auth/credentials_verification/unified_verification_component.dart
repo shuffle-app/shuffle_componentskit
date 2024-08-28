@@ -11,7 +11,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 class UnifiedVerificationComponent extends StatefulWidget {
   final UiUnifiedVerificationModel uiModel;
-  final VoidCallback? onSubmit;
+  final ValueChanged<bool>? onSubmit;
   final TextEditingController credentialsController;
   final TextEditingController passwordController;
   final ValueChanged<CountryModel>? onCountrySelected;
@@ -80,12 +80,31 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
           link: GraphicsFoundation.instance.svg.mail.path,
           isGradient: true,
           title: S.current.LoginWith('email').toUpperCase(),
-          onTap: () => widget.onSocialsLogin?.call(
-            SocialsLoginModel(
-              provider: 'Email',
-              clientType: clientType,
-            ),
-          ),
+          onTap: () {
+            widget.credentialsController.clear();
+            widget.passwordController.clear();
+            showUiKitGeneralFullScreenDialog(
+              context,
+              GeneralDialogData(
+                isWidgetScrollable: true,
+                topPadding: 1.sw <= 380 ? 0.3.sh : 0.48.sh,
+                child: PopScope(
+                  onPopInvokedWithResult: (didPop, result) {
+                    widget.credentialsController.clear();
+                    widget.passwordController.clear();
+                  },
+                  child: BottomSheetVerificationComponent(
+                    credentialsController: widget.credentialsController,
+                    passwordController: widget.passwordController,
+                    credentialsValidator: widget.credentialsValidator,
+                    loading: widget.loading,
+                    onSubmit: widget.onSubmit,
+                    passwordValidator: widget.passwordValidator,
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ];
   late final bool isSmallScreen;
@@ -319,7 +338,6 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                       isSmallScreen: isSmallScreen,
                       loading: widget.loading,
                       onCountrySelected: widget.onCountrySelected,
-                      onSubmit: widget.onSubmit,
                       passwordValidator: widget.passwordValidator,
                       uiModel: widget.uiModel,
                     ),
@@ -393,10 +411,12 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                                 child: context.button(
                                   data: BaseUiKitButtonData(
                                     text: S.of(context).Next.toUpperCase(),
-                                    onPressed: widget.passwordController.text.isEmpty ||
-                                            widget.credentialsController.text.isEmpty
-                                        ? null
-                                        : widget.onSubmit,
+                                    onPressed: () {
+                                      if (widget.passwordController.text.isNotEmpty ||
+                                          widget.credentialsController.text.isNotEmpty) {
+                                        widget.onSubmit?.call(_selectedTab == tabs.first.customValue);
+                                      }
+                                    },
                                     loading: widget.loading,
                                     fit: ButtonFit.fitWidth,
                                   ),
