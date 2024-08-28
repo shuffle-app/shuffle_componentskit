@@ -714,25 +714,13 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   ),
                   ComponentBuilder(
                     child: UnifiedVerificationComponent(
-                      uiModel: UiPersonalCredentialsVerificationModel(),
+                      uiModel: UiUnifiedVerificationModel(),
                       credentialsController: TextEditingController(),
                       formKey: GlobalKey<FormState>(),
                       passwordController: TextEditingController(),
-                      onSocialsLogin: (socialsLoginData) {
-                        if (socialsLoginData.provider.toLowerCase() == 'email') {
-                          showUiKitGeneralFullScreenDialog(
-                            context,
-                            GeneralDialogData(
-                              isWidgetScrollable: true,
-                              topPadding: 1.sw <= 380 ? 0.3.sh : 0.48.sh,
-                              child: VerificationWithEmail(
-                                context: context,
-                                credentialsController: TextEditingController(),
-                                passwordController: TextEditingController(),
-                              ),
-                            ),
-                          );
-                        }
+                      onSocialsLogin: (socialsLoginData) {},
+                      onSubmit: (isPersonalSelected) {
+                        log('isPersonalSelected $isPersonalSelected');
                       },
                     ),
                   ),
