@@ -650,7 +650,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () {
                   context.push(
                     MyBookingComponent(
-                      onAlertCircleTap: () {},
+                      onAlertCircleTap: (id) {},
                       myBookingUiModel: List.generate(
                         10,
                         (index) => MyBookingUiModel(
