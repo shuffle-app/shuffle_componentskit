@@ -11,6 +11,7 @@ class BookingUiModel {
   String? bookingLimitPerOne;
   List<SubsUiModel>? subsUiModel;
   List<UpsaleUiModel>? upsaleUiModel;
+  DateTime? selectedDateTime;
   bool showSabsInContentCard;
 
   BookingUiModel({
@@ -21,6 +22,7 @@ class BookingUiModel {
     this.bookingLimitPerOne,
     this.subsUiModel,
     this.upsaleUiModel,
+    this.selectedDateTime,
     this.showSabsInContentCard = false,
   });
 
@@ -32,6 +34,7 @@ class BookingUiModel {
     String? bookingLimitPerOne,
     List<SubsUiModel>? subsUiModel,
     List<UpsaleUiModel>? upsaleUiModel,
+    DateTime? selectedDateTime,
   }) {
     return BookingUiModel(
       id: id ?? this.id,
@@ -41,12 +44,15 @@ class BookingUiModel {
       bookingLimitPerOne: bookingLimitPerOne ?? this.bookingLimitPerOne,
       subsUiModel: subsUiModel ?? this.subsUiModel,
       upsaleUiModel: upsaleUiModel ?? this.upsaleUiModel,
+      selectedDateTime: selectedDateTime ?? this.selectedDateTime,
     );
   }
 
   String? validateCreation() {
     if (bookingLimit == null || bookingLimit!.isEmpty) {
       return S.current.XIsRequired(S.current.BookingLimit);
+    } else if (selectedDateTime == null) {
+      return S.current.XIsRequired(S.current.Date);
     }
 
     return null;

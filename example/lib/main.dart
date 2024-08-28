@@ -661,6 +661,63 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show My Booking Component',
+                onPressed: () {
+                  context.push(
+                    MyBookingComponent(
+                      onAlertCircleTap: (id) {},
+                      myBookingUiModel: List.generate(
+                        10,
+                        (index) => MyBookingUiModel(
+                          id: index,
+                          name: 'TEst $index',
+                          eventModel: index.isEven
+                              ? UiEventModel(
+                                  id: -1,
+                                  currency: 'AED',
+                                  description: '',
+                                  tags: [],
+                                  bookingUiModel: BookingUiModel(
+                                    id: -1,
+                                    selectedDateTime: DateTime(2024, 8, 1, 15, 45),
+                                  ),
+                                )
+                              : null,
+                          placeModel: index.isEven
+                              ? null
+                              : UiPlaceModel(
+                                  id: -1,
+                                  description: '',
+                                  tags: [],
+                                  currency: 'RUB',
+                                  bookingUiModel: BookingUiModel(
+                                    id: -1,
+                                    selectedDateTime: DateTime(2024, 8, 30, 15, 45),
+                                  ),
+                                ),
+                          ticketUiModel: TicketUiModel(
+                            ticketsCount: index,
+                            id: -1,
+                            upsales: [
+                              TicketItem(
+                                count: 0,
+                              ),
+                              TicketItem(
+                                count: 2,
+                              ),
+                            ],
+                          ),
+                          total: 100,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show spent points component',
                 onPressed: () => context.push(
                   SpentPointsComponent(
@@ -788,6 +845,30 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       model:
                           ComponentPlaceModel.fromJson(configuration.appConfig.content['event']).bookingElementModel ??
                               BookingElementModel(version: '0'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show personal credential verification',
+                onPressed: () => buildComponent(
+                  context,
+                  PersonalCredentialVerificationModel.fromJson(
+                    configuration.appConfig.content['personal_credentials_verification'],
+                  ),
+                  ComponentBuilder(
+                    child: UnifiedVerificationComponent(
+                      uiModel: UiUnifiedVerificationModel(),
+                      credentialsController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
+                      passwordController: TextEditingController(),
+                      onSocialsLogin: (socialsLoginData) {},
+                      onSubmit: (isPersonalSelected) {
+                        log('isPersonalSelected $isPersonalSelected');
+                      },
                     ),
                   ),
                 ),
