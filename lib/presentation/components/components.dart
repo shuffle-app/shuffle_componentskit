@@ -128,3 +128,5 @@ export 'bookings_control/bookings_control_ui_models/bookings_place_or_even_ui_mo
 export 'bookings_control/bookings_control_ui_models/user_bookings_control_ui_model.dart';
 export 'bookings_control/bookings_control_ui_models/ticket_ui_model.dart';
 export 'bookings_control/bookings_control_user_list.dart';
+export 'my_booking_component/my_booking_component.dart';
+export 'my_booking_component/my_booking_ui_model/my_booking_ui_model.dart';
