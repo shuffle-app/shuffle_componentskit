@@ -238,6 +238,13 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ),
           ],
         ),
+        if (widget.place.bookingUiModel?.subsUiModel != null &&
+            widget.place.bookingUiModel!.showSabsInContentCard &&
+            widget.place.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
+          SpacingFoundation.verticalSpace12,
+          SubsInContentCard(subs: widget.place.bookingUiModel!.subsUiModel!),
+          SpacingFoundation.verticalSpace24,
+        ],
         if (widget.isCreateEventAvaliable)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,

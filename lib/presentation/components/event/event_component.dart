@@ -315,6 +315,13 @@ class _EventComponentState extends State<EventComponent> {
           ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace24,
         ],
+        if (widget.event.bookingUiModel?.subsUiModel != null &&
+            widget.event.bookingUiModel!.showSabsInContentCard &&
+            widget.event.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
+          SpacingFoundation.verticalSpace12,
+          SubsInContentCard(subs: widget.event.bookingUiModel!.subsUiModel!),
+          SpacingFoundation.verticalSpace24,
+        ],
         if (widget.event.upsalesItems != null) ...[
           UiKitCardWrapper(
             color: theme?.colorScheme.surface2,

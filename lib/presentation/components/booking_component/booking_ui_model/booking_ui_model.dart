@@ -12,6 +12,7 @@ class BookingUiModel {
   List<SubsUiModel>? subsUiModel;
   List<UpsaleUiModel>? upsaleUiModel;
   DateTime? selectedDateTime;
+  bool showSabsInContentCard;
 
   BookingUiModel({
     required this.id,
@@ -22,6 +23,7 @@ class BookingUiModel {
     this.subsUiModel,
     this.upsaleUiModel,
     this.selectedDateTime,
+    this.showSabsInContentCard = false,
   });
 
   BookingUiModel copyWith({
