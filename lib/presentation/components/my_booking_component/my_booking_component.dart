@@ -11,8 +11,10 @@ class MyBookingComponent extends StatelessWidget {
   final ValueChanged<int?>? onLeaveFeedbackTap;
   final ValueChanged<int?>? onFullRefundTap;
   final ValueChanged<int?>? onPartialRefundTap;
+  late final List<MyBookingUiModel>? myBookingUiModelUpcoming;
+  late final List<MyBookingUiModel>? myBookingUiModelPast;
 
-  const MyBookingComponent({
+  MyBookingComponent({
     super.key,
     this.myBookingUiModel,
     this.onAlertCircleTap,
@@ -20,15 +22,14 @@ class MyBookingComponent extends StatelessWidget {
     this.onLeaveFeedbackTap,
     this.onFullRefundTap,
     this.onPartialRefundTap,
-  });
+  }) {
+    myBookingUiModelUpcoming = myBookingUiModel?.where((element) => !element.isPast).toList();
+    myBookingUiModelPast = myBookingUiModel?.where((element) => element.isPast).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-
-    final List<MyBookingUiModel>? myBookingUiModelUpcoming =
-        myBookingUiModel?.where((element) => !element.isPast).toList();
-    final List<MyBookingUiModel>? myBookingUiModelPast = myBookingUiModel?.where((element) => element.isPast).toList();
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -43,7 +44,7 @@ class MyBookingComponent extends StatelessWidget {
             style: theme?.boldTextTheme.title2,
           ),
           SpacingFoundation.verticalSpace16,
-          for (int index = 0; index < (myBookingUiModelUpcoming?.length ?? 0); index++) ...[
+          for (int index = 0; index < (myBookingUiModelUpcoming?.length ?? 0); index++)
             MyBookingItem(
               myBookingUiModel: myBookingUiModelUpcoming?[index],
               onAlertCircleTap: onAlertCircleTap,
@@ -51,9 +52,11 @@ class MyBookingComponent extends StatelessWidget {
               onFullRefundTap: onFullRefundTap,
               onLeaveFeedbackTap: onLeaveFeedbackTap,
               onPartialRefundTap: onPartialRefundTap,
+            ).paddingOnly(
+              bottom: myBookingUiModelUpcoming?[index] != myBookingUiModelUpcoming?.last
+                  ? SpacingFoundation.verticalSpacing32
+                  : 0,
             ),
-            SizedBox(height: SpacingFoundation.verticalSpacing32),
-          ],
           SizedBox(height: SpacingFoundation.verticalSpacing32),
           Row(
             children: [
@@ -84,7 +87,7 @@ class MyBookingComponent extends StatelessWidget {
             ],
           ),
           SpacingFoundation.verticalSpace16,
-          for (int index = 0; index < (myBookingUiModelPast?.length ?? 0); index++) ...[
+          for (int index = 0; index < (myBookingUiModelPast?.length ?? 0); index++)
             MyBookingItem(
               myBookingUiModel: myBookingUiModelPast?[index],
               onAlertCircleTap: onAlertCircleTap,
@@ -92,9 +95,7 @@ class MyBookingComponent extends StatelessWidget {
               onFullRefundTap: onFullRefundTap,
               onLeaveFeedbackTap: onLeaveFeedbackTap,
               onPartialRefundTap: onPartialRefundTap,
-            ),
-            SizedBox(height: SpacingFoundation.verticalSpacing32),
-          ],
+            ).paddingOnly(bottom: SpacingFoundation.verticalSpacing32)
         ],
       ),
     );
