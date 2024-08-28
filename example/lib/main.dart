@@ -763,6 +763,30 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show personal credential verification',
+                onPressed: () => buildComponent(
+                  context,
+                  PersonalCredentialVerificationModel.fromJson(
+                    configuration.appConfig.content['personal_credentials_verification'],
+                  ),
+                  ComponentBuilder(
+                    child: UnifiedVerificationComponent(
+                      uiModel: UiUnifiedVerificationModel(),
+                      credentialsController: TextEditingController(),
+                      formKey: GlobalKey<FormState>(),
+                      passwordController: TextEditingController(),
+                      onSocialsLogin: (socialsLoginData) {},
+                      onSubmit: (isPersonalSelected) {
+                        log('isPersonalSelected $isPersonalSelected');
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'create event',
                 onPressed: () {
                   context.push(

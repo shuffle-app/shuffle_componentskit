@@ -7,10 +7,11 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/utils/policies_localization_getter.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
-class PersonalCredentialsVerificationComponent extends StatefulWidget {
-  final UiPersonalCredentialsVerificationModel uiModel;
-  final VoidCallback? onSubmit;
+class UnifiedVerificationComponent extends StatefulWidget {
+  final UiUnifiedVerificationModel uiModel;
+  final ValueChanged<bool>? onSubmit;
   final TextEditingController credentialsController;
   final TextEditingController passwordController;
   final ValueChanged<CountryModel>? onCountrySelected;
@@ -22,7 +23,7 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
   final bool? hasPasswordError;
   final List<LocaleModel>? availableLocales;
 
-  const PersonalCredentialsVerificationComponent({
+  const UnifiedVerificationComponent({
     super.key,
     required this.uiModel,
     required this.formKey,
@@ -39,10 +40,10 @@ class PersonalCredentialsVerificationComponent extends StatefulWidget {
   });
 
   @override
-  State<PersonalCredentialsVerificationComponent> createState() => _PersonalCredentialsVerificationComponentState();
+  State<UnifiedVerificationComponent> createState() => _UnifiedVerificationComponentState();
 }
 
-class _PersonalCredentialsVerificationComponentState extends State<PersonalCredentialsVerificationComponent>
+class _UnifiedVerificationComponentState extends State<UnifiedVerificationComponent>
     with SingleTickerProviderStateMixin {
   String? _selectedTab;
   late final tabController = TabController(length: 2, vsync: this);
@@ -56,6 +57,16 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
 
   List<ShortLogInButton> get socials => [
         ShortLogInButton(
+          link: GraphicsFoundation.instance.svg.appleLogo.path,
+          title: S.current.LoginWith('apple').toUpperCase(),
+          onTap: () => widget.onSocialsLogin?.call(
+            SocialsLoginModel(
+              provider: 'Apple',
+              clientType: clientType,
+            ),
+          ),
+        ),
+        ShortLogInButton(
           link: GraphicsFoundation.instance.svg.googleLogo.path,
           title: S.current.LoginWith('google').toUpperCase(),
           onTap: () => widget.onSocialsLogin?.call(
@@ -66,14 +77,34 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
           ),
         ),
         ShortLogInButton(
-          link: GraphicsFoundation.instance.svg.appleLogo.path,
-          title: S.current.LoginWith('apple').toUpperCase(),
-          onTap: () => widget.onSocialsLogin?.call(
-            SocialsLoginModel(
-              provider: 'Apple',
-              clientType: clientType,
-            ),
-          ),
+          link: GraphicsFoundation.instance.svg.mail.path,
+          isGradient: true,
+          title: S.current.LoginWith('email').toUpperCase(),
+          onTap: () {
+            widget.credentialsController.clear();
+            widget.passwordController.clear();
+            showUiKitGeneralFullScreenDialog(
+              context,
+              GeneralDialogData(
+                isWidgetScrollable: true,
+                topPadding: 1.sw <= 380 ? 0.3.sh : 0.48.sh,
+                child: PopScope(
+                  onPopInvokedWithResult: (didPop, result) {
+                    widget.credentialsController.clear();
+                    widget.passwordController.clear();
+                  },
+                  child: BottomSheetVerificationComponent(
+                    credentialsController: widget.credentialsController,
+                    passwordController: widget.passwordController,
+                    credentialsValidator: widget.credentialsValidator,
+                    loading: widget.loading,
+                    onSubmit: widget.onSubmit,
+                    passwordValidator: widget.passwordValidator,
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ];
   late final bool isSmallScreen;
@@ -81,10 +112,19 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   final FocusNode credentialsFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   bool obscurePassword = true;
+  final AutoSizeGroup _group = AutoSizeGroup();
 
   List<UiKitCustomTab> get tabs => [
-        UiKitCustomTab.small(title: S.current.Account.toUpperCase(), customValue: 'account'),
-        UiKitCustomTab.small(title: 'EMAIL', customValue: 'email'),
+        UiKitCustomTab.small(
+          title: S.current.Personal.toUpperCase(),
+          customValue: 'personal',
+          group: _group,
+        ),
+        UiKitCustomTab.small(
+          title: S.current.Company.toUpperCase(),
+          customValue: 'company',
+          group: _group,
+        ),
       ];
 
   @override
@@ -122,7 +162,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
   }
 
   @override
-  void didUpdateWidget(covariant PersonalCredentialsVerificationComponent oldWidget) {
+  void didUpdateWidget(covariant UnifiedVerificationComponent oldWidget) {
     if (oldWidget.hasPasswordError != widget.hasPasswordError) {
       setState(() {
         hasPasswordError = widget.hasPasswordError ?? false;
@@ -175,37 +215,37 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
               ),
               Text(
                 S.current.CredentialsVerificationTitle,
-                style: textTheme?.titleLarge,
+                style: textTheme?.titleLarge.copyWith(fontSize: isSmallScreen ? 24.w : null),
               ),
-              SpacingFoundation.verticalSpace16,
+              isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
               Text(
                 S.current.CredentialsVerificationPrompt,
-                style: textTheme?.subHeadline,
+                style: textTheme?.subHeadline.copyWith(fontSize: isSmallScreen ? 14.w : null),
               ),
               KeyboardVisibilityBuilder(builder: (context, visibility) {
                 late final double height;
                 if (visibility) {
                   if (isSmallScreen) {
                     if (hasPasswordError) {
-                      height = SpacingFoundation.verticalSpacing8;
+                      height = 0;
                     } else {
-                      height = SpacingFoundation.verticalSpacing16;
+                      height = 0;
                     }
                   } else {
                     if (hasPasswordError) {
                       height = SpacingFoundation.verticalSpacing12;
                     } else {
-                      height = SpacingFoundation.verticalSpacing24 * 2;
+                      height = SpacingFoundation.verticalSpacing24;
                     }
                   }
                 } else {
                   if (isSmallScreen) {
-                    height = 0.05.sh;
+                    height = 0.01.sh;
                   } else {
                     if (hasPasswordError) {
-                      height = 0.17.sh;
+                      height = 0.14.sh;
                     } else {
-                      height = 0.2.sh;
+                      height = 0.17.sh;
                     }
                   }
                 }
@@ -244,7 +284,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                                   setState(() {});
                                 }).paddingAll(EdgeInsetsFoundation.all4),
                           ),
-                          SpacingFoundation.verticalSpace16
+                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
                         ],
                         if (!keyboardVisible) ...[
                           UiKitCustomTabBar(
@@ -257,7 +297,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                               });
                             },
                           ),
-                          SpacingFoundation.verticalSpace16,
+                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
                         ] else
                           isSmallScreen ? const SizedBox.shrink() : 20.h.heightBox
                       ],
@@ -265,90 +305,41 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   );
                 },
               ),
-              Expanded(
-                flex: isSmallScreen ? 7 : 2,
+              SizedBox(
+                height: isSmallScreen ? 0.32.sh : 0.26.sh,
                 child: TabBarView(
                   controller: tabController,
                   children: [
-                    Column(
-                      children: [
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return socials.elementAt(index);
-                          },
-                          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-                          itemCount: socials.length,
-                        ),
-                        if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
-                      ],
+                    UiKitCardWrapper(
+                      borderRadius: BorderRadiusFoundation.all28,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return socials.elementAt(index);
+                            },
+                            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace12,
+                            itemCount: socials.length,
+                          ),
+                          // if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
+                        ],
+                      ),
                     ),
-                    Column(
-                      children: [
-                        if (authType == RegistrationType.phone) ...[
-                          UiKitCountrySelector(
-                            selectedCountry: widget.uiModel.selectedCountry,
-                            title: countrySelectorTitle,
-                            onSelected: (country) => widget.onCountrySelected?.call(country),
-                          ),
-                          SpacingFoundation.verticalSpace16,
-                          UiKitCardWrapper(
-                            color: ColorsFoundation.surface1,
-                            borderRadius: BorderRadiusFoundation.max,
-                            child: UiKitPhoneNumberInput(
-                              enabled: true,
-                              controller: widget.credentialsController,
-                              countryCode: widget.uiModel.selectedCountry?.countryPhoneCode ?? '',
-                              fillColor: ColorsFoundation.surface3,
-                              validator: widget.credentialsValidator,
-                            ).paddingAll(EdgeInsetsFoundation.all4),
-                          ),
-                          SpacingFoundation.verticalSpace16,
-                        ],
-                        if (authType == RegistrationType.email) ...[
-                          UiKitWrappedInputField.uiKitInputFieldNoIcon(
-                            enabled: true,
-                            hintText: S.of(context).Email.toUpperCase(),
-                            controller: widget.credentialsController,
-                            fillColor: colorScheme?.surface3,
-                            validator: widget.credentialsValidator,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
-                          ),
-                          SpacingFoundation.verticalSpace16,
-                          UiKitWrappedInputField.uiKitInputFieldRightIcon(
-                            obscureText: obscurePassword,
-                            enabled: true,
-                            hintText: S.of(context).Password.toUpperCase(),
-                            controller: widget.passwordController,
-                            fillColor: colorScheme?.surface3,
-                            validator: widget.passwordValidator,
-                            icon: GestureDetector(
-                              onTap: () => setState(() => obscurePassword = !obscurePassword),
-                              child: obscurePassword
-                                  ? ImageWidget(
-                                      iconData: ShuffleUiKitIcons.view,
-                                      color: colorScheme?.darkNeutral900,
-                                    )
-                                  : const GradientableWidget(
-                                      gradient: GradientFoundation.defaultRadialGradient,
-                                      child: ImageWidget(
-                                        iconData: ShuffleUiKitIcons.eyeoff,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                            ),
-                          ),
-                          SpacingFoundation.verticalSpace2,
-                          Text(
-                            S.current.PasswordHint,
-                            style: regTextTheme?.caption4,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ],
+                    EmailVerificationForm(
+                      credentialsController: widget.credentialsController,
+                      passwordController: widget.passwordController,
+                      authType: authType,
+                      countrySelectorTitle: countrySelectorTitle,
+                      credentialsValidator: widget.credentialsValidator,
+                      isSmallScreen: isSmallScreen,
+                      loading: widget.loading,
+                      onCountrySelected: widget.onCountrySelected,
+                      passwordValidator: widget.passwordValidator,
+                      uiModel: widget.uiModel,
                     ),
                   ],
                 ),
@@ -370,6 +361,7 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                   child: !visible
                       ? Column(
                           children: [
+                            isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
                             RichText(
                               text: TextSpan(
                                 children: [
@@ -410,22 +402,27 @@ class _PersonalCredentialsVerificationComponentState extends State<PersonalCrede
                                 ],
                               ),
                             ),
-                            SpacingFoundation.verticalSpace16,
-                            AnimatedOpacity(
-                              opacity: tabController.index >= 1 ? 1 : 0,
-                              duration: const Duration(milliseconds: 500),
-                              child: context.button(
+                            isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+                            SizedBox(
+                              height: isSmallScreen ? 51.h : null,
+                              child: AnimatedOpacity(
+                                opacity: tabController.index >= 1 ? 1 : 0,
+                                duration: const Duration(milliseconds: 500),
+                                child: context.button(
                                   data: BaseUiKitButtonData(
-                                text: S.of(context).Next.toUpperCase(),
-                                onPressed:
-                                    widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
-                                        ? null
-                                        : widget.onSubmit,
-                                loading: widget.loading,
-                                fit: ButtonFit.fitWidth,
-                              )),
+                                    text: S.of(context).Next.toUpperCase(),
+                                    onPressed: () {
+                                      if (widget.passwordController.text.isNotEmpty ||
+                                          widget.credentialsController.text.isNotEmpty) {
+                                        widget.onSubmit?.call(_selectedTab == tabs.first.customValue);
+                                      }
+                                    },
+                                    loading: widget.loading,
+                                    fit: ButtonFit.fitWidth,
+                                  ),
+                                ),
+                              ),
                             ),
-                            SpacingFoundation.verticalSpace4,
                           ],
                         )
                       : !visible

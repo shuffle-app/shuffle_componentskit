@@ -130,3 +130,4 @@ export 'bookings_control/bookings_control_ui_models/ticket_ui_model.dart';
 export 'bookings_control/bookings_control_user_list.dart';
 export 'my_booking_component/my_booking_component.dart';
 export 'my_booking_component/my_booking_ui_model/my_booking_ui_model.dart';
+export 'auth/credentials_verification/bottom_sheet_verification_component.dart';
