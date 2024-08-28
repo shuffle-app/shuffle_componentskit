@@ -664,7 +664,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   tags: [],
                                   bookingUiModel: BookingUiModel(
                                     id: -1,
-                                    selectedDateTime: DateTime(2024, 8, 1),
+                                    selectedDateTime: DateTime(2024, 8, 1, 15, 45),
                                   ),
                                 )
                               : null,
@@ -677,7 +677,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   currency: 'RUB',
                                   bookingUiModel: BookingUiModel(
                                     id: -1,
-                                    selectedDateTime: DateTime(2024, 8, 30),
+                                    selectedDateTime: DateTime(2024, 8, 30, 15, 45),
                                   ),
                                 ),
                           ticketUiModel: TicketUiModel(
