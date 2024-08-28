@@ -4,15 +4,15 @@ import 'package:shuffle_components_kit/presentation/utils/policies_localization_
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class VerificationWithEmail extends StatefulWidget {
+class BottomSheetVerificationComponent extends StatefulWidget {
   final TextEditingController credentialsController;
   final TextEditingController passwordController;
-  final VoidCallback? onSubmit;
+  final ValueChanged<bool>? onSubmit;
   final bool? loading;
   final String? Function(String?)? credentialsValidator;
   final String? Function(String?)? passwordValidator;
 
-  const VerificationWithEmail({
+  const BottomSheetVerificationComponent({
     super.key,
     required this.credentialsController,
     required this.passwordController,
@@ -23,10 +23,10 @@ class VerificationWithEmail extends StatefulWidget {
   });
 
   @override
-  State<VerificationWithEmail> createState() => _VerificationWithEmailState();
+  State<BottomSheetVerificationComponent> createState() => _BottomSheetVerificationComponentState();
 }
 
-class _VerificationWithEmailState extends State<VerificationWithEmail> {
+class _BottomSheetVerificationComponentState extends State<BottomSheetVerificationComponent> {
   bool obscurePassword = true;
 
   @override
@@ -43,12 +43,12 @@ class _VerificationWithEmailState extends State<VerificationWithEmail> {
         ),
         SpacingFoundation.verticalSpace16,
         EmailVerificationForm(
+          authType: RegistrationType.email,
           credentialsController: widget.credentialsController,
           passwordController: widget.passwordController,
           loading: widget.loading,
           credentialsValidator: widget.credentialsValidator,
           passwordValidator: widget.passwordValidator,
-          onSubmit: widget.onSubmit,
         ),
         Column(
           children: [
@@ -97,9 +97,11 @@ class _VerificationWithEmailState extends State<VerificationWithEmail> {
             context.button(
               data: BaseUiKitButtonData(
                 text: S.of(context).Next.toUpperCase(),
-                onPressed: widget.passwordController.text.isEmpty || widget.credentialsController.text.isEmpty
-                    ? null
-                    : widget.onSubmit,
+                onPressed: () {
+                  if (widget.passwordController.text.isNotEmpty || widget.credentialsController.text.isNotEmpty) {
+                    widget.onSubmit?.call(true);
+                  }
+                },
                 loading: widget.loading,
                 fit: ButtonFit.fitWidth,
               ),

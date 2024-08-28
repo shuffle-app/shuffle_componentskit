@@ -128,4 +128,4 @@ export 'bookings_control/bookings_control_ui_models/bookings_place_or_even_ui_mo
 export 'bookings_control/bookings_control_ui_models/user_bookings_control_ui_model.dart';
 export 'bookings_control/bookings_control_ui_models/ticket_ui_model.dart';
 export 'bookings_control/bookings_control_user_list.dart';
-export 'auth/credentials_verification/verification_with_email.dart';
+export 'auth/credentials_verification/bottom_sheet_verification_component.dart';
