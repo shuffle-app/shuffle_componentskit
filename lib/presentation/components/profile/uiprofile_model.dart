@@ -37,6 +37,7 @@ class UiProfileModel {
   final bool? beInSearch;
   final VoidCallback? onTelegramPressed;
   final VoidCallback? onWhatsappPressed;
+  final int? updatesCount;
 
   ProfileCard get cardWidget {
     return ProfileCard(
@@ -142,6 +143,7 @@ class UiProfileModel {
     this.phone,
     this.onTelegramPressed,
     this.onWhatsappPressed,
+    this.updatesCount,
   });
 
   /// write [copyWith] method

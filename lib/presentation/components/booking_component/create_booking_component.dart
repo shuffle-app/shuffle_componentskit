@@ -190,6 +190,27 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               style: theme?.boldTextTheme.title2,
             ),
             SpacingFoundation.verticalSpace16,
+            if (_subsUiModels.isNotEmpty)
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      S.of(context).ShowInContentCard,
+                      style: theme?.regularTextTheme.labelSmall,
+                    ),
+                  ),
+                  UiKitGradientSwitch(
+                    onChanged: (value) {
+                      setState(() {
+                        _bookingUiModel.showSabsInContentCard = !_bookingUiModel.showSabsInContentCard;
+                      });
+                    },
+                    switchedOn: _bookingUiModel.showSabsInContentCard,
+                  ),
+                ],
+              ).paddingOnly(
+                bottom: SpacingFoundation.verticalSpacing24,
+              ),
             SizedBox(
               height: _subsUiModels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
               child: ListView.separated(
@@ -255,6 +276,9 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       removeItem: () {
                         _formKey.currentState?.validate();
                         _removeSubsItem(index - 1);
+                        if (_subsUiModels.isEmpty) {
+                          _bookingUiModel.showSabsInContentCard = false;
+                        }
                       },
                       onEdit: () {
                         context.push(
