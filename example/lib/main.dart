@@ -191,6 +191,49 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show Booking By Visitor Component',
+                onPressed: () => context.push(
+                  BookingByVisitorComponent(
+                    onSubmit: (first, second) {
+                      log('first $first');
+                      log('second $second');
+                    },
+                    bookingUiModel: BookingUiModel(
+                      showSabsInContentCard: true,
+                      id: -1,
+                      price: '500',
+                      currency: 'AED',
+                      subsUiModel: List.generate(
+                        10,
+                        (index) => SubsUiModel(
+                          id: index,
+                          actualbookingLimit: (math.Random().nextInt(7)).toString(),
+                          bookingLimit: '10',
+                          description: 'I am Leonardo Messi, be the best ;)',
+                          photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+                          title: 'I am Leonardo Messi',
+                        ),
+                      ),
+                      upsaleUiModel: List.generate(
+                        10,
+                        (index) => UpsaleUiModel(
+                          id: index,
+                          limit: '10',
+                          description: 'I am Leonardo Messi, be the best ;)',
+                          photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.lETOLogo.path),
+                          price: '250',
+                          actualLimit: (math.Random().nextInt(7)).toString(),
+                          currency: 'AED',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 onPressed: () => context.push(
                   PropertyManagementComponent(
                     propertySearchOptions: (value) async {
