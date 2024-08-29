@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiProfileModel {
+  final int? id;
   final VoidCallback? onShare;
   final VoidCallback? onPointsDetails;
   final VoidCallback? onBalanceDetails;
@@ -110,6 +111,7 @@ class UiProfileModel {
   }
 
   UiProfileModel({
+    this.id,
     this.onShare,
     this.onPointsDetails,
     this.onBalanceDetails,
@@ -182,8 +184,10 @@ class UiProfileModel {
     bool? beInSearch,
     VoidCallback? onTelegramPressed,
     VoidCallback? onWhatsappPressed,
+    int? id,
   }) =>
       UiProfileModel(
+        id: id ?? this.id,
         onShare: onShare ?? this.onShare,
         onPointsDetails: onPointsDetails ?? this.onPointsDetails,
         onBalanceDetails: onBalanceDetails ?? this.onBalanceDetails,

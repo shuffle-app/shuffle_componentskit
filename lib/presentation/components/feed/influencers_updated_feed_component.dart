@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -25,11 +26,12 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
 class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeedComponent>
     with SingleTickerProviderStateMixin {
   late final tabController = TabController(length: 3, vsync: this);
+  final autoSizeGroup = AutoSizeGroup();
 
-  final _tabs = [
-    UiKitCustomTab(title: S.current.Latest, customValue: 'latest'),
-    UiKitCustomTab(title: S.current.Top, customValue: 'top'),
-    UiKitCustomTab(title: S.current.Unread, customValue: 'unread'),
+  late final _tabs = [
+    UiKitCustomTab(title: S.current.Latest, customValue: 'latest', group: autoSizeGroup),
+    UiKitCustomTab(title: S.current.Top, customValue: 'top', group: autoSizeGroup),
+    UiKitCustomTab(title: S.current.Unread, customValue: 'unread', group: autoSizeGroup),
   ];
 
   @override

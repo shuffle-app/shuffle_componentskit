@@ -32,7 +32,11 @@ Future buildComponent(BuildContext context, UiBaseModel configuration, Component
       );
 
     case PageBuilderType.page:
-      return context.push(componentWidgets.child, useRootNavigator: componentWidgets.useRootNavigator);
+      return context.push(
+        componentWidgets.child,
+        useRootNavigator: componentWidgets.useRootNavigator,
+        pageBuilder: componentWidgets.pageBuilder,
+      );
     case PageBuilderType.dialog:
       return kit.showUiKitAlertDialog(context, componentWidgets.alertDialogData!);
   }
@@ -45,8 +49,15 @@ class ComponentBuilder {
   final bool useRootNavigator;
   late final bool isWidgetScrollable;
   double? topPadding;
+  RoutePageBuilder? pageBuilder;
 
-  ComponentBuilder({required this.child, this.bottomBar, this.alertDialogData, this.useRootNavigator = false}) {
+  ComponentBuilder({
+    required this.child,
+    this.bottomBar,
+    this.alertDialogData,
+    this.useRootNavigator = false,
+    this.pageBuilder,
+  }) {
     isWidgetScrollable = [
       PlaceComponent,
       EventComponent,
