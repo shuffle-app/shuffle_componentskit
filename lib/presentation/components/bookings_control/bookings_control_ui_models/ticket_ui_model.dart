@@ -38,4 +38,19 @@ class TicketItem<T> {
     this.count,
     this.item,
   });
+
+  TicketItem<T> copyWith({
+    int? count,
+    T? item,
+  }) {
+    return TicketItem(
+      count: count ?? this.count,
+      item: item ?? this.item,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'TicketItem(count: $count, item: $item)';
+  }
 }
