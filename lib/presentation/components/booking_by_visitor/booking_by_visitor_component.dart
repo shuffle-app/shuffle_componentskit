@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -7,6 +6,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 class BookingByVisitorComponent extends StatefulWidget {
   final BookingUiModel? bookingUiModel;
   final TicketUiModel? ticketUiModel;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final bool canEditTimeOfDay;
+
   final Function(
     List<TicketItem<SubsUiModel>?>? subsForTicket,
     List<TicketItem<UpsaleUiModel>?>? upsalesForTicket,
@@ -16,6 +19,9 @@ class BookingByVisitorComponent extends StatefulWidget {
     super.key,
     this.bookingUiModel,
     this.ticketUiModel,
+    this.startDate,
+    this.endDate,
+    this.canEditTimeOfDay = false,
     required this.onSubmit,
   });
 
@@ -26,8 +32,7 @@ class BookingByVisitorComponent extends StatefulWidget {
 class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   SubsUiModel? _selectedSub;
   UpsaleUiModel? _selectedUpsale;
-  DateTime? selectedDate;
-  DateTime? selectedTime;
+  late DateTime? _selectedDate;
   late final List<SubsUiModel> _subs;
   late final List<UpsaleUiModel> _upsales;
   late final Map<int, int> _originalSubsBookingLimits;
@@ -65,6 +70,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
     _originalSubsBookingLimits = {for (var sub in _subs) sub.id: int.parse(sub.actualbookingLimit ?? '0')};
     _originalUpsaleBookingLimits = {for (var upsale in _upsales) upsale.id: int.parse(upsale.actualLimit ?? '0')};
+    _selectedDate = widget.bookingUiModel?.selectedDateTime ?? widget.startDate;
   }
 
   _onSelectedSub(int id) {
@@ -373,61 +379,93 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
           ],
-          if (_ticketCount != 0) ...[
+          if (_getTotalSubsTicketCount() != 0) ...[
             Text(
               S.of(context).SelectDateTime,
               style: theme?.boldTextTheme.title2,
             ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  S.of(context).Schedule,
-                  style: theme?.regularTextTheme.labelSmall,
-                ),
-                const Spacer(),
-                context.outlinedButton(
-                  padding: EdgeInsets.all(EdgeInsetsFoundation.all12),
-                  data: BaseUiKitButtonData(
-                    iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.calendar),
-                    onPressed: () async {
-                      final selectedDateFromDialog = await showUiKitCalendarDialog(
-                        context,
-                      );
-
-                      if (selectedDateFromDialog != null) {
-                        setState(() {
-                          selectedDate = selectedDateFromDialog;
-                        });
-                        if (mounted) {
-                          await showTimePicker(
+            if ((widget.startDate != null && widget.endDate != null) ||
+                (widget.startDate != null && widget.endDate == null && widget.canEditTimeOfDay)) ...[
+              SpacingFoundation.verticalSpace24,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    S.of(context).Schedule,
+                    style: theme?.regularTextTheme.labelSmall,
+                  ),
+                  const Spacer(),
+                  context.outlinedButton(
+                    padding: EdgeInsets.all(EdgeInsetsFoundation.all12),
+                    data: BaseUiKitButtonData(
+                      iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.calendar),
+                      onPressed: () async {
+                        if (widget.canEditTimeOfDay && widget.endDate == null) {
+                          final timeOfDay = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.now(),
                           );
+                          if (timeOfDay != null) {
+                            setState(() {
+                              _selectedDate = _selectedDate!.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                            });
+                          }
+                        } else {
+                          final selectedDateFromDialog = await showUiKitCalendarDialog(
+                            firstDate: widget.startDate,
+                            lastDate: widget.endDate,
+                            context,
+                          );
+
+                          if (selectedDateFromDialog != null) {
+                            setState(() {
+                              _selectedDate = selectedDateFromDialog;
+                            });
+                            if (mounted) {
+                              final timeOfDay = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (timeOfDay != null) {
+                                setState(() {
+                                  _selectedDate =
+                                      _selectedDate!.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                                });
+                              }
+                            }
+                          }
                         }
-                      }
-                    },
-                  ),
-                )
-              ],
-            ).paddingSymmetric(horizontal: horizontalPadding),
+                      },
+                    ),
+                  )
+                ],
+              ).paddingSymmetric(horizontal: horizontalPadding),
+            ],
             SpacingFoundation.verticalSpace16,
-            Row(
-              children: [
-                Text(
-                  'DATE',
-                  style: theme?.boldTextTheme.body,
-                ),
-              ],
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
+            if (_selectedDate != null)
+              Row(
+                children: [
+                  Text(
+                    formatDateWithCustomPattern('dd.MM.yyyy', _selectedDate!.toLocal()),
+                    style: theme?.boldTextTheme.body,
+                  ),
+                  SpacingFoundation.horizontalSpace16,
+                  Text(
+                    formatChatMessageDate(_selectedDate!),
+                    style: theme?.regularTextTheme.body,
+                  ),
+                ],
+              ).paddingOnly(
+                left: horizontalPadding,
+                right: horizontalPadding,
+                bottom: SpacingFoundation.verticalSpacing24,
+              ),
             Text(
               '${S.of(context).Total}: ${_getTotalPrice()} ${widget.bookingUiModel?.currency ?? 'AED'}',
               style: theme?.boldTextTheme.title2,
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
-          if ((_subs.isNotEmpty || _upsales.isNotEmpty) && _ticketCount != 0)
+          if ((_subs.isNotEmpty || _upsales.isNotEmpty) && _getTotalSubsTicketCount() != 0)
             SafeArea(
               top: false,
               child: context.gradientButton(
@@ -442,7 +480,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24),
         ],
       ),
-      bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _ticketCount != 0
+      bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _getTotalSubsTicketCount() != 0
           ? SafeArea(
               top: false,
               child: context.gradientButton(

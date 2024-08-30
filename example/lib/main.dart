@@ -198,6 +198,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       log('first $first');
                       log('second $second');
                     },
+                    startDate: DateTime.now(),
+                    canEditTimeOfDay: true,
+                    endDate: DateTime(2024, 9, 5),
                     bookingUiModel: BookingUiModel(
                       showSabsInContentCard: true,
                       id: -1,
