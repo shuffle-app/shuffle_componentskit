@@ -19,8 +19,7 @@ class SubsInContentCard extends StatelessWidget {
     this.selectedSub,
     this.upsales,
     this.selectedUpsale,
-  });
-  //TODO error
+  }) : assert(subs != null || upsales != null, 'Either subs or upsales must be provided');
 
   @override
   Widget build(BuildContext context) {
