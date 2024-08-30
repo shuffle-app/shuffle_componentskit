@@ -38,6 +38,7 @@ class ProStatisticsUsersBookingsComponent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        SpacingFoundation.verticalSpace16,
         Text(
           '${formatDateWithCustomPattern('MMM d', dateRange.start)} - ${formatDateWithCustomPattern('MMM d', dateRange.end)}',
           style: boldTextTheme?.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
