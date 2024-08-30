@@ -43,6 +43,10 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   late int _ticketPrice;
 
+  int _getTotalPrice() {
+    return _upsaleTotalPrice + _totalSubsTicketPrice;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -157,7 +161,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         }
       } else if (_upsaleCount > 0) {
         _upsaleCount--;
-        _upsaleTotalPrice -= int.parse(_selectedUpsale?.price ?? '0');
+        _upsaleTotalPrice -= int.parse(_upsalesForTicket.last?.item?.price ?? '0');
         _updateUpsaleTicket(-1);
       }
     });
@@ -302,7 +306,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             style: theme?.boldTextTheme.title2,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
-          if (_upsales.isNotEmpty)
+          if (_upsales.isNotEmpty) ...[
             SubsInContentCard(
               upsales: _upsales,
               backgroundColor: theme?.colorScheme.surface,
@@ -311,55 +315,85 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 _onSelectedUpsale(id);
               },
             ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
+            Row(
+              children: [
+                Text(
+                  S.of(context).Product,
+                  style: theme?.regularTextTheme.labelLarge,
+                ),
+                const Spacer(),
+                context.badgeButtonNoValue(
+                  data: BaseUiKitButtonData(
+                    onPressed: () => _onRemoveUpsale(),
+                    iconWidget: const GradientableWidget(
+                      gradient: GradientFoundation.defaultLinearGradient,
+                      child: ImageWidget(
+                        iconData: ShuffleUiKitIcons.minus,
+                        height: 40,
+                        width: 40,
+                      ),
+                    ),
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace8,
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: theme?.colorScheme.surface3,
+                    borderRadius: BorderRadiusFoundation.all24r,
+                  ),
+                  child: Text(
+                    '$_upsaleCount',
+                    style: theme?.boldTextTheme.caption1Medium,
+                  ).paddingSymmetric(
+                    vertical: SpacingFoundation.verticalSpacing16,
+                    horizontal: SpacingFoundation.horizontalSpacing32,
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace8,
+                context.badgeButtonNoValue(
+                  data: BaseUiKitButtonData(
+                    onPressed: () => _onAddUpsale(),
+                    iconWidget: const GradientableWidget(
+                      gradient: GradientFoundation.defaultLinearGradient,
+                      child: ImageWidget(
+                        iconData: ShuffleUiKitIcons.gradientPlus,
+                        height: 40,
+                        width: 40,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+          ],
+
+          Text(
+            S.of(context).SelectDateTime,
+            style: theme?.boldTextTheme.title2,
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                S.of(context).Product,
-                style: theme?.regularTextTheme.labelLarge,
+                S.of(context).Schedule,
+                style: theme?.regularTextTheme.labelSmall,
               ),
               const Spacer(),
-              context.badgeButtonNoValue(
+              context.outlinedButton(
+                padding: EdgeInsets.all(EdgeInsetsFoundation.all12),
                 data: BaseUiKitButtonData(
-                  onPressed: () => _onRemoveUpsale(),
-                  iconWidget: const GradientableWidget(
-                    gradient: GradientFoundation.defaultLinearGradient,
-                    child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.minus,
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
+                  iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.calendar),
+                  onPressed: () {},
                 ),
-              ),
-              SpacingFoundation.horizontalSpace8,
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: theme?.colorScheme.surface3,
-                  borderRadius: BorderRadiusFoundation.all24r,
-                ),
-                child: Text(
-                  '$_upsaleCount',
-                  style: theme?.boldTextTheme.caption1Medium,
-                ).paddingSymmetric(
-                  vertical: SpacingFoundation.verticalSpacing16,
-                  horizontal: SpacingFoundation.horizontalSpacing32,
-                ),
-              ),
-              SpacingFoundation.horizontalSpace8,
-              context.badgeButtonNoValue(
-                data: BaseUiKitButtonData(
-                  onPressed: () => _onAddUpsale(),
-                  iconWidget: const GradientableWidget(
-                    gradient: GradientFoundation.defaultLinearGradient,
-                    child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.gradientPlus,
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
-                ),
-              ),
+              )
             ],
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
+          Text(
+            '${S.of(context).Total}: ${_getTotalPrice()} ${widget.bookingUiModel?.currency ?? 'AED'}',
+            style: theme?.boldTextTheme.title2,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SafeArea(
             child: context.gradientButton(
