@@ -28,40 +28,66 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   UpsaleUiModel? _selectedUpsale;
   late final List<SubsUiModel> _subs;
   late final List<UpsaleUiModel> _upsales;
-  late final Map<int, int> _originalBookingLimits;
+  late final Map<int, int> _originalSubsBookingLimits;
+  late final Map<int, int> _originalUpsaleBookingLimits;
 
   late final List<TicketItem<SubsUiModel>?> _subsForTicket;
   late final List<TicketItem<UpsaleUiModel>?> _upsalesForTicket;
 
-  late int ticketCount;
-  int subTicketCount = 0;
-  late int ticketPrice;
+  late int _ticketCount;
+  int _subTicketCount = 0;
+  int _totalSubsTicketPrice = 0;
 
-  int totalSubsTicketPrice = 0;
+  late int _upsaleCount;
+  int _upsaleTotalPrice = 0;
+
+  late int _ticketPrice;
 
   @override
   void initState() {
     super.initState();
     _subs = widget.bookingUiModel?.subsUiModel ?? [];
     _upsales = widget.bookingUiModel?.upsaleUiModel ?? [];
-    ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
-    ticketPrice = widget.bookingUiModel?.price != null ? int.parse(widget.bookingUiModel!.price!) : 0;
+    _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
+    _ticketPrice = widget.bookingUiModel?.price != null ? int.parse(widget.bookingUiModel!.price!) : 0;
     _subsForTicket = widget.ticketUiModel?.subs ?? [];
     _upsalesForTicket = widget.ticketUiModel?.upsales ?? [];
-    _originalBookingLimits = {for (var sub in _subs) sub.id: int.parse(sub.actualbookingLimit!)};
+    _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
+    _originalSubsBookingLimits = {for (var sub in _subs) sub.id: int.parse(sub.actualbookingLimit ?? '0')};
+    _originalUpsaleBookingLimits = {for (var upsale in _upsales) upsale.id: int.parse(upsale.actualLimit ?? '0')};
   }
 
   _onSelectedSub(int id) {
-    final subFromId = _subs.firstWhere((element) => element.id == id);
     setState(() {
-      _selectedSub = (_selectedSub != subFromId) ? subFromId : null;
+      _selectedSub = (_selectedSub?.id != id) ? _subs.firstWhere((element) => element.id == id) : null;
     });
   }
 
   _onSelectedUpsale(int id) {
-    final upsaleFromId = _upsales.firstWhere((element) => element.id == id);
     setState(() {
-      _selectedUpsale = (_selectedUpsale != upsaleFromId) ? upsaleFromId : null;
+      _selectedUpsale = (_selectedUpsale?.id != id) ? _upsales.firstWhere((element) => element.id == id) : null;
+    });
+  }
+
+  _onRemoveSubTicket() {
+    setState(() {
+      if (_selectedSub != null && _ticketCount > 0) {
+        int actualbookingLimit = int.parse(_selectedSub!.actualbookingLimit!);
+        int originalLimit = _originalSubsBookingLimits[_selectedSub!.id]!;
+
+        if (actualbookingLimit > originalLimit) {
+          _ticketCount--;
+          _totalSubsTicketPrice -= _ticketPrice;
+          _updateSubTicket(-1);
+        }
+      } else if (_ticketCount > 0) {
+        _ticketCount--;
+        _totalSubsTicketPrice -= _ticketPrice;
+      } else if (_subTicketCount > 0) {
+        _subTicketCount--;
+        _totalSubsTicketPrice -= _ticketPrice;
+        if (_subsForTicket.isNotEmpty) _updateSubTicket(-1);
+      }
     });
   }
 
@@ -72,35 +98,13 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         int maxLimit = int.parse(_selectedSub!.bookingLimit!);
 
         if (actualbookingLimit < maxLimit) {
-          subTicketCount++;
-          totalSubsTicketPrice += ticketPrice;
+          _subTicketCount++;
+          _totalSubsTicketPrice += _ticketPrice;
           _updateSubTicket(1);
         }
       } else {
-        ticketCount++;
-        totalSubsTicketPrice += ticketPrice;
-      }
-    });
-  }
-
-  _onRemoveSubTicket() {
-    setState(() {
-      if (_selectedSub != null && ticketCount > 0) {
-        int actualbookingLimit = int.parse(_selectedSub!.actualbookingLimit!);
-        int originalLimit = _originalBookingLimits[_selectedSub!.id]!;
-
-        if (actualbookingLimit > originalLimit) {
-          ticketCount--;
-          totalSubsTicketPrice -= ticketPrice;
-          _updateSubTicket(-1);
-        }
-      } else if (ticketCount > 0) {
-        ticketCount--;
-        totalSubsTicketPrice -= ticketPrice;
-      } else if (subTicketCount > 0) {
-        subTicketCount--;
-        totalSubsTicketPrice -= ticketPrice;
-        if (_subsForTicket.isNotEmpty) _updateSubTicket(-1);
+        _ticketCount++;
+        _totalSubsTicketPrice += _ticketPrice;
       }
     });
   }
@@ -110,7 +114,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
       int actualbookingLimit = int.parse(_selectedSub!.actualbookingLimit!) + change;
       _selectedSub = _selectedSub!.copyWith(actualbookingLimit: actualbookingLimit.toString());
 
-      int originalLimit = _originalBookingLimits[_selectedSub!.id]!;
+      int originalLimit = _originalSubsBookingLimits[_selectedSub!.id]!;
       int index = _subs.indexWhere((element) => element.id == _selectedSub!.id);
       _subs[index] = _selectedSub!;
 
@@ -129,16 +133,83 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         }
       }
     } else {
-      setState(() {
-        if (_subsForTicket.last?.count != null) {
-          _subsForTicket.last = _subsForTicket.last?.copyWith(count: _subsForTicket.last!.count! - 1);
-          int index = _subs.indexWhere((element) => element.id == _subsForTicket.last?.item?.id);
-          if (_subsForTicket.last?.count == 0) _subsForTicket.removeLast();
+      if (_subsForTicket.last?.count != null) {
+        _subsForTicket.last = _subsForTicket.last?.copyWith(count: _subsForTicket.last!.count! - 1);
+        int index = _subs.indexWhere((element) => element.id == _subsForTicket.last?.item?.id);
+        if (_subsForTicket.last?.count == 0) _subsForTicket.removeLast();
 
-          _subs[index] =
-              _subs[index].copyWith(actualbookingLimit: ((int.parse(_subs[index].actualbookingLimit!) - 1).toString()));
+        _subs[index] =
+            _subs[index].copyWith(actualbookingLimit: ((int.parse(_subs[index].actualbookingLimit!) - 1).toString()));
+      }
+    }
+  }
+
+  _onRemoveUpsale() {
+    setState(() {
+      if (_selectedUpsale?.actualLimit != null && _upsaleCount > 0) {
+        int actualLimit = int.parse(_selectedUpsale!.actualLimit!);
+        int originalLimit = _originalUpsaleBookingLimits[_selectedUpsale!.id]!;
+
+        if (actualLimit > originalLimit) {
+          _upsaleCount--;
+          _upsaleTotalPrice -= int.parse(_selectedUpsale?.price ?? '0');
+          _updateUpsaleTicket(-1);
         }
-      });
+      } else if (_upsaleCount > 0) {
+        _upsaleCount--;
+        _upsaleTotalPrice -= int.parse(_selectedUpsale?.price ?? '0');
+        _updateUpsaleTicket(-1);
+      }
+    });
+  }
+
+  _onAddUpsale() {
+    setState(() {
+      if (_selectedUpsale?.actualLimit != null) {
+        int actualLimit = int.parse(_selectedUpsale!.actualLimit!);
+        int maxLimit = int.parse(_selectedUpsale?.limit ?? '0');
+
+        if (actualLimit < maxLimit) {
+          _upsaleCount++;
+          _upsaleTotalPrice += int.parse(_selectedUpsale?.price ?? '0');
+          _updateUpsaleTicket(1);
+        }
+      }
+    });
+  }
+
+  void _updateUpsaleTicket(int change) {
+    if (_selectedUpsale?.actualLimit != null) {
+      int actualLimit = int.parse(_selectedUpsale!.actualLimit!) + change;
+      _selectedUpsale = _selectedUpsale!.copyWith(actualLimit: actualLimit.toString());
+
+      int originalLimit = _originalUpsaleBookingLimits[_selectedUpsale!.id]!;
+      int index = _upsales.indexWhere((element) => element.id == _selectedUpsale!.id);
+      _upsales[index] = _selectedUpsale!;
+
+      int ticketIndex = _upsalesForTicket.indexWhere((ticketItem) => ticketItem?.item?.id == _selectedUpsale!.id);
+
+      if (ticketIndex != -1) {
+        if (actualLimit > originalLimit) {
+          _upsalesForTicket[ticketIndex] = _upsalesForTicket[ticketIndex]?.copyWith(count: actualLimit - originalLimit);
+        } else {
+          _upsalesForTicket.removeAt(ticketIndex);
+        }
+      } else {
+        if (actualLimit > originalLimit) {
+          _upsalesForTicket.add(TicketItem(count: actualLimit - originalLimit, item: _selectedUpsale!));
+        }
+      }
+    } else {
+      if (_upsalesForTicket.last?.count != null) {
+        _upsalesForTicket.last = _upsalesForTicket.last?.copyWith(count: _upsalesForTicket.last!.count! - 1);
+
+        int index = _upsales.indexWhere((element) => element.id == _upsalesForTicket.last?.item?.id);
+        if (_upsalesForTicket.last?.count == 0) _upsalesForTicket.removeLast();
+
+        _upsales[index] =
+            _upsales[index].copyWith(actualLimit: ((int.parse(_upsales[index].actualLimit!) - 1).toString()));
+      }
     }
   }
 
@@ -169,7 +240,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               },
             ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
           AutoSizeText(
-            '${S.of(context).TicketPrice} $totalSubsTicketPrice ${widget.bookingUiModel?.currency}',
+            '${S.of(context).TicketPrice} $_totalSubsTicketPrice ${widget.bookingUiModel?.currency}',
             style: theme?.boldTextTheme.title2,
             maxLines: 1,
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -201,7 +272,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                   borderRadius: BorderRadiusFoundation.all24r,
                 ),
                 child: Text(
-                  '${ticketCount + subTicketCount}',
+                  '${_ticketCount + _subTicketCount}',
                   style: theme?.boldTextTheme.caption1Medium,
                 ).paddingSymmetric(
                   vertical: SpacingFoundation.verticalSpacing16,
@@ -249,7 +320,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               const Spacer(),
               context.badgeButtonNoValue(
                 data: BaseUiKitButtonData(
-                  onPressed: () => _onRemoveSubTicket(),
+                  onPressed: () => _onRemoveUpsale(),
                   iconWidget: const GradientableWidget(
                     gradient: GradientFoundation.defaultLinearGradient,
                     child: ImageWidget(
@@ -267,7 +338,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                   borderRadius: BorderRadiusFoundation.all24r,
                 ),
                 child: Text(
-                  '$ticketCount',
+                  '$_upsaleCount',
                   style: theme?.boldTextTheme.caption1Medium,
                 ).paddingSymmetric(
                   vertical: SpacingFoundation.verticalSpacing16,
@@ -277,7 +348,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               SpacingFoundation.horizontalSpace8,
               context.badgeButtonNoValue(
                 data: BaseUiKitButtonData(
-                  onPressed: () => _onAddSubTicket(),
+                  onPressed: () => _onAddUpsale(),
                   iconWidget: const GradientableWidget(
                     gradient: GradientFoundation.defaultLinearGradient,
                     child: ImageWidget(
