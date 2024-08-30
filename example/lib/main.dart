@@ -221,7 +221,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           limit: '10',
                           description: 'I am Leonardo Messi, be the best ;)',
                           photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.lETOLogo.path),
-                          price: '250',
+                          price: (math.Random().nextInt(250)).toString(),
                           actualLimit: (math.Random().nextInt(7)).toString(),
                           currency: 'AED',
                         ),
