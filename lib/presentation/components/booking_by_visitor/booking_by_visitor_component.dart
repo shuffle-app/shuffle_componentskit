@@ -26,6 +26,8 @@ class BookingByVisitorComponent extends StatefulWidget {
 class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   SubsUiModel? _selectedSub;
   UpsaleUiModel? _selectedUpsale;
+  DateTime? selectedDate;
+  DateTime? selectedTime;
   late final List<SubsUiModel> _subs;
   late final List<UpsaleUiModel> _upsales;
   late final Map<int, int> _originalSubsBookingLimits;
@@ -45,6 +47,10 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   int _getTotalPrice() {
     return _upsaleTotalPrice + _totalSubsTicketPrice;
+  }
+
+  int _getTotalSubsTicketCount() {
+    return _ticketCount + _subTicketCount;
   }
 
   @override
@@ -229,12 +235,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         autoImplyLeading: true,
         children: [
           SpacingFoundation.verticalSpace16,
-          Text(
-            S.of(context).SelectSubs,
-            style: theme?.boldTextTheme.title2,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace16,
-          if (_subs.isNotEmpty)
+          if (_subs.isNotEmpty) ...[
+            Text(
+              S.of(context).SelectSubs,
+              style: theme?.boldTextTheme.title2,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
             SubsInContentCard(
               subs: _subs,
               backgroundColor: theme?.colorScheme.surface,
@@ -243,8 +249,9 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 _onSelectedSub(id);
               },
             ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
+          ],
           AutoSizeText(
-            '${S.of(context).TicketPrice} $_totalSubsTicketPrice ${widget.bookingUiModel?.currency}',
+            '${S.of(context).TicketPrice} $_ticketPrice ${widget.bookingUiModel?.currency}',
             style: theme?.boldTextTheme.title2,
             maxLines: 1,
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -300,13 +307,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ],
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          //TODO
-          Text(
-            S.of(context).SelectYourFavoriteProduct,
-            style: theme?.boldTextTheme.title2,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace16,
           if (_upsales.isNotEmpty) ...[
+            Text(
+              S.of(context).SelectYourFavoriteProduct,
+              style: theme?.boldTextTheme.title2,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
             SubsInContentCard(
               upsales: _upsales,
               backgroundColor: theme?.colorScheme.surface,
@@ -367,47 +373,89 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
           ],
+          if (_ticketCount != 0) ...[
+            Text(
+              S.of(context).SelectDateTime,
+              style: theme?.boldTextTheme.title2,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  S.of(context).Schedule,
+                  style: theme?.regularTextTheme.labelSmall,
+                ),
+                const Spacer(),
+                context.outlinedButton(
+                  padding: EdgeInsets.all(EdgeInsetsFoundation.all12),
+                  data: BaseUiKitButtonData(
+                    iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.calendar),
+                    onPressed: () async {
+                      final selectedDateFromDialog = await showUiKitCalendarDialog(
+                        context,
+                      );
 
-          Text(
-            S.of(context).SelectDateTime,
-            style: theme?.boldTextTheme.title2,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                S.of(context).Schedule,
-                style: theme?.regularTextTheme.labelSmall,
-              ),
-              const Spacer(),
-              context.outlinedButton(
-                padding: EdgeInsets.all(EdgeInsetsFoundation.all12),
+                      if (selectedDateFromDialog != null) {
+                        setState(() {
+                          selectedDate = selectedDateFromDialog;
+                        });
+                        if (mounted) {
+                          await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                )
+              ],
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
+            Row(
+              children: [
+                Text(
+                  'DATE',
+                  style: theme?.boldTextTheme.body,
+                ),
+              ],
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+            Text(
+              '${S.of(context).Total}: ${_getTotalPrice()} ${widget.bookingUiModel?.currency ?? 'AED'}',
+              style: theme?.boldTextTheme.title2,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+          ],
+          if ((_subs.isNotEmpty || _upsales.isNotEmpty) && _ticketCount != 0)
+            SafeArea(
+              top: false,
+              child: context.gradientButton(
                 data: BaseUiKitButtonData(
-                  iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.calendar),
-                  onPressed: () {},
-                ),
-              )
-            ],
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
-          Text(
-            '${S.of(context).Total}: ${_getTotalPrice()} ${widget.bookingUiModel?.currency ?? 'AED'}',
-            style: theme?.boldTextTheme.title2,
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SafeArea(
-            child: context.gradientButton(
-              data: BaseUiKitButtonData(
-                text: S.of(context).GoToPayment.toUpperCase(),
-                onPressed: () => widget.onSubmit(
-                  _subsForTicket,
-                  _upsalesForTicket,
+                  text: S.of(context).GoToPayment.toUpperCase(),
+                  onPressed: () => widget.onSubmit(
+                    _subsForTicket,
+                    _upsalesForTicket,
+                  ),
                 ),
               ),
-            ),
-          ).paddingSymmetric(horizontal: horizontalPadding),
+            ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24),
         ],
       ),
+      bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _ticketCount != 0
+          ? SafeArea(
+              top: false,
+              child: context.gradientButton(
+                data: BaseUiKitButtonData(
+                  text: S.of(context).GoToPayment.toUpperCase(),
+                  onPressed: () => widget.onSubmit(
+                    _subsForTicket,
+                    _upsalesForTicket,
+                  ),
+                ),
+              ),
+            ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24)
+          : null,
     );
   }
 }
