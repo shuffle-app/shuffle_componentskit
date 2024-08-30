@@ -493,7 +493,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 data: BaseUiKitButtonData(
                   fit: ButtonFit.fitWidth,
                   autoSizeGroup: AutoSizeGroup(),
-                  text: S.of(context).CreateBookingLink.toUpperCase(),
+                  text: S.of(context).CreateBooking,
                   onPressed: () {
                     _bookingUiModel ??= BookingUiModel(id: -1);
 
