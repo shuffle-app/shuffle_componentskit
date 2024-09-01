@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -7,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/utils/policies_localization_getter.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class UnifiedVerificationComponent extends StatefulWidget {
   final UiUnifiedVerificationModel uiModel;
@@ -89,7 +89,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                 isWidgetScrollable: true,
                 topPadding: 1.sw <= 380 ? 0.3.sh : 0.48.sh,
                 child: PopScope(
-                  onPopInvokedWithResult: (didPop, result) {
+                  onPopInvoked: (didPop) {
                     widget.credentialsController.clear();
                     widget.passwordController.clear();
                   },
