@@ -27,62 +27,60 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlurredAppBarPage(
-          autoImplyLeading: true,
-          centerTitle: true,
-          title: S.current.ViewHistory,
-          childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-          children: [
-            UiKitCustomTabBar(
-              selectedTab: selectedTab,
-              onTappedTab: (value) {
-                setState(() {
-                  widget.onTabChange?.call(value == 0 ? 'activation' : 'accrual');
-                  selectedTab = value == 0 ? 'activation' : 'accrual';
-                });
-              },
-              tabs: [
-                UiKitCustomTab(
-                  title: S.current.Activation,
-                  customValue: 'activation',
-                ),
-                UiKitCustomTab(
-                  title: S.current.Accrual,
-                  customValue: 'accrual',
-                ),
-              ],
-            ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
-            SizedBox(
-              height: 0.75.sh,
-              child: PagedListView<int, PointHistoryUniversalModel>(
-                padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
-                pagingController: widget.pagingController,
-                builderDelegate: PagedChildBuilderDelegate(
-                  noItemsFoundIndicatorBuilder: (_) =>
-                      Center(
-                        child: Text(
-                          S
-                              .of(context)
-                              .NothingFound,
-                          style: context.uiKitTheme?.boldTextTheme.body,
-                        ),
-                      ),
-                  itemBuilder: (context, item, index) {
-                    return item.contentShortUiModel != null
-                        ? ViewHistoryActivationWidget(
-                      onTap: widget.onTapBarCode,
-                      activationModel: item.contentShortUiModel,
-                    )
-                        : UiKitPointsHistoryTile(
-                      isLast: index == widget.pagingController.itemList!.length - 1,
-                      title: item.uiModelViewHistoryAccrual?.title ?? '',
-                      points: item.uiModelViewHistoryAccrual?.points ?? 0,
-                      dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),
-                    );
-                  },
+      autoImplyLeading: true,
+      centerTitle: true,
+      title: S.current.ViewHistory,
+      childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+      children: [
+        UiKitCustomTabBar(
+          selectedTab: selectedTab,
+          onTappedTab: (index) {
+            widget.onTabChange?.call(index == 0 ? 'activation' : 'accrual');
+            setState(() {
+              selectedTab = index == 0 ? 'activation' : 'accrual';
+            });
+          },
+          tabs: [
+            UiKitCustomTab(
+              title: S.current.Activation,
+              customValue: 'activation',
+            ),
+            UiKitCustomTab(
+              title: S.current.Accrual,
+              customValue: 'accrual',
+            ),
+          ],
+        ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
+        SizedBox(
+          height: 0.75.sh,
+          child: PagedListView<int, PointHistoryUniversalModel>(
+            padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
+            pagingController: widget.pagingController,
+            builderDelegate: PagedChildBuilderDelegate(
+              firstPageProgressIndicatorBuilder: (_) => const CircularProgressIndicator.adaptive(),
+              noItemsFoundIndicatorBuilder: (_) => Center(
+                child: Text(
+                  S.of(context).NothingFound,
+                  style: context.uiKitTheme?.boldTextTheme.body,
                 ),
               ),
-            )
-          ],
-        ));
+              itemBuilder: (context, item, index) {
+                return item.contentShortUiModel != null
+                    ? ViewHistoryActivationWidget(
+                        onTap: widget.onTapBarCode,
+                        activationModel: item.contentShortUiModel,
+                      )
+                    : UiKitPointsHistoryTile(
+                        isLast: index == widget.pagingController.itemList!.length - 1,
+                        title: item.uiModelViewHistoryAccrual?.title ?? '',
+                        points: item.uiModelViewHistoryAccrual?.points ?? 0,
+                        dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),
+                      );
+              },
+            ),
+          ),
+        )
+      ],
+    ));
   }
 }

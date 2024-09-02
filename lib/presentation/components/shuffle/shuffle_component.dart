@@ -18,6 +18,7 @@ class ShuffleComponent extends StatelessWidget {
   final List<int> favoriteIds;
   final ValueNotifier<int> indexNotifier;
   final ValueNotifier<String> backgroundImageNotifier;
+  final bool allowedToSwipe;
 
   const ShuffleComponent({
     super.key,
@@ -25,6 +26,7 @@ class ShuffleComponent extends StatelessWidget {
     required this.configModel,
     required this.indexNotifier,
     required this.backgroundImageNotifier,
+    this.allowedToSwipe = true,
     this.onLike,
     this.favoriteIds = const [],
     this.onDislike,
@@ -156,19 +158,19 @@ class ShuffleComponent extends StatelessWidget {
                             currentIndex,
                             direction,
                           ) {
-                            if (currentIndex == null) return true;
+                            if (currentIndex == null) return allowedToSwipe;
                             indexNotifier.value = currentIndex;
 
                             switch (direction) {
                               case CardSwiperDirection.bottom:
-                                return true;
+                                return allowedToSwipe;
                               case CardSwiperDirection.top:
                                 // if (onFavorite != null && (configModel.showFavorite ?? true)) {
                                 //   onFavorite!(shuffle.items[currentIndex].title);
                                 // } else {
                                 //   return false;
                                 // }
-                                return true;
+                                return allowedToSwipe;
                               case CardSwiperDirection.none:
                                 return false;
                               case CardSwiperDirection.left:
@@ -177,14 +179,14 @@ class ShuffleComponent extends StatelessWidget {
                                 // } else {
                                 //   return false;
                                 // }
-                                return true;
+                                return allowedToSwipe;
                               case CardSwiperDirection.right:
                                 // if (onLike != null) {
                                 //   onLike!(shuffle.items[currentIndex].title);
                                 // } else {
                                 //   return false;
                                 // }
-                                return true;
+                                return allowedToSwipe;
                             }
                           },
                           cards: shuffle.items,

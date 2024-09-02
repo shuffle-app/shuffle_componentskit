@@ -9,6 +9,7 @@ class UiFeedModel {
   final bool showHowItWorksTitle;
   final bool showHowItWorksBody;
   final bool isHealthKitEnabled;
+  final bool shouldRecallOnMoodTap;
 
   // final List<UiUniversalModel>? mixedItems;
   final List<UiKitTag>? filterChips;
@@ -22,6 +23,7 @@ class UiFeedModel {
     // this.globalEvents,
     this.activeFilterChips,
     this.showHowItWorksBody = false,
+    this.shouldRecallOnMoodTap = false,
     this.isHealthKitEnabled = true,
     this.recommendedEvent,
     this.showHowItWorksTitle = false,
