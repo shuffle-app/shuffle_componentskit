@@ -6,23 +6,24 @@ import 'package:auto_size_text/auto_size_text.dart';
 class BookingByVisitorComponent extends StatefulWidget {
   final BookingUiModel? bookingUiModel;
   final TicketUiModel? ticketUiModel;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final bool canEditTimeOfDay;
+  final VoidCallback? onSelectedDate;
+  final DateTime? selectedDate;
+  final DateTime? selectedTime;
 
   final Function(
-    List<TicketItem<SubsUiModel>?>? subsForTicket,
-    List<TicketItem<UpsaleUiModel>?>? upsalesForTicket,
-  ) onSubmit;
+    TicketUiModel? ticketUiModel,
+    List<SubsUiModel>? subs,
+    List<UpsaleUiModel>? upsales,
+  )? onSubmit;
 
   const BookingByVisitorComponent({
     super.key,
     this.bookingUiModel,
     this.ticketUiModel,
-    this.startDate,
-    this.endDate,
-    this.canEditTimeOfDay = false,
-    required this.onSubmit,
+    this.onSelectedDate,
+    this.selectedDate,
+    this.selectedTime,
+    this.onSubmit,
   });
 
   @override
@@ -32,31 +33,23 @@ class BookingByVisitorComponent extends StatefulWidget {
 class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   SubsUiModel? _selectedSub;
   UpsaleUiModel? _selectedUpsale;
-  late DateTime? _selectedDate;
+
   late final List<SubsUiModel> _subs;
   late final List<UpsaleUiModel> _upsales;
-  late final Map<int, int> _originalSubsBookingLimits;
-  late final Map<int, int> _originalUpsaleBookingLimits;
 
-  late final List<TicketItem<SubsUiModel>?> _subsForTicket;
-  late final List<TicketItem<UpsaleUiModel>?> _upsalesForTicket;
+  late TicketUiModel _ticketUiModel;
 
+  late int _ticketPrice;
   late int _ticketCount;
-  int _subTicketCount = 0;
-  int _totalSubsTicketPrice = 0;
+
+  late int _subTicketCount = 0;
 
   late int _upsaleCount;
   int _upsaleTotalPrice = 0;
 
-  late int _ticketPrice;
+  int get _getTotalSubsTicketCount => _ticketCount + _subTicketCount;
 
-  int _getTotalPrice() {
-    return _upsaleTotalPrice + _totalSubsTicketPrice;
-  }
-
-  int _getTotalSubsTicketCount() {
-    return _ticketCount + _subTicketCount;
-  }
+  int get _getTotalPrice => (_getTotalSubsTicketCount * _ticketPrice) + (_upsaleTotalPrice);
 
   @override
   void initState() {
@@ -64,13 +57,24 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     _subs = widget.bookingUiModel?.subsUiModel ?? [];
     _upsales = widget.bookingUiModel?.upsaleUiModel ?? [];
     _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
+    _subTicketCount = widget.ticketUiModel?.totalSubsCount ?? 0;
     _ticketPrice = widget.bookingUiModel?.price != null ? int.parse(widget.bookingUiModel!.price!) : 0;
-    _subsForTicket = widget.ticketUiModel?.subs ?? [];
-    _upsalesForTicket = widget.ticketUiModel?.upsales ?? [];
+    _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
     _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
-    _originalSubsBookingLimits = {for (var sub in _subs) sub.id: int.parse(sub.actualbookingLimit ?? '0')};
-    _originalUpsaleBookingLimits = {for (var upsale in _upsales) upsale.id: int.parse(upsale.actualLimit ?? '0')};
-    _selectedDate = widget.bookingUiModel?.selectedDateTime ?? widget.startDate;
+    _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
+  }
+
+  @override
+  void didUpdateWidget(covariant BookingByVisitorComponent oldWidget) {
+    _subs = List.from(widget.bookingUiModel?.subsUiModel ?? []);
+    _upsales = List.from(widget.bookingUiModel?.upsaleUiModel ?? []);
+    _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
+    _subTicketCount = widget.ticketUiModel?.totalSubsCount ?? 0;
+    _ticketPrice = widget.bookingUiModel?.price != null ? int.parse(widget.bookingUiModel!.price!) : 0;
+    _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
+    _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
+    _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
+    super.didUpdateWidget(oldWidget);
   }
 
   _onSelectedSub(int id) {
@@ -87,22 +91,19 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   _onRemoveSubTicket() {
     setState(() {
-      if (_selectedSub != null && _ticketCount > 0) {
-        int actualbookingLimit = int.parse(_selectedSub!.actualbookingLimit!);
-        int originalLimit = _originalSubsBookingLimits[_selectedSub!.id]!;
+      if (_selectedSub != null) {
+        final sub = _ticketUiModel.subs?.firstWhere(
+          (element) => element?.item?.id == _selectedSub?.id,
+          orElse: () => null,
+        );
 
-        if (actualbookingLimit > originalLimit) {
-          _ticketCount--;
-          _totalSubsTicketPrice -= _ticketPrice;
+        if (sub != null && sub.count! <= sub.maxCount!) {
           _updateSubTicket(-1);
         }
       } else if (_ticketCount > 0) {
         _ticketCount--;
-        _totalSubsTicketPrice -= _ticketPrice;
-      } else if (_subTicketCount > 0) {
-        _subTicketCount--;
-        _totalSubsTicketPrice -= _ticketPrice;
-        if (_subsForTicket.isNotEmpty) _updateSubTicket(-1);
+      } else if (_selectedSub == null && _subTicketCount > 0 && (_ticketUiModel.subs?.isNotEmpty ?? false)) {
+        _updateSubTicket(-1);
       }
     });
   }
@@ -110,70 +111,79 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   _onAddSubTicket() {
     setState(() {
       if (_selectedSub != null) {
-        int actualbookingLimit = int.parse(_selectedSub!.actualbookingLimit!);
-        int maxLimit = int.parse(_selectedSub!.bookingLimit!);
-
-        if (actualbookingLimit < maxLimit) {
-          _subTicketCount++;
-          _totalSubsTicketPrice += _ticketPrice;
-          _updateSubTicket(1);
-        }
-      } else {
+        _updateSubTicket(1);
+      } else if (_selectedSub == null) {
         _ticketCount++;
-        _totalSubsTicketPrice += _ticketPrice;
       }
     });
   }
 
   void _updateSubTicket(int change) {
     if (_selectedSub != null) {
-      int actualbookingLimit = int.parse(_selectedSub!.actualbookingLimit!) + change;
-      _selectedSub = _selectedSub!.copyWith(actualbookingLimit: actualbookingLimit.toString());
+      TicketItem<SubsUiModel>? subFromTicket = _ticketUiModel.subs?.firstWhere(
+        (element) => _selectedSub?.id == element?.item?.id,
+        orElse: () => null,
+      );
 
-      int originalLimit = _originalSubsBookingLimits[_selectedSub!.id]!;
-      int index = _subs.indexWhere((element) => element.id == _selectedSub!.id);
-      _subs[index] = _selectedSub!;
+      if (subFromTicket == null && (!change.toString().contains('-'))) {
+        final subs = _ticketUiModel.subs ?? [];
+        final maxCount =
+            int.parse(_selectedSub?.bookingLimit ?? '0') - int.parse(_selectedSub?.actualbookingLimit ?? '0');
 
-      int ticketIndex = _subsForTicket.indexWhere((ticketItem) => ticketItem?.item?.id == _selectedSub!.id);
+        subs.add(TicketItem(count: 1, item: _selectedSub, maxCount: maxCount));
 
-      if (ticketIndex != -1) {
-        if (actualbookingLimit > originalLimit) {
-          _subsForTicket[ticketIndex] =
-              _subsForTicket[ticketIndex]?.copyWith(count: actualbookingLimit - originalLimit);
-        } else {
-          _subsForTicket.removeAt(ticketIndex);
+        _ticketUiModel = _ticketUiModel.copyWith(subs: subs);
+
+        int index = _subs.indexWhere((element) => element.id == _selectedSub?.id);
+        _subs[index] = _selectedSub!
+            .copyWith(actualbookingLimit: (int.parse(_subs[index].actualbookingLimit ?? '0') + change).toString());
+
+        _subTicketCount += change;
+      } else if (subFromTicket != null) {
+        final ticketCount = subFromTicket.count! + change;
+        if (ticketCount <= (subFromTicket.maxCount ?? 0) && ticketCount >= 0) {
+          subFromTicket = subFromTicket.copyWith(count: ticketCount);
+          int indexOfSub = _ticketUiModel.subs?.indexWhere((element) => element?.item?.id == _selectedSub?.id) ?? -1;
+          if (indexOfSub != -1) {
+            _ticketUiModel.subs?[indexOfSub] = subFromTicket;
+          }
+
+          int index = _subs.indexWhere((element) => element.id == subFromTicket?.item?.id);
+          _subs[index] = subFromTicket.item!
+              .copyWith(actualbookingLimit: (int.parse(_subs[index].actualbookingLimit ?? '0') + change).toString());
+
+          _subTicketCount += change;
         }
-      } else {
-        if (actualbookingLimit > originalLimit) {
-          _subsForTicket.add(TicketItem(count: actualbookingLimit - originalLimit, item: _selectedSub!));
-        }
+
+        if (_ticketUiModel.subs!.last?.count == 0) _ticketUiModel.subs!.removeLast();
       }
     } else {
-      if (_subsForTicket.last?.count != null) {
-        _subsForTicket.last = _subsForTicket.last?.copyWith(count: _subsForTicket.last!.count! - 1);
-        int index = _subs.indexWhere((element) => element.id == _subsForTicket.last?.item?.id);
-        if (_subsForTicket.last?.count == 0) _subsForTicket.removeLast();
+      if (_ticketUiModel.subs?.last?.count != null) {
+        _ticketUiModel.subs!.last = _ticketUiModel.subs!.last?.copyWith(count: _ticketUiModel.subs!.last!.count! - 1);
+        int index = _subs.indexWhere((element) => element.id == _ticketUiModel.subs!.last?.item?.id);
+        if (_ticketUiModel.subs!.last?.count == 0) _ticketUiModel.subs!.removeLast();
 
         _subs[index] =
             _subs[index].copyWith(actualbookingLimit: ((int.parse(_subs[index].actualbookingLimit!) - 1).toString()));
+
+        _subTicketCount += change;
       }
     }
   }
 
   _onRemoveUpsale() {
     setState(() {
-      if (_selectedUpsale?.actualLimit != null && _upsaleCount > 0) {
-        int actualLimit = int.parse(_selectedUpsale!.actualLimit!);
-        int originalLimit = _originalUpsaleBookingLimits[_selectedUpsale!.id]!;
+      if (_selectedUpsale != null) {
+        final upsale = _ticketUiModel.upsales?.firstWhere(
+          (element) => element?.item?.id == _selectedUpsale?.id,
+          orElse: () => null,
+        );
 
-        if (actualLimit > originalLimit) {
-          _upsaleCount--;
-          _upsaleTotalPrice -= int.parse(_selectedUpsale?.price ?? '0');
+        if (upsale != null && upsale.count! <= upsale.maxCount!) {
+          _upsaleTotalPrice -= int.parse(upsale.item?.price ?? '0');
           _updateUpsaleTicket(-1);
         }
-      } else if (_upsaleCount > 0) {
-        _upsaleCount--;
-        _upsaleTotalPrice -= int.parse(_upsalesForTicket.last?.item?.price ?? '0');
+      } else if (_selectedUpsale == null && _upsaleCount > 0 && (_ticketUiModel.upsales?.isNotEmpty ?? false)) {
         _updateUpsaleTicket(-1);
       }
     });
@@ -181,50 +191,63 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   _onAddUpsale() {
     setState(() {
-      if (_selectedUpsale?.actualLimit != null) {
-        int actualLimit = int.parse(_selectedUpsale!.actualLimit!);
-        int maxLimit = int.parse(_selectedUpsale?.limit ?? '0');
-
-        if (actualLimit < maxLimit) {
-          _upsaleCount++;
-          _upsaleTotalPrice += int.parse(_selectedUpsale?.price ?? '0');
-          _updateUpsaleTicket(1);
-        }
+      if (_selectedUpsale != null) {
+        _upsaleTotalPrice += int.parse(_selectedUpsale?.price ?? '0');
+        _updateUpsaleTicket(1);
       }
     });
   }
 
   void _updateUpsaleTicket(int change) {
-    if (_selectedUpsale?.actualLimit != null) {
-      int actualLimit = int.parse(_selectedUpsale!.actualLimit!) + change;
-      _selectedUpsale = _selectedUpsale!.copyWith(actualLimit: actualLimit.toString());
+    if (_selectedUpsale != null) {
+      TicketItem<UpsaleUiModel>? upsaleForTicket = _ticketUiModel.upsales?.firstWhere(
+        (element) => _selectedUpsale?.id == element?.item?.id,
+        orElse: () => null,
+      );
 
-      int originalLimit = _originalUpsaleBookingLimits[_selectedUpsale!.id]!;
-      int index = _upsales.indexWhere((element) => element.id == _selectedUpsale!.id);
-      _upsales[index] = _selectedUpsale!;
+      if (upsaleForTicket == null && (!change.toString().contains('-'))) {
+        final upsales = _ticketUiModel.upsales ?? [];
+        final maxCount = int.parse(_selectedUpsale?.limit ?? '0') - int.parse(_selectedUpsale?.actualLimit ?? '0');
 
-      int ticketIndex = _upsalesForTicket.indexWhere((ticketItem) => ticketItem?.item?.id == _selectedUpsale!.id);
+        upsales.add(TicketItem(count: 1, item: _selectedUpsale, maxCount: maxCount));
+        _ticketUiModel = _ticketUiModel.copyWith(upsales: upsales);
 
-      if (ticketIndex != -1) {
-        if (actualLimit > originalLimit) {
-          _upsalesForTicket[ticketIndex] = _upsalesForTicket[ticketIndex]?.copyWith(count: actualLimit - originalLimit);
-        } else {
-          _upsalesForTicket.removeAt(ticketIndex);
+        int index = _upsales.indexWhere((element) => element.id == _selectedUpsale?.id);
+        _upsales[index] =
+            _selectedUpsale!.copyWith(actualLimit: (int.parse(_upsales[index].actualLimit ?? '0') + change).toString());
+
+        _upsaleCount += change;
+      } else if (upsaleForTicket != null) {
+        final upsaleCount = upsaleForTicket.count! + change;
+        if (upsaleCount <= (upsaleForTicket.maxCount ?? 0) && upsaleCount >= 0) {
+          upsaleForTicket = upsaleForTicket.copyWith(count: upsaleCount);
+          int indexOfUpsale =
+              _ticketUiModel.upsales?.indexWhere((element) => element?.item?.id == _selectedUpsale?.id) ?? -1;
+
+          if (indexOfUpsale != -1) {
+            _ticketUiModel.upsales?[indexOfUpsale] = upsaleForTicket;
+          }
+
+          int index = _subs.indexWhere((element) => element.id == upsaleForTicket?.item?.id);
+          _upsales[index] = upsaleForTicket.item!
+              .copyWith(actualLimit: (int.parse(_upsales[index].actualLimit ?? '0') + change).toString());
+          _upsaleCount += change;
         }
-      } else {
-        if (actualLimit > originalLimit) {
-          _upsalesForTicket.add(TicketItem(count: actualLimit - originalLimit, item: _selectedUpsale!));
-        }
+
+        if (_ticketUiModel.upsales!.last?.count == 0) _ticketUiModel.upsales!.removeLast();
       }
     } else {
-      if (_upsalesForTicket.last?.count != null) {
-        _upsalesForTicket.last = _upsalesForTicket.last?.copyWith(count: _upsalesForTicket.last!.count! - 1);
-
-        int index = _upsales.indexWhere((element) => element.id == _upsalesForTicket.last?.item?.id);
-        if (_upsalesForTicket.last?.count == 0) _upsalesForTicket.removeLast();
+      if (_ticketUiModel.upsales?.last?.count != null) {
+        _ticketUiModel.upsales!.last =
+            _ticketUiModel.upsales!.last?.copyWith(count: _ticketUiModel.upsales!.last!.count! - 1);
+        int index = _upsales.indexWhere((element) => element.id == _ticketUiModel.upsales!.last?.item?.id);
+        if (_ticketUiModel.upsales!.last?.count == 0) _ticketUiModel.upsales!.removeLast();
 
         _upsales[index] =
-            _upsales[index].copyWith(actualLimit: ((int.parse(_upsales[index].actualLimit!) - 1).toString()));
+            _upsales[index].copyWith(actualLimit: (int.parse(_upsales[index].actualLimit!) - 1).toString());
+
+        _upsaleCount += change;
+        _upsaleTotalPrice -= int.parse(_upsales[index].price ?? '0');
       }
     }
   }
@@ -250,7 +273,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             SubsInContentCard(
               subs: _subs,
               backgroundColor: theme?.colorScheme.surface,
-              selectedSub: _selectedSub,
+              selectedSubId: _selectedSub?.id,
               onItemTap: (id) {
                 _onSelectedSub(id);
               },
@@ -289,7 +312,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                   borderRadius: BorderRadiusFoundation.all24r,
                 ),
                 child: Text(
-                  '${_ticketCount + _subTicketCount}',
+                  '$_getTotalSubsTicketCount',
                   style: theme?.boldTextTheme.caption1Medium,
                 ).paddingSymmetric(
                   vertical: SpacingFoundation.verticalSpacing16,
@@ -322,7 +345,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             SubsInContentCard(
               upsales: _upsales,
               backgroundColor: theme?.colorScheme.surface,
-              selectedUpsale: _selectedUpsale,
+              selectedUpsaleId: _selectedUpsale?.id,
               onItemTap: (id) {
                 _onSelectedUpsale(id);
               },
@@ -379,79 +402,40 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
           ],
-          if (_getTotalSubsTicketCount() != 0) ...[
+          if (_getTotalSubsTicketCount != 0) ...[
             Text(
               S.of(context).SelectDateTime,
               style: theme?.boldTextTheme.title2,
             ).paddingSymmetric(horizontal: horizontalPadding),
-            if ((widget.startDate != null && widget.endDate != null) ||
-                (widget.startDate != null && widget.endDate == null && widget.canEditTimeOfDay)) ...[
-              SpacingFoundation.verticalSpace24,
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    S.of(context).Schedule,
-                    style: theme?.regularTextTheme.labelSmall,
+            SpacingFoundation.verticalSpace24,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  S.of(context).Schedule,
+                  style: theme?.regularTextTheme.labelSmall,
+                ),
+                const Spacer(),
+                context.outlinedButton(
+                  padding: EdgeInsets.all(EdgeInsetsFoundation.all12),
+                  data: BaseUiKitButtonData(
+                    iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.calendar),
+                    onPressed: widget.onSelectedDate,
                   ),
-                  const Spacer(),
-                  context.outlinedButton(
-                    padding: EdgeInsets.all(EdgeInsetsFoundation.all12),
-                    data: BaseUiKitButtonData(
-                      iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.calendar),
-                      onPressed: () async {
-                        if (widget.canEditTimeOfDay && widget.endDate == null) {
-                          final timeOfDay = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-                          );
-                          if (timeOfDay != null) {
-                            setState(() {
-                              _selectedDate = _selectedDate!.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
-                            });
-                          }
-                        } else {
-                          final selectedDateFromDialog = await showUiKitCalendarDialog(
-                            firstDate: widget.startDate,
-                            lastDate: widget.endDate,
-                            context,
-                          );
-
-                          if (selectedDateFromDialog != null) {
-                            setState(() {
-                              _selectedDate = selectedDateFromDialog;
-                            });
-                            if (mounted) {
-                              final timeOfDay = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              );
-                              if (timeOfDay != null) {
-                                setState(() {
-                                  _selectedDate =
-                                      _selectedDate!.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
-                                });
-                              }
-                            }
-                          }
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ).paddingSymmetric(horizontal: horizontalPadding),
-            ],
+                )
+              ],
+            ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace16,
-            if (_selectedDate != null)
+            if (widget.selectedDate != null)
               Row(
                 children: [
                   Text(
-                    formatDateWithCustomPattern('dd.MM.yyyy', _selectedDate!.toLocal()),
+                    formatDateWithCustomPattern('dd.MM.yyyy', widget.selectedDate!.toLocal()),
                     style: theme?.boldTextTheme.body,
                   ),
                   SpacingFoundation.horizontalSpace16,
                   Text(
-                    formatChatMessageDate(_selectedDate!),
+                    formatChatMessageDate(widget.selectedDate!),
                     style: theme?.regularTextTheme.body,
                   ),
                 ],
@@ -461,35 +445,41 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 bottom: SpacingFoundation.verticalSpacing24,
               ),
             Text(
-              '${S.of(context).Total}: ${_getTotalPrice()} ${widget.bookingUiModel?.currency ?? 'AED'}',
+              '${S.of(context).Total}: $_getTotalPrice ${widget.bookingUiModel?.currency ?? 'AED'}',
               style: theme?.boldTextTheme.title2,
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
-          if ((_subs.isNotEmpty || _upsales.isNotEmpty) && _getTotalSubsTicketCount() != 0)
+          if ((_subs.isNotEmpty || _upsales.isNotEmpty) && _getTotalSubsTicketCount != 0)
             SafeArea(
               top: false,
               child: context.gradientButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).GoToPayment.toUpperCase(),
-                  onPressed: () => widget.onSubmit(
-                    _subsForTicket,
-                    _upsalesForTicket,
-                  ),
+                  onPressed: () {
+                    widget.onSubmit?.call(
+                      _ticketUiModel.copyWith(ticketsCount: _ticketCount),
+                      _subs,
+                      _upsales,
+                    );
+                  },
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24),
         ],
       ),
-      bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _getTotalSubsTicketCount() != 0
+      bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _getTotalSubsTicketCount != 0
           ? SafeArea(
               top: false,
               child: context.gradientButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).GoToPayment.toUpperCase(),
-                  onPressed: () => widget.onSubmit(
-                    _subsForTicket,
-                    _upsalesForTicket,
-                  ),
+                  onPressed: () {
+                    widget.onSubmit?.call(
+                      _ticketUiModel.copyWith(ticketsCount: _ticketCount),
+                      _subs,
+                      _upsales,
+                    );
+                  },
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24)
