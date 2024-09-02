@@ -46,7 +46,6 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   int _upsaleTotalPrice = 0;
 
   int get _getTotalSubsTicketCount => _ticketCount + _subTicketCount;
-
   int get _getTotalPrice => (_getTotalSubsTicketCount * _ticketPrice) + (_upsaleTotalPrice);
 
   @override
@@ -112,7 +111,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     setState(() {
       if (_selectedSub != null) {
         _updateSubTicket(1);
-      } else if (_selectedSub == null) {
+      } else {
         _ticketCount++;
       }
     });
@@ -120,20 +119,23 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   void _updateSubTicket(int change) {
     if (_selectedSub != null) {
+      /// Looking for a sub-element in the current ticket list
       TicketItem<SubsUiModel>? subFromTicket = _ticketUiModel.subs?.firstWhere(
         (element) => _selectedSub?.id == element?.item?.id,
         orElse: () => null,
       );
 
+      /// If the sub-element is not found in the ticket and the change is positive (addition)
       if (subFromTicket == null && (!change.toString().contains('-'))) {
         final subs = _ticketUiModel.subs ?? [];
         final maxCount =
             int.parse(_selectedSub?.bookingLimit ?? '0') - int.parse(_selectedSub?.actualbookingLimit ?? '0');
-
         subs.add(TicketItem(count: 1, item: _selectedSub, maxCount: maxCount));
 
+        /// Updating the ticket model with a new list of subelements
         _ticketUiModel = _ticketUiModel.copyWith(subs: subs);
 
+        /// Updating the number of bookings for the selected sub-element
         int index = _subs.indexWhere((element) => element.id == _selectedSub?.id);
         _subs[index] = _selectedSub!
             .copyWith(actualbookingLimit: (int.parse(_subs[index].actualbookingLimit ?? '0') + change).toString());
@@ -141,28 +143,36 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         _subTicketCount += change;
       } else if (subFromTicket != null) {
         final ticketCount = subFromTicket.count! + change;
+
+        /// Update the subelement only if the new quantity is acceptable
         if (ticketCount <= (subFromTicket.maxCount ?? 0) && ticketCount >= 0) {
           subFromTicket = subFromTicket.copyWith(count: ticketCount);
+
           int indexOfSub = _ticketUiModel.subs?.indexWhere((element) => element?.item?.id == _selectedSub?.id) ?? -1;
           if (indexOfSub != -1) {
             _ticketUiModel.subs?[indexOfSub] = subFromTicket;
           }
 
+          /// Updating the actual number of bookings
           int index = _subs.indexWhere((element) => element.id == subFromTicket?.item?.id);
           _subs[index] = subFromTicket.item!
               .copyWith(actualbookingLimit: (int.parse(_subs[index].actualbookingLimit ?? '0') + change).toString());
-
           _subTicketCount += change;
         }
 
+        /// If the last subelement in the list has zero number, delete it
         if (_ticketUiModel.subs!.last?.count == 0) _ticketUiModel.subs!.removeLast();
       }
     } else {
       if (_ticketUiModel.subs?.last?.count != null) {
         _ticketUiModel.subs!.last = _ticketUiModel.subs!.last?.copyWith(count: _ticketUiModel.subs!.last!.count! - 1);
+
         int index = _subs.indexWhere((element) => element.id == _ticketUiModel.subs!.last?.item?.id);
+
+        /// If the number of the last subelement has become zero, remove it from the list
         if (_ticketUiModel.subs!.last?.count == 0) _ticketUiModel.subs!.removeLast();
 
+        /// Updating the number of bookings for the last sub-element
         _subs[index] =
             _subs[index].copyWith(actualbookingLimit: ((int.parse(_subs[index].actualbookingLimit!) - 1).toString()));
 
@@ -200,27 +210,33 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   void _updateUpsaleTicket(int change) {
     if (_selectedUpsale != null) {
+      /// Looking for an upsale in the current ticket list
       TicketItem<UpsaleUiModel>? upsaleForTicket = _ticketUiModel.upsales?.firstWhere(
         (element) => _selectedUpsale?.id == element?.item?.id,
         orElse: () => null,
       );
 
+      /// If the upsale is not found in the ticket and the change is positive (addition)
       if (upsaleForTicket == null && (!change.toString().contains('-'))) {
         final upsales = _ticketUiModel.upsales ?? [];
         final maxCount = int.parse(_selectedUpsale?.limit ?? '0') - int.parse(_selectedUpsale?.actualLimit ?? '0');
-
         upsales.add(TicketItem(count: 1, item: _selectedUpsale, maxCount: maxCount));
+
         _ticketUiModel = _ticketUiModel.copyWith(upsales: upsales);
 
+        /// Updating the number of actual bookings for the selected upsale
         int index = _upsales.indexWhere((element) => element.id == _selectedUpsale?.id);
         _upsales[index] =
             _selectedUpsale!.copyWith(actualLimit: (int.parse(_upsales[index].actualLimit ?? '0') + change).toString());
-
         _upsaleCount += change;
       } else if (upsaleForTicket != null) {
         final upsaleCount = upsaleForTicket.count! + change;
+
+        /// Update the upsale only if the new quantity is acceptable
         if (upsaleCount <= (upsaleForTicket.maxCount ?? 0) && upsaleCount >= 0) {
           upsaleForTicket = upsaleForTicket.copyWith(count: upsaleCount);
+
+          /// Find the upsale index in the ticket list
           int indexOfUpsale =
               _ticketUiModel.upsales?.indexWhere((element) => element?.item?.id == _selectedUpsale?.id) ?? -1;
 
@@ -228,25 +244,34 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             _ticketUiModel.upsales?[indexOfUpsale] = upsaleForTicket;
           }
 
-          int index = _subs.indexWhere((element) => element.id == upsaleForTicket?.item?.id);
+          /// Updating the number of actual bookings for the upsale
+          int index = _upsales.indexWhere((element) => element.id == upsaleForTicket?.item?.id);
           _upsales[index] = upsaleForTicket.item!
               .copyWith(actualLimit: (int.parse(_upsales[index].actualLimit ?? '0') + change).toString());
+
           _upsaleCount += change;
         }
 
+        /// If the last upsale in the list has zero number, delete it
         if (_ticketUiModel.upsales!.last?.count == 0) _ticketUiModel.upsales!.removeLast();
       }
     } else {
       if (_ticketUiModel.upsales?.last?.count != null) {
         _ticketUiModel.upsales!.last =
             _ticketUiModel.upsales!.last?.copyWith(count: _ticketUiModel.upsales!.last!.count! - 1);
+
         int index = _upsales.indexWhere((element) => element.id == _ticketUiModel.upsales!.last?.item?.id);
+
+        /// If the number of the last update has become zero, remove it from the list
         if (_ticketUiModel.upsales!.last?.count == 0) _ticketUiModel.upsales!.removeLast();
 
+        /// Updating the number of actual bookings for the latest update
         _upsales[index] =
             _upsales[index].copyWith(actualLimit: (int.parse(_upsales[index].actualLimit!) - 1).toString());
 
         _upsaleCount += change;
+
+        /// Reducing the total price by the price of the last upsale
         _upsaleTotalPrice -= int.parse(_upsales[index].price ?? '0');
       }
     }
