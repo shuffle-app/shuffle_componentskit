@@ -312,6 +312,7 @@ class FeedComponent extends StatelessWidget {
               isCompleted: mood != null,
               onCompleted: onMoodCompleted,
               onPressed: onMoodCheck,
+              onPressedShouldRecall:feed.shouldRecallOnMoodTap,
               onCompletedWidget: mood != null
                   ? UiKitMessageCardWithIcon(
                       message: mood!.title,
