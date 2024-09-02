@@ -116,7 +116,8 @@ class _InviteComponentState extends State<InviteComponent> {
                   child: Text(
                   S.of(context).NoPeopleAvailableToInvite,
                   style: theme?.boldTextTheme.subHeadline,
-                ))
+                  textAlign: TextAlign.center,
+                ).paddingAll(EdgeInsetsFoundation.all16))
               : ListView.separated(
                   controller: scrollController,
                   padding: EdgeInsets.symmetric(
@@ -222,7 +223,7 @@ class _InviteComponentState extends State<InviteComponent> {
                         ),
                         child: UiKitInputFieldNoIcon(
                           minLines: 1,
-                          maxSymbols: 25,
+                          maxSymbols: 50,
                           controller: _wishController,
                           hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                           fillColor: theme?.colorScheme.surface1,

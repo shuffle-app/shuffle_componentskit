@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FavoriteCreateFolderComponent extends StatelessWidget {
@@ -32,11 +31,8 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                S
-                    .of(context)
-                    .EnterTitle,
-                style:
-                theme?.boldTextTheme.title2.copyWith(color: Colors.black),
+                S.of(context).EnterTitle,
+                style: theme?.boldTextTheme.title2.copyWith(color: Colors.black),
               ),
               SpacingFoundation.verticalSpace12,
               UiKitSymbolsCounterInputFieldNoFill(
@@ -44,21 +40,16 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
                 enabled: true,
                 autofocus: true,
                 obscureText: false,
-                maxSymbols: 15,
+                maxSymbols: 25,
                 textInputAction: TextInputAction.done,
                 maxLines: 2,
                 minLines: 1,
                 onFieldSubmitted: (_) => onConfirm,
                 customFocusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 2,
-                        color: context.uiKitTheme!.colorScheme.darkNeutral400)),
+                    borderSide: BorderSide(width: 2, color: context.uiKitTheme!.colorScheme.darkNeutral400)),
                 customEnabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 2,
-                        color: context.uiKitTheme!.colorScheme.darkNeutral400)),
-                customInputTextColor:
-                context.uiKitTheme?.colorScheme.inverseBodyTypography,
+                    borderSide: BorderSide(width: 2, color: context.uiKitTheme!.colorScheme.darkNeutral400)),
+                customInputTextColor: context.uiKitTheme?.colorScheme.inverseBodyTypography,
               ),
               SpacingFoundation.verticalSpace16,
               SizedBox(
@@ -77,10 +68,8 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
                       return context.button(
                         data: BaseUiKitButtonData(
                           text: S.current.Confirm,
-                          backgroundColor: context
-                              .uiKitTheme?.colorScheme.surface,
-                          textColor: context
-                              .uiKitTheme?.colorScheme.onSurface,
+                          backgroundColor: context.uiKitTheme?.colorScheme.surface,
+                          textColor: context.uiKitTheme?.colorScheme.onSurface,
                           onPressed: onConfirm,
                           fit: ButtonFit.fitWidth,
                         ),
@@ -90,8 +79,6 @@ class FavoriteCreateFolderComponent extends StatelessWidget {
                   listenable: titleController,
                 ),
               ),
-
-
             ],
           ).paddingAll(EdgeInsetsFoundation.all16),
         ),
