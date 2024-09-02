@@ -173,7 +173,7 @@ class ChatComponent extends StatelessWidget {
         ),
       ),
       hideBottomSpace: chatData.readOnlyChat,
-      bottomSheetHeight: 1.sw * 0.275,
+      bottomSheetHeight: 1.sw * 0.275 - (1.sw <= 380 ? SpacingFoundation.verticalSpacing8 : 0),
       bodyBottomSpace: kBottomNavigationBarHeight +
           (chatData.isGroupChat ? SpacingFoundation.verticalSpacing16 : SpacingFoundation.verticalSpacing4),
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
