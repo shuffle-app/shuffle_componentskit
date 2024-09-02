@@ -7,8 +7,7 @@ class BookingByVisitorComponent extends StatefulWidget {
   final BookingUiModel? bookingUiModel;
   final TicketUiModel? ticketUiModel;
   final VoidCallback? onSelectedDate;
-  final DateTime? selectedDate;
-  final DateTime? selectedTime;
+  final ValueNotifier<DateTime?>? selectedDate;
 
   final Function(
     TicketUiModel? ticketUiModel,
@@ -22,7 +21,6 @@ class BookingByVisitorComponent extends StatefulWidget {
     this.ticketUiModel,
     this.onSelectedDate,
     this.selectedDate,
-    this.selectedTime,
     this.onSubmit,
   });
 
@@ -66,6 +64,8 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   @override
   void didUpdateWidget(covariant BookingByVisitorComponent oldWidget) {
+    _subs.clear();
+    _upsales.clear();
     _subs = List.from(widget.bookingUiModel?.subsUiModel ?? []);
     _upsales = List.from(widget.bookingUiModel?.upsaleUiModel ?? []);
     _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
@@ -426,23 +426,28 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               ],
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace16,
-            if (widget.selectedDate != null)
-              Row(
-                children: [
-                  Text(
-                    formatDateWithCustomPattern('dd.MM.yyyy', widget.selectedDate!.toLocal()),
-                    style: theme?.boldTextTheme.body,
-                  ),
-                  SpacingFoundation.horizontalSpace16,
-                  Text(
-                    formatChatMessageDate(widget.selectedDate!),
-                    style: theme?.regularTextTheme.body,
-                  ),
-                ],
-              ).paddingOnly(
-                left: horizontalPadding,
-                right: horizontalPadding,
-                bottom: SpacingFoundation.verticalSpacing24,
+            if (widget.selectedDate?.value != null)
+              ValueListenableBuilder(
+                valueListenable: widget.selectedDate!,
+                builder: (context, value, child) {
+                  return Row(
+                    children: [
+                      Text(
+                        formatDateWithCustomPattern('dd.MM.yyyy', widget.selectedDate!.value!.toLocal()),
+                        style: theme?.boldTextTheme.body,
+                      ),
+                      SpacingFoundation.horizontalSpace16,
+                      Text(
+                        formatChatMessageDate(widget.selectedDate!.value!),
+                        style: theme?.regularTextTheme.body,
+                      ),
+                    ],
+                  ).paddingOnly(
+                    left: horizontalPadding,
+                    right: horizontalPadding,
+                    bottom: SpacingFoundation.verticalSpacing24,
+                  );
+                },
               ),
             Text(
               '${S.of(context).Total}: $_getTotalPrice ${widget.bookingUiModel?.currency ?? 'AED'}',

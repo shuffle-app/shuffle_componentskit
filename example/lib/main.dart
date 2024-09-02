@@ -134,6 +134,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       currency: 'AED',
     ),
   );
+  ValueNotifier<DateTime?> selectedDate = ValueNotifier<DateTime?>(null);
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +222,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show Booking By Visitor Component',
                 onPressed: () => context.push(
                   BookingByVisitorComponent(
+                    selectedDate: selectedDate,
                     onSubmit: (model, subs, upsale) {
                       setState(() {
                         ticketModel = model;
@@ -235,7 +237,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 
                       if (selectedDateFromDialog != null) {
                         setState(() {
-                          // _selectedDate = selectedDateFromDialog;
+                          selectedDate?.value = selectedDateFromDialog;
+                          log('selectedDate ${selectedDate}');
                         });
                         if (mounted) {
                           final timeOfDay = await showTimePicker(
@@ -244,8 +247,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           );
                           if (timeOfDay != null) {
                             setState(() {
-                              // _selectedDate =
-                              //     _selectedDate!.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                              selectedDate.value =
+                                  selectedDate?.value?.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                              log('selectedDate ${selectedDate}');
                             });
                           }
                         }
