@@ -89,7 +89,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                 isWidgetScrollable: true,
                 topPadding: 0.48.sh - SpacingFoundation.verticalSpacing24,
                 child: PopScope(
-                  onPopInvoked: (didPop) {
+                  onPopInvokedWithResult: (didPop, _) {
                     widget.credentialsController.clear();
                     widget.passwordController.clear();
                   },
