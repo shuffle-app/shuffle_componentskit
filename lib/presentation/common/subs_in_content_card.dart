@@ -8,17 +8,17 @@ class SubsInContentCard extends StatelessWidget {
   final List<SubsUiModel>? subs;
   final List<UpsaleUiModel>? upsales;
   final ValueChanged<int>? onItemTap;
-  final SubsUiModel? selectedSub;
-  final UpsaleUiModel? selectedUpsale;
+  final int? selectedSubId;
+  final int? selectedUpsaleId;
 
   const SubsInContentCard({
     super.key,
     this.subs,
     this.backgroundColor,
     this.onItemTap,
-    this.selectedSub,
+    this.selectedSubId,
     this.upsales,
-    this.selectedUpsale,
+    this.selectedUpsaleId,
   }) : assert(subs != null || upsales != null, 'Either subs or upsales must be provided');
 
   @override
@@ -37,6 +37,7 @@ class SubsInContentCard extends StatelessWidget {
             ).paddingOnly(
               left: SpacingFoundation.horizontalSpacing16,
               bottom: SpacingFoundation.verticalSpacing4,
+              top: SpacingFoundation.verticalSpacing12,
             ),
           SizedBox(
             height: 1.sw <= 380 ? 140.h : 105.h,
@@ -55,7 +56,7 @@ class SubsInContentCard extends StatelessWidget {
                     photoLink: sub.photo?.link,
                     actualLimit: sub.actualbookingLimit,
                     description: sub.description,
-                    selectedItem: selectedSub == sub,
+                    selectedItem: selectedSubId == sub.id,
                     onEdit: () => onItemTap?.call(sub.id),
                   ).paddingOnly(
                     left: sub == subs!.first ? SpacingFoundation.horizontalSpacing16 : 0,
@@ -71,7 +72,7 @@ class SubsInContentCard extends StatelessWidget {
                     actualLimit: upsale.actualLimit,
                     description: upsale.description,
                     isSubs: false,
-                    selectedItem: selectedUpsale == upsale,
+                    selectedItem: selectedUpsaleId == upsale.id,
                     onEdit: () => onItemTap?.call(upsale.id),
                   ).paddingOnly(
                     left: upsale == upsales!.first ? SpacingFoundation.horizontalSpacing16 : 0,
