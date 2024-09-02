@@ -108,6 +108,33 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 
   final GlobalConfiguration configuration = GlobalConfiguration();
 
+  TicketUiModel? ticketModel = TicketUiModel(id: -1);
+
+  List<SubsUiModel> subList = List.generate(
+    10,
+    (index) => SubsUiModel(
+      id: index,
+      actualbookingLimit: '1',
+      bookingLimit: '10',
+      description: 'I am Leonardo Messi, be the best ;)',
+      photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+      title: 'I am Leonardo Messi',
+    ),
+  );
+
+  List<UpsaleUiModel> upsaleList = List.generate(
+    3,
+    (index) => UpsaleUiModel(
+      id: index,
+      limit: '10',
+      actualLimit: '3',
+      description: 'I am Leonardo Messi, be the best ;)',
+      photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.lETOLogo.path),
+      price: '100',
+      currency: 'AED',
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
@@ -194,41 +221,44 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show Booking By Visitor Component',
                 onPressed: () => context.push(
                   BookingByVisitorComponent(
-                    onSubmit: (first, second) {
-                      log('first $first');
-                      log('second $second');
+                    onSubmit: (model, subs, upsale) {
+                      setState(() {
+                        ticketModel = model;
+                        upsaleList = upsale ?? [];
+                        subList = subs ?? [];
+                      });
                     },
-                    startDate: DateTime.now(),
-                    canEditTimeOfDay: true,
-                    endDate: DateTime(2024, 9, 5),
+                    onSelectedDate: () async {
+                      final selectedDateFromDialog = await showUiKitCalendarDialog(
+                        context,
+                      );
+
+                      if (selectedDateFromDialog != null) {
+                        setState(() {
+                          // _selectedDate = selectedDateFromDialog;
+                        });
+                        if (mounted) {
+                          final timeOfDay = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          if (timeOfDay != null) {
+                            setState(() {
+                              // _selectedDate =
+                              //     _selectedDate!.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                            });
+                          }
+                        }
+                      }
+                    },
+                    ticketUiModel: ticketModel,
                     bookingUiModel: BookingUiModel(
                       showSabsInContentCard: true,
                       id: -1,
                       price: '500',
                       currency: 'AED',
-                      subsUiModel: List.generate(
-                        10,
-                        (index) => SubsUiModel(
-                          id: index,
-                          actualbookingLimit: (math.Random().nextInt(7)).toString(),
-                          bookingLimit: '10',
-                          description: 'I am Leonardo Messi, be the best ;)',
-                          photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
-                          title: 'I am Leonardo Messi',
-                        ),
-                      ),
-                      upsaleUiModel: List.generate(
-                        10,
-                        (index) => UpsaleUiModel(
-                          id: index,
-                          limit: '10',
-                          description: 'I am Leonardo Messi, be the best ;)',
-                          photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.lETOLogo.path),
-                          price: (math.Random().nextInt(250)).toString(),
-                          actualLimit: (math.Random().nextInt(7)).toString(),
-                          currency: 'AED',
-                        ),
-                      ),
+                      subsUiModel: subList,
+                      upsaleUiModel: upsaleList,
                     ),
                   ),
                 ),
@@ -866,6 +896,41 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       model:
                           ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
                               BookingElementModel(version: '0'),
+                      onBook: () {
+                        context.push(
+                          BookingByVisitorComponent(
+                            bookingUiModel: BookingUiModel(
+                              showSabsInContentCard: true,
+                              id: -1,
+                              price: '500',
+                              currency: 'AED',
+                              subsUiModel: List.generate(
+                                10,
+                                (index) => SubsUiModel(
+                                  id: index,
+                                  actualbookingLimit: (math.Random().nextInt(7)).toString(),
+                                  bookingLimit: '10',
+                                  description: 'I am Leonardo Messi, be the best ;)',
+                                  photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+                                  title: 'I am Leonardo Messi',
+                                ),
+                              ),
+                              upsaleUiModel: List.generate(
+                                10,
+                                (index) => UpsaleUiModel(
+                                  id: index,
+                                  limit: '10',
+                                  description: 'I am Leonardo Messi, be the best ;)',
+                                  photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.lETOLogo.path),
+                                  price: (math.Random().nextInt(250)).toString(),
+                                  actualLimit: (math.Random().nextInt(7)).toString(),
+                                  currency: 'AED',
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -1209,7 +1274,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 
   final UiPlaceModel place = UiPlaceModel(
     title: 'title',
-
+    scheduleString: 'Sun: 06:00 pm-08:05 pm',
     id: 1,
     media: [
       UiKitMediaVideo(
