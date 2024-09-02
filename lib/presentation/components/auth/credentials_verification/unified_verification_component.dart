@@ -87,7 +87,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
               context,
               GeneralDialogData(
                 isWidgetScrollable: true,
-                topPadding: 1.sw <= 380 ? 0.3.sh : 0.48.sh,
+                topPadding: 0.48.sh - SpacingFoundation.verticalSpacing24,
                 child: PopScope(
                   onPopInvokedWithResult: (didPop, _) {
                     widget.credentialsController.clear();
@@ -240,7 +240,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                   }
                 } else {
                   if (isSmallScreen) {
-                    height = 0.01.sh;
+                    height = 0.1625.sh;
                   } else {
                     if (hasPasswordError) {
                       height = 0.14.sh;
@@ -306,7 +306,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                 },
               ),
               SizedBox(
-                height: isSmallScreen ? 0.32.sh : 0.26.sh,
+                height: 0.26.sh,
                 child: TabBarView(
                   controller: tabController,
                   children: [

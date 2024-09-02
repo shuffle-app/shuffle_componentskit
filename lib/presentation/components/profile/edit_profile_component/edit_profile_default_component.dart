@@ -96,6 +96,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
       body: Form(
         key: formKey,
         child: BlurredAppBarPage(
+          expandTitle: false,
           title: S.of(context).EditProfile,
           autoImplyLeading: true,
           centerTitle: true,

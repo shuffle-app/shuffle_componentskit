@@ -29,6 +29,7 @@ class FeedComponent extends StatelessWidget {
   final bool canShowVideoReactions;
   final ValueNotifier<double>? subscribedUpdatesNotifier;
   final List<UiProfileModel>? subscribedProfiles;
+  final ValueChanged<int>? onSubscribedUserTapped;
 
   const FeedComponent({
     super.key,
@@ -55,6 +56,7 @@ class FeedComponent extends StatelessWidget {
     this.onLoadMoreChips,
     this.subscribedUpdatesNotifier,
     this.subscribedProfiles,
+    this.onSubscribedUserTapped,
   });
 
   @override
@@ -94,12 +96,17 @@ class FeedComponent extends StatelessWidget {
             noChildrenText: S.current.DontLiveAlone,
             children: subscribedProfiles
                     ?.map(
-                      (profile) => context.userAvatar(
-                        size: UserAvatarSize.x40x40,
-                        type: profile.userTileType,
-                        userName: profile.nickname ?? '',
-                        imageUrl: profile.avatarUrl,
-                        badgeValue: profile.updatesCount,
+                      (profile) => GestureDetector(
+                        onTap: () {
+                          if (profile.id != null) onSubscribedUserTapped?.call(profile.id!);
+                        },
+                        child: context.userAvatar(
+                          size: UserAvatarSize.x40x40,
+                          type: profile.userTileType,
+                          userName: profile.nickname ?? '',
+                          imageUrl: profile.avatarUrl,
+                          badgeValue: profile.updatesCount,
+                        ),
                       ),
                     )
                     .toList() ??
