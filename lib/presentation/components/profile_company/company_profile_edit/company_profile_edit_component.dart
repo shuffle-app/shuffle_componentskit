@@ -16,6 +16,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final String? avatarUrl;
   final UiKitMenuItem<int> selectedNiche;
   final VoidCallback? onNicheChanged;
+  final bool hasChanges;
 
   final ValueChanged<List<String>>? onPreferencesChanged;
   final List<LocaleModel>? availableLocales;
@@ -34,12 +35,14 @@ class CompanyProfileEditComponent extends StatelessWidget {
   final TextEditingController phoneController;
   final bool isLoading;
   final bool isLightTheme;
+  final ScrollController scrollController;
 
   const CompanyProfileEditComponent({
     super.key,
     required this.selectedPriceSegments,
     required this.selectedAgeRanges,
     required this.selectedNiche,
+    required this.scrollController,
     this.onLanguageChanged,
     this.onProfileEditSubmitted,
     this.formKey,
@@ -62,6 +65,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
     this.isLoading = false,
     this.isLightTheme = false,
     this.onNicheChanged,
+    this.hasChanges = false,
   });
 
   @override
@@ -71,7 +75,6 @@ class CompanyProfileEditComponent extends StatelessWidget {
     final ComponentEditProfileModel model = ComponentEditProfileModel.fromJson(config['edit_profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final regularTextTheme = context.uiKitTheme?.regularTextTheme;
 
     return Scaffold(
       body: Form(
@@ -80,6 +83,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
           title: S.of(context).EditProfile,
           autoImplyLeading: true,
           centerTitle: true,
+          controller: scrollController,
           appBarBody: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -173,16 +177,12 @@ class CompanyProfileEditComponent extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
             ),
             SpacingFoundation.verticalSpace16,
-            Text(
-              S.current.YourNiche,
-              style: regularTextTheme?.labelSmall,
+            UiKitTitledSelectionTile(
+              title: S.current.YourNiche,
+              imagePath: selectedNiche.iconLink,
+              onSelectionChanged: onNicheChanged,
+              selectedItems: [selectedNiche.title],
             ),
-            UiKitMenuItemTile.custom(
-              paddingSymmetric: EdgeInsets.zero,
-              autoPopUp: false,
-              onTap: onNicheChanged,
-              item: selectedNiche,
-            ).paddingAll(EdgeInsetsFoundation.all4),
             SpacingFoundation.verticalSpace16,
             UiKitTitledSelectionTile(
               onSelectionChanged: onPriceSegmentChangeRequested,
@@ -195,26 +195,34 @@ class CompanyProfileEditComponent extends StatelessWidget {
               selectedItems: selectedAgeRanges,
               title: S.of(context).YourAudienceAge,
             ),
+            SpacingFoundation.verticalSpace24,
           ],
         ),
       ),
-      bottomNavigationBar: AnimatedOpacity(
+      bottomNavigationBar: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        curve: Curves.bounceIn,
-        opacity: MediaQuery.viewInsetsOf(context).bottom == 0 ? 1 : 0,
-        child: context
-            .gradientButton(
-              data: BaseUiKitButtonData(
-                text: S.of(context).Save.toUpperCase(),
-                loading: isLoading,
-                onPressed: onProfileEditSubmitted?.call,
+        transitionBuilder: (child, animation) {
+          return SlideTransition(
+            position: Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero).animate(animation),
+            child: MediaQuery.viewInsetsOf(context).bottom == 0 && hasChanges ? child : const SizedBox.shrink(),
+          );
+        },
+        child: SizedBox(
+          width: double.infinity,
+          child: context
+              .gradientButton(
+                data: BaseUiKitButtonData(
+                  text: S.of(context).Save.toUpperCase(),
+                  loading: isLoading,
+                  onPressed: onProfileEditSubmitted?.call,
+                ),
+              )
+              .paddingOnly(
+                left: horizontalMargin,
+                right: horizontalMargin,
+                bottom: EdgeInsetsFoundation.vertical24,
               ),
-            )
-            .paddingOnly(
-              left: horizontalMargin,
-              right: horizontalMargin,
-              bottom: EdgeInsetsFoundation.vertical24,
-            ),
+        ),
       ),
     );
   }
