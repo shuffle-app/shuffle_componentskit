@@ -132,3 +132,5 @@ export 'my_booking_component/my_booking_component.dart';
 export 'my_booking_component/my_booking_ui_model/my_booking_ui_model.dart';
 export 'auth/credentials_verification/bottom_sheet_verification_component.dart';
 export 'booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
+export 'booking_by_visitor/booking_by_visitor_component.dart';
+export 'booking_component/booking_ui_model/upsale_ui_model.dart';

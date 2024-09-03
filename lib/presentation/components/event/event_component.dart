@@ -319,7 +319,13 @@ class _EventComponentState extends State<EventComponent> {
             widget.event.bookingUiModel!.showSabsInContentCard &&
             widget.event.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
           SpacingFoundation.verticalSpace12,
-          SubsInContentCard(subs: widget.event.bookingUiModel!.subsUiModel!),
+          SubsInContentCard(
+            subs: widget.event.bookingUiModel!.subsUiModel!,
+            onItemTap: (id) {
+              final sub = widget.event.bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+              subInformationDialog(context, sub);
+            },
+          ),
           SpacingFoundation.verticalSpace24,
         ],
         if (widget.event.upsalesItems != null) ...[

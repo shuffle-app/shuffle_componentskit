@@ -12,3 +12,4 @@ export 'web_photo_video_selector.dart';
 export 'web_view_screen.dart';
 export 'login_invitation_component.dart';
 export 'subs_in_content_card.dart';
+export 'sub_information_dialog.dart';

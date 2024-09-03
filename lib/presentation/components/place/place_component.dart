@@ -242,7 +242,13 @@ class _PlaceComponentState extends State<PlaceComponent> {
             widget.place.bookingUiModel!.showSabsInContentCard &&
             widget.place.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
           SpacingFoundation.verticalSpace12,
-          SubsInContentCard(subs: widget.place.bookingUiModel!.subsUiModel!),
+          SubsInContentCard(
+            subs: widget.place.bookingUiModel!.subsUiModel!,
+            onItemTap: (id) {
+              final sub = widget.place.bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+              subInformationDialog(context, sub);
+            },
+          ),
           SpacingFoundation.verticalSpace24,
         ],
         if (widget.isCreateEventAvaliable)
