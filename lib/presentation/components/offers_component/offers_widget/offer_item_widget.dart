@@ -101,9 +101,15 @@ class OfferItemWidget extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          formatDateWithCustomPattern(
-                                  'MMMM dd', (offerUiModel!.selectedDates!.first ?? DateTime.now()).toLocal())
-                              .capitalize(),
+                          offerUiModel?.selectedDates?.first?.year == DateTime.now().year
+                              ? formatDateWithCustomPattern(
+                                  'MMMM dd',
+                                  (offerUiModel?.selectedDates?.first ?? DateTime.now()).toLocal(),
+                                ).capitalize()
+                              : formatDateWithCustomPattern(
+                                  'dd.MM.yyyy',
+                                  (offerUiModel?.selectedDates?.first ?? DateTime.now()).toLocal(),
+                                ),
                           style: theme?.boldTextTheme.caption3Medium.copyWith(
                             color: ColorsFoundation.mutedText,
                           ),
