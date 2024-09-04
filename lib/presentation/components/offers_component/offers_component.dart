@@ -27,9 +27,12 @@ class OffersComponent extends StatelessWidget {
     return Scaffold(
       body: BlurredAppBarPage(
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-        title: S.of(context).Offers,
+        customTitle: Text(
+          S.of(context).Offers,
+          style: theme?.boldTextTheme.title1.copyWith(fontSize: 1.sw <= 380 ? 22.w : 23.w),
+          textAlign: TextAlign.center,
+        ),
         autoImplyLeading: true,
-        centerTitle: true,
         appBarTrailing: context.outlinedButton(
           padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
           data: BaseUiKitButtonData(
