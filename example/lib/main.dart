@@ -136,6 +136,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
   );
   ValueNotifier<DateTime?> selectedDate = ValueNotifier<DateTime?>(null);
 
+  List<OfferUiModel> _offerUiModelList = [];
+
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
@@ -840,6 +842,70 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         );
                       },
                     ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show offers component ',
+                onPressed: () => context.push(
+                  OffersComponent(
+                    listOffers: _offerUiModelList,
+                    onCreateOffer: () {
+                      context.push(
+                        CreateOffer(
+                          offerPrice: 5,
+                          onCreateOffer: (offerUiModel) async {
+                            await payOfferDialog(
+                              context,
+                              () async {
+                                await offerCreatedDialog(context);
+                                context.pop();
+                              },
+                              5,
+                            );
+                            context.pop();
+
+                            setState(() {
+                              _offerUiModelList.add(offerUiModel);
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    onRemoveOffer: (id) {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+                      setState(() {
+                        _offerUiModelList.removeAt(index);
+                      });
+                    },
+                    onEditOffer: (id) async {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+                      context.push(
+                        CreateOffer(
+                          offerPrice: 5,
+                          offerUiModel: _offerUiModelList[index],
+                          onCreateOffer: (editOfferUiModel) async {
+                            if (editOfferUiModel != _offerUiModelList[index]) {
+                              await editOfferDialog(
+                                context,
+                                () {
+                                  setState(() {
+                                    _offerUiModelList[index] = editOfferUiModel;
+                                  });
+                                  context.pop();
+                                },
+                              );
+                            }
+
+                            context.pop();
+                          },
+                        ),
+                      );
+                    },
+                    placeOrEventName: null,
                   ),
                 ),
               ),
