@@ -25,8 +25,8 @@ class _CreateOfferState extends State<CreateOffer> {
   late DateTime? _isLaunchedDate;
   late final List<DateTime?>? _selectedDates;
 
-  late final TextEditingController _titleController = TextEditingController();
-  late final TextEditingController _pointController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _pointController = TextEditingController();
 
   late bool _isLaunched;
   late bool _notifyTheAudience;
@@ -227,19 +227,17 @@ class _CreateOfferState extends State<CreateOffer> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _selectedDates != null && _selectedDates.first != null
-                    ? Expanded(
-                        child: Text(
-                          '${formatDateWithCustomPattern('dd.MM.yyyy', (_selectedDates.first)!.toLocal())} ${_selectedDates.last != null ? '- ${formatDateWithCustomPattern('dd.MM.yyyy', (_selectedDates.last)!.toLocal())}' : ''} ',
-                          style: theme?.boldTextTheme.body,
-                        ),
-                      )
-                    : Expanded(
-                        child: Text(
-                          S.of(context).PleaseAddDatePeriod,
-                          style: theme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
-                        ),
-                      ),
+                Expanded(
+                  child: Text(
+                    _selectedDates != null && _selectedDates.first != null
+                        ? '${formatDateWithCustomPattern('dd.MM.yyyy', _selectedDates.first!.toLocal())} '
+                            '${_selectedDates.last != null ? '- ${formatDateWithCustomPattern('dd.MM.yyyy', _selectedDates.last!.toLocal())}' : ''}'
+                        : S.of(context).PleaseAddDatePeriod,
+                    style: _selectedDates != null && _selectedDates.first != null
+                        ? theme?.boldTextTheme.body
+                        : theme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
+                  ),
+                ),
                 SpacingFoundation.horizontalSpace12,
                 context.outlinedButton(
                   padding: EdgeInsets.all(EdgeInsetsFoundation.all12),

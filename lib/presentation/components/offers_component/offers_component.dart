@@ -44,7 +44,7 @@ class OffersComponent extends StatelessWidget {
         ),
         children: [
           SpacingFoundation.verticalSpace16,
-          if (listOffers != null && listOffers!.isEmpty)
+          if (listOffers == null || listOffers!.isEmpty)
             UiKitCardWrapper(
               borderRadius: BorderRadiusFoundation.all24r,
               child: Row(
