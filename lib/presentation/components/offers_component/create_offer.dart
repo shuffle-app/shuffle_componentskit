@@ -24,10 +24,13 @@ class _CreateOfferState extends State<CreateOffer> {
 
   late DateTime? _isLaunchedDate;
   late final List<DateTime?>? _selectedDates;
+
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _pointController = TextEditingController();
+
   late bool _isLaunched;
   late bool _notifyTheAudience;
+
   late int? _selectedIconIndex;
   final List<String> _iconList = [
     GraphicsFoundation.instance.svg.cocktail3d.path,
@@ -40,8 +43,8 @@ class _CreateOfferState extends State<CreateOffer> {
   @override
   void initState() {
     _offerUiModel = widget.offerUiModel ?? OfferUiModel(id: -1);
-    _titleController.text = widget.offerUiModel?.title ?? '';
-    _pointController.text = widget.offerUiModel?.pointPrice.toString() ?? '';
+    _titleController.text = widget.offerUiModel?.title?.trim() ?? '';
+    _pointController.text = widget.offerUiModel?.pointPrice.toString().trim() ?? '';
     _selectedDates = widget.offerUiModel?.selectedDates ?? [null];
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
     _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
@@ -54,14 +57,33 @@ class _CreateOfferState extends State<CreateOffer> {
   void didUpdateWidget(covariant CreateOffer oldWidget) {
     super.didUpdateWidget(oldWidget);
     _offerUiModel = widget.offerUiModel ?? OfferUiModel(id: -1);
-    _titleController.text = widget.offerUiModel?.title ?? '';
-    _pointController.text = widget.offerUiModel?.pointPrice.toString() ?? '';
+    _titleController.text = widget.offerUiModel?.title?.trim() ?? '';
+    _pointController.text = widget.offerUiModel?.pointPrice.toString().trim() ?? '';
     _selectedDates?.clear();
     _selectedDates = widget.offerUiModel?.selectedDates ?? [null];
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
     _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
     _isLaunched = widget.offerUiModel?.isLaunched ?? true;
     _selectedIconIndex = _iconList.indexWhere((element) => element == (widget.offerUiModel?.iconPath ?? 0));
+  }
+
+  void _onSubmit() {
+    if (_formKey.currentState != null &&
+        _formKey.currentState!.validate() &&
+        _selectedDates != null &&
+        _selectedDates.isNotEmpty) {
+      _offerUiModel = _offerUiModel.copyWith(
+        title: _titleController.text.trim(),
+        iconPath: _iconList[(_selectedIconIndex == -1 || _selectedIconIndex == null) ? 0 : _selectedIconIndex!],
+        isLaunched: _isLaunched,
+        notifyTheAudience: _notifyTheAudience,
+        pointPrice: _pointController.text.isEmpty ? 0 : int.parse(_pointController.text.trim().replaceAll(' ', '')),
+        selectedDates: _selectedDates,
+        isLaunchedDate: _isLaunchedDate ?? DateTime.now(),
+      );
+
+      widget.onCreateOffer?.call(_offerUiModel);
+    }
   }
 
   @override
@@ -265,60 +287,54 @@ class _CreateOfferState extends State<CreateOffer> {
                 S.of(context).TheOfferWillBeAddedToPersonal,
                 style: theme?.boldTextTheme.caption1Medium.copyWith(color: ColorsFoundation.mutedText),
               ),
-              SpacingFoundation.verticalSpace16,
-              UiKitInputFieldNoFill(
-                label: S.of(context).Points,
-                controller: _pointController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
-              ),
             ],
             SpacingFoundation.verticalSpace16,
             Text(
               S.of(context).YourOfferWillShown1Time,
               style: theme?.boldTextTheme.caption1Medium.copyWith(color: ColorsFoundation.mutedText),
             ),
-            if (widget.offerUiModel == null)
+            if (widget.offerUiModel == null) ...[
               Center(
                 child: Text(
                   S.of(context).OfferPrice(widget.offerPrice ?? 0),
                   style: theme?.boldTextTheme.body,
                 ),
               ).paddingOnly(top: SpacingFoundation.verticalSpacing16),
-            SizedBox(height: SpacingFoundation.verticalSpacing32),
-            SafeArea(
-              top: false,
-              child: context.gradientButton(
-                data: BaseUiKitButtonData(
-                  text: widget.offerUiModel == null ? S.of(context).SaveAndPay : S.of(context).Save,
-                  fit: ButtonFit.fitWidth,
-                  onPressed: () {
-                    if (_formKey.currentState != null &&
-                        _formKey.currentState!.validate() &&
-                        _selectedDates != null &&
-                        _selectedDates.isNotEmpty) {
-                      _offerUiModel = _offerUiModel.copyWith(
-                        title: _titleController.text,
-                        iconPath: _iconList[
-                            (_selectedIconIndex == -1 || _selectedIconIndex == null) ? 0 : _selectedIconIndex!],
-                        isLaunched: _isLaunched,
-                        notifyTheAudience: _notifyTheAudience,
-                        pointPrice:
-                            _pointController.text.isEmpty ? 0 : int.parse(_pointController.text.replaceAll(' ', '')),
-                        selectedDates: _selectedDates,
-                        isLaunchedDate: _isLaunchedDate ?? DateTime.now(),
-                      );
-
-                      widget.onCreateOffer?.call(_offerUiModel);
-                    }
-                  },
+              SizedBox(height: SpacingFoundation.verticalSpacing32),
+              SafeArea(
+                top: false,
+                child: context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    text: S.of(context).SaveAndPay,
+                    fit: ButtonFit.fitWidth,
+                    onPressed: () => _onSubmit(),
+                  ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace24,
+              SpacingFoundation.verticalSpace24,
+            ],
           ],
         ),
       ),
+      bottomNavigationBar: widget.offerUiModel != null
+          ? SizedBox(
+              height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
+              child: SafeArea(
+                top: false,
+                child: context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    text: S.of(context).Save,
+                    fit: ButtonFit.fitWidth,
+                    onPressed: () => _onSubmit(),
+                  ),
+                ),
+              ).paddingOnly(
+                bottom: SpacingFoundation.verticalSpacing24,
+                left: SpacingFoundation.horizontalSpacing16,
+                right: SpacingFoundation.horizontalSpacing16,
+              ),
+            )
+          : null,
     );
   }
 }
