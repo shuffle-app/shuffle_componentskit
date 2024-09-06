@@ -28,14 +28,69 @@ class TicketUiModel {
 
     return upsales!.fold(0, (sum, item) => sum + (item?.count ?? 0));
   }
+
+  int get totalUpsalePrice {
+    if (upsales == null) {
+      return 0;
+    }
+    int total = 0;
+    upsales?.forEach(
+      (element) {
+        total += (element?.count ?? 0) * int.parse(element?.item?.price ?? '0');
+      },
+    );
+
+    return total;
+  }
+
+  int get totalSubsCount {
+    if (subs == null) {
+      return 0;
+    }
+
+    return subs!.fold(0, (sum, item) => sum + (item?.count ?? 0));
+  }
+
+  TicketUiModel copyWith({
+    int? id,
+    int? ticketsCount,
+    List<TicketItem<UpsaleUiModel>?>? upsales,
+    List<TicketItem<SubsUiModel>?>? subs,
+  }) {
+    return TicketUiModel(
+      id: id ?? this.id,
+      ticketsCount: ticketsCount ?? this.ticketsCount,
+      upsales: upsales ?? this.upsales,
+      subs: subs ?? this.subs,
+    );
+  }
 }
 
 class TicketItem<T> {
   final int? count;
   final T? item;
+  final int? maxCount;
 
   TicketItem({
     this.count,
     this.item,
+    this.maxCount,
   });
+
+  TicketItem<T> copyWith({
+    int? count,
+    T? item,
+    int? maxCount,
+  }) {
+    return TicketItem(
+      count: count ?? this.count,
+      item: item ?? this.item,
+      maxCount: maxCount ?? this.maxCount,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'TicketItem(count: $count, item: $item, maxCount: $maxCount)';
+  }
 }

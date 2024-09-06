@@ -61,9 +61,11 @@ class LoginInvitationComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         for (int i = 0; i < 6; i++)
           ListTile(
+            titleAlignment: ListTileTitleAlignment.center,
+            minLeadingWidth: 32.h,
             contentPadding: EdgeInsets.symmetric(vertical: SpacingFoundation.verticalSpacing6),
             leading: ImageWidget(
-              height: 32.h,
+              // height: 32.h,
               rasterAsset: _getIconForTile(i),
             ),
             title: Text(
@@ -74,8 +76,8 @@ class LoginInvitationComponent extends StatelessWidget {
                       //many setting from 11 to 100
                       : i == 4
                           ? 11
-                          //other setting from 101 to unlimited
-                          : 101)
+                          //other setting is double 1.1
+                          : 1.1)
                   .toLowerCase(),
               style: boldTextTheme?.caption1Bold,
             ),
