@@ -69,16 +69,7 @@ class LoginInvitationComponent extends StatelessWidget {
               rasterAsset: _getIconForTile(i),
             ),
             title: Text(
-              S
-                  .of(context)
-                  .LoginBenefits(i < 4
-                      ? i
-                      //many setting from 11 to 100
-                      : i == 4
-                          ? 11
-                          //other setting is double 1.1
-                          : 1.1)
-                  .toLowerCase(),
+              i < 3 ? S.of(context).LoginBenefits(i).toLowerCase() : S.of(context).LoginBenefits2(i - 3).toLowerCase(),
               style: boldTextTheme?.caption1Bold,
             ),
           ),
