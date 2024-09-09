@@ -884,6 +884,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                     placeTitle: 'Virgins on the beach',
                                     placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
                                     notificationText: notificationUiModel.title,
+                                    onOpenPlaceTap: () {},
+                                    onToFavoritesTap: () {},
+                                    onYeahSureTap: () {},
                                   );
                                   context.pop();
                                 },
@@ -954,6 +957,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 placeTitle: 'Virgins on the beach',
                                 placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
                                 notificationText: reminderModel.title,
+                                onOpenPlaceTap: () {},
+                                onToFavoritesTap: () {},
+                                onYeahSureTap: () {},
                               );
                               setState(() {
                                 _listReminders.add(reminderModel);
