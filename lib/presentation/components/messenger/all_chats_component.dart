@@ -6,12 +6,14 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class AllChatsComponent extends StatelessWidget {
   final PagingController<int, ChatItemUiModel> controller;
   final ValueChanged<int> onChatSelected;
+  final ValueChanged<int> onChatDeleted;
   final WidgetBuilder? firstPageProgressIndicatorBuilder;
 
   const AllChatsComponent({
     super.key,
     required this.controller,
     required this.onChatSelected,
+    required this.onChatDeleted,
     this.firstPageProgressIndicatorBuilder,
   });
 
@@ -53,6 +55,7 @@ class AllChatsComponent extends StatelessWidget {
           avatarPath: item.avatarUrl ?? '',
           userType: item.userType,
           onTap: () => onChatSelected.call(item.id),
+          onDelete: () => onChatDeleted.call(item.id),
           unreadMessageCount: item.unreadMessageCount,
         ),
       ),
