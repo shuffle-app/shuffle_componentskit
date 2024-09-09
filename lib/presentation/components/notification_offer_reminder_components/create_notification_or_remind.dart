@@ -35,13 +35,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
   late bool _isLaunched;
 
   late int? _selectedIconIndex;
-  final List<String> _iconList = [
-    GraphicsFoundation.instance.svg.cocktail3d.path,
-    GraphicsFoundation.instance.svg.mango.path,
-    GraphicsFoundation.instance.svg.discount.path,
-    GraphicsFoundation.instance.svg.lifebuoy3d.path,
-    GraphicsFoundation.instance.svg.aubergine.path,
-  ];
+  final List<String> _iconList = [];
 
   @override
   void initState() {
@@ -51,6 +45,9 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
     _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? true;
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
     _selectedDates = widget.universalNotOfferRemUiModel?.selectedDates ?? [null];
+    for (var element in GraphicsFoundation.instance.png.reminder.values) {
+      _iconList.add(element.path);
+    }
     _selectedIconIndex =
         _iconList.indexWhere((element) => element == (widget.universalNotOfferRemUiModel?.iconPath ?? 0));
   }
@@ -63,6 +60,9 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
     _selectedDates?.clear();
     _selectedDates = widget.universalNotOfferRemUiModel?.selectedDates ?? [null];
+    for (var element in GraphicsFoundation.instance.png.reminder.values) {
+      _iconList.add(element.path);
+    }
     _selectedIconIndex =
         _iconList.indexWhere((element) => element == (widget.universalNotOfferRemUiModel?.iconPath ?? 0));
     super.didUpdateWidget(oldWidget);
@@ -159,6 +159,25 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
             selectedDates: _selectedDates,
             dateToWord: true,
             lastDate: widget.lastDate,
+            onCalenderTap: () async {
+              await showUiKitCalendarFromToDialog(
+                context,
+                lastDate: (widget.lastDate != null &&
+                        widget.lastDate!.isAfter(DateTime.now()) &&
+                        !widget.lastDate!.isAtSameDay)
+                    ? widget.lastDate
+                    : null,
+                (from, to) {
+                  setState(() {
+                    _selectedDates?.clear();
+                    (from != null && (from!.isAfter(DateTime.now()) || from!.isAtSameDay))
+                        ? _selectedDates?.add(from)
+                        : from = null;
+                    (from != null && from != to) ? _selectedDates?.add(to) : _selectedDates?.add(null);
+                  });
+                },
+              );
+            },
           ),
           SpacingFoundation.verticalSpace24,
           if (!widget.isNotification) ...[

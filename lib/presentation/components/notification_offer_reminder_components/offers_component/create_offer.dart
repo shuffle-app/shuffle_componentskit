@@ -36,13 +36,7 @@ class _CreateOfferState extends State<CreateOffer> {
   late bool _notifyTheAudience;
 
   late int? _selectedIconIndex;
-  final List<String> _iconList = [
-    GraphicsFoundation.instance.svg.cocktail3d.path,
-    GraphicsFoundation.instance.svg.mango.path,
-    GraphicsFoundation.instance.svg.discount.path,
-    GraphicsFoundation.instance.svg.lifebuoy3d.path,
-    GraphicsFoundation.instance.svg.aubergine.path,
-  ];
+  final List<String> _iconList = [];
 
   @override
   void initState() {
@@ -53,6 +47,9 @@ class _CreateOfferState extends State<CreateOffer> {
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
     _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
     _isLaunched = widget.offerUiModel?.isLaunched ?? true;
+    for (var element in GraphicsFoundation.instance.png.offer.values) {
+      _iconList.add(element.path);
+    }
     _selectedIconIndex = _iconList.indexWhere((element) => element == (widget.offerUiModel?.iconPath ?? 0));
     super.initState();
   }
@@ -68,6 +65,9 @@ class _CreateOfferState extends State<CreateOffer> {
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
     _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
     _isLaunched = widget.offerUiModel?.isLaunched ?? true;
+    for (var element in GraphicsFoundation.instance.png.offer.values) {
+      _iconList.add(element.path);
+    }
     _selectedIconIndex = _iconList.indexWhere((element) => element == (widget.offerUiModel?.iconPath ?? 0));
   }
 
@@ -217,6 +217,25 @@ class _CreateOfferState extends State<CreateOffer> {
             UiKitSelectDateWidget(
               selectedDates: _selectedDates,
               lastDate: widget.lastDate,
+              onCalenderTap: () async {
+                await showUiKitCalendarFromToDialog(
+                  context,
+                  lastDate: (widget.lastDate != null &&
+                          widget.lastDate!.isAfter(DateTime.now()) &&
+                          !widget.lastDate!.isAtSameDay)
+                      ? widget.lastDate
+                      : null,
+                  (from, to) {
+                    setState(() {
+                      _selectedDates?.clear();
+                      (from != null && (from!.isAfter(DateTime.now()) || from!.isAtSameDay))
+                          ? _selectedDates?.add(from)
+                          : from = null;
+                      (from != null && from != to) ? _selectedDates?.add(to) : _selectedDates?.add(null);
+                    });
+                  },
+                );
+              },
             ),
             if (widget.offerUiModel == null) ...[
               SpacingFoundation.verticalSpace24,
