@@ -53,6 +53,44 @@ class UpdatesFeedItem extends InfluencerFeedItem {
   });
 }
 
+class ShufflePostFeedItem extends UpdatesFeedItem {
+  final String text;
+  final int heartEyesReactionsCount;
+  final int likeReactionsCount;
+  final int fireReactionsCount;
+  final int sunglassesReactionsCount;
+  final int smileyReactionsCount;
+  final List<UiKitMediaVideo>? videos;
+
+  ShufflePostFeedItem({
+    required this.text,
+    this.videos,
+    this.heartEyesReactionsCount = 0,
+    this.likeReactionsCount = 0,
+    this.fireReactionsCount = 0,
+    this.sunglassesReactionsCount = 0,
+    this.smileyReactionsCount = 0,
+    super.newPhotos,
+    super.newVideos,
+    super.newFeedbacks,
+    super.newVideoReactions,
+    super.newVoices,
+    super.newRoutes,
+    super.newVideoInterviews,
+    super.newContests,
+    super.newPersonalTops,
+    super.newPersonalRespects,
+    super.commentsUpdate,
+    super.newContent,
+  }) : super(
+          speciality: '',
+          name: 'Shuffle',
+          username: '',
+          avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+          userType: UserTileType.influencer,
+        );
+}
+
 class PostFeedItem extends InfluencerFeedItem {
   final String text;
   final int heartEyesReactionsCount;
