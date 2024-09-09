@@ -11,6 +11,7 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
   final ValueChanged<int?>? onEditItem;
   final ValueChanged<int?>? onRemoveItem;
   final VoidCallback? onCreateItem;
+  final GlobalKey<SliverAnimatedListState> animatedListKey;
 
   const UniversalFormForNotOfferRem({
     super.key,
@@ -21,6 +22,7 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
     this.onCreateItem,
     this.title,
     this.whatCreate,
+    required this.animatedListKey,
   });
 
   @override
@@ -28,6 +30,7 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
     final theme = context.uiKitTheme;
 
     return BlurredAppBarPage(
+      animatedListKey: animatedListKey,
       childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
       customTitle: AutoSizeText(
         title ?? S.of(context).NothingFound,
