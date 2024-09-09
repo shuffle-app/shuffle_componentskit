@@ -8,26 +8,39 @@ class RemindersComponent extends StatelessWidget {
   final ValueChanged<int?>? onEditReminder;
   final ValueChanged<int?>? onRemoveReminder;
   final VoidCallback? onCreateReminder;
+  late final GlobalKey<SliverAnimatedListState> _listKey;
 
-  const RemindersComponent({
+  RemindersComponent({
     super.key,
     this.placeOrEventName,
     this.listReminders,
     this.onEditReminder,
     this.onRemoveReminder,
     this.onCreateReminder,
-  });
+  }) {
+    _listKey = GlobalKey<SliverAnimatedListState>();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: UniversalFormForNotOfferRem(
+        animatedListKey: _listKey,
         title: S.of(context).Reminders,
         itemList: listReminders,
         nameForEmptyList: placeOrEventName,
         onCreateItem: onCreateReminder,
         onEditItem: onEditReminder,
-        onRemoveItem: onRemoveReminder,
+        onRemoveItem: (index) {
+          onRemoveReminder?.call(index);
+
+          if (index != null) {
+            _listKey.currentState?.removeItem(
+              index,
+              (context, animation) => SizeTransition(sizeFactor: animation),
+            );
+          }
+        },
         whatCreate: S.of(context).Reminder.toLowerCase(),
       ),
     );
