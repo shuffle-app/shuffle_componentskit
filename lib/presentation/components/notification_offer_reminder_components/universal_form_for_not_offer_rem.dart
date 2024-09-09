@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class UniversalFormForNotOfferRem extends StatelessWidget {
   final String? nameForEmptyList;
@@ -28,12 +29,14 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
 
     return BlurredAppBarPage(
       childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-      customTitle: Text(
+      customTitle: AutoSizeText(
         title ?? S.of(context).NothingFound,
-        style: theme?.boldTextTheme.title1.copyWith(fontSize: 1.sw <= 380 ? 22.w : 23.w),
+        style: theme?.boldTextTheme.title1,
         textAlign: TextAlign.center,
+        maxLines: 1,
       ),
       autoImplyLeading: true,
+      centerTitle: true,
       appBarTrailing: context.outlinedButton(
         padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
         data: BaseUiKitButtonData(
