@@ -19,53 +19,53 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-    return UiKitCardWrapper(
-      borderRadius: BorderRadiusFoundation.all24r,
-      child: Dismissible(
-        key: GlobalKey(),
-        direction: DismissDirection.endToStart,
-        background: SpacingFoundation.none,
-        dismissThresholds: const {DismissDirection.endToStart: 0.6},
-        secondaryBackground: DecoratedBox(
-          decoration: BoxDecoration(
-            color: ColorsFoundation.red,
-            borderRadius: BorderRadiusFoundation.all24r,
-          ),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                context.iconButtonNoPadding(
-                  data: BaseUiKitButtonData(
-                    iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.trash,
-                    ),
+    return Dismissible(
+      key: GlobalKey(),
+      direction: DismissDirection.endToStart,
+      background: SpacingFoundation.none,
+      dismissThresholds: const {DismissDirection.endToStart: 0.6},
+      secondaryBackground: DecoratedBox(
+        decoration: BoxDecoration(
+          color: ColorsFoundation.red,
+          borderRadius: BorderRadiusFoundation.all24r,
+        ),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              context.iconButtonNoPadding(
+                data: BaseUiKitButtonData(
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.trash,
                   ),
                 ),
-                SpacingFoundation.horizontalSpace2,
-                Text(
-                  S.of(context).Remove,
-                  style: theme?.boldTextTheme.caption2Medium,
-                ),
-                SpacingFoundation.horizontalSpace12,
-              ],
-            ),
+              ),
+              SpacingFoundation.horizontalSpace2,
+              Text(
+                S.of(context).Remove,
+                style: theme?.boldTextTheme.caption2Medium,
+              ),
+              SpacingFoundation.horizontalSpace12,
+            ],
           ),
         ),
-        confirmDismiss: (direction) async {
-          if (direction == DismissDirection.startToEnd) {
-            return false;
-          } else if (direction == DismissDirection.endToStart) {
-            return true;
-          }
+      ),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.startToEnd) {
           return false;
-        },
-        onDismissed: (DismissDirection direction) {
-          if (direction == DismissDirection.endToStart) {
-            onDismissed?.call();
-          }
-        },
+        } else if (direction == DismissDirection.endToStart) {
+          return true;
+        }
+        return false;
+      },
+      onDismissed: (DismissDirection direction) {
+        if (direction == DismissDirection.endToStart) {
+          onDismissed?.call();
+        }
+      },
+      child: UiKitCardWrapper(
+        borderRadius: BorderRadiusFoundation.all24r,
         child: Row(
           children: [
             universalNotOfferRemUiModel?.imagePath != null
