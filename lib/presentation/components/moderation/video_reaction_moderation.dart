@@ -28,9 +28,7 @@ class VideoReactionModeration extends StatelessWidget {
           Row(
             children: [
               Text(
-                S
-                    .of(context)
-                    .VideoReactions,
+                S.of(context).VideoReactions,
                 style: textTheme?.title1,
               ),
               const Spacer(),
@@ -47,7 +45,6 @@ class VideoReactionModeration extends StatelessWidget {
           ).paddingAll(EdgeInsetsFoundation.all24),
           Expanded(
             child: GridView.builder(
-
               addAutomaticKeepAlives: false,
               shrinkWrap: true,
               itemCount: reactionPreviewModelList.length,
@@ -59,6 +56,7 @@ class VideoReactionModeration extends StatelessWidget {
               itemBuilder: (context, index) {
                 final reactionPreviewModelItem = reactionPreviewModelList[index];
                 return UiKitReactionPreview(
+                  isModerated: reactionPreviewModelItem.isModerated,
                   isEmpty: reactionPreviewModelItem.isEmpty,
                   imagePath: reactionPreviewModelItem.imagePath,
                   viewed: reactionPreviewModelItem.viewed,
@@ -80,6 +78,7 @@ class ReactionPreviewUiModel {
   final VoidCallback? onTap;
   final double? customWidth;
   final double? customHeight;
+  bool isModerated;
 
   ReactionPreviewUiModel({
     this.imagePath,
@@ -88,5 +87,6 @@ class ReactionPreviewUiModel {
     this.isEmpty = false,
     this.customWidth,
     this.customHeight,
+    this.isModerated = false,
   });
 }
