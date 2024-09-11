@@ -98,7 +98,7 @@ class _BottomSheetVerificationComponentState extends State<BottomSheetVerificati
               data: BaseUiKitButtonData(
                 text: S.of(context).Next.toUpperCase(),
                 onPressed: () {
-                  if (widget.passwordController.text.isNotEmpty || widget.credentialsController.text.isNotEmpty) {
+                  if (widget.passwordController.text.isNotEmpty && widget.credentialsController.text.isNotEmpty) {
                     widget.onSubmit?.call(true);
                   }
                 },
