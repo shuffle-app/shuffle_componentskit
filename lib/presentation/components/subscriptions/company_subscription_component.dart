@@ -65,6 +65,7 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           UiKitCardWrapper(
+            borderRadius: BorderRadiusFoundation.all24r,
             color: colorScheme?.surface1,
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -111,13 +112,19 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
           ),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
+            borderRadius: BorderRadiusFoundation.all24r,
             gradient: GradientFoundation.companySubscriptionGradient,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                InfluencerAccountMark(),
-                SpacingFoundation.verticalSpace8,
+                ImageWidget(
+                  height: 12.h,
+                  width: 12.h,
+                  fit: BoxFit.fill,
+                  link: GraphicsFoundation.instance.svg.influencerAccountMark.path,
+                ),
+                SpacingFoundation.verticalSpace4,
                 RichText(
                   text: TextSpan(
                     children: [
@@ -136,16 +143,67 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
               ],
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
-          SpacingFoundation.verticalSpace8,
+          SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
+            borderRadius: BorderRadiusFoundation.all24r,
             color: colorScheme?.surface1,
             child: Column(
               children: [
+                if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable! > 0) ...[
+                  Stack(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${S.of(context).YouGetAccessToTrial} ',
+                              style: regularTextTheme?.body,
+                            ),
+                            TextSpan(
+                              text: ' ${_selectedOffer!.trialDaysAvailable!}',
+                              style: regularTextTheme?.body.copyWith(color: Colors.transparent),
+                            ),
+                            TextSpan(
+                              text: ' ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)}',
+                              style: boldTextTheme?.body.copyWith(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GradientableWidget(
+                        gradient: GradientFoundation.attentionCard,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: S.of(context).YouGetAccessToTrial,
+                                style: boldTextTheme?.body.copyWith(color: Colors.transparent),
+                              ),
+                              TextSpan(
+                                text: ' ${_selectedOffer!.trialDaysAvailable!}',
+                                style: regularTextTheme?.body.copyWith(color: Colors.white),
+                              ),
+                              TextSpan(
+                                text: ' ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)}',
+                                style: boldTextTheme?.body.copyWith(color: Colors.transparent),
+                              ),
+                              TextSpan(
+                                text: ' ${S.of(context).TrialPeriod.toLowerCase()}',
+                                style: boldTextTheme?.body.copyWith(color: Colors.white),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SpacingFoundation.verticalSpace16,
+                ],
                 if (widget.uiModel.offersTitle != null)
                   Text(
                     widget.uiModel.offersTitle!,
                     style: regularTextTheme?.body,
-                  ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16),
+                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
                 ...widget.uiModel.offers.map(
                   (e) {
                     double padding = 0;
@@ -163,52 +221,17 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
               ],
             ).paddingAll(EdgeInsetsFoundation.all16),
           ),
-          SpacingFoundation.verticalSpace16,
-          if (_selectedOffer?.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable! > 0) ...[
-            UiKitCardWrapper(
-                gradient: theme?.themeMode == ThemeMode.light
-                    ? GradientFoundation.lightShunyGreyGradient
-                    : GradientFoundation.shunyGreyGradient,
-                padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-                child: Stack(
-                  children: [
-                    Text(S.of(context).YouGetAccessToTrial, style: regularTextTheme?.body),
-                    GradientableWidget(
-                      gradient: GradientFoundation.attentionCard,
-                      child: RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                          text: S.of(context).YouGetAccessToTrial,
-                          style: boldTextTheme?.body.copyWith(color: Colors.transparent),
-                        ),
-                        TextSpan(
-                          text:
-                              ' ${_selectedOffer!.trialDaysAvailable!} ${S.of(context).Days(_selectedOffer!.trialDaysAvailable!)} ${S.of(context).TrialPeriod.toLowerCase()}',
-                          style: regularTextTheme?.body.copyWith(color: Colors.white),
-                        )
-                      ])),
-                    )
-                  ],
-                )),
-            SpacingFoundation.verticalSpace16,
-          ],
-          SpacingFoundation.verticalSpace16,
-          SpacingFoundation.verticalSpace16,
-          SpacingFoundation.verticalSpace16,
+          SpacingFoundation.verticalSpace24,
           context.gradientButton(
             data: BaseUiKitButtonData(
               loading: _isLoading,
               autoSizeGroup: AutoSizeGroup(),
               fit: ButtonFit.fitWidth,
-              text: S.current
-                  .UpgradeForNmoney(
-                    _selectedOffer == null
-                        ? ''
-                        : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
-                            ? S.of(context).ForFormattedPrice(S.of(context).Free)
-                            : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod),
-                  )
-                  .toUpperCase(),
+              text: _selectedOffer == null
+                  ? S.current.UpgradeForFree.toUpperCase()
+                  : (_selectedOffer!.trialDaysAvailable != null && _selectedOffer!.trialDaysAvailable != 0)
+                      ? S.current.UpgradeForFree.toUpperCase()
+                      : S.of(context).ForFormattedPrice(_selectedOffer!.formattedPriceNoPeriod).toUpperCase(),
               onPressed: _selectedOffer == null ? null : () => widget.onSubscribe?.call(_selectedOffer!),
             ),
           ),
