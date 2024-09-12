@@ -27,7 +27,7 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<int?>? onNichePressed;
   final bool hasFavourites;
   final bool canShowVideoReactions;
-  final ValueNotifier<double>? subscribedUpdatesNotifier;
+  final AnimationController? subscribedUpdatesNotifier;
   final List<UiProfileModel>? subscribedProfiles;
   final ValueChanged<int>? onSubscribedUserTapped;
   final ValueChanged<double>? subscribedProfilesHintNotifier;
