@@ -21,6 +21,7 @@ class CreateEventComponent extends StatefulWidget {
   final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
+  final bool Function(BookingUiModel)? onBookingTap;
 
   const CreateEventComponent({
     super.key,
@@ -33,6 +34,7 @@ class CreateEventComponent extends StatefulWidget {
     required this.propertiesOptions,
     required this.availableTimeTemplates,
     this.onTimeTemplateCreated,
+    this.onBookingTap,
   });
 
   @override
@@ -533,7 +535,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           CreateBookingComponent(
                             bookingUiModel: _bookingUiModel,
                             onBookingCreated: (bookingUiModel) {
-                              _bookingUiModel = bookingUiModel;
+                              if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                _bookingUiModel = bookingUiModel;
+                              }
                             },
                           ),
                         ),

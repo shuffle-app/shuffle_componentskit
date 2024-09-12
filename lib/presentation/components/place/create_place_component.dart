@@ -21,6 +21,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
+  final bool Function(BookingUiModel)? onBookingTap;
 
   const CreatePlaceComponent({
     super.key,
@@ -33,6 +34,7 @@ class CreatePlaceComponent extends StatefulWidget {
     this.availableTimeTemplates = const [],
     this.onTimeTemplateCreated,
     this.onNicheChanged,
+    this.onBookingTap,
   });
 
   @override
@@ -520,6 +522,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           onBookingTap: () => context.push(
                             CreateBookingComponent(
                               onBookingCreated: (bookingUiModel) {
+                                if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                  _bookingUiModel = bookingUiModel;
+                                }
                                 _bookingUiModel = bookingUiModel;
                               },
                             ),
