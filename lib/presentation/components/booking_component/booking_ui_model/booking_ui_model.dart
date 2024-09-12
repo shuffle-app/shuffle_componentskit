@@ -48,13 +48,24 @@ class BookingUiModel {
     );
   }
 
-  String? validateCreation() {
-    if (bookingLimit == null || bookingLimit!.isEmpty) {
+  String? validateCreation({bool checkDate = false}) {
+    if (bookingLimit == null || bookingLimit!.isEmpty || bookingLimit == '0') {
       return S.current.XIsRequired(S.current.BookingLimit);
-    } else if (selectedDateTime == null) {
+    } else if (selectedDateTime == null && checkDate) {
       return S.current.XIsRequired(S.current.Date);
     }
 
     return null;
   }
+
+  BookingUiModel.empty()
+      : id = -1,
+        bookingLimit = '',
+        bookingLimitPerOne = '',
+        currency = 'AED',
+        price = '',
+        selectedDateTime = null,
+        showSabsInContentCard = false,
+        subsUiModel = List.empty(growable: true),
+        upsaleUiModel = List.empty(growable: true);
 }
