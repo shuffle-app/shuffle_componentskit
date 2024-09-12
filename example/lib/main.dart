@@ -728,6 +728,53 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             ),
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show Company Subscription Component',
+                onPressed: () {
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      topPadding: 1.sw <= 380 ? 0.1.sh : 0.2.sh,
+                      child: CompanySubscriptionComponent(
+                        isLoading: false,
+                        onRestorePurchase: () {},
+                        onSubscribe: (value) {},
+                        uiModel: UiCompanySubscriptionModel(
+                          offers: [
+                            SubscriptionOfferModel(
+                              trialDaysAvailable: 12,
+                              storePurchaseId: '',
+                              currency: '\$',
+                              savings: -20,
+                              price: 4.49,
+                              name: 'Annually',
+                              periodName: 'month',
+                            ),
+                            SubscriptionOfferModel(
+                              trialDaysAvailable: 123,
+                              storePurchaseId: '',
+                              currency: '\$',
+                              price: 4.99,
+                              name: 'Monthly',
+                              periodName: 'month',
+                            ),
+                          ],
+                          companyName: 'Burj Khalifa',
+                          nicheTitle: 'test',
+                          privacyPolicyUrl: 'test',
+                          termsOfServiceUrl: 'test',
+                          companyLogoLink: '',
+                          nicheIconPath: '',
+                          offersTitle: S.of(context).ToExtendYourUseSelectPayment,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'create place',
                     onPressed: () {
