@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +23,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   final TextEditingController _limitController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late XFile? file;
   late UpsaleUiModel _upsaleUiModel;
 
   BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
@@ -36,6 +36,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
     _limitController.text = widget.upsaleUiModel?.limit ?? '';
     _descriptionController.text = widget.upsaleUiModel?.description ?? '';
     _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
+    file = widget.upsaleUiModel?.photoFile;
   }
 
   @override
@@ -46,6 +47,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
       _limitController.text = widget.upsaleUiModel?.limit ?? '';
       _descriptionController.text = widget.upsaleUiModel?.description ?? '';
       _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
+      file = widget.upsaleUiModel?.photoFile;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -55,6 +57,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
     if (file != null) {
       setState(() {
         _photo = UiKitMediaPhoto(link: file.path);
+        _upsaleUiModel.photoFile = file;
       });
     }
   }

@@ -23,6 +23,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late XFile? file;
   late SubsUiModel _subsUiModel;
 
   BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
@@ -35,6 +36,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
     _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
     _descriptionController.text = widget.subsUiModel?.description ?? '';
     _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
+    file = widget.subsUiModel?.photoFile;
   }
 
   @override
@@ -45,15 +47,17 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
       _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
       _descriptionController.text = widget.subsUiModel?.description ?? '';
       _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
+      file = widget.subsUiModel?.photoFile;
     }
     super.didUpdateWidget(oldWidget);
   }
 
   _onAddPhoto() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    file = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (file != null) {
       setState(() {
-        _photo = UiKitMediaPhoto(link: file.path);
+        _photo = UiKitMediaPhoto(link: file!.path);
+        _subsUiModel.photoFile = file;
       });
     }
   }

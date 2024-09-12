@@ -1,4 +1,5 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UpsaleUiModel {
   int id;
@@ -8,6 +9,7 @@ class UpsaleUiModel {
   String? actualLimit;
   String? price;
   String? currency;
+  XFile? photoFile;
 
   UpsaleUiModel({
     required this.id,
@@ -17,6 +19,7 @@ class UpsaleUiModel {
     this.actualLimit,
     this.price,
     this.currency,
+    this.photoFile,
   });
 
   UpsaleUiModel copyWith({
@@ -27,6 +30,7 @@ class UpsaleUiModel {
     String? actualLimit,
     String? price,
     String? currency,
+    XFile? photoFile,
   }) {
     return UpsaleUiModel(
       id: id ?? this.id,
@@ -36,6 +40,7 @@ class UpsaleUiModel {
       actualLimit: actualLimit ?? this.actualLimit,
       price: price ?? this.price,
       currency: currency ?? this.currency,
+      photoFile: photoFile ?? this.photoFile,
     );
   }
 }

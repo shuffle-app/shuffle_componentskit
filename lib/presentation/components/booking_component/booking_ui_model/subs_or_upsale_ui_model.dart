@@ -1,5 +1,6 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_uikit/ui_models/places/base_ui_kit_media.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SubsUiModel {
   int id;
@@ -8,6 +9,7 @@ class SubsUiModel {
   String? description;
   String? bookingLimit;
   String? actualbookingLimit;
+  XFile? photoFile;
 
   SubsUiModel({
     required this.id,
@@ -16,6 +18,7 @@ class SubsUiModel {
     this.description,
     this.bookingLimit,
     this.actualbookingLimit,
+    this.photoFile,
   });
 
   SubsUiModel copyWith({
@@ -25,6 +28,7 @@ class SubsUiModel {
     String? description,
     String? bookingLimit,
     String? actualbookingLimit,
+    XFile? photoFile,
   }) {
     return SubsUiModel(
       id: id ?? this.id,
@@ -33,6 +37,7 @@ class SubsUiModel {
       description: description ?? this.description,
       bookingLimit: bookingLimit ?? this.bookingLimit,
       actualbookingLimit: actualbookingLimit ?? this.actualbookingLimit,
+      photoFile: photoFile ?? this.photoFile,
     );
   }
 }
