@@ -5,12 +5,18 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class VideoReactionModeration extends StatelessWidget {
   final List<ReactionPreviewUiModel> reactionPreviewModelList;
-  final VoidCallback? sortFunction;
+  final VoidCallback? sortDateFunction;
+  final bool newFirst;
+  final VoidCallback? sortModeratedFunction;
+  final bool moderatedFirst;
 
   const VideoReactionModeration({
     super.key,
-    this.sortFunction,
     required this.reactionPreviewModelList,
+    this.sortDateFunction,
+    required this.newFirst,
+    this.sortModeratedFunction,
+    required this.moderatedFirst,
   });
 
   @override
@@ -32,15 +38,34 @@ class VideoReactionModeration extends StatelessWidget {
                 style: textTheme?.title1,
               ),
               const Spacer(),
-              if (sortFunction != null)
+              if (sortDateFunction != null) ...[
+                Text(
+                  'Sorted from ${newFirst ? 'Newest' : 'Oldest'}',
+                ),
+                SpacingFoundation.horizontalSpace4,
                 context.iconButtonNoPadding(
                   data: BaseUiKitButtonData(
-                    onPressed: sortFunction,
+                    onPressed: sortDateFunction,
                     iconInfo: BaseUiKitButtonIconData(
                       iconData: ShuffleUiKitIcons.arrowssort,
                     ),
                   ),
                 )
+              ],
+              if (sortModeratedFunction != null) ...[
+                SpacingFoundation.horizontalSpace16,
+                Text(
+                  'Sorted from ${moderatedFirst ? 'Moderated' : 'Not Moderated'}',
+                ),
+                SpacingFoundation.horizontalSpace4,
+                context.iconButtonNoPadding(
+                    data: BaseUiKitButtonData(
+                  onPressed: sortModeratedFunction,
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.arrowssort,
+                  ),
+                ))
+              ]
             ],
           ).paddingAll(EdgeInsetsFoundation.all24),
           Expanded(
