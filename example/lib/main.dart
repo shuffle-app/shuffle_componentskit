@@ -136,6 +136,21 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
   );
   ValueNotifier<DateTime?> selectedDate = ValueNotifier<DateTime?>(null);
 
+  List<UniversalNotOfferRemUiModel> _offerUiModelList = [];
+
+  List<UniversalNotOfferRemUiModel> _listNotification = [
+    UniversalNotOfferRemUiModel(
+      id: -1,
+      title: 'Test',
+      imagePath: GraphicsFoundation.instance.png.avatars.avatar4.path,
+      isLaunched: false,
+      isLaunchedDate: DateTime(2017, 9, 7),
+      selectedDates: [DateTime.now(), null],
+    )
+  ];
+
+  List<UniversalNotOfferRemUiModel> _listReminders = [];
+
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
@@ -887,6 +902,215 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         );
                       },
                     ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show notification component',
+                onPressed: () => context.push(
+                  NotificationComponent(
+                    placeOrEventName: null,
+                    listNotification: _listNotification,
+                    onCreateNotification: () {
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreate: (notificationUiModel) async {
+                            if (notificationUiModel != null) {
+                              await uiKitPayDialog(
+                                context: context,
+                                onPayTap: () async {
+                                  await uiKitNotificationCreatedDialog(
+                                    context: context,
+                                    cheap: UiKitTag(title: 'Club', icon: GraphicsFoundation.instance.svg.cocktail.path),
+                                    defaultNotificationImageUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+                                    placeTitle: 'Virgins on the beach',
+                                    placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
+                                    notificationText: notificationUiModel.title,
+                                    onOpenPlaceTap: () {},
+                                    onToFavoritesTap: () {},
+                                    onYeahSureTap: () {},
+                                  );
+                                  context.pop();
+                                },
+                                title: S.of(context).PayForTheNotification,
+                                price: 5,
+                              );
+                              context.pop();
+
+                              setState(() {
+                                _listNotification.add(notificationUiModel);
+                              });
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    onRemoveNotification: (id) {
+                      int index = _listNotification.indexWhere((element) => element?.id == id);
+                      setState(() {
+                        _listNotification.removeAt(index);
+                      });
+                    },
+                    onEditNotification: (id) {
+                      int index = _listNotification.indexWhere((element) => element?.id == id);
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          universalNotOfferRemUiModel: _listNotification[index],
+                          onCreate: (notificationUiModel) async {
+                            if (notificationUiModel != _listNotification[index]) {
+                              setState(() {
+                                _listNotification[index] = notificationUiModel;
+                              });
+                            }
+
+                            context.pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show reminders component',
+                onPressed: () => context.push(
+                  RemindersComponent(
+                    listReminders: _listReminders,
+                    placeOrEventName: S.of(context).Event.toLowerCase(),
+                    onCreateReminder: () {
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          isNotification: false,
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreate: (reminderModel) async {
+                            if (reminderModel != null) {
+                              await uiKitNotificationCreatedDialog(
+                                context: context,
+                                isNotification: false,
+                                iconPath: reminderModel.iconPath,
+                                cheap: UiKitTag(title: 'Club', icon: GraphicsFoundation.instance.svg.cocktail.path),
+                                defaultNotificationImageUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+                                placeTitle: 'Virgins on the beach',
+                                placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
+                                notificationText: reminderModel.title,
+                                onOpenPlaceTap: () {},
+                                onToFavoritesTap: () {},
+                                onYeahSureTap: () {},
+                              );
+                              setState(() {
+                                _listReminders.add(reminderModel);
+                              });
+                              context.pop();
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    onEditReminder: (id) {
+                      final int index = _listReminders.indexWhere((element) => element.id == id);
+
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          isNotification: false,
+                          universalNotOfferRemUiModel: _listReminders[index],
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreate: (reminderModel) async {
+                            if (reminderModel != null) {
+                              setState(() {
+                                _listReminders[index] = reminderModel;
+                              });
+
+                              context.pop();
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    onRemoveReminder: (id) {
+                      final int index = _listReminders.indexWhere((element) => element.id == id);
+                      setState(() {
+                        _listReminders.removeAt(index);
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show offers component ',
+                onPressed: () => context.push(
+                  OffersComponent(
+                    listOffers: _offerUiModelList,
+                    onCreateOffer: () {
+                      context.push(
+                        CreateOffer(
+                          offerPrice: 5,
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreateOffer: (offerUiModel) async {
+                            await uiKitPayDialog(
+                              context: context,
+                              onPayTap: () async {
+                                await uiKitOfferCreatedDialog(context);
+                                context.pop();
+                              },
+                              title: S.of(context).PayForTheBonusOffer,
+                              price: 5,
+                            );
+                            context.pop();
+
+                            setState(() {
+                              _offerUiModelList.add(offerUiModel);
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    onRemoveOffer: (id) {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+                      setState(() {
+                        _offerUiModelList.removeAt(index);
+                      });
+                    },
+                    onEditOffer: (id) async {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+                      context.push(
+                        CreateOffer(
+                          offerPrice: 5,
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          offerUiModel: _offerUiModelList[index],
+                          onCreateOffer: (editOfferUiModel) async {
+                            if (editOfferUiModel != _offerUiModelList[index]) {
+                              await uiKitEditOfferDialog(
+                                context,
+                                () {
+                                  setState(() {
+                                    _offerUiModelList[index] = editOfferUiModel;
+                                  });
+                                  context.pop();
+                                },
+                              );
+                            }
+
+                            context.pop();
+                          },
+                        ),
+                      );
+                    },
+                    placeOrEventName: null,
                   ),
                 ),
               ),
