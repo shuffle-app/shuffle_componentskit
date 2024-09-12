@@ -47,22 +47,25 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             tabController: tabController,
             tabs: _tabs,
             onTappedTab: (index) => widget.onTappedTab,
-          ),
-          SpacingFoundation.verticalSpace16,
+          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           Expanded(
-            // height: 0.85.sh,
-            // width: 1.sw,
             child: TabBarView(
               controller: tabController,
               children: [
-                _PagedInfluencerFeedItemListBody(pagingController: widget.latestContentController),
-                _PagedInfluencerFeedItemListBody(pagingController: widget.topContentController),
-                _PagedInfluencerFeedItemListBody(pagingController: widget.unreadContentController),
+                _PagedInfluencerFeedItemListBody(
+                  pagingController: widget.latestContentController,
+                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+                _PagedInfluencerFeedItemListBody(
+                  pagingController: widget.topContentController,
+                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+                _PagedInfluencerFeedItemListBody(
+                  pagingController: widget.unreadContentController,
+                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               ],
             ),
           ),
         ],
-      ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+      ),
     );
   }
 }
@@ -74,12 +77,26 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
     required this.pagingController,
   }) : super(key: key);
 
+  double get _videoReactionPreviewWidth => 0.125.sw;
+
+  int get _fittingVideoReactionsPreviewCount {
+    final screenHorizontalSpacing = SpacingFoundation.horizontalSpacing32 + SpacingFoundation.horizontalSpacing32;
+    final availableScreenWidth = 1.sw - screenHorizontalSpacing;
+
+    /// subtracting 1 to make space for placeholder
+    /// and another 1 to make sure all reactions fit
+    return (availableScreenWidth ~/ _videoReactionPreviewWidth) - 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
 
     return PagedListView.separated(
-      padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32),
+      padding: EdgeInsets.only(
+        bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
+        top: EdgeInsetsFoundation.vertical16,
+      ),
       pagingController: pagingController,
       separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
       builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
@@ -87,7 +104,17 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
           final isLast = index == pagingController.itemList!.length - 1;
           double bottomPadding = isLast ? 0 : 16.0;
 
-          if (item is PostFeedItem) {
+          if (item is ShufflePostFeedItem) {
+            return UiKitContentUpdatesCard.fromShuffle(
+              text: item.text,
+              heartEyesReactionsCount: item.heartEyesReactionsCount,
+              likeReactionsCount: item.likeReactionsCount,
+              fireReactionsCount: item.fireReactionsCount,
+              sunglassesReactionsCount: item.sunglassesReactionsCount,
+              smileyReactionsCount: item.smileyReactionsCount,
+              children: _children(item, regularTextTheme),
+            ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
+          } else if (item is PostFeedItem) {
             return UiKitPostCard(
               authorName: item.name,
               authorUsername: item.username,
@@ -109,149 +136,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               authorUsername: item.username,
               authorAvatarUrl: item.avatarUrl,
               authorUserType: item.userType,
-              children: [
-                if (item.newPhotos != null)
-                  UiKitStaggeredMediaRow(
-                    mediaList: item.newPhotos!,
-                    visibleMediaCount: 4,
-                  ),
-                if (item.newVideos != null)
-                  ...item.newVideos!.map((video) {
-                    return UiKitContentUpdateWithLeadingImage(
-                      title: S.current.PlusXNewVideos,
-                      updateIconUrl: GraphicsFoundation.instance.svg.playOutline.path,
-                      imageUrl: video.previewImage,
-                      subtitle: video.subtitle,
-                    );
-                  }),
-                if (item.newFeedbacks != null)
-                  ...item.newFeedbacks!.map((feedback) {
-                    return UiKitContentUpdateWithLeadingImage(
-                      imageUrl: feedback.previewImage,
-                      title: S.current.PlusXNewReviews(item.newFeedbacks!.length),
-                      updateIconUrl: GraphicsFoundation.instance.svg.starFill.path,
-                      subtitle: feedback.subtitle,
-                    );
-                  }),
-                if (item.newVideoReactions != null)
-                  UiKitCustomChildContentUpdateWidget(
-                    height: 0.125.sw * 1.7,
-                    child: UiKitContentRowWithHiddenItems(
-                      placeholderSize: Size(0.125.sw, 0.125.sw * 1.7),
-                      visibleItemsCount: 2,
-                      placeholderImagePath: item.newVideoReactions!.first.previewImageUrl ?? '',
-                      placeHolderTitle: S.current.PlusXNewVideoReactions(item.newVideoReactions!.length > 2
-                          ? item.newVideoReactions!.length - 2
-                          : item.newVideoReactions!.length),
-                      children: item.newVideoReactions!.map((reaction) {
-                        return UiKitReactionPreview(
-                          viewed: reaction.isViewed,
-                          isEmpty: false,
-                          imagePath: reaction.previewImageUrl,
-                          customHeight: 0.125.sw * 1.7,
-                          customWidth: 0.125.sw,
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                if (item.newVoices != null && item.newVoices!.isNotEmpty)
-                  UiKitContentUpdateWithLeadingImage(
-                    title: S.current.PlusXNewVoices(item.newVoices!.length),
-                    updateIconUrl: GraphicsFoundation.instance.svg.voice.path,
-                    imageUrl: (item.newVoices!.first.content?.media.isNotEmpty ?? false)
-                        ? item.newVoices!.first.content?.media.first.link ?? ''
-                        : '',
-                    subtitle: item.newVoices!.first.content?.title ?? '',
-                  ),
-                if (item.newRoutes != null)
-                  ...item.newRoutes!.map((route) {
-                    return UiKitContentUpdateWithLeadingImage(
-                      title: S.current.PlusXNewRoutes,
-                      updateIconUrl: route.icon,
-                      imageUrl: route.thumbnailUrl ?? '',
-                      subtitle: '${route.routeAPointName} - ${route.routeBPointName}',
-                    );
-                  }),
-                if (item.newVideoInterviews != null)
-                  ...item.newVideoInterviews!.map((interview) {
-                    return UiKitContentUpdateWithLeadingImage(
-                      title: S.current.PlusXNewInterviews,
-                      updateIconUrl: interview.icon,
-                      imageUrl: interview.thumbnailUrl ?? '',
-                      subtitle: interview.title,
-                    );
-                  }),
-                if (item.newContests != null)
-                  ...item.newContests!.map((contest) {
-                    return UiKitContestUpdateWidget(
-                      title: S.current.PlusXNewContests,
-                      text: contest.description,
-                      contestVideo: UiKitReactionPreview(
-                        viewed: contest.video?.isViewed ?? false,
-                        isEmpty: false,
-                        imagePath: contest.video?.previewImageUrl ?? '',
-                        customHeight: 0.125.sw * 1.7,
-                        customWidth: 0.125.sw,
-                      ),
-                      height: 0.125.sw * 1.7,
-                    );
-                  }),
-                if (item.newPersonalTops != null)
-                  ...item.newPersonalTops!.map((top) {
-                    return UiKitContentUpdateWithLeadingImage(
-                      title: '${S.current.Top} ${top.title}',
-                      subtitle: top.subtitle,
-                      imageUrl: top.topContent?.isNotEmpty ?? false
-                          ? (top.topContent?.first.media.isNotEmpty ?? false)
-                              ? top.topContent?.first.media.first.link ?? ''
-                              : ''
-                          : '',
-                    );
-                  }),
-                if (item.newPersonalRespects != null)
-                  UiKitCustomChildContentUpdateWidget(
-                    height: 0.16875.sw,
-                    child: UiKitContentRowWithHiddenItems(
-                      placeholderSize: Size(1.35 * 0.16875.sw, 0.16875.sw),
-                      visibleItemsCount: 2,
-                      placeholderImagePath: item.newPersonalRespects!.first.thumbnail,
-                      placeHolderTitle: S.current.PlusXNewRespects(item.newPersonalRespects!.length > 2
-                          ? item.newPersonalRespects!.length - 2
-                          : item.newPersonalRespects!.length),
-                      children: item.newPersonalRespects!.map((respect) {
-                        return ClipRRect(
-                          borderRadius: BorderRadiusFoundation.all8,
-                          child: ImageWidget(
-                            height: 0.16875.sw,
-                            width: 1.35 * 0.16875.sw,
-                            link: respect.thumbnail,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                if (item.commentsUpdate != null)
-                  UiKitOnlyTextContentUpdateWidget(
-                    updateIcon: GraphicsFoundation.instance.svg.message.path,
-                    titleTrailing: Text(
-                      formatDifference(item.commentsUpdate!.lastCommentDate),
-                      style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.mutedText),
-                      textAlign: TextAlign.end,
-                    ),
-                    text: item.commentsUpdate!.lastComment,
-                    title:
-                        '${S.current.Chat.toUpperCase()} ${S.current.PlusXNewChatComments(item.commentsUpdate!.commentsCount)}',
-                  ),
-                if (item.newContent != null)
-                  ...item.newContent!.map((content) {
-                    return UiKitContentUpdateWithLeadingImage(
-                      imageUrl: content.media.isNotEmpty ? content.media.first.link : '',
-                      title: content.title,
-                      subtitle: content.placeName,
-                    );
-                  }),
-              ],
+              children: _children(item, regularTextTheme),
             ).paddingOnly(bottom: bottomPadding);
           } else {
             throw UnimplementedError('Unknown item type: ${item.runtimeType}');
@@ -259,5 +144,180 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         },
       ),
     );
+  }
+
+  List<UiKitContentUpdateWidget> _children(UpdatesFeedItem item, UiKitRegularTextTheme? regularTextTheme) {
+    final shufflePostVideoWidgetWidth = 0.16845.sw;
+    final shufflePostVideoWidgetHeight = 0.16845.sw * 0.75;
+    final playButtonSize = Size(32.w, 24.h);
+    final xOffset = shufflePostVideoWidgetWidth / 2 - playButtonSize.width / 2;
+    final yOffset = shufflePostVideoWidgetHeight / 2 - playButtonSize.height / 2;
+
+    return [
+      if (item is ShufflePostFeedItem && item.videos != null)
+        UiKitCustomChildContentUpdateWidget(
+          height: shufflePostVideoWidgetHeight,
+          child: Row(
+            children: item.videos!.map(
+              (video) {
+                final isLast = item.videos!.last == video;
+
+                return SizedBox(
+                  height: shufflePostVideoWidgetHeight,
+                  child: UiKitMediaVideoWidget(
+                    width: shufflePostVideoWidgetWidth,
+                    playButtonCustomOffset: Offset(xOffset, yOffset),
+                    media: video,
+                    borderRadius: BorderRadiusFoundation.all8,
+                  ).paddingOnly(right: isLast ? 0 : EdgeInsetsFoundation.horizontal16),
+                );
+              },
+            ).toList(),
+          ),
+        ),
+      if (item.newPhotos != null)
+        UiKitStaggeredMediaRow(
+          mediaList: item.newPhotos!,
+          visibleMediaCount: 4,
+        ),
+      if (item.newVideos != null)
+        ...item.newVideos!.map((video) {
+          return UiKitContentUpdateWithLeadingImage(
+            title: S.current.PlusXNewVideos,
+            updateIconUrl: GraphicsFoundation.instance.svg.playOutline.path,
+            imageUrl: video.previewImage,
+            subtitle: video.subtitle,
+          );
+        }),
+      if (item.newFeedbacks != null)
+        ...item.newFeedbacks!.map((feedback) {
+          return UiKitContentUpdateWithLeadingImage(
+            imageUrl: feedback.previewImage,
+            title: S.current.PlusXNewReviews(item.newFeedbacks!.length),
+            updateIconUrl: GraphicsFoundation.instance.svg.starFill.path,
+            subtitle: feedback.subtitle,
+          );
+        }),
+      if (item.newVideoReactions != null)
+        UiKitCustomChildContentUpdateWidget(
+          height: _videoReactionPreviewWidth * 1.7,
+          child: UiKitContentRowWithHiddenItems(
+            placeholderSize: Size(_videoReactionPreviewWidth, _videoReactionPreviewWidth * 1.7),
+            visibleItemsCount: _fittingVideoReactionsPreviewCount,
+            placeholderImagePath: item.newVideoReactions!.first.previewImageUrl ?? '',
+            placeHolderTitle: S.current.PlusXNewVideoReactions(
+                item.newVideoReactions!.length > _fittingVideoReactionsPreviewCount
+                    ? item.newVideoReactions!.length - _fittingVideoReactionsPreviewCount
+                    : item.newVideoReactions!.length),
+            children: item.newVideoReactions!.map((reaction) {
+              return UiKitReactionPreview(
+                viewed: reaction.isViewed,
+                isEmpty: false,
+                imagePath: reaction.previewImageUrl,
+                customHeight: _videoReactionPreviewWidth * 1.7,
+                customWidth: _videoReactionPreviewWidth,
+                borderRadius: BorderRadiusFoundation.all8,
+              );
+            }).toList(),
+          ),
+        ),
+      if (item.newVoices != null && item.newVoices!.isNotEmpty)
+        UiKitContentUpdateWithLeadingImage(
+          title: S.current.PlusXNewVoices(item.newVoices!.length),
+          updateIconUrl: GraphicsFoundation.instance.svg.voice.path,
+          imageUrl: (item.newVoices!.first.content?.media.isNotEmpty ?? false)
+              ? item.newVoices!.first.content?.media.first.link ?? ''
+              : '',
+          subtitle: item.newVoices!.first.content?.title ?? '',
+        ),
+      if (item.newRoutes != null)
+        ...item.newRoutes!.map((route) {
+          return UiKitContentUpdateWithLeadingImage(
+            title: S.current.PlusXNewRoutes,
+            updateIconUrl: route.icon,
+            imageUrl: route.thumbnailUrl ?? '',
+            subtitle: '${route.routeAPointName} - ${route.routeBPointName}',
+          );
+        }),
+      if (item.newVideoInterviews != null)
+        ...item.newVideoInterviews!.map((interview) {
+          return UiKitContentUpdateWithLeadingImage(
+            title: S.current.PlusXNewInterviews,
+            updateIconUrl: interview.icon,
+            imageUrl: interview.thumbnailUrl ?? '',
+            subtitle: interview.title,
+          );
+        }),
+      if (item.newContests != null)
+        ...item.newContests!.map((contest) {
+          return UiKitContestUpdateWidget(
+            title: S.current.PlusXNewContests,
+            text: contest.description,
+            contestVideo: UiKitReactionPreview(
+              viewed: contest.video?.isViewed ?? false,
+              isEmpty: false,
+              imagePath: contest.video?.previewImageUrl ?? '',
+              customHeight: _videoReactionPreviewWidth * 1.7,
+              customWidth: _videoReactionPreviewWidth,
+            ),
+            height: _videoReactionPreviewWidth * 1.7,
+          );
+        }),
+      if (item.newPersonalTops != null)
+        ...item.newPersonalTops!.map((top) {
+          return UiKitContentUpdateWithLeadingImage(
+            title: '${S.current.Top} ${top.title}',
+            subtitle: top.subtitle,
+            imageUrl: top.topContent?.isNotEmpty ?? false
+                ? (top.topContent?.first.media.isNotEmpty ?? false)
+                    ? top.topContent?.first.media.first.link ?? ''
+                    : ''
+                : '',
+          );
+        }),
+      if (item.newPersonalRespects != null)
+        UiKitCustomChildContentUpdateWidget(
+          height: 0.16875.sw,
+          child: UiKitContentRowWithHiddenItems(
+            placeholderSize: Size(1.35 * 0.16875.sw, 0.16875.sw),
+            visibleItemsCount: 2,
+            placeholderImagePath: item.newPersonalRespects!.first.thumbnail,
+            placeHolderTitle: S.current.PlusXNewRespects(item.newPersonalRespects!.length > 2
+                ? item.newPersonalRespects!.length - 2
+                : item.newPersonalRespects!.length),
+            children: item.newPersonalRespects!.map((respect) {
+              return ClipRRect(
+                borderRadius: BorderRadiusFoundation.all8,
+                child: ImageWidget(
+                  height: 0.16875.sw,
+                  width: 1.35 * 0.16875.sw,
+                  link: respect.thumbnail,
+                  fit: BoxFit.cover,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      if (item.commentsUpdate != null)
+        UiKitOnlyTextContentUpdateWidget(
+          updateIcon: GraphicsFoundation.instance.svg.message.path,
+          titleTrailing: Text(
+            formatDifference(item.commentsUpdate!.lastCommentDate),
+            style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.mutedText),
+            textAlign: TextAlign.end,
+          ),
+          text: item.commentsUpdate!.lastComment,
+          title:
+              '${S.current.Chat.toUpperCase()} ${S.current.PlusXNewChatComments(item.commentsUpdate!.commentsCount)}',
+        ),
+      if (item.newContent != null)
+        ...item.newContent!.map((content) {
+          return UiKitContentUpdateWithLeadingImage(
+            imageUrl: content.media.isNotEmpty ? content.media.first.link : '',
+            title: content.title,
+            subtitle: content.placeName,
+          );
+        }),
+    ];
   }
 }

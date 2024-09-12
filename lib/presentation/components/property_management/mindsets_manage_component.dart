@@ -9,6 +9,7 @@ class MindsetsManageComponent extends StatefulWidget {
     required this.onAddMindset,
     required this.onMindsetSelect,
     this.onEditSelectedMindset,
+    this.onRecentTagAssign,
     this.onDeleteSelectedMindset,
     required this.tagSearchOptions,
     this.onPropertyFieldSubmitted,
@@ -16,6 +17,7 @@ class MindsetsManageComponent extends StatefulWidget {
     this.onTagDeleteTap,
     required this.listMindsets,
     this.selectedMindset,
+    this.recentlyAddedTags = const [],
   });
 
   int? get selectedMindsetId => selectedMindset?.id;
@@ -28,8 +30,10 @@ class MindsetsManageComponent extends StatefulWidget {
   final VoidCallback? onDeleteSelectedMindset;
   final ValueChanged<UiModelProperty>? onTagDeleteTap;
   final ValueChanged<UiModelProperty>? onTagEditTap;
+  final ValueChanged<UiModelProperty>? onRecentTagAssign;
   final ValueChanged<String>? onPropertyFieldSubmitted;
   final Future<List<String>> Function(String) tagSearchOptions;
+  final List<UiModelProperty> recentlyAddedTags;
 
   @override
   State<MindsetsManageComponent> createState() => _MindsetsManageComponentState();
@@ -92,20 +96,6 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                   padding: EdgeInsets.zero,
                   itemCount: widget.listMindsets.length,
                   itemBuilder: (context, index) {
-                    // return UiKitExpansionTileWithIconButton(
-                    //   title: e.categoryTitle,
-                    //   onTap: onCategoryTypeAddTap,
-                    //   children: e.categoryTypes.map(
-                    //     (element) {
-                    //       return PropertiesTypeAnimatedButton(
-                    //         title: element.title,
-                    //         onTap: () {
-                    //           onCategoryPropertyTypeButtonTap.call(element.id);
-                    //         },
-                    //       );
-                    //     },
-                    //   ).toList(),
-                    // );
                     final category = widget.listMindsets.elementAt(index);
                     return PropertiesTypeAnimatedButton(
                       title: category.title,
@@ -184,7 +174,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
                       child: Column(children: [
-                        if (selectedTag != null && selectedTag!.unique)
+                        if (selectedTag != null)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -241,43 +231,27 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
             SpacingFoundation.horizontalSpace16,
             Flexible(
               child: PropertiesBorderedBox(
-                title: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        S.current.RecentlyAdded,
-                        overflow: TextOverflow.ellipsis,
-                        style: uiKitTheme?.boldTextTheme.title2,
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          S.current.RecentlyAdded,
+                          overflow: TextOverflow.ellipsis,
+                          style: uiKitTheme?.boldTextTheme.title2,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    UnderDevelopment()
-                    // PropertiesSearchInput(
-                    //   options: widget.relatedPropertySearchOptions,
-                    //   showAllOptions: true,
-                    //   onFieldSubmitted: (title) => widget.onRelatedPropertyFieldSubmitted?.call((title, selectedTag)),
-                    // ),
-                    // SpacingFoundation.verticalSpace16,
-                    // UiKitPropertiesCloud(
-                    //   child: Column(
-                    //     children: (selectedTag?.relatedProperties ?? []).map(
-                    //       (e) {
-                    //         return UiKitCloudChipWithDesc(
-                    //           title: e.title,
-                    //           description: e.linkedMindsets.join(', '),
-                    //         ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical6);
-                    //       },
-                    //     ).toList(),
-                    //   ).paddingSymmetric(
-                    //       horizontal: EdgeInsetsFoundation.horizontal20, vertical: EdgeInsetsFoundation.vertical14),
-                    // ),
-                  ],
-                ),
-              ),
+                    ],
+                  ),
+                  child: Wrap(
+                      spacing: SpacingFoundation.horizontalSpacing12,
+                      runSpacing: SpacingFoundation.verticalSpacing12,
+                      children: widget.recentlyAddedTags
+                          .map((e) => UiKitCloudChip(
+                                iconPath: e.icon,
+                                title: e.title,
+                                onTap: () => widget.onRecentTagAssign?.call(e),
+                              ))
+                          .toList())),
             ),
           ],
         ),

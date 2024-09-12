@@ -22,7 +22,7 @@ class UiPlaceModel {
   String? website;
   String? phone;
   String? price;
-  Future<List<HorizontalCaptionedImageData>?>? branches;
+  Future<List<HorizontalCaptionedImageData>?>? Function()? branches;
   dynamic schedule;
   UiKitTag? niche;
   String? contentType;
@@ -124,7 +124,7 @@ class UiPlaceModel {
     String? website,
     String? phone,
     String? price,
-    Future<List<HorizontalCaptionedImageData>?>? branches,
+    Future<List<HorizontalCaptionedImageData>?>? Function()? branches,
     Object? schedule,
     UiKitTag? niche,
     String? contentType,

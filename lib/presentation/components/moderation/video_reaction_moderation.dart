@@ -5,12 +5,18 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class VideoReactionModeration extends StatelessWidget {
   final List<ReactionPreviewUiModel> reactionPreviewModelList;
-  final VoidCallback? sortFunction;
+  final VoidCallback? sortDateFunction;
+  final bool newFirst;
+  final VoidCallback? sortModeratedFunction;
+  final bool moderatedFirst;
 
   const VideoReactionModeration({
     super.key,
-    this.sortFunction,
     required this.reactionPreviewModelList,
+    this.sortDateFunction,
+    required this.newFirst,
+    this.sortModeratedFunction,
+    required this.moderatedFirst,
   });
 
   @override
@@ -28,26 +34,42 @@ class VideoReactionModeration extends StatelessWidget {
           Row(
             children: [
               Text(
-                S
-                    .of(context)
-                    .VideoReactions,
+                S.of(context).VideoReactions,
                 style: textTheme?.title1,
               ),
               const Spacer(),
-              if (sortFunction != null)
+              if (sortDateFunction != null) ...[
+                Text(
+                  'Sorted from ${newFirst ? 'Newest' : 'Oldest'}',
+                ),
+                SpacingFoundation.horizontalSpace4,
                 context.iconButtonNoPadding(
                   data: BaseUiKitButtonData(
-                    onPressed: sortFunction,
+                    onPressed: sortDateFunction,
                     iconInfo: BaseUiKitButtonIconData(
                       iconData: ShuffleUiKitIcons.arrowssort,
                     ),
                   ),
                 )
+              ],
+              if (sortModeratedFunction != null) ...[
+                SpacingFoundation.horizontalSpace16,
+                Text(
+                  'Sorted from ${moderatedFirst ? 'Moderated' : 'Not Moderated'}',
+                ),
+                SpacingFoundation.horizontalSpace4,
+                context.iconButtonNoPadding(
+                    data: BaseUiKitButtonData(
+                  onPressed: sortModeratedFunction,
+                  iconInfo: BaseUiKitButtonIconData(
+                    iconData: ShuffleUiKitIcons.arrowssort,
+                  ),
+                ))
+              ]
             ],
           ).paddingAll(EdgeInsetsFoundation.all24),
           Expanded(
             child: GridView.builder(
-
               addAutomaticKeepAlives: false,
               shrinkWrap: true,
               itemCount: reactionPreviewModelList.length,
@@ -59,6 +81,7 @@ class VideoReactionModeration extends StatelessWidget {
               itemBuilder: (context, index) {
                 final reactionPreviewModelItem = reactionPreviewModelList[index];
                 return UiKitReactionPreview(
+                  isModerated: reactionPreviewModelItem.isModerated,
                   isEmpty: reactionPreviewModelItem.isEmpty,
                   imagePath: reactionPreviewModelItem.imagePath,
                   viewed: reactionPreviewModelItem.viewed,
@@ -80,6 +103,7 @@ class ReactionPreviewUiModel {
   final VoidCallback? onTap;
   final double? customWidth;
   final double? customHeight;
+  bool isModerated;
 
   ReactionPreviewUiModel({
     this.imagePath,
@@ -88,5 +112,6 @@ class ReactionPreviewUiModel {
     this.isEmpty = false,
     this.customWidth,
     this.customHeight,
+    this.isModerated = false,
   });
 }

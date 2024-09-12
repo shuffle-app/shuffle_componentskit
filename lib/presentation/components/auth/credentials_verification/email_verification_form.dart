@@ -13,6 +13,7 @@ class EmailVerificationForm extends StatefulWidget {
   final ValueChanged<CountryModel>? onCountrySelected;
   final bool? loading;
   final bool isSmallScreen;
+  final bool hasPasswordError;
 
   const EmailVerificationForm({
     super.key,
@@ -26,6 +27,7 @@ class EmailVerificationForm extends StatefulWidget {
     this.onCountrySelected,
     this.loading,
     this.isSmallScreen = false,
+    this.hasPasswordError = false,
   });
 
   @override

@@ -93,14 +93,16 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                     widget.credentialsController.clear();
                     widget.passwordController.clear();
                   },
-                  child: BottomSheetVerificationComponent(
-                    credentialsController: widget.credentialsController,
-                    passwordController: widget.passwordController,
-                    credentialsValidator: widget.credentialsValidator,
-                    loading: widget.loading,
-                    onSubmit: widget.onSubmit,
-                    passwordValidator: widget.passwordValidator,
-                  ),
+                  child: Form(
+                      key: widget.formKey,
+                      child: BottomSheetVerificationComponent(
+                        credentialsController: widget.credentialsController,
+                        passwordController: widget.passwordController,
+                        credentialsValidator: widget.credentialsValidator,
+                        loading: widget.loading,
+                        onSubmit: widget.onSubmit,
+                        passwordValidator: widget.passwordValidator,
+                      )),
                 ),
               ),
             );
@@ -204,237 +206,237 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
             width: 1.sw,
           ),
         ),
-        Form(
-          key: widget.formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: MediaQuery.viewPaddingOf(context).top,
-              ),
-              Text(
-                S.current.CredentialsVerificationTitle,
-                style: textTheme?.titleLarge.copyWith(fontSize: isSmallScreen ? 24.w : null),
-              ),
-              isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-              Text(
-                S.current.CredentialsVerificationPrompt,
-                style: textTheme?.subHeadline.copyWith(fontSize: isSmallScreen ? 14.w : null),
-              ),
-              KeyboardVisibilityBuilder(builder: (context, visibility) {
-                late final double height;
-                if (visibility) {
-                  if (isSmallScreen) {
-                    if (hasPasswordError) {
-                      height = 0;
-                    } else {
-                      height = 0;
-                    }
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: MediaQuery.viewPaddingOf(context).top,
+            ),
+            Text(
+              S.current.CredentialsVerificationTitle,
+              style: textTheme?.titleLarge.copyWith(fontSize: isSmallScreen ? 24.w : null),
+            ),
+            isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+            Text(
+              S.current.CredentialsVerificationPrompt,
+              style: textTheme?.subHeadline.copyWith(fontSize: isSmallScreen ? 14.w : null),
+            ),
+            KeyboardVisibilityBuilder(builder: (context, visibility) {
+              late final double height;
+              if (visibility) {
+                if (isSmallScreen) {
+                  if (hasPasswordError) {
+                    height = 0;
                   } else {
-                    if (hasPasswordError) {
-                      height = SpacingFoundation.verticalSpacing12;
-                    } else {
-                      height = SpacingFoundation.verticalSpacing24;
-                    }
+                    height = 0;
                   }
                 } else {
-                  if (isSmallScreen) {
-                    height = 0.1625.sh;
+                  if (hasPasswordError) {
+                    height = SpacingFoundation.verticalSpacing12;
                   } else {
-                    if (hasPasswordError) {
-                      height = 0.14.sh;
-                    } else {
-                      height = 0.17.sh;
-                    }
+                    height = SpacingFoundation.verticalSpacing24;
                   }
                 }
+              } else {
+                if (isSmallScreen) {
+                  height = 0.1625.sh;
+                } else {
+                  if (hasPasswordError) {
+                    height = 0.14.sh;
+                  } else {
+                    height = 0.17.sh;
+                  }
+                }
+              }
 
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  height: height,
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                height: height,
+              );
+            }),
+            KeyboardVisibilityBuilder(
+              builder: (context, keyboardVisible) {
+                return AnimatedSwitcher(
+                  reverseDuration: const Duration(milliseconds: 250),
+                  duration: const Duration(milliseconds: 125),
+                  transitionBuilder: (child, animation) => FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // const Spacer(flex: 1),
+                      if (widget.availableLocales != null &&
+                          widget.availableLocales!.isNotEmpty &&
+                          !keyboardVisible) ...[
+                        UiKitCardWrapper(
+                          color: colorScheme?.surface1,
+                          borderRadius: BorderRadiusFoundation.max,
+                          child: UiKitLocaleSelector(
+                              selectedLocale: widget.availableLocales!
+                                  .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                              availableLocales: widget.availableLocales!,
+                              onLocaleChanged: (LocaleModel value) {
+                                context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
+                                setState(() {});
+                              }).paddingAll(EdgeInsetsFoundation.all4),
+                        ),
+                        isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+                      ],
+                      if (!keyboardVisible) ...[
+                        UiKitCustomTabBar(
+                          tabController: tabController,
+                          selectedTab: _selectedTab,
+                          tabs: tabs,
+                          onTappedTab: (tabIndex) {
+                            setState(() {
+                              _selectedTab = tabs.elementAt(tabIndex).customValue;
+                            });
+                          },
+                        ),
+                        isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+                      ] else
+                        isSmallScreen ? const SizedBox.shrink() : 20.h.heightBox
+                    ],
+                  ),
                 );
-              }),
-              KeyboardVisibilityBuilder(
-                builder: (context, keyboardVisible) {
-                  return AnimatedSwitcher(
-                    reverseDuration: const Duration(milliseconds: 250),
-                    duration: const Duration(milliseconds: 125),
-                    transitionBuilder: (child, animation) => FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    ),
+              },
+            ),
+            SizedBox(
+              height: 0.26.sh,
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  UiKitCardWrapper(
+                    borderRadius: BorderRadiusFoundation.all28,
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // const Spacer(flex: 1),
-                        if (widget.availableLocales != null &&
-                            widget.availableLocales!.isNotEmpty &&
-                            !keyboardVisible) ...[
-                          UiKitCardWrapper(
-                            color: colorScheme?.surface1,
-                            borderRadius: BorderRadiusFoundation.max,
-                            child: UiKitLocaleSelector(
-                                selectedLocale: widget.availableLocales!
-                                    .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
-                                availableLocales: widget.availableLocales!,
-                                onLocaleChanged: (LocaleModel value) {
-                                  context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
-                                  setState(() {});
-                                }).paddingAll(EdgeInsetsFoundation.all4),
-                          ),
-                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                        ],
-                        if (!keyboardVisible) ...[
-                          UiKitCustomTabBar(
-                            tabController: tabController,
-                            selectedTab: _selectedTab,
-                            tabs: tabs,
-                            onTappedTab: (tabIndex) {
-                              setState(() {
-                                _selectedTab = tabs.elementAt(tabIndex).customValue;
-                              });
-                            },
-                          ),
-                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                        ] else
-                          isSmallScreen ? const SizedBox.shrink() : 20.h.heightBox
+                        ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return socials.elementAt(index);
+                          },
+                          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace12,
+                          itemCount: socials.length,
+                        ),
+                        // if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
                       ],
                     ),
-                  );
-                },
-              ),
-              SizedBox(
-                height: 0.26.sh,
-                child: TabBarView(
-                  controller: tabController,
-                  children: [
-                    UiKitCardWrapper(
-                      borderRadius: BorderRadiusFoundation.all28,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ListView.separated(
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return socials.elementAt(index);
-                            },
-                            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace12,
-                            itemCount: socials.length,
-                          ),
-                          // if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
-                        ],
-                      ),
-                    ),
-                    EmailVerificationForm(
-                      credentialsController: widget.credentialsController,
-                      passwordController: widget.passwordController,
-                      authType: authType,
-                      countrySelectorTitle: countrySelectorTitle,
-                      credentialsValidator: widget.credentialsValidator,
-                      isSmallScreen: isSmallScreen,
-                      loading: widget.loading,
-                      onCountrySelected: widget.onCountrySelected,
-                      passwordValidator: widget.passwordValidator,
-                      uiModel: widget.uiModel,
-                    ),
-                  ],
-                ),
-              ),
-              KeyboardVisibilityBuilder(
-                builder: (context, visible) => AnimatedSwitcher(
-                  reverseDuration: const Duration(milliseconds: 50),
-                  duration: const Duration(milliseconds: 500),
-                  transitionBuilder: (child, animation) => SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, 1),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    ),
                   ),
-                  child: !visible
-                      ? Column(
-                          children: [
-                            isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '${S.of(context).ByContinuingYouAcceptThe} ',
-                                    style: regTextTheme?.caption4,
-                                  ),
-                                  TextSpan(
-                                    text: S.current.TermsOfService,
-                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.push(
-                                            WebViewScreen(
-                                              title: S.current.TermsOfService,
-                                              url: PolicyLocalizer.localizedTermsOfService(
-                                                Localizations.localeOf(context).languageCode,
-                                              ),
+                  Form(
+                      key: widget.formKey,
+                      child: EmailVerificationForm(
+                        credentialsController: widget.credentialsController,
+                        passwordController: widget.passwordController,
+                        authType: authType,
+                        countrySelectorTitle: countrySelectorTitle,
+                        credentialsValidator: widget.credentialsValidator,
+                        isSmallScreen: isSmallScreen,
+                        loading: widget.loading,
+                        onCountrySelected: widget.onCountrySelected,
+                        passwordValidator: widget.passwordValidator,
+                        uiModel: widget.uiModel,
+                        hasPasswordError: hasPasswordError,
+                      )),
+                ],
+              ),
+            ),
+            KeyboardVisibilityBuilder(
+              builder: (context, visible) => AnimatedSwitcher(
+                reverseDuration: const Duration(milliseconds: 50),
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder: (child, animation) => SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 1),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                ),
+                child: !visible
+                    ? Column(
+                        children: [
+                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${S.of(context).ByContinuingYouAcceptThe} ',
+                                  style: regTextTheme?.caption4,
+                                ),
+                                TextSpan(
+                                  text: S.current.TermsOfService,
+                                  style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => context.push(
+                                          WebViewScreen(
+                                            title: S.current.TermsOfService,
+                                            url: PolicyLocalizer.localizedTermsOfService(
+                                              Localizations.localeOf(context).languageCode,
                                             ),
                                           ),
-                                  ),
-                                  TextSpan(
-                                    text: S.of(context).AndWithWhitespaces.toLowerCase(),
-                                    style: regTextTheme?.caption4,
-                                  ),
-                                  TextSpan(
-                                    text: S.current.PrivacyPolicy,
-                                    style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.push(
-                                            WebViewScreen(
-                                              title: S.current.PrivacyPolicy,
-                                              url: PolicyLocalizer.localizedPrivacyPolicy(
-                                                Localizations.localeOf(context).languageCode,
-                                              ),
+                                        ),
+                                ),
+                                TextSpan(
+                                  text: S.of(context).AndWithWhitespaces.toLowerCase(),
+                                  style: regTextTheme?.caption4,
+                                ),
+                                TextSpan(
+                                  text: S.current.PrivacyPolicy,
+                                  style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => context.push(
+                                          WebViewScreen(
+                                            title: S.current.PrivacyPolicy,
+                                            url: PolicyLocalizer.localizedPrivacyPolicy(
+                                              Localizations.localeOf(context).languageCode,
                                             ),
                                           ),
-                                  ),
-                                ],
-                              ),
+                                        ),
+                                ),
+                              ],
                             ),
-                            isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                            SizedBox(
-                              height: isSmallScreen ? 51.h : null,
-                              child: AnimatedOpacity(
-                                opacity: tabController.index >= 1 ? 1 : 0,
-                                duration: const Duration(milliseconds: 500),
-                                child: context.button(
-                                  data: BaseUiKitButtonData(
-                                    text: S.of(context).Next.toUpperCase(),
-                                    onPressed: () {
-                                      if (widget.passwordController.text.isNotEmpty ||
-                                          widget.credentialsController.text.isNotEmpty) {
-                                        widget.onSubmit?.call(_selectedTab == tabs.first.customValue);
-                                      }
-                                    },
-                                    loading: widget.loading,
-                                    fit: ButtonFit.fitWidth,
-                                  ),
+                          ),
+                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+                          SizedBox(
+                            height: isSmallScreen ? 51.h : null,
+                            child: AnimatedOpacity(
+                              opacity: tabController.index >= 1 ? 1 : 0,
+                              duration: const Duration(milliseconds: 500),
+                              child: context.button(
+                                data: BaseUiKitButtonData(
+                                  text: S.of(context).Next.toUpperCase(),
+                                  onPressed: () {
+                                    if (widget.passwordController.text.isNotEmpty &&
+                                        widget.credentialsController.text.isNotEmpty) {
+                                      widget.onSubmit?.call(_selectedTab == tabs.first.customValue);
+                                    }
+                                  },
+                                  loading: widget.loading,
+                                  fit: ButtonFit.fitWidth,
                                 ),
                               ),
                             ),
-                          ],
-                        )
-                      : !visible
-                          ? (16.h * 3).heightBox
-                          : SpacingFoundation.none,
-                ),
+                          ),
+                        ],
+                      )
+                    : !visible
+                        ? (16.h * 3).heightBox
+                        : SpacingFoundation.none,
               ),
-            ],
-          ).paddingSymmetric(
-            horizontal: horizontalMargin,
-            vertical: verticalMargin,
-          ),
+            ),
+          ],
+        ).paddingSymmetric(
+          horizontal: horizontalMargin,
+          vertical: verticalMargin,
         ),
       ],
     );
