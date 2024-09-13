@@ -525,7 +525,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                 if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
                                   _bookingUiModel = bookingUiModel;
                                 }
-                                _bookingUiModel = bookingUiModel;
                               },
                             ),
                           ),

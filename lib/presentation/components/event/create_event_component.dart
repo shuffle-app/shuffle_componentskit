@@ -538,7 +538,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                             CreateBookingComponent(
                               bookingUiModel: _bookingUiModel,
                               onBookingCreated: (bookingUiModel) {
-                                _bookingUiModel = bookingUiModel;
+                                if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                  _bookingUiModel = bookingUiModel;
+                                }
                               },
                             ),
                           ),
