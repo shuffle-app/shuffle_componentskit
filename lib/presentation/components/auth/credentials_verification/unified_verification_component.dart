@@ -245,7 +245,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                   if (hasPasswordError) {
                     height = 0.14.sh;
                   } else {
-                    height = 0.17.sh;
+                    height = 0.165.sh;
                   }
                 }
               }

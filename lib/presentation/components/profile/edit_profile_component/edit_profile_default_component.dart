@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class EditProfileDefaultComponent extends StatelessWidget {
   final List<String> selectedPreferences;
@@ -89,15 +90,18 @@ class EditProfileDefaultComponent extends StatelessWidget {
         model.content.body?[ContentItemType.popover]?.title?[ContentItemType.text]?.properties?.keys.first ?? '';
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? EdgeInsetsFoundation.horizontal16).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    final textTheme = context.uiKitTheme?.boldTextTheme;
     final theme = context.uiKitTheme;
+    final textTheme = theme?.boldTextTheme;
+
+    TextStyle? textStyle = textTheme?.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
 
     return Scaffold(
       body: Form(
         key: formKey,
         child: BlurredAppBarPage(
           expandTitle: false,
-          title: S.of(context).EditProfile,
+          customTitle: Flexible(child: AutoSizeText(S.of(context).EditProfile, maxLines: 1, style: textStyle)),
           autoImplyLeading: true,
           centerTitle: true,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
