@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'booking_ui_model/subs_or_upsale_ui_model.dart';
+import 'booking_ui_model/subs_ui_model.dart';
 
 class CreateSubsComponent extends StatefulWidget {
   final SubsUiModel? subsUiModel;
