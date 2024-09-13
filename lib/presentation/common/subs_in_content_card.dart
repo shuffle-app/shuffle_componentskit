@@ -53,7 +53,7 @@ class SubsInContentCard extends StatelessWidget {
                   return SubsOrUpsaleItem(
                     limit: sub.bookingLimit,
                     titleOrPrice: sub.title,
-                    photoLink: sub.photo?.link,
+                    photoLink: sub.photoPath,
                     actualLimit: sub.actualbookingLimit,
                     description: sub.description,
                     selectedItem: selectedSubId == sub.id,
@@ -68,7 +68,7 @@ class SubsInContentCard extends StatelessWidget {
                   return SubsOrUpsaleItem(
                     limit: upsale.limit,
                     titleOrPrice: '${upsale.price} ${upsale.currency}',
-                    photoLink: upsale.photo?.link,
+                    photoLink: upsale.photoPath,
                     actualLimit: upsale.actualLimit,
                     description: upsale.description,
                     isSubs: false,
