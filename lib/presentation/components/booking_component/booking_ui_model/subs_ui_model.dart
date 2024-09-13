@@ -1,28 +1,24 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:shuffle_uikit/ui_models/places/base_ui_kit_media.dart';
-import 'package:image_picker/image_picker.dart';
 
 class SubsUiModel {
   int id;
-  BaseUiKitMedia? photo;
+  String? photoPath;
   String? title;
   String? description;
   String? bookingLimit;
   String? actualbookingLimit;
-  XFile? photoFile;
 
   SubsUiModel({
     required this.id,
-    this.photo,
+    this.photoPath,
     this.title,
     this.description,
     this.bookingLimit,
     this.actualbookingLimit,
-    this.photoFile,
   });
 
   String? validateCreation({bool checkDate = false}) {
-    if (photoFile == null) {
+    if (photoPath == null || (photoPath?.isEmpty ?? true)) {
       return S.current.XIsRequired(S.current.Photo);
     } else if (title == null) {
       return S.current.XIsRequired(S.current.Title);
@@ -48,21 +44,19 @@ class SubsUiModel {
 
   SubsUiModel copyWith({
     int? id,
-    BaseUiKitMedia? photo,
+    String? photoPath,
     String? title,
     String? description,
     String? bookingLimit,
     String? actualbookingLimit,
-    XFile? photoFile,
   }) {
     return SubsUiModel(
       id: id ?? this.id,
-      photo: photo ?? this.photo,
+      photoPath: photoPath ?? this.photoPath,
       title: title ?? this.title,
       description: description ?? this.description,
       bookingLimit: bookingLimit ?? this.bookingLimit,
       actualbookingLimit: actualbookingLimit ?? this.actualbookingLimit,
-      photoFile: photoFile ?? this.photoFile,
     );
   }
 }
