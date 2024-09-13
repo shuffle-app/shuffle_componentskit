@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/common/price_selector_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/booking_ui_model.dart';
-import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
+import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_subs_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_upsales_component.dart';
