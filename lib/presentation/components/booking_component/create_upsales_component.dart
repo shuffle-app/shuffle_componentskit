@@ -22,9 +22,10 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late XFile? file;
   late UpsaleUiModel _upsaleUiModel;
+
+  String? _validateText;
 
   BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
 
@@ -50,6 +51,12 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
       file = widget.upsaleUiModel?.photoFile;
     }
     super.didUpdateWidget(oldWidget);
+  }
+
+  _validateCreation() {
+    setState(() {
+      _validateText = _upsaleUiModel.validateCreation();
+    });
   }
 
   _onAddPhoto() async {
@@ -96,25 +103,11 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
           ),
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
-            child: Form(
-              key: _formKey,
-              child: UiKitInputFieldNoFill(
-                label: S.of(context).Description,
-                expands: true,
-                maxSymbols: 150,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return S.of(context).PleaseEnterValidDescription;
-                  }
-                  return null;
-                },
-                controller: _descriptionController,
-                onChanged: (value) {
-                  setState(() {
-                    _formKey.currentState!.validate();
-                  });
-                },
-              ),
+            child: UiKitInputFieldNoFill(
+              label: S.of(context).Description,
+              expands: true,
+              maxSymbols: 150,
+              controller: _descriptionController,
             ),
           ),
           SpacingFoundation.verticalSpace24,
@@ -165,27 +158,48 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
           SpacingFoundation.verticalSpace24,
         ],
       ),
-      bottomNavigationBar: context
-          .gradientButton(
-            data: BaseUiKitButtonData(
-              text: S.of(context).Save.toUpperCase(),
-              onPressed: () {
-                if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _upsaleUiModel.description = _descriptionController.text.trim();
-                  _upsaleUiModel.limit = _limitController.text;
-                  _upsaleUiModel.price = _priceController.text;
-                  _upsaleUiModel.photo = _photo;
-                  widget.onSave(_upsaleUiModel);
-                  context.pop();
-                }
-              },
+      bottomNavigationBar: SizedBox(
+        height: 1.sw <= 380 ? 80.h : 65.h,
+        width: double.infinity,
+        child: Column(
+          children: [
+            if (_validateText != null)
+              Text(
+                _validateText!,
+                style: context.uiKitTheme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
+              ),
+            SpacingFoundation.verticalSpace10,
+            Row(
+              children: [
+                Expanded(
+                  child: context
+                      .gradientButton(
+                        data: BaseUiKitButtonData(
+                          text: S.of(context).Save.toUpperCase(),
+                          onPressed: () {
+                            _upsaleUiModel.description = _descriptionController.text.trim();
+                            _upsaleUiModel.limit = _limitController.text;
+                            _upsaleUiModel.price = _priceController.text;
+                            _upsaleUiModel.photo = _photo;
+
+                            _validateCreation();
+                            if (_validateText == null) {
+                              widget.onSave(_upsaleUiModel);
+                              context.pop();
+                            }
+                          },
+                        ),
+                      )
+                      .paddingOnly(
+                        left: EdgeInsetsFoundation.all16,
+                        right: EdgeInsetsFoundation.all16,
+                      ),
+                ),
+              ],
             ),
-          )
-          .paddingOnly(
-            left: EdgeInsetsFoundation.all16,
-            right: EdgeInsetsFoundation.all16,
-            bottom: EdgeInsetsFoundation.vertical24,
-          ),
+          ],
+        ),
+      ),
     );
   }
 }
