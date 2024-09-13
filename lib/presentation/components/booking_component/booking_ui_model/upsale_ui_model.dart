@@ -22,6 +22,17 @@ class UpsaleUiModel {
     this.photoFile,
   });
 
+  String? validateCreation({bool checkDate = false}) {
+    if (photoFile == null) {
+      return S.current.XIsRequired(S.current.Photo);
+    } else if (description == null) {
+      return S.current.XIsRequired(S.current.Description);
+    } else if (description != null && (description!.isEmpty || description!.trim().isEmpty)) {
+      return S.current.XIsRequired(S.current.Description);
+    }
+    return null;
+  }
+
   UpsaleUiModel copyWith({
     int? id,
     BaseUiKitMedia? photo,
