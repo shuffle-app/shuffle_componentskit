@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/common/price_selector_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/booking_ui_model.dart';
-import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_or_upsale_ui_model.dart';
+import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_subs_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_upsales_component.dart';
@@ -9,7 +9,6 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class CreateBookingComponent extends StatefulWidget {
   final Function(BookingUiModel) onBookingCreated;
-
   final BookingUiModel? bookingUiModel;
 
   const CreateBookingComponent({
@@ -227,18 +226,16 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                         context
                             .badgeButtonNoValue(
                               data: BaseUiKitButtonData(
-                                onPressed: () {
-                                  context.push(
-                                    CreateSubsComponent(
-                                      onSave: (subsUiModel) {
-                                        setState(() {
-                                          _subsUiModels.add(subsUiModel);
-                                          _countSubsLimit();
-                                        });
-                                      },
-                                    ),
-                                  );
-                                },
+                                onPressed: () => context.push(
+                                  CreateSubsComponent(
+                                    onSave: (subsUiModel) {
+                                      setState(() {
+                                        _subsUiModels.add(subsUiModel);
+                                        _countSubsLimit();
+                                      });
+                                    },
+                                  ),
+                                ),
                                 iconWidget: DecoratedBox(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
@@ -280,19 +277,17 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                           _bookingUiModel.showSabsInContentCard = false;
                         }
                       },
-                      onEdit: () {
-                        context.push(
-                          CreateSubsComponent(
-                            onSave: (subsUiModel) {
-                              setState(() {
-                                _countSubsLimit();
-                                _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
-                              });
-                            },
-                            subsUiModel: sabsItem,
-                          ),
-                        );
-                      },
+                      onEdit: () => context.push(
+                        CreateSubsComponent(
+                          onSave: (subsUiModel) {
+                            setState(() {
+                              _countSubsLimit();
+                              _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
+                            });
+                          },
+                          subsUiModel: sabsItem,
+                        ),
+                      ),
                     );
                   }
                 },
@@ -320,17 +315,15 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                         context
                             .badgeButtonNoValue(
                               data: BaseUiKitButtonData(
-                                onPressed: () {
-                                  context.push(
-                                    CreateUpsalesComponent(
-                                      onSave: (upsaleUiModel) {
-                                        setState(() {
-                                          _upsaleUiModels.add(upsaleUiModel);
-                                        });
-                                      },
-                                    ),
-                                  );
-                                },
+                                onPressed: () => context.push(
+                                  CreateUpsalesComponent(
+                                    onSave: (upsaleUiModel) {
+                                      setState(() {
+                                        _upsaleUiModels.add(upsaleUiModel);
+                                      });
+                                    },
+                                  ),
+                                ),
                                 iconWidget: DecoratedBox(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
@@ -369,18 +362,16 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                           ? upsaleItem.price
                           : S.of(context).Free,
                       removeItem: () => _removeUpsaleItem(index - 1),
-                      onEdit: () {
-                        context.push(
-                          CreateUpsalesComponent(
-                            onSave: (upsaleUiModel) {
-                              setState(() {
-                                _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
-                              });
-                            },
-                            upsaleUiModel: upsaleItem,
-                          ),
-                        );
-                      },
+                      onEdit: () => context.push(
+                        CreateUpsalesComponent(
+                          onSave: (upsaleUiModel) {
+                            setState(() {
+                              _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
+                            });
+                          },
+                          upsaleUiModel: upsaleItem,
+                        ),
+                      ),
                     );
                   }
                 },
@@ -400,7 +391,6 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       _bookingUiModel.subsUiModel = _subsUiModels;
                       _bookingUiModel.upsaleUiModel = _upsaleUiModels;
                       widget.onBookingCreated(_bookingUiModel);
-                      context.pop();
                     }
                   },
                 ),

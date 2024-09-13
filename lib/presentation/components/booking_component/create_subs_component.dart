@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'booking_ui_model/subs_or_upsale_ui_model.dart';
+import 'booking_ui_model/subs_ui_model.dart';
 
 class CreateSubsComponent extends StatefulWidget {
   final SubsUiModel? subsUiModel;
@@ -22,8 +22,10 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late XFile? file;
   late SubsUiModel _subsUiModel;
+
+  String? _validateText;
 
   BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
 
@@ -35,6 +37,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
     _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
     _descriptionController.text = widget.subsUiModel?.description ?? '';
     _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
+    file = widget.subsUiModel?.photoFile;
   }
 
   @override
@@ -45,15 +48,23 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
       _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
       _descriptionController.text = widget.subsUiModel?.description ?? '';
       _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
+      file = widget.subsUiModel?.photoFile;
     }
     super.didUpdateWidget(oldWidget);
   }
 
+  _validateCreation() {
+    setState(() {
+      _validateText = _subsUiModel.validateCreation();
+    });
+  }
+
   _onAddPhoto() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    file = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (file != null) {
       setState(() {
-        _photo = UiKitMediaPhoto(link: file.path);
+        _photo = UiKitMediaPhoto(link: file!.path);
+        _subsUiModel.photoFile = file;
       });
     }
   }
@@ -67,113 +78,89 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: BlurredAppBarPage(
-          title: S.of(context).Subs,
-          centerTitle: true,
-          autoImplyLeading: true,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+      body: BlurredAppBarPage(
+        title: S.of(context).Subs,
+        centerTitle: true,
+        autoImplyLeading: true,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+        children: [
+          SpacingFoundation.verticalSpace16,
+          RowWithAddPhoto(
+            onPhotoDeleted: _onPhotoDeleted,
+            onAddPhoto: _onAddPhoto,
+            link: _photo.link,
+          ),
+          SpacingFoundation.verticalSpace24,
+          IntrinsicHeight(
+            child: UiKitInputFieldNoFill(
+              label: S.of(context).Title,
+              expands: true,
+              maxSymbols: 45,
+              controller: _titleController,
+            ),
+          ),
+          SpacingFoundation.verticalSpace24,
+          IntrinsicHeight(
+            child: UiKitInputFieldNoFill(
+              label: S.of(context).Description,
+              expands: true,
+              maxSymbols: 150,
+              controller: _descriptionController,
+            ),
+          ),
+          SpacingFoundation.verticalSpace24,
+          UiKitInputFieldNoFill(
+            label: S.of(context).BookingLimit,
+            controller: _limitController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
+          ),
+          SpacingFoundation.verticalSpace24,
+        ],
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 1.sw <= 380 ? 80.h : 65.h,
+        width: double.infinity,
+        child: Column(
           children: [
-            SpacingFoundation.verticalSpace16,
-            RowWithAddPhoto(
-              onPhotoDeleted: _onPhotoDeleted,
-              onAddPhoto: _onAddPhoto,
-              link: _photo.link,
-            ),
-            SpacingFoundation.verticalSpace24,
-            IntrinsicHeight(
-              child: UiKitInputFieldNoFill(
-                label: S.of(context).Title,
-                expands: true,
-                maxSymbols: 45,
-                controller: _titleController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return S.of(context).PleaseEnterValidTitle;
-                  } else if (value.length < 3) {
-                    return S.of(context).PleaseEnterValidTitle;
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    _formKey.currentState!.validate();
-                  });
-                },
+            if (_validateText != null)
+              Text(
+                _validateText!,
+                style: context.uiKitTheme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
               ),
-            ),
-            SpacingFoundation.verticalSpace24,
-            IntrinsicHeight(
-              child: UiKitInputFieldNoFill(
-                label: S.of(context).Description,
-                expands: true,
-                maxSymbols: 150,
-                validator: (value) {
-                  if (value == null || value.isEmpty || value.trim().isEmpty) {
-                    return S.of(context).PleaseEnterValidDescription;
-                  }
-                  return null;
-                },
-                controller: _descriptionController,
-                onChanged: (value) {
-                  setState(() {
-                    _formKey.currentState!.validate();
-                  });
-                },
-              ),
-            ),
-            SpacingFoundation.verticalSpace24,
-            UiKitInputFieldNoFill(
-              label: S.of(context).BookingLimit,
-              controller: _limitController,
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value != null && value.isEmpty) {
-                  return S.of(context).PleaseEnterLimit;
-                } else if (value != null && value.isNotEmpty) {
-                  final newValue = int.parse(value.replaceAll(' ', ''));
+            SpacingFoundation.verticalSpace10,
+            Row(
+              children: [
+                Expanded(
+                  child: context
+                      .gradientButton(
+                        data: BaseUiKitButtonData(
+                          text: S.of(context).Save.toUpperCase(),
+                          onPressed: () {
+                            _subsUiModel.title = _titleController.text.trim();
+                            _subsUiModel.bookingLimit = _limitController.text;
+                            _subsUiModel.description = _descriptionController.text.trim();
+                            _subsUiModel.photo = _photo;
+                            _validateCreation();
 
-                  if (newValue <= 0) {
-                    return S.of(context).PleaseEnterCurrentLimit;
-                  }
-                  return null;
-                }
-                return null;
-              },
-              inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
-              onChanged: (value) {
-                setState(() {
-                  _formKey.currentState?.validate();
-                });
-              },
+                            if (_validateText == null) {
+                              widget.onSave(_subsUiModel);
+                              context.pop();
+                            }
+                          },
+                        ),
+                      )
+                      .paddingOnly(
+                        left: EdgeInsetsFoundation.all16,
+                        right: EdgeInsetsFoundation.all16,
+                      ),
+                ),
+              ],
             ),
-            SpacingFoundation.verticalSpace24,
           ],
         ),
       ),
-      bottomNavigationBar: context
-          .gradientButton(
-            data: BaseUiKitButtonData(
-              text: S.of(context).Save.toUpperCase(),
-              onPressed: () {
-                if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _subsUiModel.title = _titleController.text.trim();
-                  _subsUiModel.bookingLimit = _limitController.text;
-                  _subsUiModel.description = _descriptionController.text.trim();
-                  _subsUiModel.photo = _photo;
-                  widget.onSave(_subsUiModel);
-                  context.pop();
-                }
-              },
-            ),
-          )
-          .paddingOnly(
-            left: EdgeInsetsFoundation.all16,
-            right: EdgeInsetsFoundation.all16,
-            bottom: EdgeInsetsFoundation.vertical24,
-          ),
     );
   }
 }
