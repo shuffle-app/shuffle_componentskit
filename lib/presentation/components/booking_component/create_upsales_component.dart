@@ -27,7 +27,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
 
   String? _validateText;
 
-  BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
+  String? _photoPath;
 
   @override
   void initState() {
@@ -36,8 +36,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
     _priceController.text = widget.upsaleUiModel?.price ?? '';
     _limitController.text = widget.upsaleUiModel?.limit ?? '';
     _descriptionController.text = widget.upsaleUiModel?.description ?? '';
-    _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
-    file = widget.upsaleUiModel?.photoFile;
+    _photoPath = widget.upsaleUiModel?.photoPath ?? '';
   }
 
   @override
@@ -47,8 +46,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
       _priceController.text = widget.upsaleUiModel?.price ?? '';
       _limitController.text = widget.upsaleUiModel?.limit ?? '';
       _descriptionController.text = widget.upsaleUiModel?.description ?? '';
-      _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
-      file = widget.upsaleUiModel?.photoFile;
+      _photoPath = widget.upsaleUiModel?.photoPath ?? '';
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -63,15 +61,14 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
     final file = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (file != null) {
       setState(() {
-        _photo = UiKitMediaPhoto(link: file.path);
-        _upsaleUiModel.photoFile = file;
+        _photoPath = file.path;
       });
     }
   }
 
   _onPhotoDeleted() {
     setState(() {
-      _photo = UiKitMediaPhoto(link: '');
+      _photoPath = '';
     });
   }
 
@@ -99,7 +96,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
           RowWithAddPhoto(
             onPhotoDeleted: _onPhotoDeleted,
             onAddPhoto: _onAddPhoto,
-            link: _photo.link,
+            link: _photoPath ?? '',
           ),
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
@@ -180,7 +177,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                             _upsaleUiModel.description = _descriptionController.text.trim();
                             _upsaleUiModel.limit = _limitController.text;
                             _upsaleUiModel.price = _priceController.text;
-                            _upsaleUiModel.photo = _photo;
+                            _upsaleUiModel.photoPath = _photoPath;
 
                             _validateCreation();
                             if (_validateText == null) {

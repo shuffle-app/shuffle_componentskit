@@ -267,7 +267,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     return SubsOrUpsaleItem(
                       limit: sabsItem.bookingLimit,
                       titleOrPrice: sabsItem.title,
-                      photoLink: sabsItem.photo?.link,
+                      photoLink: sabsItem.photoPath,
                       actualLimit: sabsItem.actualbookingLimit,
                       description: sabsItem.description,
                       removeItem: () {
@@ -357,7 +357,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       limit: upsaleItem.limit,
                       isSubs: false,
                       actualLimit: upsaleItem.actualLimit,
-                      photoLink: upsaleItem.photo?.link,
+                      photoLink: upsaleItem.photoPath,
                       titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
                           ? upsaleItem.price
                           : S.of(context).Free,

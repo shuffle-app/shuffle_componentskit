@@ -27,7 +27,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
 
   String? _validateText;
 
-  BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
+  String _photoPath = '';
 
   @override
   void initState() {
@@ -36,8 +36,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
     _titleController.text = widget.subsUiModel?.title ?? '';
     _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
     _descriptionController.text = widget.subsUiModel?.description ?? '';
-    _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
-    file = widget.subsUiModel?.photoFile;
+    _photoPath = widget.subsUiModel?.photoPath ?? '';
   }
 
   @override
@@ -47,8 +46,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
       _titleController.text = widget.subsUiModel?.title ?? '';
       _limitController.text = widget.subsUiModel?.bookingLimit ?? '';
       _descriptionController.text = widget.subsUiModel?.description ?? '';
-      _photo = widget.subsUiModel?.photo ?? UiKitMediaPhoto(link: '');
-      file = widget.subsUiModel?.photoFile;
+      _photoPath = widget.subsUiModel?.photoPath ?? '';
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -63,15 +61,14 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
     file = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (file != null) {
       setState(() {
-        _photo = UiKitMediaPhoto(link: file!.path);
-        _subsUiModel.photoFile = file;
+        _photoPath = file!.path;
       });
     }
   }
 
   _onPhotoDeleted() {
     setState(() {
-      _photo = UiKitMediaPhoto(link: '');
+      _photoPath = '';
     });
   }
 
@@ -89,7 +86,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
           RowWithAddPhoto(
             onPhotoDeleted: _onPhotoDeleted,
             onAddPhoto: _onAddPhoto,
-            link: _photo.link,
+            link: _photoPath,
           ),
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
@@ -141,7 +138,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
                             _subsUiModel.title = _titleController.text.trim();
                             _subsUiModel.bookingLimit = _limitController.text;
                             _subsUiModel.description = _descriptionController.text.trim();
-                            _subsUiModel.photo = _photo;
+                            _subsUiModel.photoPath = _photoPath;
                             _validateCreation();
 
                             if (_validateText == null) {

@@ -1,29 +1,26 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UpsaleUiModel {
   int id;
-  BaseUiKitMedia? photo;
+  String? photoPath;
   String? description;
   String? limit;
   String? actualLimit;
   String? price;
   String? currency;
-  XFile? photoFile;
 
   UpsaleUiModel({
     required this.id,
-    this.photo,
+    this.photoPath,
     this.description,
     this.limit,
     this.actualLimit,
     this.price,
     this.currency,
-    this.photoFile,
   });
 
   String? validateCreation({bool checkDate = false}) {
-    if (photoFile == null) {
+    if (photoPath == null || (photoPath?.isEmpty ?? true)) {
       return S.current.XIsRequired(S.current.Photo);
     } else if (description == null) {
       return S.current.XIsRequired(S.current.Description);
@@ -35,23 +32,21 @@ class UpsaleUiModel {
 
   UpsaleUiModel copyWith({
     int? id,
-    BaseUiKitMedia? photo,
+    String? photoPath,
     String? description,
     String? limit,
     String? actualLimit,
     String? price,
     String? currency,
-    XFile? photoFile,
   }) {
     return UpsaleUiModel(
       id: id ?? this.id,
-      photo: photo ?? this.photo,
+      photoPath: photoPath ?? this.photoPath,
       description: description ?? this.description,
       limit: limit ?? this.limit,
       actualLimit: actualLimit ?? this.actualLimit,
       price: price ?? this.price,
       currency: currency ?? this.currency,
-      photoFile: photoFile ?? this.photoFile,
     );
   }
 }
