@@ -16,7 +16,7 @@ class CreateEventComponent extends StatefulWidget {
   final VoidCallback? onEventDeleted;
   final Future Function(UiEventModel) onEventCreated;
   final Future<String?> Function()? getLocation;
-  final Future<UiKitTag?> Function()? onCategoryChanged;
+  final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
   final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
@@ -294,9 +294,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         if (averageSelected) {
                           _priceController.text = averagePrice;
                         } else {
-                          _priceController.text = rangePrice1;
                           if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
-                            _priceController.text += '-$rangePrice2';
+                            _priceController.text = '$rangePrice1-$rangePrice2';
+                          } else {
+                            _priceController.text = rangePrice1;
                           }
                         }
                         _eventToEdit.currency = currency;
@@ -344,7 +345,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             title: S.of(context).EventType,
             listUiKitTags: [_eventToEdit.eventType ?? UiKitTag(title: '', icon: '')],
             onTap: () {
-              widget.onCategoryChanged?.call().then((value) {
+              widget.onCategoryChanged?.call(_eventToEdit.contentType).then((value) {
                 setState(() {
                   _eventToEdit.eventType = value;
                 });
@@ -501,53 +502,53 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding)
           ],
           SpacingFoundation.verticalSpace24,
-          SafeArea(
-            top: false,
-            child: context.button(
-              data: BaseUiKitButtonData(
-                fit: ButtonFit.fitWidth,
-                autoSizeGroup: AutoSizeGroup(),
-                text: S.of(context).CreateBooking,
-                onPressed: () {
-                  _bookingUiModel ??= BookingUiModel(id: -1);
+          context
+              .button(
+                data: BaseUiKitButtonData(
+                  fit: ButtonFit.fitWidth,
+                  autoSizeGroup: AutoSizeGroup(),
+                  text: S.of(context).CreateBooking,
+                  onPressed: () {
+                    _bookingUiModel ??= BookingUiModel(id: -1);
 
-                  showUiKitGeneralFullScreenDialog(
-                    context,
-                    GeneralDialogData(
-                      isWidgetScrollable: true,
-                      topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                      child: SelectBookingLinkComponent(
-                        onExternalTap: () => showUiKitGeneralFullScreenDialog(
-                          context,
-                          GeneralDialogData(
-                            isWidgetScrollable: true,
-                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                            child: AddLinkComponent(
-                              onSave: () {
-                                _eventToEdit.bookingUrl = _bookingUrlController.text;
-                                context.pop();
+                    showUiKitGeneralFullScreenDialog(
+                      context,
+                      GeneralDialogData(
+                        isWidgetScrollable: true,
+                        topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                        child: SelectBookingLinkComponent(
+                          onExternalTap: () {
+                            context.pop();
+                            showUiKitGeneralFullScreenDialog(
+                              context,
+                              GeneralDialogData(
+                                isWidgetScrollable: true,
+                                topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                                child: AddLinkComponent(
+                                  onSave: () {
+                                    _eventToEdit.bookingUrl = _bookingUrlController.text;
+                                    context.pop();
+                                  },
+                                  linkController: _bookingUrlController,
+                                ),
+                              ),
+                            );
+                          },
+                          onBookingTap: () => context.push(
+                            CreateBookingComponent(
+                              bookingUiModel: _bookingUiModel,
+                              onBookingCreated: (bookingUiModel) {
+                                _bookingUiModel = bookingUiModel;
                               },
-                              linkController: _bookingUrlController,
                             ),
                           ),
                         ),
-                        onBookingTap: () => context.push(
-                          CreateBookingComponent(
-                            bookingUiModel: _bookingUiModel,
-                            onBookingCreated: (bookingUiModel) {
-                              if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
-                                _bookingUiModel = bookingUiModel;
-                              }
-                            },
-                          ),
-                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ).paddingSymmetric(horizontal: horizontalPadding),
+                    );
+                  },
+                ),
+              )
+              .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           SafeArea(
             top: false,
@@ -562,7 +563,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.media = [..._photos, ..._videos];
                   _eventToEdit.website = _websiteController.text;
                   _eventToEdit.phone = _phoneController.text;
-                  _eventToEdit.price = _priceController.text;
+                  _eventToEdit.price = _priceController.text.replaceAll(' ', '');
                   _eventToEdit.bookingUiModel = _bookingUiModel;
                   _eventToEdit.upsalesItems = _upsalesSwitcher
                       ? (_upsalesController.text.isNotEmpty

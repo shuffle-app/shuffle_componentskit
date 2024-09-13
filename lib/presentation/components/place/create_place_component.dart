@@ -16,7 +16,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final VoidCallback? onPlaceDeleted;
   final Future Function(UiPlaceModel) onPlaceCreated;
   final Future<String?> Function()? getLocation;
-  final Future<UiKitTag?> Function()? onCategoryChanged;
+  final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
   final List<UiKitTag> Function(String) propertiesOptions;
   final List<UiScheduleModel> availableTimeTemplates;
@@ -427,7 +427,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 _placeToEdit.placeType ?? UiKitTag(title: '', icon: null),
               ],
               onTap: () {
-                widget.onCategoryChanged?.call().then((value) {
+                widget.onCategoryChanged?.call(_placeToEdit.contentType).then((value) {
                   setState(() {
                     _placeToEdit.placeType = value;
                   });
@@ -549,7 +549,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     _placeToEdit.website = _websiteController.text;
                     _placeToEdit.phone = _phoneController.text;
                     _placeToEdit.description = _descriptionController.text;
-                    _placeToEdit.price = _priceController.text;
+                    _placeToEdit.price = _priceController.text.replaceAll(' ', '');
                     _placeToEdit.media = [..._photos, ..._videos];
                     _placeToEdit.bookingUiModel = _bookingUiModel;
                     widget.onPlaceCreated.call(_placeToEdit);

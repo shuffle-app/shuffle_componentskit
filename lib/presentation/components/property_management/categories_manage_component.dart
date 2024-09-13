@@ -59,7 +59,7 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
   @override
   void didUpdateWidget(covariant CategoriesManageComponent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedCategory != oldWidget.selectedCategory ) {
+    if (widget.selectedCategory != oldWidget.selectedCategory) {
       setState(() {
         if (widget.selectedCategory?.categoryProperties.firstWhereOrNull((e) => e.id == selectedProperty?.id) != null) {
           selectedProperty =
@@ -69,7 +69,6 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
         }
       });
     }
-
   }
 
   @override
@@ -99,10 +98,13 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                         ),
                       ),
                       SpacingFoundation.horizontalSpace16,
-                      Text(
-                        widget.isEntertainmentSelected ? S.current.Entertainment : S.current.Business,
-                        style: uiKitTheme?.regularTextTheme.labelSmall,
-                      ),
+                      InkWell(
+                          onTap: widget.onChangeType,
+                          child:
+                          Text(
+                            widget.isEntertainmentSelected ? S.current.Entertainment : S.current.Business,
+                            style: uiKitTheme?.regularTextTheme.labelSmall,
+                          )),
                       SpacingFoundation.horizontalSpace16,
                       context.boxIconButton(
                         data: BaseUiKitButtonData(
