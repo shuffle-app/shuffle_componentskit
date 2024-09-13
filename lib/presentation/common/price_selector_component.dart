@@ -119,26 +119,25 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
             style: theme?.boldTextTheme.title2,
           ),
           SpacingFoundation.verticalSpace16,
-          Row(
-            children: [
-              GestureDetector(
-                child: UiKitRadio(selected: !_averageIsSelected),
-                onTap: () {
-                  _priceRangeController2IsLess();
+          GestureDetector(
+              onTap: () {
+                _priceRangeController2IsLess();
 
-                  setState(() {
-                    _averageIsSelected = false;
-                  });
-                  _submit();
-                },
-              ),
-              SpacingFoundation.horizontalSpace12,
-              Text(
-                S.of(context).AverageBill,
-                style: theme?.boldTextTheme.subHeadline,
-              ),
-            ],
-          ),
+                setState(() {
+                  _averageIsSelected = false;
+                });
+                _submit();
+              },
+              child: Row(
+                children: [
+                  UiKitRadio(selected: !_averageIsSelected),
+                  SpacingFoundation.horizontalSpace12,
+                  Text(
+                    S.of(context).AverageBill,
+                    style: theme?.boldTextTheme.subHeadline,
+                  ),
+                ],
+              )),
           SpacingFoundation.verticalSpace16,
           Row(
             children: [
@@ -150,7 +149,7 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
                   controller: widget.priceAverageController,
                   fillColor: theme?.colorScheme.surface3,
                   inputFormatters: [PriceWithSpacesFormatter()],
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   onTapOutside: (_) => _priceRangeController2IsLess(),
                   onChanged: (value) => _submit(),
                 ),
@@ -158,24 +157,23 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
             ],
           ),
           SpacingFoundation.verticalSpace24,
-          Row(
-            children: [
-              GestureDetector(
-                child: UiKitRadio(selected: _averageIsSelected),
-                onTap: () {
-                  setState(() {
-                    _averageIsSelected = true;
-                  });
-                  _submit();
-                },
-              ),
-              SpacingFoundation.horizontalSpace12,
-              Text(
-                S.of(context).PriceRange,
-                style: theme?.boldTextTheme.subHeadline,
-              ),
-            ],
-          ),
+          GestureDetector(
+              onTap: () {
+                setState(() {
+                  _averageIsSelected = true;
+                });
+                _submit();
+              },
+              child: Row(
+                children: [
+                  UiKitRadio(selected: _averageIsSelected),
+                  SpacingFoundation.horizontalSpace12,
+                  Text(
+                    S.of(context).PriceRange,
+                    style: theme?.boldTextTheme.subHeadline,
+                  ),
+                ],
+              )),
           SpacingFoundation.verticalSpace16,
           Column(
             children: [
@@ -190,7 +188,7 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
                       controller: widget.priceRangeControllerStart,
                       fillColor: theme?.colorScheme.surface3,
                       inputFormatters: [PriceWithSpacesFormatter()],
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(),
                       onTapOutside: (_) => _priceRangeController2IsLess(),
                       onSubmitted: (_) => _priceRangeController2IsLess(),
                       onTap: () => _priceRangeController2IsLess(),
