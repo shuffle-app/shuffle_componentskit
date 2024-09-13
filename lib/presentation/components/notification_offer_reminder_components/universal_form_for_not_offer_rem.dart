@@ -39,7 +39,6 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
         maxLines: 1,
       ),
       autoImplyLeading: true,
-      centerTitle: true,
       appBarTrailing: context.outlinedButton(
         padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
         data: BaseUiKitButtonData(

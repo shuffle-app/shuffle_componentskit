@@ -23,7 +23,7 @@ class BookingUiModel {
     this.subsUiModel,
     this.upsaleUiModel,
     this.selectedDateTime,
-    this.showSabsInContentCard = false,
+    this.showSabsInContentCard = true,
   });
 
   BookingUiModel copyWith({

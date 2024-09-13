@@ -22,6 +22,9 @@ class EventComponent extends StatefulWidget {
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
   final ValueChanged<FeedbackUiModel>? onFeedbackTap;
+  final bool showOfferButton;
+  final int? priceForOffer;
+  final VoidCallback? onOfferButtonTap;
 
   const EventComponent({
     super.key,
@@ -40,6 +43,9 @@ class EventComponent extends StatefulWidget {
     this.onLikedFeedback,
     this.onDislikedFeedback,
     this.onFeedbackTap,
+    this.showOfferButton = false,
+    this.priceForOffer,
+    this.onOfferButtonTap,
   });
 
   @override
@@ -315,6 +321,35 @@ class _EventComponentState extends State<EventComponent> {
           ).paddingSymmetric(horizontal: horizontalMargin)),
           SpacingFoundation.verticalSpace24,
         ],
+        if (widget.showOfferButton)
+          UiKitCardWrapper(
+            color: theme?.colorScheme.surface1,
+            padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+            borderRadius: BorderRadiusFoundation.all24r,
+            child: Column(
+              children: [
+                Text(
+                  S.of(context).CreateAUSP(widget.priceForOffer ?? 5),
+                  style: boldTextTheme?.caption1Medium,
+                ),
+                SpacingFoundation.verticalSpace4,
+                SizedBox(
+                  width: double.infinity,
+                  child: context.smallOutlinedButton(
+                    gradient: GradientFoundation.defaultLinearGradient,
+                    data: BaseUiKitButtonData(
+                      text: S.of(context).Offer.toUpperCase(),
+                      onPressed: widget.onOfferButtonTap,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ).paddingOnly(
+            left: horizontalMargin,
+            right: horizontalMargin,
+            bottom: SpacingFoundation.verticalSpacing24,
+          ),
         if (widget.event.bookingUiModel?.subsUiModel != null &&
             widget.event.bookingUiModel!.showSabsInContentCard &&
             widget.event.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
