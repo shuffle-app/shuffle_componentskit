@@ -70,7 +70,17 @@ class _MyAppState extends State<MyApp> {
               // theme: UiKitThemeFoundation.lightTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
+                  ? GlobalComponent(globalConfiguration: configuration, child: UnifiedVerificationComponent(
+                uiModel: UiUnifiedVerificationModel(),
+                credentialsController: TextEditingController(),
+                availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
+                formKey: GlobalKey<FormState>(),
+                passwordController: TextEditingController(),
+                onSocialsLogin: (socialsLoginData) {},
+                onSubmit: (isPersonalSelected) {
+                  log('isPersonalSelected $isPersonalSelected');
+                },
+              ),)
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.18')
