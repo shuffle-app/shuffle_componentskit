@@ -367,7 +367,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                           onPressed: () {
                             if (widget.passwordController.text.isNotEmpty &&
                                 widget.credentialsController.text.isNotEmpty) {
-                              widget.onSubmit?.call(true);
+                              widget.onSubmit?.call(false);
                             }
                           },
                           loading: widget.loading,
