@@ -192,253 +192,190 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
     final regTextTheme = context.uiKitTheme?.regularTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
 
-    if (!inited) return const LoadingWidget();
+    if (!inited) {
+      return const Scaffold(body: LoadingWidget());
+    }
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Positioned(
-          top: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing6,
-          right: SpacingFoundation.horizontalSpacing16,
-          child: ImageWidget(
-            link: decorationLink,
-            fit: BoxFit.fitWidth,
-            width: 1.sw,
-          ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Scaffold(
+        body: Stack(
+          alignment: Alignment.topCenter,
+          fit: StackFit.expand,
           children: [
-            SizedBox(
-              height: MediaQuery.viewPaddingOf(context).top,
-            ),
-            Text(
-              S.current.CredentialsVerificationTitle,
-              style: textTheme?.titleLarge.copyWith(fontSize: isSmallScreen ? 24.w : null),
-            ),
-            isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-            Text(
-              S.current.CredentialsVerificationPrompt,
-              style: textTheme?.subHeadline.copyWith(fontSize: isSmallScreen ? 14.w : null),
-            ),
-            KeyboardVisibilityBuilder(builder: (context, visibility) {
-              late final double height;
-              if (visibility) {
-                if (isSmallScreen) {
-                  if (hasPasswordError) {
-                    height = 0;
-                  } else {
-                    height = 0;
-                  }
-                } else {
-                  if (hasPasswordError) {
-                    height = SpacingFoundation.verticalSpacing12;
-                  } else {
-                    height = SpacingFoundation.verticalSpacing24;
-                  }
-                }
-              } else {
-                if (isSmallScreen) {
-                  height = 0.1625.sh;
-                } else {
-                  if (hasPasswordError) {
-                    height = 0.14.sh;
-                  } else {
-                    height = 0.165.sh;
-                  }
-                }
-              }
-
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                height: height,
-              );
-            }),
-            KeyboardVisibilityBuilder(
-              builder: (context, keyboardVisible) {
-                return AnimatedSwitcher(
-                  reverseDuration: const Duration(milliseconds: 250),
-                  duration: const Duration(milliseconds: 125),
-                  transitionBuilder: (child, animation) => FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // const Spacer(flex: 1),
-                      if (widget.availableLocales != null &&
-                          widget.availableLocales!.isNotEmpty &&
-                          !keyboardVisible) ...[
-                        UiKitCardWrapper(
-                          color: colorScheme?.surface1,
-                          borderRadius: BorderRadiusFoundation.max,
-                          child: UiKitLocaleSelector(
-                              selectedLocale: widget.availableLocales!
-                                  .firstWhere((element) => element.locale.languageCode == Intl.getCurrentLocale()),
-                              availableLocales: widget.availableLocales!,
-                              onLocaleChanged: (LocaleModel value) {
-                                context.findAncestorWidgetOfExactType<UiKitTheme>()?.onLocaleUpdated(value.locale);
-                                setState(() {});
-                              }).paddingAll(EdgeInsetsFoundation.all4),
-                        ),
-                        isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                      ],
-                      if (!keyboardVisible) ...[
-                        UiKitCustomTabBar(
-                          tabController: tabController,
-                          selectedTab: _selectedTab,
-                          tabs: tabs,
-                          onTappedTab: (tabIndex) {
-                            setState(() {
-                              _selectedTab = tabs.elementAt(tabIndex).customValue;
-                            });
-                          },
-                        ),
-                        isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                      ] else
-                        isSmallScreen ? const SizedBox.shrink() : 20.h.heightBox
-                    ],
-                  ),
-                );
-              },
-            ),
-            SizedBox(
-              height: 0.26.sh,
-              child: TabBarView(
-                controller: tabController,
-                children: [
-                  UiKitCardWrapper(
-                    borderRadius: BorderRadiusFoundation.all28,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return socials.elementAt(index);
-                          },
-                          separatorBuilder: (context, index) => SpacingFoundation.verticalSpace12,
-                          itemCount: socials.length,
-                        ),
-                        // if (tabController.index >= 1) SpacingFoundation.verticalSpace16,
-                      ],
-                    ),
-                  ),
-                  Form(
-                      key: widget.formKey,
-                      child: EmailVerificationForm(
-                        credentialsController: widget.credentialsController,
-                        passwordController: widget.passwordController,
-                        authType: authType,
-                        countrySelectorTitle: countrySelectorTitle,
-                        credentialsValidator: widget.credentialsValidator,
-                        isSmallScreen: isSmallScreen,
-                        loading: widget.loading,
-                        onCountrySelected: widget.onCountrySelected,
-                        passwordValidator: widget.passwordValidator,
-                        uiModel: widget.uiModel,
-                        hasPasswordError: hasPasswordError,
-                      )),
-                ],
+            Positioned(
+              top: MediaQuery.viewPaddingOf(context).top + SpacingFoundation.verticalSpacing6,
+              right: SpacingFoundation.horizontalSpacing16,
+              child: ImageWidget(
+                link: decorationLink,
+                fit: BoxFit.fitWidth,
+                width: 1.sw,
               ),
             ),
-            KeyboardVisibilityBuilder(
-              builder: (context, visible) => AnimatedSwitcher(
-                reverseDuration: const Duration(milliseconds: 50),
-                duration: const Duration(milliseconds: 500),
-                transitionBuilder: (child, animation) => SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 1),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  ),
-                ),
-                child: !visible
-                    ? Column(
-                        children: [
-                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${S.of(context).ByContinuingYouAcceptThe} ',
-                                  style: regTextTheme?.caption4,
+            Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              SizedBox(
+                height: MediaQuery.viewPaddingOf(context).top,
+              ),
+              Text(
+                S.current.CredentialsVerificationTitle,
+                style: textTheme?.titleLarge.copyWith(fontSize: isSmallScreen ? 24.w : null),
+              ),
+              isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+              Text(
+                S.current.CredentialsVerificationPrompt,
+                style: textTheme?.subHeadline.copyWith(fontSize: isSmallScreen ? 14.w : null),
+              )
+            ]).paddingSymmetric(
+              horizontal: horizontalMargin,
+              vertical: verticalMargin,
+            ),
+            Positioned(
+                bottom: 0,
+                right: horizontalMargin,
+                left: horizontalMargin,
+                child: KeyboardVisibilityBuilder(
+                    builder: (context, isVisible) => UiKitCardWrapper(
+                          color: isVisible ? colorScheme?.surface1 : Colors.transparent,
+                          borderRadius:isVisible ? BorderRadiusFoundation.all24 : null,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if (widget.availableLocales != null && widget.availableLocales!.isNotEmpty) ...[
+                                UiKitCardWrapper(
+                                  color: colorScheme?.surface1,
+                                  borderRadius: BorderRadiusFoundation.max,
+                                  child: UiKitLocaleSelector(
+                                      selectedLocale: widget.availableLocales!.firstWhere(
+                                          (element) => element.locale.languageCode == Intl.getCurrentLocale()),
+                                      availableLocales: widget.availableLocales!,
+                                      onLocaleChanged: (LocaleModel value) {
+                                        context
+                                            .findAncestorWidgetOfExactType<UiKitTheme>()
+                                            ?.onLocaleUpdated(value.locale);
+                                        setState(() {});
+                                      }).paddingAll(EdgeInsetsFoundation.all4),
                                 ),
-                                TextSpan(
-                                  text: S.current.TermsOfService,
-                                  style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.push(
-                                          WebViewScreen(
-                                            title: S.current.TermsOfService,
-                                            url: PolicyLocalizer.localizedTermsOfService(
-                                              Localizations.localeOf(context).languageCode,
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                                TextSpan(
-                                  text: S.of(context).AndWithWhitespaces.toLowerCase(),
-                                  style: regTextTheme?.caption4,
-                                ),
-                                TextSpan(
-                                  text: S.current.PrivacyPolicy,
-                                  style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.push(
-                                          WebViewScreen(
-                                            title: S.current.PrivacyPolicy,
-                                            url: PolicyLocalizer.localizedPrivacyPolicy(
-                                              Localizations.localeOf(context).languageCode,
-                                            ),
-                                          ),
-                                        ),
-                                ),
+                                isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
                               ],
-                            ),
+                              UiKitCustomTabBar(
+                                tabController: tabController,
+                                selectedTab: _selectedTab,
+                                tabs: tabs,
+                                onTappedTab: (tabIndex) {
+                                  setState(() {
+                                    _selectedTab = tabs.elementAt(tabIndex).customValue;
+                                  });
+                                },
+                              ),
+                              isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
+                              SizedBox(
+                                height: 0.26.sh,
+                                child: TabBarView(
+                                  controller: tabController,
+                                  children: [
+                                    UiKitCardWrapper(
+                                      borderRadius: BorderRadiusFoundation.all28,
+                                      child: ListView.separated(
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        padding: EdgeInsets.zero,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          return socials.elementAt(index);
+                                        },
+                                        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace4,
+                                        itemCount: socials.length,
+                                      ),
+                                    ),
+                                    Form(
+                                        key: widget.formKey,
+                                        child: EmailVerificationForm(
+                                          credentialsController: widget.credentialsController,
+                                          passwordController: widget.passwordController,
+                                          authType: authType,
+                                          countrySelectorTitle: countrySelectorTitle,
+                                          credentialsValidator: widget.credentialsValidator,
+                                          isSmallScreen: isSmallScreen,
+                                          loading: widget.loading,
+                                          onCountrySelected: widget.onCountrySelected,
+                                          passwordValidator: widget.passwordValidator,
+                                          uiModel: widget.uiModel,
+                                          hasPasswordError: hasPasswordError,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          isSmallScreen ? SpacingFoundation.verticalSpace8 : SpacingFoundation.verticalSpace16,
-                          SizedBox(
-                            height: isSmallScreen ? 51.h : null,
-                            child: AnimatedOpacity(
-                              opacity: tabController.index >= 1 ? 1 : 0,
-                              duration: const Duration(milliseconds: 500),
-                              child: context.button(
-                                data: BaseUiKitButtonData(
-                                  text: S.of(context).Next.toUpperCase(),
-                                  onPressed: () {
-                                    if (widget.passwordController.text.isNotEmpty &&
-                                        widget.credentialsController.text.isNotEmpty) {
-                                      widget.onSubmit?.call(_selectedTab == tabs.first.customValue);
-                                    }
-                                  },
-                                  loading: widget.loading,
-                                  fit: ButtonFit.fitWidth,
+                        ))),
+          ],
+        ),
+        bottomNavigationBar: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SpacingFoundation.verticalSpace16,
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${S.of(context).ByContinuingYouAcceptThe} ',
+                      style: regTextTheme?.caption4,
+                    ),
+                    TextSpan(
+                      text: S.current.TermsOfService,
+                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => context.push(
+                              WebViewScreen(
+                                title: S.current.TermsOfService,
+                                url: PolicyLocalizer.localizedTermsOfService(
+                                  Localizations.localeOf(context).languageCode,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    : !visible
-                        ? (16.h * 3).heightBox
-                        : SpacingFoundation.none,
+                    ),
+                    TextSpan(
+                      text: S.of(context).AndWithWhitespaces.toLowerCase(),
+                      style: regTextTheme?.caption4,
+                    ),
+                    TextSpan(
+                      text: S.current.PrivacyPolicy,
+                      style: regTextTheme?.caption4.copyWith(color: ColorsFoundation.darkNeutral600),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => context.push(
+                              WebViewScreen(
+                                title: S.current.PrivacyPolicy,
+                                url: PolicyLocalizer.localizedPrivacyPolicy(
+                                  Localizations.localeOf(context).languageCode,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ).paddingSymmetric(
-          horizontal: horizontalMargin,
-          vertical: verticalMargin,
-        ),
-      ],
-    );
+              SpacingFoundation.verticalSpace16,
+              AnimatedOpacity(
+                  opacity: tabController.index >= 1 ? 1 : 0,
+                  duration: const Duration(milliseconds: 500),
+                  child: SizedBox(
+                      height: 45.w,
+                      // height: tabController.index >= 1 ? 60 : 0,
+                      child: context.button(
+                        data: BaseUiKitButtonData(
+                          text: S.of(context).Next.toUpperCase(),
+                          onPressed: () {
+                            if (widget.passwordController.text.isNotEmpty &&
+                                widget.credentialsController.text.isNotEmpty) {
+                              widget.onSubmit?.call(false);
+                            }
+                          },
+                          loading: widget.loading,
+                          fit: ButtonFit.fitWidth,
+                        ),
+                      ))),
+            ],
+          ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+        ));
   }
 }
