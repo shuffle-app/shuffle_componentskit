@@ -8,38 +8,29 @@ class OffersComponent extends StatelessWidget {
   final ValueChanged<int?>? onEditOffer;
   final ValueChanged<int?>? onRemoveOffer;
   final VoidCallback? onCreateOffer;
-  late final GlobalKey<SliverAnimatedListState> _listKey;
-  OffersComponent({
+  final GlobalKey<SliverAnimatedListState> listKey;
+
+  const OffersComponent({
     super.key,
+    required this.listKey,
     this.placeOrEventName,
     this.listOffers,
     this.onEditOffer,
     this.onCreateOffer,
     this.onRemoveOffer,
-  }) {
-    _listKey = GlobalKey<SliverAnimatedListState>();
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: UniversalFormForNotOfferRem(
-        animatedListKey: _listKey,
+        animatedListKey: listKey,
         title: S.of(context).Offers,
         itemList: listOffers,
         nameForEmptyList: placeOrEventName,
         onCreateItem: onCreateOffer,
         onEditItem: onEditOffer,
-        onRemoveItem: (index) {
-          onRemoveOffer?.call(index);
-
-          if (index != null) {
-            _listKey.currentState?.removeItem(
-              index,
-              (context, animation) => SizeTransition(sizeFactor: animation),
-            );
-          }
-        },
+        onRemoveItem: onRemoveOffer,
         whatCreate: S.of(context).Offer,
       ),
     );
