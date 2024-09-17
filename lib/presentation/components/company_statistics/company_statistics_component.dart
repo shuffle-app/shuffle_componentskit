@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/unique_statistics_model.dart';
-import 'package:shuffle_components_kit/presentation/components/components.dart';
+import 'package:shuffle_components_kit/presentation/components/event/uievent_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class ContentStatisticsComponent extends StatelessWidget {
-  final TabController tabController;
+import '../place/uiplace_model.dart';
+
+class CompanyStatisticsComponent extends StatefulWidget {
   final UniqueStatisticsModel uniqueStatisticsModel;
   final UiKitLineChartData<num> viewsAndVisitorsStat;
   final UiKitLineChartAdditionalData? viewsAndVisitorsAdditionalData;
@@ -12,22 +13,17 @@ class ContentStatisticsComponent extends StatelessWidget {
   final UiKitLineChartData<num> bookingAndFavorites;
   final UiKitLineChartData<num> invites;
   final List<UiKitMiniChartData> miniChartData;
+  final TabController tabController;
   final ValueChanged<String?>? onTabTapped;
+  final ValueChanged<UiEventModel>? onEventTapped;
+  final ValueChanged<UiPlaceModel>? onPlaceTapped;
   final VoidCallback? onFeedbackStatActionTapped;
   final bool loadingVisitorsStatistics;
   final ValueChanged<String>? onStatisticsPopupMenuItemTapped;
-  final UiPlaceModel? place;
-  final UiEventModel? event;
+  final List<UiEventModel>? events;
+  final List<UiPlaceModel>? places;
 
-  String get title => place?.title ?? event?.title ?? '';
-
-  final _tabs = [
-    CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
-    CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
-    CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
-  ];
-
-  ContentStatisticsComponent({
+  CompanyStatisticsComponent({
     Key? key,
     required this.uniqueStatisticsModel,
     required this.viewsAndVisitorsStat,
@@ -41,60 +37,71 @@ class ContentStatisticsComponent extends StatelessWidget {
     this.onFeedbackStatActionTapped,
     this.loadingVisitorsStatistics = false,
     this.onStatisticsPopupMenuItemTapped,
-    this.place,
-    this.event,
+    this.events,
+    this.places,
+    this.onEventTapped,
+    this.onPlaceTapped,
   }) : super(key: key);
+
+  @override
+  State<CompanyStatisticsComponent> createState() => _CompanyStatisticsComponentState();
+}
+
+class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent> {
+  final _chartTabs = [
+    CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
+    CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
+    CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
+  ];
+
+  final _contentTabs = [
+    UiKitCustomTab(title: S.current.Places.toUpperCase(), customValue: 'places'),
+    UiKitCustomTab(title: S.current.Events.toUpperCase(), customValue: 'events'),
+  ];
+
+  String selectedContentTab = 'events';
 
   @override
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
-    final linesCount = title.length / 15;
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: title,
-      autoImplyLeading: true,
-      canFoldAppBar: false,
-      expandTitle: true,
-      customToolbarBaseHeight: linesCount > 1
-          ? 0.125.sh
-          : linesCount >= 2
-              ? 0.175
-              : null,
+      title: S.current.Statistics,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,
         UiKitTabBarWithUnderlineIndicator(
-          tabController: tabController,
-          onTappedTab: (index) => onTabTapped?.call(_tabs.elementAtOrNull(index)?.customValue),
-          tabs: _tabs,
+          tabController: widget.tabController,
+          onTappedTab: (index) => widget.onTabTapped?.call(_chartTabs.elementAtOrNull(index)?.customValue),
+          tabs: _chartTabs,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
-          loading: loadingVisitorsStatistics,
-          chartData: viewsAndVisitorsStat,
-          popUpMenuItemSelected: onStatisticsPopupMenuItemTapped,
-          chartAdditionalData: viewsAndVisitorsAdditionalData,
+          loading: widget.loadingVisitorsStatistics,
+          chartData: widget.viewsAndVisitorsStat,
+          popUpMenuItemSelected: widget.onStatisticsPopupMenuItemTapped,
+          chartAdditionalData: widget.viewsAndVisitorsAdditionalData,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
-          chartData: feedbackStats,
+          chartData: widget.feedbackStats,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
-          chartData: bookingAndFavorites,
-          action: onFeedbackStatActionTapped,
+          chartData: widget.bookingAndFavorites,
+          action: widget.onFeedbackStatActionTapped,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
-          chartData: invites,
+          chartData: widget.invites,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitCardWrapper(
           color: colorScheme?.surface3,
           padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-          child: UiKitMiniChart(data: miniChartData),
+          child: UiKitMiniChart(data: widget.miniChartData),
         ),
         SpacingFoundation.verticalSpace16,
         Text(
@@ -112,9 +119,9 @@ class ContentStatisticsComponent extends StatelessWidget {
               UiKitGlowingProgressIndicator(
                 maxWidth: 1.sw - 16,
                 progressColor: ColorsFoundation.warning,
-                maxValue: uniqueStatisticsModel.ratingBarProgress.maxValue,
-                value: uniqueStatisticsModel.ratingBarProgress.value,
-                title: uniqueStatisticsModel.ratingBarProgress.title,
+                maxValue: widget.uniqueStatisticsModel.ratingBarProgress.maxValue,
+                value: widget.uniqueStatisticsModel.ratingBarProgress.value,
+                title: widget.uniqueStatisticsModel.ratingBarProgress.title,
               ),
               UiKitRoundedDivider(
                 thickness: 2,
@@ -125,11 +132,11 @@ class ContentStatisticsComponent extends StatelessWidget {
                 infoList: [
                   TitledInfoModel(
                     title: S.current.Gender,
-                    info: uniqueStatisticsModel.mostActiveAgeSegment.gender,
+                    info: widget.uniqueStatisticsModel.mostActiveAgeSegment.gender,
                   ),
                   TitledInfoModel(
                     title: S.current.Age,
-                    info: uniqueStatisticsModel.mostActiveAgeSegment.name,
+                    info: widget.uniqueStatisticsModel.mostActiveAgeSegment.name,
                   ),
                   TitledInfoModel(
                     title: S.current.Interests,
@@ -153,7 +160,7 @@ class ContentStatisticsComponent extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 4,
-                      child: UiKitPieChart(data: uniqueStatisticsModel.viewSourcesData),
+                      child: UiKitPieChart(data: widget.uniqueStatisticsModel.viewSourcesData),
                     ),
                     SpacingFoundation.horizontalSpace24,
                     Expanded(
@@ -187,14 +194,16 @@ class ContentStatisticsComponent extends StatelessWidget {
                 thickness: 2,
                 height: SpacingFoundation.verticalSpacing32,
               ),
-              if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
+              if (widget.uniqueStatisticsModel.topEventsDate != null &&
+                  widget.uniqueStatisticsModel.topEventTitles != null)
                 UiKitRankedTitledBoard(
                   title: S.current.TopEventsFor(
-                    formatDateWithCustomPattern('MMMM dd', uniqueStatisticsModel.topEventsDate!),
+                    formatDateWithCustomPattern('MMMM dd', widget.uniqueStatisticsModel.topEventsDate!),
                   ),
-                  rankItems: uniqueStatisticsModel.topEventTitles!,
+                  rankItems: widget.uniqueStatisticsModel.topEventTitles!,
                 ),
-              if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
+              if (widget.uniqueStatisticsModel.topEventsDate != null &&
+                  widget.uniqueStatisticsModel.topEventTitles != null)
                 UiKitRoundedDivider(
                   thickness: 2,
                   height: SpacingFoundation.verticalSpacing32,
@@ -202,13 +211,59 @@ class ContentStatisticsComponent extends StatelessWidget {
               UiKitGlowingProgressIndicator(
                 maxWidth: 1.sw - 16,
                 progressColor: ColorsFoundation.success,
-                maxValue: uniqueStatisticsModel.interestBarProgress.maxValue,
-                value: uniqueStatisticsModel.interestBarProgress.value,
-                title: uniqueStatisticsModel.interestBarProgress.title,
+                maxValue: widget.uniqueStatisticsModel.interestBarProgress.maxValue,
+                value: widget.uniqueStatisticsModel.interestBarProgress.value,
+                title: widget.uniqueStatisticsModel.interestBarProgress.title,
               ),
             ],
           ),
         ),
+        SpacingFoundation.verticalSpace16,
+        UiKitCustomTabBar(
+          tabs: _contentTabs,
+          onTappedTab: (index) => setState(
+            () => selectedContentTab = _contentTabs.elementAtOrNull(index)?.customValue ?? 'events',
+          ),
+        ),
+        SpacingFoundation.verticalSpace16,
+        if (widget.places != null && widget.places!.isNotEmpty && selectedContentTab == 'places')
+          ListView.separated(
+            key: ValueKey(widget.places),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final place = widget.places!.elementAt(index);
+
+              return UiKitContentPreviewTile(
+                avatarPath: place.logo,
+                title: place.title ?? '',
+                subtitle: place.location,
+                onTap: () => widget.onPlaceTapped?.call(place),
+              );
+            },
+            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+            itemCount: widget.places!.length,
+          ),
+        if (widget.events != null && widget.events!.isNotEmpty && selectedContentTab == 'events')
+          ListView.separated(
+            key: ValueKey(widget.events),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final event = widget.events!.elementAt(index);
+
+              return UiKitContentPreviewTile(
+                avatarPath: event.verticalPreview?.link ?? event.owner?.logo,
+                title: event.title ?? '',
+                subtitle: event.eventType?.title,
+                onTap: () => widget.onEventTapped?.call(event),
+              );
+            },
+            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+            itemCount: widget.events!.length,
+          ),
         SpacingFoundation.bottomNavigationBarSpacing,
       ],
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class ProStatisticsUsersBookingsComponent extends StatelessWidget {
+class StatisticsUsersBookingsComponent extends StatelessWidget {
   final DateRange dateRange;
   final TabController tabController;
   final PagingController<int, BaseUiKitUserTileData> bookingUsersPaginationController;
@@ -17,7 +17,7 @@ class ProStatisticsUsersBookingsComponent extends StatelessWidget {
     UiKitCustomTab(title: S.current.Favorites.toUpperCase(), customValue: 'favorites'),
   ];
 
-  ProStatisticsUsersBookingsComponent({
+  StatisticsUsersBookingsComponent({
     Key? key,
     required this.dateRange,
     required this.tabController,
