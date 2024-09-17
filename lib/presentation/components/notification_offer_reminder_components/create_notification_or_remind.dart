@@ -29,7 +29,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
 
   final TextEditingController _titleController = TextEditingController();
 
-  late final List<DateTime?>? _selectedDates;
+  final List<DateTime?> _selectedDates = [];
   late DateTime? _isLaunchedDate = DateTime.now();
 
   late bool _isLaunched;
@@ -44,7 +44,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
     _titleController.text = widget.universalNotOfferRemUiModel?.title ?? '';
     _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? true;
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
-    _selectedDates = widget.universalNotOfferRemUiModel?.selectedDates ?? [null];
+    _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
     for (var element in GraphicsFoundation.instance.png.reminder.values) {
       _iconList.add(element.path);
     }
@@ -58,8 +58,8 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
     _titleController.text = widget.universalNotOfferRemUiModel?.title ?? '';
     _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? true;
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
-    _selectedDates?.clear();
-    _selectedDates = widget.universalNotOfferRemUiModel?.selectedDates ?? [null];
+    _selectedDates.clear();
+    _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
     for (var element in GraphicsFoundation.instance.png.reminder.values) {
       _iconList.add(element.path);
     }
@@ -69,10 +69,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
   }
 
   void _onSubmit() {
-    if (_formKey.currentState != null &&
-        _formKey.currentState!.validate() &&
-        _selectedDates != null &&
-        _selectedDates.first != null) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate() && _selectedDates.first != null) {
       _universalNotOfferRemUiModel = _universalNotOfferRemUiModel.copyWith(
         title: _titleController.text.trim(),
         iconPath: (_selectedIconIndex == -1 || _selectedIconIndex == null) ? null : _iconList[_selectedIconIndex!],
