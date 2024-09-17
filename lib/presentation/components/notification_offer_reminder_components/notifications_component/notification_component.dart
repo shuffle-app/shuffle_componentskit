@@ -8,39 +8,29 @@ class NotificationComponent extends StatelessWidget {
   final ValueChanged<int?>? onEditNotification;
   final ValueChanged<int?>? onRemoveNotification;
   final VoidCallback? onCreateNotification;
-  late final GlobalKey<SliverAnimatedListState> _listKey;
+  final GlobalKey<SliverAnimatedListState> listKey;
 
-  NotificationComponent({
+  const NotificationComponent({
     super.key,
+    required this.listKey,
     this.placeOrEventName,
     this.listNotification,
     this.onEditNotification,
     this.onRemoveNotification,
     this.onCreateNotification,
-  }) {
-    _listKey = GlobalKey<SliverAnimatedListState>();
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: UniversalFormForNotOfferRem(
-        animatedListKey: _listKey,
+        animatedListKey: listKey,
         title: S.of(context).Notifications,
         itemList: listNotification,
         nameForEmptyList: placeOrEventName,
         onCreateItem: onCreateNotification,
         onEditItem: onEditNotification,
-        onRemoveItem: (index) {
-          onRemoveNotification?.call(index);
-
-          if (index != null) {
-            _listKey.currentState?.removeItem(
-              index,
-              (context, animation) => SizeTransition(sizeFactor: animation),
-            );
-          }
-        },
+        onRemoveItem: onRemoveNotification,
         whatCreate: S.of(context).Notification.toLowerCase(),
       ),
     );
