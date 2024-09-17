@@ -173,6 +173,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
     final theme = context.uiKitTheme;
 
+    final tagTextStyle = context.uiKitTheme?.boldTextTheme.caption2Bold.copyWith(
+      color: ColorsFoundation.darkNeutral500,
+    );
+
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -216,6 +220,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             child: UiKitInputFieldNoFill(
               label: S.of(context).Description,
               controller: _descriptionController,
+              textInputAction: TextInputAction.newline,
               expands: true,
               validator: descriptionValidator,
             ),
@@ -260,6 +265,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
+            prefixText: '+',
             keyboardType: TextInputType.phone,
             inputFormatters: [americanInputFormatter],
             label: S.of(context).Phone,
@@ -507,7 +513,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 data: BaseUiKitButtonData(
                   fit: ButtonFit.fitWidth,
                   autoSizeGroup: AutoSizeGroup(),
-                  text: S.of(context).CreateBooking,
+                  text: _bookingUiModel == null && (_eventToEdit.bookingUrl ?? '').isEmpty
+                      ? S.of(context).CreateBooking
+                      : '${S.of(context).Edit} ${S.of(context).Booking}',
                   onPressed: () {
                     _bookingUiModel ??= BookingUiModel(id: -1);
 
@@ -528,22 +536,31 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                   onSave: () {
                                     _eventToEdit.bookingUrl = _bookingUrlController.text;
                                     context.pop();
+                                    setState(() {
+                                      _bookingUiModel = null;
+                                    });
                                   },
                                   linkController: _bookingUrlController,
                                 ),
                               ),
                             );
                           },
-                          onBookingTap: () => context.push(
-                            CreateBookingComponent(
-                              bookingUiModel: _bookingUiModel,
-                              onBookingCreated: (bookingUiModel) {
-                                if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
-                                  _bookingUiModel = bookingUiModel;
-                                }
-                              },
-                            ),
-                          ),
+                          onBookingTap: () {
+                            context.pop();
+                            context.push(
+                              CreateBookingComponent(
+                                bookingUiModel: _bookingUiModel,
+                                onBookingCreated: (bookingUiModel) {
+                                  if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                    _bookingUiModel = bookingUiModel;
+                                    setState(() {
+                                      _eventToEdit.bookingUrl = null;
+                                    });
+                                  }
+                                },
+                              ),
+                            );
+                          },
                         ),
                       ),
                     );
@@ -551,6 +568,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 ),
               )
               .paddingSymmetric(horizontal: horizontalPadding),
+          if (_eventToEdit.bookingUrl != null && _eventToEdit.bookingUrl!.isNotEmpty) ...[
+            SpacingFoundation.verticalSpace10,
+            Text(
+              _eventToEdit.bookingUrl!,
+              style: tagTextStyle,
+            )
+          ],
           SpacingFoundation.verticalSpace24,
           SafeArea(
             top: false,

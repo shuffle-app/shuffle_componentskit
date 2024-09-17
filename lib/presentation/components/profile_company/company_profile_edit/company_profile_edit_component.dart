@@ -162,7 +162,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
               controller: positionController,
               label: S.of(context).Position,
               validator: contactPersonValidator,
-              inputFormatters: [dateInputFormatter],
+              readOnly: true,
             ),
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(

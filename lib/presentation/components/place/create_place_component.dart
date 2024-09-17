@@ -185,6 +185,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
     final theme = context.uiKitTheme;
 
+    final tagTextStyle = context.uiKitTheme?.boldTextTheme.caption2Bold.copyWith(
+      color: ColorsFoundation.darkNeutral500,
+    );
+
     return Form(
         key: _formKey,
         child: BlurredAppBarPage(
@@ -284,52 +288,13 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 label: S.of(context).Description,
                 validator: descriptionValidator,
                 controller: _descriptionController,
+                textInputAction: TextInputAction.newline,
                 expands: true,
                 onChanged: (_) {
                   _formKey.currentState?.validate();
                 },
               ),
             ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
-            Row(
-              children: [
-                Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
-                const Spacer(),
-                context.outlinedButton(
-                  data: BaseUiKitButtonData(
-                    onPressed: () {
-                      context.push(CreateScheduleWidget(
-                        availableTemplates: widget.availableTimeTemplates,
-                        onTemplateCreated: widget.onTimeTemplateCreated,
-                        availableTypes: const [UiScheduleTimeModel.scheduleType],
-                        onScheduleCreated: (model) {
-                          if (model is UiScheduleTimeModel) {
-                            setState(() {
-                              _placeToEdit.schedule = model;
-                              _placeToEdit.scheduleString = model.weeklySchedule
-                                  .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                  .join(', ');
-                            });
-                          }
-                        },
-                      ));
-                    },
-                    iconInfo: BaseUiKitButtonIconData(
-                      iconData: CupertinoIcons.chevron_forward,
-                      size: 16.h,
-                    ),
-                  ),
-                ),
-              ],
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            if (_placeToEdit.scheduleString != null) ...[
-              SpacingFoundation.verticalSpace24,
-              Text(
-                _placeToEdit.scheduleString!,
-                style: theme?.boldTextTheme.body,
-                textAlign: TextAlign.center,
-              )
-            ],
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
               keyboardType: TextInputType.url,
@@ -339,6 +304,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
+              prefixText: '+',
               keyboardType: TextInputType.phone,
               inputFormatters: [americanInputFormatter],
               label: S.of(context).Phone,
@@ -387,6 +353,46 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 );
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+            Row(
+              children: [
+                Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
+                const Spacer(),
+                context.outlinedButton(
+                  data: BaseUiKitButtonData(
+                    onPressed: () {
+                      context.push(CreateScheduleWidget(
+                        availableTemplates: widget.availableTimeTemplates,
+                        onTemplateCreated: widget.onTimeTemplateCreated,
+                        availableTypes: const [UiScheduleTimeModel.scheduleType],
+                        onScheduleCreated: (model) {
+                          if (model is UiScheduleTimeModel) {
+                            setState(() {
+                              _placeToEdit.schedule = model;
+                              _placeToEdit.scheduleString = model.weeklySchedule
+                                  .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                  .join(', ');
+                            });
+                          }
+                        },
+                      ));
+                    },
+                    iconInfo: BaseUiKitButtonIconData(
+                      iconData: CupertinoIcons.chevron_forward,
+                      size: 16.h,
+                    ),
+                  ),
+                ),
+              ],
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            if (_placeToEdit.scheduleString != null) ...[
+              SpacingFoundation.verticalSpace24,
+              Text(
+                _placeToEdit.scheduleString!,
+                style: theme?.boldTextTheme.body,
+                textAlign: TextAlign.center,
+              )
+            ],
             SpacingFoundation.verticalSpace24,
             Text(
               S.of(context).TypeOfContent,
@@ -489,52 +495,74 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ).paddingSymmetric(horizontal: horizontalPadding),
               SpacingFoundation.verticalSpace24,
             ],
-            SafeArea(
-              top: false,
-              child: context.button(
-                data: BaseUiKitButtonData(
-                  fit: ButtonFit.fitWidth,
-                  autoSizeGroup: AutoSizeGroup(),
-                  text: S.of(context).CreateBooking,
-                  onPressed: () {
-                    _bookingUiModel ??= BookingUiModel(id: -1);
+            context
+                .button(
+                  data: BaseUiKitButtonData(
+                    fit: ButtonFit.fitWidth,
+                    autoSizeGroup: AutoSizeGroup(),
+                    text: _bookingUiModel == null && (_placeToEdit.bookingUrl ?? '').isEmpty
+                        ? S.of(context).CreateBooking
+                        : '${S.of(context).Edit} ${S.of(context).Booking}',
+                    onPressed: () {
+                      _bookingUiModel ??= BookingUiModel(id: -1);
 
-                    showUiKitGeneralFullScreenDialog(
-                      context,
-                      GeneralDialogData(
-                        isWidgetScrollable: true,
-                        topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                        child: SelectBookingLinkComponent(
-                          onExternalTap: () => showUiKitGeneralFullScreenDialog(
-                            context,
-                            GeneralDialogData(
-                              isWidgetScrollable: true,
-                              topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                              child: AddLinkComponent(
-                                onSave: () {
-                                  _placeToEdit.bookingUrl = _bookingUrlController.text;
-                                  context.pop();
-                                },
-                                linkController: _bookingUrlController,
-                              ),
-                            ),
-                          ),
-                          onBookingTap: () => context.push(
-                            CreateBookingComponent(
-                              onBookingCreated: (bookingUiModel) {
-                                if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
-                                  _bookingUiModel = bookingUiModel;
-                                }
-                              },
-                            ),
+                      showUiKitGeneralFullScreenDialog(
+                        context,
+                        GeneralDialogData(
+                          isWidgetScrollable: true,
+                          topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                          child: SelectBookingLinkComponent(
+                            onExternalTap: () {
+                              context.pop();
+                              showUiKitGeneralFullScreenDialog(
+                                context,
+                                GeneralDialogData(
+                                  isWidgetScrollable: true,
+                                  topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                                  child: AddLinkComponent(
+                                    onSave: () {
+                                      _placeToEdit.bookingUrl = _bookingUrlController.text;
+                                      context.pop();
+                                      setState(() {
+                                        _bookingUiModel = null;
+                                      });
+                                    },
+                                    linkController: _bookingUrlController,
+                                  ),
+                                ),
+                              );
+                            },
+                            onBookingTap: () {
+                              context.pop();
+                              context.push(
+                                CreateBookingComponent(
+                                  bookingUiModel: _bookingUiModel,
+                                  onBookingCreated: (bookingUiModel) {
+                                    if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                      _bookingUiModel = bookingUiModel;
+                                      setState(() {
+                                        _placeToEdit.bookingUrl = null;
+                                      });
+                                    }
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ).paddingSymmetric(horizontal: horizontalPadding),
+                      );
+                    },
+                  ),
+                )
+                .paddingSymmetric(horizontal: horizontalPadding),
+            if (_placeToEdit.bookingUrl != null && _placeToEdit.bookingUrl!.isNotEmpty) ...[
+              SpacingFoundation.verticalSpace10,
+              Text(
+                _placeToEdit.bookingUrl!,
+                style: tagTextStyle,
+                textAlign: TextAlign.center,
+              )
+            ],
             SpacingFoundation.verticalSpace24,
             SafeArea(
               top: false,

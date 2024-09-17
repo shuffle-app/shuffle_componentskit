@@ -104,6 +104,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                     place: item,
                     model: model,
                     status: creationStats[item.id],
+                    updatedAt: item.updatedAt,
                   );
                 },
                 separatorBuilder: (context, index) =>
