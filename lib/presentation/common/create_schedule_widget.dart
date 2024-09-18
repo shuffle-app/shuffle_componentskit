@@ -299,7 +299,7 @@ class UiScheduleTimeModel extends UiScheduleModel {
                       )),
             ),
             UiKitAddableFormField(
-              title: 'Days of week',
+              title: S.current.DaysOfWeek,
               isAbleToAdd: false,
               child: AddableFormChildDateWeek<String>(
                 initialValue: thisObject.key,
@@ -307,8 +307,6 @@ class UiScheduleTimeModel extends UiScheduleModel {
                   final result = await showUiKitWeekdaySelector(navigatorKey.currentContext!);
                   if (result != null) {
                     setState(() {
-                      log('weeklySchedule.isNotEmpty is ${weeklySchedule.isNotEmpty}', name: 'UiScheduleTimeModel');
-                      log('weeklySchedule.length is ${weeklySchedule.length}', name: 'UiScheduleTimeModel');
                       if (weeklySchedule.isNotEmpty && weeklySchedule.length > index) {
                         weeklySchedule[index] = MapEntry(result.join(', '), thisObject.value);
                       } else {
@@ -343,7 +341,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
         log('rebuild is here $thisObject', name: 'UiScheduleDatesModel');
         return _CardListWrapper(children: [
           UiKitAddableFormField(
-              title: 'Date',
+              title: S.current.Date,
               onAdd: () {
                 onAdd?.call();
                 dailySchedule.add(const MapEntry('', []));

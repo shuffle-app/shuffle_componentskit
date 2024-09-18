@@ -2,7 +2,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UpsaleUiModel {
   int id;
-  BaseUiKitMedia? photo;
+  String? photoPath;
   String? description;
   String? limit;
   String? actualLimit;
@@ -11,7 +11,7 @@ class UpsaleUiModel {
 
   UpsaleUiModel({
     required this.id,
-    this.photo,
+    this.photoPath,
     this.description,
     this.limit,
     this.actualLimit,
@@ -19,9 +19,20 @@ class UpsaleUiModel {
     this.currency,
   });
 
+  String? validateCreation({bool checkDate = false}) {
+    if (photoPath == null || (photoPath?.isEmpty ?? true)) {
+      return S.current.XIsRequired(S.current.Photo);
+    } else if (description == null) {
+      return S.current.XIsRequired(S.current.Description);
+    } else if (description != null && (description!.isEmpty || description!.trim().isEmpty)) {
+      return S.current.XIsRequired(S.current.Description);
+    }
+    return null;
+  }
+
   UpsaleUiModel copyWith({
     int? id,
-    BaseUiKitMedia? photo,
+    String? photoPath,
     String? description,
     String? limit,
     String? actualLimit,
@@ -30,7 +41,7 @@ class UpsaleUiModel {
   }) {
     return UpsaleUiModel(
       id: id ?? this.id,
-      photo: photo ?? this.photo,
+      photoPath: photoPath ?? this.photoPath,
       description: description ?? this.description,
       limit: limit ?? this.limit,
       actualLimit: actualLimit ?? this.actualLimit,

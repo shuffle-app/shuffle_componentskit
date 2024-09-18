@@ -1,3 +1,4 @@
+import 'package:shuffle_components_kit/presentation/components/event/uievent_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UniqueStatisticsModel {
@@ -5,16 +6,24 @@ class UniqueStatisticsModel {
   final ProgressBarModel interestBarProgress;
   final AgeSegmentModel mostActiveAgeSegment;
   final UiKitPieChartData viewSourcesData;
-  final List<String> topEventTitles;
-  final DateTime topEventsDate;
+  final List<String>? topEventTitles;
+  final DateTime? topEventsDate;
+  final int? ratingInCategory;
+  final int? ratingAmongAllContent;
+  final String? theMostActiveAttendanceDay;
+  final UiEventModel? topEvent;
 
   UniqueStatisticsModel({
     required this.ratingBarProgress,
     required this.interestBarProgress,
     required this.mostActiveAgeSegment,
     required this.viewSourcesData,
-    required this.topEventTitles,
-    required this.topEventsDate,
+    this.topEventTitles,
+    this.topEventsDate,
+    this.ratingInCategory,
+    this.ratingAmongAllContent,
+    this.theMostActiveAttendanceDay,
+    this.topEvent,
   });
 
   factory UniqueStatisticsModel.empty() => UniqueStatisticsModel(

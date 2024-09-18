@@ -1,7 +1,7 @@
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import 'subs_or_upsale_ui_model.dart';
+import 'subs_ui_model.dart';
 
 class BookingUiModel {
   int id;
@@ -23,7 +23,7 @@ class BookingUiModel {
     this.subsUiModel,
     this.upsaleUiModel,
     this.selectedDateTime,
-    this.showSabsInContentCard = false,
+    this.showSabsInContentCard = true,
   });
 
   BookingUiModel copyWith({
@@ -48,13 +48,24 @@ class BookingUiModel {
     );
   }
 
-  String? validateCreation() {
-    if (bookingLimit == null || bookingLimit!.isEmpty) {
+  String? validateCreation({bool checkDate = false}) {
+    if (bookingLimit == null || bookingLimit!.isEmpty || bookingLimit == '0') {
       return S.current.XIsRequired(S.current.BookingLimit);
-    } else if (selectedDateTime == null) {
+    } else if (selectedDateTime == null && checkDate) {
       return S.current.XIsRequired(S.current.Date);
     }
 
     return null;
   }
+
+  BookingUiModel.empty()
+      : id = -1,
+        bookingLimit = '',
+        bookingLimitPerOne = '',
+        currency = 'AED',
+        price = '',
+        selectedDateTime = null,
+        showSabsInContentCard = false,
+        subsUiModel = List.empty(growable: true),
+        upsaleUiModel = List.empty(growable: true);
 }

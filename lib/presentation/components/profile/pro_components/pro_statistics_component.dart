@@ -177,16 +177,18 @@ class ProStatisticsComponent extends StatelessWidget {
                 thickness: 2,
                 height: SpacingFoundation.verticalSpacing32,
               ),
-              UiKitRankedTitledBoard(
-                title: S.current.TopEventsFor(
-                  formatDateWithCustomPattern('MMMM dd', uniqueStatisticsModel.topEventsDate),
+              if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
+                UiKitRankedTitledBoard(
+                  title: S.current.TopEventsFor(
+                    formatDateWithCustomPattern('MMMM dd', uniqueStatisticsModel.topEventsDate!),
+                  ),
+                  rankItems: uniqueStatisticsModel.topEventTitles!,
                 ),
-                rankItems: uniqueStatisticsModel.topEventTitles,
-              ),
-              UiKitRoundedDivider(
-                thickness: 2,
-                height: SpacingFoundation.verticalSpacing32,
-              ),
+              if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
+                UiKitRoundedDivider(
+                  thickness: 2,
+                  height: SpacingFoundation.verticalSpacing32,
+                ),
               UiKitGlowingProgressIndicator(
                 maxWidth: 1.sw - 16,
                 progressColor: ColorsFoundation.success,

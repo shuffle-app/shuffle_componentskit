@@ -70,7 +70,17 @@ class _MyAppState extends State<MyApp> {
               // theme: UiKitThemeFoundation.lightTheme,
               //TODO: think about it
               home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: const ComponentsTestPage())
+                  ? GlobalComponent(globalConfiguration: configuration, child: UnifiedVerificationComponent(
+                uiModel: UiUnifiedVerificationModel(),
+                credentialsController: TextEditingController(),
+                availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
+                formKey: GlobalKey<FormState>(),
+                passwordController: TextEditingController(),
+                onSocialsLogin: (socialsLoginData) {},
+                onSubmit: (isPersonalSelected) {
+                  log('isPersonalSelected $isPersonalSelected');
+                },
+              ),)
                   : Builder(builder: (c) {
                       configuration
                           .load(version: '1.0.18')
@@ -117,7 +127,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       actualbookingLimit: '1',
       bookingLimit: '10',
       description: 'I am Leonardo Messi, be the best ;)',
-      photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+      photoPath: GraphicsFoundation.instance.png.story.path,
       title: 'I am Leonardo Messi',
     ),
   );
@@ -129,12 +139,27 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       limit: '10',
       actualLimit: '3',
       description: 'I am Leonardo Messi, be the best ;)',
-      photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.lETOLogo.path),
+      photoPath: GraphicsFoundation.instance.png.lETOLogo.path,
       price: '100',
       currency: 'AED',
     ),
   );
   ValueNotifier<DateTime?> selectedDate = ValueNotifier<DateTime?>(null);
+
+  List<UniversalNotOfferRemUiModel> _offerUiModelList = [];
+
+  List<UniversalNotOfferRemUiModel> _listNotification = [
+    UniversalNotOfferRemUiModel(
+      id: -1,
+      title: 'Test',
+      imagePath: GraphicsFoundation.instance.png.avatars.avatar4.path,
+      isLaunched: false,
+      isLaunchedDate: DateTime(2017, 9, 7),
+      selectedDates: [DateTime.now(), null],
+    )
+  ];
+
+  List<UniversalNotOfferRemUiModel> _listReminders = [];
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +184,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             actualbookingLimit: index.toString(),
             bookingLimit: (index + 1).toString(),
             description: 'I am Leonardo Messi, be the best ;)',
-            photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+            photoPath: GraphicsFoundation.instance.png.story.path,
             title: 'I am Leonardo Messi',
           ),
         ),
@@ -728,6 +753,53 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             ),
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show Company Subscription Component',
+                onPressed: () {
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      topPadding: 1.sw <= 380 ? 0.1.sh : 0.2.sh,
+                      child: CompanySubscriptionComponent(
+                        isLoading: false,
+                        onRestorePurchase: () {},
+                        onSubscribe: (value) {},
+                        uiModel: UiCompanySubscriptionModel(
+                          offers: [
+                            SubscriptionOfferModel(
+                              trialDaysAvailable: 12,
+                              storePurchaseId: '',
+                              currency: '\$',
+                              savings: -20,
+                              price: 4.49,
+                              name: 'Annually',
+                              periodName: 'month',
+                            ),
+                            SubscriptionOfferModel(
+                              trialDaysAvailable: 123,
+                              storePurchaseId: '',
+                              currency: '\$',
+                              price: 4.99,
+                              name: 'Monthly',
+                              periodName: 'month',
+                            ),
+                          ],
+                          companyName: 'Burj Khalifa',
+                          nicheTitle: 'test',
+                          privacyPolicyUrl: 'test',
+                          termsOfServiceUrl: 'test',
+                          companyLogoLink: '',
+                          nicheIconPath: '',
+                          offersTitle: S.of(context).ToExtendYourUseSelectPayment,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'create place',
                     onPressed: () {
@@ -847,6 +919,215 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show notification component',
+                onPressed: () => context.push(
+                  NotificationComponent(
+                    placeOrEventName: null,
+                    listNotification: _listNotification,
+                    onCreateNotification: () {
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreate: (notificationUiModel) async {
+                            if (notificationUiModel != null) {
+                              await uiKitPayDialog(
+                                context: context,
+                                onPayTap: () async {
+                                  await uiKitNotificationCreatedDialog(
+                                    context: context,
+                                    cheap: UiKitTag(title: 'Club', icon: GraphicsFoundation.instance.svg.cocktail.path),
+                                    defaultNotificationImageUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+                                    placeTitle: 'Virgins on the beach',
+                                    placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
+                                    notificationText: notificationUiModel.title,
+                                    onOpenPlaceTap: () {},
+                                    onToFavoritesTap: () {},
+                                    onYeahSureTap: () {},
+                                  );
+                                  context.pop();
+                                },
+                                title: S.of(context).PayForTheNotification,
+                                price: 5,
+                              );
+                              context.pop();
+
+                              setState(() {
+                                _listNotification.add(notificationUiModel);
+                              });
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    onRemoveNotification: (id) {
+                      int index = _listNotification.indexWhere((element) => element?.id == id);
+                      setState(() {
+                        _listNotification.removeAt(index);
+                      });
+                    },
+                    onEditNotification: (id) {
+                      int index = _listNotification.indexWhere((element) => element?.id == id);
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          universalNotOfferRemUiModel: _listNotification[index],
+                          onCreate: (notificationUiModel) async {
+                            if (notificationUiModel != _listNotification[index]) {
+                              setState(() {
+                                _listNotification[index] = notificationUiModel;
+                              });
+                            }
+
+                            context.pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show reminders component',
+                onPressed: () => context.push(
+                  RemindersComponent(
+                    listReminders: _listReminders,
+                    placeOrEventName: S.of(context).Event.toLowerCase(),
+                    onCreateReminder: () {
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          isNotification: false,
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreate: (reminderModel) async {
+                            if (reminderModel != null) {
+                              await uiKitNotificationCreatedDialog(
+                                context: context,
+                                isNotification: false,
+                                iconPath: reminderModel.iconPath,
+                                cheap: UiKitTag(title: 'Club', icon: GraphicsFoundation.instance.svg.cocktail.path),
+                                defaultNotificationImageUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+                                placeTitle: 'Virgins on the beach',
+                                placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
+                                notificationText: reminderModel.title,
+                                onOpenPlaceTap: () {},
+                                onToFavoritesTap: () {},
+                                onYeahSureTap: () {},
+                              );
+                              setState(() {
+                                _listReminders.add(reminderModel);
+                              });
+                              context.pop();
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    onEditReminder: (id) {
+                      final int index = _listReminders.indexWhere((element) => element.id == id);
+
+                      context.push(
+                        CreateNotificationOrRemind(
+                          lastDate: DateTime(2024, 9, 16),
+                          isNotification: false,
+                          universalNotOfferRemUiModel: _listReminders[index],
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreate: (reminderModel) async {
+                            if (reminderModel != null) {
+                              setState(() {
+                                _listReminders[index] = reminderModel;
+                              });
+
+                              context.pop();
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    onRemoveReminder: (id) {
+                      final int index = _listReminders.indexWhere((element) => element.id == id);
+                      setState(() {
+                        _listReminders.removeAt(index);
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show offers component ',
+                onPressed: () => context.push(
+                  OffersComponent(
+                    listOffers: _offerUiModelList,
+                    onCreateOffer: () {
+                      context.push(
+                        CreateOffer(
+                          offerPrice: 5,
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          onCreateOffer: (offerUiModel) async {
+                            await uiKitPayDialog(
+                              context: context,
+                              onPayTap: () async {
+                                await uiKitOfferCreatedDialog(context);
+                                context.pop();
+                              },
+                              title: S.of(context).PayForTheBonusOffer,
+                              price: 5,
+                            );
+                            context.pop();
+
+                            setState(() {
+                              _offerUiModelList.add(offerUiModel);
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    onRemoveOffer: (id) {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+                      setState(() {
+                        _offerUiModelList.removeAt(index);
+                      });
+                    },
+                    onEditOffer: (id) async {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+                      context.push(
+                        CreateOffer(
+                          offerPrice: 5,
+                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
+                          offerUiModel: _offerUiModelList[index],
+                          onCreateOffer: (editOfferUiModel) async {
+                            if (editOfferUiModel != _offerUiModelList[index]) {
+                              await uiKitEditOfferDialog(
+                                context,
+                                () {
+                                  setState(() {
+                                    _offerUiModelList[index] = editOfferUiModel;
+                                  });
+                                  context.pop();
+                                },
+                              );
+                            }
+
+                            context.pop();
+                          },
+                        ),
+                      );
+                    },
+                    placeOrEventName: null,
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show create booking component',
                 onPressed: () => context.push(
                   CreateBookingComponent(
@@ -877,7 +1158,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               actualbookingLimit: index.toString(),
                               bookingLimit: (index + 1).toString(),
                               description: 'I am Leonardo Messi, be the best ;)',
-                              photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+                              photoPath: GraphicsFoundation.instance.png.story.path,
                               title: 'I am Leonardo Messi',
                             ),
                           ),
@@ -915,7 +1196,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   actualbookingLimit: (math.Random().nextInt(7)).toString(),
                                   bookingLimit: '10',
                                   description: 'I am Leonardo Messi, be the best ;)',
-                                  photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.story.path),
+                                  photoPath: GraphicsFoundation.instance.png.story.path,
                                   title: 'I am Leonardo Messi',
                                 ),
                               ),
@@ -925,7 +1206,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                   id: index,
                                   limit: '10',
                                   description: 'I am Leonardo Messi, be the best ;)',
-                                  photo: UiKitMediaPhoto(link: GraphicsFoundation.instance.png.lETOLogo.path),
+                                  photoPath: GraphicsFoundation.instance.png.lETOLogo.path,
                                   price: (math.Random().nextInt(250)).toString(),
                                   actualLimit: (math.Random().nextInt(7)).toString(),
                                   currency: 'AED',

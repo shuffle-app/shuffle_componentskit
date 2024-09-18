@@ -4,7 +4,7 @@ import 'package:shuffle_components_kit/presentation/utils/policies_localization_
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class BottomSheetVerificationComponent extends StatefulWidget {
+class BottomSheetVerificationComponent extends StatelessWidget {
   final TextEditingController credentialsController;
   final TextEditingController passwordController;
   final ValueChanged<bool>? onSubmit;
@@ -23,13 +23,6 @@ class BottomSheetVerificationComponent extends StatefulWidget {
   });
 
   @override
-  State<BottomSheetVerificationComponent> createState() => _BottomSheetVerificationComponentState();
-}
-
-class _BottomSheetVerificationComponentState extends State<BottomSheetVerificationComponent> {
-  bool obscurePassword = true;
-
-  @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final regTextTheme = theme?.regularTextTheme;
@@ -44,11 +37,11 @@ class _BottomSheetVerificationComponentState extends State<BottomSheetVerificati
         SpacingFoundation.verticalSpace16,
         EmailVerificationForm(
           authType: RegistrationType.email,
-          credentialsController: widget.credentialsController,
-          passwordController: widget.passwordController,
-          loading: widget.loading,
-          credentialsValidator: widget.credentialsValidator,
-          passwordValidator: widget.passwordValidator,
+          credentialsController: credentialsController,
+          passwordController: passwordController,
+          loading: loading,
+          credentialsValidator: credentialsValidator,
+          passwordValidator: passwordValidator,
         ),
         Column(
           children: [
@@ -98,11 +91,11 @@ class _BottomSheetVerificationComponentState extends State<BottomSheetVerificati
               data: BaseUiKitButtonData(
                 text: S.of(context).Next.toUpperCase(),
                 onPressed: () {
-                  if (widget.passwordController.text.isNotEmpty && widget.credentialsController.text.isNotEmpty) {
-                    widget.onSubmit?.call(true);
+                  if (passwordController.text.isNotEmpty && credentialsController.text.isNotEmpty) {
+                    onSubmit?.call(true);
                   }
                 },
-                loading: widget.loading,
+                loading: loading,
                 fit: ButtonFit.fitWidth,
               ),
             ),

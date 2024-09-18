@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,10 +22,12 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late XFile? file;
   late UpsaleUiModel _upsaleUiModel;
 
-  BaseUiKitMedia _photo = UiKitMediaPhoto(link: '');
+  String? _validateText;
+
+  String? _photoPath;
 
   @override
   void initState() {
@@ -35,7 +36,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
     _priceController.text = widget.upsaleUiModel?.price ?? '';
     _limitController.text = widget.upsaleUiModel?.limit ?? '';
     _descriptionController.text = widget.upsaleUiModel?.description ?? '';
-    _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
+    _photoPath = widget.upsaleUiModel?.photoPath ?? '';
   }
 
   @override
@@ -45,23 +46,29 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
       _priceController.text = widget.upsaleUiModel?.price ?? '';
       _limitController.text = widget.upsaleUiModel?.limit ?? '';
       _descriptionController.text = widget.upsaleUiModel?.description ?? '';
-      _photo = widget.upsaleUiModel?.photo ?? UiKitMediaPhoto(link: '');
+      _photoPath = widget.upsaleUiModel?.photoPath ?? '';
     }
     super.didUpdateWidget(oldWidget);
+  }
+
+  _validateCreation() {
+    setState(() {
+      _validateText = _upsaleUiModel.validateCreation();
+    });
   }
 
   _onAddPhoto() async {
     final file = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (file != null) {
       setState(() {
-        _photo = UiKitMediaPhoto(link: file.path);
+        _photoPath = file.path;
       });
     }
   }
 
   _onPhotoDeleted() {
     setState(() {
-      _photo = UiKitMediaPhoto(link: '');
+      _photoPath = '';
     });
   }
 
@@ -89,29 +96,15 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
           RowWithAddPhoto(
             onPhotoDeleted: _onPhotoDeleted,
             onAddPhoto: _onAddPhoto,
-            link: _photo.link,
+            link: _photoPath ?? '',
           ),
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
-            child: Form(
-              key: _formKey,
-              child: UiKitInputFieldNoFill(
-                label: S.of(context).Description,
-                expands: true,
-                maxSymbols: 150,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return S.of(context).PleaseEnterValidDescription;
-                  }
-                  return null;
-                },
-                controller: _descriptionController,
-                onChanged: (value) {
-                  setState(() {
-                    _formKey.currentState!.validate();
-                  });
-                },
-              ),
+            child: UiKitInputFieldNoFill(
+              label: S.of(context).Description,
+              expands: true,
+              maxSymbols: 150,
+              controller: _descriptionController,
             ),
           ),
           SpacingFoundation.verticalSpace24,
@@ -162,27 +155,48 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
           SpacingFoundation.verticalSpace24,
         ],
       ),
-      bottomNavigationBar: context
-          .gradientButton(
-            data: BaseUiKitButtonData(
-              text: S.of(context).Save.toUpperCase(),
-              onPressed: () {
-                if (_formKey.currentState!.validate() && _photo.link.isNotEmpty) {
-                  _upsaleUiModel.description = _descriptionController.text.trim();
-                  _upsaleUiModel.limit = _limitController.text;
-                  _upsaleUiModel.price = _priceController.text;
-                  _upsaleUiModel.photo = _photo;
-                  widget.onSave(_upsaleUiModel);
-                  context.pop();
-                }
-              },
+      bottomNavigationBar: SizedBox(
+        height: 1.sw <= 380 ? 80.h : 65.h,
+        width: double.infinity,
+        child: Column(
+          children: [
+            if (_validateText != null)
+              Text(
+                _validateText!,
+                style: context.uiKitTheme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
+              ),
+            SpacingFoundation.verticalSpace10,
+            Row(
+              children: [
+                Expanded(
+                  child: context
+                      .gradientButton(
+                        data: BaseUiKitButtonData(
+                          text: S.of(context).Save.toUpperCase(),
+                          onPressed: () {
+                            _upsaleUiModel.description = _descriptionController.text.trim();
+                            _upsaleUiModel.limit = _limitController.text;
+                            _upsaleUiModel.price = _priceController.text;
+                            _upsaleUiModel.photoPath = _photoPath;
+
+                            _validateCreation();
+                            if (_validateText == null) {
+                              widget.onSave(_upsaleUiModel);
+                              context.pop();
+                            }
+                          },
+                        ),
+                      )
+                      .paddingOnly(
+                        left: EdgeInsetsFoundation.all16,
+                        right: EdgeInsetsFoundation.all16,
+                      ),
+                ),
+              ],
             ),
-          )
-          .paddingOnly(
-            left: EdgeInsetsFoundation.all16,
-            right: EdgeInsetsFoundation.all16,
-            bottom: EdgeInsetsFoundation.vertical24,
-          ),
+          ],
+        ),
+      ),
     );
   }
 }

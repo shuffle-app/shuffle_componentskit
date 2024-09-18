@@ -33,6 +33,7 @@ class UiPlaceModel {
   PlaceWeatherType? weatherType;
   String? bookingUrl;
   BookingUiModel? bookingUiModel;
+  DateTime? updatedAt;
 
   UiPlaceModel({
     required this.id,
@@ -50,6 +51,7 @@ class UiPlaceModel {
     this.price,
     this.placeType,
     this.branches,
+    this.updatedAt,
     required this.tags,
     this.baseTags = const [],
     this.weekdays = const [],
@@ -135,6 +137,7 @@ class UiPlaceModel {
     PlaceWeatherType? weatherType,
     String? bookingUrl,
     BookingUiModel? bookingUiModel,
+    DateTime? updatedAt,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -162,6 +165,8 @@ class UiPlaceModel {
         weatherType: weatherType ?? this.weatherType,
         bookingUrl: bookingUrl ?? this.bookingUrl,
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
+        currency: currency?? this.currency,
+        updatedAt: updatedAt?? this.updatedAt,
       );
 
   UiPlaceModel.empty()
