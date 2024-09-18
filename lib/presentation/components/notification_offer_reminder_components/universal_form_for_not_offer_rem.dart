@@ -31,7 +31,10 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
 
     return BlurredAppBarPage(
       animatedListKey: animatedListKey,
-      childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+      childrenPadding: EdgeInsets.only(
+        left: SpacingFoundation.horizontalSpacing16,
+        right: SpacingFoundation.horizontalSpacing16,
+      ),
       customTitle: AutoSizeText(
         title ?? S.of(context).NothingFound,
         style: theme?.boldTextTheme.title1,
@@ -48,10 +51,10 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
           ),
         ),
       ),
-      children: [
-        SpacingFoundation.verticalSpace16,
-        if (itemList == null || itemList!.isEmpty)
-          UiKitCardWrapper(
+      childrenCount: itemList == null || itemList!.isEmpty ? 1 : itemList!.length,
+      childrenBuilder: (context, index) {
+        if (itemList == null || itemList!.isEmpty) {
+          return UiKitCardWrapper(
             borderRadius: BorderRadiusFoundation.all24r,
             child: Row(
               children: [
@@ -74,19 +77,21 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
                 )
               ],
             ).paddingAll(EdgeInsetsFoundation.all16),
-          )
-        else
-          ...itemList!.map((item) {
-            double padding = SpacingFoundation.verticalSpacing16;
-            if (item == itemList!.last) padding = 0;
-
+          ).paddingOnly(top: SpacingFoundation.verticalSpacing16);
+        } else {
+          if (index < itemList!.length) {
             return UniversalNotOfferRemItemWidget(
-              universalNotOfferRemUiModel: item,
-              onDismissed: () => onRemoveItem?.call(item?.id),
-              onTap: () => onEditItem?.call(item?.id),
-            ).paddingOnly(bottom: padding);
-          }),
-      ],
+              universalNotOfferRemUiModel: itemList?[index],
+              onDismissed: () => onRemoveItem?.call(itemList?[index]?.id),
+              onTap: () => onEditItem?.call(itemList?[index]?.id),
+            ).paddingOnly(
+              bottom: itemList?[index] != itemList?.last ? SpacingFoundation.verticalSpacing16 : 0,
+              top: itemList?[index] != itemList?.first ? 0 : SpacingFoundation.verticalSpacing16,
+            );
+          }
+        }
+        return null;
+      },
     );
   }
 }

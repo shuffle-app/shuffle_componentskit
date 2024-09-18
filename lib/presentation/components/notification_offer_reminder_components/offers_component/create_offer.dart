@@ -27,7 +27,7 @@ class _CreateOfferState extends State<CreateOffer> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late DateTime? _isLaunchedDate;
-  late final List<DateTime?>? _selectedDates;
+  final List<DateTime?> _selectedDates = [];
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _pointController = TextEditingController();
@@ -43,7 +43,7 @@ class _CreateOfferState extends State<CreateOffer> {
     _offerUiModel = widget.offerUiModel ?? UniversalNotOfferRemUiModel(id: -1);
     _titleController.text = widget.offerUiModel?.title?.trim() ?? '';
     _pointController.text = widget.offerUiModel?.pointPrice.toString().trim() ?? '';
-    _selectedDates = widget.offerUiModel?.selectedDates ?? [null];
+    _selectedDates.addAll(widget.offerUiModel?.selectedDates?.toList() ?? [null]);
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
     _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
     _isLaunched = widget.offerUiModel?.isLaunched ?? true;
@@ -60,8 +60,8 @@ class _CreateOfferState extends State<CreateOffer> {
     _offerUiModel = widget.offerUiModel ?? UniversalNotOfferRemUiModel(id: -1);
     _titleController.text = widget.offerUiModel?.title?.trim() ?? '';
     _pointController.text = widget.offerUiModel?.pointPrice.toString().trim() ?? '';
-    _selectedDates?.clear();
-    _selectedDates = widget.offerUiModel?.selectedDates ?? [null];
+    _selectedDates.clear();
+    _selectedDates.addAll(widget.offerUiModel?.selectedDates?.toList() ?? [null]);
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
     _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
     _isLaunched = widget.offerUiModel?.isLaunched ?? true;
@@ -72,10 +72,7 @@ class _CreateOfferState extends State<CreateOffer> {
   }
 
   void _onSubmit() {
-    if (_formKey.currentState != null &&
-        _formKey.currentState!.validate() &&
-        _selectedDates != null &&
-        _selectedDates.first != null) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate() && _selectedDates.first != null) {
       _offerUiModel = _offerUiModel.copyWith(
         title: _titleController.text.trim(),
         iconPath: (_selectedIconIndex == -1 || _selectedIconIndex == null) ? null : _iconList[_selectedIconIndex!],
