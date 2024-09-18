@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
@@ -28,7 +28,7 @@ class CreateScheduleWidget extends StatefulWidget {
 
 class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   // ScheduleType selectedInputType = ScheduleType.weekly;
-  late final int initialItemsCount;
+  late final int initialItemsCount = 2;
   String? selectedScheduleName;
 
   UiScheduleModel? scheduleModel;
@@ -37,10 +37,13 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
 
   @override
   void initState() {
-    initialItemsCount = widget.availableTemplates.isEmpty ? 2 : 3;
+    // initialItemsCount = widget.availableTemplates.isEmpty ? 2 : 3;
     // scheduleModel = UiScheduleTimeModel(weeklySchedule: List.empty(growable: true));
     super.initState();
   }
+
+  List<UiScheduleModel> get availableTemplates =>
+      widget.availableTemplates.where((e) => e.runtimeType == scheduleModel.runtimeType).toList();
 
   void onAddButtonPressed() {
     listKey.currentState!.insertItem(initialItemsCount + scheduleModel!.itemsCount - 1);
@@ -57,11 +60,13 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     final scheduleTypes = widget.availableTypes;
     final theme = context.uiKitTheme;
 
+    TextStyle? textStyle = theme?.boldTextTheme.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
     return Scaffold(
         body: Stack(children: [
       BlurredAppBarPage(
         autoImplyLeading: true,
-        title: 'Work schedule',
+        customTitle: AutoSizeText(S.of(context).WorkHours, maxLines: 1, style: textStyle),
         centerTitle: true,
         animatedListKey: listKey,
         childrenCount: initialItemsCount,
@@ -69,57 +74,57 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
             horizontal: SpacingFoundation.horizontalSpacing12, vertical: SpacingFoundation.verticalSpacing4),
         childrenBuilder: (context, index) {
           if (index == 0) {
-            return UiKitBaseDropdown<String>(
-              items: scheduleTypes,
-              value: selectedScheduleName,
-              onChanged: (String? type) {
-                if (type != null) {
-                  if ((scheduleModel?.itemsCount ?? 0) > 1) {
-                    for (var i = 0; i < scheduleModel!.itemsCount; i++) {
-                      onMinusButtonPressed();
-                    }
-                  }
-                  setState(() {
-                    selectedScheduleName = type;
-                    if (type == UiScheduleTimeModel.scheduleType) {
-                      scheduleModel = UiScheduleTimeModel();
-                    } else if (type == UiScheduleDatesModel.scheduleType) {
-                      scheduleModel = UiScheduleDatesModel();
-                    } else if (type == UiScheduleDatesRangeModel.scheduleType) {
-                      scheduleModel = UiScheduleDatesRangeModel();
-                    }
-                  });
-                }
-              },
-            );
-          } else if (index == 1) {
-            if (widget.availableTemplates.isNotEmpty) {
-              return UiKitBaseDropdown<UiScheduleModel>(
-                items: widget.availableTemplates,
-                value: scheduleModel,
-                onChanged: (UiScheduleModel? selectedTemplate) {
-                  if (selectedTemplate != null) {
+            return Column(mainAxisSize: MainAxisSize.min, children: [
+              UiKitBaseDropdown<String>(
+                items: scheduleTypes,
+                value: selectedScheduleName,
+                onChanged: (String? type) {
+                  if (type != null) {
                     if ((scheduleModel?.itemsCount ?? 0) > 1) {
                       for (var i = 0; i < scheduleModel!.itemsCount; i++) {
                         onMinusButtonPressed();
                       }
                     }
                     setState(() {
-                      scheduleModel = selectedTemplate;
+                      selectedScheduleName = type;
+                      if (type == UiScheduleTimeModel.scheduleType) {
+                        scheduleModel = UiScheduleTimeModel();
+                      } else if (type == UiScheduleDatesModel.scheduleType) {
+                        scheduleModel = UiScheduleDatesModel();
+                      } else if (type == UiScheduleDatesRangeModel.scheduleType) {
+                        scheduleModel = UiScheduleDatesRangeModel();
+                      }
                     });
-                    if ((scheduleModel?.itemsCount ?? 0) > 1) {
-                      listKey.currentState!.insertAllItems(initialItemsCount, scheduleModel!.itemsCount);
-                    }
                   }
                 },
-              );
-            }
+              ),
+              if (availableTemplates.isNotEmpty) ...[
+                SpacingFoundation.verticalSpace4,
+                UiKitBaseDropdown<UiScheduleModel>(
+                  items: availableTemplates,
+                  // value: scheduleModel,
+                  onChanged: (UiScheduleModel? selectedTemplate) {
+                    if (selectedTemplate != null) {
+                      if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+                        for (var i = 0; i < scheduleModel!.itemsCount; i++) {
+                          onMinusButtonPressed();
+                        }
+                      }
+                      setState(() {
+                        scheduleModel = selectedTemplate;
+                      });
+                      if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+                        listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+                      }
+                    }
+                  },
+                )
+              ]
+            ]);
           }
 
           return scheduleModel?.childrenBuilder(
-                  index: index - (widget.availableTemplates.isEmpty ? 1 : 2),
-                  onAdd: onAddButtonPressed,
-                  onRemove: onMinusButtonPressed) ??
+                  index: index - 1, onAdd: onAddButtonPressed, onRemove: onMinusButtonPressed) ??
               const SizedBox.shrink();
         },
       ),
@@ -161,7 +166,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                             textTheme?.title2.copyWith(color: UiKitColors.lightHeadingTypographyColor),
                                       ),
                                       content: UiKitInputFieldNoIcon(
-                                        hintText: 'Title',
+                                        hintText: S.current.Title,
                                         controller: controller,
                                         autofocus: true,
                                         textColor: UiKitColors.lightHeadingTypographyColor,
@@ -175,11 +180,11 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                             data: BaseUiKitButtonData(
                                                 backgroundColor: theme?.colorScheme.primary,
                                                 textColor: theme?.colorScheme.inversePrimary,
-                                                text: 'Save',
+                                                text: S.current.Save,
                                                 fit: ButtonFit.fitWidth,
                                                 onPressed: () => context.pop(result: controller.text)))
                                       ],
-                                      defaultButtonText: 'Save',
+                                      defaultButtonText: S.current.Save,
                                       onPop: () => context.pop(result: controller.text)));
                               if (name != null) {
                                 scheduleModel!.templateName = name;
@@ -244,6 +249,20 @@ abstract class UiScheduleModel {
 
   @override
   String toString() => '$templateName';
+
+  String encodeSchedule();
+
+  static List<MapEntry<String, List<TimeOfDay>>> decodeSchedule(String scheduleString) {
+    return scheduleString.split(';').map((schedule) {
+      final parts = schedule.split(':');
+      return MapEntry(
+          parts[0],
+          parts[1]
+              .split(',')
+              .map((time) => TimeOfDay(hour: int.parse(time.split('-')[0]), minute: int.parse(time.split('-')[1])))
+              .toList());
+    }).toList();
+  }
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
@@ -325,6 +344,26 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   int get itemsCount => weeklySchedule.length;
+
+  @override
+  String encodeSchedule() {
+    return weeklySchedule
+        .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
+        .join(';');
+  }
+
+  @override
+  List<MapEntry<String, List<TimeOfDay>>> decodeSchedule(String scheduleString) {
+    return scheduleString.split(';').map((schedule) {
+      final parts = schedule.split(':');
+      return MapEntry(
+          parts[0],
+          parts[1]
+              .split(',')
+              .map((time) => TimeOfDay(hour: int.parse(time.split('-')[0]), minute: int.parse(time.split('-')[1])))
+              .toList());
+    }).toList();
+  }
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
@@ -433,6 +472,26 @@ class UiScheduleDatesModel extends UiScheduleModel {
 
   @override
   int get itemsCount => dailySchedule.length;
+
+  @override
+  String encodeSchedule() {
+    return dailySchedule
+        .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
+        .join(';');
+  }
+
+  @override
+  List<MapEntry<String, List<TimeOfDay>>> decodeSchedule(String scheduleString) {
+    return scheduleString.split(';').map((schedule) {
+      final parts = schedule.split(':');
+      return MapEntry(
+          parts[0],
+          parts[1]
+              .split(',')
+              .map((time) => TimeOfDay(hour: int.parse(time.split('-')[0]), minute: int.parse(time.split('-')[1])))
+              .toList());
+    }).toList();
+  }
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
@@ -536,6 +595,13 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
 
   @override
   int get itemsCount => dailySchedule.length;
+
+  @override
+  String encodeSchedule() {
+    return dailySchedule
+        .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
+        .join(';');
+  }
 }
 
 class _CardListWrapper extends StatelessWidget {

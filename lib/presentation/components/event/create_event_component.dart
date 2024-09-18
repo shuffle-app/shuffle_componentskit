@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -124,9 +126,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
-    setState(() {
-      _photos.insert(newIndex, _photos.removeAt(oldIndex));
-    });
+    if (oldIndex != newIndex) {
+      setState(() {
+        _photos.insert(min(newIndex, _photos.length-1), _photos.removeAt(oldIndex));
+      });
+    }
   }
 
   _onVideoReorderRequested(int oldIndex, int newIndex) {
@@ -258,6 +262,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
+            prefixText: 'https://',
             keyboardType: TextInputType.url,
             label: S.of(context).Website,
             controller: _websiteController,

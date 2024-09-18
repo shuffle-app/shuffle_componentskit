@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class LoginInvitationComponent extends StatelessWidget {
   final VoidCallback goToLogin;
@@ -29,6 +30,7 @@ class LoginInvitationComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
+    final AutoSizeGroup group = AutoSizeGroup();
 
     return SafeArea(
         child: Column(
@@ -68,9 +70,11 @@ class LoginInvitationComponent extends StatelessWidget {
               // height: 32.h,
               rasterAsset: _getIconForTile(i),
             ),
-            title: Text(
+            title: AutoSizeText(
               i < 3 ? S.of(context).LoginBenefits(i).toLowerCase() : S.of(context).LoginBenefits2(i - 3).toLowerCase(),
               style: boldTextTheme?.caption1Bold,
+              maxLines: 3,
+              group: group,
             ),
           ),
         SpacingFoundation.verticalSpace16,

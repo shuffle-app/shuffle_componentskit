@@ -31,6 +31,7 @@ class UiModelCategory extends UiKitTag {
     Color? iconColor,
     Color? textColor,
     bool? unique,
+    bool? showShadow
   }) =>
       UiModelCategory(
         title: title ?? this.title,

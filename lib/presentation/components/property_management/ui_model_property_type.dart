@@ -22,6 +22,7 @@ class UiModelProperty extends UiKitTag {
     int? id,
     dynamic icon,
     bool? unique,
+    bool? showShadow,
     Color? iconColor,
     Color? textColor,
   }) =>

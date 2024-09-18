@@ -50,8 +50,9 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
   }
 
   onPhotoDeleted(int index) {
+    final mediaToDelete = mediaWithoutPreviews[index];
     setState(() {
-      _photos.removeAt(index);
+      _photos.remove(mediaToDelete);
     });
   }
 
@@ -77,6 +78,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
           _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) == null) {
         selectVerticalFormat(horizontal);
       }
+      setState(() {});
     }));
   }
 
@@ -102,6 +104,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
           _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) == null) {
         selectHorizontalFormat(vertical);
       }
+      setState(() {});
     }));
   }
 
@@ -198,8 +201,8 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
             : null,
         body: PopScope(
           // onPopInvoked: (didPop) async {
-            // context.pop(result: _photos);
-            // return true;
+          // context.pop(result: _photos);
+          // return true;
           // },
           child: BlurredAppBarPage(
             autoImplyLeading: true,

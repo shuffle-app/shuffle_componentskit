@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class TagsSelectionComponent extends StatefulWidget {
   final PositionModel? positionModel;
@@ -32,7 +33,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
   }
 
   _checkEmpty() {
-    if(_controller.text.isEmpty) {
+    if (_controller.text.isEmpty) {
       setState(() {
         _allTags.addAll(widget.allTags);
       });
@@ -49,6 +50,9 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = widget.positionModel?.horizontalMargin?.toDouble() ?? 0;
+    final theme = context.uiKitTheme;
+    TextStyle? textStyle = theme?.boldTextTheme.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
     return Scaffold(
         bottomNavigationBar: _tags.isNotEmpty
             ? SafeArea(
@@ -63,7 +67,8 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
         body: BlurredAppBarPage(
             autoImplyLeading: true,
             centerTitle: true,
-            title: widget.title,
+            customToolbarBaseHeight: 100,
+            customTitle: AutoSizeText(widget.title, maxLines: 2, style: textStyle),
             childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             children: [
               SpacingFoundation.verticalSpace16,
