@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -132,9 +134,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   // }
 
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
-    setState(() {
-      _photos.insert(newIndex, _photos.removeAt(oldIndex));
+    if(oldIndex!=newIndex) {
+      setState(() {
+      _photos.insert(min(newIndex, _photos.length-1), _photos.removeAt(oldIndex));
     });
+    }
   }
 
   // _onVideoReorderRequested(int oldIndex, int newIndex) {
