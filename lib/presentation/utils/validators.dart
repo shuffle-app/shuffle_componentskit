@@ -1,9 +1,9 @@
 String? websiteValidator(String? value) {
   if (value == null || value.isEmpty) {
     return null;
-  } else if (value.contains('http://') || value.contains('https://')) {
+  } else if (RegExp(r'^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$').hasMatch(value)) {
     return null;
-  } else if (value.split('.').length < 2 || (value.split('.').lastOrNull ?? '').length < 3) {
+  } else if (value.split('.').length < 2 || (value.split('.').lastOrNull ?? '').length < 2) {
     return 'Please enter a valid website';
   }
   return null;

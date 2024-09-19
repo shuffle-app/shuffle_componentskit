@@ -11,13 +11,13 @@ class PhotoVideoSelector extends StatelessWidget {
   final ReorderCallback onPhotoReorderRequested;
   final ReorderCallback? onVideoReorderRequested;
   final PositionModel? positionModel;
-  final GlobalKey<ReorderableListState> listPhotosKey = GlobalKey<ReorderableListState>();
-  final GlobalKey<ReorderableListState> listVideosKey = GlobalKey<ReorderableListState>();
+  final GlobalKey<ReorderableListState> listPhotosKey;
+  final GlobalKey<ReorderableListState> listVideosKey;
   final Function(int index) onPhotoDeleted;
   final Function(int index)? onVideoDeleted;
   final bool hideVideosSelection;
 
-  PhotoVideoSelector({
+  const PhotoVideoSelector({
     super.key,
     this.photos = const [],
     this.videos = const [],
@@ -30,6 +30,8 @@ class PhotoVideoSelector extends StatelessWidget {
     this.onVideoDeleted,
     this.hideVideosSelection = false,
     this.positionModel,
+    required this.listPhotosKey,
+    required this.listVideosKey,
   });
 
   @override
@@ -85,8 +87,8 @@ class PhotoVideoSelector extends StatelessWidget {
                             child: photos[index].widget(photos[index].previewType != null
                                 ? Size(
                                     photos[index].previewType == UiKitPreviewType.horizontal
-                                        ? itemsSize.width /1.2
-                                        : itemsSize.width /2,
+                                        ? itemsSize.width / 1.2
+                                        : itemsSize.width / 2,
                                     itemsSize.height)
                                 : itemsSize),
                             // child: photos[index].widget(itemsSize),
@@ -109,8 +111,9 @@ class PhotoVideoSelector extends StatelessWidget {
                                 child: ColoredBox(
                                     color: Colors.black.withOpacity(0.5),
                                     child: Text('cover'.toUpperCase(),
-                                        textAlign: TextAlign.center,
-                                        style: theme?.boldTextTheme.caption3Medium.copyWith(color: Colors.white)).paddingOnly(top: 4)))
+                                            textAlign: TextAlign.center,
+                                            style: theme?.boldTextTheme.caption3Medium.copyWith(color: Colors.white))
+                                        .paddingOnly(top: 4)))
                         ],
                       ),
                       itemCount: photos.length,

@@ -26,7 +26,7 @@ class MyEventsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = ((events.isNotEmpty ? events.length : 1) * 70.h) + 80.h;
+    final height = ((events.isNotEmpty ? (events.length + (remainsToCreate != null ? 0.35 : 0)) : 1) * 70.h) + 80.h;
     final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
     final regularTextTheme = theme?.regularTextTheme;

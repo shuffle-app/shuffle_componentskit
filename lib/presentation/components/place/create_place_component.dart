@@ -52,6 +52,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
+  late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
 
   late UiPlaceModel _placeToEdit;
   late BookingUiModel? _bookingUiModel;
@@ -282,17 +284,19 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             PhotoVideoSelector(
-              hideVideosSelection: true,
-              positionModel: model.positionModel,
-              // videos: _videos,
-              photos: _photos,
-              // onVideoAddRequested: _onVideoAddRequested,
-              // onVideoDeleted: _onVideoDeleted,
-              onPhotoAddRequested: _onPhotoAddRequested,
-              onPhotoDeleted: _onPhotoDeleted,
-              onPhotoReorderRequested: _onPhotoReorderRequested,
-              // onVideoReorderRequested: _onVideoReorderRequested,
-            ),
+                hideVideosSelection: true,
+                positionModel: model.positionModel,
+                // videos: _videos,
+                photos: _photos,
+                // onVideoAddRequested: _onVideoAddRequested,
+                // onVideoDeleted: _onVideoDeleted,
+                onPhotoAddRequested: _onPhotoAddRequested,
+                onPhotoDeleted: _onPhotoDeleted,
+                onPhotoReorderRequested: _onPhotoReorderRequested,
+                listPhotosKey: _reordablePhotokey,
+                listVideosKey: _reordableVideokey
+                // onVideoReorderRequested: _onVideoReorderRequested,
+                ),
             SpacingFoundation.verticalSpace24,
             IntrinsicHeight(
               child: UiKitInputFieldNoFill(
@@ -427,15 +431,17 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 UiKitCustomTab(
                   title: S.of(context).Both,
                   customValue: 'both',
+                  group: _tabsGroup,
                 ),
                 UiKitCustomTab(
                   title: S.of(context).Leisure,
                   customValue: 'leisure',
+                  group: _tabsGroup,
                 ),
                 UiKitCustomTab(
                   title: S.of(context).Business,
                   customValue: 'business',
-                  group: AutoSizeGroup(),
+                  group: _tabsGroup,
                 ),
               ],
             ),
@@ -601,3 +607,5 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         ));
   }
 }
+
+AutoSizeGroup _tabsGroup = AutoSizeGroup();

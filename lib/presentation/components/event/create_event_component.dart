@@ -53,6 +53,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _upsalesController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
+  late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
 
   late UiEventModel _eventToEdit;
   late BookingUiModel? _bookingUiModel;
@@ -229,6 +231,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             onPhotoDeleted: _onPhotoDeleted,
             onPhotoReorderRequested: _onPhotoReorderRequested,
             onVideoReorderRequested: _onVideoReorderRequested,
+            listPhotosKey: _reordablePhotokey,
+            listVideosKey: _reordableVideokey
           ),
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
@@ -350,17 +354,19 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 height: 20.h,
                 title: S.of(context).Both,
                 customValue: 'both',
+                group: _tabsGroup,
               ),
               UiKitCustomTab(
                 height: 20.h,
                 title: S.of(context).Leisure,
                 customValue: 'leisure',
+                group: _tabsGroup,
               ),
               UiKitCustomTab(
                 height: 20.h,
                 title: S.of(context).Business,
                 customValue: 'business',
-                group: AutoSizeGroup(),
+                group: _tabsGroup,
               ),
             ],
           ),
@@ -624,3 +630,5 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     );
   }
 }
+
+AutoSizeGroup _tabsGroup = AutoSizeGroup();
