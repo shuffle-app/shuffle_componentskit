@@ -344,6 +344,8 @@ class ProfileComponent extends StatelessWidget {
               title: S.of(context).MyEvents,
               onTap: onMyEventsPressed ?? () {},
               onEventTap: onEventTap ?? (_) {},
+              //TODO update when proPlus will be implemented,
+              remainsToCreate: 3 - (events ?? []).length,
               events: events ?? []),
           SpacingFoundation.verticalSpace24,
         ],

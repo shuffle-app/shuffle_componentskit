@@ -141,6 +141,12 @@ class _LocationComponentState extends State<LocationComponent> {
         position: placeCoordinates,
       );
 
+      setState(() {
+        mapMarkers.clear();
+        mapMarkers = {marker};
+        _newPlaceTapped = true;
+      });
+
       final placeFromCoordinates = await GoogleMapsApi.fetchPlaceFromCoordinates(
         latlng: '${placeCoordinates.latitude}, ${placeCoordinates.longitude}',
       );
@@ -148,12 +154,6 @@ class _LocationComponentState extends State<LocationComponent> {
       await widget.onPlacesCheck
           ?.call(placeFromCoordinates?.results?.firstOrNull?.formattedAddress)
           .then((places) => places.isNotEmpty ? locationDetailsSheetController.updateKnownLocations(places) : null);
-
-      setState(() {
-        mapMarkers.clear();
-        mapMarkers = {marker};
-        _newPlaceTapped = true;
-      });
 
       final place = placeFromCoordinates?.results?.firstOrNull;
 

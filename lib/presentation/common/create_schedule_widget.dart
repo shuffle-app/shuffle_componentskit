@@ -27,7 +27,6 @@ class CreateScheduleWidget extends StatefulWidget {
 }
 
 class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
-  // ScheduleType selectedInputType = ScheduleType.weekly;
   late final int initialItemsCount = 2;
   String? selectedScheduleName;
 
@@ -37,8 +36,6 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
 
   @override
   void initState() {
-    // initialItemsCount = widget.availableTemplates.isEmpty ? 2 : 3;
-    // scheduleModel = UiScheduleTimeModel(weeklySchedule: List.empty(growable: true));
     super.initState();
   }
 
@@ -102,7 +99,6 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                 SpacingFoundation.verticalSpace4,
                 UiKitBaseDropdown<UiScheduleModel>(
                   items: availableTemplates,
-                  // value: scheduleModel,
                   onChanged: (UiScheduleModel? selectedTemplate) {
                     if (selectedTemplate != null) {
                       if ((scheduleModel?.itemsCount ?? 0) >= 1) {
@@ -151,7 +147,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
               if (scheduleModel != null)
                 context.outlinedButton(
                   data: BaseUiKitButtonData(
-                      text: 'Save template',
+                      text: S.of(context).SaveTemplate,
                       onPressed: scheduleModel == null
                           ? null
                           : () async {
@@ -161,7 +157,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                   context,
                                   AlertDialogData(
                                       title: Text(
-                                        'Save template',
+                                        S.of(context).SaveTemplate,
                                         style:
                                             textTheme?.title2.copyWith(color: UiKitColors.lightHeadingTypographyColor),
                                       ),
@@ -173,7 +169,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                         customLabelColor: UiKitColors.lightBodyTypographyColor,
                                         fillColor: UiKitColors.lightSurface1,
                                         borderRadius: BorderRadiusFoundation.all12,
-                                        label: 'Template name',
+                                        label: S.of(context).TemplateName,
                                       ),
                                       actions: [
                                         context.button(
@@ -210,7 +206,7 @@ abstract class UiScheduleModel {
       showUiKitAlertDialog(
           navigatorKey.currentContext!,
           AlertDialogData(
-              title: Text('End time could not be before start time',
+              title: Text(S.current.TimeRangeError,
                   style: navigatorKey.currentContext!.uiKitTheme?.regularTextTheme.body),
               defaultButtonText: S.current.Ok));
       return DateTimeRange(
@@ -351,19 +347,6 @@ class UiScheduleTimeModel extends UiScheduleModel {
         .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
         .join(';');
   }
-
-  @override
-  List<MapEntry<String, List<TimeOfDay>>> decodeSchedule(String scheduleString) {
-    return scheduleString.split(';').map((schedule) {
-      final parts = schedule.split(':');
-      return MapEntry(
-          parts[0],
-          parts[1]
-              .split(',')
-              .map((time) => TimeOfDay(hour: int.parse(time.split('-')[0]), minute: int.parse(time.split('-')[1])))
-              .toList());
-    }).toList();
-  }
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
@@ -478,19 +461,6 @@ class UiScheduleDatesModel extends UiScheduleModel {
     return dailySchedule
         .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
         .join(';');
-  }
-
-  @override
-  List<MapEntry<String, List<TimeOfDay>>> decodeSchedule(String scheduleString) {
-    return scheduleString.split(';').map((schedule) {
-      final parts = schedule.split(':');
-      return MapEntry(
-          parts[0],
-          parts[1]
-              .split(',')
-              .map((time) => TimeOfDay(hour: int.parse(time.split('-')[0]), minute: int.parse(time.split('-')[1])))
-              .toList());
-    }).toList();
   }
 }
 

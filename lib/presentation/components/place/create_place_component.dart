@@ -74,6 +74,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           description: '',
         );
     _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
+    if (_placeToEdit.verticalPreview != null) {
+      _photos.add(_placeToEdit.verticalPreview!);
+    }
     _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
@@ -134,10 +137,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   // }
 
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
-    if(oldIndex!=newIndex) {
+    if (oldIndex != newIndex) {
       setState(() {
-      _photos.insert(min(newIndex, _photos.length-1), _photos.removeAt(oldIndex));
-    });
+        _photos.insert(min(newIndex, _photos.length - 1), _photos.removeAt(oldIndex));
+      });
     }
   }
 
@@ -160,6 +163,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _photos.clear();
       _videos.clear();
       _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      if (_placeToEdit.verticalPreview != null) {
+        _photos.add(_placeToEdit.verticalPreview!);
+      }
       _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
       _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
       _descriptionController.text = widget.placeToEdit?.description ?? '';
@@ -247,6 +253,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               label: S.of(context).Title,
               validator: titleValidator,
               controller: _titleController,
+              hintText: 'Place name',
               onChanged: (_) {
                 _formKey.currentState?.validate();
               },
@@ -290,6 +297,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             IntrinsicHeight(
               child: UiKitInputFieldNoFill(
                 label: S.of(context).Description,
+                hintText: 'Some amazing details about the place',
                 validator: descriptionValidator,
                 controller: _descriptionController,
                 textInputAction: TextInputAction.newline,
@@ -303,6 +311,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             UiKitInputFieldNoFill(
               keyboardType: TextInputType.url,
               label: S.of(context).Website,
+              hintText: 'coolplace.com',
               validator: websiteValidator,
               controller: _websiteController,
             ).paddingSymmetric(horizontal: horizontalPadding),

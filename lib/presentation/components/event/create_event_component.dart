@@ -73,6 +73,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _locationController.text = widget.eventToEdit?.location ?? '';
     _priceController.text = widget.eventToEdit?.price ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+    if (_eventToEdit.verticalPreview != null &&
+        //in case that if event has not verticalPreview and we put there horizontal or just first image
+        !_photos.map((e) => e.link).contains(_eventToEdit.verticalPreview!.link)) {
+      _photos.add(_eventToEdit.verticalPreview!);
+    }
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
@@ -128,7 +133,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
     if (oldIndex != newIndex) {
       setState(() {
-        _photos.insert(min(newIndex, _photos.length-1), _photos.removeAt(oldIndex));
+        _photos.insert(min(newIndex, _photos.length - 1), _photos.removeAt(oldIndex));
       });
     }
   }
@@ -155,6 +160,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      if (_eventToEdit.verticalPreview != null &&
+          //in case that if event has not verticalPreview and we put there horizontal or just first image
+          !_photos.map((e) => e.link).contains(_eventToEdit.verticalPreview!.link)) {
+        _photos.add(_eventToEdit.verticalPreview!);
+      }
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
       _bookingUiModel = widget.eventToEdit?.bookingUiModel;
     }
@@ -203,6 +213,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoFill(
             label: S.of(context).Title,
+            hintText: 'Event name',
             controller: _titleController,
             validator: titleValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -223,6 +234,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           IntrinsicHeight(
             child: UiKitInputFieldNoFill(
               label: S.of(context).Description,
+              hintText: 'Something amazing about your event',
               controller: _descriptionController,
               textInputAction: TextInputAction.newline,
               expands: true,
@@ -264,6 +276,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitInputFieldNoFill(
             prefixText: 'https://',
             keyboardType: TextInputType.url,
+            hintText: 'coolevent.com',
             label: S.of(context).Website,
             controller: _websiteController,
             validator: websiteValidator,

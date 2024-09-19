@@ -6,6 +6,7 @@ import '../../../shuffle_components_kit.dart';
 class UiPlaceModel {
   int id;
   List<BaseUiKitMedia> media;
+  BaseUiKitMedia? verticalPreview;
   List<String> weekdays;
   String description;
   List<UiKitTag> tags;
@@ -41,6 +42,7 @@ class UiPlaceModel {
     this.scheduleString,
     this.location,
     this.media = const [],
+    this.verticalPreview,
     this.logo,
     this.phone,
     this.website,
@@ -98,6 +100,10 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Phone);
     } else if (location == null || location!.isEmpty) {
       return S.current.XIsRequired(S.current.Location);
+    } else if (baseTags.isEmpty) {
+      return S.current.XIsRequired(S.current.BaseProperties);
+    } else if (tags.isEmpty) {
+      return S.current.XIsRequired(S.current.UniqueProperties);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
     } else if (placeType == null || placeType!.title.isEmpty) {
@@ -110,6 +116,7 @@ class UiPlaceModel {
   UiPlaceModel copyWith({
     int? id,
     List<BaseUiKitMedia>? media,
+    BaseUiKitMedia? verticalPreview,
     List<String>? weekdays,
     String? description,
     List<UiKitTag>? tags,
@@ -142,6 +149,7 @@ class UiPlaceModel {
       UiPlaceModel(
         id: id ?? this.id,
         media: media ?? this.media,
+        verticalPreview: verticalPreview ?? this.verticalPreview,
         weekdays: weekdays ?? this.weekdays,
         description: description ?? this.description,
         tags: tags ?? this.tags,
@@ -165,8 +173,8 @@ class UiPlaceModel {
         weatherType: weatherType ?? this.weatherType,
         bookingUrl: bookingUrl ?? this.bookingUrl,
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
-        currency: currency?? this.currency,
-        updatedAt: updatedAt?? this.updatedAt,
+        currency: currency ?? this.currency,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
 
   UiPlaceModel.empty()
