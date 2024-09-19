@@ -313,6 +313,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
+              prefixText: 'https://',
               keyboardType: TextInputType.url,
               label: S.of(context).Website,
               hintText: 'coolplace.com',
@@ -455,12 +456,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 widget.onCategoryChanged?.call(_placeToEdit.contentType).then((value) {
                   setState(() {
                     _placeToEdit.placeType = value;
+                    _placeToEdit.baseTags.clear();
+                    _placeToEdit.tags.clear();
                   });
                 });
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
-            if (_placeToEdit.contentType == 'business')
+            if (_placeToEdit.contentType == 'business')...[
               UiKitFieldWithTagList(
                 listUiKitTags:
                     _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
@@ -472,7 +475,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     });
                   });
                 },
-              ).paddingSymmetric(horizontal: horizontalPadding),
+              ).paddingSymmetric(horizontal: horizontalPadding)],
             SpacingFoundation.verticalSpace24,
             UiKitFieldWithTagList(
               listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,

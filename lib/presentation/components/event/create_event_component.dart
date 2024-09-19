@@ -221,19 +221,18 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
-            positionModel: model.positionModel,
-            videos: _videos,
-            photos: _photos,
-            hideVideosSelection: true,
-            onVideoAddRequested: _onVideoAddRequested,
-            onVideoDeleted: _onVideoDeleted,
-            onPhotoAddRequested: _onPhotoAddRequested,
-            onPhotoDeleted: _onPhotoDeleted,
-            onPhotoReorderRequested: _onPhotoReorderRequested,
-            onVideoReorderRequested: _onVideoReorderRequested,
-            listPhotosKey: _reordablePhotokey,
-            listVideosKey: _reordableVideokey
-          ),
+              positionModel: model.positionModel,
+              videos: _videos,
+              photos: _photos,
+              hideVideosSelection: true,
+              onVideoAddRequested: _onVideoAddRequested,
+              onVideoDeleted: _onVideoDeleted,
+              onPhotoAddRequested: _onPhotoAddRequested,
+              onPhotoDeleted: _onPhotoDeleted,
+              onPhotoReorderRequested: _onPhotoReorderRequested,
+              onVideoReorderRequested: _onVideoReorderRequested,
+              listPhotosKey: _reordablePhotokey,
+              listVideosKey: _reordableVideokey),
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
             child: UiKitInputFieldNoFill(
@@ -378,6 +377,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               widget.onCategoryChanged?.call(_eventToEdit.contentType).then((value) {
                 setState(() {
                   _eventToEdit.eventType = value;
+                  _eventToEdit.baseTags.clear();
+                  _eventToEdit.tags.clear();
                 });
               });
             },
@@ -466,7 +467,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
-          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
+          Text(S.of(context).SetWorkHours, style: theme?.regularTextTheme.labelSmall)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
