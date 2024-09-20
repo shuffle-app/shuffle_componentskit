@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../../../shuffle_components_kit.dart';
 
-class MindsetsManageComponent extends StatefulWidget {
+class MindsetsManageComponent extends StatelessWidget {
   const MindsetsManageComponent({
     super.key,
     required this.onAddMindset,
@@ -18,44 +18,33 @@ class MindsetsManageComponent extends StatefulWidget {
     required this.listMindsets,
     this.selectedMindset,
     this.recentlyAddedTags = const [],
+    this.listTags,
+    this.selectedTag,
+    required this.onTagSelect,
   });
 
   int? get selectedMindsetId => selectedMindset?.id;
 
-  final List<UiModelCategory> listMindsets;
-  final UiModelCategory? selectedMindset;
+  final List<UiKitTag> listMindsets;
+  final List<UiKitTag>? listTags;
+  final UiKitTag? selectedMindset;
+  final UiKitTag? selectedTag;
   final VoidCallback onAddMindset;
   final ValueChanged<int> onMindsetSelect;
+  final ValueChanged<int> onTagSelect;
   final VoidCallback? onEditSelectedMindset;
   final VoidCallback? onDeleteSelectedMindset;
-  final ValueChanged<UiModelProperty>? onTagDeleteTap;
-  final ValueChanged<UiModelProperty>? onTagEditTap;
-  final ValueChanged<UiModelProperty>? onRecentTagAssign;
+  final ValueChanged<UiKitTag>? onTagDeleteTap;
+  final ValueChanged<UiKitTag>? onTagEditTap;
+  final ValueChanged<UiKitTag>? onRecentTagAssign;
   final ValueChanged<String>? onPropertyFieldSubmitted;
   final Future<List<String>> Function(String) tagSearchOptions;
-  final List<UiModelProperty> recentlyAddedTags;
+  final List<UiKitTag> recentlyAddedTags;
 
-  @override
-  State<MindsetsManageComponent> createState() => _MindsetsManageComponentState();
-}
-
-class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
-  UiModelProperty? selectedTag;
-
-  @override
-  void didUpdateWidget(covariant MindsetsManageComponent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedMindset != oldWidget.selectedMindset) {
-      setState(() {
-        selectedTag = null;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final uiKitTheme = context.uiKitTheme;
-    debugPrint('MindsetsManageComponent build here with selectedProperty: ${selectedTag?.title}');
 
     return Scaffold(
       body: UiKitCardWrapper(
@@ -81,7 +70,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                     SpacingFoundation.horizontalSpace16,
                     context.boxIconButton(
                       data: BaseUiKitButtonData(
-                        onPressed: widget.onAddMindset,
+                        onPressed: onAddMindset,
                         backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                         iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
@@ -94,15 +83,15 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
-                  itemCount: widget.listMindsets.length,
+                  itemCount: listMindsets.length,
                   itemBuilder: (context, index) {
-                    final category = widget.listMindsets.elementAt(index);
+                    final mindset = listMindsets.elementAt(index);
                     return PropertiesTypeAnimatedButton(
-                      title: category.title,
+                      title: mindset.title,
                       onTap: () {
-                        widget.onMindsetSelect.call(category.id);
+                        onMindsetSelect.call(mindset.id!);
                       },
-                      isSelected: widget.selectedMindsetId == category.id,
+                      isSelected: selectedMindsetId == mindset.id,
                     );
                   },
                 ),
@@ -111,12 +100,12 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
             SpacingFoundation.horizontalSpace16,
             Flexible(
               child: PropertiesBorderedBox(
-                title: widget.selectedMindset != null
+                title: selectedMindset != null
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ImageWidget(
-                            link: widget.selectedMindset?.icon ?? '',
+                            link: selectedMindset?.icon ?? '',
                             width: kIsWeb ? 24 : 24.sp,
                             color: uiKitTheme?.themeMode == ThemeMode.light
                                 ? ColorsFoundation.surface
@@ -125,7 +114,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                           SpacingFoundation.horizontalSpace4,
                           Expanded(
                             child: Text(
-                              widget.selectedMindset?.title ?? '',
+                              selectedMindset?.title ?? '',
                               overflow: TextOverflow.ellipsis,
                               style: uiKitTheme?.boldTextTheme.title2,
                             ),
@@ -133,7 +122,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                           SpacingFoundation.horizontalSpace16,
                           context.boxIconButton(
                             data: BaseUiKitButtonData(
-                              onPressed: widget.onEditSelectedMindset,
+                              onPressed: onEditSelectedMindset,
                               backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                               iconInfo: BaseUiKitButtonIconData(
                                   iconData: ShuffleUiKitIcons.pencil,
@@ -144,7 +133,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                           SpacingFoundation.horizontalSpace4,
                           context.boxIconButton(
                             data: BaseUiKitButtonData(
-                              onPressed: widget.onDeleteSelectedMindset,
+                              onPressed: onDeleteSelectedMindset,
                               backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
                               iconInfo: BaseUiKitButtonIconData(
                                   iconData: ShuffleUiKitIcons.trash,
@@ -167,9 +156,9 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                     ),
                     SpacingFoundation.verticalSpace12,
                     PropertiesSearchInput(
-                      options: widget.tagSearchOptions,
+                      options: tagSearchOptions,
                       showAllOptions: true,
-                      onFieldSubmitted: widget.onPropertyFieldSubmitted,
+                      onFieldSubmitted: onPropertyFieldSubmitted,
                     ),
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
@@ -180,7 +169,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                             children: [
                               context.boxIconButton(
                                 data: BaseUiKitButtonData(
-                                  onPressed: () => widget.onTagEditTap?.call(selectedTag!),
+                                  onPressed: () => onTagEditTap?.call(selectedTag!),
                                   backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                                   iconInfo: BaseUiKitButtonIconData(
                                       iconData: ShuffleUiKitIcons.pencil,
@@ -191,7 +180,7 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                               SpacingFoundation.horizontalSpace4,
                               context.boxIconButton(
                                 data: BaseUiKitButtonData(
-                                  onPressed: () => widget.onTagDeleteTap?.call(selectedTag!),
+                                  onPressed: () => onTagDeleteTap?.call(selectedTag!),
                                   backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
                                   iconInfo: BaseUiKitButtonIconData(
                                       iconData: ShuffleUiKitIcons.trash,
@@ -204,20 +193,14 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                         Wrap(
                             spacing: SpacingFoundation.horizontalSpacing12,
                             runSpacing: SpacingFoundation.verticalSpacing12,
-                            children: (widget.selectedMindset?.categoryProperties.where((e) => !e.unique) ?? []).map(
+                            children: (listTags ?? []).map(
                               (e) {
                                 return UiKitCloudChip(
                                   iconPath: e.icon,
                                   title: e.title,
                                   selected: e == selectedTag,
                                   onTap: () {
-                                    setState(() {
-                                      if (selectedTag == e) {
-                                        selectedTag = null;
-                                      } else {
-                                        selectedTag = e;
-                                      }
-                                    });
+                                    onTagSelect.call(e.id!);
                                   },
                                 );
                               },
@@ -245,11 +228,11 @@ class _MindsetsManageComponentState extends State<MindsetsManageComponent> {
                   child: Wrap(
                       spacing: SpacingFoundation.horizontalSpacing12,
                       runSpacing: SpacingFoundation.verticalSpacing12,
-                      children: widget.recentlyAddedTags
+                      children: recentlyAddedTags
                           .map((e) => UiKitCloudChip(
                                 iconPath: e.icon,
                                 title: e.title,
-                                onTap: () => widget.onRecentTagAssign?.call(e),
+                                onTap: () => onRecentTagAssign?.call(e),
                               ))
                           .toList())),
             ),
