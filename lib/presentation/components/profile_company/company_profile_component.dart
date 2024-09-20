@@ -17,7 +17,8 @@ class CompanyProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.uiKitTheme?.boldTextTheme;
-    final config = GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final config =
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentModel model = ComponentModel.fromJson(config['company_profile']);
     final title = model.content.title?[ContentItemType.text]?.properties?.keys.first;
     final bodyAlignment = model.positionModel?.bodyAlignment;
@@ -86,6 +87,19 @@ class CompanyProfileComponent extends StatelessWidget {
             ),
             text: S.current.EditProfile.toUpperCase(),
             onPressed: () => onProfileItemChosen('edit_profile'),
+          ),
+        ),
+        SpacingFoundation.verticalSpace16,
+        divider,
+        SpacingFoundation.verticalSpace16,
+        UiKitInlineButton(
+          data: BaseUiKitButtonData(
+            iconInfo: BaseUiKitButtonIconData(
+              iconPath: GraphicsFoundation.instance.svg.booking.path,
+              size: iconWidth,
+            ),
+            text: S.current.Bookings(2).toUpperCase(),
+            onPressed: () => onProfileItemChosen('bookings'),
           ),
         ),
         SpacingFoundation.verticalSpace16,
