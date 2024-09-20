@@ -68,7 +68,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
             autoImplyLeading: true,
             centerTitle: true,
             customToolbarBaseHeight: 100,
-            customTitle: AutoSizeText(widget.title, maxLines: 2, style: textStyle),
+            customTitle: Flexible(child: AutoSizeText(widget.title, maxLines: 2, style: textStyle)),
             childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             children: [
               SpacingFoundation.verticalSpace16,

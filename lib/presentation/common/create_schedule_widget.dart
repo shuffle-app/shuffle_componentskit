@@ -478,7 +478,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
         log('rebuild is here $thisObject', name: 'UiScheduleDatesRangeModel');
         return _CardListWrapper(children: [
           UiKitAddableFormField(
-              title: 'Date Range',
+              title: S.current.DateRange,
               onAdd: () {
                 onAdd?.call();
                 dailySchedule.add(const MapEntry('', []));

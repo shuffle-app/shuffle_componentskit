@@ -223,11 +223,12 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
           child: BlurredAppBarPage(
             autoImplyLeading: true,
             centerTitle: true,
-            customTitle: AutoSizeText(
+            customTitle: Flexible(
+                child: AutoSizeText(
               S.of(context).AddImage,
               style: textStyle,
               maxLines: 1,
-            ),
+            )),
             childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             children: [
               SpacingFoundation.verticalSpace16,
