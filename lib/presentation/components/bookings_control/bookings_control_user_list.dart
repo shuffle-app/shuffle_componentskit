@@ -7,22 +7,22 @@ import 'users_bookings_control.dart';
 
 class BookingsControlUserList extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
-  final BookingUiModel? bookingUiModel;
-  final ValueChanged<BookingUiModel?>? onBookingEdit;
+  final VoidCallback? onBookingEdit;
   final Function(String? value, int userId)? onPopupMenuSelected;
   final ValueChanged<UserBookingsControlUiModel>? onRequestsRefund;
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
   final bool canBookingEdit;
+  final bool isLoading;
 
   const BookingsControlUserList({
     super.key,
     this.bookingsPlaceItemUiModel,
     this.refundEveryone,
-    this.bookingUiModel,
     this.onBookingEdit,
     this.onPopupMenuSelected,
     this.onRequestsRefund,
     this.canBookingEdit = false,
+    this.isLoading = false,
   });
 
   @override
@@ -122,7 +122,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
               ),
               if (widget.canBookingEdit)
                 GestureDetector(
-                  onTap: () => widget.onBookingEdit?.call(widget.bookingUiModel),
+                  onTap: widget.onBookingEdit,
                   child: ImageWidget(
                     link: GraphicsFoundation.instance.svg.pencil.path,
                     color: theme?.colorScheme.inversePrimary,
@@ -130,7 +130,9 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                 ),
             ],
           ),
-          if (groupedUsers.isNotEmpty) ...[
+          if (widget.isLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (groupedUsers.isNotEmpty) ...[
             ...groupedUsers.map(
               (group) => Column(
                 children: group
