@@ -41,6 +41,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final bool isLightTheme;
   final bool beInSearch;
   final bool isLoading;
+  final bool hasChanges;
 
   const EditProfileDefaultComponent({
     super.key,
@@ -79,6 +80,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
     required this.beInSearch,
     this.activityItem,
     this.userType = UserTileType.ordinary,
+    this.hasChanges = false,
   });
 
   @override
@@ -266,7 +268,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
             GestureDetector(
               onTap: () => showUiKitCalendarDialog(context, firstDate: DateTime(1960, 1, 1)).then((d) {
                 if (d != null) {
-                  dateOfBirthController.text = '${leadingZeros(d.day)}.${leadingZeros(d.month)}.${d.year}';
+                  dateOfBirthController.text = '${d.year}-${leadingZeros(d.month)}-${leadingZeros(d.day)}';
                 }
               }),
               child: AbsorbPointer(
@@ -384,23 +386,30 @@ class EditProfileDefaultComponent extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: AnimatedOpacity(
+      bottomNavigationBar: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        curve: Curves.bounceIn,
-        opacity: MediaQuery.viewInsetsOf(context).bottom == 0 ? 1 : 0,
-        child: context
-            .gradientButton(
-              data: BaseUiKitButtonData(
-                text: S.of(context).Save.toUpperCase(),
-                loading: isLoading,
-                onPressed: onProfileEditSubmitted,
+        transitionBuilder: (child, animation) {
+          return SlideTransition(
+            position: Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero).animate(animation),
+            child: MediaQuery.viewInsetsOf(context).bottom == 0 && hasChanges ? child : const SizedBox.shrink(),
+          );
+        },
+        child: SizedBox(
+          width: double.infinity,
+          child: context
+              .gradientButton(
+                data: BaseUiKitButtonData(
+                  text: S.of(context).Save.toUpperCase(),
+                  loading: isLoading,
+                  onPressed: onProfileEditSubmitted,
+                ),
+              )
+              .paddingOnly(
+                left: horizontalMargin,
+                right: horizontalMargin,
+                bottom: EdgeInsetsFoundation.vertical24,
               ),
-            )
-            .paddingOnly(
-              left: horizontalMargin,
-              right: horizontalMargin,
-              bottom: EdgeInsetsFoundation.vertical24,
-            ),
+        ),
       ),
     );
   }
