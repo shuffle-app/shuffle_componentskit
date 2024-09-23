@@ -8,7 +8,7 @@ class BookingsControlComponent extends StatelessWidget {
   final List<BookingsPlaceOrEventUiModel>? placesOrEvents;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onPlaceItemTap;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onEventItemTap;
-  final bool isProAcc;
+  final bool isCompany;
   final bool isLoading;
 
   late final List<BookingsPlaceOrEventUiModel> places;
@@ -19,7 +19,7 @@ class BookingsControlComponent extends StatelessWidget {
     this.placesOrEvents,
     this.onPlaceItemTap,
     this.onEventItemTap,
-    this.isProAcc = false,
+    this.isCompany = false,
     this.isLoading = false,
   }) {
     places = List.empty(growable: true);
@@ -50,7 +50,7 @@ class BookingsControlComponent extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!isProAcc)
+                  if (isCompany)
                     UiKitCustomTabBar(
                       onTappedTab: (index) => tabValue.value = index == 0,
                       tabs: [
@@ -83,7 +83,7 @@ class BookingsControlComponent extends StatelessWidget {
                             : [
                                 Center(
                                   child: Text(
-                                    isProAcc ? S.of(context).ThereNoEventsYet : S.of(context).ThereNoPlacesYet,
+                                    isCompany ? S.of(context).ThereNoPlacesYet : S.of(context).ThereNoEventsYet,
                                     style: theme?.boldTextTheme.body,
                                   ),
                                 ),
