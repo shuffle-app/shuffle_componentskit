@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,13 +56,25 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     });
   }
 
+  onHorizontalPreviewDeleted() {
+    setState(() {
+      _photos.removeWhere((element) => element.previewType == UiKitPreviewType.horizontal);
+    });
+  }
+
+  onVerticalPreviewDeleted() {
+    setState(() {
+      _photos.removeWhere((element) => element.previewType == UiKitPreviewType.vertical);
+    });
+  }
+
   selectHorizontalFormat([preselected]) async {
     final horizontal = preselected ?? await _getPhoto();
     if (horizontal == null) return;
     unawaited(showDialog(
         context: context,
         builder: (context) => _ImageViewFinderDialog(
-              title: 'Crop to horizontal',
+              title: S.current.CropHorizontal,
               imageBytes: File(horizontal).readAsBytesSync(),
               viewFinderOrientation: Axis.horizontal,
               onCropCompleted: (data) {
@@ -89,7 +101,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
         context: context,
         builder: (context) => _ImageViewFinderDialog(
               viewFinderOrientation: Axis.vertical,
-              title: 'Crop to vertical',
+              title: S.current.CropVertical,
               imageBytes: File(vertical).readAsBytesSync(),
               onCropCompleted: (data) {
                 final file = File('${tempDir.path}/shuffle-photos-editing/${data.filename ?? 'vertical'}');
@@ -121,7 +133,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
               ),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Text(
-                  'Select a photo to set preview',
+                  S.current.SelectToSetPreview,
                   textAlign: TextAlign.center,
                   style: context.uiKitTheme?.boldTextTheme.title2.copyWith(color: primaryColor),
                 ),
@@ -148,7 +160,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 16.h.heightBox,
                 context.button(
                   data: BaseUiKitButtonData(
-                      text: 'From gallery',
+                      text: S.current.FromGallery,
                       textColor: inversedColor,
                       backgroundColor: primaryColor,
                       onPressed: () async {
@@ -181,12 +193,16 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
           ),
           SpacingFoundation.verticalSpace16,
           Text(
-            'Add photo here',
+            S.of(context).AddPhotoHere,
             style: theme?.boldTextTheme.body,
           )
         ],
       ),
     );
+
+    final textTheme = theme?.boldTextTheme;
+    TextStyle? textStyle = textTheme?.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
 
     return Scaffold(
         bottomNavigationBar: _photos.isNotEmpty
@@ -207,7 +223,12 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
           child: BlurredAppBarPage(
             autoImplyLeading: true,
             centerTitle: true,
-            title: 'Add Image',
+            customTitle: Flexible(
+                child: AutoSizeText(
+              S.of(context).AddImage,
+              style: textStyle,
+              maxLines: 1,
+            )),
             childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             children: [
               SpacingFoundation.verticalSpace16,
@@ -262,61 +283,94 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                       })),
               SpacingFoundation.verticalSpace8,
               if (_photos.isNotEmpty) ...[
-                Row(children: [
-                  Text(
-                    'Cover',
-                    style: theme?.boldTextTheme.title1,
-                  ),
-                  const Spacer(),
-                ]).paddingSymmetric(horizontal: horizontalPadding),
+                Text(
+                  S.of(context).Cover,
+                  style: theme?.boldTextTheme.title1,
+                ).paddingSymmetric(horizontal: horizontalPadding),
                 SpacingFoundation.verticalSpace8,
                 Text(
-                  'Horizontal format',
+                  S.of(context).HorizontalFormat,
                   style: theme?.regularTextTheme.labelSmall,
-                ),
+                ).paddingSymmetric(horizontal: horizontalPadding),
                 SpacingFoundation.verticalSpace8,
-                InkWell(
-                    borderRadius: BorderRadiusFoundation.all8,
-                    onTap: selectHorizontalFormat,
-                    child: ClipPath(
-                      clipper: ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusFoundation.all8,
-                        ),
-                      ),
-                      child: _photos
-                              .firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal)
-                              ?.widget(Size(1.sw - horizontalPadding * 6, 0.48.sw)) ??
-                          ImageWidget(
-                            height: 0.48.sw,
-                            width: 1.sw - horizontalPadding * 6,
-                            errorWidget: errorWidget,
+                Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+                  InkWell(
+                      borderRadius: BorderRadiusFoundation.all8,
+                      onTap: selectHorizontalFormat,
+                      child: ClipPath(
+                        clipper: ShapeBorderClipper(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusFoundation.all8,
                           ),
-                    ).paddingAll(horizontalPadding)),
+                        ),
+                        child: _photos
+                                .firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal)
+                                ?.widget(Size(1.sw - horizontalPadding * 6, 0.48.sw)) ??
+                            ImageWidget(
+                              height: 0.48.sw,
+                              width: 1.sw - horizontalPadding * 6,
+                              errorWidget: errorWidget,
+                            ),
+                      )),
+                  if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) != null)
+                    Positioned(
+                        top: -8.w,
+                        right: -4.w,
+                        child: context.outlinedButton(
+                          hideBorder: true,
+                          data: BaseUiKitButtonData(
+                            onPressed: onHorizontalPreviewDeleted,
+                            iconInfo: BaseUiKitButtonIconData(
+                              iconData: ShuffleUiKitIcons.x,
+                              size: 20,
+                            ),
+                          ),
+                        )),
+                ]).paddingAll(horizontalPadding),
                 SpacingFoundation.verticalSpace16,
                 Text(
-                  'Vertical format',
+                  S.of(context).VerticalFormat,
                   style: theme?.regularTextTheme.labelSmall,
-                ),
+                ).paddingSymmetric(horizontal: horizontalPadding),
                 SpacingFoundation.verticalSpace8,
-                InkWell(
-                    borderRadius: BorderRadiusFoundation.all8,
-                    onTap: selectVerticalFormat,
-                    child: ClipPath(
-                      clipper: ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
+                SizedBox(
+                    width: 267.w,
+                    height: 267.w / 0.78125,
+                    child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+                      InkWell(
                           borderRadius: BorderRadiusFoundation.all8,
-                        ),
-                      ),
-                      child: _photos
-                              .firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical)
-                              ?.widget(Size(0.48.sw, 1.sw - horizontalPadding * 6)) ??
-                          ImageWidget(
-                            height: 1.sw - horizontalPadding * 6,
-                            width: 0.48.sw,
-                            errorWidget: errorWidget,
-                          ),
-                    ).paddingAll(horizontalPadding)),
+                          onTap: selectVerticalFormat,
+                          child: ClipPath(
+                            clipper: ShapeBorderClipper(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusFoundation.all8,
+                              ),
+                            ),
+                            child: _photos
+                                    .firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical)
+                                    ?.widget(Size(267.w, 267.w / 0.78125)) ??
+                                ImageWidget(
+                                  height: 267.w / 0.78125,
+                                  width: 267.w,
+                                  errorWidget: errorWidget,
+                                ),
+                          )),
+                      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) !=
+                          null)
+                        Positioned(
+                            top: -4,
+                            right: -4,
+                            child: context.outlinedButton(
+                              hideBorder: true,
+                              data: BaseUiKitButtonData(
+                                onPressed: onVerticalPreviewDeleted,
+                                iconInfo: BaseUiKitButtonIconData(
+                                  iconData: ShuffleUiKitIcons.x,
+                                  size: 20,
+                                ),
+                              ),
+                            )),
+                    ])).paddingAll(horizontalPadding),
                 SpacingFoundation.verticalSpace24
               ]
             ],
@@ -431,7 +485,7 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
             SpacingFoundation.verticalSpace16,
             context.gradientButton(
               data: BaseUiKitButtonData(
-                text: 'CONFIRM',
+                text: S.of(context).Confirm.toUpperCase(),
                 fit: ButtonFit.fitWidth,
                 onPressed: () => controller.cropImage(),
                 loading: controller.state == UiKitViewFinderState.cropping,

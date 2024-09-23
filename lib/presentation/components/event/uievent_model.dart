@@ -131,6 +131,8 @@ class UiEventModel extends Advertisable {
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
       return S.current.XIsRequired(S.current.Title);
+    } else if (location == null || location!.isEmpty) {
+      return S.current.XIsRequired(S.current.Location);
     } else if (description == null || description!.isEmpty) {
       return S.current.XIsRequired(S.current.Description);
     } else if (media.isEmpty) {
@@ -141,6 +143,10 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Website);
     } else if (eventType == null || eventType!.title.isEmpty) {
       return S.current.XIsRequired(S.current.EventType);
+    } else if (baseTags.isEmpty) {
+      return S.current.XIsRequired(S.current.BaseProperties);
+    } else if (tags.isEmpty) {
+      return S.current.XIsRequired(S.current.UniqueProperties);
     } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
     } else if (upsalesValidator(upsalesItems?.join(',')) != null) {

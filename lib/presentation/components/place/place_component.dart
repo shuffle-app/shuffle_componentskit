@@ -12,8 +12,9 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class PlaceComponent extends StatefulWidget {
   final UiPlaceModel place;
-  final bool isCreateEventAvaliable;
+  final bool isEligibleForEdit;
   final VoidCallback? onEventCreate;
+  final VoidCallback? onEditPressed;
   final Future<bool> Function()? onAddReactionTapped;
   final Future<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
@@ -47,10 +48,11 @@ class PlaceComponent extends StatefulWidget {
     required this.canLeaveFeedbackForEventCallback,
     this.showInviteList = true,
     this.onFeedbackTap,
+    this.onEditPressed,
     this.onReactionTap,
     this.onAddFeedbackTapped,
     this.complaintFormComponent,
-    this.isCreateEventAvaliable = false,
+    this.isEligibleForEdit = false,
     this.onEventCreate,
     this.onAddReactionTapped,
     this.onEventTap,
@@ -201,13 +203,20 @@ class _PlaceComponentState extends State<PlaceComponent> {
           title: widget.place.title,
           avatarUrl: widget.place.logo,
           horizontalMargin: horizontalMargin,
-          trailing: GestureDetector(
-            onTap: widget.onSharePressed,
-            child: Icon(
-              ShuffleUiKitIcons.share,
-              color: colorScheme?.darkNeutral800,
-            ),
-          ),
+          trailing: widget.isEligibleForEdit
+              ? IconButton(
+                  icon: ImageWidget(
+                      svgAsset: GraphicsFoundation.instance.svg.pencil,
+                      color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                  onPressed: () => widget.onEditPressed?.call(),
+                )
+              : GestureDetector(
+                  onTap: widget.onSharePressed,
+                  child: Icon(
+                    ShuffleUiKitIcons.share,
+                    color: colorScheme?.darkNeutral800,
+                  ),
+                ),
         ),
         SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
@@ -285,7 +294,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
           ),
           SpacingFoundation.verticalSpace24,
         ],
-        if (widget.isCreateEventAvaliable)
+        if (widget.isEligibleForEdit)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
             builder: (context, snapshot) => UiKitCardWrapper(

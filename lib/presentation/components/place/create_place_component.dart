@@ -52,6 +52,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
+  late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
 
   late UiPlaceModel _placeToEdit;
   late BookingUiModel? _bookingUiModel;
@@ -74,6 +76,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
           description: '',
         );
     _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
+    if (_placeToEdit.verticalPreview != null) {
+      _photos.add(_placeToEdit.verticalPreview!);
+    }
     _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _websiteController.text = widget.placeToEdit?.website ?? '';
     _phoneController.text = widget.placeToEdit?.phone ?? '';
@@ -134,10 +139,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   // }
 
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
-    if(oldIndex!=newIndex) {
+    if (oldIndex != newIndex) {
       setState(() {
-      _photos.insert(min(newIndex, _photos.length-1), _photos.removeAt(oldIndex));
-    });
+        _photos.insert(min(newIndex, _photos.length - 1), _photos.removeAt(oldIndex));
+      });
     }
   }
 
@@ -160,6 +165,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _photos.clear();
       _videos.clear();
       _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      if (_placeToEdit.verticalPreview != null) {
+        _photos.add(_placeToEdit.verticalPreview!);
+      }
       _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
       _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
       _descriptionController.text = widget.placeToEdit?.description ?? '';
@@ -247,6 +255,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               label: S.of(context).Title,
               validator: titleValidator,
               controller: _titleController,
+              hintText: 'Place name',
               onChanged: (_) {
                 _formKey.currentState?.validate();
               },
@@ -275,21 +284,24 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             PhotoVideoSelector(
-              hideVideosSelection: true,
-              positionModel: model.positionModel,
-              // videos: _videos,
-              photos: _photos,
-              // onVideoAddRequested: _onVideoAddRequested,
-              // onVideoDeleted: _onVideoDeleted,
-              onPhotoAddRequested: _onPhotoAddRequested,
-              onPhotoDeleted: _onPhotoDeleted,
-              onPhotoReorderRequested: _onPhotoReorderRequested,
-              // onVideoReorderRequested: _onVideoReorderRequested,
-            ),
+                hideVideosSelection: true,
+                positionModel: model.positionModel,
+                // videos: _videos,
+                photos: _photos,
+                // onVideoAddRequested: _onVideoAddRequested,
+                // onVideoDeleted: _onVideoDeleted,
+                onPhotoAddRequested: _onPhotoAddRequested,
+                onPhotoDeleted: _onPhotoDeleted,
+                onPhotoReorderRequested: _onPhotoReorderRequested,
+                listPhotosKey: _reordablePhotokey,
+                listVideosKey: _reordableVideokey
+                // onVideoReorderRequested: _onVideoReorderRequested,
+                ),
             SpacingFoundation.verticalSpace24,
             IntrinsicHeight(
               child: UiKitInputFieldNoFill(
                 label: S.of(context).Description,
+                hintText: 'Some amazing details about the place',
                 validator: descriptionValidator,
                 controller: _descriptionController,
                 textInputAction: TextInputAction.newline,
@@ -301,8 +313,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
+              prefixText: 'https://',
               keyboardType: TextInputType.url,
               label: S.of(context).Website,
+              hintText: 'coolplace.com',
               validator: websiteValidator,
               controller: _websiteController,
             ).paddingSymmetric(horizontal: horizontalPadding),
@@ -418,15 +432,17 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 UiKitCustomTab(
                   title: S.of(context).Both,
                   customValue: 'both',
+                  group: _tabsGroup,
                 ),
                 UiKitCustomTab(
                   title: S.of(context).Leisure,
                   customValue: 'leisure',
+                  group: _tabsGroup,
                 ),
                 UiKitCustomTab(
                   title: S.of(context).Business,
                   customValue: 'business',
-                  group: AutoSizeGroup(),
+                  group: _tabsGroup,
                 ),
               ],
             ),
@@ -440,12 +456,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 widget.onCategoryChanged?.call(_placeToEdit.contentType).then((value) {
                   setState(() {
                     _placeToEdit.placeType = value;
+                    _placeToEdit.baseTags.clear();
+                    _placeToEdit.tags.clear();
                   });
                 });
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
-            if (_placeToEdit.contentType == 'business')
+            if (_placeToEdit.contentType == 'business')...[
               UiKitFieldWithTagList(
                 listUiKitTags:
                     _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
@@ -457,7 +475,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     });
                   });
                 },
-              ).paddingSymmetric(horizontal: horizontalPadding),
+              ).paddingSymmetric(horizontal: horizontalPadding)],
             SpacingFoundation.verticalSpace24,
             UiKitFieldWithTagList(
               listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
@@ -592,3 +610,5 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
         ));
   }
 }
+
+AutoSizeGroup _tabsGroup = AutoSizeGroup();

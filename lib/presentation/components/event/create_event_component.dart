@@ -53,6 +53,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _upsalesController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
+  late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
 
   late UiEventModel _eventToEdit;
   late BookingUiModel? _bookingUiModel;
@@ -73,6 +75,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _locationController.text = widget.eventToEdit?.location ?? '';
     _priceController.text = widget.eventToEdit?.price ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+    if (_eventToEdit.verticalPreview != null &&
+        //in case that if event has not verticalPreview and we put there horizontal or just first image
+        !_photos.map((e) => e.link).contains(_eventToEdit.verticalPreview!.link)) {
+      _photos.add(_eventToEdit.verticalPreview!);
+    }
     _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
     _websiteController.text = widget.eventToEdit?.website ?? '';
     _phoneController.text = widget.eventToEdit?.phone ?? '';
@@ -128,7 +135,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
     if (oldIndex != newIndex) {
       setState(() {
-        _photos.insert(min(newIndex, _photos.length-1), _photos.removeAt(oldIndex));
+        _photos.insert(min(newIndex, _photos.length - 1), _photos.removeAt(oldIndex));
       });
     }
   }
@@ -155,6 +162,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      if (_eventToEdit.verticalPreview != null &&
+          //in case that if event has not verticalPreview and we put there horizontal or just first image
+          !_photos.map((e) => e.link).contains(_eventToEdit.verticalPreview!.link)) {
+        _photos.add(_eventToEdit.verticalPreview!);
+      }
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
       _bookingUiModel = widget.eventToEdit?.bookingUiModel;
     }
@@ -203,26 +215,29 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoFill(
             label: S.of(context).Title,
+            hintText: 'Event name',
             controller: _titleController,
             validator: titleValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
-            positionModel: model.positionModel,
-            videos: _videos,
-            photos: _photos,
-            hideVideosSelection: true,
-            onVideoAddRequested: _onVideoAddRequested,
-            onVideoDeleted: _onVideoDeleted,
-            onPhotoAddRequested: _onPhotoAddRequested,
-            onPhotoDeleted: _onPhotoDeleted,
-            onPhotoReorderRequested: _onPhotoReorderRequested,
-            onVideoReorderRequested: _onVideoReorderRequested,
-          ),
+              positionModel: model.positionModel,
+              videos: _videos,
+              photos: _photos,
+              hideVideosSelection: true,
+              onVideoAddRequested: _onVideoAddRequested,
+              onVideoDeleted: _onVideoDeleted,
+              onPhotoAddRequested: _onPhotoAddRequested,
+              onPhotoDeleted: _onPhotoDeleted,
+              onPhotoReorderRequested: _onPhotoReorderRequested,
+              onVideoReorderRequested: _onVideoReorderRequested,
+              listPhotosKey: _reordablePhotokey,
+              listVideosKey: _reordableVideokey),
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
             child: UiKitInputFieldNoFill(
               label: S.of(context).Description,
+              hintText: 'Something amazing about your event',
               controller: _descriptionController,
               textInputAction: TextInputAction.newline,
               expands: true,
@@ -264,6 +279,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitInputFieldNoFill(
             prefixText: 'https://',
             keyboardType: TextInputType.url,
+            hintText: 'coolevent.com',
             label: S.of(context).Website,
             controller: _websiteController,
             validator: websiteValidator,
@@ -337,17 +353,19 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 height: 20.h,
                 title: S.of(context).Both,
                 customValue: 'both',
+                group: _tabsGroup,
               ),
               UiKitCustomTab(
                 height: 20.h,
                 title: S.of(context).Leisure,
                 customValue: 'leisure',
+                group: _tabsGroup,
               ),
               UiKitCustomTab(
                 height: 20.h,
                 title: S.of(context).Business,
                 customValue: 'business',
-                group: AutoSizeGroup(),
+                group: _tabsGroup,
               ),
             ],
           ),
@@ -359,6 +377,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               widget.onCategoryChanged?.call(_eventToEdit.contentType).then((value) {
                 setState(() {
                   _eventToEdit.eventType = value;
+                  _eventToEdit.baseTags.clear();
+                  _eventToEdit.tags.clear();
                 });
               });
             },
@@ -447,7 +467,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
-          Text(S.of(context).SetWorkHours, style: theme?.boldTextTheme.title2)
+          Text(S.of(context).SetWorkHours, style: theme?.regularTextTheme.labelSmall)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
@@ -611,3 +631,5 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     );
   }
 }
+
+AutoSizeGroup _tabsGroup = AutoSizeGroup();

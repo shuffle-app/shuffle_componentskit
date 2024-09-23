@@ -35,12 +35,13 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
         left: SpacingFoundation.horizontalSpacing16,
         right: SpacingFoundation.horizontalSpacing16,
       ),
-      customTitle: AutoSizeText(
+      customTitle: Flexible(
+          child: AutoSizeText(
         title ?? S.of(context).NothingFound,
         style: theme?.boldTextTheme.title1,
         textAlign: TextAlign.center,
         maxLines: 1,
-      ),
+      )),
       autoImplyLeading: true,
       appBarTrailing: context.outlinedButton(
         padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
