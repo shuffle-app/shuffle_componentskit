@@ -101,7 +101,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   _onPhotoAddRequested() async {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -181,7 +185,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ?? GlobalConfiguration().appConfig.content;
     final ComponentEventModel model = kIsWeb
         ? ComponentEventModel(version: '1', pageBuilderType: PageBuilderType.page)
         : ComponentEventModel.fromJson(config['event_edit']);
@@ -197,24 +205,28 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: BlurredAppBarPage(
-        title: S.of(context).Event,
+        title: S
+            .of(context)
+            .Event,
         onIWidgetInfoString: S.current.ContentQualityNotice,
         centerTitle: true,
         autoImplyLeading: true,
         appBarTrailing: (widget.eventToEdit?.id ?? -1) > 0
             ? IconButton(
-                icon: ImageWidget(
-                    iconData: ShuffleUiKitIcons.trash,
-                    color: theme?.colorScheme.inversePrimary,
-                    height: 20.h,
-                    fit: BoxFit.fitHeight),
-                onPressed: widget.onEventDeleted,
-              )
+          icon: ImageWidget(
+              iconData: ShuffleUiKitIcons.trash,
+              color: theme?.colorScheme.inversePrimary,
+              height: 20.h,
+              fit: BoxFit.fitHeight),
+          onPressed: widget.onEventDeleted,
+        )
             : null,
         children: [
           SpacingFoundation.verticalSpace16,
           UiKitInputFieldNoFill(
-            label: S.of(context).Title,
+            label: S
+                .of(context)
+                .Title,
             hintText: 'Event name',
             controller: _titleController,
             validator: titleValidator,
@@ -236,7 +248,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           IntrinsicHeight(
             child: UiKitInputFieldNoFill(
-              label: S.of(context).Description,
+              label: S
+                  .of(context)
+                  .Description,
               hintText: 'Something amazing about your event',
               controller: _descriptionController,
               textInputAction: TextInputAction.newline,
@@ -252,7 +266,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
               FocusManager.instance.primaryFocus?.unfocus();
             },
-            label: S.of(context).Address,
+            label: S
+                .of(context)
+                .Address,
             readOnly: true,
             controller: _locationController,
             icon: ImageWidget(
@@ -265,14 +281,18 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             children: [
               Expanded(
                   child: UiKitInputFieldNoFill(
-                label: S.of(context).BuildingNumber,
-                controller: _eventToEdit.houseNumberController,
-              ).paddingSymmetric(horizontal: horizontalPadding)),
+                    label: S
+                        .of(context)
+                        .BuildingNumber,
+                    controller: _eventToEdit.houseNumberController,
+                  ).paddingSymmetric(horizontal: horizontalPadding)),
               Expanded(
                   child: UiKitInputFieldNoFill(
-                label: S.of(context).OfficeAppartmentNumber,
-                controller: _eventToEdit.apartmentNumberController,
-              ).paddingSymmetric(horizontal: horizontalPadding)),
+                    label: S
+                        .of(context)
+                        .OfficeAppartmentNumber,
+                    controller: _eventToEdit.apartmentNumberController,
+                  ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
           SpacingFoundation.verticalSpace24,
@@ -280,7 +300,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             prefixText: 'https://',
             keyboardType: TextInputType.url,
             hintText: 'coolevent.com',
-            label: S.of(context).Website,
+            label: S
+                .of(context)
+                .Website,
             controller: _websiteController,
             validator: websiteValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -289,7 +311,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             prefixText: '+',
             keyboardType: TextInputType.phone,
             inputFormatters: [americanInputFormatter],
-            label: S.of(context).Phone,
+            label: S
+                .of(context)
+                .Phone,
             controller: _phoneController,
             validator: phoneNumberValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -299,11 +323,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               UiKitTag(
                 updateTitle: false,
                 title:
-                    _priceController.text.isNotEmpty ? '${_eventToEdit.currency ?? ''} ${_priceController.text}' : '0',
+                _priceController.text.isNotEmpty ? '${_eventToEdit.currency ?? ''} ${_priceController.text}' : '0',
                 icon: ShuffleUiKitIcons.label,
               ),
             ],
-            title: S.of(context).Price,
+            title: S
+                .of(context)
+                .Price,
             onTap: () {
               showUiKitGeneralFullScreenDialog(
                 context,
@@ -312,9 +338,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   useRootNavigator: false,
                   child: PriceSelectorComponent(
                     isPriceRangeSelected: _priceController.text.contains('-'),
-                    initialPriceRangeStart: _priceController.text.split('-').first,
+                    initialPriceRangeStart: _priceController.text
+                        .split('-')
+                        .first,
                     initialPriceRangeEnd:
-                        _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
+                    _priceController.text.contains('-') ? _priceController.text
+                        .split('-')
+                        .last : null,
                     initialCurrency: _eventToEdit.currency,
                     onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
                       setState(() {
@@ -337,7 +367,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           Text(
-            S.of(context).TypeOfContent,
+            S
+                .of(context)
+                .TypeOfContent,
             style: theme?.regularTextTheme.labelSmall,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace4,
@@ -351,19 +383,25 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             tabs: [
               UiKitCustomTab(
                 height: 20.h,
-                title: S.of(context).Both,
+                title: S
+                    .of(context)
+                    .Both,
                 customValue: 'both',
                 group: _tabsGroup,
               ),
               UiKitCustomTab(
                 height: 20.h,
-                title: S.of(context).Leisure,
+                title: S
+                    .of(context)
+                    .Leisure,
                 customValue: 'leisure',
                 group: _tabsGroup,
               ),
               UiKitCustomTab(
                 height: 20.h,
-                title: S.of(context).Business,
+                title: S
+                    .of(context)
+                    .Business,
                 customValue: 'business',
                 group: _tabsGroup,
               ),
@@ -371,7 +409,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ),
           SpacingFoundation.verticalSpace24,
           UiKitFieldWithTagList(
-            title: S.of(context).EventType,
+            title: S
+                .of(context)
+                .EventType,
             listUiKitTags: [_eventToEdit.eventType ?? UiKitTag(title: '', icon: '')],
             onTap: () {
               widget.onCategoryChanged?.call(_eventToEdit.contentType).then((value) {
@@ -387,7 +427,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           if (_eventToEdit.contentType == 'business') ...[
             UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.niche != null ? [_eventToEdit.niche ?? UiKitTag(title: '', icon: '')] : null,
-              title: S.of(context).PleaseSelectANiche,
+              title: S
+                  .of(context)
+                  .PleaseSelectANiche,
               onTap: () {
                 widget.onNicheChanged?.call().then((value) {
                   setState(() {
@@ -398,33 +440,42 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24
           ],
-          UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
-              title: S.of(context).BaseProperties,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.baseTags,
-                  title: S.of(context).BaseProperties,
-                  allTags: widget.propertiesOptions('base'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.baseTags.clear();
-                    _eventToEdit.baseTags.addAll(newTags);
-                  });
-                }
-              }).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
           if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
             UiKitFieldWithTagList(
+                listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
+                title: S
+                    .of(context)
+                    .BaseProperties,
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    selectedTags: _eventToEdit.baseTags,
+                    title: S
+                        .of(context)
+                        .BaseProperties,
+                    allTags: widget.propertiesOptions('base'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _eventToEdit.baseTags.clear();
+                      _eventToEdit.baseTags.addAll(newTags);
+                    });
+                  }
+                }).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+
+            UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
-              title: S.of(context).UniqueProperties,
+              title: S
+                  .of(context)
+                  .UniqueProperties,
               onTap: () async {
                 final newTags = await context.push(TagsSelectionComponent(
                   positionModel: model.positionModel,
                   selectedTags: _eventToEdit.tags,
-                  title: S.of(context).UniqueProperties,
+                  title: S
+                      .of(context)
+                      .UniqueProperties,
                   allTags: widget.propertiesOptions('unique'),
                 ));
                 if (newTags != null) {
@@ -441,7 +492,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             children: [
               Expanded(
                 child: Text(
-                  S.of(context).UpsalesAvailable,
+                  S
+                      .of(context)
+                      .UpsalesAvailable,
                   style: theme?.regularTextTheme.labelSmall,
                 ),
               ),
@@ -459,15 +512,21 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           if (_upsalesSwitcher) ...[
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
-              label: S.of(context).Upsales,
+              label: S
+                  .of(context)
+                  .Upsales,
               maxSymbols: 25,
               validator: upsalesValidator,
               controller: _upsalesController,
-              hintText: S.of(context).UpsalesAvailableHint,
+              hintText: S
+                  .of(context)
+                  .UpsalesAvailableHint,
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
-          Text(S.of(context).SetWorkHours, style: theme?.regularTextTheme.labelSmall)
+          Text(S
+              .of(context)
+              .SetWorkHours, style: theme?.regularTextTheme.labelSmall)
               .paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace16,
           UiKitCustomTabBar(
@@ -488,7 +547,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           Row(
             children: [
-              Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
+              Text(S
+                  .of(context)
+                  .WorkHours, style: theme?.regularTextTheme.labelSmall),
               const Spacer(),
               context.outlinedButton(
                 data: BaseUiKitButtonData(
@@ -535,63 +596,69 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           context
               .button(
-                data: BaseUiKitButtonData(
-                  fit: ButtonFit.fitWidth,
-                  autoSizeGroup: AutoSizeGroup(),
-                  text: _bookingUiModel == null && (_eventToEdit.bookingUrl ?? '').isEmpty
-                      ? S.of(context).CreateBooking
-                      : '${S.of(context).Edit} ${S.of(context).Booking}',
-                  onPressed: () {
-                    _bookingUiModel ??= BookingUiModel(id: -1);
+            data: BaseUiKitButtonData(
+              fit: ButtonFit.fitWidth,
+              autoSizeGroup: AutoSizeGroup(),
+              text: _bookingUiModel == null && (_eventToEdit.bookingUrl ?? '').isEmpty
+                  ? S
+                  .of(context)
+                  .CreateBooking
+                  : '${S
+                  .of(context)
+                  .Edit} ${S
+                  .of(context)
+                  .Booking}',
+              onPressed: () {
+                _bookingUiModel ??= BookingUiModel(id: -1);
 
-                    showUiKitGeneralFullScreenDialog(
-                      context,
-                      GeneralDialogData(
-                        isWidgetScrollable: true,
-                        topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                        child: SelectBookingLinkComponent(
-                          onExternalTap: () {
-                            context.pop();
-                            showUiKitGeneralFullScreenDialog(
-                              context,
-                              GeneralDialogData(
-                                isWidgetScrollable: true,
-                                topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                                child: AddLinkComponent(
-                                  onSave: () {
-                                    _eventToEdit.bookingUrl = _bookingUrlController.text;
-                                    context.pop();
-                                    setState(() {
-                                      _bookingUiModel = null;
-                                    });
-                                  },
-                                  linkController: _bookingUrlController,
-                                ),
-                              ),
-                            );
-                          },
-                          onBookingTap: () {
-                            context.pop();
-                            context.push(
-                              CreateBookingComponent(
-                                bookingUiModel: _bookingUiModel,
-                                onBookingCreated: (bookingUiModel) {
-                                  if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
-                                    _bookingUiModel = bookingUiModel;
-                                    setState(() {
-                                      _eventToEdit.bookingUrl = null;
-                                    });
-                                  }
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
+                showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    isWidgetScrollable: true,
+                    topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                    child: SelectBookingLinkComponent(
+                      onExternalTap: () {
+                        context.pop();
+                        showUiKitGeneralFullScreenDialog(
+                          context,
+                          GeneralDialogData(
+                            isWidgetScrollable: true,
+                            topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                            child: AddLinkComponent(
+                              onSave: () {
+                                _eventToEdit.bookingUrl = _bookingUrlController.text;
+                                context.pop();
+                                setState(() {
+                                  _bookingUiModel = null;
+                                });
+                              },
+                              linkController: _bookingUrlController,
+                            ),
+                          ),
+                        );
+                      },
+                      onBookingTap: () {
+                        context.pop();
+                        context.push(
+                          CreateBookingComponent(
+                            bookingUiModel: _bookingUiModel,
+                            onBookingCreated: (bookingUiModel) {
+                              if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                _bookingUiModel = bookingUiModel;
+                                setState(() {
+                                  _eventToEdit.bookingUrl = null;
+                                });
+                              }
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
               .paddingSymmetric(horizontal: horizontalPadding),
           if (_eventToEdit.bookingUrl != null && _eventToEdit.bookingUrl!.isNotEmpty) ...[
             SpacingFoundation.verticalSpace10,
@@ -605,7 +672,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             top: false,
             child: context.gradientButton(
               data: BaseUiKitButtonData(
-                text: S.of(context).Save.toUpperCase(),
+                text: S
+                    .of(context)
+                    .Save
+                    .toUpperCase(),
                 fit: ButtonFit.fitWidth,
                 onPressed: () {
                   _formKey.currentState?.validate();
@@ -618,8 +688,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.bookingUiModel = _bookingUiModel;
                   _eventToEdit.upsalesItems = _upsalesSwitcher
                       ? (_upsalesController.text.isNotEmpty
-                          ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
-                          : null)
+                      ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
+                      : null)
                       : null;
                   widget.onEventCreated.call(_eventToEdit);
                 },

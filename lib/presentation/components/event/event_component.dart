@@ -408,16 +408,17 @@ class _EventComponentState extends State<EventComponent> {
             builder: (context, value, child) {
               return UiKitColoredAccentBlock(
                 color: colorScheme?.surface1,
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    _noReactions
-                        ? Expanded(child: Text(S.of(context).NoReactionsMessage, style: boldTextTheme?.body))
-                        : Text(S.of(context).ReactionsBy, style: boldTextTheme?.body),
-                    if (!_noReactions) SpacingFoundation.horizontalSpace12,
-                    if (!_noReactions) const Expanded(child: MemberPlate()),
-                  ],
-                ),
+                title: _noReactions
+                    ? Text(S.of(context).NoReactionsMessage, style: boldTextTheme?.body)
+                    : RichText(
+                        text: TextSpan(
+                        children: [
+                          TextSpan(text: '${S.of(context).ReactionsBy} ', style: boldTextTheme?.body),
+                          WidgetSpan(
+                            child: Transform.translate(offset: const Offset(0, 4), child: const MemberPlate()),
+                          ),
+                        ],
+                      )),
                 contentHeight: 0.205.sh,
                 content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                   leftPadding: horizontalMargin,
