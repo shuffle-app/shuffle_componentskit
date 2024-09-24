@@ -69,25 +69,30 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               // theme: UiKitThemeFoundation.lightTheme,
               //TODO: think about it
-              home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: UnifiedVerificationComponent(
-                uiModel: UiUnifiedVerificationModel(),
-                credentialsController: TextEditingController(),
-                availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
-                formKey: GlobalKey<FormState>(),
-                passwordController: TextEditingController(),
-                onSocialsLogin: (socialsLoginData) {},
-                onSubmit: (isPersonalSelected) {
-                  log('isPersonalSelected $isPersonalSelected');
-                },
-              ),)
-                  : Builder(builder: (c) {
-                      configuration
-                          .load(version: '1.0.18')
-                          .then((_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(body: Center(child: LoadingWidget()));
-                    }),
+              // home: configuration.isLoaded
+              home:
+                  // ? GlobalComponent(
+                  //     globalConfiguration: configuration,
+                  //     child: UnifiedVerificationComponent(
+                  //       uiModel: UiUnifiedVerificationModel(),
+                  //       credentialsController: TextEditingController(),
+                  //       availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
+                  //       formKey: GlobalKey<FormState>(),
+                  //       passwordController: TextEditingController(),
+                  //       onSocialsLogin: (socialsLoginData) {},
+                  //       onSubmit: (isPersonalSelected) {
+                  //         log('isPersonalSelected $isPersonalSelected');
+                  //       },
+                  //     ),
+                  //   )
+                  // :
+                  Builder(builder: (c) {
+                configuration
+                    .load(version: '1.0.18')
+                    .then((_) => Future.delayed(const Duration(seconds: 1)))
+                    .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
+                return const Scaffold(body: ComponentsTestPage());
+              }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
             )));
@@ -160,6 +165,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
   ];
 
   List<UniversalNotOfferRemUiModel> _listReminders = [];
+
+  final listKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   Widget build(BuildContext context) {
@@ -293,41 +300,41 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                onPressed: () => context.push(
-                  PropertyManagementComponent(
-                    propertySearchOptions: (value) async {
-                      return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
-                    },
-                    onRecentlyAddedPropertyTapped: (value) {},
-                    onPropertyFieldSubmitted: (value) async {
-                      return UiModelProperty(
-                        title: value,
-                        id: 9,
-                        icon: null,
-                      );
-                    },
-                    onAddPropertyTypeTap: () {},
-                    onDeletePropertyTypeTap: () {},
-                    onEditPropertyTypeTap: () {},
-                    onPropertyTypeTapped: (value) {},
-                    allPropertyCategories: [
-                      // UiModelPropertiesCategory(title: 'Active tiger', id: 0),
-                      // UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
-                      // UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
-                      // UiModelPropertiesCategory(title: 'Foodie', id: 3),
-                    ],
-                    basePropertyTypesTap: (int) async {},
-                    uniquePropertyTypesTap: (int) async {},
-                    relatedProperties: [],
-                    selectedPropertyId: 1,
-                  ),
-                ),
-                text: 'show property management component',
-              ),
-            ),
+            // SpacingFoundation.verticalSpace16,
+            // context.button(
+            //   data: BaseUiKitButtonData(
+            //     onPressed: () => context.push(
+            //       PropertyManagementComponent(
+            //         propertySearchOptions: (value) async {
+            //           return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
+            //         },
+            //         onRecentlyAddedPropertyTapped: (value) {},
+            //         onPropertyFieldSubmitted: (value) async {
+            //           return UiModelProperty(
+            //             title: value,
+            //             id: 9,
+            //             icon: null,
+            //           );
+            //         },
+            //         onAddPropertyTypeTap: () {},
+            //         onDeletePropertyTypeTap: () {},
+            //         onEditPropertyTypeTap: () {},
+            //         onPropertyTypeTapped: (value) {},
+            //         allPropertyCategories: [
+            //           // UiModelPropertiesCategory(title: 'Active tiger', id: 0),
+            //           // UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
+            //           // UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
+            //           // UiModelPropertiesCategory(title: 'Foodie', id: 3),
+            //         ],
+            //         basePropertyTypesTap: (int) async {},
+            //         uniquePropertyTypesTap: (int) async {},
+            //         relatedProperties: [],
+            //         selectedPropertyId: 1,
+            //       ),
+            //     ),
+            //     text: 'show property management component',
+            //   ),
+            // ),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -919,9 +926,33 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'show promotion component',
+                onPressed: () => context.push(
+                  PromotionsComponent(
+                    listKey: listKey,
+                    listPromotions: [
+                      UniversalNotOfferRemUiModel(
+                        id: -1,
+                        iconPath: GraphicsFoundation.instance.png.avatars.avatar1.path,
+                        isLaunched: false,
+                        title: 'At.Mosphere',
+                      ),
+                    ],
+                    onCreatePromotion: () {},
+                    onEditPromotion: (value) {},
+                    onRemovePromotion: (value) {},
+                    placeOrEventName: 'Place test',
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show notification component',
                 onPressed: () => context.push(
                   NotificationComponent(
+                    listKey: listKey,
                     placeOrEventName: null,
                     listNotification: _listNotification,
                     onCreateNotification: () {
@@ -995,6 +1026,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show reminders component',
                 onPressed: () => context.push(
                   RemindersComponent(
+                    listKey: listKey,
                     listReminders: _listReminders,
                     placeOrEventName: S.of(context).Event.toLowerCase(),
                     onCreateReminder: () {
@@ -1064,6 +1096,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show offers component ',
                 onPressed: () => context.push(
                   OffersComponent(
+                    listKey: listKey,
                     listOffers: _offerUiModelList,
                     onCreateOffer: () {
                       context.push(
@@ -1147,23 +1180,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     child: PlaceComponent(
                       canLeaveFeedbackCallback: (placeId) async => false,
                       canLeaveFeedbackForEventCallback: (eventId) async => false,
-                      place: place.copyWith(
-                        bookingUiModel: BookingUiModel(
-                          showSabsInContentCard: true,
-                          id: -1,
-                          subsUiModel: List.generate(
-                            10,
-                            (index) => SubsUiModel(
-                              id: index,
-                              actualbookingLimit: index.toString(),
-                              bookingLimit: (index + 1).toString(),
-                              description: 'I am Leonardo Messi, be the best ;)',
-                              photoPath: GraphicsFoundation.instance.png.story.path,
-                              title: 'I am Leonardo Messi',
-                            ),
-                          ),
-                        ),
-                      ),
+                      place: place,
                       placeReactionLoaderCallback: (int page, int contentId) async {
                         return [];
                       },
@@ -1299,16 +1316,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           BookingsControlUserList(
                             canBookingEdit: true,
                             bookingsPlaceItemUiModel: value,
-                            bookingUiModel: BookingUiModel(
-                              id: -1,
-                              bookingLimit: '10',
-                              bookingLimitPerOne: '5',
-                            ),
-                            onBookingEdit: (model) {
+                            onBookingEdit: () {
                               context.push(
                                 CreateBookingComponent(
                                   onBookingCreated: (value) {},
-                                  bookingUiModel: model,
                                 ),
                               );
                             },
@@ -1324,8 +1335,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 userName: value.profile?.name ?? '',
                                 allTicket: value.ticketUiModel?.ticketsCount ?? 0,
                                 allUpsale: value.ticketUiModel?.totalUpsalesCount ?? 0,
-                                ticketRefun: math.Random().nextInt(4) + 1,
-                                upsaleRefun: math.Random().nextInt(4) + 1,
+                                ticketRefund: math.Random().nextInt(4) + 1,
+                                upsaleRefund: math.Random().nextInt(4) + 1,
                                 onContactTap: () {},
                                 onGoAheadTap: () {},
                               );
@@ -1405,16 +1416,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               log('list $list');
                             },
                             bookingsPlaceItemUiModel: value,
-                            bookingUiModel: BookingUiModel(
-                              id: -1,
-                              bookingLimit: '10',
-                              bookingLimitPerOne: '5',
-                            ),
-                            onBookingEdit: (model) {
+                            onBookingEdit: () {
                               context.push(
                                 CreateBookingComponent(
                                   onBookingCreated: (value) {},
-                                  bookingUiModel: model,
                                 ),
                               );
                             },
