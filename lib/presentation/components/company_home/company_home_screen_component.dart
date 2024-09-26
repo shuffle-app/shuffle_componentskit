@@ -11,7 +11,6 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   final VoidCallback? onCreatePlace;
   final ValueChanged<int>? onPlaceTapped;
   final List<UiKitStats>? profileStats;
-  final Map<int, String> creationStats;
 
   const CompanyHomeScreenComponent({
     super.key,
@@ -20,7 +19,6 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     this.avatarUrl,
     this.interests,
     this.tag,
-    this.creationStats = const {},
     this.onCreatePlace,
     this.onPlaceTapped,
     this.profileStats,
@@ -103,7 +101,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                     onTap: (id) => onPlaceTapped?.call(id),
                     place: item,
                     model: model,
-                    status: creationStats[item.id],
+                    status: item.moderationStatus,
                     updatedAt: item.updatedAt,
                   );
                 },

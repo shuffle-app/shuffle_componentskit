@@ -39,6 +39,8 @@ class UiEventModel extends Advertisable {
   List<String>? upsalesItems;
   String? bookingUrl;
   BookingUiModel? bookingUiModel;
+  DateTime? updatedAt;
+  String? moderationStatus;
 
   UiEventModel({
     required this.id,
@@ -74,6 +76,8 @@ class UiEventModel extends Advertisable {
     bool? isAdvertisement,
     this.bookingUrl,
     this.bookingUiModel,
+    this.updatedAt,
+    this.moderationStatus,
   })  : descriptionItems = [
           if (scheduleString != null)
             UiDescriptionItemModel(
@@ -226,6 +230,8 @@ class UiEventModel extends Advertisable {
     List<VideoReactionUiModel>? reactions,
     String? bookingUrl,
     BookingUiModel? bookingUiModel,
+    DateTime? updatedAt,
+    String? moderationStatus,
   }) =>
       UiEventModel(
         id: id,
@@ -259,6 +265,8 @@ class UiEventModel extends Advertisable {
         upsalesItems: upsalesItems ?? this.upsalesItems,
         bookingUrl: bookingUrl ?? this.bookingUrl,
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
+        updatedAt: updatedAt?? this.updatedAt,
+        moderationStatus: moderationStatus?? this.moderationStatus,
       );
 
   bool selectableDayPredicate(DateTime day) {
