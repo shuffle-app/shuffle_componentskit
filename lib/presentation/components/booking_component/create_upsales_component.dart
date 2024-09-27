@@ -7,10 +7,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 class CreateUpsalesComponent extends StatefulWidget {
   final UpsaleUiModel? upsaleUiModel;
   final Function(UpsaleUiModel upsaleUiModel) onSave;
+  final String? currency;
 
   const CreateUpsalesComponent({
     super.key,
     this.upsaleUiModel,
+    this.currency,
     required this.onSave,
   });
 
@@ -122,35 +124,24 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
             label: S.of(context).Price,
-            readOnly: true,
             controller: _priceController,
-            onTap: () => showUiKitGeneralFullScreenDialog(
-              context,
-              GeneralDialogData(
-                topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
-                useRootNavigator: false,
-                child: PriceSelectorComponent(
-                  isPriceRangeSelected: _priceController.text.contains('-'),
-                  initialPriceRangeStart: _priceController.text.split('-').first,
-                  initialPriceRangeEnd:
-                      _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                  initialCurrency: _upsaleUiModel.currency,
-                  onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
-                    setState(() {
-                      if (averageSelected) {
-                        _priceController.text = averagePrice.isNotEmpty ? '$averagePrice $currency' : '0 $currency';
-                      } else {
-                        _priceController.text = rangePrice1.isNotEmpty ? '$rangePrice1 $currency' : '0 $currency';
-                        if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
-                          _priceController.text += '-$rangePrice2 $currency';
-                        }
-                      }
-                      _upsaleUiModel.currency = currency;
-                    });
-                  },
-                ),
-              ),
-            ),
+            keyboardType: TextInputType.number,
+            inputFormatters: [PriceWithSpacesFormatter()],
+            onTap: () {
+              final list = _priceController.text.split(' ');
+              list.removeLast();
+              _priceController.text = list.join(' ');
+            },
+            onFieldSubmitted: (value) {
+              if (!_priceController.text.contains(widget.currency ?? 'AED')) {
+                _priceController.text = '${_priceController.text} ${widget.currency ?? 'AED'}';
+              }
+            },
+            onTapOutside: (value) {
+              if (!_priceController.text.contains(widget.currency ?? 'AED')) {
+                _priceController.text = '${_priceController.text} ${widget.currency ?? 'AED'}';
+              }
+            },
           ),
           SpacingFoundation.verticalSpace24,
         ],
