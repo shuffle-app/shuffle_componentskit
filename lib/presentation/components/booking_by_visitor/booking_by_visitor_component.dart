@@ -7,7 +7,7 @@ class BookingByVisitorComponent extends StatefulWidget {
   final BookingUiModel? bookingUiModel;
   final TicketUiModel? ticketUiModel;
   final VoidCallback? onSelectedDate;
-  final ValueNotifier<DateTime?>? selectedDate;
+  final DateTime? selectedDate;
 
   final Function(
     TicketUiModel? ticketUiModel,
@@ -32,12 +32,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   SubsUiModel? _selectedSub;
   UpsaleUiModel? _selectedUpsale;
 
-  late final List<SubsUiModel> _subs;
-  late final List<UpsaleUiModel> _upsales;
+  final List<SubsUiModel> _subs = [];
+  final List<UpsaleUiModel> _upsales = [];
 
   late TicketUiModel _ticketUiModel;
 
-  late int _ticketPrice;
+  late double _ticketPrice;
   late int _ticketCount;
 
   late int _subTicketCount = 0;
@@ -46,16 +46,16 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   int _upsaleTotalPrice = 0;
 
   int get _getTotalSubsTicketCount => _ticketCount + _subTicketCount;
-  int get _getTotalPrice => (_getTotalSubsTicketCount * _ticketPrice) + (_upsaleTotalPrice);
+  double get _getTotalPrice => (_getTotalSubsTicketCount * _ticketPrice) + (_upsaleTotalPrice);
 
   @override
   void initState() {
     super.initState();
-    _subs = widget.bookingUiModel?.subsUiModel ?? [];
-    _upsales = widget.bookingUiModel?.upsaleUiModel ?? [];
+    _subs.addAll(widget.bookingUiModel?.subsUiModel ?? []);
+    _upsales.addAll(widget.bookingUiModel?.upsaleUiModel ?? []);
     _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
     _subTicketCount = widget.ticketUiModel?.totalSubsCount ?? 0;
-    _ticketPrice = widget.bookingUiModel?.price != null ? int.parse(widget.bookingUiModel!.price!) : 0;
+    _ticketPrice = widget.bookingUiModel?.price != null ? double.parse(widget.bookingUiModel!.price!) : 0;
     _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
     _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
     _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
@@ -63,16 +63,19 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   @override
   void didUpdateWidget(covariant BookingByVisitorComponent oldWidget) {
-    _subs.clear();
-    _upsales.clear();
-    _subs = List.from(widget.bookingUiModel?.subsUiModel ?? []);
-    _upsales = List.from(widget.bookingUiModel?.upsaleUiModel ?? []);
-    _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
-    _subTicketCount = widget.ticketUiModel?.totalSubsCount ?? 0;
-    _ticketPrice = widget.bookingUiModel?.price != null ? int.parse(widget.bookingUiModel!.price!) : 0;
-    _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
-    _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
-    _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
+    if (oldWidget.ticketUiModel != widget.ticketUiModel) {
+      _subs.clear();
+      _upsales.clear();
+      _subs.addAll(widget.bookingUiModel?.subsUiModel ?? []);
+      _upsales.addAll(widget.bookingUiModel?.upsaleUiModel ?? []);
+      _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
+      _subTicketCount = widget.ticketUiModel?.totalSubsCount ?? 0;
+      _ticketPrice = widget.bookingUiModel?.price != null ? double.parse(widget.bookingUiModel!.price!) : 0;
+      _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
+      _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
+      _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
+    }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -108,6 +111,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   }
 
   _onAddSubTicket() {
+    if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel?.bookingLimitPerOne ?? '999') ?? 999)) return;
     setState(() {
       if (_selectedSub != null) {
         _updateSubTicket(1);
@@ -190,7 +194,6 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         );
 
         if (upsale != null && upsale.count! <= upsale.maxCount!) {
-          _upsaleTotalPrice -= int.parse(upsale.item?.price ?? '0');
           _updateUpsaleTicket(-1);
         }
       } else if (_selectedUpsale == null && _upsaleCount > 0 && (_ticketUiModel.upsales?.isNotEmpty ?? false)) {
@@ -202,7 +205,6 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   _onAddUpsale() {
     setState(() {
       if (_selectedUpsale != null) {
-        _upsaleTotalPrice += int.parse(_selectedUpsale?.price ?? '0');
         _updateUpsaleTicket(1);
       }
     });
@@ -229,6 +231,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         _upsales[index] =
             _selectedUpsale!.copyWith(actualLimit: (int.parse(_upsales[index].actualLimit ?? '0') + change).toString());
         _upsaleCount += change;
+        _upsaleTotalPrice += int.parse(_selectedUpsale?.price ?? '0');
       } else if (upsaleForTicket != null) {
         final upsaleCount = upsaleForTicket.count! + change;
 
@@ -250,6 +253,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               .copyWith(actualLimit: (int.parse(_upsales[index].actualLimit ?? '0') + change).toString());
 
           _upsaleCount += change;
+
+          if (change.toString().contains('-')) {
+            _upsaleTotalPrice -= int.parse(_selectedUpsale?.price ?? '0');
+          } else {
+            _upsaleTotalPrice += int.parse(_selectedUpsale?.price ?? '0');
+          }
         }
 
         /// If the last upsale in the list has zero number, delete it
@@ -275,6 +284,13 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         _upsaleTotalPrice -= int.parse(_upsales[index].price ?? '0');
       }
     }
+  }
+
+  String formatDouble(double number) {
+    String formatted = number.toStringAsFixed(10);
+    formatted = formatted.replaceAll(RegExp(r'0*$'), '');
+    formatted = formatted.replaceAll(RegExp(r'\.$'), '');
+    return formatted;
   }
 
   @override
@@ -305,7 +321,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
           ],
           AutoSizeText(
-            '${S.of(context).TicketPrice} $_ticketPrice ${widget.bookingUiModel?.currency}',
+            '${S.of(context).TicketPrice} ${formatDouble(_ticketPrice)} ${widget.bookingUiModel?.currency ?? 'AED'}',
             style: theme?.boldTextTheme.title2,
             maxLines: 1,
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -361,6 +377,11 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ],
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
+          if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel?.bookingLimitPerOne ?? '9999') ?? 9999))
+            Text(
+              '${S.of(context).BookingLimitPerOne}: ${widget.bookingUiModel?.bookingLimitPerOne}',
+              style: theme?.regularTextTheme.labelLarge,
+            ).paddingOnly(left: horizontalPadding, bottom: SpacingFoundation.verticalSpacing24),
           if (_upsales.isNotEmpty) ...[
             Text(
               S.of(context).SelectYourFavoriteProduct,
@@ -451,31 +472,26 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               ],
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace16,
-            if (widget.selectedDate?.value != null)
-              ValueListenableBuilder(
-                valueListenable: widget.selectedDate!,
-                builder: (context, value, child) {
-                  return Row(
-                    children: [
-                      Text(
-                        formatDateWithCustomPattern('dd.MM.yyyy', widget.selectedDate!.value!.toLocal()),
-                        style: theme?.boldTextTheme.body,
-                      ),
-                      SpacingFoundation.horizontalSpace16,
-                      Text(
-                        formatChatMessageDate(widget.selectedDate!.value!),
-                        style: theme?.regularTextTheme.body,
-                      ),
-                    ],
-                  ).paddingOnly(
-                    left: horizontalPadding,
-                    right: horizontalPadding,
-                    bottom: SpacingFoundation.verticalSpacing24,
-                  );
-                },
+            if (widget.selectedDate != null)
+              Row(
+                children: [
+                  Text(
+                    formatDateWithCustomPattern('dd.MM.yyyy', widget.selectedDate!.toLocal()),
+                    style: theme?.boldTextTheme.body,
+                  ),
+                  SpacingFoundation.horizontalSpace16,
+                  Text(
+                    formatChatMessageDate(widget.selectedDate!),
+                    style: theme?.regularTextTheme.body,
+                  ),
+                ],
+              ).paddingOnly(
+                left: horizontalPadding,
+                right: horizontalPadding,
+                bottom: SpacingFoundation.verticalSpacing24,
               ),
             Text(
-              '${S.of(context).Total}: $_getTotalPrice ${widget.bookingUiModel?.currency ?? 'AED'}',
+              '${S.of(context).Total}: ${formatDouble(_getTotalPrice)} ${widget.bookingUiModel?.currency ?? 'AED'}',
               style: theme?.boldTextTheme.title2,
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
