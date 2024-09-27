@@ -36,6 +36,7 @@ class PlaceComponent extends StatefulWidget {
   final bool showOfferButton;
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
+  final Future<BookingUiModel?>? bookingUiModel;
 
   const PlaceComponent({
     super.key,
@@ -64,13 +65,14 @@ class PlaceComponent extends StatefulWidget {
     this.showOfferButton = false,
     this.priceForOffer,
     this.onOfferButtonTap,
+    this.bookingUiModel,
   });
 
   @override
   State<PlaceComponent> createState() => _PlaceComponentState();
 }
 
-class _PlaceComponentState extends State<PlaceComponent> {
+class _PlaceComponentState extends State<PlaceComponent> with TickerProviderStateMixin {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
@@ -85,6 +87,11 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   bool? canLeaveFeedback;
 
+  BookingUiModel? _bookingUiModel;
+
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
@@ -94,7 +101,22 @@ class _PlaceComponentState extends State<PlaceComponent> {
       feedbacksPagedController.addPageRequestListener(_feedbacksListener);
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbacksPagedController.notifyPageRequestListeners(1);
+      await _onSubsRequest();
       setState(() {});
+    });
+  }
+
+  Future<void> _onSubsRequest() async {
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+    _bookingUiModel = await widget.bookingUiModel?.whenComplete(() {
+      _controller.forward();
     });
   }
 
@@ -283,16 +305,24 @@ class _PlaceComponentState extends State<PlaceComponent> {
             horizontal: horizontalMargin,
             vertical: SpacingFoundation.verticalSpacing24,
           ),
-        if (widget.place.bookingUiModel?.subsUiModel != null &&
-            widget.place.bookingUiModel!.showSabsInContentCard &&
-            widget.place.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
+        if (_bookingUiModel?.subsUiModel != null &&
+            _bookingUiModel!.showSabsInContentCard &&
+            _bookingUiModel!.subsUiModel!.isNotEmpty) ...[
           SpacingFoundation.verticalSpace12,
-          SubsInContentCard(
-            subs: widget.place.bookingUiModel!.subsUiModel!,
-            onItemTap: (id) {
-              final sub = widget.place.bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
-              subInformationDialog(context, sub);
-            },
+          SizeTransition(
+            sizeFactor: _animation,
+            axis: Axis.vertical,
+            axisAlignment: -1,
+            child: SizedBox(
+              width: 1.sw,
+              child: SubsInContentCard(
+                subs: _bookingUiModel!.subsUiModel!,
+                onItemTap: (id) {
+                  final sub = _bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+                  subInformationDialog(context, sub);
+                },
+              ),
+            ),
           ),
           SpacingFoundation.verticalSpace24,
         ],

@@ -25,6 +25,7 @@ class EventComponent extends StatefulWidget {
   final bool showOfferButton;
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
+  final Future<BookingUiModel?>? bookingUiModel;
 
   const EventComponent({
     super.key,
@@ -46,13 +47,14 @@ class EventComponent extends StatefulWidget {
     this.showOfferButton = false,
     this.priceForOffer,
     this.onOfferButtonTap,
+    this.bookingUiModel,
   });
 
   @override
   State<EventComponent> createState() => _EventComponentState();
 }
 
-class _EventComponentState extends State<EventComponent> {
+class _EventComponentState extends State<EventComponent> with TickerProviderStateMixin {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
@@ -66,8 +68,14 @@ class _EventComponentState extends State<EventComponent> {
   bool? canLeaveFeedback;
 
   bool isHide = true;
+
+  BookingUiModel? _bookingUiModel;
+
   late double scrollPosition;
   final ScrollController listViewController = ScrollController();
+
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
 
   @override
   void initState() {
@@ -78,7 +86,22 @@ class _EventComponentState extends State<EventComponent> {
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
+      await _onSubsRequest();
       setState(() {});
+    });
+  }
+
+  Future<void> _onSubsRequest() async {
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+    _bookingUiModel = await widget.bookingUiModel?.whenComplete(() {
+      _controller.forward();
     });
   }
 
@@ -152,6 +175,7 @@ class _EventComponentState extends State<EventComponent> {
   void dispose() {
     reactionsPagingController.dispose();
     feedbackPagingController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -350,16 +374,24 @@ class _EventComponentState extends State<EventComponent> {
             right: horizontalMargin,
             bottom: SpacingFoundation.verticalSpacing24,
           ),
-        if (widget.event.bookingUiModel?.subsUiModel != null &&
-            widget.event.bookingUiModel!.showSabsInContentCard &&
-            widget.event.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
+        if (_bookingUiModel?.subsUiModel != null &&
+            _bookingUiModel!.showSabsInContentCard &&
+            _bookingUiModel!.subsUiModel!.isNotEmpty) ...[
           SpacingFoundation.verticalSpace12,
-          SubsInContentCard(
-            subs: widget.event.bookingUiModel!.subsUiModel!,
-            onItemTap: (id) {
-              final sub = widget.event.bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
-              subInformationDialog(context, sub);
-            },
+          SizeTransition(
+            sizeFactor: _animation,
+            axis: Axis.vertical,
+            axisAlignment: -1,
+            child: SizedBox(
+              width: 1.sw,
+              child: SubsInContentCard(
+                subs: _bookingUiModel!.subsUiModel!,
+                onItemTap: (id) {
+                  final sub = _bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+                  subInformationDialog(context, sub);
+                },
+              ),
+            ),
           ),
           SpacingFoundation.verticalSpace24,
         ],
