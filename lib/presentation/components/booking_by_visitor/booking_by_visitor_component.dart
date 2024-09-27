@@ -8,11 +8,13 @@ class BookingByVisitorComponent extends StatefulWidget {
   final TicketUiModel? ticketUiModel;
   final VoidCallback? onSelectedDate;
   final DateTime? selectedDate;
+  final bool isCurrentDate;
 
   final Function(
     TicketUiModel? ticketUiModel,
     List<SubsUiModel>? subs,
     List<UpsaleUiModel>? upsales,
+    int? bookingId,
   )? onSubmit;
 
   const BookingByVisitorComponent({
@@ -22,6 +24,7 @@ class BookingByVisitorComponent extends StatefulWidget {
     this.onSelectedDate,
     this.selectedDate,
     this.onSubmit,
+    this.isCurrentDate = true,
   });
 
   @override
@@ -54,7 +57,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     _subs.addAll(widget.bookingUiModel?.subsUiModel ?? []);
     _upsales.addAll(widget.bookingUiModel?.upsaleUiModel ?? []);
     _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
-    _subTicketCount = widget.ticketUiModel?.totalSubsCount ?? 0;
+    _subTicketCount = widget.ticketUiModel?.subs?.count ?? 0;
     _ticketPrice = widget.bookingUiModel?.price != null ? double.parse(widget.bookingUiModel!.price!) : 0;
     _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
     _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
@@ -69,7 +72,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
       _subs.addAll(widget.bookingUiModel?.subsUiModel ?? []);
       _upsales.addAll(widget.bookingUiModel?.upsaleUiModel ?? []);
       _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
-      _subTicketCount = widget.ticketUiModel?.totalSubsCount ?? 0;
+      _subTicketCount = widget.ticketUiModel?.subs?.count ?? 0;
       _ticketPrice = widget.bookingUiModel?.price != null ? double.parse(widget.bookingUiModel!.price!) : 0;
       _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
       _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
@@ -81,7 +84,15 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   _onSelectedSub(int id) {
     setState(() {
-      _selectedSub = (_selectedSub?.id != id) ? _subs.firstWhere((element) => element.id == id) : null;
+      if (_ticketUiModel.subs == null || _ticketUiModel.subs?.item?.id == id) {
+        if (_selectedSub?.id != id) {
+          _selectedSub = _subs.firstWhere((element) => element.id == id);
+        } else {
+          _selectedSub = null;
+        }
+      } else {
+        _selectedSub = null;
+      }
     });
   }
 
@@ -94,17 +105,17 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   _onRemoveSubTicket() {
     setState(() {
       if (_selectedSub != null) {
-        final sub = _ticketUiModel.subs?.firstWhere(
-          (element) => element?.item?.id == _selectedSub?.id,
-          orElse: () => null,
-        );
+        // final sub = _ticketUiModel.subs?.firstWhere(
+        //   (element) => element?.item?.id == _selectedSub?.id,
+        //   orElse: () => null,
+        // );
 
-        if (sub != null && sub.count! <= sub.maxCount!) {
+        if (_ticketUiModel.subs != null && _ticketUiModel.subs!.count! <= _ticketUiModel.subs!.maxCount!) {
           _updateSubTicket(-1);
         }
       } else if (_ticketCount > 0) {
         _ticketCount--;
-      } else if (_selectedSub == null && _subTicketCount > 0 && (_ticketUiModel.subs?.isNotEmpty ?? false)) {
+      } else if (_selectedSub == null && _subTicketCount > 0 && (_ticketUiModel.subs != null)) {
         _updateSubTicket(-1);
       }
     });
@@ -115,7 +126,8 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     setState(() {
       if (_selectedSub != null) {
         _updateSubTicket(1);
-      } else {
+      } else if (widget.bookingUiModel?.subsUiModel == null ||
+          (widget.bookingUiModel?.subsUiModel != null && widget.bookingUiModel!.subsUiModel!.isEmpty)) {
         _ticketCount++;
       }
     });
@@ -124,17 +136,18 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   void _updateSubTicket(int change) {
     if (_selectedSub != null) {
       /// Looking for a sub-element in the current ticket list
-      TicketItem<SubsUiModel>? subFromTicket = _ticketUiModel.subs?.firstWhere(
-        (element) => _selectedSub?.id == element?.item?.id,
-        orElse: () => null,
-      );
+      // TicketItem<SubsUiModel>? subFromTicket = _ticketUiModel.subs?.firstWhere(
+      //   (element) => _selectedSub?.id == element?.item?.id,
+      //   orElse: () => null,
+      // );
+      TicketItem<SubsUiModel>? subFromTicket = _ticketUiModel.subs;
 
       /// If the sub-element is not found in the ticket and the change is positive (addition)
       if (subFromTicket == null && (!change.toString().contains('-'))) {
-        final subs = _ticketUiModel.subs ?? [];
+        TicketItem<SubsUiModel>? subs = _ticketUiModel.subs;
         final maxCount =
             int.parse(_selectedSub?.bookingLimit ?? '0') - int.parse(_selectedSub?.actualbookingLimit ?? '0');
-        subs.add(TicketItem(count: 1, item: _selectedSub, maxCount: maxCount));
+        subs = TicketItem(count: 1, item: _selectedSub, maxCount: maxCount);
 
         /// Updating the ticket model with a new list of subelements
         _ticketUiModel = _ticketUiModel.copyWith(subs: subs);
@@ -152,10 +165,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         if (ticketCount <= (subFromTicket.maxCount ?? 0) && ticketCount >= 0) {
           subFromTicket = subFromTicket.copyWith(count: ticketCount);
 
-          int indexOfSub = _ticketUiModel.subs?.indexWhere((element) => element?.item?.id == _selectedSub?.id) ?? -1;
-          if (indexOfSub != -1) {
-            _ticketUiModel.subs?[indexOfSub] = subFromTicket;
-          }
+          _ticketUiModel.subs = subFromTicket;
+
+          // int indexOfSub = _ticketUiModel.subs?.indexWhere((element) => element?.item?.id == _selectedSub?.id) ?? -1;
+          // if (indexOfSub != -1) {
+          //   _ticketUiModel.subs?[indexOfSub] = subFromTicket;
+          // }
 
           /// Updating the actual number of bookings
           int index = _subs.indexWhere((element) => element.id == subFromTicket?.item?.id);
@@ -165,16 +180,16 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
         }
 
         /// If the last subelement in the list has zero number, delete it
-        if (_ticketUiModel.subs!.last?.count == 0) _ticketUiModel.subs!.removeLast();
+        if (_ticketUiModel.subs?.count == 0) _ticketUiModel.subs = null;
       }
     } else {
-      if (_ticketUiModel.subs?.last?.count != null) {
-        _ticketUiModel.subs!.last = _ticketUiModel.subs!.last?.copyWith(count: _ticketUiModel.subs!.last!.count! - 1);
+      if (_ticketUiModel.subs?.count != null) {
+        _ticketUiModel.subs = _ticketUiModel.subs!.copyWith(count: _ticketUiModel.subs!.count! - 1);
 
-        int index = _subs.indexWhere((element) => element.id == _ticketUiModel.subs!.last?.item?.id);
+        int index = _subs.indexWhere((element) => element.id == _ticketUiModel.subs!.item?.id);
 
         /// If the number of the last subelement has become zero, remove it from the list
-        if (_ticketUiModel.subs!.last?.count == 0) _ticketUiModel.subs!.removeLast();
+        if (_ticketUiModel.subs!.count == 0) _ticketUiModel.subs = null;
 
         /// Updating the number of bookings for the last sub-element
         _subs[index] =
@@ -475,15 +490,23 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             if (widget.selectedDate != null)
               Row(
                 children: [
-                  Text(
-                    formatDateWithCustomPattern('dd.MM.yyyy', widget.selectedDate!.toLocal()),
-                    style: theme?.boldTextTheme.body,
-                  ),
-                  SpacingFoundation.horizontalSpace16,
-                  Text(
-                    formatChatMessageDate(widget.selectedDate!),
-                    style: theme?.regularTextTheme.body,
-                  ),
+                  if (widget.isCurrentDate) ...[
+                    Text(
+                      formatDateWithCustomPattern('dd.MM.yyyy', widget.selectedDate!.toLocal()),
+                      style: theme?.boldTextTheme.body,
+                    ),
+                    SpacingFoundation.horizontalSpace16,
+                    Text(
+                      formatChatMessageDate(widget.selectedDate!),
+                      style: theme?.regularTextTheme.body,
+                    ),
+                  ] else
+                    Expanded(
+                      child: Text(
+                        S.of(context).SelectTimeCorrespondingToContentCard,
+                        style: theme?.regularTextTheme.body.copyWith(color: ColorsFoundation.error),
+                      ),
+                    ),
                 ],
               ).paddingOnly(
                 left: horizontalPadding,
@@ -501,13 +524,16 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               child: context.gradientButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).GoToPayment.toUpperCase(),
-                  onPressed: () {
-                    widget.onSubmit?.call(
-                      _ticketUiModel.copyWith(ticketsCount: _ticketCount),
-                      _subs,
-                      _upsales,
-                    );
-                  },
+                  onPressed: widget.selectedDate != null && widget.isCurrentDate
+                      ? () {
+                          widget.onSubmit?.call(
+                            _ticketUiModel.copyWith(ticketsCount: _getTotalSubsTicketCount),
+                            _subs,
+                            _upsales,
+                            widget.bookingUiModel?.id,
+                          );
+                        }
+                      : null,
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24),
@@ -519,13 +545,16 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               child: context.gradientButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).GoToPayment.toUpperCase(),
-                  onPressed: () {
-                    widget.onSubmit?.call(
-                      _ticketUiModel.copyWith(ticketsCount: _ticketCount),
-                      _subs,
-                      _upsales,
-                    );
-                  },
+                  onPressed: widget.selectedDate != null
+                      ? () {
+                          widget.onSubmit?.call(
+                            _ticketUiModel.copyWith(ticketsCount: _getTotalSubsTicketCount),
+                            _subs,
+                            _upsales,
+                            widget.bookingUiModel?.id,
+                          );
+                        }
+                      : null,
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24)
