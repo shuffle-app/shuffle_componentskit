@@ -70,7 +70,7 @@ subInformationDialog(
                         borderRadius: BorderRadiusFoundation.all12,
                         child: ImageWidget(
                           height: 0.4.sh,
-                          link: GraphicsFoundation.instance.png.leto1.path,
+                          link: sub.photoPath,
                           fit: BoxFit.fill,
                         ),
                       ),
