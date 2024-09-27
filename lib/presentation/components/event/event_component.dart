@@ -54,7 +54,7 @@ class EventComponent extends StatefulWidget {
   State<EventComponent> createState() => _EventComponentState();
 }
 
-class _EventComponentState extends State<EventComponent> with TickerProviderStateMixin {
+class _EventComponentState extends State<EventComponent> {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
@@ -74,9 +74,6 @@ class _EventComponentState extends State<EventComponent> with TickerProviderStat
   late double scrollPosition;
   final ScrollController listViewController = ScrollController();
 
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
-
   @override
   void initState() {
     super.initState();
@@ -86,22 +83,10 @@ class _EventComponentState extends State<EventComponent> with TickerProviderStat
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
-      await _onSubsRequest();
+      await widget.bookingUiModel?.then((value) {
+        _bookingUiModel = value;
+      });
       setState(() {});
-    });
-  }
-
-  Future<void> _onSubsRequest() async {
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.fastOutSlowIn,
-    );
-    _bookingUiModel = await widget.bookingUiModel?.whenComplete(() {
-      _controller.forward();
     });
   }
 
@@ -175,7 +160,6 @@ class _EventComponentState extends State<EventComponent> with TickerProviderStat
   void dispose() {
     reactionsPagingController.dispose();
     feedbackPagingController.dispose();
-    _controller.dispose();
     super.dispose();
   }
 
@@ -378,10 +362,8 @@ class _EventComponentState extends State<EventComponent> with TickerProviderStat
             _bookingUiModel!.showSabsInContentCard &&
             _bookingUiModel!.subsUiModel!.isNotEmpty) ...[
           SpacingFoundation.verticalSpace12,
-          SizeTransition(
-            sizeFactor: _animation,
-            axis: Axis.vertical,
-            axisAlignment: -1,
+          AnimatedSize(
+            duration: const Duration(milliseconds: 250),
             child: SizedBox(
               width: 1.sw,
               child: SubsInContentCard(

@@ -72,7 +72,7 @@ class PlaceComponent extends StatefulWidget {
   State<PlaceComponent> createState() => _PlaceComponentState();
 }
 
-class _PlaceComponentState extends State<PlaceComponent> with TickerProviderStateMixin {
+class _PlaceComponentState extends State<PlaceComponent> {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
@@ -89,9 +89,6 @@ class _PlaceComponentState extends State<PlaceComponent> with TickerProviderStat
 
   BookingUiModel? _bookingUiModel;
 
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
-
   @override
   void initState() {
     super.initState();
@@ -101,22 +98,10 @@ class _PlaceComponentState extends State<PlaceComponent> with TickerProviderStat
       feedbacksPagedController.addPageRequestListener(_feedbacksListener);
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbacksPagedController.notifyPageRequestListeners(1);
-      await _onSubsRequest();
+      await widget.bookingUiModel?.then((value) {
+        _bookingUiModel = value;
+      });
       setState(() {});
-    });
-  }
-
-  Future<void> _onSubsRequest() async {
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.fastOutSlowIn,
-    );
-    _bookingUiModel = await widget.bookingUiModel?.whenComplete(() {
-      _controller.forward();
     });
   }
 
@@ -309,10 +294,8 @@ class _PlaceComponentState extends State<PlaceComponent> with TickerProviderStat
             _bookingUiModel!.showSabsInContentCard &&
             _bookingUiModel!.subsUiModel!.isNotEmpty) ...[
           SpacingFoundation.verticalSpace12,
-          SizeTransition(
-            sizeFactor: _animation,
-            axis: Axis.vertical,
-            axisAlignment: -1,
+          AnimatedSize(
+            duration: const Duration(milliseconds: 250),
             child: SizedBox(
               width: 1.sw,
               child: SubsInContentCard(
