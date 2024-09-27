@@ -154,6 +154,7 @@ class SpinnerComponent extends StatelessWidget {
                           ownerTileSubtitle: item.owner?.username,
                           ownerTileTitleTrailing: ownerTrailing,
                           ownerTileType: item.owner?.type,
+                          weatherType: item.weatherType,
                           onTap: () => onEventTap?.call(item.id),
                           onFavoriteTap: () {
                             FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
