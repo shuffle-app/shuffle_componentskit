@@ -240,12 +240,13 @@ class SearchComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace24,
               SingleChildScrollView(
                 primary: false,
+                padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing12,
                   children: chooseYourselfChips!,
                 ),
-              ).paddingOnly(left: horizontalMargin),
+              ),
               SpacingFoundation.verticalSpace24
             ],
             RichText(

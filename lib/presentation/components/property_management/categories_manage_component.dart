@@ -206,50 +206,53 @@ class CategoriesManageComponent extends StatelessWidget {
                     ),
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
-                      child: Column(children: [
-                        if (selectedProperty != null && !selectedProperty!.unique)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () => onPropertyEdit?.call(selectedProperty!),
-                                  backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.pencil,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.primary200),
-                                ),
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (selectedProperty != null && !selectedProperty!.unique)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  context.boxIconButton(
+                                    data: BaseUiKitButtonData(
+                                      onPressed: () => onPropertyEdit?.call(selectedProperty!),
+                                      backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                                      iconInfo: BaseUiKitButtonIconData(
+                                          iconData: ShuffleUiKitIcons.pencil,
+                                          size: kIsWeb ? 16 : 16.sp,
+                                          color: ColorsFoundation.primary200),
+                                    ),
+                                  ),
+                                  SpacingFoundation.horizontalSpace4,
+                                  context.boxIconButton(
+                                    data: BaseUiKitButtonData(
+                                      onPressed: () => onPropertyDeleteTap?.call(selectedProperty!),
+                                      backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
+                                      iconInfo: BaseUiKitButtonIconData(
+                                          iconData: ShuffleUiKitIcons.trash,
+                                          size: kIsWeb ? 16 : 16.sp,
+                                          color: ColorsFoundation.danger),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SpacingFoundation.horizontalSpace4,
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () => onPropertyDeleteTap?.call(selectedProperty!),
-                                  backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.trash,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.danger),
-                                ),
-                              ),
-                            ],
-                          ).paddingAll(EdgeInsetsFoundation.all4),
-                        Wrap(
-                            spacing: SpacingFoundation.horizontalSpacing12,
-                            runSpacing: SpacingFoundation.verticalSpacing12,
-                            children: (categoryProperties?.where((e) => !e.unique) ?? []).map(
-                              (e) {
-                                return UiKitCloudChip(
-                                  iconPath: e.icon,
-                                  title: e.title,
-                                  selected: e == selectedProperty,
-                                  onTap: () {
-                                    onPropertySelect.call(e.id!);
+                            Wrap(
+                                spacing: SpacingFoundation.horizontalSpacing12,
+                                runSpacing: SpacingFoundation.verticalSpacing12,
+                                children: (categoryProperties?.where((e) => !e.unique) ?? []).map(
+                                  (e) {
+                                    return UiKitCloudChip(
+                                      iconPath: e.icon,
+                                      title: e.title,
+                                      selected: e == selectedProperty,
+                                      onTap: () {
+                                        onPropertySelect.call(e.id!);
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ).toList())
-                      ]).paddingAll(EdgeInsetsFoundation.all24),
+                                ).toList())
+                          ]),
                     ),
                     SpacingFoundation.verticalSpace24,
                     Text(
@@ -265,6 +268,8 @@ class CategoriesManageComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           if (selectedProperty != null && selectedProperty!.unique)
                             Row(
@@ -292,26 +297,22 @@ class CategoriesManageComponent extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ).paddingAll(EdgeInsetsFoundation.all4),
+                            ),
                           Wrap(
-                                  spacing: SpacingFoundation.horizontalSpacing12,
-                                  runSpacing: SpacingFoundation.verticalSpacing12,
-                                  children: (categoryProperties?.where((e) => e.unique) ?? []).map(
-                                    (e) {
-                                      return UiKitCloudChip(
-                                        title: e.title,
-                                        onTap: () {
-                                          onPropertySelect.call(e.id!);
-                                        },
-                                        iconPath: e.icon,
-                                        selected: e == selectedProperty,
-                                      );
+                              spacing: SpacingFoundation.horizontalSpacing12,
+                              runSpacing: SpacingFoundation.verticalSpacing12,
+                              children: (categoryProperties?.where((e) => e.unique) ?? []).map(
+                                (e) {
+                                  return UiKitCloudChip(
+                                    title: e.title,
+                                    onTap: () {
+                                      onPropertySelect.call(e.id!);
                                     },
-                                  ).toList())
-                              .paddingOnly(
-                                  left: EdgeInsetsFoundation.horizontal20,
-                                  right: EdgeInsetsFoundation.horizontal20,
-                                  bottom: EdgeInsetsFoundation.vertical20),
+                                    iconPath: e.icon,
+                                    selected: e == selectedProperty,
+                                  );
+                                },
+                              ).toList()),
                         ],
                       ),
                     ),
@@ -353,8 +354,7 @@ class CategoriesManageComponent extends StatelessWidget {
                             ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical6);
                           },
                         ).toList(),
-                      ).paddingSymmetric(
-                          horizontal: EdgeInsetsFoundation.horizontal20, vertical: EdgeInsetsFoundation.vertical14),
+                      ),
                     ),
                   ],
                 ),

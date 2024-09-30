@@ -41,7 +41,6 @@ class MindsetsManageComponent extends StatelessWidget {
   final Future<List<String>> Function(String) tagSearchOptions;
   final List<UiKitTag> recentlyAddedTags;
 
-
   @override
   Widget build(BuildContext context) {
     final uiKitTheme = context.uiKitTheme;
@@ -162,50 +161,53 @@ class MindsetsManageComponent extends StatelessWidget {
                     ),
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
-                      child: Column(children: [
-                        if (selectedTag != null)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () => onTagEditTap?.call(selectedTag!),
-                                  backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.pencil,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.primary200),
-                                ),
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (selectedTag != null)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  context.boxIconButton(
+                                    data: BaseUiKitButtonData(
+                                      onPressed: () => onTagEditTap?.call(selectedTag!),
+                                      backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                                      iconInfo: BaseUiKitButtonIconData(
+                                          iconData: ShuffleUiKitIcons.pencil,
+                                          size: kIsWeb ? 16 : 16.sp,
+                                          color: ColorsFoundation.primary200),
+                                    ),
+                                  ),
+                                  SpacingFoundation.horizontalSpace4,
+                                  context.boxIconButton(
+                                    data: BaseUiKitButtonData(
+                                      onPressed: () => onTagDeleteTap?.call(selectedTag!),
+                                      backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
+                                      iconInfo: BaseUiKitButtonIconData(
+                                          iconData: ShuffleUiKitIcons.trash,
+                                          size: kIsWeb ? 16 : 16.sp,
+                                          color: ColorsFoundation.danger),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SpacingFoundation.horizontalSpace4,
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () => onTagDeleteTap?.call(selectedTag!),
-                                  backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.trash,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.danger),
-                                ),
-                              ),
-                            ],
-                          ).paddingAll(EdgeInsetsFoundation.all4),
-                        Wrap(
-                            spacing: SpacingFoundation.horizontalSpacing12,
-                            runSpacing: SpacingFoundation.verticalSpacing12,
-                            children: (listTags ?? []).map(
-                              (e) {
-                                return UiKitCloudChip(
-                                  iconPath: e.icon,
-                                  title: e.title,
-                                  selected: e == selectedTag,
-                                  onTap: () {
-                                    onTagSelect.call(e.id!);
+                            Wrap(
+                                spacing: SpacingFoundation.horizontalSpacing12,
+                                runSpacing: SpacingFoundation.verticalSpacing12,
+                                children: (listTags ?? []).map(
+                                  (e) {
+                                    return UiKitCloudChip(
+                                      iconPath: e.icon,
+                                      title: e.title,
+                                      selected: e == selectedTag,
+                                      onTap: () {
+                                        onTagSelect.call(e.id!);
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ).toList())
-                      ]).paddingAll(EdgeInsetsFoundation.all24),
+                                ).toList())
+                          ]),
                     ),
                   ],
                 ),
