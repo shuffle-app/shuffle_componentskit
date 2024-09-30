@@ -290,25 +290,28 @@ class _PlaceComponentState extends State<PlaceComponent> {
             horizontal: horizontalMargin,
             vertical: SpacingFoundation.verticalSpacing24,
           ),
-        if (_bookingUiModel?.subsUiModel != null &&
-            _bookingUiModel!.showSubsInContentCard &&
-            _bookingUiModel!.subsUiModel!.isNotEmpty) ...[
-          SpacingFoundation.verticalSpace12,
-          AnimatedSize(
-            duration: const Duration(milliseconds: 250),
-            child: SizedBox(
-              width: 1.sw,
-              child: SubsInContentCard(
-                subs: _bookingUiModel!.subsUiModel!,
-                onItemTap: (id) {
-                  final sub = _bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
-                  subInformationDialog(context, sub);
-                },
-              ),
-            ),
-          ),
-          SpacingFoundation.verticalSpace24,
-        ],
+        SpacingFoundation.verticalSpace12,
+        AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          child: (_bookingUiModel?.subsUiModel != null &&
+                  _bookingUiModel!.showSubsInContentCard &&
+                  _bookingUiModel!.subsUiModel!.isNotEmpty)
+              ? SizedBox(
+                  width: 1.sw,
+                  child: SubsInContentCard(
+                    subs: _bookingUiModel!.subsUiModel!,
+                    onItemTap: (id) {
+                      final sub = _bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+                      subInformationDialog(context, sub);
+                    },
+                  ),
+                ).paddingOnly(
+                  top: SpacingFoundation.verticalSpacing12,
+                  bottom: SpacingFoundation.verticalSpacing24,
+                )
+              : const SizedBox.shrink(),
+        ),
+        SpacingFoundation.verticalSpace24,
         if (widget.isEligibleForEdit)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
