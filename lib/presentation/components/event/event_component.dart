@@ -359,7 +359,7 @@ class _EventComponentState extends State<EventComponent> {
             bottom: SpacingFoundation.verticalSpacing24,
           ),
         if (_bookingUiModel?.subsUiModel != null &&
-            _bookingUiModel!.showSabsInContentCard &&
+            _bookingUiModel!.showSubsInContentCard &&
             _bookingUiModel!.subsUiModel!.isNotEmpty) ...[
           SpacingFoundation.verticalSpace12,
           AnimatedSize(

@@ -191,10 +191,10 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                   UiKitGradientSwitch(
                     onChanged: (value) {
                       setState(() {
-                        _bookingUiModel.showSabsInContentCard = !_bookingUiModel.showSabsInContentCard;
+                        _bookingUiModel.showSubsInContentCard = !_bookingUiModel.showSubsInContentCard;
                       });
                     },
-                    switchedOn: _bookingUiModel.showSabsInContentCard,
+                    switchedOn: _bookingUiModel.showSubsInContentCard,
                   ),
                 ],
               ).paddingOnly(
@@ -264,7 +264,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                         _formKey.currentState?.validate();
                         _removeSubsItem(index - 1);
                         if (_subsUiModels.isEmpty) {
-                          _bookingUiModel.showSabsInContentCard = false;
+                          _bookingUiModel.showSubsInContentCard = false;
                         }
                       },
                       onEdit: () => context.push(
