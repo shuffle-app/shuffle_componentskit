@@ -67,7 +67,7 @@ class SubsInContentCard extends StatelessWidget {
 
                   return SubsOrUpsaleItem(
                     limit: upsale.limit,
-                    titleOrPrice: '${upsale.price} ${upsale.currency}',
+                    titleOrPrice: '${upsale.price ?? 0} ${upsale.currency ?? ''}',
                     photoLink: upsale.photoPath,
                     actualLimit: upsale.actualLimit,
                     description: upsale.description,

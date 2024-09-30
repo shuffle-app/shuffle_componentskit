@@ -93,11 +93,11 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
             style: boldTextTheme?.title1,
             textAlign: TextAlign.center,
             wrapWords: false,
+            maxLines: 1,
           ),
         ),
         centerTitle: true,
         autoImplyLeading: true,
-        customToolbarBaseHeight: 1.sw <= 380 ? 0.18.sh : 0.13.sh,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           Row(

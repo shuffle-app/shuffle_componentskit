@@ -579,6 +579,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               context.push(
                                 CreateBookingComponent(
                                   bookingUiModel: _bookingUiModel,
+                                  currency: _placeToEdit.currency,
                                   onBookingCreated: (bookingUiModel) {
                                     if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
                                       _bookingUiModel = bookingUiModel;

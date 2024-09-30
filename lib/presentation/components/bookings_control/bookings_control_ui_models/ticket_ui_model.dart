@@ -5,7 +5,7 @@ class TicketUiModel {
   final int id;
   final int ticketsCount;
   final List<TicketItem<UpsaleUiModel>?>? upsales;
-  final List<TicketItem<SubsUiModel>?>? subs;
+  TicketItem<SubsUiModel>? subs;
 
   TicketUiModel({
     required this.id,
@@ -43,19 +43,19 @@ class TicketUiModel {
     return total;
   }
 
-  int get totalSubsCount {
-    if (subs == null) {
-      return 0;
-    }
+  // int get totalSubsCount {
+  //   if (subs == null) {
+  //     return 0;
+  //   }
 
-    return subs!.fold(0, (sum, item) => sum + (item?.count ?? 0));
-  }
+  //   return subs!.fold(0, (sum, item) => sum + (item?.count ?? 0));
+  // }
 
   TicketUiModel copyWith({
     int? id,
     int? ticketsCount,
     List<TicketItem<UpsaleUiModel>?>? upsales,
-    List<TicketItem<SubsUiModel>?>? subs,
+    TicketItem<SubsUiModel>? subs,
   }) {
     return TicketUiModel(
       id: id ?? this.id,

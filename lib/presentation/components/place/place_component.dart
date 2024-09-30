@@ -36,6 +36,7 @@ class PlaceComponent extends StatefulWidget {
   final bool showOfferButton;
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
+  final Future<BookingUiModel?>? bookingUiModel;
 
   const PlaceComponent({
     super.key,
@@ -64,6 +65,7 @@ class PlaceComponent extends StatefulWidget {
     this.showOfferButton = false,
     this.priceForOffer,
     this.onOfferButtonTap,
+    this.bookingUiModel,
   });
 
   @override
@@ -85,6 +87,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   bool? canLeaveFeedback;
 
+  BookingUiModel? _bookingUiModel;
+
   @override
   void initState() {
     super.initState();
@@ -94,6 +98,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
       feedbacksPagedController.addPageRequestListener(_feedbacksListener);
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbacksPagedController.notifyPageRequestListeners(1);
+      await widget.bookingUiModel?.then((value) {
+        _bookingUiModel = value;
+      });
       setState(() {});
     });
   }
@@ -283,19 +290,28 @@ class _PlaceComponentState extends State<PlaceComponent> {
             horizontal: horizontalMargin,
             vertical: SpacingFoundation.verticalSpacing24,
           ),
-        if (widget.place.bookingUiModel?.subsUiModel != null &&
-            widget.place.bookingUiModel!.showSabsInContentCard &&
-            widget.place.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
-          SpacingFoundation.verticalSpace12,
-          SubsInContentCard(
-            subs: widget.place.bookingUiModel!.subsUiModel!,
-            onItemTap: (id) {
-              final sub = widget.place.bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
-              subInformationDialog(context, sub);
-            },
-          ),
-          SpacingFoundation.verticalSpace24,
-        ],
+        SpacingFoundation.verticalSpace12,
+        AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          child: (_bookingUiModel?.subsUiModel != null &&
+                  _bookingUiModel!.showSubsInContentCard &&
+                  _bookingUiModel!.subsUiModel!.isNotEmpty)
+              ? SizedBox(
+                  width: 1.sw,
+                  child: SubsInContentCard(
+                    subs: _bookingUiModel!.subsUiModel!,
+                    onItemTap: (id) {
+                      final sub = _bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+                      subInformationDialog(context, sub);
+                    },
+                  ),
+                ).paddingOnly(
+                  top: SpacingFoundation.verticalSpacing12,
+                  bottom: SpacingFoundation.verticalSpacing24,
+                )
+              : const SizedBox.shrink(),
+        ),
+        SpacingFoundation.verticalSpace24,
         if (widget.isEligibleForEdit)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,

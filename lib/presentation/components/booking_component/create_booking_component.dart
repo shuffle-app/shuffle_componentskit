@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/presentation/common/price_selector_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/booking_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
@@ -10,10 +9,12 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class CreateBookingComponent extends StatefulWidget {
   final Function(BookingUiModel) onBookingCreated;
   final BookingUiModel? bookingUiModel;
+  final String? currency;
 
   const CreateBookingComponent({
     super.key,
     this.bookingUiModel,
+    this.currency,
     required this.onBookingCreated,
   });
 
@@ -102,35 +103,24 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(
               label: S.of(context).Price,
-              onTap: () => showUiKitGeneralFullScreenDialog(
-                context,
-                GeneralDialogData(
-                  topPadding: 1.sw <= 380 ? 0.12.sh : 0.37.sh,
-                  useRootNavigator: false,
-                  child: PriceSelectorComponent(
-                    isPriceRangeSelected: _priceController.text.contains('-'),
-                    initialPriceRangeStart: _priceController.text.split('-').first,
-                    initialPriceRangeEnd:
-                        _priceController.text.contains('-') ? _priceController.text.split('-').last : null,
-                    initialCurrency: _bookingUiModel.currency,
-                    onSubmit: (averagePrice, rangePrice1, rangePrice2, currency, averageSelected) {
-                      setState(() {
-                        if (averageSelected) {
-                          _priceController.text = averagePrice.isNotEmpty ? '$averagePrice $currency' : '0 $currency';
-                        } else {
-                          _priceController.text = rangePrice1.isNotEmpty ? '$rangePrice1 $currency' : '0 $currency';
-                          if (rangePrice2.isNotEmpty && rangePrice1.isNotEmpty) {
-                            _priceController.text += '-$rangePrice2 $currency';
-                          }
-                        }
-                        _bookingUiModel.currency = currency;
-                      });
-                    },
-                  ),
-                ),
-              ),
-              readOnly: true,
               controller: _priceController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [PriceWithSpacesFormatter()],
+              onTap: () {
+                final list = _priceController.text.split(' ');
+                list.removeLast();
+                _priceController.text = list.join(' ');
+              },
+              onFieldSubmitted: (value) {
+                if (!_priceController.text.contains(widget.currency ?? 'AED')) {
+                  _priceController.text = '${_priceController.text} ${widget.currency ?? 'AED'}';
+                }
+              },
+              onTapOutside: (value) {
+                if (!_priceController.text.contains(widget.currency ?? 'AED')) {
+                  _priceController.text = '${_priceController.text} ${widget.currency ?? 'AED'}';
+                }
+              },
             ),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
@@ -201,10 +191,10 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                   UiKitGradientSwitch(
                     onChanged: (value) {
                       setState(() {
-                        _bookingUiModel.showSabsInContentCard = !_bookingUiModel.showSabsInContentCard;
+                        _bookingUiModel.showSubsInContentCard = !_bookingUiModel.showSubsInContentCard;
                       });
                     },
-                    switchedOn: _bookingUiModel.showSabsInContentCard,
+                    switchedOn: _bookingUiModel.showSubsInContentCard,
                   ),
                 ],
               ).paddingOnly(
@@ -274,7 +264,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                         _formKey.currentState?.validate();
                         _removeSubsItem(index - 1);
                         if (_subsUiModels.isEmpty) {
-                          _bookingUiModel.showSabsInContentCard = false;
+                          _bookingUiModel.showSubsInContentCard = false;
                         }
                       },
                       onEdit: () => context.push(
@@ -317,6 +307,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                               data: BaseUiKitButtonData(
                                 onPressed: () => context.push(
                                   CreateUpsalesComponent(
+                                    currency: widget.currency,
                                     onSave: (upsaleUiModel) {
                                       setState(() {
                                         _upsaleUiModels.add(upsaleUiModel);
@@ -364,6 +355,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       removeItem: () => _removeUpsaleItem(index - 1),
                       onEdit: () => context.push(
                         CreateUpsalesComponent(
+                          currency: widget.currency,
                           onSave: (upsaleUiModel) {
                             setState(() {
                               _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
