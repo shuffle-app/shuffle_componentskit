@@ -35,13 +35,13 @@ class MyBookingItem extends StatelessWidget {
             context.userAvatar(
               size: UserAvatarSize.x40x40,
               type: UserTileType.ordinary,
-              userName: '',
-              imageUrl: GraphicsFoundation.instance.png.avatars.avatar9.path,
+              userName: myBookingUiModel?.contentName ?? '',
+              imageUrl: myBookingUiModel?.contentLogo ?? GraphicsFoundation.instance.png.avatars.avatar9.path,
             ),
             SpacingFoundation.horizontalSpace12,
             Expanded(
               child: Text(
-                myBookingUiModel?.name ?? S.of(context).NothingFound,
+                myBookingUiModel?.contentName ?? S.of(context).NothingFound,
                 style: boldTextTheme?.body,
               ),
             ),

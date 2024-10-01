@@ -1,4 +1,6 @@
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:collection/collection.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class MyBookingUiModel {
   final int id;
@@ -15,7 +17,7 @@ class MyBookingUiModel {
     this.total,
     this.eventModel,
     this.placeModel,
-  }) : assert(eventModel != null || placeModel != null, 'At least one of eventModel or placeModel must be non-null.');
+  });
 
   bool get isPast {
     final selectedDateTime =
@@ -45,4 +47,11 @@ class MyBookingUiModel {
     }
     return null;
   }
+
+  String? get contentName => eventModel?.title ?? placeModel?.title;
+
+  String? get contentLogo =>
+      placeModel?.logo ??
+      eventModel?.verticalPreview?.link ??
+      eventModel?.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link;
 }
