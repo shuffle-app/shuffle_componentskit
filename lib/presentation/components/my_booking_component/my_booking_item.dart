@@ -167,6 +167,7 @@ class MyBookingItem extends StatelessWidget {
               onPressed: () => onFullRefundTap?.call(myBookingUiModel?.id),
             ),
           ),
+          if((myBookingUiModel?.total ?? 0)>1)...[
           SpacingFoundation.verticalSpace12,
           context.outlinedButton(
             data: BaseUiKitButtonData(
@@ -175,7 +176,7 @@ class MyBookingItem extends StatelessWidget {
               text: S.of(context).PartialRefund.toUpperCase(),
               onPressed: () => onPartialRefundTap?.call(myBookingUiModel?.id),
             ),
-          )
+          )]
         ],
       ],
     );
