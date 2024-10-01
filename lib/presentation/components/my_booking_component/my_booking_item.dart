@@ -36,7 +36,7 @@ class MyBookingItem extends StatelessWidget {
               size: UserAvatarSize.x40x40,
               type: UserTileType.ordinary,
               userName: myBookingUiModel?.contentName ?? '',
-              imageUrl: myBookingUiModel?.contentLogo ?? GraphicsFoundation.instance.png.avatars.avatar9.path,
+              imageUrl: myBookingUiModel?.contentLogo,
             ),
             SpacingFoundation.horizontalSpace12,
             Expanded(
@@ -167,7 +167,7 @@ class MyBookingItem extends StatelessWidget {
               onPressed: () => onFullRefundTap?.call(myBookingUiModel?.id),
             ),
           ),
-          if((myBookingUiModel?.total ?? 0)>1)...[
+          if((myBookingUiModel?.ticketUiModel?.ticketsCount ?? 0)>1)...[
           SpacingFoundation.verticalSpace12,
           context.outlinedButton(
             data: BaseUiKitButtonData(
