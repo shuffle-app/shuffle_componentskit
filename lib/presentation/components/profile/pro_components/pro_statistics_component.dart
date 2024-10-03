@@ -222,7 +222,7 @@ class ProStatisticsComponent extends StatelessWidget {
             separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
             itemCount: events!.length,
           ),
-        SpacingFoundation.bottomNavigationBarSpacing,
+        SpacingFoundation.verticalSpace24,
       ],
     );
   }
