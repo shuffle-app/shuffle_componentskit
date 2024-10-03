@@ -290,7 +290,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
             horizontal: horizontalMargin,
             vertical: SpacingFoundation.verticalSpacing24,
           ),
-        SpacingFoundation.verticalSpace12,
         AnimatedSize(
           duration: const Duration(milliseconds: 250),
           child: (_bookingUiModel?.subsUiModel != null &&
@@ -311,7 +310,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 )
               : const SizedBox.shrink(),
         ),
-        SpacingFoundation.verticalSpace24,
         if (widget.isEligibleForEdit)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
