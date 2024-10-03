@@ -201,7 +201,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                 bottom: SpacingFoundation.verticalSpacing24,
               ),
             SizedBox(
-              height: _subsUiModels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
+              height: _subsUiModels.isEmpty ? (1.sw <= 380 ? 0.25.sh : 0.2.sh) : (1.sw <= 380 ? 0.3.sh : 0.25.sh),
               child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: _subsUiModels.length + 1,
@@ -283,15 +283,13 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                 },
               ),
             ),
-            SpacingFoundation.verticalSpace24,
             Text(
               S.of(context).CreateUpsales,
               style: theme?.boldTextTheme.title2,
             ),
             SpacingFoundation.verticalSpace16,
             SizedBox(
-              height:
-                  _upsaleUiModels.isNotEmpty ? (1.sw <= 380 ? 0.27.sh : 0.20.sh) : (1.sw <= 380 ? 0.21.sh : 0.13.sh),
+              height: _upsaleUiModels.isEmpty ? (1.sw <= 380 ? 0.25.sh : 0.2.sh) : (1.sw <= 380 ? 0.3.sh : 0.23.sh),
               child: ListView.separated(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
