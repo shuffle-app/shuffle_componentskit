@@ -35,6 +35,9 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   SubsUiModel? _selectedSub;
   UpsaleUiModel? _selectedUpsale;
 
+  bool errorSelectSubisActive = false;
+  bool errorSelectUpsaleisActive = false;
+
   final List<SubsUiModel> _subs = [];
   final List<UpsaleUiModel> _upsales = [];
 
@@ -49,6 +52,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   int _upsaleTotalPrice = 0;
 
   int get _getTotalSubsTicketCount => _ticketCount + _subTicketCount;
+
   double get _getTotalPrice => (_getTotalSubsTicketCount * _ticketPrice) + (_upsaleTotalPrice);
 
   @override
@@ -129,6 +133,8 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
       } else if (widget.bookingUiModel?.subsUiModel == null ||
           (widget.bookingUiModel?.subsUiModel != null && widget.bookingUiModel!.subsUiModel!.isEmpty)) {
         _ticketCount++;
+      } else {
+        errorSelectSubisActive = true;
       }
     });
   }
@@ -221,6 +227,8 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     setState(() {
       if (_selectedUpsale != null) {
         _updateUpsaleTicket(1);
+      } else {
+        errorSelectUpsaleisActive = true;
       }
     });
   }
@@ -391,6 +399,13 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               ),
             ],
           ).paddingSymmetric(horizontal: horizontalPadding),
+          if (errorSelectSubisActive) ...[
+            Text(
+              S.of(context).SelectSubs,
+              style: theme?.regularTextTheme.body.copyWith(color: UiKitColors.error),
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
+          ],
           SpacingFoundation.verticalSpace24,
           if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel?.bookingLimitPerOne ?? '9999') ?? 9999))
             Text(
@@ -461,6 +476,13 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 ),
               ],
             ).paddingSymmetric(horizontal: horizontalPadding),
+            if (errorSelectUpsaleisActive) ...[
+              Text(
+                S.of(context).SelectYourFavoriteProduct,
+                style: theme?.regularTextTheme.body.copyWith(color: UiKitColors.error),
+              ).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace16,
+            ],
             SpacingFoundation.verticalSpace24,
           ],
           if (_getTotalSubsTicketCount != 0) ...[
