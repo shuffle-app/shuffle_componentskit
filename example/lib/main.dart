@@ -69,25 +69,29 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               // theme: UiKitThemeFoundation.lightTheme,
               //TODO: think about it
-              home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: UnifiedVerificationComponent(
-                uiModel: UiUnifiedVerificationModel(),
-                credentialsController: TextEditingController(),
-                availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
-                formKey: GlobalKey<FormState>(),
-                passwordController: TextEditingController(),
-                onSocialsLogin: (socialsLoginData) {},
-                onSubmit: (isPersonalSelected) {
-                  log('isPersonalSelected $isPersonalSelected');
-                },
-              ),)
-                  : Builder(builder: (c) {
-                      configuration
-                          .load(version: '1.0.18')
-                          .then((_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(body: Center(child: LoadingWidget()));
-                    }),
+              home: ComponentsTestPage(),
+              // home: configuration.isLoaded
+              //     ? GlobalComponent(
+              //         globalConfiguration: configuration,
+              //         child: UnifiedVerificationComponent(
+              //           uiModel: UiUnifiedVerificationModel(),
+              //           credentialsController: TextEditingController(),
+              //           availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
+              //           formKey: GlobalKey<FormState>(),
+              //           passwordController: TextEditingController(),
+              //           onSocialsLogin: (socialsLoginData) {},
+              //           onSubmit: (isPersonalSelected) {
+              //             log('isPersonalSelected $isPersonalSelected');
+              //           },
+              //         ),
+              //       )
+              //     : Builder(builder: (c) {
+              //         configuration
+              //             .load(version: '1.0.18')
+              //             .then((_) => Future.delayed(const Duration(seconds: 1)))
+              //             .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
+              //         return const Scaffold(body: Center(child: LoadingWidget()));
+              //       }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
             )));
@@ -175,7 +179,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
         onTap: () {},
       ),
       bookingUiModel: BookingUiModel(
-        showSabsInContentCard: true,
         id: -1,
         subsUiModel: List.generate(
           10,
@@ -247,8 +250,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show Booking By Visitor Component',
                 onPressed: () => context.push(
                   BookingByVisitorComponent(
-                    selectedDate: selectedDate,
-                    onSubmit: (model, subs, upsale) {
+                    onSubmit: (model, subs, upsale, index) {
                       setState(() {
                         ticketModel = model;
                         upsaleList = upsale ?? [];
@@ -282,7 +284,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     },
                     ticketUiModel: ticketModel,
                     bookingUiModel: BookingUiModel(
-                      showSabsInContentCard: true,
                       id: -1,
                       price: '500',
                       currency: 'AED',
@@ -293,41 +294,42 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                onPressed: () => context.push(
-                  PropertyManagementComponent(
-                    propertySearchOptions: (value) async {
-                      return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
-                    },
-                    onRecentlyAddedPropertyTapped: (value) {},
-                    onPropertyFieldSubmitted: (value) async {
-                      return UiModelProperty(
-                        title: value,
-                        id: 9,
-                        icon: null,
-                      );
-                    },
-                    onAddPropertyTypeTap: () {},
-                    onDeletePropertyTypeTap: () {},
-                    onEditPropertyTypeTap: () {},
-                    onPropertyTypeTapped: (value) {},
-                    allPropertyCategories: [
-                      // UiModelPropertiesCategory(title: 'Active tiger', id: 0),
-                      // UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
-                      // UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
-                      // UiModelPropertiesCategory(title: 'Foodie', id: 3),
-                    ],
-                    basePropertyTypesTap: (int) async {},
-                    uniquePropertyTypesTap: (int) async {},
-                    relatedProperties: [],
-                    selectedPropertyId: 1,
-                  ),
-                ),
-                text: 'show property management component',
-              ),
-            ),
+            // SpacingFoundation.verticalSpace16,
+            // context.button(
+            //   data: BaseUiKitButtonData(
+            //     onPressed: () => context.push(
+            //         // PropertyManagementComponent(
+
+            //         //   propertySearchOptions: (value) async {
+            //         //     return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
+            //         //   },
+            //         //   onRecentlyAddedPropertyTapped: (value) {},
+            //         //   onPropertyFieldSubmitted: (value) async {
+            //         //     return UiModelProperty(
+            //         //       title: value,
+            //         //       id: 9,
+            //         //       icon: null,
+            //         //     );
+            //         //   },
+            //         //   onAddPropertyTypeTap: () {},
+            //         //   onDeletePropertyTypeTap: () {},
+            //         //   onEditPropertyTypeTap: () {},
+            //         //   onPropertyTypeTapped: (value) {},
+            //         //   allPropertyCategories: [
+            //         //     // UiModelPropertiesCategory(title: 'Active tiger', id: 0),
+            //         //     // UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
+            //         //     // UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
+            //         //     // UiModelPropertiesCategory(title: 'Foodie', id: 3),
+            //         //   ],
+            //         //   basePropertyTypesTap: (int) async {},
+            //         //   uniquePropertyTypesTap: (int) async {},
+            //         //   relatedProperties: [],
+            //         //   selectedPropertyId: 1,
+            //         // ),
+            //         ),
+            //     text: 'show property management component',
+            //   ),
+            // ),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -800,6 +802,53 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             ),
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show Activation Offers Component',
+                onPressed: () {
+                  context.push(
+                    ActivationOffersComponent(
+                      offerUiModel: UniversalNotOfferRemUiModel(
+                        id: -1,
+                        title: 'Cuba Libre cocktail',
+                        pointPrice: 400,
+                        selectedDates: [
+                          DateTime.now(),
+                          DateTime.now(),
+                        ],
+                      ),
+                      users: List.generate(
+                        15,
+                        (index) => UiProfileModel(
+                          id: index,
+                          avatarUrl: GraphicsFoundation.instance.png.avatars.avatar10.path,
+                          name: 'name $index',
+                          nickname: '@nickname$index',
+                        ),
+                      ),
+                      onDetailsTap: (user) {
+                        log('Activation Offers Component user  - $user');
+                        context.push(
+                          OfferInfo(
+                            user: user,
+                            offerUiModel: UniversalNotOfferRemUiModel(
+                              id: -1,
+                              title: 'Cuba Libre cocktail',
+                              pointPrice: 400,
+                              selectedDates: [
+                                DateTime.now(),
+                                DateTime.now(),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'create place',
                     onPressed: () {
@@ -922,6 +971,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show notification component',
                 onPressed: () => context.push(
                   NotificationComponent(
+                    listKey: GlobalKey(),
                     placeOrEventName: null,
                     listNotification: _listNotification,
                     onCreateNotification: () {
@@ -995,6 +1045,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show reminders component',
                 onPressed: () => context.push(
                   RemindersComponent(
+                    listKey: GlobalKey(),
                     listReminders: _listReminders,
                     placeOrEventName: S.of(context).Event.toLowerCase(),
                     onCreateReminder: () {
@@ -1064,6 +1115,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show offers component ',
                 onPressed: () => context.push(
                   OffersComponent(
+                    listKey: GlobalKey(),
                     listOffers: _offerUiModelList,
                     onCreateOffer: () {
                       context.push(
@@ -1147,23 +1199,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     child: PlaceComponent(
                       canLeaveFeedbackCallback: (placeId) async => false,
                       canLeaveFeedbackForEventCallback: (eventId) async => false,
-                      place: place.copyWith(
-                        bookingUiModel: BookingUiModel(
-                          showSabsInContentCard: true,
-                          id: -1,
-                          subsUiModel: List.generate(
-                            10,
-                            (index) => SubsUiModel(
-                              id: index,
-                              actualbookingLimit: index.toString(),
-                              bookingLimit: (index + 1).toString(),
-                              description: 'I am Leonardo Messi, be the best ;)',
-                              photoPath: GraphicsFoundation.instance.png.story.path,
-                              title: 'I am Leonardo Messi',
-                            ),
-                          ),
-                        ),
-                      ),
+                      place: place,
                       placeReactionLoaderCallback: (int page, int contentId) async {
                         return [];
                       },
@@ -1185,7 +1221,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         context.push(
                           BookingByVisitorComponent(
                             bookingUiModel: BookingUiModel(
-                              showSabsInContentCard: true,
                               id: -1,
                               price: '500',
                               currency: 'AED',
@@ -1294,21 +1329,16 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () {
                   context.push(
                     BookingsControlComponent(
+                      isCompany: true,
                       onPlaceItemTap: (value) {
                         context.push(
                           BookingsControlUserList(
                             canBookingEdit: true,
                             bookingsPlaceItemUiModel: value,
-                            bookingUiModel: BookingUiModel(
-                              id: -1,
-                              bookingLimit: '10',
-                              bookingLimitPerOne: '5',
-                            ),
-                            onBookingEdit: (model) {
+                            onBookingEdit: () {
                               context.push(
                                 CreateBookingComponent(
                                   onBookingCreated: (value) {},
-                                  bookingUiModel: model,
                                 ),
                               );
                             },
@@ -1319,16 +1349,16 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         context.push(
                           BookingsControlUserList(
                             onRequestsRefund: (value) {
-                              getRefundBookingDialogUiKit(
-                                context: context,
-                                userName: value.profile?.name ?? '',
-                                allTicket: value.ticketUiModel?.ticketsCount ?? 0,
-                                allUpsale: value.ticketUiModel?.totalUpsalesCount ?? 0,
-                                ticketRefun: math.Random().nextInt(4) + 1,
-                                upsaleRefun: math.Random().nextInt(4) + 1,
-                                onContactTap: () {},
-                                onGoAheadTap: () {},
-                              );
+                              // getRefundBookingDialogUiKit(
+                              //   context: context,
+                              //   userName: value.profile?.name ?? '',
+                              //   allTicket: value.ticketUiModel?.ticketsCount ?? 0,
+                              //   allUpsale: value.ticketUiModel?.totalUpsalesCount ?? 0,
+                              //   ticketRefund: math.Random().nextInt(4) + 1,
+                              //   upsaleRefund: math.Random().nextInt(4) + 1,
+                              //   onContactTap: () {},
+                              //   onGoAheadTap: () {},
+                              // );
                             },
                             onPopupMenuSelected: (str, userId) {
                               if (str == 'refund') {
@@ -1405,16 +1435,10 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               log('list $list');
                             },
                             bookingsPlaceItemUiModel: value,
-                            bookingUiModel: BookingUiModel(
-                              id: -1,
-                              bookingLimit: '10',
-                              bookingLimitPerOne: '5',
-                            ),
-                            onBookingEdit: (model) {
+                            onBookingEdit: () {
                               context.push(
                                 CreateBookingComponent(
                                   onBookingCreated: (value) {},
-                                  bookingUiModel: model,
                                 ),
                               );
                             },
@@ -1466,12 +1490,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                                 item: null,
                                               ),
                                             ),
-                                            subs: List.generate(
-                                              5,
-                                              (index) => TicketItem(
-                                                count: math.Random().nextInt(4),
-                                                item: null,
-                                              ),
+                                            subs: TicketItem(
+                                              count: math.Random().nextInt(4),
+                                              item: null,
                                             ),
                                           ),
                                         );
