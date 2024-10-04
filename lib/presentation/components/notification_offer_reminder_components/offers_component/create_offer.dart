@@ -156,6 +156,7 @@ class _CreateOfferState extends State<CreateOffer> {
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(
               label: S.of(context).Points,
+              maxSymbols: 7,
               controller: _pointController,
               keyboardType: TextInputType.number,
               inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
