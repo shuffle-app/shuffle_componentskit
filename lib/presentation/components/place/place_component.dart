@@ -37,6 +37,7 @@ class PlaceComponent extends StatefulWidget {
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
   final Future<BookingUiModel?>? bookingUiModel;
+  final VoidCallback? onSpendPointTap;
 
   const PlaceComponent({
     super.key,
@@ -66,6 +67,7 @@ class PlaceComponent extends StatefulWidget {
     this.priceForOffer,
     this.onOfferButtonTap,
     this.bookingUiModel,
+    this.onSpendPointTap,
   });
 
   @override
@@ -447,14 +449,15 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   SpacingFoundation.horizontalSpace8,
                   Expanded(
                     child: PointBalancePlaceActionCard(
-                        value: widget.place.userPoints?.toString() ?? '0',
-                        group: group,
-                        rasterIconAsset: GraphicsFoundation.instance.png.money,
-                        action: null
-                        //     () {
-                        //   log('balance was pressed');
-                        // },
-                        ),
+                      value: widget.place.userPoints?.toString() ?? '0',
+                      group: group,
+                      rasterIconAsset: GraphicsFoundation.instance.png.money,
+                      buttonTitle: S.of(context).SpendIt,
+                      action: widget.onSpendPointTap,
+                      //     () {
+                      //   log('balance was pressed');
+                      // },
+                    ),
                   ),
                 ];
               }(),
