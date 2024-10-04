@@ -5,6 +5,9 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:shuffle_uikit/ui_kit/organisms/event/add_to_scheduler_event_action_card.dart';
+
+final AutoSizeGroup group = AutoSizeGroup();
 
 class EventComponent extends StatefulWidget {
   final UiEventModel event;
@@ -26,6 +29,7 @@ class EventComponent extends StatefulWidget {
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
   final Future<BookingUiModel?>? bookingUiModel;
+  final VoidCallback? onSpendPointTap;
 
   const EventComponent({
     super.key,
@@ -48,6 +52,7 @@ class EventComponent extends StatefulWidget {
     this.priceForOffer,
     this.onOfferButtonTap,
     this.bookingUiModel,
+    this.onSpendPointTap,
   });
 
   @override
@@ -378,6 +383,30 @@ class _EventComponentState extends State<EventComponent> {
                 )
               : const SizedBox.shrink(),
         ),
+        Row(
+          children: [
+            Expanded(
+              child: AddToSchedulerEventActionCard(
+                value: 'in 2 days',
+                rasterIconAsset: GraphicsFoundation.instance.png.events,
+                group: group,
+                buttonTitle: S.of(context).Soon,
+                action: null,
+              ),
+            ),
+            SpacingFoundation.horizontalSpace8,
+            Expanded(
+              child: PointBalancePlaceActionCard(
+                value: '${widget.event.userPoints ?? 0}',
+                group: group,
+                rasterIconAsset: GraphicsFoundation.instance.png.money,
+                buttonTitle: S.of(context).SpendIt,
+                action: widget.onSpendPointTap,
+              ),
+            ),
+          ],
+        ).paddingSymmetric(horizontal: horizontalMargin),
+        SpacingFoundation.verticalSpace24,
         if (widget.event.upsalesItems != null) ...[
           UiKitCardWrapper(
             color: theme?.colorScheme.surface2,
