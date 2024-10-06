@@ -184,7 +184,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         ...item.newVideos!.map((video) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewVideos,
-            updateIconUrl: GraphicsFoundation.instance.svg.playOutline.path,
+            iconData: ShuffleUiKitIcons.playoutline,
             imageUrl: video.previewImage,
             subtitle: video.subtitle,
           );
@@ -194,7 +194,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
           return UiKitContentUpdateWithLeadingImage(
             imageUrl: feedback.previewImage,
             title: S.current.PlusXNewReviews(item.newFeedbacks!.length),
-            updateIconUrl: GraphicsFoundation.instance.svg.starFill.path,
+            iconData: ShuffleUiKitIcons.starfill,
             subtitle: feedback.subtitle,
           );
         }),
@@ -224,7 +224,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
       if (item.newVoices != null && item.newVoices!.isNotEmpty)
         UiKitContentUpdateWithLeadingImage(
           title: S.current.PlusXNewVoices(item.newVoices!.length),
-          updateIconUrl: GraphicsFoundation.instance.svg.voice.path,
+          iconData: ShuffleUiKitIcons.voice,
           imageUrl: (item.newVoices!.first.content?.media.isNotEmpty ?? false)
               ? item.newVoices!.first.content?.media.first.link ?? ''
               : '',
@@ -234,7 +234,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         ...item.newRoutes!.map((route) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewRoutes,
-            updateIconUrl: route.icon,
+            iconData: route.icon,
             imageUrl: route.thumbnailUrl ?? '',
             subtitle: '${route.routeAPointName} - ${route.routeBPointName}',
           );
@@ -243,7 +243,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         ...item.newVideoInterviews!.map((interview) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewInterviews,
-            updateIconUrl: interview.icon,
+            iconData: interview.icon,
             imageUrl: interview.thumbnailUrl ?? '',
             subtitle: interview.title,
           );
@@ -300,7 +300,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         ),
       if (item.commentsUpdate != null)
         UiKitOnlyTextContentUpdateWidget(
-          updateIcon: GraphicsFoundation.instance.svg.message.path,
+          updateIcon: ShuffleUiKitIcons.message,
           titleTrailing: Text(
             formatDifference(item.commentsUpdate!.lastCommentDate),
             style: regularTextTheme?.caption3.copyWith(color: ColorsFoundation.mutedText),

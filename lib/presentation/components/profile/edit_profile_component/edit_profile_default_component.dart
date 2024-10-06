@@ -1,8 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class EditProfileDefaultComponent extends StatelessWidget {
   final List<String> selectedPreferences;
@@ -344,7 +344,7 @@ class EditProfileDefaultComponent extends StatelessWidget {
                       context.iconButtonNoPadding(
                           data: BaseUiKitButtonData(
                               iconWidget: ImageWidget(
-                        svgAsset: e.icon,
+                        iconData: e.icon,
                         color: theme?.colorScheme.inversePrimary,
                       ))),
                       SpacingFoundation.horizontalSpace16,

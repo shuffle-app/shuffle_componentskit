@@ -217,10 +217,11 @@ class _EventComponentState extends State<EventComponent> {
                         right: 0,
                         child: IconButton(
                           icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.pencil,
-                              color: Colors.white,
-                              height: 20.h,
-                              fit: BoxFit.fitHeight),
+                            iconData: ShuffleUiKitIcons.pencil,
+                            color: Colors.white,
+                            height: 20.h,
+                            fit: BoxFit.fitHeight,
+                          ),
                           onPressed: () => widget.onEditPressed?.call(),
                         ),
                       )

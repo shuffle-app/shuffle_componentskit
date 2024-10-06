@@ -48,15 +48,12 @@ class InfluencerToolsComponent extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GradientableWidget(
-                        gradient: GradientFoundation.starLinearGradient,
-                        child: ImageWidget(
-                          iconData: ShuffleUiKitIcons.gradientStar,
-                          color: Colors.white,
-                          width: 0.0625.sw,
-                          height: 0.0625.sw,
-                          fit: BoxFit.cover,
-                        ),
+                      ImageWidget(
+                        svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                        color: Colors.white,
+                        width: 0.0625.sw,
+                        height: 0.0625.sw,
+                        fit: BoxFit.cover,
                       ),
                       SpacingFoundation.horizontalSpace8,
                       Expanded(

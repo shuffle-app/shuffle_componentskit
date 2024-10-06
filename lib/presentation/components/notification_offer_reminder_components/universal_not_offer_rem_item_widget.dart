@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class UniversalNotOfferRemItemWidget extends StatelessWidget {
   final UniversalNotOfferRemUiModel? universalNotOfferRemUiModel;
@@ -130,9 +130,9 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                         height: 10.h,
                         fit: BoxFit.fill,
                         color: ColorsFoundation.mutedText,
-                        link: universalNotOfferRemUiModel?.isLaunched ?? true
-                            ? GraphicsFoundation.instance.svg.playOutline.path
-                            : GraphicsFoundation.instance.svg.stopOutline.path,
+                        iconData: universalNotOfferRemUiModel?.isLaunched ?? true
+                            ? ShuffleUiKitIcons.playoutline
+                            : ShuffleUiKitIcons.stopoutline,
                       ),
                       SpacingFoundation.horizontalSpace2,
                       Expanded(
@@ -165,7 +165,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                   onPressed: onTap,
                   backgroundColor: theme?.colorScheme.surface3,
                   iconInfo: BaseUiKitButtonIconData(
-                    iconPath: GraphicsFoundation.instance.svg.chevronRight.path,
+                    iconData: ShuffleUiKitIcons.chevronright,
                     color: theme?.colorScheme.headingTypography,
                   ),
                 ),
