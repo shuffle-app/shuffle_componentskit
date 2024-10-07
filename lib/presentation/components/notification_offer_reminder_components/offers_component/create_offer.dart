@@ -45,7 +45,7 @@ class _CreateOfferState extends State<CreateOffer> {
     _pointController.text = widget.offerUiModel?.pointPrice.toString().trim() ?? '';
     _selectedDates.addAll(widget.offerUiModel?.selectedDates?.toList() ?? [null]);
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
-    _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
+    _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? true;
     _isLaunched = widget.offerUiModel?.isLaunched ?? true;
     for (var element in GraphicsFoundation.instance.png.offer.values) {
       _iconList.add(element.path);
@@ -63,7 +63,7 @@ class _CreateOfferState extends State<CreateOffer> {
     _selectedDates.clear();
     _selectedDates.addAll(widget.offerUiModel?.selectedDates?.toList() ?? [null]);
     _isLaunchedDate = widget.offerUiModel?.isLaunchedDate;
-    _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? false;
+    _notifyTheAudience = widget.offerUiModel?.notifyTheAudience ?? true;
     _isLaunched = widget.offerUiModel?.isLaunched ?? true;
     for (var element in GraphicsFoundation.instance.png.offer.values) {
       _iconList.add(element.path);
