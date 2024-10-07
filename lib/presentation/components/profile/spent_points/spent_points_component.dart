@@ -49,7 +49,7 @@ class SpentPointsComponent extends StatelessWidget {
                 ),
               ),
         customTitle: isContentCard
-            ? Expanded(
+            ? Flexible(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
