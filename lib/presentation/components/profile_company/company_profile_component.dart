@@ -95,7 +95,7 @@ class CompanyProfileComponent extends StatelessWidget {
         UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
-              iconPath: GraphicsFoundation.instance.svg.booking.path,
+              iconData: ShuffleUiKitIcons.booking,
               size: iconWidth,
             ),
             text: S.current.Bookings(2).toUpperCase(),
@@ -160,7 +160,7 @@ class CompanyProfileComponent extends StatelessWidget {
         UiKitInlineButton(
           data: BaseUiKitButtonData(
             iconInfo: BaseUiKitButtonIconData(
-              iconPath: GraphicsFoundation.instance.svg.lifebuoy.path,
+              iconData: ShuffleUiKitIcons.lifebuoy,
               size: iconWidth,
             ),
             text: S.current.Support.toUpperCase(),

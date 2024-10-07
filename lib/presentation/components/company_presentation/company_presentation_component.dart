@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../../shuffle_components_kit.dart';
 
@@ -59,21 +59,21 @@ class CompanyPresentationComponent extends StatelessWidget {
     tags: [
       UiKitTag(
         title: S.current.TastyCoffee,
-        icon: GraphicsFoundation.instance.svg.coffee.path,
+        icon: ShuffleUiKitIcons.coffee,
         unique: true,
       ),
       UiKitTag(
         title: S.current.CalmAtmosphere,
-        icon: GraphicsFoundation.instance.svg.calm.path,
+        icon: ShuffleUiKitIcons.calm,
         unique: true,
       ),
       UiKitTag(
         title: S.current.TeaList,
-        icon: GraphicsFoundation.instance.svg.teapot.path,
+        icon: ShuffleUiKitIcons.teapot,
         unique: true,
       ),
     ],
-    branches: ()async=>[
+    branches: () async => [
       /// mock branches
       HorizontalCaptionedImageData(
         imageUrl: GraphicsFoundation.instance.png.leto3.path,
@@ -147,8 +147,7 @@ class CompanyPresentationComponent extends StatelessWidget {
       },
     );
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentPlaceModel model = kIsWeb
         ? ComponentPlaceModel(
             version: '',
@@ -161,8 +160,7 @@ class CompanyPresentationComponent extends StatelessWidget {
             ),
           )
         : ComponentPlaceModel.fromJson(config['place']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final theme = context.uiKitTheme;
     final colorScheme = theme?.colorScheme;
     final boldTextTheme = theme?.boldTextTheme;
@@ -186,8 +184,7 @@ class CompanyPresentationComponent extends StatelessWidget {
           SizedBox(
             height: 0.17.sh,
             child: ListView.separated(
-                padding: EdgeInsets.symmetric(
-                    horizontal: EdgeInsetsFoundation.horizontal8),
+                padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal8),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return UiKitCardWrapper(
@@ -214,8 +211,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                     ),
                   );
                 },
-                separatorBuilder: (context, index) =>
-                    SpacingFoundation.horizontalSpace8,
+                separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace8,
                 itemCount: infoTexts.length),
           ),
           SpacingFoundation.verticalSpace16,
@@ -246,8 +242,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                   child: InkWell(
                     onTap: () {},
                     child: Ink(
-                      child: Icon(ShuffleUiKitIcons.alertcircle,
-                              color: colorScheme?.darkNeutral800, size: 16.sp)
+                      child: Icon(ShuffleUiKitIcons.alertcircle, color: colorScheme?.darkNeutral800, size: 16.sp)
                           .paddingAll(EdgeInsetsFoundation.all6),
                     ),
                   ),
@@ -259,8 +254,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                   avatars.length,
                   (index) => RespectFromUser(
                     name: 'Alice',
-                    avatarUrl:
-                        avatars[index],
+                    avatarUrl: avatars[index],
                   ),
                 ),
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal32),
@@ -273,7 +267,7 @@ class CompanyPresentationComponent extends StatelessWidget {
             padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
             child: UiKitVideoInterviewTile(
               onPlayTap: () {},
-              imagePath:  GraphicsFoundation.instance.png.leto7.path,
+              imagePath: GraphicsFoundation.instance.png.leto7.path,
               userNickname: 'msgeidt',
               title: S.current.GreatInterviewWithOwner,
               userImage: avatars[3],
@@ -302,9 +296,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                 ),
               ),
             ],
-          ).paddingSymmetric(
-              horizontal: horizontalMargin,
-              vertical: EdgeInsetsFoundation.vertical24),
+          ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
             borderRadius: BorderRadiusFoundation.zero,
@@ -320,22 +312,19 @@ class CompanyPresentationComponent extends StatelessWidget {
                     ),
                     const MemberPlate(),
                   ],
-                ).paddingSymmetric(
-                    horizontal: EdgeInsetsFoundation.horizontal16),
+                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 SpacingFoundation.verticalSpace16,
                 SizedBox(
                   height: .25.sh,
                   width: 1.sw,
                   child: ListView(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: EdgeInsetsFoundation.horizontal12),
+                    padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal12),
                     scrollDirection: Axis.horizontal,
                     children: List.generate(placeImages.length, (index) {
                       return UiKitReactionPreview(
                         imagePath: placeImages[index],
                         customWidth: 0.27.sw,
-                      ).paddingSymmetric(
-                          horizontal: EdgeInsetsFoundation.horizontal4);
+                      ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal4);
                     }),
                   ),
                 )
@@ -357,8 +346,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                   width: 1.sw,
                   child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: EdgeInsetsFoundation.horizontal16),
+                      padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                       itemBuilder: (context, index) {
                         if (index == feedbacks.length - 1) {
                           return UiKitCardWrapper(
@@ -378,27 +366,23 @@ class CompanyPresentationComponent extends StatelessWidget {
                                       Icon(
                                         ShuffleUiKitIcons.chevronright,
                                         size: 24.sp,
-                                        color:
-                                            theme?.themeMode == ThemeMode.dark
-                                                ? ColorsFoundation.lightSurface
-                                                : ColorsFoundation.surface,
+                                        color: theme?.themeMode == ThemeMode.dark
+                                            ? ColorsFoundation.lightSurface
+                                            : ColorsFoundation.surface,
                                       )
                                     ],
-                                  ).paddingSymmetric(
-                                      horizontal:
-                                          EdgeInsetsFoundation.horizontal12),
+                                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12),
                                 ),
                               ),
                             ),
                           );
                         } else {
                           return SizedBox(
-                            width:
-                                1.sw - (2 * EdgeInsetsFoundation.horizontal16),
+                            width: 1.sw - (2 * EdgeInsetsFoundation.horizontal16),
                             child: UiKitFeedbackCard(
                               rating: feedbacks[index].feedbackRating,
                               title: feedbacks[index].feedbackAuthorName,
-                              maxLines:3,
+                              maxLines: 3,
                               text: feedbacks[index].feedbackText,
                               datePosted: feedbacks[index].feedbackDateTime,
                               avatarUrl: feedbacks[index].feedbackAuthorPhoto,
@@ -408,8 +392,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                           );
                         }
                       },
-                      separatorBuilder: (context, index) =>
-                          SpacingFoundation.horizontalSpace16,
+                      separatorBuilder: (context, index) => SpacingFoundation.horizontalSpace16,
                       itemCount: feedbacks.length),
                 ),
               ],
@@ -456,9 +439,7 @@ class CompanyPresentationComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           BottomBookingBar(
             onBook: () {},
-            model: ComponentPlaceModel.fromJson(
-                        configuration.appConfig.content['place'])
-                    .bookingElementModel ??
+            model: ComponentPlaceModel.fromJson(configuration.appConfig.content['place']).bookingElementModel ??
                 BookingElementModel(version: '0'),
           ),
           Stack(
@@ -469,7 +450,7 @@ class CompanyPresentationComponent extends StatelessWidget {
                 child: ImageWidget(
                   link: GraphicsFoundation.instance.png.entertainment.path,
                   height: 0.25.sh,
-                  width: 1.sw-(2*EdgeInsetsFoundation.horizontal20),
+                  width: 1.sw - (2 * EdgeInsetsFoundation.horizontal20),
                   fit: BoxFit.fitHeight,
                 ),
               ),
@@ -487,12 +468,10 @@ class CompanyPresentationComponent extends StatelessWidget {
           ).paddingAll(EdgeInsetsFoundation.all16),
           context
               .button(
-                data: BaseUiKitButtonData(
-                    text: S.current.Next, onPressed: onNext),
+                data: BaseUiKitButtonData(text: S.current.Next, onPressed: onNext),
               )
               .paddingSymmetric(
-                  horizontal: EdgeInsetsFoundation.horizontal16,
-                  vertical: EdgeInsetsFoundation.vertical8),
+                  horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical8),
         ],
       ),
     );

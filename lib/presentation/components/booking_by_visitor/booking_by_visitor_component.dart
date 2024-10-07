@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class BookingByVisitorComponent extends StatefulWidget {
   final BookingUiModel? bookingUiModel;
@@ -390,7 +390,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                   iconWidget: const GradientableWidget(
                     gradient: GradientFoundation.defaultLinearGradient,
                     child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.gradientPlus,
+                      iconData: ShuffleUiKitIcons.plus,
                       height: 40,
                       width: 40,
                     ),
@@ -467,7 +467,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                     iconWidget: const GradientableWidget(
                       gradient: GradientFoundation.defaultLinearGradient,
                       child: ImageWidget(
-                        iconData: ShuffleUiKitIcons.gradientPlus,
+                        iconData: ShuffleUiKitIcons.plus,
                         height: 40,
                         width: 40,
                       ),

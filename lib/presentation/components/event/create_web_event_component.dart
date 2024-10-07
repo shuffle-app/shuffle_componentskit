@@ -198,7 +198,8 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                           borderRadius: BorderRadiusFoundation.all12,
                           fillColor: theme?.colorScheme.surface1,
                           onFieldSubmitted: (value) {
-                            _eventToEdit.eventType = _eventToEdit.eventType?.copyWith(title: value) ?? UiKitTag(title: value,icon: '');
+                            _eventToEdit.eventType =
+                                _eventToEdit.eventType?.copyWith(title: value) ?? UiKitTag(title: value, icon: '');
                             setState(() {});
                             widget.onCategorySelected?.call(value);
                           },
@@ -214,10 +215,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                             final baseTags = await widget.onBaseTagsAdded?.call();
                             if (baseTags != null) {
                               setState(() {
-                                _eventToEdit.baseTags = baseTags
-                                    .map(
-                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
-                                    .toList();
+                                _eventToEdit.baseTags = baseTags.map((e) => UiKitTag(title: e, icon: e.icon)).toList();
                               });
                             }
                           },
@@ -228,7 +226,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                 setState(() {
                                   _eventToEdit.baseTags = [
                                     ..._eventToEdit.baseTags,
-                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                    UiKitTag(title: value, icon: ShuffleUiKitIcons.shuffleDefault),
                                   ];
                                 });
                               },
@@ -252,10 +250,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                             final uniqueTags = await widget.onUniqueTagsAdded?.call();
                             if (uniqueTags != null) {
                               setState(() {
-                                _eventToEdit.tags = uniqueTags
-                                    .map(
-                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
-                                    .toList();
+                                _eventToEdit.tags = uniqueTags.map((e) => UiKitTag(title: e, icon: e.icon)).toList();
                               });
                             }
                           },
@@ -266,7 +261,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                 setState(() {
                                   _eventToEdit.tags = [
                                     ..._eventToEdit.tags,
-                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                    UiKitTag(title: value, icon: ShuffleUiKitIcons.shuffleDefault),
                                   ];
                                 });
                               },
