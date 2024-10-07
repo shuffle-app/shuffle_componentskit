@@ -1,3 +1,5 @@
+import 'package:shuffle_components_kit/presentation/components/notification_offer_reminder_components/users_of_offer.dart';
+
 class UniversalNotOfferRemUiModel {
   final int id;
   final String? title;
@@ -9,6 +11,7 @@ class UniversalNotOfferRemUiModel {
   final bool isLaunched;
   final DateTime? isLaunchedDate;
   final bool isOffer;
+  final List<UsersOfOffer>? userOfOffer;
 
   UniversalNotOfferRemUiModel({
     required this.id,
@@ -21,6 +24,7 @@ class UniversalNotOfferRemUiModel {
     this.isLaunched = false,
     this.isLaunchedDate,
     this.isOffer = false,
+    this.userOfOffer,
   }) : imagePath = iconPath != null ? null : imagePath;
 
   UniversalNotOfferRemUiModel copyWith({
@@ -34,6 +38,7 @@ class UniversalNotOfferRemUiModel {
     bool? isLaunched,
     DateTime? isLaunchedDate,
     bool? isOffer,
+    List<UsersOfOffer>? userOfOffer,
   }) {
     return UniversalNotOfferRemUiModel(
       id: id ?? this.id,
@@ -46,6 +51,7 @@ class UniversalNotOfferRemUiModel {
       isLaunched: isLaunched ?? this.isLaunched,
       isLaunchedDate: isLaunchedDate ?? this.isLaunchedDate,
       isOffer: isOffer ?? this.isOffer,
+      userOfOffer: userOfOffer ?? this.userOfOffer,
     );
   }
 
