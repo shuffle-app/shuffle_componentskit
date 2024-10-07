@@ -60,10 +60,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
       },
       child: BlurredAppBarPage(
         animatedListKey: widget.animatedListKey,
-        childrenPadding: EdgeInsets.only(
-          left: SpacingFoundation.horizontalSpacing16,
-          right: SpacingFoundation.horizontalSpacing16,
-        ),
+        childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         customTitle: Flexible(
             child: AutoSizeText(
           widget.title ?? S.of(context).NothingFound,
