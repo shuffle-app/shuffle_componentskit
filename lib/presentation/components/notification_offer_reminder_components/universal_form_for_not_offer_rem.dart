@@ -3,7 +3,7 @@ import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class UniversalFormForNotOfferRem extends StatelessWidget {
+class UniversalFormForNotOfferRem extends StatefulWidget {
   final String? nameForEmptyList;
   final String? title;
   final String? whatCreate;
@@ -11,6 +11,7 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
   final ValueChanged<int?>? onEditItem;
   final ValueChanged<int?>? onRemoveItem;
   final VoidCallback? onCreateItem;
+  final ValueChanged<int?>? onActivateTap;
   final GlobalKey<SliverAnimatedListState> animatedListKey;
 
   const UniversalFormForNotOfferRem({
@@ -20,79 +21,131 @@ class UniversalFormForNotOfferRem extends StatelessWidget {
     this.onEditItem,
     this.onRemoveItem,
     this.onCreateItem,
+    this.onActivateTap,
     this.title,
     this.whatCreate,
     required this.animatedListKey,
   });
 
   @override
+  State<UniversalFormForNotOfferRem> createState() => _UniversalFormForNotOfferRemState();
+}
+
+class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRem> {
+  int? editingItemId;
+
+  void _onLongPress(int? itemId) {
+    setState(() {
+      if (editingItemId == itemId) {
+        editingItemId = null;
+      } else {
+        editingItemId = itemId;
+      }
+    });
+  }
+
+  void _onTapOutside() {
+    setState(() {
+      editingItemId = null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-    return BlurredAppBarPage(
-      animatedListKey: animatedListKey,
-      childrenPadding: EdgeInsets.only(
-        left: SpacingFoundation.horizontalSpacing16,
-        right: SpacingFoundation.horizontalSpacing16,
-      ),
-      customTitle: Flexible(
-          child: AutoSizeText(
-        title ?? S.of(context).NothingFound,
-        style: theme?.boldTextTheme.title1,
-        textAlign: TextAlign.center,
-        maxLines: 1,
-      )),
-      autoImplyLeading: true,
-      appBarTrailing: context.outlinedButton(
-        padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
-        data: BaseUiKitButtonData(
-          onPressed: onCreateItem,
-          iconInfo: BaseUiKitButtonIconData(
-            iconData: ShuffleUiKitIcons.plus,
+    return GestureDetector(
+      onTap: () {
+        _onTapOutside();
+      },
+      child: BlurredAppBarPage(
+        animatedListKey: widget.animatedListKey,
+        childrenPadding: EdgeInsets.only(
+          left: SpacingFoundation.horizontalSpacing16,
+          right: SpacingFoundation.horizontalSpacing16,
+        ),
+        customTitle: Flexible(
+            child: AutoSizeText(
+          widget.title ?? S.of(context).NothingFound,
+          style: theme?.boldTextTheme.title1,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+        )),
+        autoImplyLeading: true,
+        appBarTrailing: context.outlinedButton(
+          padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
+          data: BaseUiKitButtonData(
+            onPressed: widget.onCreateItem,
+            iconInfo: BaseUiKitButtonIconData(
+              iconData: ShuffleUiKitIcons.plus,
+            ),
           ),
         ),
-      ),
-      childrenCount: itemList == null || itemList!.isEmpty ? 1 : itemList!.length,
-      childrenBuilder: (context, index) {
-        if (itemList == null || itemList!.isEmpty) {
-          return UiKitCardWrapper(
-            borderRadius: BorderRadiusFoundation.all24r,
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 3,
-                  child: Text(
-                    S.of(context).CreateNewXForYourY(
-                          whatCreate ?? S.of(context).Offer.toLowerCase(),
-                          nameForEmptyList ?? S.of(context).Place.toLowerCase(),
-                        ),
-                    style: theme?.boldTextTheme.body,
+        childrenCount: widget.itemList == null || widget.itemList!.isEmpty ? 1 : widget.itemList!.length,
+        childrenBuilder: (context, index) {
+          if (widget.itemList == null || widget.itemList!.isEmpty) {
+            return UiKitCardWrapper(
+              borderRadius: BorderRadiusFoundation.all24r,
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 3,
+                    child: Text(
+                      S.of(context).CreateNewXForYourY(
+                            widget.whatCreate ?? S.of(context).Offer.toLowerCase(),
+                            widget.nameForEmptyList ?? S.of(context).Place.toLowerCase(),
+                          ),
+                      style: theme?.boldTextTheme.body,
+                    ),
+                  ),
+                  Flexible(
+                    child: ImageWidget(
+                      height: 60.h,
+                      fit: BoxFit.fitHeight,
+                      link: GraphicsFoundation.instance.svg.indexFingerHands.path,
+                    ),
+                  )
+                ],
+              ).paddingAll(EdgeInsetsFoundation.all16),
+            ).paddingOnly(top: SpacingFoundation.verticalSpacing16);
+          } else {
+            if (index < widget.itemList!.length) {
+              final offer = widget.itemList?[index];
+              final isItemEditing = editingItemId == offer?.id;
+
+              return GestureDetector(
+                onTap: () {
+                  _onTapOutside();
+                },
+                onLongPress: () {
+                  _onLongPress(offer?.id);
+                },
+                child: TapRegion(
+                  onTapOutside: (_) {
+                    if (isItemEditing) {
+                      _onTapOutside();
+                    }
+                  },
+                  child: UniversalNotOfferRemItemWidget(
+                    universalNotOfferRemUiModel: offer,
+                    onDismissed: () => widget.onRemoveItem?.call(offer?.id),
+                    onEdit: () {
+                      widget.onEditItem?.call(offer?.id);
+                    },
+                    onLongPress: () => _onLongPress(offer?.id),
+                    onActivateTap: () => widget.onActivateTap?.call(offer?.id),
+                    isEditingMode: isItemEditing,
+                  ).paddingOnly(
+                    bottom: offer != widget.itemList?.last ? SpacingFoundation.verticalSpacing16 : 0,
+                    top: offer != widget.itemList?.first ? 0 : SpacingFoundation.verticalSpacing16,
                   ),
                 ),
-                Flexible(
-                  child: ImageWidget(
-                    height: 60.h,
-                    fit: BoxFit.fitHeight,
-                    link: GraphicsFoundation.instance.svg.indexFingerHands.path,
-                  ),
-                )
-              ],
-            ).paddingAll(EdgeInsetsFoundation.all16),
-          ).paddingOnly(top: SpacingFoundation.verticalSpacing16);
-        } else {
-          if (index < itemList!.length) {
-            return UniversalNotOfferRemItemWidget(
-              universalNotOfferRemUiModel: itemList?[index],
-              onDismissed: () => onRemoveItem?.call(itemList?[index]?.id),
-              onTap: () => onEditItem?.call(itemList?[index]?.id),
-            ).paddingOnly(
-              bottom: itemList?[index] != itemList?.last ? SpacingFoundation.verticalSpacing16 : 0,
-              top: itemList?[index] != itemList?.first ? 0 : SpacingFoundation.verticalSpacing16,
-            );
+              );
+            }
           }
-        }
-        return null;
-      },
+          return null;
+        },
+      ),
     );
   }
 }
