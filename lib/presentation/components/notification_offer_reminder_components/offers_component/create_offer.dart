@@ -225,11 +225,11 @@ class _CreateOfferState extends State<CreateOffer> {
                       : null,
                   (from, to) {
                     setState(() {
-                      _selectedDates?.clear();
+                      _selectedDates.clear();
                       (from != null && (from!.isAfter(DateTime.now()) || from!.isAtSameDay))
-                          ? _selectedDates?.add(from)
+                          ? _selectedDates.add(from)
                           : from = null;
-                      (from != null && from != to) ? _selectedDates?.add(to) : _selectedDates?.add(null);
+                      (from != null && from != to) ? _selectedDates.add(to) : _selectedDates.add(null);
                     });
                   },
                 );
@@ -271,7 +271,7 @@ class _CreateOfferState extends State<CreateOffer> {
             if (widget.offerUiModel == null) ...[
               Center(
                 child: Text(
-                  S.of(context).OfferPrice(widget.offerPrice ?? 0),
+                  S.of(context).FreeNowXLater(widget.offerPrice ?? 5),
                   style: theme?.boldTextTheme.body,
                 ),
               ).paddingOnly(top: SpacingFoundation.verticalSpacing16),
@@ -280,7 +280,7 @@ class _CreateOfferState extends State<CreateOffer> {
                 top: false,
                 child: context.gradientButton(
                   data: BaseUiKitButtonData(
-                    text: S.of(context).SaveAndPay,
+                    text: S.of(context).Save,
                     fit: ButtonFit.fitWidth,
                     onPressed: () => _onSubmit(),
                   ),
