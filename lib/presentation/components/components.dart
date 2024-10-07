@@ -142,3 +142,6 @@ export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
 export 'activation_offers_component.dart/activation_offers_component.dart';
 export 'activation_offers_component.dart/offer_info.dart';
+export 'notification_offer_reminder_components/users_of_offer.dart';
+export 'activation_offers_component.dart/offer_title_widget.dart';
+export 'activation_offers_component.dart/user_in_offer_widget.dart';
