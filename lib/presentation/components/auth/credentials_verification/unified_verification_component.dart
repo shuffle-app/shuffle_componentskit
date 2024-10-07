@@ -77,7 +77,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
           ),
         ),
         ShortLogInButton(
-          link: GraphicsFoundation.instance.svg.mail.path,
+          icon: ShuffleUiKitIcons.mail,
           isGradient: true,
           title: S.current.LoginWith('email').toUpperCase(),
           onTap: () {
@@ -234,7 +234,7 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
                 child: KeyboardVisibilityBuilder(
                     builder: (context, isVisible) => UiKitCardWrapper(
                           color: isVisible ? colorScheme?.surface1 : Colors.transparent,
-                          borderRadius:isVisible ? BorderRadiusFoundation.all24 : null,
+                          borderRadius: isVisible ? BorderRadiusFoundation.all24 : null,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,

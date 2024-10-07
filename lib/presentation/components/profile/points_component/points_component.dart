@@ -56,7 +56,7 @@ class PointsComponent extends StatelessWidget {
     }
 
     return LinearInfluencerIndicator(
-      actualSum: (uiUserPointsProgressBarModel?.actual ?? 0) %100,
+      actualSum: (uiUserPointsProgressBarModel?.actual ?? 0) % 100,
       sum: uiUserPointsProgressBarModel?.sum ?? 100,
       width: 1.sw <= 380 ? 185.w : 215.w,
       height: progressIndicatorHeight,
@@ -200,7 +200,7 @@ class PointsComponent extends StatelessWidget {
                   children: [
                     RowGradientCircle(
                       level: uiUserPointsProgressBarModel.level,
-                      progressInCircle: ((uiUserPointsProgressBarModel.actual /100) / 33).toInt(),
+                      progressInCircle: ((uiUserPointsProgressBarModel.actual / 100) / 33).toInt(),
                     ).paddingAll(EdgeInsetsFoundation.all8),
                     SpacingFoundation.horizontalSpace4,
                     Expanded(
@@ -215,21 +215,21 @@ class PointsComponent extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${(uiUserPointsProgressBarModel.actual %100).floor()}/',
+                                  text: '${(uiUserPointsProgressBarModel.actual % 100).floor()}/',
                                   style: theme?.regularTextTheme.caption2.copyWith(
-                                    color:
-                                    (uiUserPointsProgressBarModel.actual %100).floor() >= (uiUserPointsProgressBarModel.sum / 2.2)
-                                            ? ColorsFoundation.lightBodyTypographyColor
-                                            : ColorsFoundation.mutedText,
+                                    color: (uiUserPointsProgressBarModel.actual % 100).floor() >=
+                                            (uiUserPointsProgressBarModel.sum / 2.2)
+                                        ? ColorsFoundation.lightBodyTypographyColor
+                                        : ColorsFoundation.mutedText,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '${uiUserPointsProgressBarModel.sum.toInt()}',
                                   style: theme?.regularTextTheme.caption2.copyWith(
-                                    color:
-                                    (uiUserPointsProgressBarModel.actual %100).floor() > (uiUserPointsProgressBarModel.sum / 1.5)
-                                            ? ColorsFoundation.lightBodyTypographyColor
-                                            : ColorsFoundation.mutedText,
+                                    color: (uiUserPointsProgressBarModel.actual % 100).floor() >
+                                            (uiUserPointsProgressBarModel.sum / 1.5)
+                                        ? ColorsFoundation.lightBodyTypographyColor
+                                        : ColorsFoundation.mutedText,
                                   ),
                                 ),
                               ],
@@ -281,7 +281,7 @@ class PointsComponent extends StatelessWidget {
                               children: [
                                 userType == UserTileType.premium && itemPoits.showStar
                                     ? ImageWidget(
-                                        link: GraphicsFoundation.instance.svg.star2.path,
+                                        iconData: ShuffleUiKitIcons.star2,
                                         height: 12.h,
                                         color: theme?.colorScheme.bodyTypography,
                                       )
@@ -299,7 +299,7 @@ class PointsComponent extends StatelessWidget {
                                 SpacingFoundation.verticalSpace4,
                                 userType != UserTileType.premium && itemPoits.showStar
                                     ? ImageWidget(
-                                        link: GraphicsFoundation.instance.svg.star2.path,
+                                        iconData: ShuffleUiKitIcons.star2,
                                         height: 12.h,
                                         color: theme?.colorScheme.bodyTypography,
                                       )

@@ -1,7 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:collection/collection.dart';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/mood/widgets/preview_cards_wrapper.dart';
@@ -132,7 +133,7 @@ class MoodComponent extends StatelessWidget {
                           value: item.description,
                           unit: 'kCal',
                           icon: ImageWidget(
-                            svgAsset: Assets.images.svg.fireWhite,
+                            iconData: ShuffleUiKitIcons.fireWhite,
                             height: 18.h,
                             width: 12.w,
                             fit: BoxFit.cover,
@@ -147,35 +148,32 @@ class MoodComponent extends StatelessWidget {
           ).paddingSymmetric(horizontal: horizontalMargin),
           if (model.showPlaces ?? true && tabBarContent != null) ...[
             SpacingFoundation.verticalSpace24,
-    TitleWithHowItWorks(
-    title:  S.of(context).WeHavePlacesJustForYou,
-    textStyle: theme?.boldTextTheme.title1,
-    shouldShow: showHowItWorks,
-    howItWorksWidget: HowItWorksWidget(
-
-                    title: S.current.CheckInHiwTitle,
-                    subtitle: S.current.CheckInHiwSubtitle,
-                    hintTiles: [
-                      HintCardUiModel(
-                        title: S.current.CheckInHiwHint(0),
-                        imageUrl: GraphicsFoundation.instance.png.threeLevels.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.CheckInHiwHint(1),
-                        imageUrl: GraphicsFoundation.instance.png.visitFirst.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.CheckInHiwHint(2),
-                        imageUrl: GraphicsFoundation.instance.png.checkIn.path,
-                      ),
-                      HintCardUiModel(
-                        title: S.current.CheckInHiwHint(3),
-                        imageUrl: GraphicsFoundation.instance.png.reward.path,
-                      ),
-                    ],
-
-
-            )),
+            TitleWithHowItWorks(
+                title: S.of(context).WeHavePlacesJustForYou,
+                textStyle: theme?.boldTextTheme.title1,
+                shouldShow: showHowItWorks,
+                howItWorksWidget: HowItWorksWidget(
+                  title: S.current.CheckInHiwTitle,
+                  subtitle: S.current.CheckInHiwSubtitle,
+                  hintTiles: [
+                    HintCardUiModel(
+                      title: S.current.CheckInHiwHint(0),
+                      imageUrl: GraphicsFoundation.instance.png.threeLevels.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.CheckInHiwHint(1),
+                      imageUrl: GraphicsFoundation.instance.png.visitFirst.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.CheckInHiwHint(2),
+                      imageUrl: GraphicsFoundation.instance.png.checkIn.path,
+                    ),
+                    HintCardUiModel(
+                      title: S.current.CheckInHiwHint(3),
+                      imageUrl: GraphicsFoundation.instance.png.reward.path,
+                    ),
+                  ],
+                )),
             SpacingFoundation.verticalSpace24,
             StatefulBuilder(
               builder: (context, setState) {
@@ -225,7 +223,7 @@ class MoodComponent extends StatelessWidget {
                     FutureBuilder(
                       future: onTabChanged.call(selectedLevel),
                       builder: (context, AsyncSnapshot<UiMoodGameContentModel> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done && snapshot.data!= null) {
+                        if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
                           final todayContent = snapshot.data?.todayGameContent;
                           final tomorrowContent = snapshot.data?.tomorrowGameContent;
                           final dayAfterTomorrowContent = snapshot.data?.dayAfterTomorrowGameContent;
@@ -392,15 +390,12 @@ class MoodComponent extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  GradientableWidget(
-                                    gradient: GradientFoundation.starLinearGradient,
-                                    child: ImageWidget(
-                                      iconData: ShuffleUiKitIcons.gradientStar,
-                                      color: Colors.white,
-                                      width: 0.0625.sw,
-                                      height: 0.0625.sw,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  ImageWidget(
+                                    svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                                    color: Colors.white,
+                                    width: 0.0625.sw,
+                                    height: 0.0625.sw,
+                                    fit: BoxFit.cover,
                                   ),
                                   SpacingFoundation.horizontalSpace8,
                                   Expanded(
@@ -451,15 +446,12 @@ class MoodComponent extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                GradientableWidget(
-                                  gradient: GradientFoundation.starLinearGradient,
-                                  child: ImageWidget(
-                                    iconData: ShuffleUiKitIcons.gradientStar,
-                                    color: Colors.white,
-                                    width: 0.0625.sw,
-                                    height: 0.0625.sw,
-                                    fit: BoxFit.cover,
-                                  ),
+                                ImageWidget(
+                                  svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                                  color: Colors.white,
+                                  width: 0.0625.sw,
+                                  height: 0.0625.sw,
+                                  fit: BoxFit.cover,
                                 ),
                                 SpacingFoundation.horizontalSpace8,
                                 Expanded(

@@ -213,10 +213,11 @@ class _PlaceComponentState extends State<PlaceComponent> {
           trailing: widget.isEligibleForEdit
               ? IconButton(
                   icon: ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.pencil,
-                      color: Colors.white,
-                      height: 20.h,
-                      fit: BoxFit.fitHeight),
+                    iconData: ShuffleUiKitIcons.pencil,
+                    color: Colors.white,
+                    height: 20.h,
+                    fit: BoxFit.fitHeight,
+                  ),
                   onPressed: () => widget.onEditPressed?.call(),
                 )
               : GestureDetector(

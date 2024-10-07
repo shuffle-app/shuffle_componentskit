@@ -218,10 +218,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             final baseTags = await widget.onBaseTagsAdded?.call();
                             if (baseTags != null) {
                               setState(() {
-                                _placeToEdit.baseTags = baseTags
-                                    .map(
-                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
-                                    .toList();
+                                _placeToEdit.baseTags = baseTags.map((e) => UiKitTag(title: e, icon: e.icon)).toList();
                               });
                             }
                           },
@@ -232,7 +229,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                 setState(() {
                                   _placeToEdit.baseTags = [
                                     ..._placeToEdit.baseTags,
-                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                    UiKitTag(title: value, icon: ShuffleUiKitIcons.shuffleDefault)
                                   ];
                                 });
                               },
@@ -256,10 +253,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                             final uniqueTags = await widget.onUniqueTagsAdded?.call();
                             if (uniqueTags != null) {
                               setState(() {
-                                _placeToEdit.tags = uniqueTags
-                                    .map(
-                                        (e) => UiKitTag(title: e, icon: GraphicsFoundation.instance.iconFromString('')))
-                                    .toList();
+                                _placeToEdit.tags = uniqueTags.map((e) => UiKitTag(title: e, icon: e.icon)).toList();
                               });
                             }
                           },
@@ -270,7 +264,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                                 setState(() {
                                   _placeToEdit.tags = [
                                     ..._placeToEdit.tags,
-                                    UiKitTag(title: value, icon: GraphicsFoundation.instance.iconFromString(''))
+                                    UiKitTag(title: value, icon: ShuffleUiKitIcons.shuffleDefault)
                                   ];
                                 });
                               },

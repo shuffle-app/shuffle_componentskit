@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:collection/collection.dart';
 
 class SearchComponent extends StatelessWidget {
   final TextEditingController searchController;
@@ -160,7 +160,7 @@ class SearchComponent extends StatelessWidget {
                         hintText: S.of(context).Search.toUpperCase(),
                         controller: searchController,
                         icon: ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.search,
+                          iconData: ShuffleUiKitIcons.search,
                           color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                         ),
                       ),
