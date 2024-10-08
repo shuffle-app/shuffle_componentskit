@@ -62,6 +62,7 @@ class ProStatisticsComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
+          key: ValueKey(viewsAndVisitorsStat),
           loading: loadingVisitorsStatistics,
           chartData: viewsAndVisitorsStat,
           popUpMenuItemSelected: onStatisticsPopupMenuItemTapped,
@@ -69,15 +70,21 @@ class ProStatisticsComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
+          loading: loadingVisitorsStatistics,
+          key: ValueKey(feedbackStats),
           chartData: feedbackStats,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
+          loading: loadingVisitorsStatistics,
+          key: ValueKey(bookingAndFavorites),
           chartData: bookingAndFavorites,
           action: onFeedbackStatActionTapped,
         ),
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
+          loading: loadingVisitorsStatistics,
+          key: ValueKey(invites),
           chartData: invites,
         ),
         SpacingFoundation.verticalSpace16,
@@ -123,7 +130,7 @@ class ProStatisticsComponent extends StatelessWidget {
                   ),
                   TitledInfoModel(
                     title: S.current.Interests,
-                    info: 'Snowboard, Free Ride, Hookah, Dance',
+                    info: uniqueStatisticsModel.mostActiveAgeSegment.interests.join(', '),
                   ),
                 ],
               ),
@@ -152,7 +159,7 @@ class ProStatisticsComponent extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: mockPieChart.legend
+                        children: uniqueStatisticsModel.viewSourcesData.legend
                             .map<Widget>(
                               (legendItem) => UiKitChartLegendWidget(
                                 valueTitle: legendItem.title,
