@@ -102,9 +102,11 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Phone);
     } else if (location == null || location!.isEmpty) {
       return S.current.XIsRequired(S.current.Location);
-    } else if (baseTags.isEmpty) {
-      return S.current.XIsRequired(S.current.BaseProperties);
-    } else if (tags.isEmpty) {
+    }
+    //  else if (baseTags.isEmpty) {
+    //   return S.current.XIsRequired(S.current.BaseProperties);
+    // }
+    else if (tags.isEmpty) {
       return S.current.XIsRequired(S.current.UniqueProperties);
     } else if (website == null || website!.isEmpty) {
       return S.current.XIsRequired(S.current.Website);
@@ -178,7 +180,7 @@ class UiPlaceModel {
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
         currency: currency ?? this.currency,
         updatedAt: updatedAt ?? this.updatedAt,
-        moderationStatus: moderationStatus?? this.moderationStatus,
+        moderationStatus: moderationStatus ?? this.moderationStatus,
       );
 
   UiPlaceModel.empty()

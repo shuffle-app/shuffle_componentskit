@@ -78,26 +78,25 @@ class UiEventModel extends Advertisable {
     this.bookingUiModel,
     this.updatedAt,
     this.moderationStatus,
-  })
-      : descriptionItems = [
-    if (scheduleString != null)
-      UiDescriptionItemModel(
-        title: S.current.DontMissIt,
-        description: scheduleString,
-      ),
-    if (location != null && location.isNotEmpty)
-      UiDescriptionItemModel(
-        title: S.current.Place,
-        description: location,
-      ),
-    if (phone != null && phone.isNotEmpty)
-      UiDescriptionItemModel(
-        title: S.current.Phone,
-        description: phone,
-      ),
-    if (website != null && website.isNotEmpty)
-      UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
-  ],
+  })  : descriptionItems = [
+          if (scheduleString != null)
+            UiDescriptionItemModel(
+              title: S.current.DontMissIt,
+              description: scheduleString,
+            ),
+          if (location != null && location.isNotEmpty)
+            UiDescriptionItemModel(
+              title: S.current.Place,
+              description: location,
+            ),
+          if (phone != null && phone.isNotEmpty)
+            UiDescriptionItemModel(
+              title: S.current.Phone,
+              description: phone,
+            ),
+          if (website != null && website.isNotEmpty)
+            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
+        ],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         super(isAdvertisement: isAdvertisement ?? false) {
@@ -129,8 +128,7 @@ class UiEventModel extends Advertisable {
     this.isRecurrent = false,
     this.archived = false,
     this.descriptionItems = const [],
-  })
-      : houseNumberController = TextEditingController(),
+  })  : houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         super(isAdvertisement: true);
 
@@ -149,9 +147,12 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Website);
     } else if (eventType == null || eventType!.title.isEmpty) {
       return S.current.XIsRequired(S.current.EventType);
-    } else if (baseTags.isEmpty) {
-      return S.current.XIsRequired(S.current.BaseProperties);
-    } else if (tags.isEmpty) {
+    }
+    // else
+    // if (baseTags.isEmpty) {
+    //   return S.current.XIsRequired(S.current.BaseProperties);
+    // }
+    else if (tags.isEmpty) {
       return S.current.XIsRequired(S.current.UniqueProperties);
     } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);
