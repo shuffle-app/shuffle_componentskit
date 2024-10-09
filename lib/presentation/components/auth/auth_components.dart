@@ -6,3 +6,4 @@ export 'user_selection/ui_user_type_selection_model.dart';
 export 'user_selection/user_type_selection_component.dart';
 export 'password_updating/password_updating_component.dart';
 export 'credentials_verification/email_verification_form.dart';
+export 'mindset_selection_invitation_component.dart';

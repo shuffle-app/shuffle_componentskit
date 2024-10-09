@@ -268,6 +268,25 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   S.of(context).Logo,
                   style: theme?.regularTextTheme.labelSmall,
                 ).paddingOnly(right: horizontalPadding),
+                Builder(
+                  builder: (context) => GestureDetector(
+                    onTap: () => showUiKitPopover(
+                      context,
+                      customMinHeight: 30.h,
+                      showButton: false,
+                      title: Text(
+                        S.of(context).SupportedFormatsBooking,
+                        style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    child: ImageWidget(
+                      iconData: ShuffleUiKitIcons.info,
+                      width: 20.w,
+                      color: theme?.colorScheme.darkNeutral900,
+                    ),
+                  ),
+                ),
                 if (_placeToEdit.logo != null)
                   CircularAvatar(height: kIsWeb ? 40 : 40.h, avatarUrl: _placeToEdit.logo!),
                 const Spacer(),
@@ -463,7 +482,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
-            if (_placeToEdit.contentType == 'business')...[
+            if (_placeToEdit.contentType == 'business') ...[
               UiKitFieldWithTagList(
                 listUiKitTags:
                     _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
@@ -475,28 +494,29 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     });
                   });
                 },
-              ).paddingSymmetric(horizontal: horizontalPadding)],
+              ).paddingSymmetric(horizontal: horizontalPadding)
+            ],
             SpacingFoundation.verticalSpace24,
-            UiKitFieldWithTagList(
-              listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
-              title: S.of(context).BaseProperties,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _placeToEdit.baseTags,
-                  title: S.of(context).BaseProperties,
-                  allTags: widget.propertiesOptions('base'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _placeToEdit.baseTags.clear();
-                    _placeToEdit.baseTags.addAll(newTags);
-                  });
-                }
-              },
-            ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace4,
             if (_placeToEdit.placeType != null && _placeToEdit.placeType!.title.isNotEmpty) ...[
+              UiKitFieldWithTagList(
+                listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
+                title: S.of(context).BaseProperties,
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    selectedTags: _placeToEdit.baseTags,
+                    title: S.of(context).BaseProperties,
+                    allTags: widget.propertiesOptions('base'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _placeToEdit.baseTags.clear();
+                      _placeToEdit.baseTags.addAll(newTags);
+                    });
+                  }
+                },
+              ).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace4,
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.tags.isNotEmpty ? _placeToEdit.tags : null,
                 title: S.of(context).UniqueProperties,
@@ -559,6 +579,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               context.push(
                                 CreateBookingComponent(
                                   bookingUiModel: _bookingUiModel,
+                                  currency: _placeToEdit.currency,
                                   onBookingCreated: (bookingUiModel) {
                                     if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
                                       _bookingUiModel = bookingUiModel;

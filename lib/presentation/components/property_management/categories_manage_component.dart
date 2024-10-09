@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../components.dart';
 
-class CategoriesManageComponent extends StatefulWidget {
+class CategoriesManageComponent extends StatelessWidget {
   const CategoriesManageComponent({
     super.key,
     required this.onAddCategory,
@@ -24,52 +24,38 @@ class CategoriesManageComponent extends StatefulWidget {
     this.onSelectedRelatedPropertyTapped,
     required this.listCategories,
     this.selectedCategory,
+    this.selectedProperty,
     this.onLoadMoreCategories,
     required this.onChangeType,
+    this.relatedProperties,
+    this.categoryProperties,
+    required this.onPropertySelect,
   });
 
   int? get selectedCategoryId => selectedCategory?.id;
 
-  final List<UiModelCategory> listCategories;
-  final UiModelCategory? selectedCategory;
+  final List<UiKitTag> listCategories;
+  final UiKitTag? selectedCategory;
+  final UiKitTag? selectedProperty;
   final VoidCallback onAddCategory;
   final VoidCallback onChangeType;
   final VoidCallback? onLoadMoreCategories;
   final ValueChanged<int> onCategorySelect;
+  final ValueChanged<int> onPropertySelect;
   final VoidCallback? onEditSelectedCategory;
-  final ValueChanged<UiModelProperty>? onPropertyEdit;
+  final ValueChanged<UiKitTag>? onPropertyEdit;
   final VoidCallback? onDeleteSelectedCategory;
-  final ValueChanged<UiModelProperty>? onPropertyDeleteTap;
+  final ValueChanged<UiKitTag>? onPropertyDeleteTap;
   final ValueChanged<String>? onPropertyFieldSubmitted;
   final ValueChanged<String>? onUniquePropertyFieldSubmitted;
-  final ValueChanged<(String, UiModelProperty?)>? onRelatedPropertyFieldSubmitted;
+  final ValueChanged<(String, UiKitTag?)>? onRelatedPropertyFieldSubmitted;
   final Future<List<String>> Function(String) propertySearchOptions;
   final Future<List<String>> Function(String) uniquePropertySearchOptions;
   final Future<List<String>> Function(String) relatedPropertySearchOptions;
-  final ValueChanged<(UiModelProperty, UiModelRelatedProperty)>? onSelectedRelatedPropertyTapped;
+  final ValueChanged<(UiKitTag, UiKitTag)>? onSelectedRelatedPropertyTapped;
   final bool isEntertainmentSelected;
-
-  @override
-  State<CategoriesManageComponent> createState() => _CategoriesManageComponentState();
-}
-
-class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
-  UiModelProperty? selectedProperty;
-
-  @override
-  void didUpdateWidget(covariant CategoriesManageComponent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedCategory != oldWidget.selectedCategory) {
-      setState(() {
-        if (widget.selectedCategory?.categoryProperties.firstWhereOrNull((e) => e.id == selectedProperty?.id) != null) {
-          selectedProperty =
-              widget.selectedCategory?.categoryProperties.firstWhereOrNull((e) => e.id == selectedProperty?.id);
-        } else {
-          selectedProperty = null;
-        }
-      });
-    }
-  }
+  final List<UiKitTag>? relatedProperties;
+  final List<UiKitTag>? categoryProperties;
 
   @override
   Widget build(BuildContext context) {
@@ -99,16 +85,15 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                       ),
                       SpacingFoundation.horizontalSpace16,
                       InkWell(
-                          onTap: widget.onChangeType,
-                          child:
-                          Text(
-                            widget.isEntertainmentSelected ? S.current.Entertainment : S.current.Business,
+                          onTap: onChangeType,
+                          child: Text(
+                            isEntertainmentSelected ? S.current.Entertainment : S.current.Business,
                             style: uiKitTheme?.regularTextTheme.labelSmall,
                           )),
                       SpacingFoundation.horizontalSpace16,
                       context.boxIconButton(
                         data: BaseUiKitButtonData(
-                          onPressed: widget.onAddCategory,
+                          onPressed: onAddCategory,
                           backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                           iconInfo: BaseUiKitButtonIconData(
                               iconData: ShuffleUiKitIcons.plus,
@@ -121,14 +106,14 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                   child: NotificationListener<ScrollNotification>(
                     onNotification: (ScrollNotification notification) {
                       if (notification.metrics.maxScrollExtent * 0.95 < notification.metrics.pixels) {
-                        widget.onLoadMoreCategories?.call();
+                        onLoadMoreCategories?.call();
                       }
                       return false;
                     },
                     child: ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
-                      itemCount: widget.listCategories.length,
+                      itemCount: listCategories.length,
                       itemBuilder: (context, index) {
                         // return UiKitExpansionTileWithIconButton(
                         //   title: e.categoryTitle,
@@ -144,13 +129,13 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                         //     },
                         //   ).toList(),
                         // );
-                        final category = widget.listCategories.elementAt(index);
+                        final category = listCategories.elementAt(index);
                         return PropertiesTypeAnimatedButton(
                           title: category.title,
                           onTap: () {
-                            widget.onCategorySelect.call(category.id);
+                            onCategorySelect.call(category.id!);
                           },
-                          isSelected: widget.selectedCategoryId == category.id,
+                          isSelected: selectedCategoryId == category.id,
                         );
                       },
                     ),
@@ -159,52 +144,52 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
             SpacingFoundation.horizontalSpace16,
             Flexible(
               child: PropertiesBorderedBox(
-                title: widget.selectedCategory != null
+                title: selectedCategory != null
                     ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ImageWidget(
-                      link: widget.selectedCategory?.icon ?? '',
-                      width: kIsWeb ? 24 : 24.sp,
-                      color: uiKitTheme?.themeMode == ThemeMode.light
-                          ? ColorsFoundation.surface
-                          : ColorsFoundation.lightSurface,
-                    ),
-                    SpacingFoundation.horizontalSpace4,
-                    Expanded(
-                      child: Text(
-                        widget.selectedCategory?.title ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        style: uiKitTheme?.boldTextTheme.title2,
-                      ),
-                    ),
-                    SpacingFoundation.horizontalSpace16,
-                    context.boxIconButton(
-                      data: BaseUiKitButtonData(
-                        onPressed: widget.onEditSelectedCategory,
-                        backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
-                        iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.pencil,
-                            size: kIsWeb ? 16 : 16.sp,
-                            color: ColorsFoundation.primary200),
-                      ),
-                    ),
-                    SpacingFoundation.horizontalSpace4,
-                    context.boxIconButton(
-                      data: BaseUiKitButtonData(
-                        onPressed: widget.onDeleteSelectedCategory,
-                        backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
-                        iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.trash,
-                            size: kIsWeb ? 16 : 16.sp,
-                            color: ColorsFoundation.danger),
-                      ),
-                    ),
-                  ],
-                )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ImageWidget(
+                            link: selectedCategory?.icon ?? '',
+                            width: kIsWeb ? 24 : 24.sp,
+                            color: uiKitTheme?.themeMode == ThemeMode.light
+                                ? ColorsFoundation.surface
+                                : ColorsFoundation.lightSurface,
+                          ),
+                          SpacingFoundation.horizontalSpace4,
+                          Expanded(
+                            child: Text(
+                              selectedCategory?.title ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              style: uiKitTheme?.boldTextTheme.title2,
+                            ),
+                          ),
+                          SpacingFoundation.horizontalSpace16,
+                          context.boxIconButton(
+                            data: BaseUiKitButtonData(
+                              onPressed: onEditSelectedCategory,
+                              backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                              iconInfo: BaseUiKitButtonIconData(
+                                  iconData: ShuffleUiKitIcons.pencil,
+                                  size: kIsWeb ? 16 : 16.sp,
+                                  color: ColorsFoundation.primary200),
+                            ),
+                          ),
+                          SpacingFoundation.horizontalSpace4,
+                          context.boxIconButton(
+                            data: BaseUiKitButtonData(
+                              onPressed: onDeleteSelectedCategory,
+                              backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
+                              iconInfo: BaseUiKitButtonIconData(
+                                  iconData: ShuffleUiKitIcons.trash,
+                                  size: kIsWeb ? 16 : 16.sp,
+                                  color: ColorsFoundation.danger),
+                            ),
+                          ),
+                        ],
+                      )
                     : const SizedBox(
-                  height: 24,
-                ),
+                        height: 24,
+                      ),
                 child: ListView(
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
@@ -215,62 +200,59 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                     ),
                     SpacingFoundation.verticalSpace12,
                     PropertiesSearchInput(
-                      options: widget.propertySearchOptions,
+                      options: propertySearchOptions,
                       showAllOptions: true,
-                      onFieldSubmitted: widget.onPropertyFieldSubmitted,
+                      onFieldSubmitted: onPropertyFieldSubmitted,
                     ),
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
-                      child: Column(children: [
-                        if (selectedProperty != null && !selectedProperty!.unique)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () => widget.onPropertyEdit?.call(selectedProperty!),
-                                  backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.pencil,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.primary200),
-                                ),
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (selectedProperty != null && !selectedProperty!.unique)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  context.boxIconButton(
+                                    data: BaseUiKitButtonData(
+                                      onPressed: () => onPropertyEdit?.call(selectedProperty!),
+                                      backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
+                                      iconInfo: BaseUiKitButtonIconData(
+                                          iconData: ShuffleUiKitIcons.pencil,
+                                          size: kIsWeb ? 16 : 16.sp,
+                                          color: ColorsFoundation.primary200),
+                                    ),
+                                  ),
+                                  SpacingFoundation.horizontalSpace4,
+                                  context.boxIconButton(
+                                    data: BaseUiKitButtonData(
+                                      onPressed: () => onPropertyDeleteTap?.call(selectedProperty!),
+                                      backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
+                                      iconInfo: BaseUiKitButtonIconData(
+                                          iconData: ShuffleUiKitIcons.trash,
+                                          size: kIsWeb ? 16 : 16.sp,
+                                          color: ColorsFoundation.danger),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SpacingFoundation.horizontalSpace4,
-                              context.boxIconButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () => widget.onPropertyDeleteTap?.call(selectedProperty!),
-                                  backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
-                                  iconInfo: BaseUiKitButtonIconData(
-                                      iconData: ShuffleUiKitIcons.trash,
-                                      size: kIsWeb ? 16 : 16.sp,
-                                      color: ColorsFoundation.danger),
-                                ),
-                              ),
-                            ],
-                          ).paddingAll(EdgeInsetsFoundation.all4),
-                        Wrap(
-                            spacing: SpacingFoundation.horizontalSpacing12,
-                            runSpacing: SpacingFoundation.verticalSpacing12,
-                            children: (widget.selectedCategory?.categoryProperties.where((e) => !e.unique) ?? []).map(
+                            Wrap(
+                                spacing: SpacingFoundation.horizontalSpacing12,
+                                runSpacing: SpacingFoundation.verticalSpacing12,
+                                children: (categoryProperties?.where((e) => !e.unique) ?? []).map(
                                   (e) {
-                                return UiKitCloudChip(
-                                  iconPath: e.icon,
-                                  title: e.title,
-                                  selected: e == selectedProperty,
-                                  onTap: () {
-                                    setState(() {
-                                      if (selectedProperty == e) {
-                                        selectedProperty = null;
-                                      } else {
-                                        selectedProperty = e;
-                                      }
-                                    });
+                                    return UiKitCloudChip(
+                                      iconPath: e.icon,
+                                      title: e.title,
+                                      selected: e == selectedProperty,
+                                      onTap: () {
+                                        onPropertySelect.call(e.id!);
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ).toList())
-                      ]).paddingAll(EdgeInsetsFoundation.all24),
+                                ).toList())
+                          ]),
                     ),
                     SpacingFoundation.verticalSpace24,
                     Text(
@@ -279,13 +261,15 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                     ),
                     SpacingFoundation.verticalSpace12,
                     PropertiesSearchInput(
-                      options: widget.uniquePropertySearchOptions,
+                      options: uniquePropertySearchOptions,
                       showAllOptions: true,
-                      onFieldSubmitted: widget.onUniquePropertyFieldSubmitted,
+                      onFieldSubmitted: onUniquePropertyFieldSubmitted,
                     ),
                     SpacingFoundation.verticalSpace12,
                     UiKitPropertiesCloud(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           if (selectedProperty != null && selectedProperty!.unique)
                             Row(
@@ -293,7 +277,7 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                               children: [
                                 context.boxIconButton(
                                   data: BaseUiKitButtonData(
-                                    onPressed: () => widget.onPropertyEdit?.call(selectedProperty!),
+                                    onPressed: () => onPropertyEdit?.call(selectedProperty!),
                                     backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                                     iconInfo: BaseUiKitButtonIconData(
                                         iconData: ShuffleUiKitIcons.pencil,
@@ -304,7 +288,7 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                                 SpacingFoundation.horizontalSpace4,
                                 context.boxIconButton(
                                   data: BaseUiKitButtonData(
-                                    onPressed: () => widget.onPropertyDeleteTap?.call(selectedProperty!),
+                                    onPressed: () => onPropertyDeleteTap?.call(selectedProperty!),
                                     backgroundColor: ColorsFoundation.danger.withOpacity(0.3),
                                     iconInfo: BaseUiKitButtonIconData(
                                         iconData: ShuffleUiKitIcons.trash,
@@ -313,33 +297,22 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                                   ),
                                 ),
                               ],
-                            ).paddingAll(EdgeInsetsFoundation.all4),
+                            ),
                           Wrap(
                               spacing: SpacingFoundation.horizontalSpacing12,
                               runSpacing: SpacingFoundation.verticalSpacing12,
-                              children:
-                              (widget.selectedCategory?.categoryProperties.where((e) => e.unique) ?? []).map(
-                                    (e) {
+                              children: (categoryProperties?.where((e) => e.unique) ?? []).map(
+                                (e) {
                                   return UiKitCloudChip(
                                     title: e.title,
                                     onTap: () {
-                                      setState(() {
-                                        if (selectedProperty == e) {
-                                          selectedProperty = null;
-                                        } else {
-                                          selectedProperty = e;
-                                        }
-                                      });
+                                      onPropertySelect.call(e.id!);
                                     },
                                     iconPath: e.icon,
                                     selected: e == selectedProperty,
                                   );
                                 },
-                              ).toList())
-                              .paddingOnly(
-                              left: EdgeInsetsFoundation.horizontal20,
-                              right: EdgeInsetsFoundation.horizontal20,
-                              bottom: EdgeInsetsFoundation.vertical20),
+                              ).toList()),
                         ],
                       ),
                     ),
@@ -365,25 +338,23 @@ class _CategoriesManageComponentState extends State<CategoriesManageComponent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PropertiesSearchInput(
-                      options: widget.relatedPropertySearchOptions,
+                      options: relatedPropertySearchOptions,
                       showAllOptions: true,
-                      onFieldSubmitted: (title) =>
-                          widget.onRelatedPropertyFieldSubmitted?.call((title, selectedProperty)),
+                      onFieldSubmitted: (title) => onRelatedPropertyFieldSubmitted?.call((title, selectedProperty)),
                     ),
                     SpacingFoundation.verticalSpace16,
                     UiKitPropertiesCloud(
                       child: Column(
-                        children: (selectedProperty?.relatedProperties ?? []).map(
-                              (e) {
+                        children: (relatedProperties ?? []).map(
+                          (e) {
                             return UiKitCloudChipWithDesc(
                               title: e.title,
-                              onTap: () => widget.onSelectedRelatedPropertyTapped?.call((selectedProperty!, e)),
-                              description: e.linkedMindsets.join(', '),
+                              onTap: () => onSelectedRelatedPropertyTapped?.call((selectedProperty!, e)),
+                              description: '',
                             ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical6);
                           },
                         ).toList(),
-                      ).paddingSymmetric(
-                          horizontal: EdgeInsetsFoundation.horizontal20, vertical: EdgeInsetsFoundation.vertical14),
+                      ),
                     ),
                   ],
                 ),

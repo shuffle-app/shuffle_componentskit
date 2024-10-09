@@ -36,6 +36,7 @@ class PlaceComponent extends StatefulWidget {
   final bool showOfferButton;
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
+  final Future<BookingUiModel?>? bookingUiModel;
 
   const PlaceComponent({
     super.key,
@@ -64,6 +65,7 @@ class PlaceComponent extends StatefulWidget {
     this.showOfferButton = false,
     this.priceForOffer,
     this.onOfferButtonTap,
+    this.bookingUiModel,
   });
 
   @override
@@ -85,6 +87,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   bool? canLeaveFeedback;
 
+  BookingUiModel? _bookingUiModel;
+
   @override
   void initState() {
     super.initState();
@@ -94,6 +98,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
       feedbacksPagedController.addPageRequestListener(_feedbacksListener);
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbacksPagedController.notifyPageRequestListeners(1);
+      await widget.bookingUiModel?.then((value) {
+        _bookingUiModel = value;
+      });
       setState(() {});
     });
   }
@@ -206,8 +213,11 @@ class _PlaceComponentState extends State<PlaceComponent> {
           trailing: widget.isEligibleForEdit
               ? IconButton(
                   icon: ImageWidget(
-                      svgAsset: GraphicsFoundation.instance.svg.pencil,
-                      color: Colors.white, height: 20.h, fit: BoxFit.fitHeight),
+                    iconData: ShuffleUiKitIcons.pencil,
+                    color: Colors.white,
+                    height: 20.h,
+                    fit: BoxFit.fitHeight,
+                  ),
                   onPressed: () => widget.onEditPressed?.call(),
                 )
               : GestureDetector(
@@ -281,19 +291,26 @@ class _PlaceComponentState extends State<PlaceComponent> {
             horizontal: horizontalMargin,
             vertical: SpacingFoundation.verticalSpacing24,
           ),
-        if (widget.place.bookingUiModel?.subsUiModel != null &&
-            widget.place.bookingUiModel!.showSabsInContentCard &&
-            widget.place.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
-          SpacingFoundation.verticalSpace12,
-          SubsInContentCard(
-            subs: widget.place.bookingUiModel!.subsUiModel!,
-            onItemTap: (id) {
-              final sub = widget.place.bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
-              subInformationDialog(context, sub);
-            },
-          ),
-          SpacingFoundation.verticalSpace24,
-        ],
+        AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          child: (_bookingUiModel?.subsUiModel != null &&
+                  _bookingUiModel!.showSubsInContentCard &&
+                  _bookingUiModel!.subsUiModel!.isNotEmpty)
+              ? SizedBox(
+                  width: 1.sw,
+                  child: SubsInContentCard(
+                    subs: _bookingUiModel!.subsUiModel!,
+                    onItemTap: (id) {
+                      final sub = _bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+                      subInformationDialog(context, sub);
+                    },
+                  ),
+                ).paddingOnly(
+                  top: SpacingFoundation.verticalSpacing12,
+                  bottom: SpacingFoundation.verticalSpacing24,
+                )
+              : const SizedBox.shrink(),
+        ),
         if (widget.isEligibleForEdit)
           FutureBuilder<List<UiEventModel>>(
             future: widget.events,
@@ -448,16 +465,17 @@ class _PlaceComponentState extends State<PlaceComponent> {
             builder: (context, value, child) {
               return UiKitColoredAccentBlock(
                 color: colorScheme?.surface1,
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    _noReactions
-                        ? Expanded(child: Text(S.current.NoReactionsMessage, style: boldTextTheme?.body))
-                        : Text(S.current.ReactionsBy, style: boldTextTheme?.body),
-                    if (!_noReactions) SpacingFoundation.horizontalSpace12,
-                    if (!_noReactions) const Expanded(child: MemberPlate()),
-                  ],
-                ),
+                title: _noReactions
+                    ? Text(S.of(context).NoReactionsMessage, style: boldTextTheme?.body)
+                    : RichText(
+                        text: TextSpan(
+                        children: [
+                          TextSpan(text: '${S.of(context).ReactionsBy} ', style: boldTextTheme?.body),
+                          WidgetSpan(
+                            child: Transform.translate(offset: const Offset(0, 4), child: const MemberPlate()),
+                          ),
+                        ],
+                      )),
                 contentHeight: 0.205.sh,
                 content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                   spacing: SpacingFoundation.horizontalSpacing8,

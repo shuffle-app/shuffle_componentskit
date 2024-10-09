@@ -35,6 +35,7 @@ class UiPlaceModel {
   String? bookingUrl;
   BookingUiModel? bookingUiModel;
   DateTime? updatedAt;
+  String? moderationStatus;
 
   UiPlaceModel({
     required this.id,
@@ -65,6 +66,7 @@ class UiPlaceModel {
     this.weatherType,
     this.bookingUrl,
     this.bookingUiModel,
+    this.moderationStatus,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
@@ -145,6 +147,7 @@ class UiPlaceModel {
     String? bookingUrl,
     BookingUiModel? bookingUiModel,
     DateTime? updatedAt,
+    String? moderationStatus,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -175,6 +178,7 @@ class UiPlaceModel {
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
         currency: currency ?? this.currency,
         updatedAt: updatedAt ?? this.updatedAt,
+        moderationStatus: moderationStatus?? this.moderationStatus,
       );
 
   UiPlaceModel.empty()

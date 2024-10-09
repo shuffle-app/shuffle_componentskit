@@ -398,25 +398,25 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24
           ],
-          UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
-              title: S.of(context).BaseProperties,
-              onTap: () async {
-                final newTags = await context.push(TagsSelectionComponent(
-                  positionModel: model.positionModel,
-                  selectedTags: _eventToEdit.baseTags,
-                  title: S.of(context).BaseProperties,
-                  allTags: widget.propertiesOptions('base'),
-                ));
-                if (newTags != null) {
-                  setState(() {
-                    _eventToEdit.baseTags.clear();
-                    _eventToEdit.baseTags.addAll(newTags);
-                  });
-                }
-              }).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
           if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
+            UiKitFieldWithTagList(
+                listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
+                title: S.of(context).BaseProperties,
+                onTap: () async {
+                  final newTags = await context.push(TagsSelectionComponent(
+                    positionModel: model.positionModel,
+                    selectedTags: _eventToEdit.baseTags,
+                    title: S.of(context).BaseProperties,
+                    allTags: widget.propertiesOptions('base'),
+                  ));
+                  if (newTags != null) {
+                    setState(() {
+                      _eventToEdit.baseTags.clear();
+                      _eventToEdit.baseTags.addAll(newTags);
+                    });
+                  }
+                }).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
             UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
               title: S.of(context).UniqueProperties,
@@ -575,6 +575,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                             context.push(
                               CreateBookingComponent(
                                 bookingUiModel: _bookingUiModel,
+                                currency: _eventToEdit.currency,
                                 onBookingCreated: (bookingUiModel) {
                                   if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
                                     _bookingUiModel = bookingUiModel;

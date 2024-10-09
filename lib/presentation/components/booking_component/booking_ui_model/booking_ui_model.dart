@@ -12,7 +12,7 @@ class BookingUiModel {
   List<SubsUiModel>? subsUiModel;
   List<UpsaleUiModel>? upsaleUiModel;
   DateTime? selectedDateTime;
-  bool showSabsInContentCard;
+  bool showSubsInContentCard;
 
   BookingUiModel({
     required this.id,
@@ -23,7 +23,7 @@ class BookingUiModel {
     this.subsUiModel,
     this.upsaleUiModel,
     this.selectedDateTime,
-    this.showSabsInContentCard = true,
+    this.showSubsInContentCard = true,
   });
 
   BookingUiModel copyWith({
@@ -65,7 +65,7 @@ class BookingUiModel {
         currency = 'AED',
         price = '',
         selectedDateTime = null,
-        showSabsInContentCard = false,
+        showSubsInContentCard = false,
         subsUiModel = List.empty(growable: true),
         upsaleUiModel = List.empty(growable: true);
 }

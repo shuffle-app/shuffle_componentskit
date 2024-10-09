@@ -25,6 +25,7 @@ class EventComponent extends StatefulWidget {
   final bool showOfferButton;
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
+  final Future<BookingUiModel?>? bookingUiModel;
 
   const EventComponent({
     super.key,
@@ -46,6 +47,7 @@ class EventComponent extends StatefulWidget {
     this.showOfferButton = false,
     this.priceForOffer,
     this.onOfferButtonTap,
+    this.bookingUiModel,
   });
 
   @override
@@ -66,6 +68,9 @@ class _EventComponentState extends State<EventComponent> {
   bool? canLeaveFeedback;
 
   bool isHide = true;
+
+  BookingUiModel? _bookingUiModel;
+
   late double scrollPosition;
   final ScrollController listViewController = ScrollController();
 
@@ -78,6 +83,9 @@ class _EventComponentState extends State<EventComponent> {
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
+      await widget.bookingUiModel?.then((value) {
+        _bookingUiModel = value;
+      });
       setState(() {});
     });
   }
@@ -209,10 +217,11 @@ class _EventComponentState extends State<EventComponent> {
                         right: 0,
                         child: IconButton(
                           icon: ImageWidget(
-                              svgAsset: GraphicsFoundation.instance.svg.pencil,
-                              color: Colors.white,
-                              height: 20.h,
-                              fit: BoxFit.fitHeight),
+                            iconData: ShuffleUiKitIcons.pencil,
+                            color: Colors.white,
+                            height: 20.h,
+                            fit: BoxFit.fitHeight,
+                          ),
                           onPressed: () => widget.onEditPressed?.call(),
                         ),
                       )
@@ -350,19 +359,26 @@ class _EventComponentState extends State<EventComponent> {
             right: horizontalMargin,
             bottom: SpacingFoundation.verticalSpacing24,
           ),
-        if (widget.event.bookingUiModel?.subsUiModel != null &&
-            widget.event.bookingUiModel!.showSabsInContentCard &&
-            widget.event.bookingUiModel!.subsUiModel!.isNotEmpty) ...[
-          SpacingFoundation.verticalSpace12,
-          SubsInContentCard(
-            subs: widget.event.bookingUiModel!.subsUiModel!,
-            onItemTap: (id) {
-              final sub = widget.event.bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
-              subInformationDialog(context, sub);
-            },
-          ),
-          SpacingFoundation.verticalSpace24,
-        ],
+        AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          child: (_bookingUiModel?.subsUiModel != null &&
+                  _bookingUiModel!.showSubsInContentCard &&
+                  _bookingUiModel!.subsUiModel!.isNotEmpty)
+              ? SizedBox(
+                  width: 1.sw,
+                  child: SubsInContentCard(
+                    subs: _bookingUiModel!.subsUiModel!,
+                    onItemTap: (id) {
+                      final sub = _bookingUiModel!.subsUiModel!.firstWhere((element) => element.id == id);
+                      subInformationDialog(context, sub);
+                    },
+                  ),
+                ).paddingOnly(
+                  top: SpacingFoundation.verticalSpacing12,
+                  bottom: SpacingFoundation.verticalSpacing24,
+                )
+              : const SizedBox.shrink(),
+        ),
         if (widget.event.upsalesItems != null) ...[
           UiKitCardWrapper(
             color: theme?.colorScheme.surface2,
@@ -408,16 +424,17 @@ class _EventComponentState extends State<EventComponent> {
             builder: (context, value, child) {
               return UiKitColoredAccentBlock(
                 color: colorScheme?.surface1,
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    _noReactions
-                        ? Expanded(child: Text(S.of(context).NoReactionsMessage, style: boldTextTheme?.body))
-                        : Text(S.of(context).ReactionsBy, style: boldTextTheme?.body),
-                    if (!_noReactions) SpacingFoundation.horizontalSpace12,
-                    if (!_noReactions) const Expanded(child: MemberPlate()),
-                  ],
-                ),
+                title: _noReactions
+                    ? Text(S.of(context).NoReactionsMessage, style: boldTextTheme?.body)
+                    : RichText(
+                        text: TextSpan(
+                        children: [
+                          TextSpan(text: '${S.of(context).ReactionsBy} ', style: boldTextTheme?.body),
+                          WidgetSpan(
+                            child: Transform.translate(offset: const Offset(0, 4), child: const MemberPlate()),
+                          ),
+                        ],
+                      )),
                 contentHeight: 0.205.sh,
                 content: UiKitHorizontalScrollableList<VideoReactionUiModel>(
                   leftPadding: horizontalMargin,

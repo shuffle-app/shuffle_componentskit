@@ -7,6 +7,7 @@ class BookingsPlaceOrEventUiModel {
   final String? imageUrl;
   final List<UserBookingsControlUiModel>? users;
   final List<BookingsPlaceOrEventUiModel>? events;
+  final bool isPlace;
 
   BookingsPlaceOrEventUiModel({
     required this.id,
@@ -15,6 +16,7 @@ class BookingsPlaceOrEventUiModel {
     this.imageUrl,
     this.users,
     this.events,
+    this.isPlace = true,
   });
 
   BookingsPlaceOrEventUiModel copyWith({
@@ -23,6 +25,7 @@ class BookingsPlaceOrEventUiModel {
     String? description,
     String? imageUrl,
     List<UserBookingsControlUiModel>? users,
+    List<BookingsPlaceOrEventUiModel>? events,
   }) {
     return BookingsPlaceOrEventUiModel(
       id: id ?? this.id,
@@ -30,6 +33,7 @@ class BookingsPlaceOrEventUiModel {
       description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
       users: users ?? this.users,
+      events: events ?? this.events,
     );
   }
 }

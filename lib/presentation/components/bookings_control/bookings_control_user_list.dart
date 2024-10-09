@@ -1,28 +1,28 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 import 'users_bookings_control.dart';
 
 class BookingsControlUserList extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
-  final BookingUiModel? bookingUiModel;
-  final ValueChanged<BookingUiModel?>? onBookingEdit;
+  final VoidCallback? onBookingEdit;
   final Function(String? value, int userId)? onPopupMenuSelected;
   final ValueChanged<UserBookingsControlUiModel>? onRequestsRefund;
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
   final bool canBookingEdit;
+  final bool isLoading;
 
   const BookingsControlUserList({
     super.key,
     this.bookingsPlaceItemUiModel,
     this.refundEveryone,
-    this.bookingUiModel,
     this.onBookingEdit,
     this.onPopupMenuSelected,
     this.onRequestsRefund,
     this.canBookingEdit = false,
+    this.isLoading = false,
   });
 
   @override
@@ -93,11 +93,11 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
             style: boldTextTheme?.title1,
             textAlign: TextAlign.center,
             wrapWords: false,
+            maxLines: 1,
           ),
         ),
         centerTitle: true,
         autoImplyLeading: true,
-        customToolbarBaseHeight: 1.sw <= 380 ? 0.18.sh : 0.13.sh,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           Row(
@@ -122,15 +122,17 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
               ),
               if (widget.canBookingEdit)
                 GestureDetector(
-                  onTap: () => widget.onBookingEdit?.call(widget.bookingUiModel),
+                  onTap: widget.onBookingEdit,
                   child: ImageWidget(
-                    link: GraphicsFoundation.instance.svg.pencil.path,
+                    iconData: ShuffleUiKitIcons.pencil,
                     color: theme?.colorScheme.inversePrimary,
                   ),
                 ),
             ],
           ),
-          if (groupedUsers.isNotEmpty) ...[
+          if (widget.isLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (groupedUsers.isNotEmpty) ...[
             ...groupedUsers.map(
               (group) => Column(
                 children: group

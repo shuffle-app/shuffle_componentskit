@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:collection/collection.dart';
 
 class SearchComponent extends StatelessWidget {
   final TextEditingController searchController;
@@ -160,7 +160,7 @@ class SearchComponent extends StatelessWidget {
                         hintText: S.of(context).Search.toUpperCase(),
                         controller: searchController,
                         icon: ImageWidget(
-                          svgAsset: GraphicsFoundation.instance.svg.search,
+                          iconData: ShuffleUiKitIcons.search,
                           color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                         ),
                       ),
@@ -240,24 +240,22 @@ class SearchComponent extends StatelessWidget {
               SpacingFoundation.verticalSpace24,
               SingleChildScrollView(
                 primary: false,
+                padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
                   spacing: SpacingFoundation.horizontalSpacing12,
                   children: chooseYourselfChips!,
                 ),
-              ).paddingOnly(left: horizontalMargin),
+              ),
               SpacingFoundation.verticalSpace24
             ],
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Text(S.of(context).TopPlacesRatedBy('\n'), style: theme?.boldTextTheme.title1),
-                Positioned(
-                  top: (theme?.boldTextTheme.title1.fontSize ?? 0) * 1.3,
-                  left: SizesFoundation.screenWidth / 5,
-                  child: const MemberPlate(),
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(text: '${S.of(context).TopPlacesRatedBy('\n')} ', style: theme?.boldTextTheme.title1),
+                WidgetSpan(
+                  child: Transform.translate(offset: const Offset(0, 4), child: const MemberPlate()),
                 ),
-              ],
+              ]),
             ).paddingSymmetric(horizontal: horizontalMargin),
             if (search.filterChips != null && search.filterChips!.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
@@ -290,7 +288,7 @@ class SearchComponent extends StatelessWidget {
                     rating: e.rating,
                     title: e.title,
                     imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
-                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id,e.type))
+                    onPressed: onPlaceTapped == null ? null : () => onPlaceTapped!.call(e.id, e.type))
                 .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing12)),
             kBottomNavigationBarHeight.heightBox,
           ],

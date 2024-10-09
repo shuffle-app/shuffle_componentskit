@@ -8,6 +8,8 @@ class BookingsControlComponent extends StatelessWidget {
   final List<BookingsPlaceOrEventUiModel>? placesOrEvents;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onPlaceItemTap;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onEventItemTap;
+  final bool isCompany;
+  final bool isLoading;
 
   late final List<BookingsPlaceOrEventUiModel> places;
   late final List<BookingsPlaceOrEventUiModel> events;
@@ -17,12 +19,14 @@ class BookingsControlComponent extends StatelessWidget {
     this.placesOrEvents,
     this.onPlaceItemTap,
     this.onEventItemTap,
+    this.isCompany = false,
+    this.isLoading = false,
   }) {
     places = List.empty(growable: true);
     events = List.empty(growable: true);
 
     for (var element in placesOrEvents ?? []) {
-      element.events != null ? events.add(element) : places.add(element);
+      element.isPlace ? places.add(element) : events.add(element);
     }
   }
 
@@ -34,7 +38,9 @@ class BookingsControlComponent extends StatelessWidget {
 
     return Scaffold(
       body: BlurredAppBarPage(
-        title: S.of(context).BookingsHeading,
+        title: S
+            .of(context)
+            .BookingsHeading,
         autoImplyLeading: true,
         centerTitle: true,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
@@ -44,55 +50,90 @@ class BookingsControlComponent extends StatelessWidget {
             valueListenable: tabValue,
             builder: (context, value, child) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  UiKitCustomTabBar(
-                    onTappedTab: (index) => tabValue.value = index == 0,
-                    tabs: [
-                      UiKitCustomTab(
-                        title: S.of(context).Place.toUpperCase(),
-                        customValue: 'true',
-                      ),
-                      UiKitCustomTab(
-                        title: S.of(context).Events.toUpperCase(),
-                        customValue: 'false',
-                      ),
-                    ],
-                  ),
-                  SpacingFoundation.verticalSpace24,
-                  ...tabValue.value
-                      ? places.map(
+                  if (isCompany)
+                    UiKitCustomTabBar(
+                      onTappedTab: (index) => tabValue.value = index == 0,
+                      tabs: [
+                        UiKitCustomTab(
+                          title: S
+                              .of(context)
+                              .Place
+                              .toUpperCase(),
+                          customValue: 'true',
+                        ),
+                        UiKitCustomTab(
+                          title: S
+                              .of(context)
+                              .Events
+                              .toUpperCase(),
+                          customValue: 'false',
+                        ),
+                      ],
+                    ).paddingOnly(bottom: SpacingFoundation.verticalSpacing12),
+                  SpacingFoundation.verticalSpace12,
+                  if (isLoading)
+                    const Center(child: CircularProgressIndicator.adaptive())
+                  else
+                    ...tabValue.value
+                        ? places.isNotEmpty
+                        ? places.map(
                           (element) {
-                            return BookingsControlPlaceItemUiKit(
+                        return BookingsControlPlaceItemUiKit(
+                          title: element.title,
+                          description: element.description,
+                          imageUrl: element.imageUrl,
+                          onTap: () => onPlaceItemTap?.call(element),
+                        ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16);
+                      },
+                    ).toList()
+                        : [
+                      Center(
+                        child: Text(
+                          isCompany ? S
+                              .of(context)
+                              .ThereNoPlacesYet : S
+                              .of(context)
+                              .ThereNoEventsYet,
+                          style: theme?.boldTextTheme.body,
+                        ),
+                      ),
+                    ]
+                        : events.isNotEmpty
+                        ? events.map(
+                          (element) {
+                        return Column(
+                          children: [
+                            BookingsControlEventItem(
                               title: element.title,
                               description: element.description,
-                              imageUrl: element.imageUrl,
-                              onTap: () => onPlaceItemTap?.call(element),
-                            ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16);
-                          },
-                        ).toList()
-                      : events.map(
-                          (element) {
-                            return Column(
-                              children: [
-                                BookingsControlEventItem(
-                                  title: element.title,
-                                  description: element.description,
-                                  events: element.events,
-                                  onTap: (id) {
-                                    onEventItemTap?.call(
-                                      element.events?.firstWhere((element) => element.id == id),
-                                    );
-                                  },
-                                ),
-                                if (element != events.last)
-                                  Divider(
-                                    color: theme?.colorScheme.surface2,
-                                    thickness: 2.0,
-                                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                              ],
-                            );
-                          },
-                        ).toList(),
+                              events: element.events,
+                              onTap: (id) {
+                                onEventItemTap?.call(
+                                  element.events?.firstWhere((element) => element.id == id),
+                                );
+                              },
+                            ),
+                            if (element != events.last)
+                              Divider(
+                                color: theme?.colorScheme.surface2,
+                                thickness: 2.0,
+                              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                          ],
+                        );
+                      },
+                    ).toList()
+                        : [
+                      Center(
+                        child: Text(
+                          S
+                              .of(context)
+                              .ThereNoEventsYet,
+                          style: theme?.boldTextTheme.body,
+                        ),
+                      ),
+                    ],
                 ],
               );
             },

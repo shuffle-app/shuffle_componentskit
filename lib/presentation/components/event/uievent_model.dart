@@ -39,6 +39,8 @@ class UiEventModel extends Advertisable {
   List<String>? upsalesItems;
   String? bookingUrl;
   BookingUiModel? bookingUiModel;
+  DateTime? updatedAt;
+  String? moderationStatus;
 
   UiEventModel({
     required this.id,
@@ -74,25 +76,28 @@ class UiEventModel extends Advertisable {
     bool? isAdvertisement,
     this.bookingUrl,
     this.bookingUiModel,
-  })  : descriptionItems = [
-          if (scheduleString != null)
-            UiDescriptionItemModel(
-              title: S.current.DontMissIt,
-              description: scheduleString,
-            ),
-          if (location != null && location.isNotEmpty)
-            UiDescriptionItemModel(
-              title: S.current.Place,
-              description: location,
-            ),
-          if (phone != null && phone.isNotEmpty)
-            UiDescriptionItemModel(
-              title: S.current.Phone,
-              description: phone,
-            ),
-          if (website != null && website.isNotEmpty)
-            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
-        ],
+    this.updatedAt,
+    this.moderationStatus,
+  })
+      : descriptionItems = [
+    if (scheduleString != null)
+      UiDescriptionItemModel(
+        title: S.current.DontMissIt,
+        description: scheduleString,
+      ),
+    if (location != null && location.isNotEmpty)
+      UiDescriptionItemModel(
+        title: S.current.Place,
+        description: location,
+      ),
+    if (phone != null && phone.isNotEmpty)
+      UiDescriptionItemModel(
+        title: S.current.Phone,
+        description: phone,
+      ),
+    if (website != null && website.isNotEmpty)
+      UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
+  ],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         super(isAdvertisement: isAdvertisement ?? false) {
@@ -124,7 +129,8 @@ class UiEventModel extends Advertisable {
     this.isRecurrent = false,
     this.archived = false,
     this.descriptionItems = const [],
-  })  : houseNumberController = TextEditingController(),
+  })
+      : houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         super(isAdvertisement: true);
 
@@ -226,6 +232,8 @@ class UiEventModel extends Advertisable {
     List<VideoReactionUiModel>? reactions,
     String? bookingUrl,
     BookingUiModel? bookingUiModel,
+    DateTime? updatedAt,
+    String? moderationStatus,
   }) =>
       UiEventModel(
         id: id,
@@ -259,6 +267,8 @@ class UiEventModel extends Advertisable {
         upsalesItems: upsalesItems ?? this.upsalesItems,
         bookingUrl: bookingUrl ?? this.bookingUrl,
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
+        updatedAt: updatedAt ?? this.updatedAt,
+        moderationStatus: moderationStatus ?? this.moderationStatus,
       );
 
   bool selectableDayPredicate(DateTime day) {
@@ -266,7 +276,8 @@ class UiEventModel extends Advertisable {
     if (endDate == null || startDate?.day == endDate?.day) {
       return startDate?.day == day.day;
     }
-    return day.isAfter(startDate!) && day.isBefore(endDate!);
+    return (day.isAfter(DateUtils.dateOnly(startDate!)) && day.isBefore(DateUtils.dateOnly(endDate!))) ||
+        day.isAtSameMomentAs(DateUtils.dateOnly(startDate!));
   }
 
   Map<int, int>? get feedbacksHelpfulCounts =>

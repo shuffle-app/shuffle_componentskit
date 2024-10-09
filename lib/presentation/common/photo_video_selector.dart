@@ -69,6 +69,25 @@ class PhotoVideoSelector extends StatelessWidget {
                     S.of(context).Photo,
                     style: theme?.regularTextTheme.labelSmall,
                   ).paddingSymmetric(horizontal: horizontalPadding),
+                  Builder(
+                    builder: (context) => GestureDetector(
+                      onTap: () => showUiKitPopover(
+                        context,
+                        customMinHeight: 30.h,
+                        showButton: false,
+                        title: Text(
+                          S.of(context).SupportedFormatsBooking,
+                          style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      child: ImageWidget(
+                        iconData: ShuffleUiKitIcons.info,
+                        width: 20.w,
+                        color: theme?.colorScheme.darkNeutral900,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: ReorderableListView.builder(
                       key: listPhotosKey,

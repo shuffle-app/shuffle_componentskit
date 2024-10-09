@@ -40,25 +40,27 @@ class SearchResultComponent extends StatelessWidget {
       customToolbarHeight: 170.0,
       canFoldAppBar: false,
       childrenPadding: EdgeInsets.only(bottom: EdgeInsetsFoundation.vertical16),
-      appBarBody: showSearchBar ? UiKitInputFieldRightIcon(
-        focusNode: searchFocusNode,
-        autofocus: autofocus,
-        fillColor: colorScheme?.surface3,
-        hintText: S.of(context).Search.toUpperCase(),
-        onChanged: onSearchValueChanged,
-        controller: searchController,
-        icon: searchController.text.isEmpty
-            ? ImageWidget(
-                svgAsset: GraphicsFoundation.instance.svg.search,
-                color: colorScheme?.bodyTypography,
-              )
-            : null,
-        onIconPressed: () {
-          if (searchController.text.isNotEmpty) searchController.clear();
-          // context.pop();
-        },
-        onFieldSubmitted: onFieldSubmitted,
-      ) : null,
+      appBarBody: showSearchBar
+          ? UiKitInputFieldRightIcon(
+              focusNode: searchFocusNode,
+              autofocus: autofocus,
+              fillColor: colorScheme?.surface3,
+              hintText: S.of(context).Search.toUpperCase(),
+              onChanged: onSearchValueChanged,
+              controller: searchController,
+              icon: searchController.text.isEmpty
+                  ? ImageWidget(
+                      iconData: ShuffleUiKitIcons.search,
+                      color: colorScheme?.bodyTypography,
+                    )
+                  : null,
+              onIconPressed: () {
+                if (searchController.text.isNotEmpty) searchController.clear();
+                // context.pop();
+              },
+              onFieldSubmitted: onFieldSubmitted,
+            )
+          : null,
       children: searchResults,
     );
   }

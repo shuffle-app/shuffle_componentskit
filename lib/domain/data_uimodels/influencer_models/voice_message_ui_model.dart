@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/feed/uifeed_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class VoiceMessageUiModel {
   final String fileUrl;
   final Duration duration;
-  final String icon = GraphicsFoundation.instance.svg.voice.path;
+  final IconData icon = ShuffleUiKitIcons.voice;
   final UiUniversalModel? content;
 
   VoiceMessageUiModel({

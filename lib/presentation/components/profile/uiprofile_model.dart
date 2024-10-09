@@ -39,6 +39,7 @@ class UiProfileModel {
   final VoidCallback? onTelegramPressed;
   final VoidCallback? onWhatsappPressed;
   final int? updatesCount;
+  final DateTime? userCreatedAt;
 
   ProfileCard get cardWidget {
     return ProfileCard(
@@ -89,7 +90,7 @@ class UiProfileModel {
     if (userTileType == UserTileType.pro) {
       return ProfileCard(
         profileCardBody: ProPublicProfileCardBody(
-          registrationDate: DateTime.now(),
+          registrationDate: userCreatedAt ?? DateTime.now(),
           onTelegramPressed: onTelegramPressed,
           onWhatsappPressed: onWhatsappPressed,
           name: name,
@@ -122,6 +123,7 @@ class UiProfileModel {
     this.showSupportShuffle = false,
     this.onFollow,
     this.matchingInterests,
+    this.userCreatedAt,
     this.nickname,
     this.userCredo,
     this.name,
@@ -185,6 +187,7 @@ class UiProfileModel {
     VoidCallback? onTelegramPressed,
     VoidCallback? onWhatsappPressed,
     int? id,
+    DateTime? userCreatedAt
   }) =>
       UiProfileModel(
         id: id ?? this.id,
@@ -221,6 +224,7 @@ class UiProfileModel {
         balance: balance ?? this.balance,
         onTelegramPressed: onTelegramPressed ?? this.onTelegramPressed,
         onWhatsappPressed: onWhatsappPressed ?? this.onWhatsappPressed,
+        userCreatedAt: userCreatedAt?? this.userCreatedAt,
       );
 }
 

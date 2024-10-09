@@ -47,6 +47,7 @@ class EventlistComponent extends StatelessWidget {
                           color: Colors.white,
                         ).paddingOnly(right: 5.w)))),
             child: UiKitCardWrapper(
+              padding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
                     child: event.reviewStatus != null
                         ? DecoratedBox(
                             decoration: BoxDecoration(

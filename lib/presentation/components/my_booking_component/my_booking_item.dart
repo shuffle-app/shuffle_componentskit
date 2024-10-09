@@ -35,13 +35,13 @@ class MyBookingItem extends StatelessWidget {
             context.userAvatar(
               size: UserAvatarSize.x40x40,
               type: UserTileType.ordinary,
-              userName: '',
-              imageUrl: GraphicsFoundation.instance.png.avatars.avatar9.path,
+              userName: myBookingUiModel?.contentName ?? '',
+              imageUrl: myBookingUiModel?.contentLogo,
             ),
             SpacingFoundation.horizontalSpace12,
             Expanded(
               child: Text(
-                myBookingUiModel?.name ?? S.of(context).NothingFound,
+                myBookingUiModel?.contentName ?? S.of(context).NothingFound,
                 style: boldTextTheme?.body,
               ),
             ),
@@ -167,6 +167,7 @@ class MyBookingItem extends StatelessWidget {
               onPressed: () => onFullRefundTap?.call(myBookingUiModel?.id),
             ),
           ),
+          if((myBookingUiModel?.ticketUiModel?.ticketsCount ?? 0)>1)...[
           SpacingFoundation.verticalSpace12,
           context.outlinedButton(
             data: BaseUiKitButtonData(
@@ -175,7 +176,7 @@ class MyBookingItem extends StatelessWidget {
               text: S.of(context).PartialRefund.toUpperCase(),
               onPressed: () => onPartialRefundTap?.call(myBookingUiModel?.id),
             ),
-          )
+          )]
         ],
       ],
     );
