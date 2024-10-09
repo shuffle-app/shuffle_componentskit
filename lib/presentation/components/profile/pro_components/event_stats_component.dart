@@ -133,7 +133,7 @@ class ContentStatisticsComponent extends StatelessWidget {
                   ),
                   TitledInfoModel(
                     title: S.current.Interests,
-                    info: 'Snowboard, Free Ride, Hookah, Dance',
+                    info: uniqueStatisticsModel.mostActiveAgeSegment.interests.join(', '),
                   ),
                 ],
               ),
