@@ -111,6 +111,7 @@ export 'profile_company/company_profile_component.dart';
 export 'profile_company/company_profile_edit/company_profile_edit_component.dart';
 export 'profile_company/ui_company_profile_model.dart';
 export 'property_management/categories_manage_component.dart';
+export 'property_management/ui_model_related_property.dart';
 export 'property_management/mindsets_manage_component.dart';
 export 'property_management/property_management_component.dart';
 export 'property_management/property_management_icons_component.dart';

@@ -54,7 +54,7 @@ class CategoriesManageComponent extends StatelessWidget {
   final Future<List<String>> Function(String) relatedPropertySearchOptions;
   final ValueChanged<(UiKitTag, UiKitTag)>? onSelectedRelatedPropertyTapped;
   final bool isEntertainmentSelected;
-  final List<UiKitTag>? relatedProperties;
+  final List<UiModelRelatedProperty>? relatedProperties;
   final List<UiKitTag>? categoryProperties;
 
   @override
@@ -343,17 +343,20 @@ class CategoriesManageComponent extends StatelessWidget {
                       onFieldSubmitted: (title) => onRelatedPropertyFieldSubmitted?.call((title, selectedProperty)),
                     ),
                     SpacingFoundation.verticalSpace16,
-                    UiKitPropertiesCloud(
-                      child: Column(
-                        children: (relatedProperties ?? []).map(
-                          (e) {
+                    Expanded(
+                      child: UiKitPropertiesCloud(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: relatedProperties?.length ?? 0,
+                          itemBuilder: (context, index) {
                             return UiKitCloudChipWithDesc(
-                              title: e.title,
-                              onTap: () => onSelectedRelatedPropertyTapped?.call((selectedProperty!, e)),
+                              title: relatedProperties![index].title,
+                              onTap: () =>
+                                  onSelectedRelatedPropertyTapped?.call((selectedProperty!, relatedProperties![index])),
                               description: '',
                             ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical6);
                           },
-                        ).toList(),
+                        ),
                       ),
                     ),
                   ],
