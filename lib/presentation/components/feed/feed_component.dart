@@ -27,9 +27,10 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<int?>? onNichePressed;
   final bool hasFavourites;
   final bool canShowVideoReactions;
-  final ValueNotifier<double>? subscribedUpdatesNotifier;
+  final AnimationController? subscribedUpdatesNotifier;
   final List<UiProfileModel>? subscribedProfiles;
   final ValueChanged<int>? onSubscribedUserTapped;
+  final ValueChanged<double>? subscribedProfilesHintNotifier;
 
   const FeedComponent({
     super.key,
@@ -57,6 +58,7 @@ class FeedComponent extends StatelessWidget {
     this.subscribedUpdatesNotifier,
     this.subscribedProfiles,
     this.onSubscribedUserTapped,
+    this.subscribedProfilesHintNotifier,
   });
 
   @override
@@ -319,7 +321,7 @@ class FeedComponent extends StatelessWidget {
               isCompleted: mood != null,
               onCompleted: onMoodCompleted,
               onPressed: onMoodCheck,
-              onPressedShouldRecall:feed.shouldRecallOnMoodTap,
+              onPressedShouldRecall: feed.shouldRecallOnMoodTap,
               onCompletedWidget: mood != null
                   ? UiKitMessageCardWithIcon(
                       message: mood!.title,
