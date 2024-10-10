@@ -26,7 +26,11 @@ class BookingsControlComponent extends StatelessWidget {
     events = List.empty(growable: true);
 
     for (var element in placesOrEvents ?? []) {
-      element.isPlace ? places.add(element) : events.add(element);
+      if (isCompany) {
+        element.isPlace ? places.add(element) : events.add(element);
+      } else {
+        places.add(element);
+      }
     }
   }
 
@@ -38,9 +42,7 @@ class BookingsControlComponent extends StatelessWidget {
 
     return Scaffold(
       body: BlurredAppBarPage(
-        title: S
-            .of(context)
-            .BookingsHeading,
+        title: S.of(context).BookingsHeading,
         autoImplyLeading: true,
         centerTitle: true,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
@@ -57,17 +59,11 @@ class BookingsControlComponent extends StatelessWidget {
                       onTappedTab: (index) => tabValue.value = index == 0,
                       tabs: [
                         UiKitCustomTab(
-                          title: S
-                              .of(context)
-                              .Place
-                              .toUpperCase(),
+                          title: S.of(context).Place.toUpperCase(),
                           customValue: 'true',
                         ),
                         UiKitCustomTab(
-                          title: S
-                              .of(context)
-                              .Events
-                              .toUpperCase(),
+                          title: S.of(context).Events.toUpperCase(),
                           customValue: 'false',
                         ),
                       ],
@@ -78,62 +74,56 @@ class BookingsControlComponent extends StatelessWidget {
                   else
                     ...tabValue.value
                         ? places.isNotEmpty
-                        ? places.map(
-                          (element) {
-                        return BookingsControlPlaceItemUiKit(
-                          title: element.title,
-                          description: element.description,
-                          imageUrl: element.imageUrl,
-                          onTap: () => onPlaceItemTap?.call(element),
-                        ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16);
-                      },
-                    ).toList()
-                        : [
-                      Center(
-                        child: Text(
-                          isCompany ? S
-                              .of(context)
-                              .ThereNoPlacesYet : S
-                              .of(context)
-                              .ThereNoEventsYet,
-                          style: theme?.boldTextTheme.body,
-                        ),
-                      ),
-                    ]
+                            ? places.map(
+                                (element) {
+                                  return BookingsControlPlaceItemUiKit(
+                                    title: element.title,
+                                    description: element.description,
+                                    imageUrl: element.imageUrl,
+                                    onTap: () => onPlaceItemTap?.call(element),
+                                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16);
+                                },
+                              ).toList()
+                            : [
+                                Center(
+                                  child: Text(
+                                    isCompany ? S.of(context).ThereNoPlacesYet : S.of(context).ThereNoEventsYet,
+                                    style: theme?.boldTextTheme.body,
+                                  ),
+                                ),
+                              ]
                         : events.isNotEmpty
-                        ? events.map(
-                          (element) {
-                        return Column(
-                          children: [
-                            BookingsControlEventItem(
-                              title: element.title,
-                              description: element.description,
-                              events: element.events,
-                              onTap: (id) {
-                                onEventItemTap?.call(
-                                  element.events?.firstWhere((element) => element.id == id),
-                                );
-                              },
-                            ),
-                            if (element != events.last)
-                              Divider(
-                                color: theme?.colorScheme.surface2,
-                                thickness: 2.0,
-                              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                          ],
-                        );
-                      },
-                    ).toList()
-                        : [
-                      Center(
-                        child: Text(
-                          S
-                              .of(context)
-                              .ThereNoEventsYet,
-                          style: theme?.boldTextTheme.body,
-                        ),
-                      ),
-                    ],
+                            ? events.map(
+                                (element) {
+                                  return Column(
+                                    children: [
+                                      BookingsControlEventItem(
+                                        title: element.title,
+                                        description: element.description,
+                                        events: element.events,
+                                        onTap: (id) {
+                                          onEventItemTap?.call(
+                                            element.events?.firstWhere((element) => element.id == id),
+                                          );
+                                        },
+                                      ),
+                                      if (element != events.last)
+                                        Divider(
+                                          color: theme?.colorScheme.surface2,
+                                          thickness: 2.0,
+                                        ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                                    ],
+                                  );
+                                },
+                              ).toList()
+                            : [
+                                Center(
+                                  child: Text(
+                                    S.of(context).ThereNoEventsYet,
+                                    style: theme?.boldTextTheme.body,
+                                  ),
+                                ),
+                              ],
                 ],
               );
             },
