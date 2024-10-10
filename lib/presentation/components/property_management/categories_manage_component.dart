@@ -353,7 +353,7 @@ class CategoriesManageComponent extends StatelessWidget {
                               title: relatedProperties![index].title,
                               onTap: () =>
                                   onSelectedRelatedPropertyTapped?.call((selectedProperty!, relatedProperties![index])),
-                              description: '',
+                              description: relatedProperties![index].description ?? '',
                             ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical6);
                           },
                         ),
