@@ -15,6 +15,7 @@ class MyEventsComponent extends StatelessWidget {
     required this.events,
     this.buttonText,
     this.remainsToCreate,
+    this.onShowMyEventPage,
   });
 
   final String title;
@@ -23,6 +24,7 @@ class MyEventsComponent extends StatelessWidget {
   final String? buttonText;
   final List<UiEventModel> events;
   final int? remainsToCreate;
+  final VoidCallback? onShowMyEventPage;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,16 @@ class MyEventsComponent extends StatelessWidget {
                 },
               ),
               const Spacer(),
+              context.smallOutlinedButton(
+                data: BaseUiKitButtonData(
+                  onPressed: onShowMyEventPage,
+                  backgroundColor: Colors.transparent,
+                  iconInfo: BaseUiKitButtonIconData(
+                    size: 14.w,
+                    iconData: ShuffleUiKitIcons.chevronright,
+                  ),
+                ),
+              ),
             ],
           ),
           SpacingFoundation.verticalSpace16,
@@ -108,10 +120,12 @@ class MyEventsComponent extends StatelessWidget {
                           : const SizedBox.shrink(),
                       trailing: context.smallButton(
                         data: BaseUiKitButtonData(
+                          backgroundColor: theme?.colorScheme.surface1,
                           onPressed: () => onEventTap(event),
                           iconInfo: BaseUiKitButtonIconData(
                             iconData: CupertinoIcons.right_chevron,
                             size: 20.w,
+                            color: theme?.colorScheme.inversePrimary,
                           ),
                         ),
                       ),
