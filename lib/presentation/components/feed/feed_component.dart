@@ -27,7 +27,8 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<int?>? onNichePressed;
   final bool hasFavourites;
   final bool canShowVideoReactions;
-  final AnimationController? subscribedUpdatesNotifier;
+  final bool canShowSubscribedUsers;
+  final ValueNotifier<double>? subscribedUsersFeedIconScaleNotifier;
   final List<UiProfileModel>? subscribedProfiles;
   final ValueChanged<int>? onSubscribedUserTapped;
   final ValueChanged<double>? subscribedProfilesHintNotifier;
@@ -40,6 +41,7 @@ class FeedComponent extends StatelessWidget {
     required this.controller,
     required this.showBusinessContent,
     this.canShowVideoReactions = false,
+    this.canShowSubscribedUsers = false,
     this.storiesPagingController,
     this.onReactionTapped,
     this.hasFavourites = false,
@@ -57,7 +59,7 @@ class FeedComponent extends StatelessWidget {
     this.onListItemPressed,
     this.onAdvertisementPressed,
     this.onLoadMoreChips,
-    this.subscribedUpdatesNotifier,
+    this.subscribedUsersFeedIconScaleNotifier,
     this.subscribedProfiles,
     this.onSubscribedUserTapped,
     this.subscribedProfilesHintNotifier,
@@ -96,28 +98,34 @@ class FeedComponent extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       controller: scrollController,
       slivers: [
-        SliverPersistentHeader(
-          delegate: UiKitAnimatedPullToShowDelegate(
-            topPadding: MediaQuery.viewPaddingOf(context).top,
-            children: subscribedProfiles
-                    ?.map(
-                      (profile) => GestureDetector(
-                        onTap: () {
-                          if (profile.id != null) onSubscribedUserTapped?.call(profile.id!);
-                        },
-                        child: context.userAvatar(
-                          size: UserAvatarSize.x40x40,
-                          type: profile.userTileType,
-                          userName: profile.nickname ?? '',
-                          imageUrl: profile.avatarUrl,
-                          badgeValue: profile.updatesCount,
+        if (!canShowSubscribedUsers) MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox,
+        if (subscribedProfiles != null &&
+            subscribedProfiles!.isNotEmpty &&
+            subscribedUsersFeedIconScaleNotifier != null &&
+            canShowSubscribedUsers)
+          SliverPersistentHeader(
+            delegate: UiKitAnimatedPullToShowDelegate(
+              lastPhaseScaleNotifier: subscribedUsersFeedIconScaleNotifier!,
+              topPadding: MediaQuery.viewPaddingOf(context).top,
+              children: subscribedProfiles
+                      ?.map(
+                        (profile) => GestureDetector(
+                          onTap: () {
+                            if (profile.id != null) onSubscribedUserTapped?.call(profile.id!);
+                          },
+                          child: context.userAvatar(
+                            size: UserAvatarSize.x40x40,
+                            type: profile.userTileType,
+                            userName: profile.nickname ?? '',
+                            imageUrl: profile.avatarUrl,
+                            badgeValue: profile.updatesCount,
+                          ),
                         ),
-                      ),
-                    )
-                    .toList() ??
-                [],
+                      )
+                      .toList() ??
+                  [],
+            ),
           ),
-        ),
         if (showBusinessContent) ...[
           if (feed.recommendedBusinessEvents != null && feed.recommendedBusinessEvents!.isNotEmpty) ...[
             Text(
@@ -125,29 +133,32 @@ class FeedComponent extends StatelessWidget {
               style: themeTitleStyle,
             ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: feed.recommendedBusinessEvents
-                        ?.map<Widget>(
-                          (e) => UiKitImageWithDescriptionCard(
-                            onTap: () => onListItemPressed?.call(e.id, 'event'),
-                            title: e.title ?? '',
-                            imageUrl: e.verticalPreview?.link ??
-                                e.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link ??
-                                '',
-                            subtitleIcon: ShuffleUiKitIcons.clock,
-                            subtitle: e.scheduleString,
-                            tags: e.tags,
-                          ).paddingOnly(
-                              right: e.id == feed.recommendedBusinessEvents?.last.id
-                                  ? 0
-                                  : SpacingFoundation.horizontalSpacing12),
-                        )
-                        .toList() ??
-                    [],
-              ).paddingSymmetric(horizontal: horizontalMargin),
+            UiKitTiltWrapper(
+              tiltNotifier: tiltNotifier,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: feed.recommendedBusinessEvents
+                          ?.map<Widget>(
+                            (e) => UiKitImageWithDescriptionCard(
+                              onTap: () => onListItemPressed?.call(e.id, 'event'),
+                              title: e.title ?? '',
+                              imageUrl: e.verticalPreview?.link ??
+                                  e.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link ??
+                                  '',
+                              subtitleIcon: ShuffleUiKitIcons.clock,
+                              subtitle: e.scheduleString,
+                              tags: e.tags,
+                            ).paddingOnly(
+                                right: e.id == feed.recommendedBusinessEvents?.last.id
+                                    ? 0
+                                    : SpacingFoundation.horizontalSpacing12),
+                          )
+                          .toList() ??
+                      [],
+                ).paddingSymmetric(horizontal: horizontalMargin),
+              ),
             ).wrapSliverBox,
             SpacingFoundation.verticalSpace24.wrapSliverBox
           ],
@@ -210,18 +221,21 @@ class FeedComponent extends StatelessWidget {
         if (!showBusinessContent) ...[
           SpacingFoundation.verticalSpace16.wrapSliverBox,
           if (feed.recommendedEvent != null && (feedLeisureModel.showDailyRecomendation ?? true)) ...[
-            UiKitAccentCard(
-              onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
-              title: feed.recommendedEvent!.title ?? '',
-              additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
-              accentMessage: S.of(context).DontMissIt,
-              image: ImageWidget(
-                link: feed.recommendedEvent?.media.firstOrNull?.link,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                errorWidget: const UiKitBigPhotoErrorWidget(),
-              ),
-            ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
+            UiKitTiltWrapper(
+              tiltNotifier: tiltNotifier,
+              child: UiKitAccentCard(
+                onPressed: onEventPressed == null ? null : () => onEventPressed!(feed.recommendedEvent?.id),
+                title: feed.recommendedEvent!.title ?? '',
+                additionalInfo: feed.recommendedEvent!.descriptionItems?.first.description ?? '',
+                accentMessage: S.of(context).DontMissIt,
+                image: ImageWidget(
+                  link: feed.recommendedEvent?.media.firstOrNull?.link,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  errorWidget: const UiKitBigPhotoErrorWidget(),
+                ),
+              ).paddingSymmetric(horizontal: horizontalMargin),
+            ).wrapSliverBox,
             SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
           if (storiesPagingController != null && canShowVideoReactions) ...[
@@ -229,49 +243,52 @@ class FeedComponent extends StatelessWidget {
                 .paddingSymmetric(horizontal: horizontalMargin)
                 .wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,
-            SizedBox(
-              height: 0.285.sw * 1.7,
-              width: 1.sw,
-              child: PagedListView<int, VideoReactionUiModel>.separated(
-                scrollDirection: Axis.horizontal,
-                builderDelegate: PagedChildBuilderDelegate(
-                  firstPageProgressIndicatorBuilder: (c) => Align(
-                    alignment: Alignment.centerLeft,
-                    child: UiKitShimmerProgressIndicator(
-                      gradient: GradientFoundation.greyGradient,
-                      child: UiKitReactionPreview(
-                        customHeight: 0.285.sw * 1.7,
-                        customWidth: 0.285.sw,
-                        imagePath: GraphicsFoundation.instance.png.place.path,
-                      ).paddingOnly(left: horizontalMargin),
-                    ),
-                  ),
-                  newPageProgressIndicatorBuilder: (c) => Align(
-                    alignment: Alignment.centerLeft,
-                    child: UiKitShimmerProgressIndicator(
-                      gradient: GradientFoundation.greyGradient,
-                      child: UiKitReactionPreview(
-                        customHeight: 0.285.sw * 1.7,
-                        customWidth: 0.285.sw,
-                        imagePath: GraphicsFoundation.instance.png.place.path,
+            UiKitTiltWrapper(
+              tiltNotifier: feed.recommendedEvent == null ? tiltNotifier : null,
+              child: SizedBox(
+                height: 0.285.sw * 1.7,
+                width: 1.sw,
+                child: PagedListView<int, VideoReactionUiModel>.separated(
+                  scrollDirection: Axis.horizontal,
+                  builderDelegate: PagedChildBuilderDelegate(
+                    firstPageProgressIndicatorBuilder: (c) => Align(
+                      alignment: Alignment.centerLeft,
+                      child: UiKitShimmerProgressIndicator(
+                        gradient: GradientFoundation.greyGradient,
+                        child: UiKitReactionPreview(
+                          customHeight: 0.285.sw * 1.7,
+                          customWidth: 0.285.sw,
+                          imagePath: GraphicsFoundation.instance.png.place.path,
+                        ).paddingOnly(left: horizontalMargin),
                       ),
                     ),
-                  ),
-                  itemBuilder: (_, item, index) {
-                    double leftPadding = 0;
-                    if (index == 0) leftPadding = horizontalMargin;
+                    newPageProgressIndicatorBuilder: (c) => Align(
+                      alignment: Alignment.centerLeft,
+                      child: UiKitShimmerProgressIndicator(
+                        gradient: GradientFoundation.greyGradient,
+                        child: UiKitReactionPreview(
+                          customHeight: 0.285.sw * 1.7,
+                          customWidth: 0.285.sw,
+                          imagePath: GraphicsFoundation.instance.png.place.path,
+                        ),
+                      ),
+                    ),
+                    itemBuilder: (_, item, index) {
+                      double leftPadding = 0;
+                      if (index == 0) leftPadding = horizontalMargin;
 
-                    return UiKitReactionPreview(
-                      customHeight: 0.285.sw * 1.7,
-                      customWidth: 0.285.sw,
-                      imagePath: item.previewImageUrl ?? '',
-                      viewed: item.isViewed,
-                      onTap: () => onReactionTapped?.call(item),
-                    ).paddingOnly(left: leftPadding);
-                  },
+                      return UiKitReactionPreview(
+                        customHeight: 0.285.sw * 1.7,
+                        customWidth: 0.285.sw,
+                        imagePath: item.previewImageUrl ?? '',
+                        viewed: item.isViewed,
+                        onTap: () => onReactionTapped?.call(item),
+                      ).paddingOnly(left: leftPadding);
+                    },
+                  ),
+                  separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
+                  pagingController: storiesPagingController!,
                 ),
-                separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
-                pagingController: storiesPagingController!,
               ),
             ).wrapSliverBox,
             SpacingFoundation.verticalSpace16.wrapSliverBox,

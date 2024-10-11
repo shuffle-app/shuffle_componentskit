@@ -21,11 +21,11 @@ class ContentStatisticsComponent extends StatelessWidget {
 
   String get title => place?.title ?? event?.title ?? '';
 
-  final _tabs = [
-    CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
-    CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
-    CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
-  ];
+  // final _tabs = [
+  //   CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
+  //   CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
+  //   CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
+  // ];
 
   ContentStatisticsComponent({
     Key? key,
@@ -65,12 +65,12 @@ class ContentStatisticsComponent extends StatelessWidget {
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,
-        UiKitTabBarWithUnderlineIndicator(
-          tabController: tabController,
-          onTappedTab: (index) => onTabTapped?.call(_tabs.elementAtOrNull(index)?.customValue),
-          tabs: _tabs,
-        ),
-        SpacingFoundation.verticalSpace16,
+        // UiKitTabBarWithUnderlineIndicator(
+        //   tabController: tabController,
+        //   onTappedTab: (index) => onTabTapped?.call(_tabs.elementAtOrNull(index)?.customValue),
+        //   tabs: _tabs,
+        // ),
+        // SpacingFoundation.verticalSpace16,
         UiKitLineChart(
           loading: loadingVisitorsStatistics,
           chartData: viewsAndVisitorsStat,
