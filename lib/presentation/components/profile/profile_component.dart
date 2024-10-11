@@ -33,6 +33,7 @@ class ProfileComponent extends StatelessWidget {
   final PagingController<int, FeedbackUiModel>? feedbackPagingController;
   final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
   final int? unreadMessagesCount;
+  final VoidCallback? onShowMyEventPage;
 
   const ProfileComponent({
     super.key,
@@ -60,6 +61,7 @@ class ProfileComponent extends StatelessWidget {
     this.onRecommendedUserCardChanged,
     this.onFeedbackCardPressed,
     this.unreadMessagesCount,
+    this.onShowMyEventPage,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
@@ -341,12 +343,14 @@ class ProfileComponent extends StatelessWidget {
         if (feedbackPagingController != null) SpacingFoundation.verticalSpace24,
         if (profile.userTileType == UserTileType.pro) ...[
           MyEventsComponent(
-              title: S.of(context).MyEvents,
-              onTap: onMyEventsPressed ?? () {},
-              onEventTap: onEventTap ?? (_) {},
-              //TODO update when proPlus will be implemented,
-              remainsToCreate: 3 - (events ?? []).length,
-              events: events ?? []),
+            title: S.of(context).MyEvents,
+            onTap: onMyEventsPressed ?? () {},
+            onEventTap: onEventTap ?? (_) {},
+            //TODO update when proPlus will be implemented,
+            remainsToCreate: 3 - (events ?? []).length,
+            events: events ?? [],
+            onShowMyEventPage: onShowMyEventPage,
+          ),
           SpacingFoundation.verticalSpace24,
         ],
         // SizedBox(

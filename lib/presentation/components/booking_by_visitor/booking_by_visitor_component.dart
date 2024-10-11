@@ -90,7 +90,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     setState(() {
       if (_ticketUiModel.subs == null || _ticketUiModel.subs?.item?.id == id) {
         if (_selectedSub?.id != id) {
-          _selectedSub = _subs.firstWhere((element) => element.id == id);
+          final sub = _subs.firstWhere((element) => element.id == id);
+          if (sub.actualbookingLimit != sub.bookingLimit) {
+            _selectedSub = sub;
+          } else {
+            _selectedSub = null;
+          }
         } else {
           _selectedSub = null;
         }
@@ -102,7 +107,19 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   _onSelectedUpsale(int id) {
     setState(() {
-      _selectedUpsale = (_selectedUpsale?.id != id) ? _upsales.firstWhere((element) => element.id == id) : null;
+      if ((_selectedUpsale?.id != id)) {
+        final upsale = _upsales.firstWhere((element) {
+          return element.id == id;
+        });
+
+        if (upsale.limit != upsale.actualLimit) {
+          _selectedUpsale = upsale;
+        } else {
+          _selectedUpsale = null;
+        }
+      } else {
+        _selectedUpsale = null;
+      }
     });
   }
 
