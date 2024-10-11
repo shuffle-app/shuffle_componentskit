@@ -63,9 +63,10 @@ showCompleteInfluencerDialog({
                   Row(
                     children: [
                       ImageWidget(
-                        link: GraphicsFoundation.instance.png.chess3Nobg.path,
+                        svgAsset: GraphicsFoundation.instance.svg.chess3Nobg,
                         width: 0.3.sw,
                         height: 0.3.sw,
+                        fit: BoxFit.contain,
                       ),
                       SpacingFoundation.horizontalSpace16,
                       Column(
