@@ -151,7 +151,7 @@ class UsersBookingsControl extends StatelessWidget {
                           ),
                         ),
                       ],
-                      onSelected: (value) => onPopupMenuSelected?.call(value, element.id),
+                      onSelected: (value) => onPopupMenuSelected?.call(value, element.ticketUiModel?.id ?? -1),
                     )
             ],
           ),
