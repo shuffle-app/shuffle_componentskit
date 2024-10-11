@@ -19,11 +19,12 @@ class ProStatisticsComponent extends StatelessWidget {
   final ValueChanged<String>? onStatisticsPopupMenuItemTapped;
   final List<UiEventModel>? events;
 
-  final _tabs = [
-    CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
-    CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
-    CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
-  ];
+  /// bring back tabs when needed
+  // final _tabs = [
+  //   CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
+  //   CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
+  //   CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
+  // ];
 
   ProStatisticsComponent({
     Key? key,
@@ -55,16 +56,21 @@ class ProStatisticsComponent extends StatelessWidget {
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,
-        UiKitTabBarWithUnderlineIndicator(
-          tabController: tabController,
-          onTappedTab: (index) => onTabTapped?.call(_tabs.elementAtOrNull(index)?.customValue),
-          tabs: _tabs,
-        ),
-        SpacingFoundation.verticalSpace16,
+        // UiKitTabBarWithUnderlineIndicator(
+        //   tabController: tabController,
+        //   onTappedTab: (index) => onTabTapped?.call(_tabs.elementAtOrNull(index)?.customValue),
+        //   tabs: _tabs,
+        // ),
+        // SpacingFoundation.verticalSpace16,
         UiKitLineChart(
           key: ValueKey(viewsAndVisitorsStat),
           loading: loadingVisitorsStatistics,
-          chartData: viewsAndVisitorsStat,
+          chartData: viewsAndVisitorsStat.copyWith(
+            popUpMenuOptions: [
+              S.current.Settings,
+              S.current.DownloadPdf,
+            ],
+          ),
           popUpMenuItemSelected: onStatisticsPopupMenuItemTapped,
           chartAdditionalData: viewsAndVisitorsAdditionalData,
         ),
@@ -214,6 +220,7 @@ class ProStatisticsComponent extends StatelessWidget {
           ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical16),
         if (events != null && events!.isNotEmpty)
           ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             itemBuilder: (context, index) {

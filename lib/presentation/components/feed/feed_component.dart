@@ -31,6 +31,8 @@ class FeedComponent extends StatelessWidget {
   final List<UiProfileModel>? subscribedProfiles;
   final ValueChanged<int>? onSubscribedUserTapped;
   final ValueChanged<double>? subscribedProfilesHintNotifier;
+  final ValueNotifier<double>? tiltNotifier;
+  final ScrollController? scrollController;
 
   const FeedComponent({
     super.key,
@@ -59,6 +61,8 @@ class FeedComponent extends StatelessWidget {
     this.subscribedProfiles,
     this.onSubscribedUserTapped,
     this.subscribedProfilesHintNotifier,
+    this.tiltNotifier,
+    this.scrollController,
   });
 
   @override
@@ -90,12 +94,11 @@ class FeedComponent extends StatelessWidget {
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
+      controller: scrollController,
       slivers: [
-        MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox,
-        if (subscribedUpdatesNotifier != null)
-          UiKitAnimatedPullToShowRow(
-            progressNotifier: subscribedUpdatesNotifier!,
-            noChildrenText: S.current.DontLiveAlone,
+        SliverPersistentHeader(
+          delegate: UiKitAnimatedPullToShowDelegate(
+            topPadding: MediaQuery.viewPaddingOf(context).top,
             children: subscribedProfiles
                     ?.map(
                       (profile) => GestureDetector(
@@ -113,7 +116,8 @@ class FeedComponent extends StatelessWidget {
                     )
                     .toList() ??
                 [],
-          ).wrapSliverBox,
+          ),
+        ),
         if (showBusinessContent) ...[
           if (feed.recommendedBusinessEvents != null && feed.recommendedBusinessEvents!.isNotEmpty) ...[
             Text(
