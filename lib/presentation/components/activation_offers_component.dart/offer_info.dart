@@ -11,7 +11,7 @@ class OfferInfo extends StatelessWidget {
   final UniversalNotOfferRemUiModel? offerUiModel;
   final String? contentImageUrl;
   final String? contentTitle;
-  final Function(int? userId, int? offerId)? onConfirmTap;
+  final ValueChanged<String?>? onConfirmTap;
   final Function(int? userId, int? offerId)? onCancelTap;
 
   const OfferInfo({
@@ -57,9 +57,11 @@ class OfferInfo extends StatelessWidget {
                 imageUrl: contentImageUrl,
               ),
               SpacingFoundation.horizontalSpace16,
-              Text(
-                contentTitle ?? S.of(context).NothingFound,
-                style: theme?.boldTextTheme.body,
+              Expanded(
+                child: Text(
+                  contentTitle ?? S.of(context).NothingFound,
+                  style: theme?.boldTextTheme.body,
+                ),
               ),
             ],
           ).paddingOnly(
@@ -85,7 +87,7 @@ class OfferInfo extends StatelessWidget {
             context.gradientButton(
               data: BaseUiKitButtonData(
                 text: S.of(context).Confirm.toUpperCase(),
-                onPressed: () => onConfirmTap?.call(offerUser?.user?.id, offerUiModel?.id),
+                onPressed: () => onConfirmTap?.call(offerUser?.ticketNumber),
               ),
             ),
             SpacingFoundation.verticalSpace16,
