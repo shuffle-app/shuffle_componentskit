@@ -29,6 +29,7 @@ class CategoriesManageComponent extends StatelessWidget {
     required this.onChangeType,
     this.relatedProperties,
     this.categoryProperties,
+    this.additionalWidgets,
     required this.onPropertySelect,
   });
 
@@ -56,6 +57,7 @@ class CategoriesManageComponent extends StatelessWidget {
   final bool isEntertainmentSelected;
   final List<UiModelRelatedProperty>? relatedProperties;
   final List<UiKitTag>? categoryProperties;
+  final List<Widget>? additionalWidgets;
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +196,14 @@ class CategoriesManageComponent extends StatelessWidget {
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   children: [
+                    if (additionalWidgets != null) ...[
+                      Wrap(
+                        runSpacing: SpacingFoundation.verticalSpacing4,
+                        spacing: SpacingFoundation.verticalSpacing4,
+                        children: additionalWidgets!,
+                      ),
+                      SpacingFoundation.verticalSpace24,
+                    ],
                     Text(
                       S.current.BaseProperties,
                       style: uiKitTheme?.boldTextTheme.subHeadline,

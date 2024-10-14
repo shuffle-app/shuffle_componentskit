@@ -24,6 +24,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
   final bool Function(BookingUiModel)? onBookingTap;
+  final List<String> availableTagOptions;
 
   const CreatePlaceComponent({
     super.key,
@@ -37,6 +38,7 @@ class CreatePlaceComponent extends StatefulWidget {
     this.onTimeTemplateCreated,
     this.onNicheChanged,
     this.onBookingTap,
+    this.availableTagOptions = const [],
   });
 
   @override
@@ -498,25 +500,38 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ],
             SpacingFoundation.verticalSpace24,
             if (_placeToEdit.placeType != null && _placeToEdit.placeType!.title.isNotEmpty) ...[
-              UiKitFieldWithTagList(
-                listUiKitTags: _placeToEdit.baseTags.isNotEmpty ? _placeToEdit.baseTags : null,
-                title: S.of(context).BaseProperties,
-                onTap: () async {
-                  final newTags = await context.push(TagsSelectionComponent(
-                    positionModel: model.positionModel,
-                    selectedTags: _placeToEdit.baseTags,
+              if (widget.availableTagOptions.contains('base')) ...[
+                UiKitFieldWithTagList(
+                    listUiKitTags: _placeToEdit.baseTags.isNotEmpty
+                        ? _placeToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('base').any((el) => e.id == el.id))
+                            .toList()
+                        : null,
                     title: S.of(context).BaseProperties,
-                    allTags: widget.propertiesOptions('base'),
-                  ));
-                  if (newTags != null) {
-                    setState(() {
-                      _placeToEdit.baseTags.clear();
-                      _placeToEdit.baseTags.addAll(newTags);
-                    });
-                  }
-                },
-              ).paddingSymmetric(horizontal: horizontalPadding),
-              SpacingFoundation.verticalSpace4,
+                    onTap: () async {
+                      final newTags = await context.push(TagsSelectionComponent(
+                        positionModel: model.positionModel,
+                        selectedTags: _placeToEdit.baseTags,
+                        title: S.of(context).BaseProperties,
+                        allTags: widget.propertiesOptions('base'),
+                      ));
+                      if (newTags != null) {
+                        setState(() {
+                          final tagList = List<UiKitTag>.from(_placeToEdit.baseTags
+                              .where((e) => widget.propertiesOptions('base').any((el) => e.id == el.id)));
+                          final notTypeTags = List<UiKitTag>.from(
+                              _placeToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                          final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                          tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                          tagList.addAll(newTags);
+                          tagList.addAll(notTypeTags);
+                          _placeToEdit.baseTags.clear();
+                          _placeToEdit.baseTags.addAll(tagList.toSet());
+                        });
+                      }
+                    }).paddingSymmetric(horizontal: horizontalPadding),
+                SpacingFoundation.verticalSpace24
+              ],
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.tags.isNotEmpty ? _placeToEdit.tags : null,
                 title: S.of(context).UniqueProperties,
@@ -530,12 +545,140 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   if (newTags != null) {
                     setState(() {
                       _placeToEdit.tags.clear();
-                      _placeToEdit.tags.addAll(newTags);
+                      _placeToEdit.tags.addAll(newTags.toSet());
                     });
                   }
                 },
               ).paddingSymmetric(horizontal: horizontalPadding),
               SpacingFoundation.verticalSpace24,
+              if (widget.availableTagOptions.contains('museumtype')) ...[
+                UiKitFieldWithTagList(
+                    listUiKitTags: _placeToEdit.baseTags.isNotEmpty
+                        ? _placeToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('museumtype').any((el) => e.id == el.id))
+                            .toList()
+                        : null,
+                    title: S.of(context).MuseumType,
+                    onTap: () async {
+                      final newTags = await context.push(TagsSelectionComponent(
+                        positionModel: model.positionModel,
+                        selectedTags: _placeToEdit.baseTags,
+                        title: S.of(context).MuseumType,
+                        allTags: widget.propertiesOptions('museumtype'),
+                      ));
+                      if (newTags != null) {
+                        setState(() {
+                          final tagList = List<UiKitTag>.from(_placeToEdit.baseTags
+                              .where((e) => widget.propertiesOptions('museumtype').any((el) => e.id == el.id)));
+                          final notTypeTags = List<UiKitTag>.from(
+                              _placeToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                          final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                          tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                          tagList.addAll(newTags);
+                          tagList.addAll(notTypeTags);
+                          _placeToEdit.baseTags.clear();
+                          _placeToEdit.baseTags.addAll(tagList.toSet());
+                        });
+                      }
+                    }).paddingSymmetric(horizontal: horizontalPadding),
+                SpacingFoundation.verticalSpace24
+              ],
+              if (widget.availableTagOptions.contains('cuisinetype')) ...[
+                UiKitFieldWithTagList(
+                    listUiKitTags: _placeToEdit.baseTags.isNotEmpty
+                        ? _placeToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('cuisinetype').any((el) => e.id == el.id))
+                            .toList()
+                        : null,
+                    title: S.of(context).CuisineType,
+                    onTap: () async {
+                      final newTags = await context.push(TagsSelectionComponent(
+                        positionModel: model.positionModel,
+                        selectedTags: _placeToEdit.baseTags,
+                        title: S.of(context).CuisineType,
+                        allTags: widget.propertiesOptions('cuisinetype'),
+                      ));
+                      if (newTags != null) {
+                        setState(() {
+                          final tagList = List<UiKitTag>.from(_placeToEdit.baseTags
+                              .where((e) => widget.propertiesOptions('cuisinetype').any((el) => e.id == el.id)));
+                          final notTypeTags = List<UiKitTag>.from(
+                              _placeToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                          final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                          tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                          tagList.addAll(newTags);
+                          tagList.addAll(notTypeTags);
+                          _placeToEdit.baseTags.clear();
+                          _placeToEdit.baseTags.addAll(tagList.toSet());
+                        });
+                      }
+                    }).paddingSymmetric(horizontal: horizontalPadding),
+                SpacingFoundation.verticalSpace24
+              ],
+              if (widget.availableTagOptions.contains('gallerytype')) ...[
+                UiKitFieldWithTagList(
+                    listUiKitTags: _placeToEdit.baseTags.isNotEmpty
+                        ? _placeToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id))
+                            .toList()
+                        : null,
+                    title: S.of(context).GalleryType,
+                    onTap: () async {
+                      final newTags = await context.push(TagsSelectionComponent(
+                        positionModel: model.positionModel,
+                        selectedTags: _placeToEdit.baseTags,
+                        title: S.of(context).GalleryType,
+                        allTags: widget.propertiesOptions('gallerytype'),
+                      ));
+                      if (newTags != null) {
+                        setState(() {
+                          final tagList = List<UiKitTag>.from(_placeToEdit.baseTags
+                              .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id)));
+                          final notTypeTags = List<UiKitTag>.from(
+                              _placeToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                          final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                          tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                          tagList.addAll(newTags);
+                          tagList.addAll(notTypeTags);
+                          _placeToEdit.baseTags.clear();
+                          _placeToEdit.baseTags.addAll(tagList.toSet());
+                        });
+                      }
+                    }).paddingSymmetric(horizontal: horizontalPadding),
+                SpacingFoundation.verticalSpace24
+              ],
+              if (widget.availableTagOptions.contains('musictype')) ...[
+                UiKitFieldWithTagList(
+                    listUiKitTags: _placeToEdit.baseTags.isNotEmpty
+                        ? _placeToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id))
+                            .toList()
+                        : null,
+                    title: S.of(context).MusicType,
+                    onTap: () async {
+                      final newTags = await context.push(TagsSelectionComponent(
+                        positionModel: model.positionModel,
+                        selectedTags: _placeToEdit.baseTags,
+                        title: S.of(context).MusicType,
+                        allTags: widget.propertiesOptions('musictype'),
+                      ));
+                      if (newTags != null) {
+                        setState(() {
+                          final tagList = List<UiKitTag>.from(_placeToEdit.baseTags
+                              .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id)));
+                          final notTypeTags = List<UiKitTag>.from(
+                              _placeToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                          final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                          tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                          tagList.addAll(newTags);
+                          tagList.addAll(notTypeTags);
+                          _placeToEdit.baseTags.clear();
+                          _placeToEdit.baseTags.addAll(tagList.toSet());
+                        });
+                      }
+                    }).paddingSymmetric(horizontal: horizontalPadding),
+                SpacingFoundation.verticalSpace24
+              ],
             ],
             context
                 .button(
