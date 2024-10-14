@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ActivationOffersComponent extends StatelessWidget {
   final UniversalNotOfferRemUiModel? offerUiModel;
   final ValueChanged<UsersOfOffer>? onDetailsTap;
+  final PagingController<int, UsersOfOffer> pagingController;
 
   const ActivationOffersComponent({
     super.key,
+    required this.pagingController,
     this.offerUiModel,
     this.onDetailsTap,
   });
@@ -33,16 +36,25 @@ class ActivationOffersComponent extends StatelessWidget {
             ),
           ),
           SpacingFoundation.verticalSpace16,
-          if (offerUiModel?.userOfOffer != null && offerUiModel!.userOfOffer!.isNotEmpty)
-            ...offerUiModel!.userOfOffer!.map((user) => UserInOfferWidget(
-                  offerUser: user,
-                  onDetailsTap: onDetailsTap,
-                ).paddingOnly(bottom: SpacingFoundation.verticalSpacing20))
-          else
-            Text(
-              S.of(context).ThereNoUsersWhoHaveBoughtOfferYet,
-              style: boldTextTheme?.caption1Medium,
+          SizedBox(
+            height: 0.65.sh,
+            child: PagedListView<int, UsersOfOffer>(
+              pagingController: pagingController,
+              padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
+              builderDelegate: PagedChildBuilderDelegate(
+                noItemsFoundIndicatorBuilder: (context) => Text(
+                  S.of(context).ThereNoUsersWhoHaveBoughtOfferYet,
+                  style: boldTextTheme?.caption1Medium,
+                ),
+                itemBuilder: (context, item, index) {
+                  return UserInOfferWidget(
+                    offerUser: item,
+                    onDetailsTap: onDetailsTap,
+                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing20);
+                },
+              ),
             ),
+          ),
         ],
       ),
     );
