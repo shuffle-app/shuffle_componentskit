@@ -359,6 +359,28 @@ class _EventComponentState extends State<EventComponent> {
             right: horizontalMargin,
             bottom: SpacingFoundation.verticalSpacing24,
           ),
+        Row(
+          children: [
+            Expanded(
+              child: AddToSchedulerEventActionCard(
+                action: null,
+                rasterIconAsset: GraphicsFoundation.instance.png.money,
+                value: 'in 2 days',
+                buttonTitle: S.of(context).Soon,
+              ),
+            ),
+            SpacingFoundation.horizontalSpace8,
+            Expanded(
+              child: PointBalancePlaceActionCard(
+                value: widget.event.userPoints?.toString() ?? '0',
+                group: group,
+                rasterIconAsset: GraphicsFoundation.instance.png.money,
+                buttonTitle: S.of(context).SpendIt,
+                action: widget.onSpendPointTap,
+              ),
+            ),
+          ],
+        ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
         if (widget.bookingNotifier != null)
           ListenableBuilder(
             listenable: widget.bookingNotifier!,
