@@ -109,7 +109,7 @@ class SpentPointsComponent extends StatelessWidget {
           SizedBox(
             height: 0.75.sh,
             child: PagedListView<int, UiModelDiscounts>(
-              padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
+              padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate(
                 noItemsFoundIndicatorBuilder: (_) => Center(
