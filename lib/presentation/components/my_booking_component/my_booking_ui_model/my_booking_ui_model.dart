@@ -8,6 +8,7 @@ class MyBookingUiModel {
   final TicketUiModel? ticketUiModel;
   final UiEventModel? eventModel;
   final UiPlaceModel? placeModel;
+  final DateTime? visitDate;
   final int? total;
 
   MyBookingUiModel({
@@ -17,14 +18,12 @@ class MyBookingUiModel {
     this.total,
     this.eventModel,
     this.placeModel,
+    this.visitDate,
   });
 
   bool get isPast {
-    final selectedDateTime =
-        eventModel?.bookingUiModel?.selectedDateTime ?? placeModel?.bookingUiModel?.selectedDateTime;
-
-    if (selectedDateTime != null) {
-      return DateTime.now().isAfter(selectedDateTime);
+    if (visitDate != null) {
+      return DateTime.now().isAfter(visitDate!) || visitDate!.isAtSameDay;
     } else {
       return false;
     }
