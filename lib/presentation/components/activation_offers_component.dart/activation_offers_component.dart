@@ -7,12 +7,14 @@ class ActivationOffersComponent extends StatelessWidget {
   final UniversalNotOfferRemUiModel? offerUiModel;
   final ValueChanged<UsersOfOffer>? onDetailsTap;
   final PagingController<int, UsersOfOffer> pagingController;
+  final VoidCallback? onScannerTap;
 
   const ActivationOffersComponent({
     super.key,
     required this.pagingController,
     this.offerUiModel,
     this.onDetailsTap,
+    this.onScannerTap,
   });
 
   @override
@@ -32,7 +34,7 @@ class ActivationOffersComponent extends StatelessWidget {
           context.gradientButton(
             data: BaseUiKitButtonData(
               text: S.of(context).CodeScanner.toUpperCase(),
-              onPressed: () {},
+              onPressed: onScannerTap,
             ),
           ),
           SpacingFoundation.verticalSpace16,
