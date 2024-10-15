@@ -30,15 +30,13 @@ class OfferInfo extends StatelessWidget {
 
     return Scaffold(
       body: BlurredAppBarPage(
-        //TODO - ?
-        customToolbarBaseHeight: 60.h,
         customTitle: Expanded(
           child: AutoSizeText(
             S.of(context).OfferInfo,
             style: theme?.boldTextTheme.title1,
             textAlign: TextAlign.center,
             wrapWords: false,
-            maxLines: 2,
+            maxLines: 1,
           ),
         ),
         expandTitle: true,
