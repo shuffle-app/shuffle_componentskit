@@ -1,8 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -15,6 +15,7 @@ class MyEventsComponent extends StatelessWidget {
     required this.events,
     this.buttonText,
     this.remainsToCreate,
+    this.onShowMyEventPage,
   });
 
   final String title;
@@ -23,16 +24,15 @@ class MyEventsComponent extends StatelessWidget {
   final String? buttonText;
   final List<UiEventModel> events;
   final int? remainsToCreate;
+  final VoidCallback? onShowMyEventPage;
 
   @override
   Widget build(BuildContext context) {
-    final height = ((events.isNotEmpty ? (events.length + (remainsToCreate != null ? 0.35 : 0)) : 1) * 70.h) + 80.h;
     final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
     final regularTextTheme = theme?.regularTextTheme;
 
     return UiKitCardWrapper(
-      height: height,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -64,6 +64,16 @@ class MyEventsComponent extends StatelessWidget {
                 },
               ),
               const Spacer(),
+              context.smallOutlinedButton(
+                data: BaseUiKitButtonData(
+                  onPressed: onShowMyEventPage,
+                  backgroundColor: Colors.transparent,
+                  iconInfo: BaseUiKitButtonIconData(
+                    size: 14.w,
+                    iconData: ShuffleUiKitIcons.chevronright,
+                  ),
+                ),
+              ),
             ],
           ),
           SpacingFoundation.verticalSpace16,
@@ -110,10 +120,12 @@ class MyEventsComponent extends StatelessWidget {
                           : const SizedBox.shrink(),
                       trailing: context.smallButton(
                         data: BaseUiKitButtonData(
+                          backgroundColor: theme?.colorScheme.surface1,
                           onPressed: () => onEventTap(event),
                           iconInfo: BaseUiKitButtonIconData(
                             iconData: CupertinoIcons.right_chevron,
                             size: 20.w,
+                            color: theme?.colorScheme.inversePrimary,
                           ),
                         ),
                       ),
@@ -130,6 +142,6 @@ class MyEventsComponent extends StatelessWidget {
           ),
         ],
       ).paddingAll(EdgeInsetsFoundation.all16),
-    );
+    ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16);
   }
 }

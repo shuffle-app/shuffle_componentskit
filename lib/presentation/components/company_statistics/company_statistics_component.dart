@@ -80,7 +80,12 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
         SpacingFoundation.verticalSpace16,
         UiKitLineChart(
           loading: widget.loadingVisitorsStatistics,
-          chartData: widget.viewsAndVisitorsStat,
+          chartData: widget.viewsAndVisitorsStat.copyWith(
+            popUpMenuOptions: [
+              S.current.Settings,
+              S.current.DownloadPdf,
+            ],
+          ),
           popUpMenuItemSelected: widget.onStatisticsPopupMenuItemTapped,
           chartAdditionalData: widget.viewsAndVisitorsAdditionalData,
         ),
@@ -169,7 +174,7 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: mockPieChart.legend
+                        children: widget.uniqueStatisticsModel.viewSourcesData.legend
                             .map<Widget>(
                               (legendItem) => UiKitChartLegendWidget(
                                 valueTitle: legendItem.title,

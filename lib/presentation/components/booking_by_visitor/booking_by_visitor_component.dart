@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class BookingByVisitorComponent extends StatefulWidget {
   final BookingUiModel? bookingUiModel;
@@ -35,6 +35,9 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   SubsUiModel? _selectedSub;
   UpsaleUiModel? _selectedUpsale;
 
+  bool errorSelectSubisActive = false;
+  bool errorSelectUpsaleisActive = false;
+
   final List<SubsUiModel> _subs = [];
   final List<UpsaleUiModel> _upsales = [];
 
@@ -49,6 +52,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   int _upsaleTotalPrice = 0;
 
   int get _getTotalSubsTicketCount => _ticketCount + _subTicketCount;
+
   double get _getTotalPrice => (_getTotalSubsTicketCount * _ticketPrice) + (_upsaleTotalPrice);
 
   @override
@@ -86,7 +90,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     setState(() {
       if (_ticketUiModel.subs == null || _ticketUiModel.subs?.item?.id == id) {
         if (_selectedSub?.id != id) {
-          _selectedSub = _subs.firstWhere((element) => element.id == id);
+          final sub = _subs.firstWhere((element) => element.id == id);
+          if (sub.actualbookingLimit != sub.bookingLimit) {
+            _selectedSub = sub;
+          } else {
+            _selectedSub = null;
+          }
         } else {
           _selectedSub = null;
         }
@@ -98,7 +107,19 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
   _onSelectedUpsale(int id) {
     setState(() {
-      _selectedUpsale = (_selectedUpsale?.id != id) ? _upsales.firstWhere((element) => element.id == id) : null;
+      if ((_selectedUpsale?.id != id)) {
+        final upsale = _upsales.firstWhere((element) {
+          return element.id == id;
+        });
+
+        if (upsale.limit != upsale.actualLimit) {
+          _selectedUpsale = upsale;
+        } else {
+          _selectedUpsale = null;
+        }
+      } else {
+        _selectedUpsale = null;
+      }
     });
   }
 
@@ -129,6 +150,8 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
       } else if (widget.bookingUiModel?.subsUiModel == null ||
           (widget.bookingUiModel?.subsUiModel != null && widget.bookingUiModel!.subsUiModel!.isEmpty)) {
         _ticketCount++;
+      } else {
+        errorSelectSubisActive = true;
       }
     });
   }
@@ -221,6 +244,8 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     setState(() {
       if (_selectedUpsale != null) {
         _updateUpsaleTicket(1);
+      } else {
+        errorSelectUpsaleisActive = true;
       }
     });
   }
@@ -382,7 +407,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                   iconWidget: const GradientableWidget(
                     gradient: GradientFoundation.defaultLinearGradient,
                     child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.gradientPlus,
+                      iconData: ShuffleUiKitIcons.plus,
                       height: 40,
                       width: 40,
                     ),
@@ -391,6 +416,13 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               ),
             ],
           ).paddingSymmetric(horizontal: horizontalPadding),
+          if (errorSelectSubisActive) ...[
+            Text(
+              S.of(context).SelectSubs,
+              style: theme?.regularTextTheme.body.copyWith(color: UiKitColors.error),
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
+          ],
           SpacingFoundation.verticalSpace24,
           if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel?.bookingLimitPerOne ?? '9999') ?? 9999))
             Text(
@@ -452,7 +484,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                     iconWidget: const GradientableWidget(
                       gradient: GradientFoundation.defaultLinearGradient,
                       child: ImageWidget(
-                        iconData: ShuffleUiKitIcons.gradientPlus,
+                        iconData: ShuffleUiKitIcons.plus,
                         height: 40,
                         width: 40,
                       ),
@@ -461,6 +493,13 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 ),
               ],
             ).paddingSymmetric(horizontal: horizontalPadding),
+            if (errorSelectUpsaleisActive) ...[
+              Text(
+                S.of(context).SelectYourFavoriteProduct,
+                style: theme?.regularTextTheme.body.copyWith(color: UiKitColors.error),
+              ).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace16,
+            ],
             SpacingFoundation.verticalSpace24,
           ],
           if (_getTotalSubsTicketCount != 0) ...[

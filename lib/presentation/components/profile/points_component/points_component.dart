@@ -35,10 +35,8 @@ class PointsComponent extends StatelessWidget {
 
   double get progressIndicatorHeight => 1.sw <= 380 ? 16.h : 12.h;
 
-  LinearInfluencerIndicator _linearInfluencerIndicator(
-    UiUserPointsProgressBarModel? uiUserPointsProgressBarModel,
-    Color? customColor,
-  ) {
+  LinearInfluencerIndicator _linearInfluencerIndicator(UiUserPointsProgressBarModel? uiUserPointsProgressBarModel,
+      Color? customColor,) {
     Gradient getCustomGradient() {
       if (uiUserPointsProgressBarModel != null) {
         if (uiUserPointsProgressBarModel.level < 1) {
@@ -56,7 +54,7 @@ class PointsComponent extends StatelessWidget {
     }
 
     return LinearInfluencerIndicator(
-      actualSum: (uiUserPointsProgressBarModel?.actual ?? 0) %100,
+      actualSum: (uiUserPointsProgressBarModel?.actual ?? 0) % 100,
       sum: uiUserPointsProgressBarModel?.sum ?? 100,
       width: 1.sw <= 380 ? 185.w : 215.w,
       height: progressIndicatorHeight,
@@ -119,12 +117,18 @@ class PointsComponent extends StatelessWidget {
           ),
         ),
         customTitle: TitleWithHowItWorks(
-          title: S.of(context).Points,
+          title: S
+              .of(context)
+              .Points,
           textStyle: theme?.boldTextTheme.title1,
           shouldShow: showHIW,
           howItWorksWidget: HowItWorksWidget(
-            title: S.of(context).PointsAre,
-            subtitle: S.of(context).ShuffleExchangeSystem,
+            title: S
+                .of(context)
+                .PointsAre,
+            subtitle: S
+                .of(context)
+                .ShuffleExchangeSystem,
             hintTiles: [
               HintCardUiModel(
                 title: S.of(context).PointsHiwItems(0),
@@ -151,7 +155,9 @@ class PointsComponent extends StatelessWidget {
           Row(
             children: [
               Text(
-                S.of(context).Balance,
+                S
+                    .of(context)
+                    .Balance,
                 style: theme?.regularTextTheme.caption1.copyWith(
                   color: theme.colorScheme.darkNeutral900,
                 ),
@@ -166,11 +172,14 @@ class PointsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace16,
           context
               .midSizeOutlinedButton(
-                data: BaseUiKitButtonData(
-                  text: S.of(context).Spend.toUpperCase(),
-                  onPressed: onSpendCallBack,
-                ),
-              )
+            data: BaseUiKitButtonData(
+              text: S
+                  .of(context)
+                  .Spend
+                  .toUpperCase(),
+              onPressed: onSpendCallBack,
+            ),
+          )
               .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace16,
           UiKitCardWrapper(
@@ -200,7 +209,7 @@ class PointsComponent extends StatelessWidget {
                   children: [
                     RowGradientCircle(
                       level: uiUserPointsProgressBarModel.level,
-                      progressInCircle: ((uiUserPointsProgressBarModel.actual /100) / 33).toInt(),
+                      progressInCircle: ((uiUserPointsProgressBarModel.actual % 100) / 33).toInt(),
                     ).paddingAll(EdgeInsetsFoundation.all8),
                     SpacingFoundation.horizontalSpace4,
                     Expanded(
@@ -215,21 +224,23 @@ class PointsComponent extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${(uiUserPointsProgressBarModel.actual %100).floor()}/',
+                                  text: '${(uiUserPointsProgressBarModel.actual % 100).floor()}/',
                                   style: theme?.regularTextTheme.caption2.copyWith(
                                     color:
-                                    (uiUserPointsProgressBarModel.actual %100).floor() >= (uiUserPointsProgressBarModel.sum / 2.2)
-                                            ? ColorsFoundation.lightBodyTypographyColor
-                                            : ColorsFoundation.mutedText,
+                                    (uiUserPointsProgressBarModel.actual % 100).floor() >=
+                                        (uiUserPointsProgressBarModel.sum / 2.2)
+                                        ? ColorsFoundation.lightBodyTypographyColor
+                                        : ColorsFoundation.mutedText,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '${uiUserPointsProgressBarModel.sum.toInt()}',
                                   style: theme?.regularTextTheme.caption2.copyWith(
                                     color:
-                                    (uiUserPointsProgressBarModel.actual %100).floor() > (uiUserPointsProgressBarModel.sum / 1.5)
-                                            ? ColorsFoundation.lightBodyTypographyColor
-                                            : ColorsFoundation.mutedText,
+                                    (uiUserPointsProgressBarModel.actual % 100).floor() >
+                                        (uiUserPointsProgressBarModel.sum / 1.5)
+                                        ? ColorsFoundation.lightBodyTypographyColor
+                                        : ColorsFoundation.mutedText,
                                   ),
                                 ),
                               ],
@@ -246,90 +257,92 @@ class PointsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace24,
           listItemPoint != null
               ? ColoredBox(
-                  color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
-                  child: GridView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
-                      mainAxisSpacing: SpacingFoundation.verticalSpacing6,
-                    ),
-                    itemCount: listItemPoint!.length,
-                    itemBuilder: (context, index) {
-                      final itemPoits = listItemPoint![index];
-                      print(itemPoits.actualSum > itemPoits.sum);
+            color: theme?.colorScheme.surface2 ?? ColorsFoundation.surface2,
+            child: GridView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              controller: _scrollController,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: SpacingFoundation.horizontalSpacing8,
+                mainAxisSpacing: SpacingFoundation.verticalSpacing6,
+              ),
+              itemCount: listItemPoint!.length,
+              itemBuilder: (context, index) {
+                final itemPoits = listItemPoint![index];
+                print(itemPoits.actualSum > itemPoits.sum);
 
-                      return UiKitCardWrapper(
-                        color: theme?.colorScheme.surface,
-                        borderRadius: BorderRadiusFoundation.all24,
-                        child: Stack(
-                          children: [
-                            ImageWidget(
-                              height: 1.sw <= 380 ? 85.h : 75.h,
-                              width: 85.w,
-                              fit: BoxFit.fitWidth,
-                              link: itemPoits.imagePath,
+                return UiKitCardWrapper(
+                  color: theme?.colorScheme.surface,
+                  borderRadius: BorderRadiusFoundation.all24,
+                  child: Stack(
+                    children: [
+                      ImageWidget(
+                        height: 1.sw <= 380 ? 85.h : 75.h,
+                        width: 85.w,
+                        fit: BoxFit.fitWidth,
+                        link: itemPoits.imagePath,
+                      ),
+                      const Align(
+                        alignment: Alignment.topCenter,
+                        child: TriangleAnimation(),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          userType == UserTileType.premium && itemPoits.showStar
+                              ? ImageWidget(
+                            iconData: ShuffleUiKitIcons.star2,
+                            height: 12.h,
+                            color: theme?.colorScheme.bodyTypography,
+                          )
+                              : SpacingFoundation.none,
+                          const Spacer(),
+                          Text(
+                            itemPoits.title ?? S
+                                .of(context)
+                                .NothingFound,
+                            style: theme?.boldTextTheme.caption3Medium,
+                            textAlign: TextAlign.right,
+                          ),
+                          Text(
+                            '${itemPoits.getPoints} ${S.of(context).PointsCount(itemPoits.getPoints)}',
+                            style: theme?.boldTextTheme.caption2Bold,
+                          ),
+                          SpacingFoundation.verticalSpace4,
+                          userType != UserTileType.premium && itemPoits.showStar
+                              ? ImageWidget(
+                            iconData: ShuffleUiKitIcons.star2,
+                            height: 12.h,
+                            color: theme?.colorScheme.bodyTypography,
+                          )
+                              : Text(
+                            '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
+                            style: theme?.regularTextTheme.labelSmall.copyWith(
+                              color: ColorsFoundation.mutedText,
                             ),
-                            const Align(
-                              alignment: Alignment.topCenter,
-                              child: TriangleAnimation(),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                userType == UserTileType.premium && itemPoits.showStar
-                                    ? ImageWidget(
-                                        link: GraphicsFoundation.instance.svg.star2.path,
-                                        height: 12.h,
-                                        color: theme?.colorScheme.bodyTypography,
-                                      )
-                                    : SpacingFoundation.none,
-                                const Spacer(),
-                                Text(
-                                  itemPoits.title ?? S.of(context).NothingFound,
-                                  style: theme?.boldTextTheme.caption3Medium,
-                                  textAlign: TextAlign.right,
-                                ),
-                                Text(
-                                  '${itemPoits.getPoints} ${S.of(context).PointsCount(itemPoits.getPoints)}',
-                                  style: theme?.boldTextTheme.caption2Bold,
-                                ),
-                                SpacingFoundation.verticalSpace4,
-                                userType != UserTileType.premium && itemPoits.showStar
-                                    ? ImageWidget(
-                                        link: GraphicsFoundation.instance.svg.star2.path,
-                                        height: 12.h,
-                                        color: theme?.colorScheme.bodyTypography,
-                                      )
-                                    : Text(
-                                        '${parseDoubleToInt(itemPoits.actualSum)}/${parseDoubleToInt(itemPoits.sum)}',
-                                        style: theme?.regularTextTheme.labelSmall.copyWith(
-                                          color: ColorsFoundation.mutedText,
-                                        ),
-                                      ),
-                                SpacingFoundation.verticalSpace2,
-                                LinearInfluencerIndicator(
-                                  actualSum:
-                                      userType != UserTileType.premium && itemPoits.showStar ? 0 : itemPoits.actualSum,
-                                  sum: itemPoits.sum,
-                                  width: 120.w,
-                                ),
-                                // SpacingFoundation.verticalSpace16,
-                              ],
-                            ).paddingAll(EdgeInsetsFoundation.all16)
-                          ],
-                        ),
-                      );
-                    },
-                  ).paddingOnly(
-                    left: SpacingFoundation.horizontalSpacing16,
-                    right: SpacingFoundation.horizontalSpacing16,
-                    bottom: SpacingFoundation.verticalSpacing8,
-                    top: SpacingFoundation.verticalSpacing16,
+                          ),
+                          SpacingFoundation.verticalSpace2,
+                          LinearInfluencerIndicator(
+                            actualSum:
+                            userType != UserTileType.premium && itemPoits.showStar ? 0 : itemPoits.actualSum,
+                            sum: itemPoits.sum,
+                            width: 120.w,
+                          ),
+                          // SpacingFoundation.verticalSpace16,
+                        ],
+                      ).paddingAll(EdgeInsetsFoundation.all16)
+                    ],
                   ),
-                )
+                );
+              },
+            ).paddingOnly(
+              left: SpacingFoundation.horizontalSpacing16,
+              right: SpacingFoundation.horizontalSpacing16,
+              bottom: SpacingFoundation.verticalSpacing8,
+              top: SpacingFoundation.verticalSpacing16,
+            ),
+          )
               : SpacingFoundation.none,
           if (listChallengeFeelings != null)
             ColoredBox(
@@ -339,56 +352,61 @@ class PointsComponent extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      S.of(context).ChallengeFeelings,
+                      S
+                          .of(context)
+                          .ChallengeFeelings,
                       style: theme?.boldTextTheme.caption1Bold,
                     ).paddingOnly(bottom: SpacingFoundation.verticalSpacing8),
                     Row(
                       children: listChallengeFeelings
-                              ?.map(
-                                (itemChallengeFeelings) => Expanded(
-                                  child: Stack(
-                                    children: [
-                                      ImageWidget(
-                                        height: 1.sw <= 380 ? 60.h : 45.h,
-                                        width: 1.sw <= 380 ? 55.w : 45.w,
-                                        fit: BoxFit.fitHeight,
-                                        link: itemChallengeFeelings.imagePath,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          SizedBox(height: 30.h),
-                                          Text(
-                                            '${parseDoubleToInt(itemChallengeFeelings.sum)} ${itemChallengeFeelings.title}',
-                                            style: theme?.boldTextTheme.caption3Medium,
-                                          ),
-                                          AutoSizeText(
-                                            '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(itemChallengeFeelings.getPoints)}',
-                                            maxLines: 1,
-                                            minFontSize: 8,
-                                            group: challengeFeelingsGroup,
-                                            textAlign: TextAlign.right,
-                                            style: theme?.boldTextTheme.caption2Bold,
-                                          ),
-                                          Text(
-                                            '${parseDoubleToInt(itemChallengeFeelings.actualSum)}/${parseDoubleToInt(itemChallengeFeelings.sum)}',
-                                            style: theme?.regularTextTheme.labelSmall.copyWith(
-                                              color: ColorsFoundation.mutedText,
-                                            ),
-                                          ),
-                                          SpacingFoundation.verticalSpace2,
-                                          LinearInfluencerIndicator(
-                                            actualSum: itemChallengeFeelings.actualSum,
-                                            sum: itemChallengeFeelings.sum,
-                                            width: 65.w,
-                                          )
-                                        ],
-                                      ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8)
-                                    ],
+                          ?.map(
+                            (itemChallengeFeelings) =>
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  ImageWidget(
+                                    height: 1.sw <= 380 ? 60.h : 45.h,
+                                    width: 1.sw <= 380 ? 55.w : 45.w,
+                                    fit: BoxFit.fitHeight,
+                                    link: itemChallengeFeelings.imagePath,
                                   ),
-                                ),
-                              )
-                              .toList() ??
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      SizedBox(height: 30.h),
+                                      Text(
+                                        '${parseDoubleToInt(itemChallengeFeelings.sum)} ${itemChallengeFeelings.title}',
+                                        style: theme?.boldTextTheme.caption3Medium,
+                                      ),
+                                      AutoSizeText(
+                                        '${itemChallengeFeelings.getPoints} ${S.of(context).PointsCount(
+                                            itemChallengeFeelings.getPoints)}',
+                                        maxLines: 1,
+                                        minFontSize: 8,
+                                        group: challengeFeelingsGroup,
+                                        textAlign: TextAlign.right,
+                                        style: theme?.boldTextTheme.caption2Bold,
+                                      ),
+                                      Text(
+                                        '${parseDoubleToInt(itemChallengeFeelings.actualSum)}/${parseDoubleToInt(
+                                            itemChallengeFeelings.sum)}',
+                                        style: theme?.regularTextTheme.labelSmall.copyWith(
+                                          color: ColorsFoundation.mutedText,
+                                        ),
+                                      ),
+                                      SpacingFoundation.verticalSpace2,
+                                      LinearInfluencerIndicator(
+                                        actualSum: itemChallengeFeelings.actualSum,
+                                        sum: itemChallengeFeelings.sum,
+                                        width: 65.w,
+                                      )
+                                    ],
+                                  ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8)
+                                ],
+                              ),
+                            ),
+                      )
+                          .toList() ??
                           [],
                     ),
                   ],

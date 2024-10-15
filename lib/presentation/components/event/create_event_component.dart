@@ -24,6 +24,7 @@ class CreateEventComponent extends StatefulWidget {
   final List<UiScheduleModel> availableTimeTemplates;
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
   final bool Function(BookingUiModel)? onBookingTap;
+  final List<String> availableTagOptions;
 
   const CreateEventComponent({
     super.key,
@@ -37,6 +38,7 @@ class CreateEventComponent extends StatefulWidget {
     required this.availableTimeTemplates,
     this.onTimeTemplateCreated,
     this.onBookingTap,
+    this.availableTagOptions = const [],
   });
 
   @override
@@ -399,24 +401,38 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             SpacingFoundation.verticalSpace24
           ],
           if (_eventToEdit.eventType != null && _eventToEdit.eventType!.title.isNotEmpty) ...[
-            UiKitFieldWithTagList(
-                listUiKitTags: _eventToEdit.baseTags.isNotEmpty ? _eventToEdit.baseTags : null,
-                title: S.of(context).BaseProperties,
-                onTap: () async {
-                  final newTags = await context.push(TagsSelectionComponent(
-                    positionModel: model.positionModel,
-                    selectedTags: _eventToEdit.baseTags,
-                    title: S.of(context).BaseProperties,
-                    allTags: widget.propertiesOptions('base'),
-                  ));
-                  if (newTags != null) {
-                    setState(() {
-                      _eventToEdit.baseTags.clear();
-                      _eventToEdit.baseTags.addAll(newTags);
-                    });
-                  }
-                }).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
+            if (widget.availableTagOptions.contains('base')) ...[
+              UiKitFieldWithTagList(
+                  listUiKitTags: _eventToEdit.baseTags.isNotEmpty
+                      ? _eventToEdit.baseTags
+                          .where((e) => widget.propertiesOptions('base').any((el) => e.id == el.id))
+                          .toList()
+                      : null,
+                  title: S.of(context).BaseProperties,
+                  onTap: () async {
+                    final newTags = await context.push(TagsSelectionComponent(
+                      positionModel: model.positionModel,
+                      selectedTags: _eventToEdit.baseTags,
+                      title: S.of(context).BaseProperties,
+                      allTags: widget.propertiesOptions('base'),
+                    ));
+                    if (newTags != null) {
+                      setState(() {
+                        final tagList = List<UiKitTag>.from(_eventToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('base').any((el) => e.id == el.id)));
+                        final notTypeTags = List<UiKitTag>.from(
+                            _eventToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                        final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                        tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                        tagList.addAll(newTags);
+                        tagList.addAll(notTypeTags);
+                        _eventToEdit.baseTags.clear();
+                        _eventToEdit.baseTags.addAll(tagList.toSet());
+                      });
+                    }
+                  }).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace24
+            ],
             UiKitFieldWithTagList(
               listUiKitTags: _eventToEdit.tags.isNotEmpty ? _eventToEdit.tags : null,
               title: S.of(context).UniqueProperties,
@@ -430,12 +446,140 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 if (newTags != null) {
                   setState(() {
                     _eventToEdit.tags.clear();
-                    _eventToEdit.tags.addAll(newTags);
+                    _eventToEdit.tags.addAll(newTags.toSet());
                   });
                 }
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
+            if (widget.availableTagOptions.contains('museumtype')) ...[
+              UiKitFieldWithTagList(
+                  listUiKitTags: _eventToEdit.baseTags.isNotEmpty
+                      ? _eventToEdit.baseTags
+                          .where((e) => widget.propertiesOptions('museumtype').any((el) => e.id == el.id))
+                          .toList()
+                      : null,
+                  title: S.of(context).MuseumType,
+                  onTap: () async {
+                    final newTags = await context.push(TagsSelectionComponent(
+                      positionModel: model.positionModel,
+                      selectedTags: _eventToEdit.baseTags,
+                      title: S.of(context).MuseumType,
+                      allTags: widget.propertiesOptions('museumtype'),
+                    ));
+                    if (newTags != null) {
+                      setState(() {
+                        final tagList = List<UiKitTag>.from(_eventToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('museumtype').any((el) => e.id == el.id)));
+                        final notTypeTags = List<UiKitTag>.from(
+                            _eventToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                        final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                        tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                        tagList.addAll(newTags);
+                        tagList.addAll(notTypeTags);
+                        _eventToEdit.baseTags.clear();
+                        _eventToEdit.baseTags.addAll(tagList.toSet());
+                      });
+                    }
+                  }).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace24
+            ],
+            if (widget.availableTagOptions.contains('cuisinetype')) ...[
+              UiKitFieldWithTagList(
+                  listUiKitTags: _eventToEdit.baseTags.isNotEmpty
+                      ? _eventToEdit.baseTags
+                          .where((e) => widget.propertiesOptions('cuisinetype').any((el) => e.id == el.id))
+                          .toList()
+                      : null,
+                  title: S.of(context).CuisineType,
+                  onTap: () async {
+                    final newTags = await context.push(TagsSelectionComponent(
+                      positionModel: model.positionModel,
+                      selectedTags: _eventToEdit.baseTags,
+                      title: S.of(context).CuisineType,
+                      allTags: widget.propertiesOptions('cuisinetype'),
+                    ));
+                    if (newTags != null) {
+                      setState(() {
+                        final tagList = List<UiKitTag>.from(_eventToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('cuisinetype').any((el) => e.id == el.id)));
+                        final notTypeTags = List<UiKitTag>.from(
+                            _eventToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                        final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                        tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                        tagList.addAll(newTags);
+                        tagList.addAll(notTypeTags);
+                        _eventToEdit.baseTags.clear();
+                        _eventToEdit.baseTags.addAll(tagList.toSet());
+                      });
+                    }
+                  }).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace24
+            ],
+            if (widget.availableTagOptions.contains('gallerytype')) ...[
+              UiKitFieldWithTagList(
+                  listUiKitTags: _eventToEdit.baseTags.isNotEmpty
+                      ? _eventToEdit.baseTags
+                      .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id))
+                      .toList()
+                      : null,
+                  title: S.of(context).GalleryType,
+                  onTap: () async {
+                    final newTags = await context.push(TagsSelectionComponent(
+                      positionModel: model.positionModel,
+                      selectedTags: _eventToEdit.baseTags,
+                      title: S.of(context).GalleryType,
+                      allTags: widget.propertiesOptions('gallerytype'),
+                    ));
+                    if (newTags != null) {
+                      setState(() {
+                        final tagList = List<UiKitTag>.from(_eventToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id)));
+                        final notTypeTags = List<UiKitTag>.from(
+                            _eventToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                        final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                        tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                        tagList.addAll(newTags);
+                        tagList.addAll(notTypeTags);
+                        _eventToEdit.baseTags.clear();
+                        _eventToEdit.baseTags.addAll(tagList.toSet());
+                      });
+                    }
+                  }).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace24
+            ],
+            if (widget.availableTagOptions.contains('musictype')) ...[
+              UiKitFieldWithTagList(
+                  listUiKitTags: _eventToEdit.baseTags.isNotEmpty
+                      ? _eventToEdit.baseTags
+                      .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id))
+                      .toList()
+                      : null,
+                  title: S.of(context).MusicType,
+                  onTap: () async {
+                    final newTags = await context.push(TagsSelectionComponent(
+                      positionModel: model.positionModel,
+                      selectedTags: _eventToEdit.baseTags,
+                      title: S.of(context).MusicType,
+                      allTags: widget.propertiesOptions('musictype'),
+                    ));
+                    if (newTags != null) {
+                      setState(() {
+                        final tagList = List<UiKitTag>.from(_eventToEdit.baseTags
+                            .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id)));
+                        final notTypeTags = List<UiKitTag>.from(
+                            _eventToEdit.baseTags.where((e) => !tagList.any((el) => el.id == e.id)));
+                        final tagsToRemove = tagList.where((e) => !newTags.any((el) => el.id == e.id));
+                        tagList.removeWhere((e) => tagsToRemove.any((el) => el.id == e.id));
+                        tagList.addAll(newTags);
+                        tagList.addAll(notTypeTags);
+                        _eventToEdit.baseTags.clear();
+                        _eventToEdit.baseTags.addAll(tagList.toSet());
+                      });
+                    }
+                  }).paddingSymmetric(horizontal: horizontalPadding),
+              SpacingFoundation.verticalSpace24
+            ],
           ],
           Row(
             children: [

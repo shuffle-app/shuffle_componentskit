@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:collection/collection.dart';
 
 class EventlistComponent extends StatelessWidget {
   final List<UiEventModel> events;
@@ -10,7 +11,8 @@ class EventlistComponent extends StatelessWidget {
   final Function(UiEventModel) onDelete;
   final bool isArchive;
 
-  EventlistComponent({super.key, required this.events, required this.onTap, required this.onDelete, this.isArchive = false});
+  EventlistComponent(
+      {super.key, required this.events, required this.onTap, required this.onDelete, this.isArchive = false});
 
   final GlobalKey<AnimatedListState> _animatedListKey = GlobalKey<AnimatedListState>();
 
@@ -26,8 +28,10 @@ class EventlistComponent extends StatelessWidget {
       childrenCount: events.isEmpty ? 1 : events.length,
       childrenBuilder: (context, index) {
         if (events.isEmpty) {
-          return Text(S.of(context).NothingFound, style: theme?.boldTextTheme.caption1Bold)
-              .paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8);
+          return Center(
+            child: Text(S.of(context).NothingFound, style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(
+                horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8),
+          );
         }
 
         final event = events[index];
@@ -47,6 +51,7 @@ class EventlistComponent extends StatelessWidget {
                           color: Colors.white,
                         ).paddingOnly(right: 5.w)))),
             child: UiKitCardWrapper(
+                    padding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
                     child: event.reviewStatus != null
                         ? DecoratedBox(
                             decoration: BoxDecoration(
@@ -62,7 +67,8 @@ class EventlistComponent extends StatelessWidget {
                         : ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: BorderedUserCircleAvatar(
-                              imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                              imageUrl:
+                                  event.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
                               size: 40.w,
                             ),
                             title: Text(
@@ -79,8 +85,10 @@ class EventlistComponent extends StatelessWidget {
                                 : const SizedBox.shrink(),
                             trailing: context.smallButton(
                               data: BaseUiKitButtonData(
+                                backgroundColor: theme?.colorScheme.surface1,
                                 onPressed: () => onTap(event),
                                 iconInfo: BaseUiKitButtonIconData(
+                                  color: theme?.colorScheme.inversePrimary,
                                   iconData: CupertinoIcons.right_chevron,
                                   size: 20.w,
                                 ),

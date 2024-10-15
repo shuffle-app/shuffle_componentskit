@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../presentation/components/feed/uifeed_model.dart';
@@ -8,7 +9,7 @@ class EntertainmentRouteUiModel {
   final String routeAPointName;
   final String routeBPointName;
   final List<UiUniversalModel> routePoints;
-  final String icon = GraphicsFoundation.instance.svg.landmark.path;
+  final IconData icon = ShuffleUiKitIcons.landmark;
 
   EntertainmentRouteUiModel({
     this.thumbnailUrl,

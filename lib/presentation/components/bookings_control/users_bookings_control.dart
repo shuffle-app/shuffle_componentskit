@@ -95,12 +95,9 @@ class UsersBookingsControl extends StatelessWidget {
                         ),
                         if (element.profile?.userTileType == UserTileType.influencer) ...[
                           SpacingFoundation.horizontalSpace8,
-                          const GradientableWidget(
-                            gradient: GradientFoundation.badgeIcon,
-                            child: ImageWidget(
-                              iconData: ShuffleUiKitIcons.gradientStar,
-                            ),
-                          )
+                          ImageWidget(
+                            svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                          ),
                         ]
                       ],
                     ),
@@ -154,7 +151,7 @@ class UsersBookingsControl extends StatelessWidget {
                           ),
                         ),
                       ],
-                      onSelected: (value) => onPopupMenuSelected?.call(value, element.id),
+                      onSelected: (value) => onPopupMenuSelected?.call(value, element.ticketUiModel?.id ?? -1),
                     )
             ],
           ),

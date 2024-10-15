@@ -68,20 +68,27 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     });
   }
 
-  selectHorizontalFormat([preselected]) async {
+  selectHorizontalFormat([String? preselected]) async {
     final horizontal = preselected ?? await _getPhoto();
+    Uint8List? bytes;
     if (horizontal == null) return;
+    if (horizontal.startsWith('http')) {
+      bytes = await _getBytesFromUrl(horizontal);
+    }
     unawaited(showDialog(
         context: context,
         builder: (context) => _ImageViewFinderDialog(
               title: S.current.CropHorizontal,
-              imageBytes: File(horizontal).readAsBytesSync(),
+              imageBytes: bytes ?? File(horizontal).readAsBytesSync(),
               viewFinderOrientation: Axis.horizontal,
               onCropCompleted: (data) {
-                final file = File('${tempDir.path}/shuffle-photos-editing/${data.filename ?? 'horizontal'}');
+                final file = File(
+                    '${tempDir.path}/shuffle-photos-editing/${horizontal}${DateTime.now().millisecondsSinceEpoch}');
                 file.createSync(recursive: true);
                 file.writeAsBytesSync(data.croppedFileBytes);
+
                 setState(() {
+                  _photos.removeWhere((element) => element.previewType == UiKitPreviewType.horizontal);
                   _photos.add(UiKitMediaPhoto(link: file.path, previewType: UiKitPreviewType.horizontal));
                 });
               },
@@ -94,20 +101,27 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     }));
   }
 
-  selectVerticalFormat([preselected]) async {
+  selectVerticalFormat([String? preselected]) async {
     final vertical = preselected ?? await _getPhoto();
     if (vertical == null) return;
+    Uint8List? bytes;
+    if (vertical.startsWith('http')) {
+      bytes = await _getBytesFromUrl(vertical);
+    }
     unawaited(showDialog(
         context: context,
         builder: (context) => _ImageViewFinderDialog(
               viewFinderOrientation: Axis.vertical,
               title: S.current.CropVertical,
-              imageBytes: File(vertical).readAsBytesSync(),
+              imageBytes: bytes ?? File(vertical).readAsBytesSync(),
               onCropCompleted: (data) {
-                final file = File('${tempDir.path}/shuffle-photos-editing/${data.filename ?? 'vertical'}');
+                final file =
+                    File('${tempDir.path}/shuffle-photos-editing/${vertical}${DateTime.now().millisecondsSinceEpoch}');
                 file.createSync(recursive: true);
                 file.writeAsBytesSync(data.croppedFileBytes);
+
                 setState(() {
+                  _photos.removeWhere((element) => element.previewType == UiKitPreviewType.vertical);
                   _photos.add(UiKitMediaPhoto(link: file.path, previewType: UiKitPreviewType.vertical));
                 });
               },
@@ -120,8 +134,8 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     }));
   }
 
-  _getPhoto() async {
-    final selected = await showDialog(
+  Future<String?> _getPhoto() async {
+    final selected = await showDialog<String?>(
         context: context,
         builder: (context) {
           final inversedColor = context.uiKitTheme?.colorScheme.inversePrimary;
@@ -175,6 +189,11 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
         });
 
     return selected;
+  }
+
+  Future<Uint8List?> _getBytesFromUrl(String url) async {
+    final image = await CustomCacheManager.imageInstance.getSingleFile(url);
+    return await image.readAsBytes();
   }
 
   @override

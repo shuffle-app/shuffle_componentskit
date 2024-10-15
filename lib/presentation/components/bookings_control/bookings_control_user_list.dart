@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 import 'users_bookings_control.dart';
 
@@ -124,7 +124,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                 GestureDetector(
                   onTap: widget.onBookingEdit,
                   child: ImageWidget(
-                    link: GraphicsFoundation.instance.svg.pencil.path,
+                    iconData: ShuffleUiKitIcons.pencil,
                     color: theme?.colorScheme.inversePrimary,
                   ),
                 ),

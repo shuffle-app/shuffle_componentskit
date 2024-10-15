@@ -149,9 +149,12 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Website);
     } else if (eventType == null || eventType!.title.isEmpty) {
       return S.current.XIsRequired(S.current.EventType);
-    } else if (baseTags.isEmpty) {
-      return S.current.XIsRequired(S.current.BaseProperties);
-    } else if (tags.isEmpty) {
+    }
+    // else
+    // if (baseTags.isEmpty) {
+    //   return S.current.XIsRequired(S.current.BaseProperties);
+    // }
+    else if (tags.isEmpty) {
       return S.current.XIsRequired(S.current.UniqueProperties);
     } else if (scheduleString == null || scheduleString!.isEmpty) {
       return S.current.XIsRequired(S.current.Dates);

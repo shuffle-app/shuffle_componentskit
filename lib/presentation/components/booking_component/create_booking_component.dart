@@ -240,7 +240,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                                   child: GradientableWidget(
                                     gradient: GradientFoundation.defaultLinearGradient,
                                     child: const ImageWidget(
-                                      iconData: ShuffleUiKitIcons.gradientPlus,
+                                      iconData: ShuffleUiKitIcons.plus,
                                       height: 45,
                                       width: 45,
                                     ).paddingAll(EdgeInsetsFoundation.all32),
@@ -327,7 +327,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                                   child: GradientableWidget(
                                     gradient: GradientFoundation.defaultLinearGradient,
                                     child: const ImageWidget(
-                                      iconData: ShuffleUiKitIcons.gradientPlus,
+                                      iconData: ShuffleUiKitIcons.plus,
                                       height: 45,
                                       width: 45,
                                     ).paddingAll(EdgeInsetsFoundation.all32),

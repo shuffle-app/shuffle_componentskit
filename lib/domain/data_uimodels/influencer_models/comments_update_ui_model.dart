@@ -1,11 +1,12 @@
-import 'package:shuffle_uikit/foundation/graphics_foundation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class CommentsUpdateUiModel {
   final String type;
   final int commentsCount;
   final DateTime lastCommentDate;
   final String lastComment;
-  final String icon = GraphicsFoundation.instance.svg.message.path;
+  final IconData icon = ShuffleUiKitIcons.message;
 
   CommentsUpdateUiModel({
     required this.type,

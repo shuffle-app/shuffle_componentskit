@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class InfluencerFeaturesAnimation extends StatefulWidget {
   const InfluencerFeaturesAnimation({super.key});
@@ -74,9 +73,9 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
               UiKitTag(title: 'Open', icon: ShuffleUiKitIcons.clock, unique: false),
             ],
             tags: [
-              UiKitTag(title: 'Drauth beer', icon: ShuffleUiKitIcons.cocktail2, unique: true),
+              UiKitTag(title: 'Drauth beer', icon: ShuffleUiKitIcons.cocktailtropical, unique: true),
               UiKitTag(title: 'Live music', icon: ShuffleUiKitIcons.music, unique: true),
-              UiKitTag(title: 'Networking', icon: ShuffleUiKitIcons.personLayered, unique: true),
+              UiKitTag(title: 'Networking', icon: GraphicsFoundation.instance.svg.personLayered.path, unique: true),
               UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
               UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: false),
               UiKitTag(title: 'Cheap', icon: ShuffleUiKitIcons.cocktail, unique: true),
@@ -203,7 +202,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
                 GradientableWidget(
                   gradient: GradientFoundation.starLinearGradient,
                   child: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.shuffleCut,
+                    iconData: ShuffleUiKitIcons.shufflecut,
                     color: Colors.white,
                     width: 0.0625.sw,
                     height: 0.0625.sw,
@@ -235,7 +234,7 @@ class _InfluencerFeaturesAnimationState extends State<InfluencerFeaturesAnimatio
                 GradientableWidget(
                   gradient: GradientFoundation.fameLinearGradient,
                   child: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.shuffleCut,
+                    iconData: ShuffleUiKitIcons.shufflecut,
                     color: Colors.white,
                     width: 0.0625.sw,
                     height: 0.0625.sw,
@@ -267,7 +266,7 @@ class _GetBonusWrapper extends StatelessWidget {
                 Text('get bonus', style: context.uiKitTheme?.boldTextTheme.body),
                 SpacingFoundation.horizontalSpace2,
                 ImageWidget(
-                  svgAsset: GraphicsFoundation.instance.svg.shuffleCut,
+                  iconData: ShuffleUiKitIcons.shufflecut,
                   color: Colors.white,
                   width: 0.0625.sw,
                   height: 0.0625.sw,

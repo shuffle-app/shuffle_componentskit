@@ -10,6 +10,6 @@ export 'title_with_how_it_works.dart';
 export 'web_form_field.dart';
 export 'web_photo_video_selector.dart';
 export 'web_view_screen.dart';
-export 'login_invitation_component.dart';
+export '../components/auth/login_invitation_component.dart';
 export 'subs_in_content_card.dart';
 export 'sub_information_dialog.dart';

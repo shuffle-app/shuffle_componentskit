@@ -25,7 +25,7 @@ class AdditionalInfoPremium extends StatelessWidget {
                 child: ImageWidget(
                   height: 18.h,
                   fit: BoxFit.fitHeight,
-                  link: GraphicsFoundation.instance.svg.shuffleCut.path,
+                  iconData: ShuffleUiKitIcons.shufflecut,
                   color: Colors.white,
                 ),
               ),
@@ -77,7 +77,7 @@ class AdditionalInfoPremium extends StatelessWidget {
                 gradient: GradientFoundation.defaultLinearGradient,
                 child: ImageWidget(
                   height: 16.h,
-                  link: GraphicsFoundation.instance.svg.shuffleCut.path,
+                  iconData: ShuffleUiKitIcons.shufflecut,
                   color: Colors.white,
                 ),
               ),

@@ -36,7 +36,9 @@ class _FAQComponentState extends State<FAQComponent> {
 
     final itemsToShow = _controller.text.isEmpty
         ? widget.faqData.keys.toList()
-        : widget.faqData.keys.where((element) => element.toLowerCase().contains(_controller.text.toLowerCase())).toList();
+        : widget.faqData.keys
+            .where((element) => element.toLowerCase().contains(_controller.text.toLowerCase()))
+            .toList();
 
     return Scaffold(
       body: BlurredAppBarPage(
@@ -51,7 +53,7 @@ class _FAQComponentState extends State<FAQComponent> {
                   controller: _controller,
                   fillColor: theme?.colorScheme.surface3,
                   icon: ImageWidget(
-                    svgAsset: GraphicsFoundation.instance.svg.search,
+                    iconData: ShuffleUiKitIcons.search,
                     color: theme?.colorScheme.inversePrimary.withOpacity(0.5),
                   ),
                 ),
@@ -102,7 +104,8 @@ class _FAQComponentState extends State<FAQComponent> {
                     ),
                   ),
                 ),
-                Divider(color: theme?.colorScheme.darkNeutral600).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
+                Divider(color: theme?.colorScheme.darkNeutral600)
+                    .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
               ],
             ),
           );
