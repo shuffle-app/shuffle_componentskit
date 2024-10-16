@@ -1,48 +1,72 @@
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/spent_points/ui_model_discounts.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SpentPointBarcodeComponent extends StatelessWidget {
-  const SpentPointBarcodeComponent({
-    super.key,
-    this.barcode,
-    this.uiModelDiscounts, this.discountTitle,
-  });
-
   final Widget? barcode;
+  final String? barcodeNumber;
   final UiModelDiscounts? uiModelDiscounts;
   final String? discountTitle;
 
+  const SpentPointBarcodeComponent({
+    super.key,
+    this.barcode,
+    this.uiModelDiscounts,
+    this.discountTitle,
+    this.barcodeNumber,
+  });
+
   @override
   Widget build(BuildContext context) {
+    final theme = context.uiKitTheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        barcode ??
-            UiKitCardWrapper(
-              child: SizedBox(width: double.infinity, height: 146.h),
-            ),
+        barcode != null
+            ? barcode!
+            : (discountTitle != null && discountTitle!.isNotEmpty)
+                ? UiKitCardWrapper(
+                    width: 0.85.sw,
+                    height: 0.24.sh,
+                    color: theme?.colorScheme.inversePrimary,
+                    borderRadius: BorderRadiusFoundation.all24r,
+                    child: BarcodeWidget(
+                      barcode: Barcode.code128(escapes: true),
+                      data: barcodeNumber!,
+                      style: theme?.regularTextTheme.caption2.copyWith(color: theme.colorScheme.primary),
+                      textPadding: SpacingFoundation.verticalSpacing8,
+                    ).paddingOnly(
+                      top: SpacingFoundation.verticalSpacing10,
+                      bottom: SpacingFoundation.verticalSpacing6,
+                      left: SpacingFoundation.horizontalSpacing12,
+                      right: SpacingFoundation.horizontalSpacing12,
+                    ),
+                  )
+                : UiKitCardWrapper(
+                    child: SizedBox(width: double.infinity, height: 146.h),
+                  ),
         SpacingFoundation.verticalSpace16,
         Text(
-         S.current.OfferSuccessfullyActivated,
-          style: context.uiKitTheme?.boldTextTheme.body,
+          S.current.OfferSuccessfullyActivated,
+          style: theme?.boldTextTheme.body,
           textAlign: TextAlign.center,
         ),
         SpacingFoundation.verticalSpace16,
         Text(
-         uiModelDiscounts?.contentShortUiModel.title ?? '',
-          style: context.uiKitTheme?.boldTextTheme.caption1Bold,
+          uiModelDiscounts?.contentShortUiModel.title ?? '',
+          style: theme?.boldTextTheme.caption1Bold,
           textAlign: TextAlign.center,
         ),
         Text(
           discountTitle ?? '',
-          style: context.uiKitTheme?.boldTextTheme.caption1Bold,
+          style: theme?.boldTextTheme.caption1Bold,
           textAlign: TextAlign.center,
         ),
         SpacingFoundation.verticalSpace16,
         Text(
           S.current.ShowTheBarcode,
-          style: context.uiKitTheme?.regularTextTheme.caption1,
+          style: theme?.regularTextTheme.caption1,
           textAlign: TextAlign.center,
         ),
       ],
