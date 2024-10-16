@@ -448,7 +448,6 @@ class MoodComponent extends StatelessWidget {
                               children: [
                                 ImageWidget(
                                   svgAsset: GraphicsFoundation.instance.svg.gradientStar,
-                                  color: Colors.white,
                                   width: 0.0625.sw,
                                   height: 0.0625.sw,
                                   fit: BoxFit.cover,
