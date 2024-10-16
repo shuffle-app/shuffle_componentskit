@@ -121,11 +121,13 @@ class _UnifiedVerificationComponentState extends State<UnifiedVerificationCompon
           title: S.current.Personal.toUpperCase(),
           customValue: 'personal',
           group: _group,
+          height: 26,
         ),
         UiKitCustomTab.small(
           title: S.current.Company.toUpperCase(),
           customValue: 'company',
           group: _group,
+          height: 26,
         ),
       ];
 

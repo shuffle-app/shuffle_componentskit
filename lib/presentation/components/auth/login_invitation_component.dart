@@ -18,8 +18,6 @@ class LoginInvitationComponent extends StatelessWidget {
       case 3:
         return GraphicsFoundation.instance.png.help;
       case 4:
-        return GraphicsFoundation.instance.png.starryEyedExcitedEmoji;
-      case 5:
         return GraphicsFoundation.instance.png.shuffleLabel;
       default:
         return GraphicsFoundation.instance.png.shuffleLabel;
@@ -61,7 +59,7 @@ class LoginInvitationComponent extends StatelessWidget {
           ],
         ),
         SpacingFoundation.verticalSpace16,
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
           ListTile(
             titleAlignment: ListTileTitleAlignment.center,
             minLeadingWidth: 32.h,
@@ -71,7 +69,7 @@ class LoginInvitationComponent extends StatelessWidget {
               rasterAsset: _getIconForTile(i),
             ),
             title: AutoSizeText(
-              i < 3 ? S.of(context).LoginBenefits(i).toLowerCase() : S.of(context).LoginBenefits2(i - 3).toLowerCase(),
+              S.of(context).LoginBenefits(i < 4 ? i : 101).toLowerCase(),
               style: boldTextTheme?.caption1Bold,
               maxLines: 3,
               group: group,

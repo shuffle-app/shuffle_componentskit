@@ -26,7 +26,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = context.uiKitTheme?.boldTextTheme;
+    final theme = context.uiKitTheme;
+    final textTheme = theme?.boldTextTheme;
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
             GlobalConfiguration().appConfig.content;
@@ -73,11 +74,32 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               profileStats: profileStats,
             ),
             SpacingFoundation.verticalSpace24,
+            Row(children: [
             Text(
               S.of(context).Places,
               style: textTheme?.title1,
               textAlign: TextAlign.left,
-            ),
+            ),horizontalMargin.widthBox,
+              Builder(
+                builder: (context) => GestureDetector(
+                  onTap: () => showUiKitPopover(
+                    context,
+                    customMinHeight: 30.h,
+                    showButton: false,
+                    title: Text(
+                      S.of(context).PlaceCompanyInfo,
+                      style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  child: ImageWidget(
+                    iconData: ShuffleUiKitIcons.info,
+                    width: 20.w,
+                    color: theme?.colorScheme.darkNeutral900,
+                  ),
+                ),
+              ),
+            ]),
             SpacingFoundation.verticalSpace24,
             if (places.isEmpty)
               UiKitTitledActionCard(

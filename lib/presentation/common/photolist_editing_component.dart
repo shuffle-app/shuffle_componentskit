@@ -93,8 +93,9 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 });
               },
             )).then((_) {
-      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) != null &&
-          _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) == null) {
+      // if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) != null &&
+      //     _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) == null) {
+      if (preselected == null) {
         selectVerticalFormat(horizontal);
       }
       setState(() {});
@@ -126,8 +127,9 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 });
               },
             )).then((_) {
-      if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) != null &&
-          _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) == null) {
+      // if (_photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.vertical) != null &&
+      //     _photos.firstWhereOrNull((element) => element.previewType == UiKitPreviewType.horizontal) == null) {
+      if (preselected == null) {
         selectHorizontalFormat(vertical);
       }
       setState(() {});
@@ -470,10 +472,11 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text(
+                Expanded(
+                    child: Text(
                   widget.title,
                   style: boldTextTheme?.title2.copyWith(color: primaryColor),
-                ),
+                )),
                 const Spacer(),
                 IconButton(
                   icon: Icon(Icons.close, color: primaryColor),
