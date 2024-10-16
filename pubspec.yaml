@@ -23,6 +23,9 @@ dependencies:
   json_annotation: ^4.9.0
   json_serializable: ^6.8.0
 
+  #for barcode generate
+  barcode_widget: ^2.0.4
+
   #configuration libs
   http: ^1.2.1
   path_provider: ^2.1.3

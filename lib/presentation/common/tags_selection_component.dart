@@ -61,7 +61,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
                         text: S.of(context).Save,
                         onPressed: () {
                           context.pop(result: _tags.toList());
-                        })),
+                        })).paddingSymmetric(horizontal: horizontalPadding),
               )
             : null,
         body: BlurredAppBarPage(
