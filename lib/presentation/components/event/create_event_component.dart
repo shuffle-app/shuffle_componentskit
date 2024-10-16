@@ -520,8 +520,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               UiKitFieldWithTagList(
                   listUiKitTags: _eventToEdit.baseTags.isNotEmpty
                       ? _eventToEdit.baseTags
-                      .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id))
-                      .toList()
+                          .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id))
+                          .toList()
                       : null,
                   title: S.of(context).GalleryType,
                   onTap: () async {
@@ -552,8 +552,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               UiKitFieldWithTagList(
                   listUiKitTags: _eventToEdit.baseTags.isNotEmpty
                       ? _eventToEdit.baseTags
-                      .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id))
-                      .toList()
+                          .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id))
+                          .toList()
                       : null,
                   title: S.of(context).MusicType,
                   onTap: () async {
@@ -634,7 +634,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             children: [
               Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
               const Spacer(),
-              context.outlinedButton(
+              context.smallOutlinedButton(
                 data: BaseUiKitButtonData(
                   onPressed: () {
                     context.push(CreateScheduleWidget(
