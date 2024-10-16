@@ -209,7 +209,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
               ? IconButton(
                   icon: ImageWidget(
                     iconData: ShuffleUiKitIcons.pencil,
-                    color: Colors.white,
                     height: 20.h,
                     fit: BoxFit.fitHeight,
                   ),
