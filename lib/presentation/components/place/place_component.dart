@@ -208,9 +208,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
           trailing: widget.isEligibleForEdit
               ? IconButton(
                   icon: ImageWidget(
-                    iconData: ShuffleUiKitIcons.pencil,
-                    color: Colors.white,
+                    link: GraphicsFoundation.instance.svg.pencil.path,
                     height: 20.h,
+                    color: theme?.colorScheme.inversePrimary,
                     fit: BoxFit.fitHeight,
                   ),
                   onPressed: () => widget.onEditPressed?.call(),

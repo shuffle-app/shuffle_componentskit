@@ -69,25 +69,31 @@ class _MyAppState extends State<MyApp> {
               theme: _theme ?? UiKitThemeFoundation.defaultTheme,
               // theme: UiKitThemeFoundation.lightTheme,
               //TODO: think about it
-              home: configuration.isLoaded
-                  ? GlobalComponent(globalConfiguration: configuration, child: UnifiedVerificationComponent(
-                uiModel: UiUnifiedVerificationModel(),
-                credentialsController: TextEditingController(),
-                availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
-                formKey: GlobalKey<FormState>(),
-                passwordController: TextEditingController(),
-                onSocialsLogin: (socialsLoginData) {},
-                onSubmit: (isPersonalSelected) {
-                  log('isPersonalSelected $isPersonalSelected');
-                },
-              ),)
-                  : Builder(builder: (c) {
-                      configuration
-                          .load(version: '1.0.18')
-                          .then((_) => Future.delayed(const Duration(seconds: 1)))
-                          .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
-                      return const Scaffold(body: Center(child: LoadingWidget()));
-                    }),
+              home:
+                  // configuration.isLoaded
+                  //     ? GlobalComponent(
+                  //         globalConfiguration: configuration,
+                  //         child: UnifiedVerificationComponent(
+                  //           uiModel: UiUnifiedVerificationModel(),
+                  //           credentialsController: TextEditingController(),
+                  //           availableLocales: S.delegate.supportedLocales.map((e) => LocaleModel.fromLocale(e)).toList(),
+                  //           formKey: GlobalKey<FormState>(),
+                  //           passwordController: TextEditingController(),
+                  //           onSocialsLogin: (socialsLoginData) {},
+                  //           onSubmit: (isPersonalSelected) {
+                  //             log('isPersonalSelected $isPersonalSelected');
+                  //           },
+                  //         ),
+                  //       )
+                  //     :
+                  Builder(builder: (c) {
+                configuration
+                    .load(version: '1.0.18')
+                    .then((_) => Future.delayed(const Duration(seconds: 1)))
+                    .then((_) => UiKitTheme.of(c).onThemeUpdated(themeMatcher(configuration.appConfig.theme)));
+                return const ComponentsTestPage();
+                // Scaffold(body: Center(child: LoadingWidget()));
+              }),
               // onGenerateRoute: AppRouter.onGenerateRoute,
               // initialRoute: AppRoutes.initial,
             )));
@@ -175,7 +181,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
         onTap: () {},
       ),
       bookingUiModel: BookingUiModel(
-        showSabsInContentCard: true,
+        showSubsInContentCard: true,
         id: -1,
         subsUiModel: List.generate(
           10,
@@ -236,6 +242,130 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
           children: [
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show spent point barcode component',
+                onPressed: () {
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      topPadding: 1.sw <= 380 ? 0.35.sh : 0.45.sh,
+                      useRootNavigator: false,
+                      child: SpentPointBarcodeComponent(
+                        discountTitle: 'Free coctails',
+                        barcodeNumber: '18957697567236asas72',
+                        uiModelDiscounts: UiModelDiscounts(
+                          buttonTitle: '30% discount '
+                              '(-1500)',
+                          barcode: '189576975672367',
+                          contentShortUiModel: ContentShortUiModel(
+                            imageUrl: GraphicsFoundation.instance.png.place.path,
+                            title: 'La Vue Citytel Group',
+                            tags: [
+                              UiKitTag(
+                                title: 'Club',
+                                icon: ShuffleUiKitIcons.accounting,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Free',
+                                icon: ShuffleUiKitIcons.discount,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: 'Closed',
+                                icon: ShuffleUiKitIcons.clock,
+                                unique: false,
+                              ),
+                              UiKitTag(
+                                title: '7 min',
+                                icon: ShuffleUiKitIcons.route,
+                                unique: false,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show mood',
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            S.current.YouCanGet,
+                            style: theme?.boldTextTheme.title2,
+                          ),
+                        ),
+                        SpacingFoundation.verticalSpace8,
+                        ...[
+                          S.current.DifferentNumberOfPoints,
+                          S.current.RealMoney,
+                          S.current.InventoryItems,
+                          S.current.DubaiEventTicket
+                        ].map(
+                          (e) => Row(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ImageWidget(
+                                svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                                width: 0.0625.sw,
+                                height: 0.0625.sw,
+                                fit: BoxFit.cover,
+                              ),
+                              SpacingFoundation.horizontalSpace8,
+                              Expanded(
+                                child: Text(
+                                  e,
+                                  style: theme?.regularTextTheme.body,
+                                ),
+                              ),
+                            ],
+                          ).paddingSymmetric(
+                              vertical: SpacingFoundation.verticalSpacing8,
+                              horizontal: SpacingFoundation.horizontalSpacing16),
+                        ),
+                        SpacingFoundation.verticalSpace8,
+                      ],
+                    ),
+                    topPadding: 0.6.sh,
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show company presentation component',
+                onPressed: () => showUiKitGeneralFullScreenDialog(
+                  context,
+                  GeneralDialogData(
+                    useRootNavigator: true,
+                    topPadding: 0.7.sh,
+                    child: AgeSelectBottomSheet(
+                      onAgeChanged: (int value) {
+                        final today = DateTime.now();
+                        final thisYear = today.year;
+                        final birthYear = thisYear - value;
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'show company presentation component',
                     onPressed: () {
@@ -247,8 +377,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show Booking By Visitor Component',
                 onPressed: () => context.push(
                   BookingByVisitorComponent(
-                    selectedDate: selectedDate,
-                    onSubmit: (model, subs, upsale) {
+                    // selectedDate: selectedDate,
+                    onSubmit: (model, subs, upsale, _) {
                       setState(() {
                         ticketModel = model;
                         upsaleList = upsale ?? [];
@@ -282,7 +412,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     },
                     ticketUiModel: ticketModel,
                     bookingUiModel: BookingUiModel(
-                      showSabsInContentCard: true,
+                      showSubsInContentCard: true,
                       id: -1,
                       price: '500',
                       currency: 'AED',
@@ -293,41 +423,42 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 ),
               ),
             ),
-            SpacingFoundation.verticalSpace16,
-            context.button(
-              data: BaseUiKitButtonData(
-                onPressed: () => context.push(
-                  PropertyManagementComponent(
-                    propertySearchOptions: (value) async {
-                      return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
-                    },
-                    onRecentlyAddedPropertyTapped: (value) {},
-                    onPropertyFieldSubmitted: (value) async {
-                      return UiModelProperty(
-                        title: value,
-                        id: 9,
-                        icon: null,
-                      );
-                    },
-                    onAddPropertyTypeTap: () {},
-                    onDeletePropertyTypeTap: () {},
-                    onEditPropertyTypeTap: () {},
-                    onPropertyTypeTapped: (value) {},
-                    allPropertyCategories: [
-                      // UiModelPropertiesCategory(title: 'Active tiger', id: 0),
-                      // UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
-                      // UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
-                      // UiModelPropertiesCategory(title: 'Foodie', id: 3),
-                    ],
-                    basePropertyTypesTap: (int) async {},
-                    uniquePropertyTypesTap: (int) async {},
-                    relatedProperties: [],
-                    selectedPropertyId: 1,
-                  ),
-                ),
-                text: 'show property management component',
-              ),
-            ),
+            // SpacingFoundation.verticalSpace16,
+            // context.button(
+            //   data: BaseUiKitButtonData(
+            //     onPressed: () => context.push(
+            //       PropertyManagementComponent(
+
+            //         propertySearchOptions: (value) async {
+            //           return ['Active tiger', 'Interested adventure', 'Forever resting sloth', 'Foodie'];
+            //         },
+            //         onRecentlyAddedPropertyTapped: (value) {},
+            //         onPropertyFieldSubmitted: (value) async {
+            //           return UiModelProperty(
+            //             title: value,
+            //             id: 9,
+            //             icon: null,
+            //           );
+            //         },
+            //         onAddPropertyTypeTap: () {},
+            //         onDeletePropertyTypeTap: () {},
+            //         onEditPropertyTypeTap: () {},
+            //         onPropertyTypeTapped: (value) {},
+            //         allPropertyCategories: [
+            //           // UiModelPropertiesCategory(title: 'Active tiger', id: 0),
+            //           // UiModelPropertiesCategory(title: 'Interested adventure', id: 1),
+            //           // UiModelPropertiesCategory(title: 'Forever resting sloth', id: 2),
+            //           // UiModelPropertiesCategory(title: 'Foodie', id: 3),
+            //         ],
+            //         basePropertyTypesTap: (int) async {},
+            //         uniquePropertyTypesTap: (int) async {},
+            //         relatedProperties: [],
+            //         selectedPropertyId: 1,
+            //       ),
+            //     ),
+            //     text: 'show property management component',
+            //   ),
+            // ),
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
@@ -889,7 +1020,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                             tags: [
                               UiKitTag(
                                 title: 'Club',
-                                icon: ShuffleUiKitIcons.club,
+                                icon: ShuffleUiKitIcons.accounting,
                                 unique: false,
                               ),
                               UiKitTag(
@@ -922,6 +1053,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show notification component',
                 onPressed: () => context.push(
                   NotificationComponent(
+                    listKey: GlobalKey<SliverAnimatedListState>(),
                     placeOrEventName: null,
                     listNotification: _listNotification,
                     onCreateNotification: () {
@@ -936,7 +1068,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 onPayTap: () async {
                                   await uiKitNotificationCreatedDialog(
                                     context: context,
-                                    cheap: UiKitTag(title: 'Club', icon: GraphicsFoundation.instance.svg.cocktail.path),
+                                    cheap:
+                                        UiKitTag(title: 'Club', icon: GraphicsFoundation.instance.svg.angryEmoji.path),
                                     defaultNotificationImageUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
                                     placeTitle: 'Virgins on the beach',
                                     placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
@@ -995,6 +1128,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show reminders component',
                 onPressed: () => context.push(
                   RemindersComponent(
+                    listKey: GlobalKey<SliverAnimatedListState>(),
                     listReminders: _listReminders,
                     placeOrEventName: S.of(context).Event.toLowerCase(),
                     onCreateReminder: () {
@@ -1009,7 +1143,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 context: context,
                                 isNotification: false,
                                 iconPath: reminderModel.iconPath,
-                                cheap: UiKitTag(title: 'Club', icon: GraphicsFoundation.instance.svg.cocktail.path),
+                                cheap: UiKitTag(
+                                    title: 'Club', icon: GraphicsFoundation.instance.svg.analyticsBusiness.path),
                                 defaultNotificationImageUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
                                 placeTitle: 'Virgins on the beach',
                                 placeImageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
@@ -1064,6 +1199,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'show offers component ',
                 onPressed: () => context.push(
                   OffersComponent(
+                    listKey: GlobalKey<SliverAnimatedListState>(),
                     listOffers: _offerUiModelList,
                     onCreateOffer: () {
                       context.push(
@@ -1149,7 +1285,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       canLeaveFeedbackForEventCallback: (eventId) async => false,
                       place: place.copyWith(
                         bookingUiModel: BookingUiModel(
-                          showSabsInContentCard: true,
+                          showSubsInContentCard: true,
                           id: -1,
                           subsUiModel: List.generate(
                             10,
@@ -1185,7 +1321,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         context.push(
                           BookingByVisitorComponent(
                             bookingUiModel: BookingUiModel(
-                              showSabsInContentCard: true,
+                              showSubsInContentCard: true,
                               id: -1,
                               price: '500',
                               currency: 'AED',
@@ -1294,21 +1430,17 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 onPressed: () {
                   context.push(
                     BookingsControlComponent(
+                      isCompany: true,
                       onPlaceItemTap: (value) {
                         context.push(
                           BookingsControlUserList(
                             canBookingEdit: true,
                             bookingsPlaceItemUiModel: value,
-                            bookingUiModel: BookingUiModel(
-                              id: -1,
-                              bookingLimit: '10',
-                              bookingLimitPerOne: '5',
-                            ),
-                            onBookingEdit: (model) {
+                            onBookingEdit: () {
                               context.push(
                                 CreateBookingComponent(
                                   onBookingCreated: (value) {},
-                                  bookingUiModel: model,
+                                  bookingUiModel: null,
                                 ),
                               );
                             },
@@ -1324,8 +1456,8 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                 userName: value.profile?.name ?? '',
                                 allTicket: value.ticketUiModel?.ticketsCount ?? 0,
                                 allUpsale: value.ticketUiModel?.totalUpsalesCount ?? 0,
-                                ticketRefun: math.Random().nextInt(4) + 1,
-                                upsaleRefun: math.Random().nextInt(4) + 1,
+                                ticketRefund: math.Random().nextInt(4) + 1,
+                                upsaleRefund: math.Random().nextInt(4) + 1,
                                 onContactTap: () {},
                                 onGoAheadTap: () {},
                               );
@@ -1405,16 +1537,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                               log('list $list');
                             },
                             bookingsPlaceItemUiModel: value,
-                            bookingUiModel: BookingUiModel(
-                              id: -1,
-                              bookingLimit: '10',
-                              bookingLimitPerOne: '5',
-                            ),
-                            onBookingEdit: (model) {
+                            onBookingEdit: () {
                               context.push(
                                 CreateBookingComponent(
                                   onBookingCreated: (value) {},
-                                  bookingUiModel: model,
+                                  bookingUiModel: null,
                                 ),
                               );
                             },
@@ -1427,6 +1554,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           id: index,
                           title: 'testeMain',
                           description: 'test $index',
+                          isPlace: true,
                           events: index.isEven
                               ? List.generate(
                                   math.Random().nextInt(5) + 1,
@@ -1466,12 +1594,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                                                 item: null,
                                               ),
                                             ),
-                                            subs: List.generate(
-                                              5,
-                                              (index) => TicketItem(
-                                                count: math.Random().nextInt(4),
-                                                item: null,
-                                              ),
+                                            subs: TicketItem(
+                                              count: math.Random().nextInt(4),
+                                              item: null,
                                             ),
                                           ),
                                         );
@@ -1660,54 +1785,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 //                     ),
 //                 text: 'show property management component')),
 //         SpacingFoundation.verticalSpace16,
-//         context.button(
-//           data: BaseUiKitButtonData(
-//             text: 'show spent point barcode component',
-//             onPressed: () {
-//               showUiKitGeneralFullScreenDialog(
-//                 context,
-//                 GeneralDialogData(
-//                   topPadding: 0.35.sh,
-//                   child: SpentPointBarcodeComponent(
-//                     discountTitle: 'Free coctails',
-//                     uiModelDiscounts: UiModelDiscounts(
-//                       buttonTitle: '30% discount '
-//                           '(-1500)',
-//                       barcode: '189576975672367',
-//                       contentShortUiModel: ContentShortUiModel(
-//                         imageUrl:
-//                             GraphicsFoundation.instance.png.place.path,
-//                         title: 'La Vue Citytel Group',
-//                         tags: [
-//                           UiKitTag(
-//                             title: 'Club',
-//                             icon: ShuffleUiKitIcons.club,
-//                             unique: false,
-//                           ),
-//                           UiKitTag(
-//                             title: 'Free',
-//                             icon: ShuffleUiKitIcons.discount,
-//                             unique: false,
-//                           ),
-//                           UiKitTag(
-//                             title: 'Closed',
-//                             icon: ShuffleUiKitIcons.clock,
-//                             unique: false,
-//                           ),
-//                           UiKitTag(
-//                             title: '7 min',
-//                             icon: ShuffleUiKitIcons.route,
-//                             unique: false,
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
 //         SpacingFoundation.verticalSpace16,
 //         context.button(
 //           data: BaseUiKitButtonData(

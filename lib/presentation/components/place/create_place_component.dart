@@ -397,7 +397,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               children: [
                 Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
                 const Spacer(),
-                context.outlinedButton(
+                context.smallOutlinedButton(
                   data: BaseUiKitButtonData(
                     onPressed: () {
                       context.push(CreateScheduleWidget(

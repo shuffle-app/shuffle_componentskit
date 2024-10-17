@@ -167,6 +167,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
               height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
               child: context
                   .outlinedButton(
+                    borderRadius: BorderRadiusFoundation.all24r,
                     data: BaseUiKitButtonData(
                       text: S.of(context).RefundEveryone.toUpperCase(),
                       onPressed: () {
