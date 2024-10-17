@@ -213,42 +213,46 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        context
-                            .badgeButtonNoValue(
-                              data: BaseUiKitButtonData(
-                                onPressed: () => context.push(
-                                  CreateSubsComponent(
-                                    onSave: (subsUiModel) {
-                                      setState(() {
-                                        _subsUiModels.add(subsUiModel);
-                                        _countSubsLimit();
-                                      });
-                                    },
+                        SizedBox(
+                          height: 0.28.sw,
+                          width: 0.28.sw,
+                          child: context
+                              .badgeButtonNoValue(
+                                data: BaseUiKitButtonData(
+                                  onPressed: () => context.push(
+                                    CreateSubsComponent(
+                                      onSave: (subsUiModel) {
+                                        setState(() {
+                                          _subsUiModels.add(subsUiModel);
+                                          _countSubsLimit();
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                                iconWidget: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    border: Border.fromBorderSide(
-                                      BorderSide(
-                                        color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
-                                        width: 2,
+                                  iconWidget: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      border: Border.fromBorderSide(
+                                        BorderSide(
+                                          color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      borderRadius: BorderRadiusFoundation.all12,
+                                    ),
+                                    child: GradientableWidget(
+                                      gradient: GradientFoundation.defaultLinearGradient,
+                                      child: ImageWidget(
+                                        iconData: ShuffleUiKitIcons.plus,
+                                        height: 30.w,
+                                        width: 30.w,
                                       ),
                                     ),
-                                    borderRadius: BorderRadiusFoundation.all12,
-                                  ),
-                                  child: GradientableWidget(
-                                    gradient: GradientFoundation.defaultLinearGradient,
-                                    child: const ImageWidget(
-                                      iconData: ShuffleUiKitIcons.plus,
-                                      height: 45,
-                                      width: 45,
-                                    ).paddingAll(EdgeInsetsFoundation.all32),
                                   ),
                                 ),
-                              ),
-                            )
-                            .paddingOnly(top: 4),
+                              )
+                              .paddingOnly(top: 4),
+                        ),
                       ],
                     );
                   } else {
@@ -302,42 +306,46 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        context
-                            .badgeButtonNoValue(
-                              data: BaseUiKitButtonData(
-                                onPressed: () => context.push(
-                                  CreateUpsalesComponent(
-                                    currency: widget.currency,
-                                    onSave: (upsaleUiModel) {
-                                      setState(() {
-                                        _upsaleUiModels.add(upsaleUiModel);
-                                      });
-                                    },
+                        SizedBox(
+                          height: 0.28.sw,
+                          width: 0.28.sw,
+                          child: context
+                              .badgeButtonNoValue(
+                                data: BaseUiKitButtonData(
+                                  onPressed: () => context.push(
+                                    CreateUpsalesComponent(
+                                      currency: widget.currency,
+                                      onSave: (upsaleUiModel) {
+                                        setState(() {
+                                          _upsaleUiModels.add(upsaleUiModel);
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                                iconWidget: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    border: Border.fromBorderSide(
-                                      BorderSide(
-                                        color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
-                                        width: 2,
+                                  iconWidget: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      border: Border.fromBorderSide(
+                                        BorderSide(
+                                          color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      borderRadius: BorderRadiusFoundation.all12,
+                                    ),
+                                    child: GradientableWidget(
+                                      gradient: GradientFoundation.defaultLinearGradient,
+                                      child: ImageWidget(
+                                        height: 30.w,
+                                        width: 30.w,
+                                        iconData: ShuffleUiKitIcons.plus,
                                       ),
                                     ),
-                                    borderRadius: BorderRadiusFoundation.all12,
-                                  ),
-                                  child: GradientableWidget(
-                                    gradient: GradientFoundation.defaultLinearGradient,
-                                    child: const ImageWidget(
-                                      iconData: ShuffleUiKitIcons.plus,
-                                      height: 45,
-                                      width: 45,
-                                    ).paddingAll(EdgeInsetsFoundation.all32),
                                   ),
                                 ),
-                              ),
-                            )
-                            .paddingOnly(top: 4),
+                              )
+                              .paddingOnly(top: 4),
+                        ),
                       ],
                     );
                   } else {
