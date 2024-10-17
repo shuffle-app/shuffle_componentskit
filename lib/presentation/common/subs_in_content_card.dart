@@ -40,7 +40,7 @@ class SubsInContentCard extends StatelessWidget {
               top: SpacingFoundation.verticalSpacing12,
             ),
           SizedBox(
-            height: 1.sw <= 380 ? 140.h : 105.h,
+            height: 1.sw <= 380 ? 160.h : 125.h,
             child: ListView.separated(
               itemCount: subs != null ? subs!.length : upsales!.length,
               scrollDirection: Axis.horizontal,
