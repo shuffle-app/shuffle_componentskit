@@ -205,4 +205,12 @@ class UiPlaceModel {
   bool selectableDayPredicate(DateTime day) {
     return weekdays.isEmpty ? true : weekdays.contains(day.weekday.toString().substring(0, 3).toLowerCase());
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UiPlaceModel && id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

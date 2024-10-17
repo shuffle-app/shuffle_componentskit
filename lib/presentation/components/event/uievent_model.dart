@@ -283,4 +283,12 @@ class UiEventModel extends Advertisable {
 
   Map<int, int>? get feedbacksHelpfulCounts =>
       <int, int>{}..addEntries(reviews?.map((e) => MapEntry<int, int>(e.id, e.helpfulCount ?? 0)) ?? []);
+
+  @override
+  bool operator ==(Object other) {
+    return other is UiEventModel && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
