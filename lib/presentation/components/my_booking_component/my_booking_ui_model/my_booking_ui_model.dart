@@ -23,7 +23,7 @@ class MyBookingUiModel {
 
   bool get isPast {
     if (visitDate != null) {
-      return DateTime.now().isAfter(visitDate!) || visitDate!.isAtSameDay;
+      return DateTime.now().toLocal().isAfter(visitDate!);
     } else {
       return false;
     }
