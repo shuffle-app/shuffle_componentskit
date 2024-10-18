@@ -13,7 +13,7 @@ class ViewHistoryPointComponent extends StatefulWidget {
   });
 
   final ValueChanged<String>? onTabChange;
-  final VoidCallback? onTapBarCode;
+  final ValueChanged<PointHistoryUniversalModel>? onTapBarCode;
   final PagingController<int, PointHistoryUniversalModel> pagingController;
 
   @override
@@ -67,7 +67,7 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
               itemBuilder: (context, item, index) {
                 return item.contentShortUiModel != null
                     ? ViewHistoryActivationWidget(
-                        onTap: widget.onTapBarCode,
+                        onTap: () => widget.onTapBarCode?.call(item),
                         activationModel: item.contentShortUiModel,
                       )
                     : UiKitPointsHistoryTile(
