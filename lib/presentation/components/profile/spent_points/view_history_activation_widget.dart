@@ -3,8 +3,7 @@ import 'package:shuffle_components_kit/domain/domain.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ViewHistoryActivationWidget extends StatelessWidget {
-  const ViewHistoryActivationWidget(
-      {super.key, this.activationModel, required this.onTap});
+  const ViewHistoryActivationWidget({super.key, this.activationModel, required this.onTap});
 
   final ContentShortUiModel? activationModel;
   final VoidCallback? onTap;
@@ -22,14 +21,15 @@ class ViewHistoryActivationWidget extends StatelessWidget {
                 imageUrl: activationModel?.imageUrl,
                 title: activationModel?.title,
                 tags: activationModel?.tags,
+                contentTitle: activationModel?.contentTitle,
               ),
             ),
             SpacingFoundation.horizontalSpace8,
             context.iconButtonNoPadding(
               data: BaseUiKitButtonData(
-                  onPressed: onTap,
-                  iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.barcode)),
+                onPressed: onTap,
+                iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.barcode),
+              ),
             )
           ],
         ),
