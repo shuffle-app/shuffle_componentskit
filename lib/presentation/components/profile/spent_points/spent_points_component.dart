@@ -33,8 +33,7 @@ class SpentPointsComponent extends StatelessWidget {
         appBarTrailing: context.iconButtonNoPadding(
           data: BaseUiKitButtonData(
             onPressed: onHistoryTap,
-            iconInfo:
-                BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.history),
+            iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.history),
           ),
         ),
         customTitle: Expanded(
@@ -46,8 +45,7 @@ class SpentPointsComponent extends StatelessWidget {
           ),
         ),
         // customToolbarBaseHeight: 0.13.sh,
-        childrenPadding:
-            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace16,
           Row(
@@ -73,10 +71,9 @@ class SpentPointsComponent extends StatelessWidget {
                 child: Column(
                   children: [
                     UiKitExtendedInfluencerFeedbackCardWithoutBottom(
-                      imageUrl:
-                          discountsList?[index].contentShortUiModel.imageUrl,
-                      title: discountsList?[index].contentShortUiModel.title,
-                      tags: discountsList?[index].contentShortUiModel.tags,
+                      imageUrl: discountsList?[index].contentShortUiModel?.imageUrl,
+                      title: discountsList?[index].contentShortUiModel?.title,
+                      tags: discountsList?[index].contentShortUiModel?.tags,
                     ),
                     SpacingFoundation.verticalSpace12,
                     context.gradientButton(
