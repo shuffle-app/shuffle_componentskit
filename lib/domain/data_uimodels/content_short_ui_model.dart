@@ -7,6 +7,7 @@ class ContentShortUiModel {
   final List<UiKitTag>? tags;
   final DateTime? periodFrom;
   final DateTime? periodTo;
+  final String? ticketNumber;
 
   ContentShortUiModel({
     this.title,
@@ -15,5 +16,6 @@ class ContentShortUiModel {
     this.periodFrom,
     this.periodTo,
     this.tags,
+    this.ticketNumber,
   });
 }
