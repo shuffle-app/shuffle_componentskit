@@ -8,7 +8,7 @@ class AgeSelectBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme  = context.uiKitTheme;
+    final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
     return SafeArea(
         top: false,
@@ -16,11 +16,7 @@ class AgeSelectBottomSheet extends StatelessWidget {
           Text(
             S.of(context).YourAge,
             style: boldTextTheme?.labelLarge,
-          ).paddingOnly(
-            top: EdgeInsetsFoundation.vertical16,
-            left: EdgeInsetsFoundation.horizontal16,
-            right: EdgeInsetsFoundation.horizontal16,
-          ),
+          ).paddingAll(EdgeInsetsFoundation.all16),
           UiKitHorizontalWheelNumberSelector(
             hideTitle: true,
             values: List<int>.generate(70, (index) => index + 13),

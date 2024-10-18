@@ -477,7 +477,7 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
                   widget.title,
                   style: boldTextTheme?.title2.copyWith(color: primaryColor),
                 )),
-                const Spacer(),
+                SpacingFoundation.horizontalSpace16,
                 IconButton(
                   icon: Icon(Icons.close, color: primaryColor),
                   onPressed: () => Navigator.of(context).pop(),

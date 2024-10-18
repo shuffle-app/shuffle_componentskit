@@ -69,19 +69,19 @@ class MyBookingItem extends StatelessWidget {
           ],
         ),
         SpacingFoundation.verticalSpace2,
-        if (myBookingUiModel?.dateTime != null)
+        if (myBookingUiModel?.visitDate != null)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                formatDifference(myBookingUiModel!.dateTime!.toLocal()),
+                formatDateWithCustomPattern('dd.MM.yyyy', myBookingUiModel!.visitDate!.toLocal()),
                 style: boldTextTheme?.caption3Medium.copyWith(
                   color: ColorsFoundation.mutedText,
                 ),
               ),
               SpacingFoundation.horizontalSpace8,
               Text(
-                formatChatMessageDate(myBookingUiModel!.dateTime!.toLocal()),
+                formatChatMessageDate(myBookingUiModel!.visitDate!.toLocal()),
                 style: boldTextTheme?.caption3Medium.copyWith(
                   color: ColorsFoundation.mutedText,
                 ),
@@ -167,16 +167,17 @@ class MyBookingItem extends StatelessWidget {
               onPressed: () => onFullRefundTap?.call(myBookingUiModel?.id),
             ),
           ),
-          if((myBookingUiModel?.ticketUiModel?.ticketsCount ?? 0)>1)...[
-          SpacingFoundation.verticalSpace12,
-          context.outlinedButton(
-            data: BaseUiKitButtonData(
-              fit: ButtonFit.fitWidth,
-              textColor: theme?.colorScheme.inversePrimary,
-              text: S.of(context).PartialRefund.toUpperCase(),
-              onPressed: () => onPartialRefundTap?.call(myBookingUiModel?.id),
-            ),
-          )]
+          if ((myBookingUiModel?.ticketUiModel?.ticketsCount ?? 0) > 1) ...[
+            SpacingFoundation.verticalSpace12,
+            context.outlinedButton(
+              data: BaseUiKitButtonData(
+                fit: ButtonFit.fitWidth,
+                textColor: theme?.colorScheme.inversePrimary,
+                text: S.of(context).PartialRefund.toUpperCase(),
+                onPressed: () => onPartialRefundTap?.call(myBookingUiModel?.id),
+              ),
+            )
+          ]
         ],
       ],
     );

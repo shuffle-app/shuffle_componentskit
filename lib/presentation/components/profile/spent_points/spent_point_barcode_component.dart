@@ -25,7 +25,7 @@ class SpentPointBarcodeComponent extends StatelessWidget {
       children: [
         barcode != null
             ? barcode!
-            : (discountTitle != null && discountTitle!.isNotEmpty)
+            : (barcodeNumber != null && barcodeNumber!.isNotEmpty)
                 ? UiKitCardWrapper(
                     width: 0.85.sw,
                     height: 0.24.sh,

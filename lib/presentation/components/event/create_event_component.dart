@@ -520,8 +520,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               UiKitFieldWithTagList(
                   listUiKitTags: _eventToEdit.baseTags.isNotEmpty
                       ? _eventToEdit.baseTags
-                      .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id))
-                      .toList()
+                          .where((e) => widget.propertiesOptions('gallerytype').any((el) => e.id == el.id))
+                          .toList()
                       : null,
                   title: S.of(context).GalleryType,
                   onTap: () async {
@@ -552,8 +552,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               UiKitFieldWithTagList(
                   listUiKitTags: _eventToEdit.baseTags.isNotEmpty
                       ? _eventToEdit.baseTags
-                      .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id))
-                      .toList()
+                          .where((e) => widget.propertiesOptions('musictype').any((el) => e.id == el.id))
+                          .toList()
                       : null,
                   title: S.of(context).MusicType,
                   onTap: () async {
@@ -634,7 +634,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             children: [
               Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
               const Spacer(),
-              context.outlinedButton(
+              context.smallOutlinedButton(
                 data: BaseUiKitButtonData(
                   onPressed: () {
                     context.push(CreateScheduleWidget(
@@ -677,75 +677,76 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding)
           ],
           SpacingFoundation.verticalSpace24,
-          context
-              .button(
-                data: BaseUiKitButtonData(
-                  fit: ButtonFit.fitWidth,
-                  autoSizeGroup: AutoSizeGroup(),
-                  text: _bookingUiModel == null && (_eventToEdit.bookingUrl ?? '').isEmpty
-                      ? S.of(context).CreateBooking
-                      : '${S.of(context).Edit} ${S.of(context).Booking}',
-                  onPressed: () {
-                    _bookingUiModel ??= BookingUiModel(id: -1);
+          if (_eventToEdit.bookingUiModel == null)
+            context
+                .button(
+                  data: BaseUiKitButtonData(
+                    fit: ButtonFit.fitWidth,
+                    autoSizeGroup: AutoSizeGroup(),
+                    text: _bookingUiModel == null && (_eventToEdit.bookingUrl ?? '').isEmpty
+                        ? S.of(context).CreateBooking
+                        : '${S.of(context).Edit} ${S.of(context).Booking}',
+                    onPressed: () {
+                      _bookingUiModel ??= BookingUiModel(id: -1);
 
-                    showUiKitGeneralFullScreenDialog(
-                      context,
-                      GeneralDialogData(
-                        isWidgetScrollable: true,
-                        topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
-                        child: SelectBookingLinkComponent(
-                          onExternalTap: () {
-                            context.pop();
-                            showUiKitGeneralFullScreenDialog(
-                              context,
-                              GeneralDialogData(
-                                isWidgetScrollable: true,
-                                topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
-                                child: AddLinkComponent(
-                                  onSave: () {
-                                    _eventToEdit.bookingUrl = _bookingUrlController.text;
-                                    context.pop();
-                                    setState(() {
-                                      _bookingUiModel = null;
-                                    });
-                                  },
-                                  linkController: _bookingUrlController,
+                      showUiKitGeneralFullScreenDialog(
+                        context,
+                        GeneralDialogData(
+                          isWidgetScrollable: true,
+                          topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
+                          child: SelectBookingLinkComponent(
+                            onExternalTap: () {
+                              context.pop();
+                              showUiKitGeneralFullScreenDialog(
+                                context,
+                                GeneralDialogData(
+                                  isWidgetScrollable: true,
+                                  topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
+                                  child: AddLinkComponent(
+                                    onSave: () {
+                                      _eventToEdit.bookingUrl = _bookingUrlController.text;
+                                      context.pop();
+                                      setState(() {
+                                        _bookingUiModel = null;
+                                      });
+                                    },
+                                    linkController: _bookingUrlController,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          onBookingTap: () {
-                            context.pop();
-                            context.push(
-                              CreateBookingComponent(
-                                bookingUiModel: _bookingUiModel,
-                                currency: _eventToEdit.currency,
-                                onBookingCreated: (bookingUiModel) {
-                                  if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
-                                    _bookingUiModel = bookingUiModel;
-                                    setState(() {
-                                      _eventToEdit.bookingUrl = null;
-                                    });
-                                  }
-                                },
-                              ),
-                            );
-                          },
+                              );
+                            },
+                            onBookingTap: () {
+                              context.pop();
+                              context.push(
+                                CreateBookingComponent(
+                                  bookingUiModel: _bookingUiModel,
+                                  currency: _eventToEdit.currency,
+                                  onBookingCreated: (bookingUiModel) {
+                                    if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                      _bookingUiModel = bookingUiModel;
+                                      setState(() {
+                                        _eventToEdit.bookingUrl = null;
+                                      });
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              )
-              .paddingSymmetric(horizontal: horizontalPadding),
+                      );
+                    },
+                  ),
+                )
+                .paddingSymmetric(horizontal: horizontalPadding),
           if (_eventToEdit.bookingUrl != null && _eventToEdit.bookingUrl!.isNotEmpty) ...[
             SpacingFoundation.verticalSpace10,
             Text(
-              _eventToEdit.bookingUrl!,
+              '_eventToEdit.bookingUrl!',
               style: tagTextStyle,
             )
           ],
-          SpacingFoundation.verticalSpace24,
+          if (_eventToEdit.bookingUiModel == null) SpacingFoundation.verticalSpace24,
           SafeArea(
             top: false,
             child: context.gradientButton(
