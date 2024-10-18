@@ -5,17 +5,25 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SpentPointBarcodeComponent extends StatelessWidget {
   final Widget? barcode;
-  final String? barcodeNumber;
+  final int userId;
   final UiModelDiscounts? uiModelDiscounts;
-  final String? discountTitle;
 
-  const SpentPointBarcodeComponent({
+  static late int _staticUserId;
+  static UiModelDiscounts? _staticUiModelDiscounts;
+
+  SpentPointBarcodeComponent({
     super.key,
+    required this.userId,
     this.barcode,
     this.uiModelDiscounts,
-    this.discountTitle,
-    this.barcodeNumber,
-  });
+  }) {
+    _staticUserId = userId;
+    _staticUiModelDiscounts = uiModelDiscounts;
+  }
+
+  static String get barcodeTicketNumber => '${_staticUiModelDiscounts?.barcode ?? ''}$_staticUserId';
+
+  static String get barcodeCurrentTicketNumber => _staticUiModelDiscounts?.barcode ?? '';
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +33,7 @@ class SpentPointBarcodeComponent extends StatelessWidget {
       children: [
         barcode != null
             ? barcode!
-            : (barcodeNumber != null && barcodeNumber!.isNotEmpty)
+            : (uiModelDiscounts?.barcode != null && uiModelDiscounts!.barcode.isNotEmpty)
                 ? UiKitCardWrapper(
                     width: 0.85.sw,
                     height: 0.24.sh,
@@ -33,7 +41,7 @@ class SpentPointBarcodeComponent extends StatelessWidget {
                     borderRadius: BorderRadiusFoundation.all24r,
                     child: BarcodeWidget(
                       barcode: Barcode.code128(escapes: true),
-                      data: barcodeNumber!,
+                      data: barcodeTicketNumber,
                       style: theme?.regularTextTheme.caption2.copyWith(color: theme.colorScheme.primary),
                       textPadding: SpacingFoundation.verticalSpacing8,
                     ).paddingOnly(
@@ -54,12 +62,12 @@ class SpentPointBarcodeComponent extends StatelessWidget {
         ),
         SpacingFoundation.verticalSpace16,
         Text(
-          uiModelDiscounts?.contentShortUiModel.title ?? '',
+          uiModelDiscounts?.contentShortUiModel?.title ?? '',
           style: theme?.boldTextTheme.caption1Bold,
           textAlign: TextAlign.center,
         ),
         Text(
-          discountTitle ?? '',
+          uiModelDiscounts?.contentShortUiModel?.contentTitle ?? '',
           style: theme?.boldTextTheme.caption1Bold,
           textAlign: TextAlign.center,
         ),
