@@ -8,6 +8,7 @@ class SpentPointBarcodeComponent extends StatelessWidget {
   final String? barcodeNumber;
   final UiModelDiscounts? uiModelDiscounts;
   final String? discountTitle;
+  final String? xActivated;
 
   const SpentPointBarcodeComponent({
     super.key,
@@ -15,6 +16,7 @@ class SpentPointBarcodeComponent extends StatelessWidget {
     this.uiModelDiscounts,
     this.discountTitle,
     this.barcodeNumber,
+    this.xActivated,
   });
 
   @override
@@ -48,7 +50,7 @@ class SpentPointBarcodeComponent extends StatelessWidget {
                   ),
         SpacingFoundation.verticalSpace16,
         Text(
-          S.current.OfferSuccessfullyActivated,
+          S.current.XSuccessfullyActivated(xActivated ?? S.current.Offer),
           style: theme?.boldTextTheme.body,
           textAlign: TextAlign.center,
         ),
