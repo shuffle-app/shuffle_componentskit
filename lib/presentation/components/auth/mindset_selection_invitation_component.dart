@@ -30,17 +30,36 @@ class MindsetSelectionInvitationComponent extends StatelessWidget {
         child: Column(
       children: [
         SpacingFoundation.verticalSpace24,
-        RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(children: [
-              TextSpan(text: S.of(context).TellUsAbout, style: boldTextTheme?.title2),
-              WidgetSpan(
-                  child: GradientableWidget(
-                      gradient: GradientFoundation.attentionCard,
-                      child: Text(' ${S.of(context).Yourself} '.toLowerCase(),
-                          style: boldTextTheme?.title2.copyWith(color: Colors.white)))),
-              TextSpan(text: S.of(context).AndGet.toLowerCase(), style: boldTextTheme?.title2)
-            ])),
+        Stack(
+            alignment: Alignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(children: [
+                    TextSpan(text: S.of(context).TellUsAbout, style: boldTextTheme?.title2),
+                    TextSpan(
+                        text: ' ${S.of(context).Yourself} '.toLowerCase(),
+                        style: boldTextTheme?.title2.copyWith(color: Colors.transparent)),
+                    TextSpan(text: S.of(context).AndGet.toLowerCase(), style: boldTextTheme?.title2)
+                  ])),
+              GradientableWidget(
+                  gradient: GradientFoundation.attentionCard,
+                  child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: S.of(context).TellUsAbout,
+                            style: boldTextTheme?.title2.copyWith(color: Colors.transparent)),
+                        TextSpan(
+                            text: ' ${S.of(context).Yourself} '.toLowerCase(),
+                            style: boldTextTheme?.title2.copyWith(color: Colors.white)),
+                        TextSpan(
+                            text: S.of(context).AndGet.toLowerCase(),
+                            style: boldTextTheme?.title2.copyWith(color: Colors.transparent))
+                      ])))
+            ]),
         SpacingFoundation.verticalSpace16,
         for (int i = 0; i < 4; i++)
           ListTile(

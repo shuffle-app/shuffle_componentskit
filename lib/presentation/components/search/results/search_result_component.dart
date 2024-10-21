@@ -11,6 +11,7 @@ class SearchResultComponent extends StatelessWidget {
   final FocusNode? searchFocusNode;
   final List<Widget> searchResults;
   final bool showSearchBar;
+  final String? title;
 
   const SearchResultComponent({
     super.key,
@@ -23,6 +24,7 @@ class SearchResultComponent extends StatelessWidget {
     this.autofocus = true,
     this.showSearchBar = true,
     this.errorText,
+    this.title,
   });
 
   @override
@@ -33,11 +35,12 @@ class SearchResultComponent extends StatelessWidget {
     final colorScheme = context.uiKitTheme?.colorScheme;
 
     return BlurredAppBarPage(
-      title: S.of(context).YoullFindIt,
+      title: title ?? S.of(context).YoullFindIt,
       wrapSliverBox: false,
       centerTitle: true,
       autoImplyLeading: true,
       customToolbarHeight: 170.0,
+      customToolbarBaseHeight: title != null ? 100 : null,
       canFoldAppBar: false,
       childrenPadding: EdgeInsets.only(bottom: EdgeInsetsFoundation.vertical16),
       appBarBody: showSearchBar
