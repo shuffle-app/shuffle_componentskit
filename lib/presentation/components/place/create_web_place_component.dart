@@ -92,6 +92,32 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
     _phoneController.text = widget.placeToEdit?.phone ?? '';
   }
 
+  @override
+  void didUpdateWidget(covariant CreateWebPlaceComponent oldWidget) {
+    if (oldWidget.placeToEdit != widget.placeToEdit) {
+      _placeToEdit = widget.placeToEdit ??
+          UiPlaceModel(
+            id: -1,
+            media: [],
+            tags: [],
+            description: '',
+          );
+      _photos.clear();
+      _videos.clear();
+      _photos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      if (_placeToEdit.verticalPreview != null) {
+        _photos.add(_placeToEdit.verticalPreview!);
+      }
+      _videos.addAll(_placeToEdit.media.where((element) => element.type == UiKitMediaType.video));
+      widget.descriptionController.text = widget.placeToEdit?.description ?? '';
+      _websiteController.text = widget.placeToEdit?.website ?? '';
+      _phoneController.text = widget.placeToEdit?.phone ?? '';
+      _titleController.text = widget.placeToEdit?.title ?? '';
+      _addressController.text = widget.placeToEdit?.location ?? '';
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   _checkDescriptionHeightConstraint() {
     if (widget.descriptionController.text.length * 5.8.w / 0.6.sw > descriptionHeightConstraint / 50.h) {
       setState(() {
@@ -196,6 +222,7 @@ class _CreateWebPlaceComponentState extends State<CreateWebPlaceComponent> {
                         title: S.of(context).PlaceType,
                         isRequired: true,
                         child: UiKitSuggestionField(
+                          initialValue: TextEditingValue(text: _placeToEdit.placeType?.title ?? ''),
                           options: widget.placeCategoriesLoader,
                           showAllOptions: true,
                           hintText: 'Enter place category',

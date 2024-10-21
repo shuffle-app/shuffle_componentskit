@@ -96,6 +96,28 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
     widget.descriptionController.addListener(_checkDescriptionHeightConstraint);
   }
 
+  @override
+  void didUpdateWidget(covariant CreateWebEventComponent oldWidget) {
+    if (oldWidget.eventToEdit != widget.eventToEdit) {
+      _titleController.text = widget.eventToEdit?.title ?? '';
+      widget.descriptionController.text = widget.eventToEdit?.description ?? '';
+      _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
+      _addressController.text = widget.eventToEdit?.location ?? '';
+      _websiteController.text = widget.eventToEdit?.website ?? '';
+      _personPhoneController.text = widget.eventToEdit?.phone ?? '';
+      _photos.clear();
+      _videos.clear();
+      _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
+      if (_eventToEdit.verticalPreview != null &&
+          //in case that if event has not verticalPreview and we put there horizontal or just first image
+          !_photos.map((e) => e.link).contains(_eventToEdit.verticalPreview!.link)) {
+        _photos.add(_eventToEdit.verticalPreview!);
+      }
+      _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   _checkDescriptionHeightConstraint() {
     if (widget.descriptionController.text.length * 5.8.w / 0.6.sw > descriptionHeightConstraint / 50.h) {
       setState(() {
@@ -193,6 +215,7 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                         title: S.of(context).EventType,
                         isRequired: true,
                         child: UiKitSuggestionField(
+                          initialValue: TextEditingValue(text: _eventToEdit.eventType?.title?? ''),
                           showAllOptions: true,
                           options: widget.onSuggestCategories ?? (q) => Future.value([]),
                           borderRadius: BorderRadiusFoundation.all12,
