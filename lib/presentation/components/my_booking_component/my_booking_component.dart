@@ -43,18 +43,24 @@ class MyBookingComponent extends StatelessWidget {
           style: theme?.boldTextTheme.title2,
         ),
         SpacingFoundation.verticalSpace16,
-        for (int index = 0; index < (myBookingUiModelUpcoming?.length ?? 0); index++)
-          MyBookingItem(
-            myBookingUiModel: myBookingUiModelUpcoming?[index],
-            onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelUpcoming?[index].id),
-            onBarCodeTap: onBarCodeTap,
-            onFullRefundTap: onFullRefundTap,
-            onLeaveFeedbackTap: onLeaveFeedbackTap,
-            onPartialRefundTap: onPartialRefundTap,
-          ).paddingOnly(
-            bottom: myBookingUiModelUpcoming?[index] != myBookingUiModelUpcoming?.last
-                ? SpacingFoundation.verticalSpacing32
-                : 0,
+        if (myBookingUiModelUpcoming != null && myBookingUiModelUpcoming!.isNotEmpty)
+          for (int index = 0; index < (myBookingUiModelUpcoming?.length ?? 0); index++)
+            MyBookingItem(
+              myBookingUiModel: myBookingUiModelUpcoming?[index],
+              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelUpcoming?[index].id),
+              onBarCodeTap: onBarCodeTap,
+              onFullRefundTap: onFullRefundTap,
+              onLeaveFeedbackTap: onLeaveFeedbackTap,
+              onPartialRefundTap: onPartialRefundTap,
+            ).paddingOnly(
+              bottom: myBookingUiModelUpcoming?[index] != myBookingUiModelUpcoming?.last
+                  ? SpacingFoundation.verticalSpacing32
+                  : 0,
+            )
+        else
+          Text(
+            S.of(context).ThisIsEmptyNowBook,
+            style: theme?.regularTextTheme.body,
           ),
         SizedBox(height: SpacingFoundation.verticalSpacing32),
         Row(
@@ -86,15 +92,21 @@ class MyBookingComponent extends StatelessWidget {
           ],
         ),
         SpacingFoundation.verticalSpace16,
-        for (int index = 0; index < (myBookingUiModelPast?.length ?? 0); index++)
-          MyBookingItem(
-            myBookingUiModel: myBookingUiModelPast?[index],
-            onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelPast?[index].id),
-            onBarCodeTap: onBarCodeTap,
-            onFullRefundTap: onFullRefundTap,
-            onLeaveFeedbackTap: onLeaveFeedbackTap,
-            onPartialRefundTap: onPartialRefundTap,
-          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing32)
+        if (myBookingUiModelPast != null && myBookingUiModelPast!.isNotEmpty)
+          for (int index = 0; index < (myBookingUiModelPast?.length ?? 0); index++)
+            MyBookingItem(
+              myBookingUiModel: myBookingUiModelPast?[index],
+              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelPast?[index].id),
+              onBarCodeTap: onBarCodeTap,
+              onFullRefundTap: onFullRefundTap,
+              onLeaveFeedbackTap: onLeaveFeedbackTap,
+              onPartialRefundTap: onPartialRefundTap,
+            ).paddingOnly(bottom: SpacingFoundation.verticalSpacing32)
+        else
+          Text(
+            S.of(context).NoPastBookings,
+            style: theme?.regularTextTheme.body,
+          ),
       ],
     );
   }
