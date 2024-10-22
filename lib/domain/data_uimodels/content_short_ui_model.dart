@@ -8,6 +8,7 @@ class ContentShortUiModel {
   final DateTime? periodFrom;
   final DateTime? periodTo;
   final String? ticketNumber;
+  final int? offerId;
 
   ContentShortUiModel({
     this.title,
@@ -17,5 +18,6 @@ class ContentShortUiModel {
     this.periodTo,
     this.tags,
     this.ticketNumber,
+    this.offerId,
   });
 }
