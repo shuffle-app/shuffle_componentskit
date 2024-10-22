@@ -365,7 +365,7 @@ class _EventComponentState extends State<EventComponent> {
               child: AddToSchedulerEventActionCard(
                 action: null,
                 rasterIconAsset: GraphicsFoundation.instance.png.money,
-                value: 'in 2 days',
+                value: S.of(context).inXDays(2),
                 buttonTitle: S.of(context).Soon,
               ),
             ),
