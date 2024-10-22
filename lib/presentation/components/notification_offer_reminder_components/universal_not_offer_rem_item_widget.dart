@@ -79,20 +79,11 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  universalNotOfferRemUiModel?.imagePath != null
-                      ? context
-                          .userAvatar(
-                            size: UserAvatarSize.x40x40,
-                            type: UserTileType.ordinary,
-                            userName: '',
-                            imageUrl: universalNotOfferRemUiModel?.imagePath,
-                          )
-                          .paddingOnly(right: SpacingFoundation.horizontalSpacing8)
-                      : ImageWidget(
-                          height: 45.h,
-                          fit: BoxFit.fill,
-                          link: universalNotOfferRemUiModel?.iconPath ?? '',
-                        ),
+                  ImageWidget(
+                    height: 45.h,
+                    fit: BoxFit.fill,
+                    link: universalNotOfferRemUiModel?.iconPath ?? '',
+                  ),
                   SpacingFoundation.horizontalSpace4,
                   Flexible(
                     flex: 3,

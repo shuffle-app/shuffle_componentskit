@@ -7,7 +7,6 @@ class CreateNotificationOrRemind extends StatefulWidget {
   final bool isNotification;
   final UniversalNotOfferRemUiModel? universalNotOfferRemUiModel;
   final ValueChanged<UniversalNotOfferRemUiModel>? onCreate;
-  final String? defaultItemImagePath;
   final DateTime? lastDate;
 
   const CreateNotificationOrRemind({
@@ -15,7 +14,6 @@ class CreateNotificationOrRemind extends StatefulWidget {
     this.isNotification = true,
     this.universalNotOfferRemUiModel,
     this.onCreate,
-    this.defaultItemImagePath,
     this.lastDate,
   });
 
@@ -73,7 +71,6 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
       _universalNotOfferRemUiModel = _universalNotOfferRemUiModel.copyWith(
         title: _titleController.text.trim(),
         iconPath: (_selectedIconIndex == -1 || _selectedIconIndex == null) ? null : _iconList[_selectedIconIndex!],
-        imagePath: widget.universalNotOfferRemUiModel?.imagePath ?? widget.defaultItemImagePath,
         isLaunched: _isLaunched,
         selectedDates: _selectedDates,
         isLaunchedDate: _isLaunchedDate ?? DateTime.now(),
@@ -166,11 +163,11 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
                     : null,
                 (from, to) {
                   setState(() {
-                    _selectedDates?.clear();
+                    _selectedDates.clear();
                     (from != null && (from!.isAfter(DateTime.now()) || from!.isAtSameDay))
-                        ? _selectedDates?.add(from)
+                        ? _selectedDates.add(from)
                         : from = null;
-                    (from != null && from != to) ? _selectedDates?.add(to) : _selectedDates?.add(null);
+                    (from != null && from != to) ? _selectedDates.add(to) : _selectedDates.add(null);
                   });
                 },
               );
