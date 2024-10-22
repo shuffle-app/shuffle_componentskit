@@ -57,7 +57,6 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
             padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
             pagingController: widget.pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-              firstPageProgressIndicatorBuilder: (_) => const CircularProgressIndicator.adaptive(),
               noItemsFoundIndicatorBuilder: (_) => Center(
                 child: Text(
                   S.of(context).NothingFound,
