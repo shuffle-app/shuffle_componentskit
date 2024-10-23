@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/domain.dart';
+import 'package:shuffle_components_kit/presentation/components/notification_offer_reminder_components/offer_content_card.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ViewHistoryActivationWidget extends StatelessWidget {
@@ -17,10 +18,9 @@ class ViewHistoryActivationWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: UiKitExtendedInfluencerFeedbackCardWithoutBottom(
+              child: OfferContentCard(
                 imageUrl: activationModel?.imageUrl,
                 title: activationModel?.title,
-                tags: activationModel?.tags,
                 contentTitle: activationModel?.contentTitle,
               ),
             ),

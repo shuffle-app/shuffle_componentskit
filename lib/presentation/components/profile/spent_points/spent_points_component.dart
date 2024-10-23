@@ -122,7 +122,7 @@ class SpentPointsComponent extends StatelessWidget {
                   return UiKitCardWrapper(
                     child: Column(
                       children: [
-                        UiKitExtendedInfluencerFeedbackCardWithoutBottom(
+                        OfferContentCard(
                           imageUrl: item.contentShortUiModel.imageUrl,
                           title: item.contentShortUiModel.title,
                           contentTitle: item.contentShortUiModel.contentTitle,
