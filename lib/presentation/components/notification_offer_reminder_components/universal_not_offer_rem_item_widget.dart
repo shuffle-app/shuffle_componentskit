@@ -129,9 +129,9 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                               height: 10.h,
                               fit: BoxFit.fill,
                               color: ColorsFoundation.mutedText,
-                              link: universalNotOfferRemUiModel?.isLaunched ?? true
-                                  ? GraphicsFoundation.instance.svg.playOutline.path
-                                  : GraphicsFoundation.instance.svg.stopOutline.path,
+                              iconData: universalNotOfferRemUiModel?.isLaunched ?? true
+                                  ? ShuffleUiKitIcons.playoutline
+                                  : ShuffleUiKitIcons.stopoutline,
                             ),
                             SpacingFoundation.horizontalSpace2,
                             Expanded(
@@ -162,7 +162,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                         onPressed: onActivateTap,
                         backgroundColor: theme?.colorScheme.surface3,
                         iconInfo: BaseUiKitButtonIconData(
-                          iconPath: GraphicsFoundation.instance.svg.chevronRight.path,
+                          iconData: ShuffleUiKitIcons.chevronright,
                           color: theme?.colorScheme.headingTypography,
                         ),
                       ),
