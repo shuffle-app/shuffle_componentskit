@@ -7,6 +7,8 @@ class OffersComponent extends StatelessWidget {
   final List<UniversalNotOfferRemUiModel?>? listOffers;
   final ValueChanged<int?>? onEditOffer;
   final ValueChanged<int?>? onRemoveOffer;
+  final ValueChanged<int?>? onActivateTap;
+
   final VoidCallback? onCreateOffer;
   final GlobalKey<SliverAnimatedListState> listKey;
 
@@ -18,6 +20,7 @@ class OffersComponent extends StatelessWidget {
     this.onEditOffer,
     this.onCreateOffer,
     this.onRemoveOffer,
+    this.onActivateTap,
   });
 
   @override
@@ -31,6 +34,7 @@ class OffersComponent extends StatelessWidget {
         onCreateItem: onCreateOffer,
         onEditItem: onEditOffer,
         onRemoveItem: onRemoveOffer,
+        onActivateTap: onActivateTap,
         whatCreate: S.of(context).Offer,
       ),
     );

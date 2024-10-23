@@ -23,6 +23,7 @@ class UiEventModel extends Advertisable {
   String? price;
   String? website;
   String? phone;
+  int? userPoints;
   UiKitTag? niche;
   String? reviewStatus;
   List<UiKitTag> tags;
@@ -78,6 +79,7 @@ class UiEventModel extends Advertisable {
     this.bookingUiModel,
     this.updatedAt,
     this.moderationStatus,
+    this.userPoints,
   })  : descriptionItems = [
           if (scheduleString != null)
             UiDescriptionItemModel(
@@ -235,6 +237,7 @@ class UiEventModel extends Advertisable {
     BookingUiModel? bookingUiModel,
     DateTime? updatedAt,
     String? moderationStatus,
+    int? userPoints,
   }) =>
       UiEventModel(
         id: id,
@@ -270,6 +273,7 @@ class UiEventModel extends Advertisable {
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
         updatedAt: updatedAt ?? this.updatedAt,
         moderationStatus: moderationStatus ?? this.moderationStatus,
+        userPoints: userPoints ?? this.userPoints,
       );
 
   bool selectableDayPredicate(DateTime day) {

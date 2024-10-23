@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/domain.dart';
+import 'package:shuffle_components_kit/presentation/components/notification_offer_reminder_components/offer_content_card.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ViewHistoryActivationWidget extends StatelessWidget {
-  const ViewHistoryActivationWidget(
-      {super.key, this.activationModel, required this.onTap});
+  const ViewHistoryActivationWidget({super.key, this.activationModel, required this.onTap});
 
   final ContentShortUiModel? activationModel;
   final VoidCallback? onTap;
@@ -18,18 +18,18 @@ class ViewHistoryActivationWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: UiKitExtendedInfluencerFeedbackCardWithoutBottom(
+              child: OfferContentCard(
                 imageUrl: activationModel?.imageUrl,
                 title: activationModel?.title,
-                tags: activationModel?.tags,
+                contentTitle: activationModel?.contentTitle,
               ),
             ),
             SpacingFoundation.horizontalSpace8,
             context.iconButtonNoPadding(
               data: BaseUiKitButtonData(
-                  onPressed: onTap,
-                  iconInfo: BaseUiKitButtonIconData(
-                      iconData: ShuffleUiKitIcons.barcode)),
+                onPressed: onTap,
+                iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.barcode),
+              ),
             )
           ],
         ),

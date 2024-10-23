@@ -931,6 +931,44 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             ),
             SpacingFoundation.verticalSpace16,
             context.button(
+              data: BaseUiKitButtonData(
+                text: 'show Activation Offers Component',
+                onPressed: () {
+                  context.push(
+                    ActivationOffersComponent(
+                      offerUiModel: UniversalNotOfferRemUiModel(
+                        id: -1,
+                        title: 'Cuba Libre cocktail',
+                        pointPrice: 400,
+                        selectedDates: [
+                          DateTime.now(),
+                          DateTime.now(),
+                        ],
+                      ),
+                      onDetailsTap: (user) {
+                        log('Activation Offers Component user  - $user');
+                        context.push(
+                          OfferInfo(
+                            offerUser: user,
+                            offerUiModel: UniversalNotOfferRemUiModel(
+                              id: -1,
+                              title: 'Cuba Libre cocktail',
+                              pointPrice: 400,
+                              selectedDates: [
+                                DateTime.now(),
+                                DateTime.now(),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
                 data: BaseUiKitButtonData(
                     text: 'create place',
                     onPressed: () {
@@ -1201,6 +1239,41 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   OffersComponent(
                     listKey: GlobalKey<SliverAnimatedListState>(),
                     listOffers: _offerUiModelList,
+                    onActivateTap: (id) {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+
+                      context.push(
+                        ActivationOffersComponent(
+                          offerUiModel: _offerUiModelList[index].copyWith(
+                            userOfOffer: List.generate(
+                              15,
+                              (index) => UsersOfOffer(
+                                isConfirm: false,
+                                user: UiProfileModel(
+                                  id: index,
+                                  avatarUrl: GraphicsFoundation.instance.png.avatars.avatar10.path,
+                                  name: 'name $index',
+                                  nickname: '@nickname$index',
+                                ),
+                              ),
+                            ),
+                          ),
+                          onDetailsTap: (user) {
+                            log('Activation Offers Component user  - $user');
+                            context.push(
+                              OfferInfo(
+                                offerUser: user,
+                                offerUiModel: _offerUiModelList[index],
+                                contentTitle: 'At.moshpere',
+                                contentImageUrl: GraphicsFoundation.instance.png.avatars.avatar10.path,
+                                onCancelTap: (userId, offerId) {},
+                                onConfirmTap: (userId, offerId) {},
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                     onCreateOffer: () {
                       context.push(
                         CreateOffer(
@@ -1219,7 +1292,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                             context.pop();
 
                             setState(() {
-                              _offerUiModelList.add(offerUiModel);
+                              _offerUiModelList.add(offerUiModel.copyWith(id: _offerUiModelList.length));
                             });
                           },
                         ),

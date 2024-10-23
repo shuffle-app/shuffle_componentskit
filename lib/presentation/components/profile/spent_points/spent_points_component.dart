@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:intl/intl.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../components.dart';
 
@@ -9,14 +11,22 @@ class SpentPointsComponent extends StatelessWidget {
     super.key,
     this.onHistoryTap,
     this.balance,
-    this.discountsList,
     this.onDiscountTap,
+    this.isContentCard = false,
+    this.uiKitTag,
+    this.contentImage,
+    this.contentTitle,
+    required this.pagingController,
   });
 
   final int? balance;
   final VoidCallback? onHistoryTap;
-  final List<UiModelDiscounts>? discountsList;
   final ValueChanged<UiModelDiscounts>? onDiscountTap;
+  final bool isContentCard;
+  final UiKitTag? uiKitTag;
+  final String? contentImage;
+  final String? contentTitle;
+  final PagingController<int, UiModelDiscounts> pagingController;
 
   String stringWithSpace(int text) {
     NumberFormat formatter = NumberFormat('#,###');
@@ -30,24 +40,54 @@ class SpentPointsComponent extends StatelessWidget {
       body: BlurredAppBarPage(
         autoImplyLeading: true,
         centerTitle: true,
-        appBarTrailing: context.iconButtonNoPadding(
-          data: BaseUiKitButtonData(
-            onPressed: onHistoryTap,
-            iconInfo:
-                BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.history),
-          ),
-        ),
-        customTitle: Expanded(
-          child: Text(
-            S.current.Spend,
-            style: context.uiKitTheme?.boldTextTheme.title1,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        // customToolbarBaseHeight: 0.13.sh,
-        childrenPadding:
-            EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        appBarTrailing: isContentCard
+            ? null
+            : context.iconButtonNoPadding(
+                data: BaseUiKitButtonData(
+                  onPressed: onHistoryTap,
+                  iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.history),
+                ),
+              ),
+        customTitle: isContentCard
+            ? Flexible(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    context.userAvatar(
+                      size: UserAvatarSize.x40x40,
+                      type: UserTileType.ordinary,
+                      userName: '',
+                      imageUrl: contentImage,
+                    ),
+                    SpacingFoundation.horizontalSpace4,
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AutoSizeText(
+                            contentTitle ?? S.of(context).NothingFound,
+                            style: uiKitTheme?.regularTextTheme.caption1,
+                            maxLines: 1,
+                          ),
+                          UiKitTagWidget(
+                            title: uiKitTag?.title ?? S.of(context).NothingFound,
+                            icon: uiKitTag?.icon,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : Expanded(
+                child: Text(
+                  S.current.Spend,
+                  style: context.uiKitTheme?.boldTextTheme.title1,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+        childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
           SpacingFoundation.verticalSpace16,
           Row(
@@ -66,32 +106,45 @@ class SpentPointsComponent extends StatelessWidget {
             ],
           ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
           SpacingFoundation.verticalSpace24,
-          ...List.generate(
-            discountsList?.length ?? 0,
-            (index) {
-              return UiKitCardWrapper(
-                child: Column(
-                  children: [
-                    UiKitExtendedInfluencerFeedbackCardWithoutBottom(
-                      imageUrl:
-                          discountsList?[index].contentShortUiModel.imageUrl,
-                      title: discountsList?[index].contentShortUiModel.title,
-                      tags: discountsList?[index].contentShortUiModel.tags,
-                    ),
-                    SpacingFoundation.verticalSpace12,
-                    context.gradientButton(
-                      data: BaseUiKitButtonData(
-                        fit: ButtonFit.fitWidth,
-                        text: discountsList?[index].buttonTitle,
-                        onPressed: () async {
-                          onDiscountTap?.call(discountsList![index]);
-                        },
-                      ),
-                    )
-                  ],
-                ).paddingAll(EdgeInsetsFoundation.all16),
-              ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical8);
-            },
+          SizedBox(
+            height: 0.75.sh,
+            child: PagedListView<int, UiModelDiscounts>(
+              padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
+              pagingController: pagingController,
+              builderDelegate: PagedChildBuilderDelegate(
+                noItemsFoundIndicatorBuilder: (_) => Center(
+                  child: Text(
+                    S.of(context).NothingFound,
+                    style: context.uiKitTheme?.boldTextTheme.body,
+                  ),
+                ),
+                itemBuilder: (context, item, index) {
+                  return UiKitCardWrapper(
+                    child: Column(
+                      children: [
+                        OfferContentCard(
+                          imageUrl: item.contentShortUiModel.imageUrl,
+                          title: item.contentShortUiModel.title,
+                          contentTitle: item.contentShortUiModel.contentTitle,
+                          periodFrom: item.contentShortUiModel.periodFrom,
+                          periodTo: item.contentShortUiModel.periodTo,
+                        ),
+                        SpacingFoundation.verticalSpace12,
+                        context.gradientButton(
+                          data: BaseUiKitButtonData(
+                            fit: ButtonFit.fitWidth,
+                            text: item.buttonTitle,
+                            onPressed: () async {
+                              onDiscountTap?.call(item);
+                            },
+                          ),
+                        )
+                      ],
+                    ).paddingAll(EdgeInsetsFoundation.all16),
+                  ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical8);
+                },
+              ),
+            ),
           )
         ],
       ),
