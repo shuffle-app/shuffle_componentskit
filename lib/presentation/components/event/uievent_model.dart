@@ -16,7 +16,7 @@ class UiEventModel extends Advertisable {
   String? currency;
   DateTime? startDate;
   DateTime? endDate;
-  dynamic schedule;
+  UiScheduleModel? schedule;
   String? description;
   String? location;
   UiKitTag? eventType;
@@ -230,7 +230,7 @@ class UiEventModel extends Advertisable {
     String? reviewStatus,
     PlaceWeatherType? weatherType,
     List<String>? upsalesItems,
-    dynamic schedule,
+    UiScheduleModel? schedule,
     List<FeedbackUiModel>? reviews,
     List<VideoReactionUiModel>? reactions,
     String? bookingUrl,

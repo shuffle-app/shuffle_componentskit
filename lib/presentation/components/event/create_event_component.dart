@@ -638,6 +638,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 data: BaseUiKitButtonData(
                   onPressed: () {
                     context.push(CreateScheduleWidget(
+                      scheduleToEdit:
+                          [UiScheduleDatesModel, UiScheduleDatesRangeModel].contains(_eventToEdit.schedule.runtimeType)
+                              ? _eventToEdit.schedule
+                              : null,
                       availableTemplates: widget.availableTimeTemplates,
                       onTemplateCreated: widget.onTimeTemplateCreated,
                       availableTypes: const [UiScheduleDatesModel.scheduleType, UiScheduleDatesRangeModel.scheduleType],
