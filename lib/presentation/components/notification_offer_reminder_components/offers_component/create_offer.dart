@@ -38,7 +38,7 @@ class _CreateOfferState extends State<CreateOffer> {
   late bool _isLaunched;
   late bool _notifyTheAudience;
 
-  late int? _selectedIconIndex;
+  int? _selectedIconIndex = 0;
   late List<String>? _iconsList;
 
   @override
