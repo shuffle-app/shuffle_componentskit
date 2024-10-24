@@ -242,6 +242,24 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'scanner barcode',
+                onPressed: () {
+                  context.push(
+                    CustomBarcodeScanner(
+                      onDetect: (barcode) {
+                        if (barcode.barcodes.firstOrNull?.rawValue != null) {
+                          log('barcode ${barcode.barcodes.firstOrNull?.rawValue}');
+                          context.pop();
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'show spent point barcode component',
                 onPressed: () {
                   showUiKitGeneralFullScreenDialog(
