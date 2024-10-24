@@ -145,3 +145,4 @@ export 'suggest_place/suggest_place_component.dart';
 export 'video_reactions/create_video_reaction_component.dart';
 export 'welcome/welcome_component.dart';
 export 'influencer/show_complete_influencer_dialog.dart';
+export 'barcode_scan_component/barcode_scan_component.dart';
