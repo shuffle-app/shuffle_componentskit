@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../../domain/config_models/profile/component_profile_model.dart';
 
 class PublicProProfileComponent extends StatelessWidget {
@@ -36,10 +36,19 @@ class PublicProProfileComponent extends StatelessWidget {
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
+    final theme = context.uiKitTheme;
+
+    TextStyle? textStyle = theme?.boldTextTheme.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: uiProfileModel.name ?? '',
+      customTitle: AutoSizeText(
+        uiProfileModel.name ?? '',
+        maxLines: 2,
+        style: textStyle,
+      ),
+      customToolbarBaseHeight: 100,
       autoImplyLeading: true,
       bodyBottomSpace: verticalMargin,
       childrenPadding: EdgeInsets.zero,

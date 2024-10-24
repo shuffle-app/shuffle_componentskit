@@ -13,7 +13,7 @@ class ViewHistoryPointComponent extends StatefulWidget {
   });
 
   final ValueChanged<String>? onTabChange;
-  final VoidCallback? onTapBarCode;
+  final ValueChanged<PointHistoryUniversalModel>? onTapBarCode;
   final PagingController<int, PointHistoryUniversalModel> pagingController;
 
   @override
@@ -57,7 +57,6 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
             padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
             pagingController: widget.pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-              firstPageProgressIndicatorBuilder: (_) => const CircularProgressIndicator.adaptive(),
               noItemsFoundIndicatorBuilder: (_) => Center(
                 child: Text(
                   S.of(context).NothingFound,
@@ -67,7 +66,7 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
               itemBuilder: (context, item, index) {
                 return item.contentShortUiModel != null
                     ? ViewHistoryActivationWidget(
-                        onTap: widget.onTapBarCode,
+                        onTap: () => widget.onTapBarCode?.call(item),
                         activationModel: item.contentShortUiModel,
                       )
                     : UiKitPointsHistoryTile(

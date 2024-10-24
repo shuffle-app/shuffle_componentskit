@@ -17,6 +17,7 @@ class AgeSelectBottomSheet extends StatelessWidget {
             S.of(context).YourAge,
             style: boldTextTheme?.labelLarge,
           ).paddingAll(EdgeInsetsFoundation.all16),
+          SpacingFoundation.verticalSpace10,
           UiKitHorizontalWheelNumberSelector(
             hideTitle: true,
             values: List<int>.generate(70, (index) => index + 13),

@@ -16,13 +16,14 @@ class UiEventModel extends Advertisable {
   String? currency;
   DateTime? startDate;
   DateTime? endDate;
-  dynamic schedule;
+  UiScheduleModel? schedule;
   String? description;
   String? location;
   UiKitTag? eventType;
   String? price;
   String? website;
   String? phone;
+  int? userPoints;
   UiKitTag? niche;
   String? reviewStatus;
   List<UiKitTag> tags;
@@ -78,6 +79,7 @@ class UiEventModel extends Advertisable {
     this.bookingUiModel,
     this.updatedAt,
     this.moderationStatus,
+    this.userPoints,
   })  : descriptionItems = [
           if (scheduleString != null)
             UiDescriptionItemModel(
@@ -228,13 +230,14 @@ class UiEventModel extends Advertisable {
     String? reviewStatus,
     PlaceWeatherType? weatherType,
     List<String>? upsalesItems,
-    dynamic schedule,
+    UiScheduleModel? schedule,
     List<FeedbackUiModel>? reviews,
     List<VideoReactionUiModel>? reactions,
     String? bookingUrl,
     BookingUiModel? bookingUiModel,
     DateTime? updatedAt,
     String? moderationStatus,
+    int? userPoints,
   }) =>
       UiEventModel(
         id: id,
@@ -270,6 +273,7 @@ class UiEventModel extends Advertisable {
         bookingUiModel: bookingUiModel ?? this.bookingUiModel,
         updatedAt: updatedAt ?? this.updatedAt,
         moderationStatus: moderationStatus ?? this.moderationStatus,
+        userPoints: userPoints ?? this.userPoints,
       );
 
   bool selectableDayPredicate(DateTime day) {
@@ -278,7 +282,8 @@ class UiEventModel extends Advertisable {
       return startDate?.day == day.day;
     }
     return (day.isAfter(DateUtils.dateOnly(startDate!)) && day.isBefore(DateUtils.dateOnly(endDate!))) ||
-        day.isAtSameMomentAs(DateUtils.dateOnly(startDate!));
+        day.isAtSameMomentAs(DateUtils.dateOnly(startDate!)) ||
+        day.isAtSameMomentAs(DateUtils.dateOnly(endDate!));
   }
 
   Map<int, int>? get feedbacksHelpfulCounts =>

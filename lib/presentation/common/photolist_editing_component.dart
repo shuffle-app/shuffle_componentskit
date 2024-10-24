@@ -463,10 +463,8 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
       insetPadding: EdgeInsets.zero,
       backgroundColor: inversedColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all24),
-      child: SizedBox(
-        height: 0.8.sh,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
+      child:  Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
@@ -515,7 +513,6 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
             ),
           ],
         ).paddingAll(EdgeInsetsFoundation.all24),
-      ),
     );
   }
 }

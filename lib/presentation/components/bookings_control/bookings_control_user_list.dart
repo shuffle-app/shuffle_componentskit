@@ -124,7 +124,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                 GestureDetector(
                   onTap: widget.onBookingEdit,
                   child: ImageWidget(
-                    iconData: ShuffleUiKitIcons.pencil,
+                    link: GraphicsFoundation.instance.svg.pencil.path,
                     color: theme?.colorScheme.inversePrimary,
                   ),
                 ),

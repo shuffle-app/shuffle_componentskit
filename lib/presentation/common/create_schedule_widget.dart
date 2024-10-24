@@ -10,12 +10,14 @@ class CreateScheduleWidget extends StatefulWidget {
   final ValueChanged<UiScheduleModel>? onTemplateCreated;
   final ValueChanged<UiScheduleModel>? onScheduleCreated;
   final List<String> availableTypes;
+  final UiScheduleModel? scheduleToEdit;
 
   const CreateScheduleWidget(
       {super.key,
       this.availableTemplates = const [],
       this.onTemplateCreated,
       this.onScheduleCreated,
+      this.scheduleToEdit,
       this.availableTypes = const [
         UiScheduleTimeModel.scheduleType,
         UiScheduleDatesModel.scheduleType,
@@ -36,6 +38,10 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
 
   @override
   void initState() {
+    scheduleModel = widget.scheduleToEdit;
+    if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+      listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+    }
     super.initState();
   }
 

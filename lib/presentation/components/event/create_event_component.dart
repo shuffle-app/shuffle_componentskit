@@ -638,6 +638,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 data: BaseUiKitButtonData(
                   onPressed: () {
                     context.push(CreateScheduleWidget(
+                      scheduleToEdit:
+                          [UiScheduleDatesModel, UiScheduleDatesRangeModel].contains(_eventToEdit.schedule.runtimeType)
+                              ? _eventToEdit.schedule
+                              : null,
                       availableTemplates: widget.availableTimeTemplates,
                       onTemplateCreated: widget.onTimeTemplateCreated,
                       availableTypes: const [UiScheduleDatesModel.scheduleType, UiScheduleDatesRangeModel.scheduleType],
@@ -687,8 +691,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         ? S.of(context).CreateBooking
                         : '${S.of(context).Edit} ${S.of(context).Booking}',
                     onPressed: () {
-                      _bookingUiModel ??= BookingUiModel(id: -1);
-
                       showUiKitGeneralFullScreenDialog(
                         context,
                         GeneralDialogData(

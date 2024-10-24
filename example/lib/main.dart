@@ -158,7 +158,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
     UniversalNotOfferRemUiModel(
       id: -1,
       title: 'Test',
-      imagePath: GraphicsFoundation.instance.png.avatars.avatar4.path,
       isLaunched: false,
       isLaunchedDate: DateTime(2017, 9, 7),
       selectedDates: [DateTime.now(), null],
@@ -254,6 +253,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         discountTitle: 'Free coctails',
                         barcodeNumber: '18957697567236asas72',
                         uiModelDiscounts: UiModelDiscounts(
+                          offerId: 1,
                           buttonTitle: '30% discount '
                               '(-1500)',
                           barcode: '189576975672367',
@@ -929,6 +929,45 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 },
               ),
             ),
+            // SpacingFoundation.verticalSpace16,
+            // context.button(
+            //   data: BaseUiKitButtonData(
+            //     text: 'show Activation Offers Component',
+            //     onPressed: () {
+            //       context.push(
+            //         ActivationOffersComponent(
+            //           pagingController: ,
+            //           offerUiModel: UniversalNotOfferRemUiModel(
+            //             id: -1,
+            //             title: 'Cuba Libre cocktail',
+            //             pointPrice: 400,
+            //             selectedDates: [
+            //               DateTime.now(),
+            //               DateTime.now(),
+            //             ],
+            //           ),
+            //           onDetailsTap: (user) {
+            //             log('Activation Offers Component user  - $user');
+            //             context.push(
+            //               OfferInfo(
+            //                 offerUser: user,
+            //                 offerUiModel: UniversalNotOfferRemUiModel(
+            //                   id: -1,
+            //                   title: 'Cuba Libre cocktail',
+            //                   pointPrice: 400,
+            //                   selectedDates: [
+            //                     DateTime.now(),
+            //                     DateTime.now(),
+            //                   ],
+            //                 ),
+            //               ),
+            //             );
+            //           },
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             SpacingFoundation.verticalSpace16,
             context.button(
                 data: BaseUiKitButtonData(
@@ -1002,49 +1041,13 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             context.button(
               data: BaseUiKitButtonData(
                 text: 'show spent points component',
-                onPressed: () => context.push(
-                  SpentPointsComponent(
-                    balance: 1234,
-                    onHistoryTap: () {},
-                    onDiscountTap: (value) {},
-                    discountsList: List.generate(
-                      6,
-                      (index) {
-                        return UiModelDiscounts(
-                          buttonTitle: '30% discount '
-                              '(-1500)',
-                          barcode: '189576975672367',
-                          contentShortUiModel: ContentShortUiModel(
-                            imageUrl: GraphicsFoundation.instance.png.place.path,
-                            title: 'La Vue Citytel Group',
-                            tags: [
-                              UiKitTag(
-                                title: 'Club',
-                                icon: ShuffleUiKitIcons.accounting,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Free',
-                                icon: ShuffleUiKitIcons.discount,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: 'Closed',
-                                icon: ShuffleUiKitIcons.clock,
-                                unique: false,
-                              ),
-                              UiKitTag(
-                                title: '7 min',
-                                icon: ShuffleUiKitIcons.route,
-                                unique: false,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                // onPressed: () => context.push(
+                //   SpentPointsComponent(
+                //     balance: 1234,
+                //     onHistoryTap: () {},
+                //     onDiscountTap: (value) {},
+                //   ),
+                // ),
               ),
             ),
             SpacingFoundation.verticalSpace16,
@@ -1060,7 +1063,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       context.push(
                         CreateNotificationOrRemind(
                           lastDate: DateTime(2024, 9, 16),
-                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
                           onCreate: (notificationUiModel) async {
                             if (notificationUiModel != null) {
                               await uiKitPayDialog(
@@ -1104,7 +1106,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       context.push(
                         CreateNotificationOrRemind(
                           lastDate: DateTime(2024, 9, 16),
-                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
                           universalNotOfferRemUiModel: _listNotification[index],
                           onCreate: (notificationUiModel) async {
                             if (notificationUiModel != _listNotification[index]) {
@@ -1136,7 +1137,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         CreateNotificationOrRemind(
                           lastDate: DateTime(2024, 9, 16),
                           isNotification: false,
-                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
                           onCreate: (reminderModel) async {
                             if (reminderModel != null) {
                               await uiKitNotificationCreatedDialog(
@@ -1170,7 +1170,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                           lastDate: DateTime(2024, 9, 16),
                           isNotification: false,
                           universalNotOfferRemUiModel: _listReminders[index],
-                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
                           onCreate: (reminderModel) async {
                             if (reminderModel != null) {
                               setState(() {
@@ -1201,11 +1200,45 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                   OffersComponent(
                     listKey: GlobalKey<SliverAnimatedListState>(),
                     listOffers: _offerUiModelList,
+                    onActivateTap: (id) {
+                      int index = _offerUiModelList.indexWhere((element) => element?.id == id);
+
+                      // context.push(
+                      //   ActivationOffersComponent(
+                      //     offerUiModel: _offerUiModelList[index].copyWith(
+                      //       userOfOffer: List.generate(
+                      //         15,
+                      //         (index) => UsersOfOffer(
+                      //           isConfirm: false,
+                      //           user: UiProfileModel(
+                      //             id: index,
+                      //             avatarUrl: GraphicsFoundation.instance.png.avatars.avatar10.path,
+                      //             name: 'name $index',
+                      //             nickname: '@nickname$index',
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     onDetailsTap: (user) {
+                      //       log('Activation Offers Component user  - $user');
+                      //       context.push(
+                      //         OfferInfo(
+                      //           offerUser: user,
+                      //           offerUiModel: _offerUiModelList[index],
+                      //           contentTitle: 'At.moshpere',
+                      //           contentImageUrl: GraphicsFoundation.instance.png.avatars.avatar10.path,
+                      //           onCancelTap: (userId, offerId) {},
+                      //           onConfirmTap: (userId, offerId) {},
+                      //         ),
+                      //       );
+                      //     },
+                      //   ),
+                      // );
+                    },
                     onCreateOffer: () {
                       context.push(
                         CreateOffer(
                           offerPrice: 5,
-                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
                           onCreateOffer: (offerUiModel) async {
                             await uiKitPayDialog(
                               context: context,
@@ -1219,7 +1252,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                             context.pop();
 
                             setState(() {
-                              _offerUiModelList.add(offerUiModel);
+                              _offerUiModelList.add(offerUiModel.copyWith(id: _offerUiModelList.length));
                             });
                           },
                         ),
@@ -1236,7 +1269,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       context.push(
                         CreateOffer(
                           offerPrice: 5,
-                          defaultItemImagePath: GraphicsFoundation.instance.png.avatars.avatar3.path,
                           offerUiModel: _offerUiModelList[index],
                           onCreateOffer: (editOfferUiModel) async {
                             if (editOfferUiModel != _offerUiModelList[index]) {
@@ -1416,7 +1448,9 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       body: CreateEventComponent(
                         availableTimeTemplates: [],
                         propertiesOptions: (p0) => [],
-                        onEventCreated: (UiEventModel model) async {},
+                        onEventCreated: (UiEventModel model) async {
+                          log('model ${model.bookingUiModel}');
+                        },
                       ),
                     ),
                   );
