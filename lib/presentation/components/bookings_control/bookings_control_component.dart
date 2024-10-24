@@ -11,9 +11,6 @@ class BookingsControlComponent extends StatelessWidget {
   final bool isCompany;
   final bool isLoading;
 
-  late final List<BookingsPlaceOrEventUiModel> places;
-  late final List<BookingsPlaceOrEventUiModel> events;
-
   BookingsControlComponent({
     super.key,
     this.placesOrEvents,
@@ -21,18 +18,7 @@ class BookingsControlComponent extends StatelessWidget {
     this.onEventItemTap,
     this.isCompany = false,
     this.isLoading = false,
-  }) {
-    places = List.empty(growable: true);
-    events = List.empty(growable: true);
-
-    for (var element in placesOrEvents ?? []) {
-      if (isCompany) {
-        element.isPlace ? places.add(element) : events.add(element);
-      } else {
-        places.add(element);
-      }
-    }
-  }
+  });
 
   final ValueNotifier<bool> tabValue = ValueNotifier(true);
 
@@ -73,8 +59,8 @@ class BookingsControlComponent extends StatelessWidget {
                     const Center(child: CircularProgressIndicator.adaptive())
                   else
                     ...tabValue.value
-                        ? places.isNotEmpty
-                            ? places.map(
+                        ? placesOrEvents != null && placesOrEvents!.isNotEmpty
+                            ? placesOrEvents!.map(
                                 (element) {
                                   return BookingsControlPlaceItemUiKit(
                                     title: element.title,
@@ -92,38 +78,40 @@ class BookingsControlComponent extends StatelessWidget {
                                   ),
                                 ),
                               ]
-                        : events.isNotEmpty
-                            ? events.map(
-                                (element) {
-                                  return Column(
-                                    children: [
-                                      BookingsControlEventItem(
-                                        title: element.title,
-                                        description: element.description,
-                                        events: element.events,
-                                        onTap: (id) {
-                                          onEventItemTap?.call(
-                                            element.events?.firstWhere((element) => element.id == id),
-                                          );
-                                        },
+                        : isCompany
+                            ? placesOrEvents != null && placesOrEvents!.isNotEmpty
+                                ? placesOrEvents!.map(
+                                    (element) {
+                                      return Column(
+                                        children: [
+                                          BookingsControlEventItem(
+                                            title: element.title,
+                                            description: element.description,
+                                            events: element.events,
+                                            onTap: (id) {
+                                              onEventItemTap?.call(
+                                                element.events?.firstWhere((element) => element.id == id),
+                                              );
+                                            },
+                                          ),
+                                          if (element != placesOrEvents!.last)
+                                            Divider(
+                                              color: theme?.colorScheme.surface2,
+                                              thickness: 2.0,
+                                            ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                                        ],
+                                      );
+                                    },
+                                  ).toList()
+                                : [
+                                    Center(
+                                      child: Text(
+                                        S.of(context).ThereNoEventsYet,
+                                        style: theme?.boldTextTheme.body,
                                       ),
-                                      if (element != events.last)
-                                        Divider(
-                                          color: theme?.colorScheme.surface2,
-                                          thickness: 2.0,
-                                        ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                                    ],
-                                  );
-                                },
-                              ).toList()
-                            : [
-                                Center(
-                                  child: Text(
-                                    S.of(context).ThereNoEventsYet,
-                                    style: theme?.boldTextTheme.body,
-                                  ),
-                                ),
-                              ],
+                                    ),
+                                  ]
+                            : [],
                 ],
               );
             },
