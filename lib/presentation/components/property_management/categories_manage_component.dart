@@ -171,7 +171,7 @@ class CategoriesManageComponent extends StatelessWidget {
                               onPressed: onEditSelectedCategory,
                               backgroundColor: ColorsFoundation.primary200.withOpacity(0.3),
                               iconInfo: BaseUiKitButtonIconData(
-                                  iconData: ShuffleUiKitIcons.pencil,
+                                  iconPath: GraphicsFoundation.instance.svg.pencil.path,
                                   size: kIsWeb ? 16 : 16.sp,
                                   color: ColorsFoundation.primary200),
                             ),

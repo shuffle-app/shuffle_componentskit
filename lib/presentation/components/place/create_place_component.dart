@@ -691,8 +691,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           ? S.of(context).CreateBooking
                           : '${S.of(context).Edit} ${S.of(context).Booking}',
                       onPressed: () {
-                        _bookingUiModel ??= BookingUiModel(id: -1);
-
                         showUiKitGeneralFullScreenDialog(
                           context,
                           GeneralDialogData(
