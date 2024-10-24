@@ -14,10 +14,10 @@ dependencies:
 
   #main ui kit
   shuffle_uikit:
-  #  path: ../shuffle_uikit
-    git:
-      url: https://github.com/shuffle-app/shuffle_ui_kit.git
-      ref: master
+   path: ../../../shuffle_uikit
+    # git:
+    #   url: https://github.com/shuffle-app/shuffle_ui_kit.git
+    #   ref: master
 
   #tools for config workers
   json_annotation: ^4.9.0
@@ -25,6 +25,9 @@ dependencies:
 
   #for barcode generate
   barcode_widget: ^2.0.4
+
+  #for scan barcode
+  mobile_scanner: ^6.0.2
 
   #configuration libs
   http: ^1.2.1
@@ -43,6 +46,7 @@ dependencies:
 
   flutter_mobx: ^2.2.1+1
   visibility_detector: ^0.4.0+2
+  
 
 dependency_overrides:
   file: ^7.0.0
