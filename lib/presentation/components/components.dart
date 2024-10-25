@@ -152,3 +152,4 @@ export 'activation_offers_component.dart/user_in_offer_widget.dart';
 export 'notification_offer_reminder_components/offer_content_card.dart';
 export 'barcode/offer_barcode_component.dart';
 export 'barcode/booking_barcode_component.dart';
+export 'barcode_scan_component/barcode_scan_component.dart';
