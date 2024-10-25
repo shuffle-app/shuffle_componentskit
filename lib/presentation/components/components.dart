@@ -97,7 +97,6 @@ export 'profile/profile_preferences/ui_edit_default_profile_preferences_model.da
 export 'profile/public_profile/profile_stats.dart';
 export 'profile/public_profile/public_pro_profile_component.dart';
 export 'profile/settings_component/settings_component.dart';
-export 'profile/spent_points/spent_point_barcode_component.dart';
 export 'profile/spent_points/spent_points_component.dart';
 export 'profile/spent_points/ui_model_discounts.dart';
 export 'profile/spent_points/ui_model_view_history_accrual.dart';
@@ -151,4 +150,6 @@ export 'notification_offer_reminder_components/users_of_offer.dart';
 export 'activation_offers_component.dart/offer_title_widget.dart';
 export 'activation_offers_component.dart/user_in_offer_widget.dart';
 export 'notification_offer_reminder_components/offer_content_card.dart';
+export 'barcode/offer_barcode_component.dart';
+export 'barcode/booking_barcode_component.dart';
 export 'barcode_scan_component/barcode_scan_component.dart';

@@ -1,16 +1,15 @@
-import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/spent_points/ui_model_discounts.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class SpentPointBarcodeComponent extends StatelessWidget {
+class OfferBarcodeComponent extends StatelessWidget {
   final Widget? barcode;
   final String? barcodeNumber;
   final UiModelDiscounts? uiModelDiscounts;
   final String? discountTitle;
   final String? xActivated;
 
-  const SpentPointBarcodeComponent({
+  const OfferBarcodeComponent({
     super.key,
     this.barcode,
     this.uiModelDiscounts,
@@ -28,23 +27,7 @@ class SpentPointBarcodeComponent extends StatelessWidget {
         barcode != null
             ? barcode!
             : (barcodeNumber != null && barcodeNumber!.isNotEmpty)
-                ? UiKitCardWrapper(
-                    width: 0.85.sw,
-                    height: 0.24.sh,
-                    color: theme?.colorScheme.inversePrimary,
-                    borderRadius: BorderRadiusFoundation.all24r,
-                    child: BarcodeWidget(
-                      barcode: Barcode.code128(escapes: true),
-                      data: barcodeNumber!,
-                      style: theme?.regularTextTheme.caption2.copyWith(color: theme.colorScheme.primary),
-                      textPadding: SpacingFoundation.verticalSpacing8,
-                    ).paddingOnly(
-                      top: SpacingFoundation.verticalSpacing10,
-                      bottom: SpacingFoundation.verticalSpacing6,
-                      left: SpacingFoundation.horizontalSpacing12,
-                      right: SpacingFoundation.horizontalSpacing12,
-                    ),
-                  )
+                ? CustomBarcode(barcodeNumber: barcodeNumber!)
                 : UiKitCardWrapper(
                     child: SizedBox(width: double.infinity, height: 146.h),
                   ),
