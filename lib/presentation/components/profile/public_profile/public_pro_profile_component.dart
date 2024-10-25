@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/profile/public_profile/profile_highlights.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -43,11 +44,12 @@ class PublicProProfileComponent extends StatelessWidget {
 
     return BlurredAppBarPage(
       centerTitle: true,
-      customTitle: AutoSizeText(
+      customTitle: Expanded(
+          child: AutoSizeText(
         uiProfileModel.name ?? '',
         maxLines: 2,
         style: textStyle,
-      ),
+      )),
       customToolbarBaseHeight: 100,
       autoImplyLeading: true,
       bodyBottomSpace: verticalMargin,
@@ -110,9 +112,7 @@ class PublicProProfileComponent extends StatelessWidget {
               uiProfileModel.cardWidgetPublic.paddingSymmetric(horizontal: horizontalMargin),
               if (profileStats != null)
                 ProfileHighlights(
-                  placesVisited: profileStats!.placesVisited,
-                  reviewsPosted: profileStats!.reviewsPosted,
-                  points: profileStats!.points,
+                  profileStats: profileStats!
                 ).paddingOnly(
                     left: horizontalMargin, right: horizontalMargin, bottom: SpacingFoundation.verticalSpacing16),
               if (bookingsAndInvitesChartData != null)
