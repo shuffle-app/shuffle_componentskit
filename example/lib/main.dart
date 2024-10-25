@@ -230,6 +230,12 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       // ],
     );
 
+    final List<String> tickets = [
+      '18957697567236asas72',
+      // '18957697567236asas73',
+      // '18957697567236asas74',
+    ];
+
     return Scaffold(
       appBar: CustomAppBar(
         title:
@@ -242,14 +248,42 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
-                text: 'show spent point barcode component',
+                text: 'show booking barcode',
+                onPressed: () {
+                  showUiKitGeneralFullScreenDialog(
+                    context,
+                    GeneralDialogData(
+                      //TODO topPadding in app
+                      topPadding: tickets.isEmpty || tickets.length == 1
+                          ? 1.sw <= 380
+                              ? 0.4.sh
+                              : 0.35.sh
+                          : null,
+                      useRootNavigator: false,
+                      child: BookingBarcodeComponent(
+                        imageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
+                        onShare: (ticketNumber) {
+                          log('ticketNumber ${ticketNumber}');
+                        },
+                        title: 'Teste',
+                        tickets: tickets,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
+                text: 'show offer barcode',
                 onPressed: () {
                   showUiKitGeneralFullScreenDialog(
                     context,
                     GeneralDialogData(
                       topPadding: 1.sw <= 380 ? 0.35.sh : 0.45.sh,
                       useRootNavigator: false,
-                      child: SpentPointBarcodeComponent(
+                      child: OfferBarcodeComponent(
                         discountTitle: 'Free coctails',
                         barcodeNumber: '18957697567236asas72',
                         uiModelDiscounts: UiModelDiscounts(
