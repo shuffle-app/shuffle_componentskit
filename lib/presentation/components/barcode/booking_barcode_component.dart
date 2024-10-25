@@ -1,10 +1,9 @@
-// ignore_for_file: implementation_imports
-
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class BookingBarcodeComponent extends StatelessWidget {
-  final Map<String, ValueNotifier<bool>> tickets;
+  final List<String> tickets;
   final String? title;
   final ValueChanged<String>? onShare;
   final String? imageUrl;
@@ -20,7 +19,7 @@ class BookingBarcodeComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final isEmptyTickets = tickets.keys.isNotEmpty;
+    final isNotEmptyTickets = tickets.isNotEmpty;
 
     return Column(
       children: [
@@ -35,18 +34,17 @@ class BookingBarcodeComponent extends StatelessWidget {
             ),
             SpacingFoundation.horizontalSpace12,
             Expanded(
-              child: Text(
+              child: AutoSizeText(
                 title ?? S.of(context).NothingFound,
                 style: theme?.boldTextTheme.title2,
+                maxLines: 3,
               ),
             ),
           ],
         ),
-        if (isEmptyTickets)
-          ...tickets.keys.map(
+        if (isNotEmptyTickets)
+          ...tickets.map(
             (e) {
-              final isShare = tickets[e];
-
               return Column(
                 children: [
                   SpacingFoundation.verticalSpace24,
@@ -54,7 +52,7 @@ class BookingBarcodeComponent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '${S.of(context).Ticket} ${tickets.keys.toList().indexWhere((element) => element == e) + 1}',
+                          '${S.of(context).Ticket} ${tickets.indexWhere((element) => element == e) + 1}',
                           style: theme?.boldTextTheme.body,
                         ),
                       ),
@@ -70,24 +68,6 @@ class BookingBarcodeComponent extends StatelessWidget {
                   ),
                   SpacingFoundation.verticalSpace16,
                   CustomBarcode(barcodeNumber: e),
-                  SpacingFoundation.verticalSpace16,
-                  if (isShare != null)
-                    ValueListenableBuilder(
-                      valueListenable: isShare,
-                      builder: (context, value, child) {
-                        return value
-                            ? Row(
-                                children: [
-                                  Text(
-                                    S.of(context).YouSharedTicket,
-                                    style: theme?.regularTextTheme.caption1,
-                                    textAlign: TextAlign.end,
-                                  ),
-                                ],
-                              )
-                            : SpacingFoundation.none;
-                      },
-                    ),
                   SpacingFoundation.verticalSpace24,
                   Divider(
                     color: theme?.colorScheme.surface2,
@@ -103,7 +83,7 @@ class BookingBarcodeComponent extends StatelessWidget {
             S.of(context).NothingFound,
             style: theme?.regularTextTheme.caption1,
           ),
-        if (isEmptyTickets)
+        if (isNotEmptyTickets)
           Text(
             S.of(context).ShowTheBarcodeCheckout,
             style: theme?.regularTextTheme.caption1,

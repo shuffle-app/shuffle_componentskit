@@ -230,11 +230,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       // ],
     );
 
-    final Map<String, ValueNotifier<bool>> tickets = {
-      '18957697567236asas72': ValueNotifier<bool>(false),
-      '18957697567236asas73': ValueNotifier<bool>(false),
-      '18957697567236asas74': ValueNotifier<bool>(false),
-    };
+    final List<String> tickets = [
+      '18957697567236asas72',
+      '18957697567236asas73',
+      '18957697567236asas74',
+    ];
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -262,14 +262,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       useRootNavigator: false,
                       child: BookingBarcodeComponent(
                         imageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
-                        onShare: (ticketNumber) {
-                          log('ticketNumber ${ticketNumber}');
-                          final value = tickets?[ticketNumber]?.value;
-                          if (value != null) {
-                            tickets![ticketNumber]!.value = true;
-                            log('tickets[e].value ${value}');
-                          }
-                        },
+                        onShare: (ticketNumber) {},
                         title: 'Teste',
                         tickets: tickets,
                       ),
