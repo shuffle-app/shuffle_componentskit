@@ -245,13 +245,19 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                 text: 'scanner barcode',
                 onPressed: () {
                   context.push(
-                    CustomBarcodeScanner(
-                      onDetect: (barcode) {
-                        if (barcode.barcodes.firstOrNull?.rawValue != null) {
-                          log('barcode ${barcode.barcodes.firstOrNull?.rawValue}');
-                          context.pop();
-                        }
-                      },
+                    Scaffold(
+                      appBar: CustomAppBar(
+                        title: S.of(context).Scanner,
+                        autoImplyLeading: true,
+                      ),
+                      body: CustomBarcodeScanner(
+                        onDetect: (barcode) {
+                          if (barcode.barcodes.firstOrNull?.rawValue != null) {
+                            log('barcode ${barcode.barcodes.firstOrNull?.rawValue}');
+                            // context.pop();
+                          }
+                        },
+                      ),
                     ),
                   );
                 },
