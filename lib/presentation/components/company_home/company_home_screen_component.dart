@@ -29,14 +29,10 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     final theme = context.uiKitTheme;
     final textTheme = theme?.boldTextTheme;
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ??
-            GlobalConfiguration().appConfig.content;
-    final ComponentModel model =
-        ComponentModel.fromJson(config['company_home']);
-    final horizontalMargin =
-        (model.positionModel?.horizontalMargin ?? 0).toDouble();
-    final verticalMargin =
-        (model.positionModel?.verticalMargin ?? 0).toDouble();
+        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+    final ComponentModel model = ComponentModel.fromJson(config['company_home']);
+    final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
+    final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
     final bodyAlignment = model.positionModel?.bodyAlignment;
 
     return Scaffold(
@@ -70,16 +66,18 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               //   ),
               // ),
               profileType: ProfileCardType.company,
-              // avatarUrl: GraphicsFoundation.instance.png.mockAvatar.path,
               profileStats: profileStats,
+            ).paddingSymmetric(
+              horizontal: horizontalMargin,
             ),
             SpacingFoundation.verticalSpace24,
             Row(children: [
-            Text(
-              S.of(context).Places,
-              style: textTheme?.title1,
-              textAlign: TextAlign.left,
-            ),horizontalMargin.widthBox,
+              Text(
+                S.of(context).Places,
+                style: textTheme?.title1,
+                textAlign: TextAlign.left,
+              ),
+              horizontalMargin.widthBox,
               Builder(
                 builder: (context) => GestureDetector(
                   onTap: () => showUiKitPopover(
@@ -99,7 +97,9 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                   ),
                 ),
               ),
-            ]),
+            ]).paddingSymmetric(
+              horizontal: horizontalMargin,
+            ),
             SpacingFoundation.verticalSpace24,
             if (places.isEmpty)
               UiKitTitledActionCard(
@@ -110,6 +110,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                     onPressed: onCreatePlace,
                   ),
                 ),
+              ).paddingSymmetric(
+                horizontal: horizontalMargin,
               ),
             if (places.isNotEmpty)
               ListView.separated(
@@ -127,24 +129,24 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                     updatedAt: item.updatedAt,
                   );
                 },
-                separatorBuilder: (context, index) =>
-                    SpacingFoundation.verticalSpace24,
+                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
                 itemCount: places.length,
               ),
             if (places.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
-              context.gradientButton(
-                data: BaseUiKitButtonData(
-                    text: S.of(context).CreatePlace,
-                    onPressed: onCreatePlace,
-                    fit: ButtonFit.fitWidth),
-              ),
+              context
+                  .gradientButton(
+                    data: BaseUiKitButtonData(
+                        text: S.of(context).CreatePlace, onPressed: onCreatePlace, fit: ButtonFit.fitWidth),
+                  )
+                  .paddingSymmetric(
+                    horizontal: horizontalMargin,
+                  ),
             ],
             SpacingFoundation.verticalSpace24,
             kBottomNavigationBarHeight.heightBox
           ],
         ).paddingSymmetric(
-          horizontal: horizontalMargin,
           vertical: verticalMargin,
         ),
       ),
