@@ -230,11 +230,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       // ],
     );
 
-    final List<String> tickets = [
-      '18957697567236asas72',
-      // '18957697567236asas73',
-      // '18957697567236asas74',
-    ];
+    final Map<String, ValueNotifier<bool>> tickets = {
+      '18957697567236asas72': ValueNotifier<bool>(false),
+      '18957697567236asas73': ValueNotifier<bool>(false),
+      '18957697567236asas74': ValueNotifier<bool>(false),
+    };
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -264,6 +264,11 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         imageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
                         onShare: (ticketNumber) {
                           log('ticketNumber ${ticketNumber}');
+                          final value = tickets?[ticketNumber]?.value;
+                          if (value != null) {
+                            tickets![ticketNumber]!.value = true;
+                            log('tickets[e].value ${value}');
+                          }
                         },
                         title: 'Teste',
                         tickets: tickets,
