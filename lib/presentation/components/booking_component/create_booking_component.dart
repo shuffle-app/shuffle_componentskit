@@ -10,12 +10,14 @@ class CreateBookingComponent extends StatefulWidget {
   final Function(BookingUiModel) onBookingCreated;
   final BookingUiModel? bookingUiModel;
   final String? currency;
+  final bool isViewMode;
 
   const CreateBookingComponent({
     super.key,
     this.bookingUiModel,
     this.currency,
     required this.onBookingCreated,
+    this.isViewMode = false,
   });
 
   @override
@@ -34,11 +36,15 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
 
   int _allSubsLimitCount = 0;
 
+  late final _plusGradient = widget.isViewMode
+      ? GradientFoundation.defaultLinearGradientWithOpacity02
+      : GradientFoundation.defaultLinearGradient;
+
   @override
   void initState() {
     super.initState();
     _bookingUiModel = widget.bookingUiModel ?? BookingUiModel(id: -1);
-    _priceController.text = widget.bookingUiModel?.price ?? '';
+    _priceController.text = '${widget.bookingUiModel?.price ?? ''} ${widget.currency ?? 'AED'}';
     _bookingLimitController.text = widget.bookingUiModel?.bookingLimit ?? '';
     _bookingLimitPerOneController.text = widget.bookingUiModel?.bookingLimitPerOne ?? '';
     _subsUiModels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
@@ -73,7 +79,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
   void didUpdateWidget(covariant CreateBookingComponent oldWidget) {
     if (oldWidget.bookingUiModel != widget.bookingUiModel) {
       _bookingUiModel = widget.bookingUiModel ?? BookingUiModel(id: -1);
-      _priceController.text = widget.bookingUiModel?.price ?? '';
+      _priceController.text = '${widget.bookingUiModel?.price ?? ''} ${widget.currency ?? 'AED'}';
       _bookingLimitController.text = widget.bookingUiModel?.bookingLimit ?? '';
       _bookingLimitPerOneController.text = widget.bookingUiModel?.bookingLimitPerOne ?? '';
       _subsUiModels.clear();
@@ -102,14 +108,19 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
           children: [
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(
+              readOnly: widget.isViewMode,
+              customInputTextColor: widget.isViewMode ? ColorsFoundation.mutedText : null,
+              customLabelColor: widget.isViewMode ? ColorsFoundation.mutedText : null,
               label: S.of(context).Price,
               controller: _priceController,
               keyboardType: TextInputType.number,
               inputFormatters: [PriceWithSpacesFormatter()],
               onTap: () {
-                final list = _priceController.text.split(' ');
-                list.removeLast();
-                _priceController.text = list.join(' ');
+                if (!widget.isViewMode && _priceController.text.contains(widget.currency ?? 'AED')) {
+                  final list = _priceController.text.split(' ');
+                  list.removeLast();
+                  _priceController.text = list.join(' ');
+                }
               },
               onFieldSubmitted: (value) {
                 if (!_priceController.text.contains(widget.currency ?? 'AED')) {
@@ -124,6 +135,9 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
             ),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
+              readOnly: widget.isViewMode,
+              customInputTextColor: widget.isViewMode ? ColorsFoundation.mutedText : null,
+              customLabelColor: widget.isViewMode ? ColorsFoundation.mutedText : null,
               label: S.of(context).BookingLimit,
               controller: _bookingLimitController,
               keyboardType: TextInputType.number,
@@ -146,6 +160,9 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
             ),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
+              readOnly: widget.isViewMode,
+              customInputTextColor: widget.isViewMode ? ColorsFoundation.mutedText : null,
+              customLabelColor: widget.isViewMode ? ColorsFoundation.mutedText : null,
               label: S.of(context).BookingLimitPerOne,
               controller: _bookingLimitPerOneController,
               keyboardType: TextInputType.number,
@@ -189,17 +206,17 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     ),
                   ),
                   UiKitGradientSwitch(
-                    onChanged: (value) {
-                      setState(() {
-                        _bookingUiModel.showSubsInContentCard = !_bookingUiModel.showSubsInContentCard;
-                      });
-                    },
+                    onChanged: widget.isViewMode
+                        ? null
+                        : (value) {
+                            setState(() {
+                              _bookingUiModel.showSubsInContentCard = !_bookingUiModel.showSubsInContentCard;
+                            });
+                          },
                     switchedOn: _bookingUiModel.showSubsInContentCard,
                   ),
                 ],
-              ).paddingOnly(
-                bottom: SpacingFoundation.verticalSpacing24,
-              ),
+              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing24),
             SizedBox(
               height: _subsUiModels.isEmpty ? (1.sw <= 380 ? 0.25.sh : 0.2.sh) : (1.sw <= 380 ? 0.3.sh : 0.23.sh),
               child: ListView.separated(
@@ -219,29 +236,34 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                           child: context
                               .badgeButtonNoValue(
                                 data: BaseUiKitButtonData(
-                                  onPressed: () => context.push(
-                                    CreateSubsComponent(
-                                      onSave: (subsUiModel) {
-                                        setState(() {
-                                          _subsUiModels.add(subsUiModel);
-                                          _countSubsLimit();
-                                        });
-                                      },
-                                    ),
-                                  ),
+                                  onPressed: () {
+                                    if (!widget.isViewMode) {
+                                      context.push(
+                                        CreateSubsComponent(
+                                          onSave: (subsUiModel) {
+                                            setState(() {
+                                              _subsUiModels.add(subsUiModel);
+                                              _countSubsLimit();
+                                            });
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  },
                                   iconWidget: DecoratedBox(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       border: Border.fromBorderSide(
                                         BorderSide(
-                                          color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                          color: context.uiKitTheme!.colorScheme.darkNeutral400
+                                              .withOpacity(widget.isViewMode ? 0.2 : 0.4),
                                           width: 2,
                                         ),
                                       ),
                                       borderRadius: BorderRadiusFoundation.all12,
                                     ),
                                     child: GradientableWidget(
-                                      gradient: GradientFoundation.defaultLinearGradient,
+                                      gradient: _plusGradient,
                                       child: ImageWidget(
                                         iconData: ShuffleUiKitIcons.plus,
                                         height: 30.w,
@@ -259,29 +281,36 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     final sabsItem = _subsUiModels[index - 1];
 
                     return SubsOrUpsaleItem(
+                      isViewMode: widget.isViewMode,
                       limit: sabsItem.bookingLimit,
                       titleOrPrice: sabsItem.title,
                       photoLink: sabsItem.photoPath,
                       actualLimit: sabsItem.actualbookingLimit,
                       description: sabsItem.description,
                       removeItem: () {
-                        _formKey.currentState?.validate();
-                        _removeSubsItem(index - 1);
-                        if (_subsUiModels.isEmpty) {
-                          _bookingUiModel.showSubsInContentCard = false;
+                        if (!widget.isViewMode) {
+                          _formKey.currentState?.validate();
+                          _removeSubsItem(index - 1);
+                          if (_subsUiModels.isEmpty) {
+                            _bookingUiModel.showSubsInContentCard = false;
+                          }
                         }
                       },
-                      onEdit: () => context.push(
-                        CreateSubsComponent(
-                          onSave: (subsUiModel) {
-                            setState(() {
-                              _countSubsLimit();
-                              _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
-                            });
-                          },
-                          subsUiModel: sabsItem,
-                        ),
-                      ),
+                      onEdit: () {
+                        if (!widget.isViewMode) {
+                          return context.push(
+                            CreateSubsComponent(
+                              onSave: (subsUiModel) {
+                                setState(() {
+                                  _countSubsLimit();
+                                  _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
+                                });
+                              },
+                              subsUiModel: sabsItem,
+                            ),
+                          );
+                        }
+                      },
                     );
                   }
                 },
@@ -310,29 +339,34 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                           child: context
                               .badgeButtonNoValue(
                                 data: BaseUiKitButtonData(
-                                  onPressed: () => context.push(
-                                    CreateUpsalesComponent(
-                                      currency: widget.currency,
-                                      onSave: (upsaleUiModel) {
-                                        setState(() {
-                                          _upsaleUiModels.add(upsaleUiModel);
-                                        });
-                                      },
-                                    ),
-                                  ),
+                                  onPressed: () {
+                                    if (!widget.isViewMode) {
+                                      context.push(
+                                        CreateUpsalesComponent(
+                                          currency: widget.currency,
+                                          onSave: (upsaleUiModel) {
+                                            setState(() {
+                                              _upsaleUiModels.add(upsaleUiModel);
+                                            });
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  },
                                   iconWidget: DecoratedBox(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       border: Border.fromBorderSide(
                                         BorderSide(
-                                          color: context.uiKitTheme!.colorScheme.darkNeutral400.withOpacity(0.4),
+                                          color: context.uiKitTheme!.colorScheme.darkNeutral400
+                                              .withOpacity(widget.isViewMode ? 0.2 : 0.4),
                                           width: 2,
                                         ),
                                       ),
                                       borderRadius: BorderRadiusFoundation.all12,
                                     ),
                                     child: GradientableWidget(
-                                      gradient: GradientFoundation.defaultLinearGradient,
+                                      gradient: _plusGradient,
                                       child: ImageWidget(
                                         height: 30.w,
                                         width: 30.w,
@@ -350,6 +384,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                     final upsaleItem = _upsaleUiModels[index - 1];
 
                     return SubsOrUpsaleItem(
+                      isViewMode: widget.isViewMode,
                       description: upsaleItem.description,
                       limit: upsaleItem.limit,
                       isSubs: false,
@@ -358,43 +393,51 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                       titleOrPrice: (upsaleItem.price != null && upsaleItem.price!.isNotEmpty)
                           ? upsaleItem.price
                           : S.of(context).Free,
-                      removeItem: () => _removeUpsaleItem(index - 1),
-                      onEdit: () => context.push(
-                        CreateUpsalesComponent(
-                          currency: widget.currency,
-                          onSave: (upsaleUiModel) {
-                            setState(() {
-                              _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
-                            });
-                          },
-                          upsaleUiModel: upsaleItem,
-                        ),
-                      ),
+                      removeItem: () {
+                        if (!widget.isViewMode) _removeUpsaleItem(index - 1);
+                      },
+                      onEdit: () {
+                        if (!widget.isViewMode) {
+                          return context.push(
+                            CreateUpsalesComponent(
+                              currency: widget.currency,
+                              onSave: (upsaleUiModel) {
+                                setState(() {
+                                  _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
+                                });
+                              },
+                              upsaleUiModel: upsaleItem,
+                            ),
+                          );
+                        }
+                      },
                     );
                   }
                 },
               ),
             ),
-            SafeArea(
-              child: context.gradientButton(
-                data: BaseUiKitButtonData(
-                  text: S.of(context).Save.toUpperCase(),
-                  onPressed: () {
-                    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                      _bookingUiModel.price = _priceController.text;
-                      _bookingUiModel.bookingLimit = _bookingLimitController.text.isEmpty
-                          ? _allSubsLimitCount.toString()
-                          : _bookingLimitController.text;
-                      _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
-                      _bookingUiModel.subsUiModel = _subsUiModels;
-                      _bookingUiModel.upsaleUiModel = _upsaleUiModels;
-                      widget.onBookingCreated(_bookingUiModel);
-                    }
-                  },
+            if (!widget.isViewMode) ...[
+              SafeArea(
+                child: context.gradientButton(
+                  data: BaseUiKitButtonData(
+                    text: S.of(context).Save.toUpperCase(),
+                    onPressed: () {
+                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        _bookingUiModel.price = _priceController.text;
+                        _bookingUiModel.bookingLimit = _bookingLimitController.text.isEmpty
+                            ? _allSubsLimitCount.toString()
+                            : _bookingLimitController.text;
+                        _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
+                        _bookingUiModel.subsUiModel = _subsUiModels;
+                        _bookingUiModel.upsaleUiModel = _upsaleUiModels;
+                        widget.onBookingCreated(_bookingUiModel);
+                      }
+                    },
+                  ),
                 ),
               ),
-            ),
-            SpacingFoundation.verticalSpace24,
+              SpacingFoundation.verticalSpace24,
+            ],
           ],
         ),
       ),

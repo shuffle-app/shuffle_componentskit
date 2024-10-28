@@ -321,70 +321,117 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.of(context).UpcomingEvent, style: boldTextTheme?.subHeadline),
+                  Row(
+                    children: [
+                      Text(
+                        S.of(context).UpcomingEvent,
+                        style: boldTextTheme?.subHeadline,
+                      ),
+                      SpacingFoundation.horizontalSpace16,
+                      Builder(
+                        builder: (context) => GestureDetector(
+                          onTap: () => showUiKitPopover(
+                            context,
+                            customMinHeight: 30.h,
+                            showButton: false,
+                            title: Text(
+                              S.current.HintNumberEventsForPro,
+                              style: theme?.regularTextTheme.body.copyWith(
+                                color: Colors.black87,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          child: ImageWidget(
+                            iconData: ShuffleUiKitIcons.info,
+                            width: 20.w,
+                            color: theme?.colorScheme.darkNeutral900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
                     SpacingFoundation.verticalSpace8,
                     for (UiEventModel event in snapshot.data!)
-                      ListTile(
-                        isThreeLine: true,
-                        contentPadding: EdgeInsets.zero,
-                        leading: BorderedUserCircleAvatar(
-                          imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                          size: 40.w,
-                        ),
-                        title: Text(
-                          event.title ?? '',
-                          style: boldTextTheme?.caption1Bold,
-                        ),
-                        subtitle: event.scheduleString != null
-                            ? Text(
-                                event.scheduleString!,
-                                style: boldTextTheme?.caption1Medium.copyWith(
-                                  color: colorScheme?.darkNeutral500,
+                      if (event.moderationStatus != null)
+                        InkWell(
+                          onTap: () => widget.onEventTap?.call(event),
+                          borderRadius: BorderRadiusFoundation.all24,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadiusFoundation.all24,
+                                gradient: LinearGradient(
+                                    colors: [theme!.colorScheme.inversePrimary.withOpacity(0.3), Colors.transparent])),
+                            child: Center(
+                              child: Text(
+                                event.reviewStatus!,
+                                style: boldTextTheme?.caption1Bold.copyWith(color: Colors.white),
+                              ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing8),
+                            ),
+                          ),
+                        ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16)
+                      else
+                        ListTile(
+                          isThreeLine: true,
+                          contentPadding: EdgeInsets.zero,
+                          leading: BorderedUserCircleAvatar(
+                            imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                            size: 40.w,
+                          ),
+                          title: Text(
+                            event.title ?? '',
+                            style: boldTextTheme?.caption1Bold,
+                          ),
+                          subtitle: event.scheduleString != null
+                              ? Text(
+                                  event.scheduleString!,
+                                  style: boldTextTheme?.caption1Medium.copyWith(
+                                    color: colorScheme?.darkNeutral500,
+                                  ),
+                                )
+                              : null,
+                          // event.date != null
+                          //     ? Text(
+                          //         DateFormat('MMMM d').format(event.date!),
+                          //         style: theme?.boldTextTheme.caption1Medium.copyWith(
+                          //           color: theme.colorScheme.darkNeutral500,
+                          //         ),
+                          //       )
+                          //     : const SizedBox.shrink(),
+                          trailing: context
+                              .smallButton(
+                                data: BaseUiKitButtonData(
+                                  onPressed: () {
+                                    if (widget.onEventTap != null) {
+                                      widget.onEventTap?.call(event);
+                                    } else {
+                                      buildComponent(
+                                        context,
+                                        ComponentEventModel.fromJson(config['event']),
+                                        ComponentBuilder(
+                                          child: EventComponent(
+                                            event: event,
+                                            canLeaveVideoReaction: widget.canLeaveVideoReaction,
+                                            canLeaveFeedback: widget.canLeaveFeedbackForEventCallback,
+                                            feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
+                                            reactionsLoaderCallback: widget.eventReactionLoaderCallback,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  iconInfo: BaseUiKitButtonIconData(
+                                    iconData: CupertinoIcons.right_chevron,
+                                    color: colorScheme?.inversePrimary,
+                                    size: 20.w,
+                                  ),
                                 ),
                               )
-                            : null,
-                        // event.date != null
-                        //     ? Text(
-                        //         DateFormat('MMMM d').format(event.date!),
-                        //         style: theme?.boldTextTheme.caption1Medium.copyWith(
-                        //           color: theme.colorScheme.darkNeutral500,
-                        //         ),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        trailing: context
-                            .smallButton(
-                              data: BaseUiKitButtonData(
-                                onPressed: () {
-                                  if (widget.onEventTap != null) {
-                                    widget.onEventTap?.call(event);
-                                  } else {
-                                    buildComponent(
-                                      context,
-                                      ComponentEventModel.fromJson(config['event']),
-                                      ComponentBuilder(
-                                        child: EventComponent(
-                                          event: event,
-                                          canLeaveVideoReaction: widget.canLeaveVideoReaction,
-                                          canLeaveFeedback: widget.canLeaveFeedbackForEventCallback,
-                                          feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
-                                          reactionsLoaderCallback: widget.eventReactionLoaderCallback,
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
-                                iconInfo: BaseUiKitButtonIconData(
-                                  iconData: CupertinoIcons.right_chevron,
-                                  color: colorScheme?.inversePrimary,
-                                  size: 20.w,
-                                ),
-                              ),
-                            )
-                            .paddingOnly(top: SpacingFoundation.verticalSpacing4),
-                      ),
+                              .paddingOnly(top: SpacingFoundation.verticalSpacing4),
+                        )
                   ],
-                  SpacingFoundation.verticalSpace4,
+                  SpacingFoundation.verticalSpace16,
                   context.gradientButton(
                     data: BaseUiKitButtonData(
                       text: S.of(context).CreateEvent,
