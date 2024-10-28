@@ -61,13 +61,41 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
       child: BlurredAppBarPage(
         animatedListKey: widget.animatedListKey,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-        customTitle: Flexible(
-            child: AutoSizeText(
-          widget.title ?? S.of(context).NothingFound,
-          style: theme?.boldTextTheme.title1,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-        )),
+        customTitle: Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: AutoSizeText(
+                  widget.title ?? S.of(context).NothingFound,
+                  style: theme?.boldTextTheme.title1,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                ),
+              ),
+              SpacingFoundation.horizontalSpace12,
+              Builder(
+                builder: (context) => GestureDetector(
+                  onTap: () => showUiKitPopover(
+                    context,
+                    customMinHeight: 30.h,
+                    showButton: false,
+                    title: Text(
+                      S.of(context).LongTapCardEdit,
+                      style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  child: ImageWidget(
+                    iconData: ShuffleUiKitIcons.info,
+                    width: 20.w,
+                    color: theme?.colorScheme.darkNeutral900,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         autoImplyLeading: true,
         appBarTrailing: context.outlinedButton(
           padding: EdgeInsets.all(EdgeInsetsFoundation.all6),
