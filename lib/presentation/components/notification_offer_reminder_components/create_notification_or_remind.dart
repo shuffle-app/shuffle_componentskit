@@ -152,7 +152,6 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
           UiKitSelectDateWidget(
             selectedDates: _selectedDates,
             dateToWord: true,
-            lastDate: widget.lastDate,
             onCalenderTap: () async {
               await showUiKitCalendarFromToDialog(
                 context,
