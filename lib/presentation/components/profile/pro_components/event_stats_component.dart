@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_components_kit/domain/data_uimodels/unique_statistics_model.dart';
-import 'package:shuffle_components_kit/presentation/components/components.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ContentStatisticsComponent extends StatelessWidget {
@@ -27,8 +27,8 @@ class ContentStatisticsComponent extends StatelessWidget {
   //   CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
   // ];
 
-  ContentStatisticsComponent({
-    Key? key,
+  const ContentStatisticsComponent({
+    super.key,
     required this.uniqueStatisticsModel,
     required this.viewsAndVisitorsStat,
     required this.feedbackStats,
@@ -43,25 +43,30 @@ class ContentStatisticsComponent extends StatelessWidget {
     this.onStatisticsPopupMenuItemTapped,
     this.place,
     this.event,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
-    final colorScheme = context.uiKitTheme?.colorScheme;
-    final linesCount = title.length / 15;
+    final theme = context.uiKitTheme;
+    final boldTextTheme = theme?.boldTextTheme;
+    final colorScheme = theme?.colorScheme;
+    // final linesCount = title.length / 15;
+
+    TextStyle? textStyle = theme?.boldTextTheme.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
 
     return BlurredAppBarPage(
       centerTitle: true,
-      title: title,
+      customTitle: Expanded(child: AutoSizeText(title, maxLines: 1, style: textStyle)),
+      customToolbarBaseHeight: 100,
       autoImplyLeading: true,
       canFoldAppBar: false,
       expandTitle: true,
-      customToolbarBaseHeight: linesCount > 1
-          ? 0.125.sh
-          : linesCount >= 2
-              ? 0.175
-              : null,
+      // customToolbarBaseHeight: linesCount > 1
+      //     ? 0.125.sh
+      //     : linesCount >= 2
+      //         ? 0.175
+      //         : null,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,

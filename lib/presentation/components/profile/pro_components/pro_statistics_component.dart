@@ -164,7 +164,7 @@ class ProStatisticsComponent extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: uniqueStatisticsModel.viewSourcesData.legend
                             .map<Widget>(
                               (legendItem) => UiKitChartLegendWidget(

@@ -23,7 +23,7 @@ class CompanyStatisticsComponent extends StatefulWidget {
   final List<UiEventModel>? events;
   final List<UiPlaceModel>? places;
 
-  CompanyStatisticsComponent({
+  const CompanyStatisticsComponent({
     Key? key,
     required this.uniqueStatisticsModel,
     required this.viewsAndVisitorsStat,
@@ -59,7 +59,7 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
     UiKitCustomTab(title: S.current.Events.toUpperCase(), customValue: 'events'),
   ];
 
-  String selectedContentTab = 'events';
+  String selectedContentTab = 'places';
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +72,12 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,
-        UiKitTabBarWithUnderlineIndicator(
-          tabController: widget.tabController,
-          onTappedTab: (index) => widget.onTabTapped?.call(_chartTabs.elementAtOrNull(index)?.customValue),
-          tabs: _chartTabs,
-        ),
-        SpacingFoundation.verticalSpace16,
+        // UiKitTabBarWithUnderlineIndicator(
+        //   tabController: widget.tabController,
+        //   onTappedTab: (index) => widget.onTabTapped?.call(_chartTabs.elementAtOrNull(index)?.customValue),
+        //   tabs: _chartTabs,
+        // ),
+        // SpacingFoundation.verticalSpace16,
         UiKitLineChart(
           loading: widget.loadingVisitorsStatistics,
           chartData: widget.viewsAndVisitorsStat.copyWith(
@@ -145,7 +145,7 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                   ),
                   TitledInfoModel(
                     title: S.current.Interests,
-                    info: 'Snowboard, Free Ride, Hookah, Dance',
+                    info: widget.uniqueStatisticsModel.mostActiveAgeSegment.interests.join(', '),
                   ),
                 ],
               ),
@@ -173,7 +173,7 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: widget.uniqueStatisticsModel.viewSourcesData.legend
                             .map<Widget>(
                               (legendItem) => UiKitChartLegendWidget(
@@ -195,31 +195,31 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                   ],
                 ),
               ),
-              UiKitRoundedDivider(
-                thickness: 2,
-                height: SpacingFoundation.verticalSpacing32,
-              ),
-              if (widget.uniqueStatisticsModel.topEventsDate != null &&
-                  widget.uniqueStatisticsModel.topEventTitles != null)
-                UiKitRankedTitledBoard(
-                  title: S.current.TopEventsFor(
-                    formatDateWithCustomPattern('MMMM dd', widget.uniqueStatisticsModel.topEventsDate!),
-                  ),
-                  rankItems: widget.uniqueStatisticsModel.topEventTitles!,
-                ),
-              if (widget.uniqueStatisticsModel.topEventsDate != null &&
-                  widget.uniqueStatisticsModel.topEventTitles != null)
-                UiKitRoundedDivider(
-                  thickness: 2,
-                  height: SpacingFoundation.verticalSpacing32,
-                ),
-              UiKitGlowingProgressIndicator(
-                maxWidth: 1.sw - 16,
-                progressColor: ColorsFoundation.success,
-                maxValue: widget.uniqueStatisticsModel.interestBarProgress.maxValue,
-                value: widget.uniqueStatisticsModel.interestBarProgress.value,
-                title: widget.uniqueStatisticsModel.interestBarProgress.title,
-              ),
+              // UiKitRoundedDivider(
+              //   thickness: 2,
+              //   height: SpacingFoundation.verticalSpacing32,
+              // ),
+              // if (widget.uniqueStatisticsModel.topEventsDate != null &&
+              //     widget.uniqueStatisticsModel.topEventTitles != null)
+              //   UiKitRankedTitledBoard(
+              //     title: S.current.TopEventsFor(
+              //       formatDateWithCustomPattern('MMMM dd', widget.uniqueStatisticsModel.topEventsDate!),
+              //     ),
+              //     rankItems: widget.uniqueStatisticsModel.topEventTitles!,
+              //   ),
+              // if (widget.uniqueStatisticsModel.topEventsDate != null &&
+              //     widget.uniqueStatisticsModel.topEventTitles != null)
+              //   UiKitRoundedDivider(
+              //     thickness: 2,
+              //     height: SpacingFoundation.verticalSpacing32,
+              //   ),
+              // UiKitGlowingProgressIndicator(
+              //   maxWidth: 1.sw - 16,
+              //   progressColor: ColorsFoundation.success,
+              //   maxValue: widget.uniqueStatisticsModel.interestBarProgress.maxValue,
+              //   value: widget.uniqueStatisticsModel.interestBarProgress.value,
+              //   title: widget.uniqueStatisticsModel.interestBarProgress.title,
+              // ),
             ],
           ),
         ),
