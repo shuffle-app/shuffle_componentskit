@@ -127,7 +127,15 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                     link: GraphicsFoundation.instance.svg.pencil.path,
                     color: theme?.colorScheme.inversePrimary,
                   ),
-                ),
+                )
+              else
+                GestureDetector(
+                  onTap: widget.onBookingEdit,
+                  child: ImageWidget(
+                    iconData: ShuffleUiKitIcons.view,
+                    color: theme?.colorScheme.inversePrimary,
+                  ),
+                )
             ],
           ),
           if (widget.isLoading)
