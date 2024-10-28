@@ -9,6 +9,7 @@ class CreateOffer extends StatefulWidget {
   final UniversalNotOfferRemUiModel? offerUiModel;
   final ValueChanged<UniversalNotOfferRemUiModel>? onCreateOffer;
   final int? offerPrice;
+  final DateTime? firstDate;
   final DateTime? lastDate;
   final Map<int, String>? iconsList;
 
@@ -17,6 +18,7 @@ class CreateOffer extends StatefulWidget {
     this.offerUiModel,
     this.onCreateOffer,
     this.offerPrice,
+    this.firstDate,
     this.lastDate,
     this.iconsList,
   });
@@ -194,35 +196,9 @@ class _CreateOfferState extends State<CreateOffer> {
               inputFormatters: [PriceWithSpacesFormatter(allowDecimal: false)],
             ),
             SpacingFoundation.verticalSpace16,
-            Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    S.of(context).PersonalizeYourOffer,
-                    style: theme?.regularTextTheme.labelSmall,
-                  ),
-                ),
-                SpacingFoundation.horizontalSpace12,
-                Builder(
-                  builder: (context) => GestureDetector(
-                    onTap: () => showUiKitPopover(
-                      context,
-                      customMinHeight: 30.h,
-                      showButton: false,
-                      title: Text(
-                        S.of(context).ByDefaultYourOfferWillDisplay,
-                        style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.info,
-                      width: 20.w,
-                      color: theme?.colorScheme.darkNeutral900,
-                    ),
-                  ),
-                ),
-              ],
+            Text(
+              S.of(context).PersonalizeYourOffer,
+              style: theme?.regularTextTheme.labelSmall,
             ),
             SpacingFoundation.verticalSpace4,
             UiKitSelectedIconWidget(
@@ -246,25 +222,34 @@ class _CreateOfferState extends State<CreateOffer> {
             SpacingFoundation.verticalSpace2,
             UiKitSelectDateWidget(
               selectedDates: _selectedDates,
-              lastDate: widget.lastDate,
               onCalenderTap: () async {
-                await showUiKitCalendarFromToDialog(
+                _selectedDates.clear();
+                final firstDate = await showUiKitCalendarDialog(
                   context,
-                  lastDate: (widget.lastDate != null &&
-                          widget.lastDate!.isAfter(DateTime.now()) &&
-                          !widget.lastDate!.isAtSameDay)
-                      ? widget.lastDate
-                      : null,
-                  (from, to) {
-                    setState(() {
-                      _selectedDates.clear();
-                      (from != null && (from!.isAfter(DateTime.now()) || from!.isAtSameDay))
-                          ? _selectedDates.add(from)
-                          : from = null;
-                      (from != null && from != to) ? _selectedDates.add(to) : _selectedDates.add(null);
-                    });
-                  },
+                  firstDate: widget.firstDate,
+                  lastDate: widget.lastDate,
                 );
+                setState(() {
+                  _selectedDates.add(firstDate);
+                });
+                await Future.delayed(const Duration(milliseconds: 200));
+                if (_selectedDates[0] != null && context.mounted) {
+                  final lastDate = await showUiKitCalendarDialog(
+                    context,
+                    firstDate: _selectedDates[0],
+                    lastDate: widget.lastDate,
+                  );
+
+                  if (lastDate != null && _selectedDates[0]!.isAtSameMomentAs(lastDate)) {
+                    setState(() {
+                      _selectedDates.add(null);
+                    });
+                  } else {
+                    setState(() {
+                      _selectedDates.add(lastDate);
+                    });
+                  }
+                }
               },
             ),
             if (widget.offerUiModel == null) ...[
