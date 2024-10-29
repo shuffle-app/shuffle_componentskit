@@ -116,4 +116,7 @@ class ChatItemUiModel {
       firstPageMessages: firstPageMessages ?? this.firstPageMessages,
     );
   }
+
+  @override
+  String toString() =>'ChatItemUiModel id $id isGroupChat $isGroupChat';
 }

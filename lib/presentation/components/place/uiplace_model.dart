@@ -203,7 +203,7 @@ class UiPlaceModel {
   }
 
   bool selectableDayPredicate(DateTime day) {
-    return weekdays.isEmpty ? true : weekdays.contains(day.weekday.toString().substring(0, 3).toLowerCase());
+    return weekdays.isEmpty ? true : weekdays.contains(uiKitConstWeekdays[day.weekday].toLowerCase());
   }
 
   @override
