@@ -744,9 +744,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           if (_eventToEdit.bookingUrl != null && _eventToEdit.bookingUrl!.isNotEmpty) ...[
             SpacingFoundation.verticalSpace10,
             Text(
-              '_eventToEdit.bookingUrl!',
+              _eventToEdit.bookingUrl!,
               style: tagTextStyle,
-            )
+              textAlign: TextAlign.center,
+            ),
           ],
           if (_eventToEdit.bookingUiModel == null) SpacingFoundation.verticalSpace24,
           SafeArea(
