@@ -209,9 +209,9 @@ class _EventComponentState extends State<EventComponent> {
                         overflow: TextOverflow.ellipsis,
                         stepGranularity: 1.w,
                         style: theme?.boldTextTheme.title2,
-                        textAlign: titleAlignment.textAlign,
+                        textAlign: widget.isEligibleForEdit ? TextAlign.start : titleAlignment.textAlign,
                       ),
-                    ),
+                    ).paddingOnly(right: widget.isEligibleForEdit ? SpacingFoundation.horizontalSpacing44 : 0),
                     if (widget.isEligibleForEdit)
                       Positioned(
                         right: 0,
