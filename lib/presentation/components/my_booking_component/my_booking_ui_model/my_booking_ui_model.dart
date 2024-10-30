@@ -10,6 +10,7 @@ class MyBookingUiModel {
   final UiPlaceModel? placeModel;
   final DateTime? visitDate;
   final int? total;
+  final String? categoryName;
 
   MyBookingUiModel({
     required this.id,
@@ -19,6 +20,7 @@ class MyBookingUiModel {
     this.eventModel,
     this.placeModel,
     this.visitDate,
+    this.categoryName,
   });
 
   bool get isPast {
