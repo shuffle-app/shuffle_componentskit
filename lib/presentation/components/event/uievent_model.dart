@@ -42,6 +42,8 @@ class UiEventModel extends Advertisable {
   BookingUiModel? bookingUiModel;
   DateTime? updatedAt;
   String? moderationStatus;
+  int? ownerId;
+  int? placeId;
 
   UiEventModel({
     required this.id,
@@ -80,6 +82,8 @@ class UiEventModel extends Advertisable {
     this.updatedAt,
     this.moderationStatus,
     this.userPoints,
+    this.ownerId,
+    this.placeId,
   })  : descriptionItems = [
           if (scheduleString != null)
             UiDescriptionItemModel(
@@ -193,6 +197,8 @@ class UiEventModel extends Advertisable {
         upsalesItems = const [],
         bookingUrl = null,
         bookingUiModel = null,
+        ownerId = null,
+        placeId = null,
         super(isAdvertisement: false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
@@ -238,6 +244,8 @@ class UiEventModel extends Advertisable {
     DateTime? updatedAt,
     String? moderationStatus,
     int? userPoints,
+    int? ownerId,
+    int? placeId,
   }) =>
       UiEventModel(
         id: id,
@@ -274,6 +282,8 @@ class UiEventModel extends Advertisable {
         updatedAt: updatedAt ?? this.updatedAt,
         moderationStatus: moderationStatus ?? this.moderationStatus,
         userPoints: userPoints ?? this.userPoints,
+        ownerId: ownerId ?? this.ownerId,
+        placeId: placeId ?? this.placeId,
       );
 
   bool selectableDayPredicate(DateTime day) {
