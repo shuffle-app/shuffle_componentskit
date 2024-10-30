@@ -64,6 +64,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
         customTitle: Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Flexible(
                 child: AutoSizeText(
@@ -73,7 +74,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                   maxLines: 1,
                 ),
               ),
-              SpacingFoundation.horizontalSpace12,
+              SpacingFoundation.horizontalSpace8,
               Builder(
                 builder: (context) => GestureDetector(
                   onTap: () => showUiKitPopover(
@@ -93,6 +94,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                   ),
                 ),
               ),
+              SpacingFoundation.horizontalSpace12,
             ],
           ),
         ),

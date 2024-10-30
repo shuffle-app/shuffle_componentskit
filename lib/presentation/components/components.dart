@@ -154,3 +154,4 @@ export 'notification_offer_reminder_components/offer_content_card.dart';
 export 'barcode/offer_barcode_component.dart';
 export 'barcode/booking_barcode_component.dart';
 export 'barcode_scan_component/barcode_scan_component.dart';
+export 'barcode/share_booking_barcode.dart';
