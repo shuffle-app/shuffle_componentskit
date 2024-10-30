@@ -1,66 +1,51 @@
-import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class ShareBookingBarcode extends StatelessWidget {
-  final String? profileImageUrl;
+  final BaseUiKitUserTileData? userTileData;
   final String? contentImageUrl;
   final String barcodeNumber;
-  final String? contentTitle;
   final String? eventTitle;
-  final String? categoryType;
   final DateTime? contentDate;
   final int? price;
   final String? currency;
-  final ValueChanged<Uint8List?>? onShareTap;
+  final ValueChanged<Future<Uint8List?> Function()>? onShareTap;
   final bool isLoading;
+  final bool isShareLoading;
 
   ShareBookingBarcode({
     super.key,
-    this.profileImageUrl,
-    this.contentImageUrl,
+    this.userTileData,
     required this.barcodeNumber,
-    this.contentTitle,
-    this.categoryType,
     this.contentDate,
     this.price,
     this.currency,
     this.eventTitle,
     this.onShareTap,
     this.isLoading = false,
+    this.isShareLoading = false,
+    this.contentImageUrl,
   });
 
   final GlobalKey globalKey = GlobalKey();
 
-  late final Uint8List? pngBytes;
-
-  Future<void> _capturePng() async {
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      try {
-        RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-        if (boundary.debugNeedsPaint) {
-          await Future.delayed(const Duration(milliseconds: 20));
-        }
-        ui.Image image = await boundary.toImage();
-        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-        pngBytes = byteData?.buffer.asUint8List();
-      } catch (e) {
-        log('Error capturing PNG: $e');
-        pngBytes = null;
-      }
-    });
+  Future<Uint8List?> _capturePng() async {
+    RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    if (boundary.debugNeedsPaint) {
+      await Future.delayed(const Duration(milliseconds: 20));
+    }
+    ui.Image image = await boundary.toImage();
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData?.buffer.asUint8List();
   }
 
   @override
   Widget build(BuildContext context) {
-    _capturePng();
-
     final theme = context.uiKitTheme;
     final boldTextTheme = theme?.boldTextTheme;
 
@@ -102,9 +87,9 @@ class ShareBookingBarcode extends StatelessWidget {
                         children: [
                           context.userAvatar(
                             size: UserAvatarSize.x40x40,
-                            type: UserTileType.ordinary,
+                            type: userTileData?.type ?? UserTileType.ordinary,
                             userName: '',
-                            imageUrl: profileImageUrl,
+                            imageUrl: userTileData?.avatarUrl,
                           ),
                           SpacingFoundation.horizontalSpace12,
                           Expanded(
@@ -113,14 +98,14 @@ class ShareBookingBarcode extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 AutoSizeText(
-                                  contentTitle ?? S.of(context).NothingFound,
+                                  userTileData?.name ?? S.of(context).NothingFound,
                                   style: boldTextTheme?.body,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                if (categoryType != null && categoryType!.isNotEmpty)
+                                if (userTileData?.speciality != null && userTileData!.speciality!.isNotEmpty)
                                   Text(
-                                    categoryType!,
+                                    userTileData!.speciality!,
                                     style: boldTextTheme?.caption1Medium,
                                   ),
                               ],
@@ -184,9 +169,9 @@ class ShareBookingBarcode extends StatelessWidget {
           child: context.gradientButton(
             data: BaseUiKitButtonData(
               onPressed: () async {
-                onShareTap?.call(pngBytes);
+                onShareTap?.call(_capturePng);
               },
-              loading: isLoading,
+              loading: isShareLoading,
               text: S.of(context).Share,
             ),
           ),
