@@ -186,29 +186,29 @@ class ProStatisticsComponent extends StatelessWidget {
                   ],
                 ),
               ),
-              UiKitRoundedDivider(
-                thickness: 2,
-                height: SpacingFoundation.verticalSpacing32,
-              ),
-              if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
-                UiKitRankedTitledBoard(
-                  title: S.current.TopEventsFor(
-                    formatDateWithCustomPattern('MMMM dd', uniqueStatisticsModel.topEventsDate!),
-                  ),
-                  rankItems: uniqueStatisticsModel.topEventTitles!,
-                ),
-              if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
-                UiKitRoundedDivider(
-                  thickness: 2,
-                  height: SpacingFoundation.verticalSpacing32,
-                ),
-              UiKitGlowingProgressIndicator(
-                maxWidth: 1.sw - 16,
-                progressColor: ColorsFoundation.success,
-                maxValue: uniqueStatisticsModel.interestBarProgress.maxValue,
-                value: uniqueStatisticsModel.interestBarProgress.value,
-                title: uniqueStatisticsModel.interestBarProgress.title,
-              ),
+              // UiKitRoundedDivider(
+              //   thickness: 2,
+              //   height: SpacingFoundation.verticalSpacing32,
+              // ),
+              // if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
+              //   UiKitRankedTitledBoard(
+              //     title: S.current.TopEventsFor(
+              //       formatDateWithCustomPattern('MMMM dd', uniqueStatisticsModel.topEventsDate!),
+              //     ),
+              //     rankItems: uniqueStatisticsModel.topEventTitles!,
+              //   ),
+              // if (uniqueStatisticsModel.topEventTitles != null && uniqueStatisticsModel.topEventsDate != null)
+              //   UiKitRoundedDivider(
+              //     thickness: 2,
+              //     height: SpacingFoundation.verticalSpacing32,
+              //   ),
+              // UiKitGlowingProgressIndicator(
+              //   maxWidth: 1.sw - 16,
+              //   progressColor: ColorsFoundation.success,
+              //   maxValue: uniqueStatisticsModel.interestBarProgress.maxValue,
+              //   value: uniqueStatisticsModel.interestBarProgress.value,
+              //   title: uniqueStatisticsModel.interestBarProgress.title,
+              // ),
             ],
           ),
         ),

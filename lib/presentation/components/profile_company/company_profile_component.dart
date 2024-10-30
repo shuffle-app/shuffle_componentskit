@@ -159,11 +159,10 @@ class CompanyProfileComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         UiKitInlineButton(
           data: BaseUiKitButtonData(
-            iconWidget: ImageWidget(svgAsset: GraphicsFoundation.instance.svg.lifebuoy,width: iconWidth,),
-            // iconInfo: BaseUiKitButtonIconData(
-            //
-            //   size: iconWidth,
-            // ),
+            iconInfo: BaseUiKitButtonIconData(
+              iconPath: GraphicsFoundation.instance.svg.lifebuoy.path,
+              size: iconWidth,
+            ),
             text: S.current.Support.toUpperCase(),
             onPressed: () => onProfileItemChosen('support'),
           ),
