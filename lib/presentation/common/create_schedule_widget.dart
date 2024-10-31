@@ -39,8 +39,26 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   @override
   void initState() {
     scheduleModel = widget.scheduleToEdit;
-    if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-      listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+    debugPrint('recieved schedule: $scheduleModel');
+    if (scheduleModel != null) {
+      switch (scheduleModel.runtimeType) {
+        case UiScheduleTimeModel _:
+          selectedScheduleName = UiScheduleTimeModel.scheduleType;
+          break;
+
+        case UiScheduleDatesModel _:
+          selectedScheduleName = UiScheduleDatesModel.scheduleType;
+          break;
+
+        case UiScheduleDatesRangeModel _:
+          selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+      }
+      if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // Pre-fill the list with existing items.
+          listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+        });
+      }
     }
     super.initState();
   }
@@ -114,6 +132,18 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                       }
                       setState(() {
                         scheduleModel = selectedTemplate;
+                        switch (scheduleModel.runtimeType) {
+                          case UiScheduleTimeModel _:
+                            selectedScheduleName = UiScheduleTimeModel.scheduleType;
+                            break;
+
+                          case UiScheduleDatesModel _:
+                            selectedScheduleName = UiScheduleDatesModel.scheduleType;
+                            break;
+
+                          case UiScheduleDatesRangeModel _:
+                            selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+                        }
                       });
                       if ((scheduleModel?.itemsCount ?? 0) >= 1) {
                         listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
@@ -202,8 +232,6 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
 
 const _paddingMultiplier = 4.2;
 
-enum ScheduleType { weekly, dayTime, dayRangeTime }
-
 abstract class UiScheduleModel {
   String? templateName;
 
@@ -212,8 +240,8 @@ abstract class UiScheduleModel {
       showUiKitAlertDialog(
           navigatorKey.currentContext!,
           AlertDialogData(
-              title: Text(S.current.TimeRangeError,
-                  style: navigatorKey.currentContext!.uiKitTheme?.regularTextTheme.body),
+              title:
+                  Text(S.current.TimeRangeError, style: navigatorKey.currentContext!.uiKitTheme?.regularTextTheme.body),
               defaultButtonText: S.current.Ok));
       return DateTimeRange(
           start: DateTime(2020, 1, 1, start.hour, start.minute), end: DateTime(2020, 1, 1, start.hour, start.minute));
@@ -272,7 +300,12 @@ class UiScheduleTimeModel extends UiScheduleModel {
   final List<MapEntry<String, List<TimeOfDay>>> weeklySchedule = List.empty(growable: true)
     ..add(const MapEntry('', []));
 
-  UiScheduleTimeModel();
+  UiScheduleTimeModel([List<MapEntry<String, List<TimeOfDay>>>? schedule]) {
+    if (schedule != null && schedule.isNotEmpty) {
+      weeklySchedule.clear();
+      weeklySchedule.addAll(schedule);
+    }
+  }
 
   @override
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
@@ -359,7 +392,12 @@ class UiScheduleDatesModel extends UiScheduleModel {
   static const String scheduleType = 'Date – Time';
   final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
-  UiScheduleDatesModel();
+  UiScheduleDatesModel([List<MapEntry<String, List<TimeOfDay>>>? schedule]) {
+    if (schedule != null && schedule.isNotEmpty) {
+      dailySchedule.clear();
+      dailySchedule.addAll(schedule);
+    }
+  }
 
   @override
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
@@ -474,7 +512,12 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
   static const String scheduleType = 'Date Range - Time';
   final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
-  UiScheduleDatesRangeModel();
+  UiScheduleDatesRangeModel([List<MapEntry<String, List<TimeOfDay>>>? schedule]) {
+    if (schedule != null && schedule.isNotEmpty) {
+      dailySchedule.clear();
+      dailySchedule.addAll(schedule);
+    }
+  }
 
   @override
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>

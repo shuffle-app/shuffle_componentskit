@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:huawei_map/huawei_map.dart' as hms;
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import 'google_maps_api.dart';
@@ -22,11 +23,13 @@ class LocationComponent extends StatefulWidget {
   final double? initialLatitude;
   final double? initialLongitude;
   final Future<LatLng?> Function()? onDetermineLocation;
+  final bool isHuawei;
 
   const LocationComponent({
     super.key,
     required this.onLocationChanged,
     required this.onLocationConfirmed,
+    required this.isHuawei,
     this.onPlacesCheck,
     this.initialLatitude,
     this.initialLongitude,
@@ -43,6 +46,7 @@ class _LocationComponentState extends State<LocationComponent> {
   final TextEditingController searchTextController = TextEditingController();
   final List<LocationSuggestion> locationSuggestions = [];
   late final GoogleMapController mapsController;
+  late final hms.HuaweiMapController huaweiController;
   Set<Marker> mapMarkers = {};
   List<KnownLocation>? _suggestionPlaces = [];
   bool _newPlaceTapped = true;
@@ -53,6 +57,9 @@ class _LocationComponentState extends State<LocationComponent> {
 
   @override
   void initState() {
+    if (widget.isHuawei) {
+      hms.HuaweiMapInitializer.initializeMap();
+    }
     super.initState();
     cameraPosition = CameraPosition(
       target: LatLng(widget.initialLatitude ?? 25.276987, widget.initialLongitude ?? 55.296249),
@@ -114,22 +121,39 @@ class _LocationComponentState extends State<LocationComponent> {
       final placeId = suggestion.placeId;
 
       final placeDetails = await GoogleMapsApi.fetchPlaceDetails(placeId: placeId);
-
-      await mapsController.animateCamera(
-        CameraUpdate.newLatLngBounds(
-          LatLngBounds(
-            northeast: LatLng(
-              placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lat ?? 0,
-              placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lng ?? 0,
+      if (widget.isHuawei) {
+        await huaweiController.animateCamera(
+          hms.CameraUpdate.newLatLngBounds(
+            hms.LatLngBounds(
+              northeast: hms.LatLng(
+                placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lat ?? 0,
+                placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lng ?? 0,
+              ),
+              southwest: hms.LatLng(
+                placeDetails?.locationDetails?.geometry?.viewport?.southwest?.lat ?? 0,
+                placeDetails?.locationDetails?.geometry?.viewport?.southwest?.lng ?? 0,
+              ),
             ),
-            southwest: LatLng(
-              placeDetails?.locationDetails?.geometry?.viewport?.southwest?.lat ?? 0,
-              placeDetails?.locationDetails?.geometry?.viewport?.southwest?.lng ?? 0,
-            ),
+            0,
           ),
-          0,
-        ),
-      );
+        );
+      } else {
+        await mapsController.animateCamera(
+          CameraUpdate.newLatLngBounds(
+            LatLngBounds(
+              northeast: LatLng(
+                placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lat ?? 0,
+                placeDetails?.locationDetails?.geometry?.viewport?.northeast?.lng ?? 0,
+              ),
+              southwest: LatLng(
+                placeDetails?.locationDetails?.geometry?.viewport?.southwest?.lat ?? 0,
+                placeDetails?.locationDetails?.geometry?.viewport?.southwest?.lng ?? 0,
+              ),
+            ),
+            0,
+          ),
+        );
+      }
 
       final placeCoordinates = LatLng(
         placeDetails?.locationDetails?.geometry?.location?.lat ?? 0,
@@ -209,7 +233,13 @@ class _LocationComponentState extends State<LocationComponent> {
   Future<void> onCurrentLocationTapped() async {
     final newLocation = await widget.onDetermineLocation?.call();
     if (newLocation != null) {
-      await mapsController.animateCamera(CameraUpdate.newLatLng(newLocation));
+      if (widget.isHuawei) {
+        await huaweiController.animateCamera(
+          hms.CameraUpdate.newLatLng(hms.LatLng(newLocation.latitude, newLocation.longitude)),
+        );
+      } else {
+        await mapsController.animateCamera(CameraUpdate.newLatLng(newLocation));
+      }
     }
   }
 
@@ -312,12 +342,19 @@ class _LocationComponentState extends State<LocationComponent> {
     return Theme(
       data: UiKitThemeFoundation.defaultTheme,
       child: UiKitLocationPicker(
+        isHuawei: widget.isHuawei,
         onLocationChanged: widget.onLocationChanged,
         newPlace: _newPlaceTapped,
         suggestionPlaces: _suggestionPlaces,
         onNewPlaceTap: (value) => setState(() => _newPlaceTapped = value),
         onMapCreated: (controller) {
-          setState(() => mapsController = controller);
+          if (widget.isHuawei) {
+            setState(() {
+              huaweiController = controller;
+            });
+          } else {
+            setState(() => mapsController = controller);
+          }
         },
         initialCameraPosition: cameraPosition,
         onCameraMoved: onCameraMoved,

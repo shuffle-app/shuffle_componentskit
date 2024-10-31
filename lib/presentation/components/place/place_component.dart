@@ -119,7 +119,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
         reactionsPagingController.appendPage(data, page + 1);
       }
     }
-    setState(() {});
+    if(mounted) {
+      setState(() {});
+    }
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
