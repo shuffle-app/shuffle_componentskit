@@ -113,8 +113,8 @@ class PublicProProfileComponent extends StatelessWidget {
               if (profileStats != null)
                 ProfileHighlights(
                   profileStats: profileStats!
-                ).paddingOnly(
-                    left: horizontalMargin, right: horizontalMargin, bottom: SpacingFoundation.verticalSpacing16),
+                ).paddingSymmetric(
+                    horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
               if (bookingsAndInvitesChartData != null)
                 UiKitLineChart(chartData: bookingsAndInvitesChartData!).paddingAll(horizontalMargin),
               if (events != null)

@@ -15,15 +15,21 @@ class ProfileHighlights extends StatelessWidget {
     final cards = profileStats.profileHighlightCards;
 
     /// Frame 364 in Figma
-    return SizedBox(
-      width: 1.sw,
-      child: ListView.separated(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => cards[index],
-          separatorBuilder: (_, __) => SpacingFoundation.horizontalSpace8,
-          itemCount: cards.length),
+    return Row(
+      children: cards.map((e) => Flexible(child: e)).toList().separated(SpacingFoundation.horizontalSpacing8),
     );
+  }
+}
+
+extension SeparatedList on List<Widget> {
+  List<Widget> separated(double horizontalSpacing) {
+    final result = List<Widget>.empty(growable: true);
+    for (var i = 0; i < length; i++) {
+      result.add(this[i]);
+      if (i < length - 1) {
+        result.add(horizontalSpacing.horizontalSpace);
+      }
+    }
+    return result;
   }
 }
