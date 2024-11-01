@@ -5,7 +5,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:shuffle_uikit/ui_kit/organisms/event/add_to_scheduler_event_action_card.dart';
 
 final AutoSizeGroup group = AutoSizeGroup();
 

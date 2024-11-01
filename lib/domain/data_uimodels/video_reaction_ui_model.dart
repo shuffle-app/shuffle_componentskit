@@ -19,6 +19,7 @@ class VideoReactionUiModel {
   final UserTileType authorType;
   final String parentContentType;
   final int parentContentId;
+  final DateTime? createdAt;
   int? nextReactionId;
   int? previousReactionId;
   bool isViewed;
@@ -44,6 +45,7 @@ class VideoReactionUiModel {
     this.eventDate,
     this.nextReactionId,
     this.previousReactionId,
+    this.createdAt,
     this.isViewed = false,
   });
 
@@ -73,6 +75,7 @@ class VideoReactionUiModel {
     int? previousReactionId,
     bool? isViewed,
     UserTileType? authorType,
+    DateTime? createdAt,
   }) {
     return VideoReactionUiModel(
       id: id,
@@ -95,6 +98,7 @@ class VideoReactionUiModel {
       previousReactionId: previousReactionId ?? this.previousReactionId,
       isViewed: isViewed ?? this.isViewed,
       authorType: authorType ?? this.authorType,
+      createdAt: createdAt?? this.createdAt,
     );
   }
 

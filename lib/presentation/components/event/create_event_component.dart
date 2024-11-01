@@ -638,13 +638,17 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 data: BaseUiKitButtonData(
                   onPressed: () {
                     context.push(CreateScheduleWidget(
-                      scheduleToEdit:
-                          [UiScheduleDatesModel, UiScheduleDatesRangeModel].contains(_eventToEdit.schedule.runtimeType)
-                              ? _eventToEdit.schedule
-                              : null,
+                      scheduleToEdit: [UiScheduleDatesModel, UiScheduleDatesRangeModel, UiScheduleTimeModel]
+                              .contains(_eventToEdit.schedule.runtimeType)
+                          ? _eventToEdit.schedule
+                          : null,
                       availableTemplates: widget.availableTimeTemplates,
                       onTemplateCreated: widget.onTimeTemplateCreated,
-                      availableTypes: const [UiScheduleDatesModel.scheduleType, UiScheduleDatesRangeModel.scheduleType],
+                      availableTypes: const [
+                        UiScheduleTimeModel.scheduleType,
+                        UiScheduleDatesModel.scheduleType,
+                        UiScheduleDatesRangeModel.scheduleType
+                      ],
                       onScheduleCreated: (model) {
                         if (model is UiScheduleDatesModel) {
                           setState(() {
@@ -657,6 +661,13 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           setState(() {
                             _eventToEdit.schedule = model;
                             _eventToEdit.scheduleString = model.dailySchedule
+                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                .join(', ');
+                          });
+                        } else if (model is UiScheduleTimeModel) {
+                          setState(() {
+                            _eventToEdit.schedule = model;
+                            _eventToEdit.scheduleString = model.weeklySchedule
                                 .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
                                 .join(', ');
                           });

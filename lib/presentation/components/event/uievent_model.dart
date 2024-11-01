@@ -306,4 +306,8 @@ class UiEventModel extends Advertisable {
 
   @override
   int get hashCode => id.hashCode;
+
+  @override
+  String toString() =>
+      'EventModel{id: $id, title: $title, owner: $owner, media: $media, favorite: $favorite, isRecurrent: $isRecurrent, scheduleString: $scheduleString, startDate: $startDate, endDate: $endDate, description: $description, location: $location, eventType: $eventType, price: $price, website: $website, phone: $phone, niche: $niche, tags: $tags, baseTags: $baseTags, rating: $rating, archived: $archived, weekdays: $weekdays, currency: $currency, schedule: $schedule, reviewStatus: $reviewStatus, weatherType: $weatherType, reviews: $reviews, reactions: $reactions, upsalesItems: $upsalesItems, bookingUrl: $bookingUrl, bookingUiModel: $bookingUiModel, updatedAt: $updatedAt, moderationStatus: $moderationStatus, userPoints: $userPoints}';
 }
