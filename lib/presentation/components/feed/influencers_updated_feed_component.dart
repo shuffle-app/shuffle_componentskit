@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -7,17 +8,22 @@ import '../../../domain/data_uimodels/influencer_models/influencer_feed_item.dar
 
 class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final ValueChanged<String>? onTappedTab;
+  final VoidCallback? onDispose;
+  final Function(int, String)? onReactionsTapped;
+
   final PagingController<int, InfluencerFeedItem> latestContentController;
   final PagingController<int, InfluencerFeedItem> topContentController;
   final PagingController<int, InfluencerFeedItem> unreadContentController;
 
-  InfluencersUpdatedFeedComponent({
-    Key? key,
+  const InfluencersUpdatedFeedComponent({
+    super.key,
     this.onTappedTab,
+    this.onDispose,
     required this.latestContentController,
     required this.topContentController,
     required this.unreadContentController,
-  }) : super(key: key);
+    this.onReactionsTapped,
+  });
 
   @override
   State<InfluencersUpdatedFeedComponent> createState() => _InfluencersUpdatedFeedComponentState();
@@ -33,6 +39,12 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     UiKitCustomTab(title: S.current.Top, customValue: 'top', group: autoSizeGroup),
     UiKitCustomTab(title: S.current.Unread, customValue: 'unread', group: autoSizeGroup),
   ];
+
+  @override
+  void dispose() {
+    widget.onDispose?.call();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +65,15 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               controller: tabController,
               children: [
                 _PagedInfluencerFeedItemListBody(
+                  onReactionsTapped: widget.onReactionsTapped,
                   pagingController: widget.latestContentController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
+                  onReactionsTapped: widget.onReactionsTapped,
                   pagingController: widget.topContentController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
+                  onReactionsTapped: widget.onReactionsTapped,
                   pagingController: widget.unreadContentController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               ],
@@ -72,10 +87,12 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
 class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final PagingController<int, InfluencerFeedItem> pagingController;
+  final Function(int, String)? onReactionsTapped;
+
   const _PagedInfluencerFeedItemListBody({
-    Key? key,
     required this.pagingController,
-  }) : super(key: key);
+    this.onReactionsTapped,
+  });
 
   double get _videoReactionPreviewWidth => 0.125.sw;
 
@@ -112,6 +129,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               fireReactionsCount: item.fireReactionsCount,
               sunglassesReactionsCount: item.sunglassesReactionsCount,
               smileyReactionsCount: item.smileyReactionsCount,
+              onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
               children: _children(item, regularTextTheme),
             ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
           } else if (item is PostFeedItem) {
@@ -127,6 +145,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               firesCount: item.fireReactionsCount,
               smileyCount: item.smileyReactionsCount,
               text: item.text,
+              onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
               hasNewMark: item.newMark,
             ).paddingOnly(bottom: bottomPadding);
           } else if (item is UpdatesFeedItem) {
@@ -136,6 +155,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               authorUsername: item.username,
               authorAvatarUrl: item.avatarUrl,
               authorUserType: item.userType,
+              onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
               children: _children(item, regularTextTheme),
             ).paddingOnly(bottom: bottomPadding);
           } else {
@@ -259,6 +279,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               imagePath: contest.video?.previewImageUrl ?? '',
               customHeight: _videoReactionPreviewWidth * 1.7,
               customWidth: _videoReactionPreviewWidth,
+              borderRadius: BorderRadiusFoundation.all8,
             ),
             height: _videoReactionPreviewWidth * 1.7,
           );
@@ -266,7 +287,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
       if (item.newPersonalTops != null)
         ...item.newPersonalTops!.map((top) {
           return UiKitContentUpdateWithLeadingImage(
-            title: '${S.current.Top} ${top.title}',
+            title: '${(S.current.Top).toUpperCase()} ${top.title}',
             subtitle: top.subtitle,
             imageUrl: top.topContent?.isNotEmpty ?? false
                 ? (top.topContent?.first.media.isNotEmpty ?? false)
