@@ -95,6 +95,7 @@ class FeedComponent extends StatelessWidget {
     } else {
       feelingText = S.of(context).HowAreYouFeelingTonight;
     }
+    debugPrint('canShowSubscribedUsers $canShowSubscribedUsers');
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),

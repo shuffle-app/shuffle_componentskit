@@ -598,7 +598,9 @@ class _EventComponentState extends State<EventComponent> {
           ...widget.event.descriptionItems!.map(
             (e) => GestureDetector(
               onTap: () {
-                if (e.descriptionUrl != null) {
+                if (e.descriptionUrl == 'times' && widget.event.schedule != null) {
+                  showTimeInfoDialog(context, widget.event.schedule!.getReadableScheduleString());
+                } else if (e.descriptionUrl != null) {
                   launchUrlString(e.descriptionUrl!);
                 } else if (e.description.startsWith('http')) {
                   launchUrlString(e.description);
