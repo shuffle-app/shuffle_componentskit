@@ -34,6 +34,7 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<double>? subscribedProfilesHintNotifier;
   final ValueNotifier<double>? tiltNotifier;
   final ScrollController? scrollController;
+  final bool showHints;
 
   const FeedComponent({
     super.key,
@@ -65,6 +66,7 @@ class FeedComponent extends StatelessWidget {
     this.subscribedProfilesHintNotifier,
     this.tiltNotifier,
     this.scrollController,
+    this.showHints = true,
   });
 
   @override
@@ -105,6 +107,7 @@ class FeedComponent extends StatelessWidget {
             canShowSubscribedUsers)
           SliverPersistentHeader(
             delegate: UiKitAnimatedPullToShowDelegate(
+              showHints: showHints,
               lastPhaseScaleNotifier: subscribedUsersFeedIconScaleNotifier!,
               topPadding: MediaQuery.viewPaddingOf(context).top,
               children: subscribedProfiles
