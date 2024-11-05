@@ -119,7 +119,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         reactionsPagingController.appendPage(data, page + 1);
       }
     }
-    if(mounted) {
+    if (mounted) {
       setState(() {});
     }
   }
@@ -676,6 +676,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                     } else if (url.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
                       log('launching $url', name: 'PlaceComponent');
                       launchUrlString('tel:${url}');
+                    } else if (url == 'times' && widget.place.schedule != null) {
+                      showTimeInfoDialog(context, widget.place.schedule!.getReadableScheduleString());
                     }
                   },
                   child: UiKitTitledDescriptionGridWidget(

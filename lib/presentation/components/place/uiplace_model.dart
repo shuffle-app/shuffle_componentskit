@@ -76,7 +76,7 @@ class UiPlaceModel {
             UiDescriptionItemModel(
               title: S.current.WorkHours,
               description: scheduleString,
-              // description: formatDate(null, null, openFrom, openTo, weekdays)!,
+              descriptionUrl: 'times'
             ),
         ],
         houseNumberController = TextEditingController(),

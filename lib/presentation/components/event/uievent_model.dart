@@ -89,6 +89,7 @@ class UiEventModel extends Advertisable {
             UiDescriptionItemModel(
               title: S.current.DontMissIt,
               description: scheduleString,
+                descriptionUrl: 'times'
             ),
           if (location != null && location.isNotEmpty)
             UiDescriptionItemModel(

@@ -293,6 +293,8 @@ abstract class UiScheduleModel {
               .toList());
     }).toList();
   }
+
+  List<List<String>> getReadableScheduleString();
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
@@ -385,6 +387,13 @@ class UiScheduleTimeModel extends UiScheduleModel {
     return weeklySchedule
         .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
         .join(';');
+  }
+
+  @override
+  List<List<String>> getReadableScheduleString() {
+    return weeklySchedule
+        .map((e) => ['${e.key}:', (e.value.map((time) => '${time.hour}-${time.minute}').join(', '))])
+        .toList();
   }
 }
 
@@ -506,6 +515,13 @@ class UiScheduleDatesModel extends UiScheduleModel {
         .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
         .join(';');
   }
+
+  @override
+  List<List<String>> getReadableScheduleString() {
+    return dailySchedule
+        .map((e) => ['${e.key}:', e.value.map((time) => '${time.hour}-${time.minute}').join(', ')])
+        .toList();
+  }
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
@@ -620,6 +636,13 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
     return dailySchedule
         .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
         .join(';');
+  }
+
+  @override
+  List<List<String>> getReadableScheduleString() {
+    return dailySchedule
+        .map((e) => ['${e.key}:', e.value.map((time) => '${time.hour}-${time.minute}').join(', ')])
+        .toList();
   }
 }
 

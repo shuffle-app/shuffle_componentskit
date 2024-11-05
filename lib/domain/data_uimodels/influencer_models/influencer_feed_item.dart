@@ -3,18 +3,22 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../../../shuffle_components_kit.dart';
 
 abstract class InfluencerFeedItem {
+  final int id;
   final String speciality;
   final String name;
   final String username;
   final String avatarUrl;
   final UserTileType userType;
+  String? userReaction;
 
   InfluencerFeedItem({
+    required this.id,
     required this.speciality,
     required this.name,
     required this.username,
     required this.avatarUrl,
     required this.userType,
+    this.userReaction,
   });
 }
 
@@ -33,11 +37,13 @@ class UpdatesFeedItem extends InfluencerFeedItem {
   final List<UiUniversalModel>? newContent;
 
   UpdatesFeedItem({
+    required super.id,
     required super.speciality,
     required super.name,
     required super.username,
     required super.avatarUrl,
     required super.userType,
+    super.userReaction,
     this.newPhotos,
     this.newVideos,
     this.newFeedbacks,
@@ -64,6 +70,8 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
 
   ShufflePostFeedItem({
     required this.text,
+    required super.id,
+    super.userReaction,
     this.videos,
     this.heartEyesReactionsCount = 0,
     this.likeReactionsCount = 0,
@@ -89,6 +97,41 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
           avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
           userType: UserTileType.influencer,
         );
+
+  ShufflePostFeedItem copyWith({
+    String? text,
+    int? heartEyesReactionsCount,
+    int? likeReactionsCount,
+    int? fireReactionsCount,
+    int? sunglassesReactionsCount,
+    int? smileyReactionsCount,
+    List<UiKitMediaVideo>? videos,
+    String? userReaction,
+  }) {
+    return ShufflePostFeedItem(
+      id: id,
+      text: text ?? this.text,
+      videos: videos ?? this.videos,
+      heartEyesReactionsCount: heartEyesReactionsCount ?? this.heartEyesReactionsCount,
+      likeReactionsCount: likeReactionsCount ?? this.likeReactionsCount,
+      fireReactionsCount: fireReactionsCount ?? this.fireReactionsCount,
+      sunglassesReactionsCount: sunglassesReactionsCount ?? this.sunglassesReactionsCount,
+      smileyReactionsCount: smileyReactionsCount ?? this.smileyReactionsCount,
+      newPhotos: newPhotos,
+      newVideos: newVideos,
+      newFeedbacks: newFeedbacks,
+      newVideoReactions: newVideoReactions,
+      newVoices: newVoices,
+      newRoutes: newRoutes,
+      newVideoInterviews: newVideoInterviews,
+      newContests: newContests,
+      newPersonalTops: newPersonalTops,
+      newPersonalRespects: newPersonalRespects,
+      commentsUpdate: commentsUpdate,
+      newContent: newContent,
+      userReaction: userReaction,
+    );
+  }
 }
 
 class PostFeedItem extends InfluencerFeedItem {
@@ -101,6 +144,7 @@ class PostFeedItem extends InfluencerFeedItem {
   final bool newMark;
 
   PostFeedItem({
+    required super.id,
     required super.speciality,
     required super.name,
     required super.username,
@@ -112,8 +156,41 @@ class PostFeedItem extends InfluencerFeedItem {
     required this.fireReactionsCount,
     required this.sunglassesReactionsCount,
     required this.smileyReactionsCount,
+    super.userReaction,
     this.newMark = false,
   });
+
+  PostFeedItem copyWith({
+    String? text,
+    int? heartEyesReactionsCount,
+    int? likeReactionsCount,
+    int? fireReactionsCount,
+    int? sunglassesReactionsCount,
+    int? smileyReactionsCount,
+    bool? newMark,
+    String? speciality,
+    String? name,
+    String? username,
+    String? userType,
+    String? userReaction,
+  }) {
+    return PostFeedItem(
+      id: id,
+      avatarUrl: super.avatarUrl,
+      userType: super.userType,
+      speciality: speciality ?? this.speciality,
+      name: name ?? this.name,
+      username: username ?? this.username,
+      text: text ?? this.text,
+      heartEyesReactionsCount: heartEyesReactionsCount ?? this.heartEyesReactionsCount,
+      likeReactionsCount: likeReactionsCount ?? this.likeReactionsCount,
+      fireReactionsCount: fireReactionsCount ?? this.fireReactionsCount,
+      sunglassesReactionsCount: sunglassesReactionsCount ?? this.sunglassesReactionsCount,
+      smileyReactionsCount: smileyReactionsCount ?? this.smileyReactionsCount,
+      newMark: newMark ?? this.newMark,
+      userReaction: userReaction,
+    );
+  }
 }
 
 class VideoUpdateItem {
