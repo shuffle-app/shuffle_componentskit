@@ -362,10 +362,11 @@ class _EventComponentState extends State<EventComponent> {
           children: [
             Expanded(
               child: AddToSchedulerEventActionCard(
+                group: group,
                 action: null,
-                rasterIconAsset: GraphicsFoundation.instance.png.money,
-                value: S.of(context).inXDays(2),
-                buttonTitle: S.of(context).Soon,
+                rasterIconAsset: GraphicsFoundation.instance.png.events,
+                value: '',
+                buttonTitle: S.of(context).Add,
               ),
             ),
             SpacingFoundation.horizontalSpace8,
