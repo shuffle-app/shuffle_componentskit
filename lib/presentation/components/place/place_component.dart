@@ -10,6 +10,8 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+final AutoSizeGroup _group = AutoSizeGroup();
+
 class PlaceComponent extends StatefulWidget {
   final UiPlaceModel place;
   final bool isEligibleForEdit;
@@ -375,7 +377,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                         ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16)
                       else
                         ListTile(
-                          isThreeLine: true,
+                          isThreeLine: false,
                           contentPadding: EdgeInsets.zero,
                           leading: BorderedUserCircleAvatar(
                             imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
@@ -457,7 +459,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
             builder: (context, snapshot) => Row(
               mainAxisSize: MainAxisSize.max,
               children: () {
-                final AutoSizeGroup group = AutoSizeGroup();
                 log('here we are building ${snapshot.data?.length ?? 0} events', name: 'PlaceComponent');
 
                 final List<UiEventModel> tempSorted = List.from(snapshot.data ?? []);
@@ -475,7 +476,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                       value: closestEvent == null
                           ? 'none'
                           : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
-                      group: group,
+                      group: _group,
                       rasterIconAsset: GraphicsFoundation.instance.png.events,
                       action: closestEvent == null
                           ? null
@@ -498,7 +499,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   Expanded(
                     child: PointBalancePlaceActionCard(
                       value: widget.place.userPoints?.toString() ?? '0',
-                      group: group,
+                      group: _group,
                       rasterIconAsset: GraphicsFoundation.instance.png.money,
                       buttonTitle: S.of(context).SpendIt,
                       action: widget.onSpendPointTap,
