@@ -11,6 +11,9 @@ class BookingsControlComponent extends StatelessWidget {
   final bool isCompany;
   final bool isLoading;
 
+  late final List<BookingsPlaceOrEventUiModel> placeForEvent;
+  late final List<BookingsPlaceOrEventUiModel> placeHasBooking;
+
   BookingsControlComponent({
     super.key,
     this.placesOrEvents,
@@ -18,7 +21,11 @@ class BookingsControlComponent extends StatelessWidget {
     this.onEventItemTap,
     this.isCompany = false,
     this.isLoading = false,
-  });
+  }) {
+    placeForEvent =
+        placesOrEvents?.where((element) => element.events != null && element.events!.isNotEmpty).toList() ?? [];
+    placeHasBooking = placesOrEvents?.where((element) => element.hasBooking).toList() ?? [];
+  }
 
   final ValueNotifier<bool> tabValue = ValueNotifier(true);
 
@@ -59,8 +66,8 @@ class BookingsControlComponent extends StatelessWidget {
                     const Center(child: CircularProgressIndicator.adaptive())
                   else
                     ...tabValue.value
-                        ? placesOrEvents != null && placesOrEvents!.isNotEmpty
-                            ? placesOrEvents!.map(
+                        ? placeHasBooking.isNotEmpty
+                            ? placeHasBooking.map(
                                 (element) {
                                   return BookingsControlPlaceItemUiKit(
                                     title: element.title,
@@ -79,10 +86,11 @@ class BookingsControlComponent extends StatelessWidget {
                                 ),
                               ]
                         : isCompany
-                            ? placesOrEvents != null && placesOrEvents!.isNotEmpty
-                                ? placesOrEvents!.map(
+                            ? placeForEvent.isNotEmpty
+                                ? placeForEvent.map(
                                     (element) {
                                       return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           BookingsControlEventItem(
                                             title: element.title,
@@ -94,7 +102,7 @@ class BookingsControlComponent extends StatelessWidget {
                                               );
                                             },
                                           ),
-                                          if (element != placesOrEvents!.last)
+                                          if (element != placeForEvent.last)
                                             Divider(
                                               color: theme?.colorScheme.surface2,
                                               thickness: 2.0,

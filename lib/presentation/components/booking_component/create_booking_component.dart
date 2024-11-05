@@ -114,24 +114,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               label: S.of(context).Price,
               controller: _priceController,
               keyboardType: TextInputType.number,
-              inputFormatters: [PriceWithSpacesFormatter()],
-              onTap: () {
-                if (!widget.isViewMode && _priceController.text.contains(widget.currency ?? 'AED')) {
-                  final list = _priceController.text.split(' ');
-                  list.removeLast();
-                  _priceController.text = list.join(' ');
-                }
-              },
-              onFieldSubmitted: (value) {
-                if (!_priceController.text.contains(widget.currency ?? 'AED')) {
-                  _priceController.text = '${_priceController.text} ${widget.currency ?? 'AED'}';
-                }
-              },
-              onTapOutside: (value) {
-                if (!_priceController.text.contains(widget.currency ?? 'AED')) {
-                  _priceController.text = '${_priceController.text} ${widget.currency ?? 'AED'}';
-                }
-              },
+              inputFormatters: [PriceWithSpacesFormatter(currency: widget.currency ?? 'AED')],
             ),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
