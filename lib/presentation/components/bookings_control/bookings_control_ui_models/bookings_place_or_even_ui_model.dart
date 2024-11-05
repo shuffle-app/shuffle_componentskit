@@ -9,6 +9,7 @@ class BookingsPlaceOrEventUiModel {
   final List<BookingsPlaceOrEventUiModel>? events;
   final bool isPlace;
   final String? currency;
+  final bool hasBooking;
 
   BookingsPlaceOrEventUiModel({
     required this.id,
@@ -19,6 +20,7 @@ class BookingsPlaceOrEventUiModel {
     this.events,
     this.isPlace = true,
     this.currency,
+    this.hasBooking = false,
   });
 
   BookingsPlaceOrEventUiModel copyWith({
@@ -29,6 +31,7 @@ class BookingsPlaceOrEventUiModel {
     List<UserBookingsControlUiModel>? users,
     List<BookingsPlaceOrEventUiModel>? events,
     String? currency,
+    bool? hasBooking,
   }) {
     return BookingsPlaceOrEventUiModel(
       id: id ?? this.id,
@@ -38,6 +41,7 @@ class BookingsPlaceOrEventUiModel {
       users: users ?? this.users,
       events: events ?? this.events,
       currency: currency ?? this.currency,
+      hasBooking: hasBooking ?? this.hasBooking,
     );
   }
 }
