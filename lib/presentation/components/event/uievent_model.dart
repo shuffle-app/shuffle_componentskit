@@ -291,9 +291,10 @@ class UiEventModel extends Advertisable {
     if (endDate == null || startDate?.day == endDate?.day) {
       return startDate?.day == day.day;
     }
+    DateTime dayFromApp = DateUtils.dateOnly(day.toLocal());
     return (day.isAfter(DateUtils.dateOnly(startDate!)) && day.isBefore(DateUtils.dateOnly(endDate!))) ||
-        day.isAtSameMomentAs(DateUtils.dateOnly(startDate!)) ||
-        day.isAtSameMomentAs(DateUtils.dateOnly(endDate!));
+        DateUtils.dateOnly(endDate!.toLocal()) == dayFromApp ||
+        DateUtils.dateOnly(startDate!.toLocal()) == dayFromApp;
   }
 
   Map<int, int>? get feedbacksHelpfulCounts =>
