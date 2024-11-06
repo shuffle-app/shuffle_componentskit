@@ -26,6 +26,16 @@ class UpsaleUiModel {
       return S.current.XIsRequired(S.current.Description);
     } else if (description != null && (description!.isEmpty || description!.trim().isEmpty)) {
       return S.current.XIsRequired(S.current.Description);
+    } else if (limit != null && limit!.isEmpty) {
+      return S.current.XIsRequired(S.current.BookingLimit);
+    } else if (limit != null && limit!.isNotEmpty) {
+      final newValue = int.parse(limit!.replaceAll(' ', ''));
+      if (newValue <= 0) {
+        return S.current.XIsRequired(S.current.BookingLimit);
+      }
+      return null;
+    } else if (limit == null) {
+      return S.current.XIsRequired(S.current.BookingLimit);
     }
     return null;
   }

@@ -785,7 +785,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 },
               ),
             ),
-          ).paddingSymmetric(horizontal: horizontalPadding)
+          ).paddingOnly(left: horizontalPadding, right: horizontalPadding, bottom: SpacingFoundation.verticalSpacing8)
         ],
       ),
     );

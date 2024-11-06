@@ -129,6 +129,10 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                 if (value != null && value.isNotEmpty) {
                   final newValue = int.parse(value.replaceAll(' ', ''));
 
+                  if (newValue == 0) {
+                    return S.of(context).LimitMustBeGreaterThanZero;
+                  }
+
                   if (newValue < _allSubsLimitCount) {
                     return S.of(context).LimitLessSumLimitsSubs;
                   }
@@ -153,6 +157,10 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
               validator: (value) {
                 if ((value != null && value.isNotEmpty)) {
                   final newValue = int.parse(value.replaceAll(' ', ''));
+
+                  if (newValue == 0) {
+                    return S.of(context).LimitMustBeGreaterThanZero;
+                  }
 
                   if ((_bookingLimitController.text != '') &&
                       newValue >= int.parse(_bookingLimitController.text.replaceAll(' ', ''))) {
