@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -67,8 +68,9 @@ class GlobalConfiguration {
     if (userId != null) {
       ConfigConstants.configHeaders.putIfAbsent('userId', () => userId);
     }
-    Map<String, dynamic> configAsMap = (await _getFromUrl(
-        'https://raw.githubusercontent.com/shuffle-app/app_configs/$version/config_$_languageCode.json'))['config'];
+    Map<String, dynamic> configAsMap = (await _loadJsonFromAssets())['config'];
+    // Map<String, dynamic> configAsMap = (await _getFromUrl(
+    //     'https://raw.githubusercontent.com/shuffle-app/app_configs/$version/config_$_languageCode.json'))['config'];
     final model = ConfigurationModel(updated: DateTime.now(), content: configAsMap, theme: configAsMap['theme_name']);
     unawaited(_saveToDocument());
 
@@ -118,5 +120,11 @@ class GlobalConfiguration {
     }
 
     return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> _loadJsonFromAssets() async {
+    final filePath = 'packages/shuffle_components_kit/assets/config_$_languageCode.json';
+    String jsonString = await rootBundle.loadString(filePath);
+    return jsonDecode(jsonString);
   }
 }
