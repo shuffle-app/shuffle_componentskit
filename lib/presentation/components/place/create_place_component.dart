@@ -706,7 +706,12 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                     topPadding: 1.sw <= 380 ? 0.50.sh : 0.65.sh,
                                     child: AddLinkComponent(
                                       onSave: () {
-                                        _placeToEdit.bookingUrl = _bookingUrlController.text;
+                                        if (_bookingUrlController.text.isEmpty) {
+                                          _placeToEdit.bookingUrl = null;
+                                        } else {
+                                          _placeToEdit.bookingUrl = _bookingUrlController.text;
+                                        }
+
                                         context.pop();
                                         setState(() {
                                           _bookingUiModel = null;

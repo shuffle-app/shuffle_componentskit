@@ -179,7 +179,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                       : null,
                 ),
               ),
-              SpacingFoundation.verticalSpace4,
+              SpacingFoundation.verticalSpace8,
               if (scheduleModel != null)
                 context.outlinedButton(
                   data: BaseUiKitButtonData(
