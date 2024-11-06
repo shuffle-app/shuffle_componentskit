@@ -64,3 +64,8 @@ dev_dependencies:
       ref: trunk
 
 flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/
