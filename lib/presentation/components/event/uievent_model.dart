@@ -86,11 +86,7 @@ class UiEventModel extends Advertisable {
     this.placeId,
   })  : descriptionItems = [
           if (scheduleString != null)
-            UiDescriptionItemModel(
-              title: S.current.DontMissIt,
-              description: scheduleString,
-                descriptionUrl: 'times'
-            ),
+            UiDescriptionItemModel(title: S.current.DontMissIt, description: scheduleString, descriptionUrl: 'times'),
           if (location != null && location.isNotEmpty)
             UiDescriptionItemModel(
               title: S.current.Place,
