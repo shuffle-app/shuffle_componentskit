@@ -232,23 +232,31 @@ class SearchComponent extends StatelessWidget {
               ),
             ],
             SpacingFoundation.verticalSpace24,
-            if (chooseYourselfChips != null) ...[
-              Text(
-                S.current.ChooseYourself,
-                style: theme?.boldTextTheme.title1,
-              ).paddingSymmetric(horizontal: horizontalMargin),
-              SpacingFoundation.verticalSpace24,
-              SingleChildScrollView(
-                primary: false,
-                padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
-                scrollDirection: Axis.horizontal,
-                child: Wrap(
-                  spacing: SpacingFoundation.horizontalSpacing12,
-                  children: chooseYourselfChips!,
-                ),
-              ),
-              SpacingFoundation.verticalSpace24
-            ],
+            AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (chooseYourselfChips != null) ...[
+                        Text(
+                          S.current.ChooseYourself,
+                          style: theme?.boldTextTheme.title1,
+                        ).paddingSymmetric(horizontal: horizontalMargin),
+                        SpacingFoundation.verticalSpace24,
+                        SingleChildScrollView(
+                          primary: false,
+                          padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                            spacing: SpacingFoundation.horizontalSpacing12,
+                            children: chooseYourselfChips!,
+                          ),
+                        ),
+                        SpacingFoundation.verticalSpace24
+                      ]
+                    ])),
             RichText(
               text: TextSpan(children: [
                 TextSpan(text: '${S.of(context).TopPlacesRatedBy('\n')} ', style: theme?.boldTextTheme.title1),

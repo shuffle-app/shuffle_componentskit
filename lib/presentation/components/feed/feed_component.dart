@@ -242,61 +242,66 @@ class FeedComponent extends StatelessWidget {
             ).wrapSliverBox,
             SpacingFoundation.verticalSpace24.wrapSliverBox,
           ],
-          if (storiesPagingController != null && canShowVideoReactions) ...[
-            Text(S.current.YouMissedALot, style: themeTitleStyle)
-                .paddingSymmetric(horizontal: horizontalMargin)
-                .wrapSliverBox,
-            SpacingFoundation.verticalSpace16.wrapSliverBox,
-            UiKitTiltWrapper(
-              tiltNotifier: feed.recommendedEvent == null ? tiltNotifier : null,
-              child: SizedBox(
-                height: 0.285.sw * 1.7,
-                width: 1.sw,
-                child: PagedListView<int, VideoReactionUiModel>.separated(
-                  scrollDirection: Axis.horizontal,
-                  builderDelegate: PagedChildBuilderDelegate(
-                    firstPageProgressIndicatorBuilder: (c) => Align(
-                      alignment: Alignment.centerLeft,
-                      child: UiKitShimmerProgressIndicator(
-                        gradient: GradientFoundation.greyGradient,
-                        child: UiKitReactionPreview(
-                          customHeight: 0.285.sw * 1.7,
-                          customWidth: 0.285.sw,
-                          imagePath: GraphicsFoundation.instance.png.place.path,
-                        ).paddingOnly(left: horizontalMargin),
-                      ),
-                    ),
-                    newPageProgressIndicatorBuilder: (c) => Align(
-                      alignment: Alignment.centerLeft,
-                      child: UiKitShimmerProgressIndicator(
-                        gradient: GradientFoundation.greyGradient,
-                        child: UiKitReactionPreview(
-                          customHeight: 0.285.sw * 1.7,
-                          customWidth: 0.285.sw,
-                          imagePath: GraphicsFoundation.instance.png.place.path,
-                        ),
-                      ),
-                    ),
-                    itemBuilder: (_, item, index) {
-                      double leftPadding = 0;
-                      if (index == 0) leftPadding = horizontalMargin;
+          AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min, children: [
+                if (storiesPagingController != null && canShowVideoReactions) ...[
+                  Text(S.current.YouMissedALot, style: themeTitleStyle).paddingSymmetric(horizontal: horizontalMargin),
+                  SpacingFoundation.verticalSpace16,
+                  UiKitTiltWrapper(
+                    tiltNotifier: feed.recommendedEvent == null ? tiltNotifier : null,
+                    child: SizedBox(
+                      height: 0.285.sw * 1.7,
+                      width: 1.sw,
+                      child: PagedListView<int, VideoReactionUiModel>.separated(
+                        scrollDirection: Axis.horizontal,
+                        builderDelegate: PagedChildBuilderDelegate(
+                          firstPageProgressIndicatorBuilder: (c) => Align(
+                            alignment: Alignment.centerLeft,
+                            child: UiKitShimmerProgressIndicator(
+                              gradient: GradientFoundation.greyGradient,
+                              child: UiKitReactionPreview(
+                                customHeight: 0.285.sw * 1.7,
+                                customWidth: 0.285.sw,
+                                imagePath: GraphicsFoundation.instance.png.place.path,
+                              ).paddingOnly(left: horizontalMargin),
+                            ),
+                          ),
+                          newPageProgressIndicatorBuilder: (c) => Align(
+                            alignment: Alignment.centerLeft,
+                            child: UiKitShimmerProgressIndicator(
+                              gradient: GradientFoundation.greyGradient,
+                              child: UiKitReactionPreview(
+                                customHeight: 0.285.sw * 1.7,
+                                customWidth: 0.285.sw,
+                                imagePath: GraphicsFoundation.instance.png.place.path,
+                              ),
+                            ),
+                          ),
+                          itemBuilder: (_, item, index) {
+                            double leftPadding = 0;
+                            if (index == 0) leftPadding = horizontalMargin;
 
-                      return UiKitReactionPreview(
-                        customHeight: 0.285.sw * 1.7,
-                        customWidth: 0.285.sw,
-                        imagePath: item.previewImageUrl ?? '',
-                        viewed: item.isViewed,
-                        onTap: () => onReactionTapped?.call(item),
-                      ).paddingOnly(left: leftPadding);
-                    },
+                            return UiKitReactionPreview(
+                              customHeight: 0.285.sw * 1.7,
+                              customWidth: 0.285.sw,
+                              imagePath: item.previewImageUrl ?? '',
+                              viewed: item.isViewed,
+                              onTap: () => onReactionTapped?.call(item),
+                            ).paddingOnly(left: leftPadding);
+                          },
+                        ),
+                        separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
+                        pagingController: storiesPagingController!,
+                      ),
+                    ),
                   ),
-                  separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
-                  pagingController: storiesPagingController!,
-                ),
-              ),
-            ).wrapSliverBox,
-            SpacingFoundation.verticalSpace16.wrapSliverBox,
-          ],
+                  SpacingFoundation.verticalSpace16,
+                ]
+              ])).wrapSliverBox,
           if ((feedLeisureModel.showFeelings ?? true)) ...[
             TitleWithHowItWorks(
               title: feelingText,
