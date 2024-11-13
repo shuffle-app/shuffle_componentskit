@@ -14,8 +14,6 @@ class UiEventModel extends Advertisable {
   String? scheduleString;
   String? contentType;
   String? currency;
-  DateTime? startDate;
-  DateTime? endDate;
   UiScheduleModel? schedule;
   String? description;
   String? location;
@@ -30,7 +28,6 @@ class UiEventModel extends Advertisable {
   List<UiKitTag> baseTags;
   double? rating;
   bool archived;
-  List<String> weekdays;
   List<UiDescriptionItemModel>? descriptionItems;
   TextEditingController houseNumberController;
   TextEditingController apartmentNumberController;
@@ -64,11 +61,8 @@ class UiEventModel extends Advertisable {
     this.contentType,
     this.website,
     this.scheduleString,
-    this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
-    this.startDate,
-    this.endDate,
     this.niche,
     this.currency,
     this.schedule,
@@ -116,7 +110,6 @@ class UiEventModel extends Advertisable {
     this.title,
     this.favorite,
     this.owner,
-    this.startDate,
     this.reviewStatus,
     this.contentType,
     this.scheduleString,
@@ -127,7 +120,6 @@ class UiEventModel extends Advertisable {
     this.tags = const [],
     this.baseTags = const [],
     this.rating,
-    this.weekdays = const [],
     this.isRecurrent = false,
     this.archived = false,
     this.descriptionItems = const [],
@@ -187,7 +179,6 @@ class UiEventModel extends Advertisable {
         baseTags = const [],
         rating = null,
         archived = false,
-        weekdays = const [],
         descriptionItems = const [],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
@@ -253,8 +244,6 @@ class UiEventModel extends Advertisable {
         favorite: favorite ?? this.favorite,
         isRecurrent: isRecurrent ?? this.isRecurrent,
         scheduleString: scheduleString ?? this.scheduleString,
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
         description: description ?? this.description,
         location: location ?? this.location,
         eventType: eventType ?? this.eventType,
@@ -266,7 +255,6 @@ class UiEventModel extends Advertisable {
         baseTags: baseTags ?? this.baseTags,
         rating: rating ?? this.rating,
         archived: archived ?? this.archived,
-        weekdays: weekdays ?? this.weekdays,
         currency: currency ?? this.currency,
         schedule: schedule ?? this.schedule,
         reviewStatus: reviewStatus ?? this.reviewStatus,
@@ -284,15 +272,12 @@ class UiEventModel extends Advertisable {
       );
 
   bool selectableDayPredicate(DateTime day) {
-    if (startDate == null) return true;
-    if (endDate == null || startDate?.day == endDate?.day) {
-      return startDate?.day == day.day;
-    }
-    DateTime dayFromApp = DateUtils.dateOnly(day.toLocal());
-    return (day.isAfter(DateUtils.dateOnly(startDate!)) && day.isBefore(DateUtils.dateOnly(endDate!))) ||
-        DateUtils.dateOnly(endDate!.toLocal()) == dayFromApp ||
-        DateUtils.dateOnly(startDate!.toLocal()) == dayFromApp;
+    return schedule?.selectableDayPredicate(day) ?? true;
   }
+
+  DateTime? get startDayForEvent => schedule?.startDay ?? updatedAt;
+
+  DateTime? get endDayForEvent => schedule?.endDay ?? updatedAt;
 
   Map<int, int>? get feedbacksHelpfulCounts =>
       <int, int>{}..addEntries(reviews?.map((e) => MapEntry<int, int>(e.id, e.helpfulCount ?? 0)) ?? []);
@@ -307,5 +292,5 @@ class UiEventModel extends Advertisable {
 
   @override
   String toString() =>
-      'EventModel{id: $id, title: $title, owner: $owner, media: $media, favorite: $favorite, isRecurrent: $isRecurrent, scheduleString: $scheduleString, startDate: $startDate, endDate: $endDate, description: $description, location: $location, eventType: $eventType, price: $price, website: $website, phone: $phone, niche: $niche, tags: $tags, baseTags: $baseTags, rating: $rating, archived: $archived, weekdays: $weekdays, currency: $currency, schedule: $schedule, reviewStatus: $reviewStatus, weatherType: $weatherType, reviews: $reviews, reactions: $reactions, upsalesItems: $upsalesItems, bookingUrl: $bookingUrl, bookingUiModel: $bookingUiModel, updatedAt: $updatedAt, moderationStatus: $moderationStatus, userPoints: $userPoints}';
+      'EventModel{id: $id, title: $title, owner: $owner, media: $media, favorite: $favorite, isRecurrent: $isRecurrent, scheduleString: $scheduleString, description: $description, location: $location, eventType: $eventType, price: $price, website: $website, phone: $phone, niche: $niche, tags: $tags, baseTags: $baseTags, rating: $rating, archived: $archived, currency: $currency, schedule: $schedule, reviewStatus: $reviewStatus, weatherType: $weatherType, reviews: $reviews, reactions: $reactions, upsalesItems: $upsalesItems, bookingUrl: $bookingUrl, bookingUiModel: $bookingUiModel, updatedAt: $updatedAt, moderationStatus: $moderationStatus, userPoints: $userPoints}';
 }

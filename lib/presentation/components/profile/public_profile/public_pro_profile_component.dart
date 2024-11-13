@@ -124,7 +124,7 @@ class PublicProProfileComponent extends StatelessWidget {
                         (event) => UiKitProUserProfileEventCard(
                           title: event.title ?? '',
                           previewImage: event.verticalPreview?.link ?? '',
-                          contentDate: event.startDate ?? DateTime.now(),
+                          contentDate: event.startDayForEvent ?? DateTime.now(),
                           properties: [...event.tags, ...event.baseTags],
                           videoReactions: event.reactions
                               ?.map<ProfileVideoReaction>(

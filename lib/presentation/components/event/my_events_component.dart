@@ -109,10 +109,9 @@ class MyEventsComponent extends StatelessWidget {
                         event.title ?? '',
                         style: boldTextTheme?.caption1Bold,
                       ),
-                      //TODO restore schedules
-                      subtitle: event.startDate != null
+                      subtitle: event.startDayForEvent != null
                           ? Text(
-                              DateFormat('d MMMM').format(event.startDate!),
+                              DateFormat('d MMMM').format(event.startDayForEvent!),
                               style: boldTextTheme?.caption1Medium.copyWith(
                                 color: theme?.colorScheme.darkNeutral500,
                               ),

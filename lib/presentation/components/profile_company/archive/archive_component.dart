@@ -115,9 +115,9 @@ class ArchiveComponent extends StatelessWidget {
                                       event.title ?? '',
                                       style: theme?.boldTextTheme.caption1Bold,
                                     ),
-                                    subtitle: event.startDate != null
+                                    subtitle: event.startDayForEvent != null
                                         ? Text(
-                                            DateFormat('MMMM d').format(event.startDate!),
+                                            DateFormat('MMMM d').format(event.startDayForEvent!),
                                             style: theme?.boldTextTheme.caption1Medium.copyWith(
                                               color: theme.colorScheme.darkNeutral500,
                                             ),

@@ -61,7 +61,6 @@ class PlacePreview extends StatelessWidget {
             title: event.title ?? '',
             description: event.description ?? '',
             media: event.media,
-            weekdays: event.weekdays,
             weatherType: event.weatherType,
             scheduleString: event.scheduleString,
             location: event.location,

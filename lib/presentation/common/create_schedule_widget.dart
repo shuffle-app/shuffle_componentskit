@@ -296,6 +296,12 @@ abstract class UiScheduleModel {
   }
 
   List<List<String>> getReadableScheduleString();
+
+  bool selectableDayPredicate(DateTime day);
+
+  DateTime? get startDay;
+
+  DateTime? get endDay;
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
@@ -415,10 +421,21 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return weeklySchedule
-        .map((e) => ['${e.key}:', (e.value.map((time) => time.normalizedString).join(', '))])
-        .toList();
+    return weeklySchedule.map((e) => ['${e.key}:', (e.value.map((time) => time.normalizedString).join(', '))]).toList();
   }
+
+  @override
+  bool selectableDayPredicate(DateTime day) {
+    final indexesOfWeekdays = weeklySchedule.map((e) => uiKitConstWeekdays.indexOf(e.key) + 1).toList();
+    return indexesOfWeekdays.contains(day.weekday);
+  }
+
+  @override
+  // there is no start day in the weekly schedule
+  DateTime? get startDay => null;
+
+  @override
+  DateTime? get endDay => null;
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
@@ -589,9 +606,27 @@ class UiScheduleDatesModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return dailySchedule
-        .map((e) => ['${e.key}:', e.value.map((time) => time.normalizedString).join(', ')])
-        .toList();
+    return dailySchedule.map((e) => ['${e.key}:', e.value.map((time) => time.normalizedString).join(', ')]).toList();
+  }
+
+  @override
+  bool selectableDayPredicate(DateTime day) {
+    final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
+    return daysList.any((e) => e.isAtSameDayAs(day));
+  }
+
+  @override
+  DateTime? get startDay {
+    final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
+    daysList.sort((a,b)=>a.compareTo(b));
+    return daysList.firstOrNull;
+  }
+
+  @override
+  DateTime? get endDay {
+    final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
+    daysList.sort((a,b)=>a.compareTo(b));
+    return daysList.lastOrNull;
   }
 }
 
@@ -789,9 +824,29 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return dailySchedule
-        .map((e) => ['${e.key}:', e.value.map((time) => time.normalizedString).join(', ')])
-        .toList();
+    return dailySchedule.map((e) => ['${e.key}:', e.value.map((time) => time.normalizedString).join(', ')]).toList();
+  }
+
+  @override
+  bool selectableDayPredicate(DateTime day) {
+    final List<DateTimeRange> dateRanges = dailySchedule.map((e) => getDateRangeFromKey(e.key)).nonNulls.toList();
+    return dateRanges.any((range) =>
+        (range.start.isBefore(day) || range.start.isAtSameDayAs(day)) &&
+        (range.end.isAfter(day) || range.end.isAtSameDayAs(day)));
+  }
+
+  @override
+  DateTime? get startDay {
+    final List<DateTimeRange> dateRanges = dailySchedule.map((e) => getDateRangeFromKey(e.key)).nonNulls.toList();
+    dateRanges.sort((a, b) => a.start.compareTo(b.start));
+    return dateRanges.firstOrNull?.start;
+  }
+
+  @override
+  DateTime? get endDay {
+    final List<DateTimeRange> dateRanges = dailySchedule.map((e) => getDateRangeFromKey(e.key)).nonNulls.toList();
+    dateRanges.sort((a, b) => a.end.compareTo(b.end));
+    return dateRanges.lastOrNull?.end;
   }
 }
 

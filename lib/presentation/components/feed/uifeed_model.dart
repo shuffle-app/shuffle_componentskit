@@ -51,6 +51,7 @@ class UiUniversalModel extends Advertisable {
   final PlaceWeatherType? weatherType;
   DateTime? shouldVisitAt;
   final String? placeName;
+  final bool isArchieved;
 
   UiUniversalModel({
     required this.id,
@@ -70,6 +71,7 @@ class UiUniversalModel extends Advertisable {
     this.shouldVisitAt,
     this.weatherType,
     this.placeName,
+    this.isArchieved = false,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -90,6 +92,7 @@ class UiUniversalModel extends Advertisable {
     this.shouldVisitAt,
     this.weatherType,
     this.placeName,
+    this.isArchieved = false,
   }) : super(isAdvertisement: true);
 
   UiUniversalModel.checkIn({
@@ -110,6 +113,7 @@ class UiUniversalModel extends Advertisable {
     this.shouldVisitAt,
     this.weatherType,
     this.placeName,
+    this.isArchieved = false,
   }) : super(isAdvertisement: false);
 
   factory UiUniversalModel.fromPlaceUiModel(UiPlaceModel placeModel) => UiUniversalModel(
@@ -120,6 +124,7 @@ class UiUniversalModel extends Advertisable {
       description: placeModel.description,
       tags: placeModel.tags,
       title: placeModel.title,
+      isArchieved: placeModel.archived,
       weatherType: placeModel.weatherType);
 
   factory UiUniversalModel.fromEventUiModel(UiEventModel eventModel) => UiUniversalModel(
@@ -131,6 +136,7 @@ class UiUniversalModel extends Advertisable {
       tags: eventModel.tags,
       rating: eventModel.rating,
       title: eventModel.title,
+      isArchieved: eventModel.archived,
       weatherType: eventModel.weatherType);
 
   factory UiUniversalModel.empty() => UiUniversalModel(
@@ -142,6 +148,8 @@ class UiUniversalModel extends Advertisable {
       );
 
   bool get isEventContent => type == 'event';
+
+  bool get isNotArchieved => !isArchieved;
 
   bool get isPlaceContent => type == 'place';
 

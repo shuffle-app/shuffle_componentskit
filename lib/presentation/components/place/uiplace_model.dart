@@ -36,48 +36,46 @@ class UiPlaceModel {
   BookingUiModel? bookingUiModel;
   DateTime? updatedAt;
   String? moderationStatus;
+  bool archived;
 
-  UiPlaceModel({
-    required this.id,
-    this.title,
-    this.scheduleString,
-    this.location,
-    this.media = const [],
-    this.verticalPreview,
-    this.logo,
-    this.phone,
-    this.website,
-    this.source,
-    required this.description,
-    this.rating,
-    this.status,
-    this.price,
-    this.placeType,
-    this.branches,
-    this.updatedAt,
-    required this.tags,
-    this.baseTags = const [],
-    this.weekdays = const [],
-    this.schedule,
-    this.niche,
-    this.contentType = 'both',
-    this.userPoints,
-    this.currency,
-    this.weatherType,
-    this.bookingUrl,
-    this.bookingUiModel,
-    this.moderationStatus,
-  })  : descriptionItems = [
+  UiPlaceModel(
+      {required this.id,
+      this.title,
+      this.scheduleString,
+      this.location,
+      this.media = const [],
+      this.verticalPreview,
+      this.logo,
+      this.phone,
+      this.website,
+      this.source,
+      required this.description,
+      this.rating,
+      this.status,
+      this.price,
+      this.placeType,
+      this.branches,
+      this.updatedAt,
+      required this.tags,
+      this.baseTags = const [],
+      this.weekdays = const [],
+      this.schedule,
+      this.niche,
+      this.contentType = 'both',
+      this.userPoints,
+      this.currency,
+      this.weatherType,
+      this.bookingUrl,
+      this.bookingUiModel,
+      this.moderationStatus,
+      this.archived = false})
+      : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
           if (phone != null && phone.isNotEmpty) UiDescriptionItemModel(title: S.current.Phone, description: phone),
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
           if (scheduleString != null)
-            UiDescriptionItemModel(
-              title: S.current.WorkHours,
-              description: scheduleString,
-              descriptionUrl: 'times'
-            ),
+            UiDescriptionItemModel(title: S.current.WorkHours, description: scheduleString, descriptionUrl: 'times'),
         ],
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController() {
@@ -193,6 +191,7 @@ class UiPlaceModel {
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         bookingUiModel = null,
+        archived = false,
         baseTags = const [] {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
@@ -203,7 +202,7 @@ class UiPlaceModel {
   }
 
   bool selectableDayPredicate(DateTime day) {
-    return weekdays.isEmpty ? true : weekdays.contains(uiKitConstWeekdays[day.weekday].toLowerCase());
+    return schedule?.selectableDayPredicate(day) ?? true;
   }
 
   @override
