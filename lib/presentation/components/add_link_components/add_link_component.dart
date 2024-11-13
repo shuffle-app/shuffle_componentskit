@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -41,6 +42,12 @@ class _AddLinkComponentState extends State<AddLinkComponent> {
             label: 'URL',
             keyboardType: TextInputType.url,
             hintText: 'https://yoursite.com',
+            inputFormatters: [
+              MaskTextInputFormatter(
+                filter: {"#": RegExp(r'[a-zA-Z0-9.-]')},
+                mask: 'https://###################################',
+              ),
+            ],
             controller: widget.linkController,
             validator: bookingWebsiteValidator,
             onChanged: (value) {

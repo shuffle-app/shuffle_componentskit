@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shuffle_components_kit/presentation/components/add_link_components/add_link_component.dart';
 import 'package:shuffle_components_kit/presentation/components/add_link_components/select_booking_link_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -281,6 +282,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitInputFieldNoFill(
             keyboardType: TextInputType.url,
             hintText: 'https://coolevent.com',
+            inputFormatters: [
+              MaskTextInputFormatter(
+                filter: {"#": RegExp(r'[a-zA-Z0-9.-]')},
+                mask: 'https://###################################',
+              ),
+            ],
             label: S.of(context).Website,
             controller: _websiteController,
             validator: websiteValidator,
