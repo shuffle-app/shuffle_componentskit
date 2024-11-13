@@ -57,6 +57,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           // Pre-fill the list with existing items.
           listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+          onMinusButtonPressed();
         });
       }
     }
