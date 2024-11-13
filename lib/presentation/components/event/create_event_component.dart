@@ -279,9 +279,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
-            prefixText: 'https://',
             keyboardType: TextInputType.url,
-            hintText: 'coolevent.com',
+            hintText: 'https://coolevent.com',
             label: S.of(context).Website,
             controller: _websiteController,
             validator: websiteValidator,
@@ -709,6 +708,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
                           child: SelectBookingLinkComponent(
                             onExternalTap: () {
+                              _bookingUrlController.text = _eventToEdit.bookingUrl ?? '';
+
                               context.pop();
                               showUiKitGeneralFullScreenDialog(
                                 context,
@@ -720,7 +721,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                       if (_bookingUrlController.text.isEmpty) {
                                         _eventToEdit.bookingUrl = null;
                                       } else {
-                                        _eventToEdit.bookingUrl = _bookingUrlController.text;
+                                        _eventToEdit.bookingUrl = _bookingUrlController.text.trim();
                                       }
 
                                       context.pop();
@@ -777,7 +778,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   _eventToEdit.title = _titleController.text;
                   _eventToEdit.description = _descriptionController.text;
                   _eventToEdit.media = [..._photos, ..._videos];
-                  _eventToEdit.website = _websiteController.text;
+                  _eventToEdit.website = _websiteController.text.trim();
                   _eventToEdit.phone = _phoneController.text;
                   _eventToEdit.price = _priceController.text.replaceAll(' ', '');
                   _eventToEdit.bookingUiModel = _bookingUiModel;

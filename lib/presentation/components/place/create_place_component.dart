@@ -334,10 +334,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
-              prefixText: 'https://',
               keyboardType: TextInputType.url,
               label: S.of(context).Website,
-              hintText: 'coolplace.com',
+              hintText: 'https://coolplace.com',
               validator: websiteValidator,
               controller: _websiteController,
             ).paddingSymmetric(horizontal: horizontalPadding),
@@ -698,6 +697,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             topPadding: 1.sw <= 380 ? 0.40.sh : 0.59.sh,
                             child: SelectBookingLinkComponent(
                               onExternalTap: () {
+                                _bookingUrlController.text = _placeToEdit.bookingUrl ?? '';
+
                                 context.pop();
                                 showUiKitGeneralFullScreenDialog(
                                   context,
@@ -709,7 +710,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                         if (_bookingUrlController.text.isEmpty) {
                                           _placeToEdit.bookingUrl = null;
                                         } else {
-                                          _placeToEdit.bookingUrl = _bookingUrlController.text;
+                                          _placeToEdit.bookingUrl = _bookingUrlController.text.trim();
                                         }
 
                                         context.pop();
@@ -764,7 +765,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   onPressed: () {
                     _formKey.currentState?.validate();
                     _placeToEdit.title = _titleController.text;
-                    _placeToEdit.website = _websiteController.text;
+                    _placeToEdit.website = _websiteController.text.trim();
                     _placeToEdit.phone = _phoneController.text;
                     _placeToEdit.description = _descriptionController.text;
                     _placeToEdit.price = _priceController.text.replaceAll(' ', '');
