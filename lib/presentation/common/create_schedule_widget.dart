@@ -310,63 +310,57 @@ class UiScheduleTimeModel extends UiScheduleModel {
   }
 
   @override
-  Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
-      StatefulBuilder(builder: (context, setState) {
-        final MapEntry<String, List<TimeOfDay>> thisObject =
-            weeklySchedule.isNotEmpty && weeklySchedule.length > index ? weeklySchedule[index] : const MapEntry('', []);
-        log('rebuild is here $thisObject', name: 'UiScheduleTimeModel');
-        log('index is $index', name: 'UiScheduleTimeModel');
-        return _CardListWrapper(
-          children: [
-            UiKitAddableFormField(
-              title: S.current.Time,
-              onAdd: () {
-                onAdd?.call();
+  Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) {
+    String? errorText;
+
+    return StatefulBuilder(builder: (context, setState) {
+      final MapEntry<String, List<TimeOfDay>> thisObject =
+          weeklySchedule.isNotEmpty && weeklySchedule.length > index ? weeklySchedule[index] : const MapEntry('', []);
+      log('rebuild is here $thisObject', name: 'UiScheduleTimeModel');
+      log('index is $index', name: 'UiScheduleTimeModel');
+      return _CardListWrapper(
+        children: [
+          UiKitAddableFormField(
+            title: S.current.Time,
+            onAdd: () {
+              onAdd?.call();
+              setState(() {
                 weeklySchedule.add(const MapEntry('', []));
-              },
-              isAbleToRemove: index > 0,
-              onRemove: index > 0
-                  ? () {
+              });
+            },
+            isAbleToRemove: index > 0,
+            onRemove: index > 0
+                ? () {
+                    setState(() {
                       weeklySchedule.removeAt(index);
-                      onRemove?.call();
+                    });
+                    onRemove?.call();
+                  }
+                : null,
+            child: AddableFormChildTime<DateTimeRange>(
+              initialValue:
+                  thisObject.value.isEmpty ? null : createTimeRange(thisObject.value.first, thisObject.value.last),
+              onChanged: () => showUiKitTimeFromToDialog(
+                navigatorKey.currentContext!,
+                (TimeOfDay? from, TimeOfDay? to) {
+                  if (from != null || to != null) {
+                    if (from != null && (to?.isBefore(from) ?? false)) {
+                      setState(() {
+                        errorText = S.of(context).StartTimeShouldBeEarlierThanEndTime;
+                      });
+                      return;
+                    } else {
+                      setState(() {
+                        errorText = null;
+                      });
                     }
-                  : null,
-              child: AddableFormChildTime<DateTimeRange>(
-                  initialValue:
-                      thisObject.value.isEmpty ? null : createTimeRange(thisObject.value.first, thisObject.value.last),
-                  onChanged: () => showUiKitTimeFromToDialog(
-                        navigatorKey.currentContext!,
-                        (TimeOfDay? from, TimeOfDay? to) {
-                          if (from != null || to != null) {
-                            final newValues = [from, to]..removeWhere((element) => element == null);
-                            log('weeklySchedule.isNotEmpty is ${weeklySchedule.isNotEmpty}',
-                                name: 'UiScheduleTimeModel');
-                            log('weeklySchedule.length is ${weeklySchedule.length}', name: 'UiScheduleTimeModel');
-                            setState(() {
-                              if (weeklySchedule.isNotEmpty && weeklySchedule.length > index) {
-                                weeklySchedule[index] = MapEntry(thisObject.key, newValues.map((e) => e!).toList());
-                              } else {
-                                weeklySchedule.add(MapEntry(thisObject.key, newValues.map((e) => e!).toList()));
-                              }
-                              log('weeklySchedule ${weeklySchedule}', name: 'UiScheduleTimeModel');
-                            });
-                          }
-                        },
-                      )),
-            ),
-            UiKitAddableFormField(
-              title: S.current.DaysOfWeek,
-              isAbleToAdd: false,
-              child: AddableFormChildDateWeek<String>(
-                initialValue: thisObject.key,
-                onChanged: () async {
-                  final result = await showUiKitWeekdaySelector(navigatorKey.currentContext!);
-                  if (result != null) {
+                    final newValues = [from, to]..removeWhere((element) => element == null);
+
                     setState(() {
                       if (weeklySchedule.isNotEmpty && weeklySchedule.length > index) {
-                        weeklySchedule[index] = MapEntry(result.join(', '), thisObject.value);
+                        weeklySchedule[index] = MapEntry(thisObject.key, newValues.map((e) => e!).toList());
                       } else {
-                        weeklySchedule.add(MapEntry(result.join(', '), thisObject.value));
+                        weeklySchedule.add(MapEntry(thisObject.key, newValues.map((e) => e!).toList()));
                       }
                       log('weeklySchedule ${weeklySchedule}', name: 'UiScheduleTimeModel');
                     });
@@ -374,10 +368,39 @@ class UiScheduleTimeModel extends UiScheduleModel {
                 },
               ),
             ),
-          ],
-        );
-      }).paddingOnly(
-          bottom: weeklySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+          ),
+          if (errorText != null)
+            Text(
+              errorText!,
+              style: context.uiKitTheme?.boldTextTheme.body.copyWith(
+                color: ColorsFoundation.error,
+              ),
+            ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4),
+          UiKitAddableFormField(
+            title: S.current.DaysOfWeek,
+            isAbleToAdd: false,
+            child: AddableFormChildDateWeek<String>(
+              initialValue: thisObject.key,
+              onChanged: () async {
+                final result = await showUiKitWeekdaySelector(navigatorKey.currentContext!);
+                if (result != null) {
+                  setState(() {
+                    if (weeklySchedule.isNotEmpty && weeklySchedule.length > index) {
+                      weeklySchedule[index] = MapEntry(result.join(', '), thisObject.value);
+                    } else {
+                      weeklySchedule.add(MapEntry(result.join(', '), thisObject.value));
+                    }
+                    log('weeklySchedule ${weeklySchedule}', name: 'UiScheduleTimeModel');
+                  });
+                }
+              },
+            ),
+          ),
+        ],
+      );
+    }).paddingOnly(
+        bottom: weeklySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+  }
 
   @override
   int get itemsCount => weeklySchedule.length;
@@ -409,102 +432,149 @@ class UiScheduleDatesModel extends UiScheduleModel {
   }
 
   @override
-  Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
-      StatefulBuilder(builder: (context, setState) {
-        final MapEntry<String, List<TimeOfDay>> thisObject =
-            dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
-        log('rebuild is here $thisObject', name: 'UiScheduleDatesModel');
-        return _CardListWrapper(children: [
-          UiKitAddableFormField(
-              title: S.current.Date,
-              onAdd: () {
-                onAdd?.call();
-                dailySchedule.add(const MapEntry('', []));
-              },
-              isAbleToRemove: index > 0,
-              onRemove: index > 0
-                  ? () {
-                      dailySchedule.removeAt(index);
-                      onRemove?.call();
-                    }
-                  : null,
-              child: AddableFormChildDateWeek<DateTime>(
-                  initialValue: thisObject.key.isEmpty ? null : getDateFromKey(thisObject.key),
-                  onChanged: () async {
-                    final result = await showUiKitCalendarDialog(navigatorKey.currentContext!);
-                    if (result != null) {
-                      setState(() {
-                        if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                          dailySchedule[index] = MapEntry(convertDateToKey(result), thisObject.value);
-                        } else {
-                          dailySchedule.add(MapEntry(convertDateToKey(result), thisObject.value));
-                        }
-                      });
-                    }
-                  })),
-          if (thisObject.value.isEmpty)
-            UiKitAddableFormField(
-                title: S.current.Time,
-                onAdd: () {
-                  setState(() {
-                    if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                      dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
-                    } else {
-                      dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
-                    }
-                  });
-                },
-                child: AddableFormChildTime<DateTime>(
-                  onChanged: () async {
-                    final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
-                    if (result != null) {
-                      setState(() {
-                        if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                          dailySchedule[index] = MapEntry(thisObject.key, [result]);
-                        } else {
-                          dailySchedule.add(MapEntry(thisObject.key, [result]));
-                        }
-                      });
-                    }
-                  },
-                ))
-          else
-            for (var (i, time) in thisObject.value.indexed)
-              UiKitAddableFormField(
-                  title: S.current.Time,
-                  onAdd: () {
+  Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) {
+    String? errorText;
+
+    return StatefulBuilder(builder: (context, setState) {
+      final MapEntry<String, List<TimeOfDay>> thisObject =
+          dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
+      log('rebuild is here $thisObject', name: 'UiScheduleDatesModel');
+      return _CardListWrapper(children: [
+        UiKitAddableFormField(
+            title: S.current.Date,
+            onAdd: () {
+              onAdd?.call();
+              dailySchedule.add(const MapEntry('', []));
+            },
+            isAbleToRemove: index > 0,
+            onRemove: index > 0
+                ? () {
+                    dailySchedule.removeAt(index);
+                    onRemove?.call();
+                  }
+                : null,
+            child: AddableFormChildDateWeek<DateTime>(
+                initialValue: thisObject.key.isEmpty ? null : getDateFromKey(thisObject.key),
+                onChanged: () async {
+                  final result = await showUiKitCalendarDialog(
+                    navigatorKey.currentContext!,
+                    selectableDayPredicate: (day) {
+                      return day.toLocal().isAfter(DateTime.now().toLocal()) || (day.toLocal().isAtSameDay);
+                    },
+                  );
+                  if (dailySchedule[index].value.isNotEmpty) dailySchedule[index].value.clear();
+
+                  if (result != null) {
                     setState(() {
                       if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                        dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                        dailySchedule[index] = MapEntry(convertDateToKey(result), thisObject.value);
                       } else {
-                        dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                        dailySchedule.add(MapEntry(convertDateToKey(result), thisObject.value));
                       }
                     });
-                  },
-                  isAbleToRemove: true,
-                  onRemove: () {
+                  }
+                })),
+        if (thisObject.value.isEmpty)
+          UiKitAddableFormField(
+              title: S.current.Time,
+              onAdd: () {
+                setState(() {
+                  if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
+                    dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                  } else {
+                    dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                  }
+                });
+              },
+              child: AddableFormChildTime<DateTime>(
+                onChanged: () async {
+                  final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
+                  if (result != null) {
+                    if (dailySchedule[index].key.isNotEmpty) {
+                      if (result.isBefore(TimeOfDay.now()) && asSameDayDateTime(dailySchedule[index].key)) {
+                        setState(() {
+                          errorText = S.of(context).TheSelectedTimeCannotBeElapsed;
+                        });
+                        return;
+                      } else if (errorText != null) {
+                        setState(() {
+                          errorText = null;
+                        });
+                      }
+                    } else {
+                      setState(() {
+                        errorText = S.of(context).ItNecessaryToChooseADay;
+                      });
+                      return;
+                    }
+
+                    setState(() {
+                      if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
+                        dailySchedule[index] = MapEntry(thisObject.key, [result]);
+                      } else {
+                        dailySchedule.add(MapEntry(thisObject.key, [result]));
+                      }
+                    });
+                  }
+                },
+              ))
+        else
+          for (var (i, time) in thisObject.value.indexed)
+            UiKitAddableFormField(
+              title: S.current.Time,
+              onAdd: () {
+                setState(() {
+                  if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
+                    dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                  } else {
+                    dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                  }
+                });
+              },
+              isAbleToRemove: true,
+              onRemove: () {
+                final originalTimes = thisObject.value;
+                originalTimes.removeAt(i);
+                setState(() {
+                  dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
+                });
+              },
+              child: AddableFormChildTime<DateTime>(
+                initialValue: DateTime(2020, 1, 1, time.hour, time.minute),
+                onChanged: () async {
+                  final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
+                  if (result != null) {
+                    if (result.isBefore(TimeOfDay.now()) && asSameDayDateTime(dailySchedule[index].key)) {
+                      setState(() {
+                        errorText = S.of(context).TheSelectedTimeCannotBeElapsed;
+                      });
+                      return;
+                    } else if (errorText != null) {
+                      setState(() {
+                        errorText = null;
+                      });
+                    }
+
                     final originalTimes = thisObject.value;
-                    originalTimes.removeAt(i);
+                    originalTimes[i] = result;
                     setState(() {
                       dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
                     });
-                  },
-                  child: AddableFormChildTime<DateTime>(
-                    initialValue: DateTime(2020, 1, 1, time.hour, time.minute),
-                    onChanged: () async {
-                      final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
-                      if (result != null) {
-                        final originalTimes = thisObject.value;
-                        originalTimes[i] = result;
-                        setState(() {
-                          dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
-                        });
-                      }
-                    },
-                  ))
-        ]);
-      }).paddingOnly(
-          bottom: dailySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+                  }
+                },
+              ),
+            ),
+        if (errorText != null)
+          Text(
+            errorText!,
+            style: context.uiKitTheme?.boldTextTheme.body.copyWith(
+              color: ColorsFoundation.error,
+            ),
+          ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4),
+      ]);
+    }).paddingOnly(
+        bottom: dailySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+  }
 
   @override
   int get itemsCount => dailySchedule.length;
@@ -536,43 +606,64 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
   }
 
   @override
-  Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) =>
-      StatefulBuilder(builder: (context, setState) {
-        final MapEntry<String, List<TimeOfDay>> thisObject =
-            dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
-        log('rebuild is here $thisObject', name: 'UiScheduleDatesRangeModel');
-        return _CardListWrapper(children: [
-          UiKitAddableFormField(
-              title: S.current.DateRange,
-              onAdd: () {
-                onAdd?.call();
-                dailySchedule.add(const MapEntry('', []));
-              },
-              isAbleToRemove: index > 0,
-              onRemove: index > 0
-                  ? () {
-                      dailySchedule.removeAt(index);
-                      onRemove?.call();
-                    }
-                  : null,
-              child: AddableFormChildDateWeek<DateTimeRange>(
-                  initialValue: getDateRangeFromKey(thisObject.key),
-                  onChanged: () async {
-                    final result = await showDateRangePickerDialog(navigatorKey.currentContext!);
-                    if (result != null) {
+  Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) {
+    String? errorText;
+
+    return StatefulBuilder(builder: (context, setState) {
+      final MapEntry<String, List<TimeOfDay>> thisObject =
+          dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
+      log('rebuild is here $thisObject', name: 'UiScheduleDatesRangeModel');
+      final now = DateTime.now();
+      return _CardListWrapper(children: [
+        UiKitAddableFormField(
+            title: S.current.DateRange,
+            onAdd: () {
+              onAdd?.call();
+              dailySchedule.add(const MapEntry('', []));
+            },
+            isAbleToRemove: index > 0,
+            onRemove: index > 0
+                ? () {
+                    dailySchedule.removeAt(index);
+                    onRemove?.call();
+                  }
+                : null,
+            child: AddableFormChildDateWeek<DateTimeRange>(
+                initialValue: getDateRangeFromKey(thisObject.key),
+                onChanged: () async {
+                  final result = await showDateRangePickerDialog(navigatorKey.currentContext!);
+                  if (result != null) {
+                    if (!result.start.isAtSameDay) {
+                      if ((result.start.isBefore(now) || result.end.isBefore(now))) {
+                        setState(() {
+                          errorText = S.current.APeriodOrPartOfPeriodOfTimeCannotBeInPast;
+                        });
+                        return;
+                      } else if (errorText != null) {
+                        setState(() {
+                          errorText = null;
+                        });
+                      }
+                    } else if (errorText != null) {
                       setState(() {
-                        if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                          dailySchedule[index] = MapEntry(convertDateRangeToKey(result), thisObject.value);
-                        } else {
-                          dailySchedule.add(MapEntry(convertDateRangeToKey(result), thisObject.value));
-                        }
+                        errorText = null;
                       });
                     }
-                  })),
-          if (thisObject.value.isEmpty)
-            UiKitAddableFormField(
-                title: S.current.Time,
-                onAdd: () {
+
+                    setState(() {
+                      if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
+                        dailySchedule[index] = MapEntry(convertDateRangeToKey(result), thisObject.value);
+                      } else {
+                        dailySchedule.add(MapEntry(convertDateRangeToKey(result), thisObject.value));
+                      }
+                    });
+                  }
+                })),
+        if (thisObject.value.isEmpty)
+          UiKitAddableFormField(
+              title: S.current.Time,
+              onAdd: () {
+                if (dailySchedule[index].key.isNotEmpty) {
                   setState(() {
                     if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
                       dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
@@ -580,53 +671,110 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                       dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
                     }
                   });
-                },
-                child: AddableFormChildTime<DateTimeRange>(
-                  onChanged: () async {
-                    final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
-                    if (result != null) {
-                      dailySchedule[index] = MapEntry(thisObject.key, [result]);
-                      setState(() {});
-                    }
-                  },
-                ))
-          else
-            for (var (i, time) in thisObject.value.indexed)
-              UiKitAddableFormField(
-                  title: S.current.Time,
-                  onAdd: () {
-                    setState(() {
-                      if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                        dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
-                      } else {
-                        dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
-                      }
-                    });
-                  },
-                  isAbleToRemove: true,
-                  onRemove: () {
-                    final originalTimes = thisObject.value;
-                    originalTimes.removeAt(i);
-                    setState(() {
-                      dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
-                    });
-                  },
-                  child: AddableFormChildTime<DateTime>(
-                    initialValue: DateTime(2020, 1, 1, time.hour, time.minute),
-                    onChanged: () async {
-                      final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
-                      if (result != null) {
-                        final originalTimes = thisObject.value;
-                        originalTimes[i] = result;
+                } else {
+                  setState(() {
+                    errorText = S.of(context).ItNecessaryToChooseADay;
+                  });
+                  return;
+                }
+              },
+              child: AddableFormChildTime<DateTimeRange>(
+                onChanged: () async {
+                  final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
+                  if (result != null) {
+                    if (dailySchedule[index].key.isNotEmpty) {
+                      final nowTime = TimeOfDay.now();
+                      if (atSameDayDatesRange(dailySchedule[index].key) &&
+                          result.hour < nowTime.hour &&
+                          result.minute < nowTime.minute) {
                         setState(() {
-                          dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
+                          errorText = S.current.TheSelectedTimeCannotBeElapsed;
+                        });
+                        return;
+                      } else if (errorText != null) {
+                        setState(() {
+                          errorText = null;
                         });
                       }
-                    },
-                  ))
-        ]);
-      }).paddingOnly(
-          bottom: dailySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+                    } else {
+                      setState(() {
+                        errorText = S.of(context).ItNecessaryToChooseADay;
+                      });
+                      return;
+                    }
+
+                    dailySchedule[index] = MapEntry(thisObject.key, [result]);
+                    setState(() {});
+                  }
+                },
+              ))
+        else
+          for (var (i, time) in thisObject.value.indexed)
+            UiKitAddableFormField(
+              title: S.current.Time,
+              onAdd: () {
+                setState(() {
+                  if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
+                    dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                  } else {
+                    dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                  }
+                });
+              },
+              isAbleToRemove: true,
+              onRemove: () {
+                final originalTimes = thisObject.value;
+                originalTimes.removeAt(i);
+                setState(() {
+                  dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
+                });
+              },
+              child: AddableFormChildTime<DateTime>(
+                initialValue: DateTime(2020, 1, 1, time.hour, time.minute),
+                onChanged: () async {
+                  final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
+                  if (result != null) {
+                    if (dailySchedule[index].key.isNotEmpty) {
+                      final nowTime = TimeOfDay.now();
+                      if (atSameDayDatesRange(dailySchedule[index].key) &&
+                          result.hour < nowTime.hour &&
+                          result.minute < nowTime.minute) {
+                        setState(() {
+                          errorText = S.current.TheSelectedTimeCannotBeElapsed;
+                        });
+                        return;
+                      } else if (errorText != null) {
+                        setState(() {
+                          errorText = null;
+                        });
+                      }
+                    }
+                  } else {
+                    setState(() {
+                      errorText = S.of(context).ItNecessaryToChooseADay;
+                    });
+                    return;
+                  }
+
+                  final originalTimes = thisObject.value;
+                  originalTimes[i] = result;
+                  setState(() {
+                    dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
+                  });
+                },
+              ),
+            ),
+        if (errorText != null)
+          Text(
+            errorText!,
+            style: context.uiKitTheme?.boldTextTheme.body.copyWith(
+              color: ColorsFoundation.error,
+            ),
+          ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4),
+      ]);
+    }).paddingOnly(
+        bottom: dailySchedule.length - 1 == index ? SpacingFoundation.verticalSpacing40 * _paddingMultiplier : 0);
+  }
 
   @override
   int get itemsCount => dailySchedule.length;
@@ -677,4 +825,34 @@ extension WrapChildrenSeparator on List<Widget> {
     }
     return result;
   }
+}
+
+bool atSameDayDatesRange(String key) {
+  final dateRange = key.split('/');
+  bool isSameDay = false;
+  if (dateRange.length == 2) {
+    if (dateRange[0] == dateRange[1]) {
+      final parseDay = dateRange[0].split('-');
+      if (DateTime(
+        int.parse('20${parseDay[0]}'),
+        int.parse(parseDay[1]),
+        int.parse(parseDay[2]),
+      ).isAtSameDay) {
+        log('AT same day ');
+        isSameDay = true;
+      }
+    }
+  }
+
+  return isSameDay;
+}
+
+bool asSameDayDateTime(String key) {
+  final selectedDateList = key.split('-');
+  final DateTime selectedDate = DateTime(
+    int.parse('20${selectedDateList[0]}'),
+    int.parse(selectedDateList[1]),
+    int.parse(selectedDateList[2]),
+  );
+  return selectedDate.isAtSameDay;
 }

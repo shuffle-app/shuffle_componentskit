@@ -12,6 +12,7 @@ class CreateOffer extends StatefulWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
   final Map<int, String>? iconsList;
+  final bool Function(DateTime)? selectableDayPredicate;
 
   const CreateOffer({
     super.key,
@@ -21,6 +22,7 @@ class CreateOffer extends StatefulWidget {
     this.firstDate,
     this.lastDate,
     this.iconsList,
+    this.selectableDayPredicate,
   });
 
   @override
@@ -227,7 +229,7 @@ class _CreateOfferState extends State<CreateOffer> {
                 final firstDate = await showUiKitCalendarDialog(
                   context,
                   firstDate: widget.firstDate,
-                  lastDate: widget.lastDate,
+                  selectableDayPredicate: widget.selectableDayPredicate,
                 );
                 setState(() {
                   _selectedDates.add(firstDate);
@@ -236,8 +238,8 @@ class _CreateOfferState extends State<CreateOffer> {
                 if (_selectedDates[0] != null && context.mounted) {
                   final lastDate = await showUiKitCalendarDialog(
                     context,
-                    firstDate: _selectedDates[0],
-                    lastDate: widget.lastDate,
+                    firstDate: widget.firstDate,
+                    selectableDayPredicate: widget.selectableDayPredicate,
                   );
 
                   if (lastDate != null && _selectedDates[0]!.isAtSameMomentAs(lastDate)) {
