@@ -612,28 +612,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
           SpacingFoundation.verticalSpace24,
-          Text(S.of(context).SetWorkHours, style: theme?.regularTextTheme.labelSmall)
-              .paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace16,
-          UiKitCustomTabBar(
-            tabs: [UiKitCustomTab(height: 20.h, title: 'Single'), UiKitCustomTab(height: 20.h, title: 'Cyclic')],
-            onTappedTab: (int index) {
-              setState(() {
-                switch (index) {
-                  case 0:
-                    _eventToEdit.isRecurrent = false;
-                    break;
-                  case 1:
-                    _eventToEdit.isRecurrent = true;
-                    break;
-                }
-              });
-            },
-          ).paddingSymmetric(horizontal: horizontalPadding),
-          SpacingFoundation.verticalSpace24,
           Row(
             children: [
-              Text(S.of(context).WorkHours, style: theme?.regularTextTheme.labelSmall),
+              Text(S.of(context).SetWorkHours, style: theme?.regularTextTheme.labelSmall),
               const Spacer(),
               context.smallOutlinedButton(
                 data: BaseUiKitButtonData(

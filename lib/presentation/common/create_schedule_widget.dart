@@ -165,68 +165,71 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
           bottom: MediaQuery.paddingOf(context).bottom + SpacingFoundation.verticalSpacing8,
           left: SpacingFoundation.horizontalSpacing16,
           right: SpacingFoundation.horizontalSpacing16,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              context.gradientButton(
-                data: BaseUiKitButtonData(
-                  text: S.current.Save,
-                  onPressed: scheduleModel != null
-                      ? () {
-                          context.pop();
-                          widget.onScheduleCreated?.call(scheduleModel!);
-                        }
-                      : null,
-                ),
-              ),
-              SpacingFoundation.verticalSpace8,
-              if (scheduleModel != null)
-                context.outlinedButton(
-                  data: BaseUiKitButtonData(
-                      text: S.of(context).SaveTemplate,
-                      onPressed: scheduleModel == null
-                          ? null
-                          : () async {
-                              final textTheme = theme?.boldTextTheme;
-                              final controller = TextEditingController();
-                              final name = await showUiKitAlertDialog<String?>(
-                                  context,
-                                  AlertDialogData(
-                                      title: Text(
-                                        S.of(context).SaveTemplate,
-                                        style:
-                                            textTheme?.title2.copyWith(color: UiKitColors.lightHeadingTypographyColor),
-                                      ),
-                                      content: UiKitInputFieldNoIcon(
-                                        hintText: S.current.Title,
-                                        controller: controller,
-                                        autofocus: true,
-                                        textColor: UiKitColors.lightHeadingTypographyColor,
-                                        customLabelColor: UiKitColors.lightBodyTypographyColor,
-                                        fillColor: UiKitColors.lightSurface1,
-                                        borderRadius: BorderRadiusFoundation.all12,
-                                        label: S.of(context).TemplateName,
-                                      ),
-                                      actions: [
-                                        context.button(
-                                            data: BaseUiKitButtonData(
-                                                backgroundColor: theme?.colorScheme.primary,
-                                                textColor: theme?.colorScheme.inversePrimary,
-                                                text: S.current.Save,
-                                                fit: ButtonFit.fitWidth,
-                                                onPressed: () => context.pop(result: controller.text)))
-                                      ],
-                                      defaultButtonText: S.current.Save,
-                                      onPop: () => context.pop(result: controller.text)));
-                              if (name != null) {
-                                scheduleModel!.templateName = name;
-                                widget.onTemplateCreated?.call(scheduleModel!);
-                              }
-                            }),
-                ),
-            ],
-          ))
+          child: UiKitCardWrapper(
+              borderRadius: BorderRadiusFoundation.all24,
+              color: theme?.colorScheme.surface,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  context.gradientButton(
+                    data: BaseUiKitButtonData(
+                      text: S.current.Save,
+                      onPressed: scheduleModel != null
+                          ? () {
+                              context.pop();
+                              widget.onScheduleCreated?.call(scheduleModel!);
+                            }
+                          : null,
+                    ),
+                  ),
+                  SpacingFoundation.verticalSpace8,
+                  if (scheduleModel != null)
+                    context.outlinedButton(
+                      data: BaseUiKitButtonData(
+                          text: S.of(context).SaveTemplate,
+                          onPressed: scheduleModel == null
+                              ? null
+                              : () async {
+                                  final textTheme = theme?.boldTextTheme;
+                                  final controller = TextEditingController();
+                                  final name = await showUiKitAlertDialog<String?>(
+                                      context,
+                                      AlertDialogData(
+                                          title: Text(
+                                            S.of(context).SaveTemplate,
+                                            style: textTheme?.title2
+                                                .copyWith(color: UiKitColors.lightHeadingTypographyColor),
+                                          ),
+                                          content: UiKitInputFieldNoIcon(
+                                            hintText: S.current.Title,
+                                            controller: controller,
+                                            autofocus: true,
+                                            textColor: UiKitColors.lightHeadingTypographyColor,
+                                            customLabelColor: UiKitColors.lightBodyTypographyColor,
+                                            fillColor: UiKitColors.lightSurface1,
+                                            borderRadius: BorderRadiusFoundation.all12,
+                                            label: S.of(context).TemplateName,
+                                          ),
+                                          actions: [
+                                            context.button(
+                                                data: BaseUiKitButtonData(
+                                                    backgroundColor: theme?.colorScheme.primary,
+                                                    textColor: theme?.colorScheme.inversePrimary,
+                                                    text: S.current.Save,
+                                                    fit: ButtonFit.fitWidth,
+                                                    onPressed: () => context.pop(result: controller.text)))
+                                          ],
+                                          defaultButtonText: S.current.Save,
+                                          onPop: () => context.pop(result: controller.text)));
+                                  if (name != null) {
+                                    scheduleModel!.templateName = name;
+                                    widget.onTemplateCreated?.call(scheduleModel!);
+                                  }
+                                }),
+                    ),
+                ],
+              )))
     ]));
   }
 }
@@ -618,14 +621,14 @@ class UiScheduleDatesModel extends UiScheduleModel {
   @override
   DateTime? get startDay {
     final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
-    daysList.sort((a,b)=>a.compareTo(b));
+    daysList.sort((a, b) => a.compareTo(b));
     return daysList.firstOrNull;
   }
 
   @override
   DateTime? get endDay {
     final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
-    daysList.sort((a,b)=>a.compareTo(b));
+    daysList.sort((a, b) => a.compareTo(b));
     return daysList.lastOrNull;
   }
 }
