@@ -110,7 +110,7 @@ class UiProfileModel {
         badge: const ProMemberPlate(),
       );
     } else {
-      return ProfileCard();
+      return const ProfileCard();
     }
   }
 

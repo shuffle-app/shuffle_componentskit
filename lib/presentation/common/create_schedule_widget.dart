@@ -162,11 +162,14 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
         },
       ),
       Positioned(
-          bottom: MediaQuery.paddingOf(context).bottom + SpacingFoundation.verticalSpacing8,
+          bottom: 0,
           left: SpacingFoundation.horizontalSpacing16,
           right: SpacingFoundation.horizontalSpacing16,
           child: UiKitCardWrapper(
               borderRadius: BorderRadiusFoundation.all24,
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom + SpacingFoundation.verticalSpacing8,
+              ),
               color: theme?.colorScheme.surface,
               child: Column(
                 mainAxisSize: MainAxisSize.min,

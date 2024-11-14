@@ -3,7 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 abstract class ProfileStats {
   String getStringValue(int value) {
-    if (value >= 1000000) {
+    if (value >= 100000) {
       return '99k+';
     }
     return '${value > 1000 ? '${value ~/ 1000}k+' : value}';
