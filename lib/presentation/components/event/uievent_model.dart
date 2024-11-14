@@ -206,8 +206,6 @@ class UiEventModel extends Advertisable {
     bool? favorite,
     bool? isRecurrent,
     String? scheduleString,
-    DateTime? startDate,
-    DateTime? endDate,
     String? description,
     String? location,
     UiKitTag? eventType,

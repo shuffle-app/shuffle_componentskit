@@ -68,8 +68,6 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   final TextEditingController _personEmailController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   late final GlobalKey _formKey = GlobalKey<FormState>();
-  DateTimeRange _selectedDateRange =
-      DateTimeRange(start: DateTime.now(), end: DateTime.now().add(const Duration(days: 31)));
 
   late UiEventModel _eventToEdit;
 
@@ -418,45 +416,6 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                       ]),
                       SpacingFoundation.verticalSpace24,
                       //TODO restore editing schedules
-                      WebFormField(
-                        isRequired: true,
-                        title: 'Start date and End date',
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              DateFormat('MMM dd, yyyy').format(_selectedDateRange.start),
-                              style: theme.boldTextTheme.body,
-                            ),
-                            SpacingFoundation.horizontalSpace4,
-                            Text('-', style: theme.boldTextTheme.body),
-                            SpacingFoundation.horizontalSpace4,
-                            Text(
-                              DateFormat('MMM dd, yyyy').format(_selectedDateRange.end),
-                              style: theme.boldTextTheme.body,
-                            ),
-                            const Spacer(),
-                            context.iconButtonNoPadding(
-                              data: BaseUiKitButtonData(
-                                iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.clock),
-                                onPressed: () async {
-                                  await showUiKitCalendarFromToDialog(
-                                    context,
-                                    (from, to) {
-                                      if (from != null && to != null) {
-                                        setState(() {
-                                          _selectedDateRange = _selectedDateRange.copyWith(start: from, end: to);
-                                        });
-                                      }
-                                    },
-                                    lastDate: DateTime.now().add(const Duration(days: 3650)),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                       // WebFormField(
                       //   title: S.of(context).OpeningHours,
                       //   isRequired: true,
@@ -627,8 +586,6 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
                                             title: _titleController.text,
                                             description: widget.descriptionController.text,
                                             location: _addressController.text,
-                                            startDate: _selectedDateRange.start,
-                                            endDate: _selectedDateRange.end,
                                             website: _websiteController.text,
                                             phone: _personPhoneController.text,
                                             media: [..._photos, ..._videos],

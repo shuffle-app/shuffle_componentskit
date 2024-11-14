@@ -19,6 +19,7 @@ class UiProfileModel {
   final int? mindsetId;
   final int? followers;
   final VoidCallback? onFollow;
+  final bool following;
   final bool showSupportShuffle;
   final ValueChanged<int>? onDonate;
   final List<String>? allInterests;
@@ -102,6 +103,7 @@ class UiProfileModel {
           onFollow: onFollow,
           phone: phone,
           email: email,
+          following:following,
           followers: followers ?? 0,
         ),
         badge: const ProMemberPlate(),
@@ -121,6 +123,7 @@ class UiProfileModel {
     this.onCustomDonate,
     this.mindsetId,
     this.showSupportShuffle = false,
+    this.following = false,
     this.onFollow,
     this.matchingInterests,
     this.userCreatedAt,
@@ -164,6 +167,7 @@ class UiProfileModel {
     VoidCallback? onPointsDetails,
     VoidCallback? onBalanceDetails,
     VoidCallback? onCalendarTap,
+    bool? following,
     bool? showSupportShuffle,
     ValueChanged<int>? onDonate,
     List<String>? allInterests,
@@ -200,6 +204,7 @@ class UiProfileModel {
         description: description ?? this.description,
         avatarUrl: avatarUrl ?? this.avatarUrl,
         userCredo: userCredo ?? this.userCredo,
+        following: following ?? this.following,
         followers: followers ?? this.followers,
         onFollow: onFollow ?? this.onFollow,
         showSupportShuffle: showSupportShuffle ?? this.showSupportShuffle,
