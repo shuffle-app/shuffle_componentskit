@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/uiowner_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiProfileModel {
@@ -103,7 +104,7 @@ class UiProfileModel {
           onFollow: onFollow,
           phone: phone,
           email: email,
-          following:following,
+          following: following,
           followers: followers ?? 0,
         ),
         badge: const ProMemberPlate(),
@@ -155,44 +156,43 @@ class UiProfileModel {
 
   /// write [copyWith] method
 
-  UiProfileModel copyWith({
-    String? nickname,
-    String? name,
-    String? description,
-    String? avatarUrl,
-    String? userCredo,
-    int? followers,
-    int? mindsetId,
-    VoidCallback? onFollow,
-    VoidCallback? onPointsDetails,
-    VoidCallback? onBalanceDetails,
-    VoidCallback? onCalendarTap,
-    bool? following,
-    bool? showSupportShuffle,
-    ValueChanged<int>? onDonate,
-    List<String>? allInterests,
-    List<String>? favoriteTags,
-    List<String>? matchingInterests,
-    VoidCallback? onViewAllAchievements,
-    List<UiKitAchievementsModel>? achievements,
-    UserTileType? userTileType,
-    VoidCallback? onShare,
-    String? specialization,
-    List<String>? socialLinks,
-    List<String>? tags,
-    List<int>? tagsIds,
-    List<int>? favoriteTagsIds,
-    String? email,
-    String? phone,
-    int? points,
-    int? balance,
-    VoidCallback? onCustomDonate,
-    bool? beInSearch,
-    VoidCallback? onTelegramPressed,
-    VoidCallback? onWhatsappPressed,
-    int? id,
-    DateTime? userCreatedAt
-  }) =>
+  UiProfileModel copyWith(
+          {String? nickname,
+          String? name,
+          String? description,
+          String? avatarUrl,
+          String? userCredo,
+          int? followers,
+          int? mindsetId,
+          VoidCallback? onFollow,
+          VoidCallback? onPointsDetails,
+          VoidCallback? onBalanceDetails,
+          VoidCallback? onCalendarTap,
+          bool? following,
+          bool? showSupportShuffle,
+          ValueChanged<int>? onDonate,
+          List<String>? allInterests,
+          List<String>? favoriteTags,
+          List<String>? matchingInterests,
+          VoidCallback? onViewAllAchievements,
+          List<UiKitAchievementsModel>? achievements,
+          UserTileType? userTileType,
+          VoidCallback? onShare,
+          String? specialization,
+          List<String>? socialLinks,
+          List<String>? tags,
+          List<int>? tagsIds,
+          List<int>? favoriteTagsIds,
+          String? email,
+          String? phone,
+          int? points,
+          int? balance,
+          VoidCallback? onCustomDonate,
+          bool? beInSearch,
+          VoidCallback? onTelegramPressed,
+          VoidCallback? onWhatsappPressed,
+          int? id,
+          DateTime? userCreatedAt}) =>
       UiProfileModel(
         id: id ?? this.id,
         onShare: onShare ?? this.onShare,
@@ -229,8 +229,11 @@ class UiProfileModel {
         balance: balance ?? this.balance,
         onTelegramPressed: onTelegramPressed ?? this.onTelegramPressed,
         onWhatsappPressed: onWhatsappPressed ?? this.onWhatsappPressed,
-        userCreatedAt: userCreatedAt?? this.userCreatedAt,
+        userCreatedAt: userCreatedAt ?? this.userCreatedAt,
       );
+
+  UiOwnerModel asOwnerModel([VoidCallback? onTap]) =>
+      UiOwnerModel(id: id!, username: nickname, logo: avatarUrl, name: name!, type: userTileType,onTap: onTap);
 }
 
 final AutoSizeGroup _statsConstGroup = AutoSizeGroup();

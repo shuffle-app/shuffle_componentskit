@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiOwnerModel {
+  final int id;
   final String name;
   final String? username;
   final String? logo;
   final UserTileType type;
   final VoidCallback? onTap;
 
-  UiOwnerModel({
+  const UiOwnerModel({
     this.username,
+    required this.id,
     required this.name,
     this.logo,
     this.onTap,
@@ -27,45 +29,47 @@ class UiOwnerModel {
       );
 
   Widget buildMenuItem({
-    VoidCallback? onMessageTap,
-    VoidCallback? onFollowTap,
-    VoidCallback? onUnFollowTap,
-    VoidCallback? onBlockTap,
+    ValueChanged<int>? onMessageTap,
+    ValueChanged<int>? onFollowTap,
+    ValueChanged<int>? onUnFollowTap,
+    ValueChanged<int>? onBlockTap,
   }) =>
-       UiKitPopUpMenuTile(
-                title: name,
-                titleIcon: UiKitUserBadge(userType: type,),
-                subtitle: username!=null ? '@$username' : null,
-                leading:UiKitUserAvatar40x40(
-                  type: type,
-                  imageUrl: logo ?? '',
-                  userName: username ?? '',
-                ),
-                menuOptions: [
-                  if (onBlockTap != null)
-                    UiKitPopUpMenuButtonOption(
-                      title: 'Block user',
-                      value: 'Block user',
-                      onTap: onBlockTap,
-                    ),
-                  if (onUnFollowTap != null)
-                    UiKitPopUpMenuButtonOption(
-                      title: 'Unfollow',
-                      value: 'Unfollow',
-                      onTap: onUnFollowTap,
-                    ),
-                  if (onFollowTap != null)
-                    UiKitPopUpMenuButtonOption(
-                      title: 'Follow',
-                      value: 'Follow',
-                      onTap: onFollowTap,
-                    ),
-                  if (onMessageTap != null)
-                    UiKitPopUpMenuButtonOption(
-                      title: 'Message',
-                      value: 'message',
-                      onTap: onMessageTap,
-                    ),
-                ],
-              );
+      UiKitPopUpMenuTile(
+        title: name,
+        titleIcon: UiKitUserBadge(
+          userType: type,
+        ),
+        subtitle: username != null ? '@$username' : null,
+        leading: UiKitUserAvatar40x40(
+          type: type,
+          imageUrl: logo ?? '',
+          userName: username ?? '',
+        ),
+        menuOptions: [
+          if (onBlockTap != null)
+            UiKitPopUpMenuButtonOption(
+              title: 'Block user',
+              value: 'Block user',
+              onTap: () => onBlockTap(id),
+            ),
+          if (onUnFollowTap != null)
+            UiKitPopUpMenuButtonOption(
+              title: S.current.Unfollow,
+              value: 'Unfollow',
+              onTap: () => onUnFollowTap(id),
+            ),
+          if (onFollowTap != null)
+            UiKitPopUpMenuButtonOption(
+              title: S.current.Follow,
+              value: 'Follow',
+              onTap: () => onFollowTap(id),
+            ),
+          if (onMessageTap != null)
+            UiKitPopUpMenuButtonOption(
+              title: S.current.Message,
+              value: 'message',
+              onTap: () => onMessageTap(id),
+            ),
+        ],
+      );
 }
