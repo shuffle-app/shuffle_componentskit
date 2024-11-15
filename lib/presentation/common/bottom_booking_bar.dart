@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class BottomBookingBar extends StatefulWidget {
   final BookingElementModel model;
@@ -109,11 +110,12 @@ class _BottomBookingBarState extends State<BottomBookingBar> {
                   Expanded(
                     child: context.gradientButton(
                       data: BaseUiKitButtonData(
-                        text: S.of(context).BookIt,
-                        onPressed: widget.onBook,
-                        loading: widget.isLoading,
-                        // fit: ButtonFit.hugContent
-                      ),
+                          text: S.of(context).BookIt,
+                          onPressed: widget.onBook,
+                          loading: widget.isLoading,
+                          autoSizeGroup: AutoSizeGroup()
+                          // fit: ButtonFit.hugContent
+                          ),
                     ),
                   ),
                   SpacingFoundation.horizontalSpace12,
