@@ -66,7 +66,7 @@ String? descriptionValidator(String? value) {
   if (value == null || value.isEmpty) {
     return null;
   } else if (value.length < 20) {
-    return 'Please enter a valid description';
+    return 'At least 20 characters';
   }
   return null;
 }
