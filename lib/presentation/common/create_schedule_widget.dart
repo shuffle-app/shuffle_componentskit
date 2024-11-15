@@ -5,6 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+import 'select_schedule_type.dart';
+import 'select_template_type.dart';
+
 class CreateScheduleWidget extends StatefulWidget {
   final List<UiScheduleModel> availableTemplates;
   final ValueChanged<UiScheduleModel>? onTemplateCreated;
@@ -69,10 +72,12 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
 
   void onAddButtonPressed() {
     listKey.currentState!.insertItem(initialItemsCount + scheduleModel!.itemsCount - 1);
+    // listKey.currentState!.insertItem(scheduleModel!.itemsCount + 1);
   }
 
-  void onMinusButtonPressed() {
-    listKey.currentState!.removeItem(initialItemsCount + scheduleModel!.itemsCount - 1 - 1, (context, animation) {
+  void onMinusButtonPressed({int? index}) {
+    listKey.currentState!.removeItem(index != null ? scheduleModel!.itemsCount - index : scheduleModel!.itemsCount - 1,
+        (context, animation) {
       return ScaleTransition(scale: animation, child: const SizedBox());
     });
   }
@@ -88,7 +93,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
         body: Stack(children: [
       BlurredAppBarPage(
         autoImplyLeading: true,
-        customTitle: AutoSizeText(S.of(context).WorkHours, maxLines: 1, style: textStyle),
+        customTitle: AutoSizeText(S.of(context).Schedule, maxLines: 1, style: textStyle),
         centerTitle: true,
         animatedListKey: listKey,
         childrenCount: initialItemsCount,
@@ -97,14 +102,14 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
         childrenBuilder: (context, index) {
           if (index == 0) {
             return Column(mainAxisSize: MainAxisSize.min, children: [
-              UiKitBaseDropdown<String>(
-                items: scheduleTypes,
-                value: selectedScheduleName,
-                onChanged: (String? type) {
+              SelectScheduleType(
+                scheduleTypes: scheduleTypes,
+                selectedScheduleName: selectedScheduleName,
+                onSelectType: (type) {
                   if (type != null) {
                     if ((scheduleModel?.itemsCount ?? 0) > 1) {
-                      for (var i = 0; i < scheduleModel!.itemsCount; i++) {
-                        onMinusButtonPressed();
+                      for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
+                        onMinusButtonPressed(index: i);
                       }
                     }
                     setState(() {
@@ -118,17 +123,18 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                       }
                     });
                   }
+                  context.pop();
                 },
-              ),
+              ).paddingOnly(bottom: availableTemplates.isEmpty ? SpacingFoundation.verticalSpacing16 : 0.0),
               if (availableTemplates.isNotEmpty) ...[
                 SpacingFoundation.verticalSpace4,
-                UiKitBaseDropdown<UiScheduleModel>(
-                  items: availableTemplates,
+                SelectTemplateType(
+                  scheduleTypes: availableTemplates,
                   onChanged: (UiScheduleModel? selectedTemplate) {
                     if (selectedTemplate != null) {
                       if ((scheduleModel?.itemsCount ?? 0) >= 1) {
                         for (var i = 0; i < scheduleModel!.itemsCount; i++) {
-                          onMinusButtonPressed();
+                          onMinusButtonPressed(index: i);
                         }
                       }
                       setState(() {
@@ -147,15 +153,18 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                         }
                       });
                       if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                        listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+                        log('scheduleModel!.itemsCount ${scheduleModel!.itemsCount}');
+                        listKey.currentState!.insertAllItems(0, scheduleModel!.itemsCount);
                       }
+
+                      context.pop();
                     }
                   },
-                )
+                ),
+                SpacingFoundation.verticalSpace16,
               ]
             ]);
           }
-
           return scheduleModel?.childrenBuilder(
                   index: index - 1, onAdd: onAddButtonPressed, onRemove: onMinusButtonPressed) ??
               const SizedBox.shrink();
@@ -239,19 +248,11 @@ const _paddingMultiplier = 4.2;
 abstract class UiScheduleModel {
   String? templateName;
 
-  DateTimeRange createTimeRange(TimeOfDay start, TimeOfDay end) {
-    if (end.isBefore(start)) {
-      showUiKitAlertDialog(
-          navigatorKey.currentContext!,
-          AlertDialogData(
-              title:
-                  Text(S.current.TimeRangeError, style: navigatorKey.currentContext!.uiKitTheme?.regularTextTheme.body),
-              defaultButtonText: S.current.Ok));
-      return DateTimeRange(
-          start: DateTime(2020, 1, 1, start.hour, start.minute), end: DateTime(2020, 1, 1, start.hour, start.minute));
-    }
-    return DateTimeRange(
-        start: DateTime(2020, 1, 1, start.hour, start.minute), end: DateTime(2020, 1, 1, end.hour, end.minute));
+  TimeRange createTimeRange(TimeOfDay start, TimeOfDay end) {
+    return TimeRange(
+      start: TimeOfDay(hour: start.hour, minute: start.minute),
+      end: TimeOfDay(hour: end.hour, minute: end.minute),
+    );
   }
 
   DateTime? getDateFromKey(String key) {
@@ -321,8 +322,6 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   Widget childrenBuilder({required int index, VoidCallback? onAdd, VoidCallback? onRemove}) {
-    String? errorText;
-
     return StatefulBuilder(builder: (context, setState) {
       final MapEntry<String, List<TimeOfDay>> thisObject =
           weeklySchedule.isNotEmpty && weeklySchedule.length > index ? weeklySchedule[index] : const MapEntry('', []);
@@ -347,23 +346,13 @@ class UiScheduleTimeModel extends UiScheduleModel {
                     onRemove?.call();
                   }
                 : null,
-            child: AddableFormChildTime<DateTimeRange>(
+            child: AddableFormChildTime<TimeRange>(
               initialValue:
                   thisObject.value.isEmpty ? null : createTimeRange(thisObject.value.first, thisObject.value.last),
               onChanged: () => showUiKitTimeFromToDialog(
                 navigatorKey.currentContext!,
                 (TimeOfDay? from, TimeOfDay? to) {
                   if (from != null || to != null) {
-                    if (from != null && (to?.isBefore(from) ?? false)) {
-                      setState(() {
-                        errorText = S.of(context).StartTimeShouldBeEarlierThanEndTime;
-                      });
-                      return;
-                    } else {
-                      setState(() {
-                        errorText = null;
-                      });
-                    }
                     final newValues = [from, to]..removeWhere((element) => element == null);
 
                     setState(() {
@@ -379,13 +368,6 @@ class UiScheduleTimeModel extends UiScheduleModel {
               ),
             ),
           ),
-          if (errorText != null)
-            Text(
-              errorText!,
-              style: context.uiKitTheme?.boldTextTheme.body.copyWith(
-                color: ColorsFoundation.error,
-              ),
-            ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4),
           UiKitAddableFormField(
             title: S.current.DaysOfWeek,
             isAbleToAdd: false,
