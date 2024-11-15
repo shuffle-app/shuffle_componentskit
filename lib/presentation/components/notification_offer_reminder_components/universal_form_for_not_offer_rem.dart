@@ -64,7 +64,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
         customTitle: Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: AutoSizeText(
@@ -89,12 +89,11 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                   ),
                   child: ImageWidget(
                     iconData: ShuffleUiKitIcons.info,
-                    width: 20.w,
+                    width: 16.w,
                     color: theme?.colorScheme.darkNeutral900,
                   ),
                 ),
               ),
-              SpacingFoundation.horizontalSpace12,
             ],
           ),
         ),
