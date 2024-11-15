@@ -722,13 +722,13 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
               },
               child: AddableFormChildTime<DateTimeRange>(
                 onChanged: () async {
-                  final result = await showUiKitTimeDialog(navigatorKey.currentContext!);
-                  if (result != null) {
+                   await showUiKitTimeFromToDialog(navigatorKey.currentContext!,(timeFrom,timeTo){
+                  if (timeFrom != null) {
                     if (dailySchedule[index].key.isNotEmpty) {
                       final nowTime = TimeOfDay.now();
                       if (atSameDayDatesRange(dailySchedule[index].key) &&
-                          result.hour < nowTime.hour &&
-                          result.minute < nowTime.minute) {
+                          timeFrom.hour < nowTime.hour &&
+                          timeFrom.minute < nowTime.minute) {
                         setState(() {
                           errorText = S.current.TheSelectedTimeCannotBeElapsed;
                         });
@@ -745,10 +745,19 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                       return;
                     }
 
-                    dailySchedule[index] = MapEntry(thisObject.key, [result]);
+                    if(timeTo!=null){
+                      if(timeFrom.isAfter(timeTo)) {
+                        setState(() {
+                          errorText = S.current.TheSelectedTimeCannotBeElapsed;
+                        });
+                        return;
+                      }
+                    }
+
+                    dailySchedule[index] = MapEntry(thisObject.key, [timeFrom,timeTo].nonNulls.toList());
                     setState(() {});
                   }
-                },
+                });},
               ))
         else
           for (var (i, time) in thisObject.value.indexed)
