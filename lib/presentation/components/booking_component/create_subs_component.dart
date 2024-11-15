@@ -102,6 +102,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
             child: UiKitInputFieldNoFill(
               label: S.of(context).Description,
               expands: true,
+              textInputAction: TextInputAction.newline,
               maxSymbols: 150,
               controller: _descriptionController,
             ),

@@ -104,6 +104,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
           IntrinsicHeight(
             child: UiKitInputFieldNoFill(
               label: S.of(context).Description,
+              textInputAction: TextInputAction.newline,
               expands: true,
               maxSymbols: 150,
               controller: _descriptionController,
