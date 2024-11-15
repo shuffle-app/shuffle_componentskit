@@ -388,7 +388,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           if (_eventToEdit.contentType == 'business') ...[
             UiKitFieldWithTagList(
-              listUiKitTags: _eventToEdit.niche != null ? [_eventToEdit.niche ?? UiKitTag(title: '', icon: '')] : null,
+              listUiKitTags: _eventToEdit.niche != null ? [_eventToEdit.niche!] : null,
               title: S.of(context).PleaseSelectANiche,
               onTap: () {
                 widget.onNicheChanged?.call().then((value) {
