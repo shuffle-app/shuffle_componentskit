@@ -340,7 +340,14 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
 
     return Scaffold(
       body: BlurredAppBarPage(
-        title: S.of(context).Booking,
+        customTitle: Flexible(
+          child: AutoSizeText(
+            S.of(context).Booking,
+            style: theme?.boldTextTheme.title1,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+          ),
+        ),
         centerTitle: true,
         autoImplyLeading: true,
         children: [
