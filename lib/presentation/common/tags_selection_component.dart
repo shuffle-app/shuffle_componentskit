@@ -56,19 +56,27 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
     return Scaffold(
         bottomNavigationBar: _tags.isNotEmpty
             ? SafeArea(
-                child: context.gradientButton(
-                    data: BaseUiKitButtonData(
-                        text: S.of(context).Save,
-                        onPressed: () {
-                          context.pop(result: _tags.toList());
-                        })).paddingSymmetric(horizontal: horizontalPadding),
+                child: context
+                    .gradientButton(
+                        data: BaseUiKitButtonData(
+                            text: S.of(context).Save,
+                            onPressed: () {
+                              context.pop(result: _tags.toList());
+                            }))
+                    .paddingSymmetric(horizontal: horizontalPadding),
               )
             : null,
         body: BlurredAppBarPage(
             autoImplyLeading: true,
             centerTitle: true,
             customToolbarBaseHeight: 100,
-            customTitle: Flexible(child: AutoSizeText(widget.title, maxLines: 2, style: textStyle)),
+            customTitle: Flexible(
+                child: AutoSizeText(
+              widget.title,
+              maxLines: 2,
+              style: textStyle,
+              textAlign: TextAlign.center,
+            )),
             childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             children: [
               SpacingFoundation.verticalSpace16,
