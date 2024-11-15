@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/notification_offer_reminder_components/universal_not_offer_rem_ui_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:collection/src/iterable_extensions.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class CreateOffer extends StatefulWidget {
   final UniversalNotOfferRemUiModel? offerUiModel;
@@ -133,7 +134,14 @@ class _CreateOfferState extends State<CreateOffer> {
       body: Form(
         key: _formKey,
         child: BlurredAppBarPage(
-          title: S.of(context).Offer,
+          customTitle: Expanded(
+            child: AutoSizeText(
+              S.of(context).Offer,
+              style: theme?.boldTextTheme.title1,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+            ),
+          ),
           centerTitle: true,
           autoImplyLeading: true,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
