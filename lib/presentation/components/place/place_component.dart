@@ -348,7 +348,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           ),
                           child: ImageWidget(
                             iconData: ShuffleUiKitIcons.info,
-                            width: 20.w,
+                            width: 16.w,
                             color: theme?.colorScheme.darkNeutral900,
                           ),
                         ),
@@ -463,12 +463,14 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
                 final List<UiEventModel> tempSorted = List.from(snapshot.data ?? []);
                 if (tempSorted.isNotEmpty) {
-                  tempSorted.sort((a, b) => (a.startDayForEvent ?? DateTime.now()).compareTo(b.startDayForEvent ?? DateTime.now()));
+                  tempSorted.sort(
+                      (a, b) => (a.startDayForEvent ?? DateTime.now()).compareTo(b.startDayForEvent ?? DateTime.now()));
                 }
 
                 final closestEvent = tempSorted.firstOrNull;
 
-                final Duration daysToEvent = (closestEvent?.startDayForEvent ?? DateTime.now()).difference(DateTime.now());
+                final Duration daysToEvent =
+                    (closestEvent?.startDayForEvent ?? DateTime.now()).difference(DateTime.now());
 
                 return [
                   Expanded(

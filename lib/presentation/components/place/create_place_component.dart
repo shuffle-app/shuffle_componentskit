@@ -284,7 +284,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     ),
                     child: ImageWidget(
                       iconData: ShuffleUiKitIcons.info,
-                      width: 20.w,
+                      width: 16.w,
                       color: theme?.colorScheme.darkNeutral900,
                     ),
                   ),
@@ -292,7 +292,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 if (_placeToEdit.logo != null)
                   CircularAvatar(height: kIsWeb ? 40 : 40.h, avatarUrl: _placeToEdit.logo!),
                 const Spacer(),
-                context.outlinedButton(
+                context.smallOutlinedButton(
                   data: BaseUiKitButtonData(
                     onPressed: _onLogoAddRequested,
                     iconInfo: BaseUiKitButtonIconData(
@@ -471,9 +471,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             SpacingFoundation.verticalSpace24,
             UiKitFieldWithTagList(
               title: S.of(context).PlaceType,
-              listUiKitTags: [
-                _placeToEdit.placeType ?? UiKitTag(title: '', icon: null),
-              ],
+              listUiKitTags: _placeToEdit.placeType != null ? [_placeToEdit.placeType!] : null,
               onTap: () {
                 widget.onCategoryChanged?.call(_placeToEdit.contentType).then((value) {
                   setState(() {
@@ -487,8 +485,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             SpacingFoundation.verticalSpace24,
             if (_placeToEdit.contentType == 'business') ...[
               UiKitFieldWithTagList(
-                listUiKitTags:
-                    _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
+                listUiKitTags: _placeToEdit.niche != null ? [_placeToEdit.niche!] : null,
                 title: S.of(context).PleaseSelectANiche,
                 onTap: () {
                   widget.onNicheChanged?.call().then((value) {

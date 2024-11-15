@@ -8,6 +8,7 @@ import 'users_bookings_control.dart';
 class BookingsControlUserList extends StatefulWidget {
   final BookingsPlaceOrEventUiModel? bookingsPlaceItemUiModel;
   final VoidCallback? onBookingEdit;
+  final VoidCallback? onScannerTap;
   final Function(String? value, int userId)? onPopupMenuSelected;
   final ValueChanged<UserBookingsControlUiModel>? onRequestsRefund;
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
@@ -19,6 +20,7 @@ class BookingsControlUserList extends StatefulWidget {
     this.bookingsPlaceItemUiModel,
     this.refundEveryone,
     this.onBookingEdit,
+    this.onScannerTap,
     this.onPopupMenuSelected,
     this.onRequestsRefund,
     this.canBookingEdit = false,
@@ -172,25 +174,49 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
       ),
       bottomNavigationBar: groupedUsers.isNotEmpty
           ? SizedBox(
-              height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
-              child: context
-                  .outlinedButton(
-                    borderRadius: BorderRadiusFoundation.all24r,
-                    data: BaseUiKitButtonData(
-                      text: S.of(context).RefundEveryone.toUpperCase(),
-                      onPressed: () {
-                        checkBoxOn
-                            ? widget.refundEveryone?.call(
-                                widget.bookingsPlaceItemUiModel?.users!.where((element) => element.isSelected).toList())
-                            : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!);
-                      },
-                    ),
-                  )
-                  .paddingOnly(
-                    left: EdgeInsetsFoundation.all16,
-                    right: EdgeInsetsFoundation.all16,
-                    bottom: EdgeInsetsFoundation.vertical24,
+              height: (kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24) * 2,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
+                    child: context
+                        .outlinedButton(
+                          borderRadius: BorderRadiusFoundation.all24r,
+                          data: BaseUiKitButtonData(
+                            text: S.of(context).RefundEveryone.toUpperCase(),
+                            onPressed: () {
+                              checkBoxOn
+                                  ? widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!
+                                      .where((element) => element.isSelected)
+                                      .toList())
+                                  : widget.refundEveryone?.call(widget.bookingsPlaceItemUiModel?.users!);
+                            },
+                          ),
+                        )
+                        .paddingOnly(
+                          left: EdgeInsetsFoundation.all16,
+                          right: EdgeInsetsFoundation.all16,
+                          bottom: EdgeInsetsFoundation.all16,
+                        ),
                   ),
+                  SizedBox(
+                    height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
+                    width: 1.sw,
+                    child: context
+                        .gradientButton(
+                          data: BaseUiKitButtonData(
+                            text: S.of(context).CodeScanner.toUpperCase(),
+                            onPressed: widget.onScannerTap,
+                          ),
+                        )
+                        .paddingOnly(
+                          left: EdgeInsetsFoundation.all16,
+                          right: EdgeInsetsFoundation.all16,
+                          bottom: EdgeInsetsFoundation.vertical24,
+                        ),
+                  ),
+                ],
+              ),
             )
           : null,
     );

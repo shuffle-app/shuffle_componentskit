@@ -83,7 +83,7 @@ class PhotoVideoSelector extends StatelessWidget {
                       ),
                       child: ImageWidget(
                         iconData: ShuffleUiKitIcons.info,
-                        width: 20.w,
+                        width: 16.w,
                         color: theme?.colorScheme.darkNeutral900,
                       ),
                     ),
@@ -142,7 +142,7 @@ class PhotoVideoSelector extends StatelessWidget {
                 ],
               ),
               context
-                  .outlinedButton(
+                  .smallOutlinedButton(
                     data: BaseUiKitButtonData(
                       onPressed: onPhotoAddRequested,
                       iconInfo: BaseUiKitButtonIconData(

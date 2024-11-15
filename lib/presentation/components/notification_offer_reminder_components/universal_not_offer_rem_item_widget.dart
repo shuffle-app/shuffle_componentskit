@@ -173,7 +173,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
               if (isEditingMode)
                 Positioned.fill(
                   child: ColoredBox(
-                    color: ColorsFoundation.darkNeutral400.withOpacity(0.28),
+                    color: ColorsFoundation.neutral48,
                     child: Center(
                       child: context.button(
                         data: BaseUiKitButtonData(
