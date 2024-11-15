@@ -284,7 +284,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     ),
                     child: ImageWidget(
                       iconData: ShuffleUiKitIcons.info,
-                      width: 20.w,
+                      width: 16.w,
                       color: theme?.colorScheme.darkNeutral900,
                     ),
                   ),
@@ -487,8 +487,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             SpacingFoundation.verticalSpace24,
             if (_placeToEdit.contentType == 'business') ...[
               UiKitFieldWithTagList(
-                listUiKitTags:
-                    _placeToEdit.niche != null ? [_placeToEdit.niche ?? UiKitTag(title: '', icon: null)] : null,
+                listUiKitTags: _placeToEdit.niche != null ? [_placeToEdit.niche!] : null,
                 title: S.of(context).PleaseSelectANiche,
                 onTap: () {
                   widget.onNicheChanged?.call().then((value) {
