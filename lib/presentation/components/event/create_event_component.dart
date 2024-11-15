@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shuffle_components_kit/presentation/components/add_link_components/add_link_component.dart';
 import 'package:shuffle_components_kit/presentation/components/add_link_components/select_booking_link_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -375,7 +374,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           UiKitFieldWithTagList(
             title: S.of(context).EventType,
-            listUiKitTags: [_eventToEdit.eventType ?? UiKitTag(title: '', icon: '')],
+            listUiKitTags: _eventToEdit.eventType != null ? [_eventToEdit.eventType!] : null,
             onTap: () {
               widget.onCategoryChanged?.call(_eventToEdit.contentType).then((value) {
                 setState(() {
