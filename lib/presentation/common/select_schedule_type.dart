@@ -5,12 +5,14 @@ class SelectScheduleType extends StatelessWidget {
   final List<String> scheduleTypes;
   final String? selectedScheduleName;
   final ValueChanged<String?>? onSelectType;
+  final bool Function() showWarningDialog;
 
   const SelectScheduleType({
     super.key,
     required this.scheduleTypes,
     this.selectedScheduleName,
     this.onSelectType,
+    required this.showWarningDialog,
   });
 
   @override
@@ -18,7 +20,19 @@ class SelectScheduleType extends StatelessWidget {
     final theme = context.uiKitTheme;
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        if (showWarningDialog()) {
+          await showUiKitAlertDialog(
+              context,
+              AlertDialogData(
+                  defaultButtonText: S.of(context).Ok,
+                  insetPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                  title: Text(
+                    S.of(context).ChangingScheduleTypeAlert,
+                    textAlign: TextAlign.center,
+                    style: theme?.boldTextTheme.title2.copyWith(color: UiKitColors.surface1),
+                  )));
+        }
         showUiKitGeneralFullScreenDialog(
           context,
           GeneralDialogData(

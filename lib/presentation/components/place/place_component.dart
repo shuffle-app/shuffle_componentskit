@@ -17,6 +17,7 @@ class PlaceComponent extends StatefulWidget {
   final bool isEligibleForEdit;
   final VoidCallback? onEventCreate;
   final VoidCallback? onEditPressed;
+  final VoidCallback? onArchivePressed;
   final Future<bool> Function()? onAddReactionTapped;
   final Future<List<UiEventModel>>? events;
   final ComplaintFormComponent? complaintFormComponent;
@@ -70,6 +71,7 @@ class PlaceComponent extends StatefulWidget {
     this.onOfferButtonTap,
     this.bookingNotifier,
     this.onSpendPointTap,
+    this.onArchivePressed,
   });
 
   @override
@@ -229,6 +231,15 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   ),
                 ),
         ),
+        if (widget.place.archived) ...[
+          SpacingFoundation.verticalSpace8,
+          InkWell(
+              borderRadius: BorderRadiusFoundation.all24,
+              onTap: () => widget.onArchivePressed?.call(),
+              child: UiKitBadgeOutlined.text(
+                text: S.of(context).Archived,
+              )),
+        ],
         SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
           listViewController: listViewController,

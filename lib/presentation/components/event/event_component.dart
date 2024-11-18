@@ -13,6 +13,7 @@ class EventComponent extends StatefulWidget {
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
   final VoidCallback? onSharePressed;
+  final VoidCallback? onArchivePressed;
   final Future<bool> Function()? onAddReactionTapped;
   final PagedLoaderCallback<VideoReactionUiModel> reactionsLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> feedbackLoaderCallback;
@@ -30,6 +31,7 @@ class EventComponent extends StatefulWidget {
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
 
+
   const EventComponent({
     super.key,
     required this.event,
@@ -38,6 +40,7 @@ class EventComponent extends StatefulWidget {
     required this.canLeaveFeedback,
     this.complaintFormComponent,
     this.onAddFeedbackTapped,
+    this.onArchivePressed,
     this.isEligibleForEdit = false,
     this.onEditPressed,
     this.onSharePressed,
@@ -242,9 +245,12 @@ class _EventComponentState extends State<EventComponent> {
               SpacingFoundation.verticalSpace8,
             ],
             if (widget.event.archived) ...[
-              UiKitBadgeOutlined.text(
+              InkWell(
+                  borderRadius: BorderRadiusFoundation.all24,
+                  onTap: () => widget.onArchivePressed?.call(),
+                  child: UiKitBadgeOutlined.text(
                 text: S.of(context).Archived,
-              ),
+              )),
               SpacingFoundation.verticalSpace4,
             ],
             if (widget.event.owner != null)
