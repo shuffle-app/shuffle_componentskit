@@ -17,7 +17,6 @@ class SelectScheduleType extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-    //TODO region
     return InkWell(
       onTap: () {
         showUiKitGeneralFullScreenDialog(
@@ -29,7 +28,7 @@ class SelectScheduleType extends StatelessWidget {
               children: [
                 SpacingFoundation.verticalSpace16,
                 Text(
-                  S.of(context).SelectOption,
+                  S.of(context).SelectOptionSchedule,
                   style: theme?.boldTextTheme.subHeadline,
                 ),
                 SpacingFoundation.verticalSpace16,
@@ -75,7 +74,7 @@ class SelectScheduleType extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              selectedScheduleName ?? S.of(context).SelectOption,
+              selectedScheduleName ?? S.of(context).SelectOptionSchedule,
               style: theme?.boldTextTheme.caption1Medium,
             ),
             const Spacer(),

@@ -76,7 +76,7 @@ class SelectTemplateType extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              selectedScheduleName ?? S.of(context).SelectOption,
+              selectedScheduleName ?? S.of(context).SelectTemplate,
               style: theme?.boldTextTheme.caption1Medium,
             ),
             const Spacer(),
