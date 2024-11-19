@@ -34,6 +34,8 @@ class ProfileComponent extends StatelessWidget {
   final ValueChanged<FeedbackUiModel>? onFeedbackCardPressed;
   final int? unreadMessagesCount;
   final VoidCallback? onShowMyEventPage;
+  final ProfileStats? profileStats;
+  final UiKitLineChartData<num>? bookingsAndInvitesChartData;
 
   const ProfileComponent({
     super.key,
@@ -62,6 +64,8 @@ class ProfileComponent extends StatelessWidget {
     this.onFeedbackCardPressed,
     this.unreadMessagesCount,
     this.onShowMyEventPage,
+    this.profileStats,
+    this.bookingsAndInvitesChartData,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
@@ -82,7 +86,6 @@ class ProfileComponent extends StatelessWidget {
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    final AutoSizeGroup _statsConstGroup = AutoSizeGroup();
 
     return BlurredAppBarPage(
       centerTitle: true,
@@ -123,7 +126,7 @@ class ProfileComponent extends StatelessWidget {
       bodyBottomSpace: verticalMargin,
       children: [
         verticalMargin.heightBox,
-        profile.cardWidget.paddingSymmetric(horizontal: horizontalMargin),
+        profile.cardWidget(profileStats).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace24,
         Center(
             child: SingleChildScrollView(
@@ -239,7 +242,8 @@ class ProfileComponent extends StatelessWidget {
           ),
         ],
         SpacingFoundation.verticalSpace24,
-        // if (videoReactionsPagingController != null)
+        if (bookingsAndInvitesChartData != null)
+          UiKitLineChart(chartData: bookingsAndInvitesChartData!).paddingAll(horizontalMargin),
         if (videoReactionsPagingController != null)
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
@@ -412,3 +416,5 @@ class ProfileComponent extends StatelessWidget {
     );
   }
 }
+
+final AutoSizeGroup _statsConstGroup = AutoSizeGroup();

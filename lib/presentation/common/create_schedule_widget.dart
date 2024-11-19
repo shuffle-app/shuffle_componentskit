@@ -97,6 +97,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
         centerTitle: true,
         animatedListKey: listKey,
         childrenCount: initialItemsCount,
+        bodyBottomSpace: 0.2.sh,
         childrenPadding: EdgeInsets.symmetric(
             horizontal: SpacingFoundation.horizontalSpacing12, vertical: SpacingFoundation.verticalSpacing4),
         childrenBuilder: (context, index) {

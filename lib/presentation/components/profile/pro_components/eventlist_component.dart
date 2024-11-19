@@ -51,7 +51,7 @@ class EventlistComponent extends StatelessWidget {
                           color: Colors.white,
                         ).paddingOnly(right: 5.w)))),
             child: UiKitCardWrapper(
-                    padding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                    padding: event.reviewStatus == null ? EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16) : null,
                     child: event.reviewStatus != null
                         ? DecoratedBox(
                             decoration: BoxDecoration(
@@ -96,7 +96,7 @@ class EventlistComponent extends StatelessWidget {
                             ),
                           ))
                 .paddingSymmetric(
-                    horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8));
+                    horizontal: SpacingFoundation.horizontalSpacing8, vertical: SpacingFoundation.verticalSpacing8));
       },
     );
   }

@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shuffle_components_kit/domain/data_uimodels/uiowner_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+
+import '../../../shuffle_components_kit.dart';
 
 class UiProfileModel {
   final int? id;
@@ -43,7 +44,7 @@ class UiProfileModel {
   final int? updatesCount;
   final DateTime? userCreatedAt;
 
-  ProfileCard get cardWidget {
+  ProfileCard cardWidget(ProfileStats? stats) {
     return ProfileCard(
       onShare: onShare,
       nickname: nickname,
@@ -55,6 +56,7 @@ class UiProfileModel {
       followers: followers,
       interests: allInterests,
       userTileType: userTileType,
+      proStats: stats,
       onFollow: onFollow,
       matchingInterests: matchingInterests,
       profileType: ProfileCardType.personal,
@@ -233,7 +235,7 @@ class UiProfileModel {
       );
 
   UiOwnerModel asOwnerModel([VoidCallback? onTap]) =>
-      UiOwnerModel(id: id!, username: nickname, logo: avatarUrl, name: name!, type: userTileType,onTap: onTap);
+      UiOwnerModel(id: id!, username: nickname, logo: avatarUrl, name: name!, type: userTileType, onTap: onTap);
 }
 
 final AutoSizeGroup _statsConstGroup = AutoSizeGroup();
