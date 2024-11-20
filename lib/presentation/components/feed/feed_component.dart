@@ -29,7 +29,7 @@ class FeedComponent extends StatelessWidget {
   final bool canShowVideoReactions;
   final bool canShowSubscribedUsers;
   final ValueNotifier<double>? subscribedUsersFeedIconScaleNotifier;
-  final List<UiProfileModel>? subscribedProfiles;
+  final List<UiProfileModel> subscribedProfiles;
   final ValueChanged<int>? onSubscribedUserTapped;
   final ValueChanged<double>? subscribedProfilesHintNotifier;
   final ValueNotifier<double>? tiltNotifier;
@@ -61,7 +61,7 @@ class FeedComponent extends StatelessWidget {
     this.onAdvertisementPressed,
     this.onLoadMoreChips,
     this.subscribedUsersFeedIconScaleNotifier,
-    this.subscribedProfiles,
+    this.subscribedProfiles = const [],
     this.onSubscribedUserTapped,
     this.subscribedProfilesHintNotifier,
     this.tiltNotifier,
@@ -71,6 +71,7 @@ class FeedComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.uiKitTheme;
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
     final ComponentFeedModel feedLeisureModel = ComponentFeedModel.fromJson(config['feed']);
@@ -81,8 +82,8 @@ class FeedComponent extends StatelessWidget {
     }
     final horizontalMargin = (feedBusinessModel.positionModel?.horizontalMargin ?? 0).toDouble();
 
-    final themeTitleStyle = context.uiKitTheme?.boldTextTheme.title1;
-    final isLightTheme = context.uiKitTheme?.themeMode == ThemeMode.light;
+    final themeTitleStyle = theme?.boldTextTheme.title1;
+    final isLightTheme = theme?.themeMode == ThemeMode.light;
 
     final size = MediaQuery.sizeOf(context);
 
@@ -95,23 +96,21 @@ class FeedComponent extends StatelessWidget {
     } else {
       feelingText = S.of(context).HowAreYouFeelingTonight;
     }
-    debugPrint('canShowSubscribedUsers $canShowSubscribedUsers');
+
+    debugPrint('subscribedProfiles: ${subscribedProfiles.length} && canShowSubscribedUsers: $canShowSubscribedUsers');
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       controller: scrollController,
       slivers: [
         if (!canShowSubscribedUsers) MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox,
-        if (subscribedProfiles != null &&
-            subscribedProfiles!.isNotEmpty &&
-            subscribedUsersFeedIconScaleNotifier != null &&
-            canShowSubscribedUsers)
+        if (subscribedUsersFeedIconScaleNotifier != null && canShowSubscribedUsers)
           SliverPersistentHeader(
             delegate: UiKitAnimatedPullToShowDelegate(
               showHints: showHints,
               lastPhaseScaleNotifier: subscribedUsersFeedIconScaleNotifier!,
               topPadding: MediaQuery.viewPaddingOf(context).top,
-              children: subscribedProfiles
+              children: (subscribedProfiles.isEmpty ? null : subscribedProfiles)
                       ?.map(
                         (profile) => GestureDetector(
                           onTap: () {
@@ -127,7 +126,24 @@ class FeedComponent extends StatelessWidget {
                         ),
                       )
                       .toList() ??
-                  [],
+                  [
+                    Opacity(
+                        opacity: 0.5,
+                        child: context.userAvatar(
+                          size: UserAvatarSize.x40x40,
+                          type: UserTileType.influencer,
+                          userName: 'F L',
+                        )),
+                    SizedBox(
+                        width: 0.6.sw,
+                        child: GradientableWidget(
+                            gradient: GradientFoundation.attentionCard,
+                            child: Text(
+                              S.current.DontLiveAlone,
+                              style: theme?.boldTextTheme.caption1Medium.copyWith(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            )))
+                  ],
             ),
           ),
         if (showBusinessContent) ...[
@@ -247,61 +263,63 @@ class FeedComponent extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, children: [
-                if (storiesPagingController != null && canShowVideoReactions) ...[
-                  Text(S.current.YouMissedALot, style: themeTitleStyle).paddingSymmetric(horizontal: horizontalMargin),
-                  SpacingFoundation.verticalSpace16,
-                  UiKitTiltWrapper(
-                    tiltNotifier: feed.recommendedEvent == null ? tiltNotifier : null,
-                    child: SizedBox(
-                      height: 0.285.sw * 1.7,
-                      width: 1.sw,
-                      child: PagedListView<int, VideoReactionUiModel>.separated(
-                        scrollDirection: Axis.horizontal,
-                        builderDelegate: PagedChildBuilderDelegate(
-                          firstPageProgressIndicatorBuilder: (c) => Align(
-                            alignment: Alignment.centerLeft,
-                            child: UiKitShimmerProgressIndicator(
-                              gradient: GradientFoundation.greyGradient,
-                              child: UiKitReactionPreview(
-                                customHeight: 0.285.sw * 1.7,
-                                customWidth: 0.285.sw,
-                                imagePath: GraphicsFoundation.instance.png.place.path,
-                              ).paddingOnly(left: horizontalMargin),
-                            ),
-                          ),
-                          newPageProgressIndicatorBuilder: (c) => Align(
-                            alignment: Alignment.centerLeft,
-                            child: UiKitShimmerProgressIndicator(
-                              gradient: GradientFoundation.greyGradient,
-                              child: UiKitReactionPreview(
-                                customHeight: 0.285.sw * 1.7,
-                                customWidth: 0.285.sw,
-                                imagePath: GraphicsFoundation.instance.png.place.path,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (storiesPagingController != null && canShowVideoReactions) ...[
+                      Text(S.current.YouMissedALot, style: themeTitleStyle)
+                          .paddingSymmetric(horizontal: horizontalMargin),
+                      SpacingFoundation.verticalSpace16,
+                      UiKitTiltWrapper(
+                        tiltNotifier: feed.recommendedEvent == null ? tiltNotifier : null,
+                        child: SizedBox(
+                          height: 0.285.sw * 1.7,
+                          width: 1.sw,
+                          child: PagedListView<int, VideoReactionUiModel>.separated(
+                            scrollDirection: Axis.horizontal,
+                            builderDelegate: PagedChildBuilderDelegate(
+                              firstPageProgressIndicatorBuilder: (c) => Align(
+                                alignment: Alignment.centerLeft,
+                                child: UiKitShimmerProgressIndicator(
+                                  gradient: GradientFoundation.greyGradient,
+                                  child: UiKitReactionPreview(
+                                    customHeight: 0.285.sw * 1.7,
+                                    customWidth: 0.285.sw,
+                                    imagePath: GraphicsFoundation.instance.png.place.path,
+                                  ).paddingOnly(left: horizontalMargin),
+                                ),
                               ),
-                            ),
-                          ),
-                          itemBuilder: (_, item, index) {
-                            double leftPadding = 0;
-                            if (index == 0) leftPadding = horizontalMargin;
+                              newPageProgressIndicatorBuilder: (c) => Align(
+                                alignment: Alignment.centerLeft,
+                                child: UiKitShimmerProgressIndicator(
+                                  gradient: GradientFoundation.greyGradient,
+                                  child: UiKitReactionPreview(
+                                    customHeight: 0.285.sw * 1.7,
+                                    customWidth: 0.285.sw,
+                                    imagePath: GraphicsFoundation.instance.png.place.path,
+                                  ),
+                                ),
+                              ),
+                              itemBuilder: (_, item, index) {
+                                double leftPadding = 0;
+                                if (index == 0) leftPadding = horizontalMargin;
 
-                            return UiKitReactionPreview(
-                              customHeight: 0.285.sw * 1.7,
-                              customWidth: 0.285.sw,
-                              imagePath: item.previewImageUrl ?? '',
-                              viewed: item.isViewed,
-                              onTap: () => onReactionTapped?.call(item),
-                            ).paddingOnly(left: leftPadding);
-                          },
+                                return UiKitReactionPreview(
+                                  customHeight: 0.285.sw * 1.7,
+                                  customWidth: 0.285.sw,
+                                  imagePath: item.previewImageUrl ?? '',
+                                  viewed: item.isViewed,
+                                  onTap: () => onReactionTapped?.call(item),
+                                ).paddingOnly(left: leftPadding);
+                              },
+                            ),
+                            separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
+                            pagingController: storiesPagingController!,
+                          ),
                         ),
-                        separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
-                        pagingController: storiesPagingController!,
                       ),
-                    ),
-                  ),
-                  SpacingFoundation.verticalSpace16,
-                ]
-              ])).wrapSliverBox,
+                      SpacingFoundation.verticalSpace16,
+                    ]
+                  ])).wrapSliverBox,
           if ((feedLeisureModel.showFeelings ?? true)) ...[
             TitleWithHowItWorks(
               title: feelingText,
