@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shuffle_uikit/ui_kit/organisms/profile/data/profile_stats.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ProfileHighlights extends StatelessWidget {
