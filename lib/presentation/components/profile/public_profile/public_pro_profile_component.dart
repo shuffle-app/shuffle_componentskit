@@ -49,6 +49,7 @@ class PublicProProfileComponent extends StatelessWidget {
         uiProfileModel.name ?? '',
         maxLines: 2,
         style: textStyle,
+        textAlign: TextAlign.center,
       )),
       customToolbarBaseHeight: 100,
       autoImplyLeading: true,
@@ -111,10 +112,8 @@ class PublicProProfileComponent extends StatelessWidget {
               verticalMargin.heightBox,
               uiProfileModel.cardWidgetPublic.paddingSymmetric(horizontal: horizontalMargin),
               if (profileStats != null)
-                ProfileHighlights(
-                  profileStats: profileStats!
-                ).paddingSymmetric(
-                    horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
+                ProfileHighlights(profileStats: profileStats!)
+                    .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
               if (bookingsAndInvitesChartData != null)
                 UiKitLineChart(chartData: bookingsAndInvitesChartData!).paddingAll(horizontalMargin),
               if (events != null)
