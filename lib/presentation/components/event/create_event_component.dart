@@ -281,7 +281,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitInputFieldNoFill(
             keyboardType: TextInputType.url,
             hintText: 'https://coolevent.com',
-            inputFormatters: [HttpsPrefixFormatter()],
+            inputFormatters: [PrefixFormatter(prefix: 'https://')],
             label: S.of(context).Website,
             controller: _websiteController,
             validator: websiteValidator,

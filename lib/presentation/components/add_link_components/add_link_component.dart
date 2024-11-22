@@ -41,7 +41,7 @@ class _AddLinkComponentState extends State<AddLinkComponent> {
             label: 'URL',
             keyboardType: TextInputType.url,
             hintText: 'https://yoursite.com',
-            inputFormatters: [HttpsPrefixFormatter()],
+            inputFormatters: [PrefixFormatter(prefix: 'https://')],
             controller: widget.linkController,
             validator: bookingWebsiteValidator,
             onChanged: (value) {
