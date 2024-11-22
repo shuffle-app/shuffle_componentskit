@@ -91,87 +91,88 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
     return Scaffold(
         body: Stack(children: [
-      BlurredAppBarPage(
-        autoImplyLeading: true,
-        customTitle: AutoSizeText(S.of(context).Schedule, maxLines: 1, style: textStyle),
-        centerTitle: true,
-        animatedListKey: listKey,
-        childrenCount: initialItemsCount,
-        bodyBottomSpace: 0.2.sh,
-        childrenPadding: EdgeInsets.symmetric(
-            horizontal: SpacingFoundation.horizontalSpacing12, vertical: SpacingFoundation.verticalSpacing4),
-        childrenBuilder: (context, index) {
-          if (index == 0) {
-            return Column(mainAxisSize: MainAxisSize.min, children: [
-              SelectScheduleType(
-                scheduleTypes: scheduleTypes,
-                selectedScheduleName: selectedScheduleName,
-                showWarningDialog: () => scheduleModel?.isNotEmpty ?? false,
-                onSelectType: (type) {
-                  if (type != null) {
-                    if ((scheduleModel?.itemsCount ?? 0) > 1) {
-                      for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
-                        onMinusButtonPressed(index: i);
-                      }
-                    }
-                    setState(() {
-                      selectedScheduleName = type;
-                      if (type == UiScheduleTimeModel.scheduleType) {
-                        scheduleModel = UiScheduleTimeModel();
-                      } else if (type == UiScheduleDatesModel.scheduleType) {
-                        scheduleModel = UiScheduleDatesModel();
-                      } else if (type == UiScheduleDatesRangeModel.scheduleType) {
-                        scheduleModel = UiScheduleDatesRangeModel();
-                      }
-                    });
-                  }
-                  context.pop();
-                },
-              ).paddingOnly(bottom: availableTemplates.isEmpty ? SpacingFoundation.verticalSpacing16 : 0.0),
-              if (availableTemplates.isNotEmpty) ...[
-                SpacingFoundation.verticalSpace4,
-                SelectTemplateType(
-                  scheduleTypes: availableTemplates,
-                  onChanged: (UiScheduleModel? selectedTemplate) {
-                    if (selectedTemplate != null) {
-                      if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                        for (var i = 0; i < scheduleModel!.itemsCount; i++) {
-                          onMinusButtonPressed(index: i);
+      SizedBox(
+          height: 0.8.sh,
+          child: BlurredAppBarPage(
+            autoImplyLeading: true,
+            customTitle: AutoSizeText(S.of(context).Schedule, maxLines: 1, style: textStyle),
+            centerTitle: true,
+            animatedListKey: listKey,
+            childrenCount: initialItemsCount,
+            childrenPadding: EdgeInsets.symmetric(
+                horizontal: SpacingFoundation.horizontalSpacing12, vertical: SpacingFoundation.verticalSpacing4),
+            childrenBuilder: (context, index) {
+              if (index == 0) {
+                return Column(mainAxisSize: MainAxisSize.min, children: [
+                  SelectScheduleType(
+                    scheduleTypes: scheduleTypes,
+                    selectedScheduleName: selectedScheduleName,
+                    showWarningDialog: () => scheduleModel?.isNotEmpty ?? false,
+                    onSelectType: (type) {
+                      if (type != null) {
+                        if ((scheduleModel?.itemsCount ?? 0) > 1) {
+                          for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
+                            onMinusButtonPressed(index: i);
+                          }
                         }
+                        setState(() {
+                          selectedScheduleName = type;
+                          if (type == UiScheduleTimeModel.scheduleType) {
+                            scheduleModel = UiScheduleTimeModel();
+                          } else if (type == UiScheduleDatesModel.scheduleType) {
+                            scheduleModel = UiScheduleDatesModel();
+                          } else if (type == UiScheduleDatesRangeModel.scheduleType) {
+                            scheduleModel = UiScheduleDatesRangeModel();
+                          }
+                        });
                       }
-                      setState(() {
-                        scheduleModel = selectedTemplate;
-                        switch (scheduleModel.runtimeType) {
-                          case UiScheduleTimeModel _:
-                            selectedScheduleName = UiScheduleTimeModel.scheduleType;
-                            break;
-
-                          case UiScheduleDatesModel _:
-                            selectedScheduleName = UiScheduleDatesModel.scheduleType;
-                            break;
-
-                          case UiScheduleDatesRangeModel _:
-                            selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
-                        }
-                      });
-                      if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                        log('scheduleModel!.itemsCount ${scheduleModel!.itemsCount}');
-                        listKey.currentState!.insertAllItems(0, scheduleModel!.itemsCount);
-                      }
-
                       context.pop();
-                    }
-                  },
-                ),
-                SpacingFoundation.verticalSpace16,
-              ]
-            ]);
-          }
-          return scheduleModel?.childrenBuilder(
-                  index: index - 1, onAdd: onAddButtonPressed, onRemove: onMinusButtonPressed) ??
-              const SizedBox.shrink();
-        },
-      ),
+                    },
+                  ).paddingOnly(bottom: availableTemplates.isEmpty ? SpacingFoundation.verticalSpacing16 : 0.0),
+                  if (availableTemplates.isNotEmpty) ...[
+                    SpacingFoundation.verticalSpace4,
+                    SelectTemplateType(
+                      scheduleTypes: availableTemplates,
+                      onChanged: (UiScheduleModel? selectedTemplate) {
+                        if (selectedTemplate != null) {
+                          if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+                            for (var i = 0; i < scheduleModel!.itemsCount; i++) {
+                              onMinusButtonPressed(index: i);
+                            }
+                          }
+                          setState(() {
+                            scheduleModel = selectedTemplate;
+                            switch (scheduleModel.runtimeType) {
+                              case UiScheduleTimeModel _:
+                                selectedScheduleName = UiScheduleTimeModel.scheduleType;
+                                break;
+
+                              case UiScheduleDatesModel _:
+                                selectedScheduleName = UiScheduleDatesModel.scheduleType;
+                                break;
+
+                              case UiScheduleDatesRangeModel _:
+                                selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+                            }
+                          });
+                          if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+                            log('scheduleModel!.itemsCount ${scheduleModel!.itemsCount}');
+                            listKey.currentState!.insertAllItems(0, scheduleModel!.itemsCount);
+                          }
+
+                          context.pop();
+                        }
+                      },
+                    ),
+                    SpacingFoundation.verticalSpace16,
+                  ]
+                ]);
+              }
+              return scheduleModel?.childrenBuilder(
+                      index: index - 1, onAdd: onAddButtonPressed, onRemove: onMinusButtonPressed) ??
+                  const SizedBox.shrink();
+            },
+          )),
       Positioned(
           bottom: 0,
           left: SpacingFoundation.horizontalSpacing16,
