@@ -36,11 +36,10 @@ class UiProfileModel {
   final UserTileType userTileType;
   final String? specialization;
   final List<String>? socialLinks;
+  final ValueChanged<String?>? onSocialLinksPressed;
   final int? points;
   final int? balance;
   final bool? beInSearch;
-  final VoidCallback? onTelegramPressed;
-  final VoidCallback? onWhatsappPressed;
   final int? updatesCount;
   final DateTime? userCreatedAt;
 
@@ -95,8 +94,8 @@ class UiProfileModel {
       return ProfileCard(
         profileCardBody: ProPublicProfileCardBody(
           registrationDate: userCreatedAt ?? DateTime.now(),
-          onTelegramPressed: onTelegramPressed,
-          onWhatsappPressed: onWhatsappPressed,
+          onSocialLinksPressed: onSocialLinksPressed,
+          socialLinks: socialLinks,
           name: name,
           nickname: nickname,
           avatarUrl: avatarUrl,
@@ -151,50 +150,49 @@ class UiProfileModel {
     this.points,
     this.balance,
     this.phone,
-    this.onTelegramPressed,
-    this.onWhatsappPressed,
     this.updatesCount,
+    this.onSocialLinksPressed,
   });
 
   /// write [copyWith] method
 
-  UiProfileModel copyWith(
-          {String? nickname,
-          String? name,
-          String? description,
-          String? avatarUrl,
-          String? userCredo,
-          int? followers,
-          int? mindsetId,
-          VoidCallback? onFollow,
-          VoidCallback? onPointsDetails,
-          VoidCallback? onBalanceDetails,
-          VoidCallback? onCalendarTap,
-          bool? following,
-          bool? showSupportShuffle,
-          ValueChanged<int>? onDonate,
-          List<String>? allInterests,
-          List<String>? favoriteTags,
-          List<String>? matchingInterests,
-          VoidCallback? onViewAllAchievements,
-          List<UiKitAchievementsModel>? achievements,
-          UserTileType? userTileType,
-          VoidCallback? onShare,
-          String? specialization,
-          List<String>? socialLinks,
-          List<String>? tags,
-          List<int>? tagsIds,
-          List<int>? favoriteTagsIds,
-          String? email,
-          String? phone,
-          int? points,
-          int? balance,
-          VoidCallback? onCustomDonate,
-          bool? beInSearch,
-          VoidCallback? onTelegramPressed,
-          VoidCallback? onWhatsappPressed,
-          int? id,
-          DateTime? userCreatedAt}) =>
+  UiProfileModel copyWith({
+    String? nickname,
+    String? name,
+    String? description,
+    String? avatarUrl,
+    String? userCredo,
+    int? followers,
+    int? mindsetId,
+    VoidCallback? onFollow,
+    VoidCallback? onPointsDetails,
+    VoidCallback? onBalanceDetails,
+    VoidCallback? onCalendarTap,
+    bool? following,
+    bool? showSupportShuffle,
+    ValueChanged<int>? onDonate,
+    List<String>? allInterests,
+    List<String>? favoriteTags,
+    List<String>? matchingInterests,
+    VoidCallback? onViewAllAchievements,
+    List<UiKitAchievementsModel>? achievements,
+    UserTileType? userTileType,
+    VoidCallback? onShare,
+    String? specialization,
+    List<String>? socialLinks,
+    List<String>? tags,
+    List<int>? tagsIds,
+    List<int>? favoriteTagsIds,
+    String? email,
+    String? phone,
+    int? points,
+    int? balance,
+    VoidCallback? onCustomDonate,
+    bool? beInSearch,
+    int? id,
+    DateTime? userCreatedAt,
+    ValueChanged<String?>? onSocialLinksPressed,
+  }) =>
       UiProfileModel(
         id: id ?? this.id,
         onShare: onShare ?? this.onShare,
@@ -229,9 +227,8 @@ class UiProfileModel {
         favoriteTagsIds: favoriteTagsIds ?? this.favoriteTagsIds,
         points: points ?? this.points,
         balance: balance ?? this.balance,
-        onTelegramPressed: onTelegramPressed ?? this.onTelegramPressed,
-        onWhatsappPressed: onWhatsappPressed ?? this.onWhatsappPressed,
         userCreatedAt: userCreatedAt ?? this.userCreatedAt,
+        onSocialLinksPressed: onSocialLinksPressed ?? this.onSocialLinksPressed,
       );
 
   UiOwnerModel asOwnerModel([VoidCallback? onTap]) =>
