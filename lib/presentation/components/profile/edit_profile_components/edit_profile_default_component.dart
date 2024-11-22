@@ -25,7 +25,10 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final List<String> socialLinks;
   final ValueChanged<List<String>>? onPreferencesChanged;
   final ValueChanged<List<String>>? onSocialLinksChanged;
+  final ValueChanged<String>? onSocialLinkDelete;
   final ValueChanged<String>? onLocaleUpdated;
+  final ValueChanged<bool>? onChangeShowPhone;
+  final ValueChanged<bool>? onChangeShowEmail;
   final String? Function(String?)? nameValidator;
   final String? Function(String?)? emailValidator;
   final String? Function(String?)? phoneValidator;
@@ -42,6 +45,8 @@ class EditProfileDefaultComponent extends StatelessWidget {
   final bool beInSearch;
   final bool isLoading;
   final bool hasChanges;
+  final bool showPhoneInProfile;
+  final bool showEmailInProfile;
 
   const EditProfileDefaultComponent({
     super.key,
@@ -81,6 +86,11 @@ class EditProfileDefaultComponent extends StatelessWidget {
     this.activityItem,
     this.userType = UserTileType.ordinary,
     this.hasChanges = false,
+    this.onSocialLinkDelete,
+    this.showPhoneInProfile = true,
+    this.showEmailInProfile = true,
+    this.onChangeShowPhone,
+    this.onChangeShowEmail,
   });
 
   @override
@@ -306,6 +316,22 @@ class EditProfileDefaultComponent extends StatelessWidget {
               keyboardType: TextInputType.phone,
               inputFormatters: [americanInputFormatter],
             ),
+            if (userType == UserTileType.influencer || userType == UserTileType.pro)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      S.of(context).ShowXInProfile(S.of(context).Phone.toLowerCase()),
+                      style: theme?.regularTextTheme.labelSmall,
+                    ),
+                  ),
+                  UiKitGradientSwitch(
+                    onChanged: onChangeShowPhone,
+                    switchedOn: showPhoneInProfile,
+                  ),
+                ],
+              ).paddingOnly(top: SpacingFoundation.verticalSpacing8),
             SpacingFoundation.verticalSpace16,
             UiKitInputFieldNoFill(
               controller: emailController,
@@ -315,22 +341,42 @@ class EditProfileDefaultComponent extends StatelessWidget {
               validator: emailValidator,
               keyboardType: TextInputType.emailAddress,
             ),
-            if (userType == UserTileType.influencer) ...[
-              SpacingFoundation.verticalSpace16,
+            if (userType == UserTileType.influencer || userType == UserTileType.pro)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      S.of(context).ShowXInProfile(S.of(context).Email.toLowerCase()),
+                      style: theme?.regularTextTheme.labelSmall,
+                    ),
+                  ),
+                  UiKitGradientSwitch(
+                    onChanged: onChangeShowEmail,
+                    switchedOn: showEmailInProfile,
+                  ),
+                ],
+              ).paddingOnly(top: SpacingFoundation.verticalSpacing8),
+            if (userType == UserTileType.influencer || userType == UserTileType.pro) ...[
+              SpacingFoundation.verticalSpace24,
               Row(
                 children: [
                   Text(
-                    'Links',
+                    S.of(context).Links,
                     style: theme?.regularTextTheme.labelSmall,
                   ),
                   const Spacer(),
                   context.smallOutlinedButton(
                     data: BaseUiKitButtonData(
                       onPressed: () async {
-                        final newLinks = await socialLinksEditBuilder(context, socialLinks: socialLinks);
-                        if (newLinks.isNotEmpty) {
-                          onSocialLinksChanged?.call(newLinks);
-                        }
+                        await socialLinksEditBuilder(
+                          context,
+                          socialLinks: socialLinks,
+                          onSave: (value) {
+                            onSocialLinksChanged?.call(value);
+                            context.pop();
+                          },
+                        );
                       },
                       iconInfo: BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.plus, color: Colors.white),
                     ),
@@ -339,29 +385,37 @@ class EditProfileDefaultComponent extends StatelessWidget {
               ),
             ],
             if (socialLinks.isNotEmpty)
-              ...socialLinks.map((e) => Row(
-                    children: [
-                      context.iconButtonNoPadding(
-                          data: BaseUiKitButtonData(
-                              iconWidget: ImageWidget(
-                        iconData: e.icon,
-                        color: theme?.colorScheme.inversePrimary,
-                      ))),
-                      SpacingFoundation.horizontalSpace16,
-                      Expanded(
-                          child: Text(
+              ...socialLinks.map(
+                (e) => Row(
+                  children: [
+                    ImageWidget(
+                      iconData: e.icon,
+                      link: e.iconSvg,
+                      height: 20.w,
+                      color: theme?.colorScheme.inversePrimary,
+                    ),
+                    SpacingFoundation.horizontalSpace16,
+                    Expanded(
+                      child: Text(
                         '@${e.split('/').last}',
                         style: theme?.boldTextTheme.caption1Medium,
-                      )),
-                      SpacingFoundation.horizontalSpace16,
-                      context.iconButtonNoPadding(
-                          data: BaseUiKitButtonData(
-                              iconInfo: BaseUiKitButtonIconData(
-                        iconData: ShuffleUiKitIcons.trash,
-                        color: theme?.colorScheme.inversePrimary,
-                      )))
-                    ],
-                  )),
+                      ),
+                    ),
+                    SpacingFoundation.horizontalSpace16,
+                    context.iconButtonNoPadding(
+                      data: BaseUiKitButtonData(
+                        onPressed: () {
+                          onSocialLinkDelete?.call(e);
+                        },
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.trash,
+                          color: theme?.colorScheme.inversePrimary,
+                        ),
+                      ),
+                    )
+                  ],
+                ).paddingOnly(top: SpacingFoundation.verticalSpacing8),
+              ),
             SpacingFoundation.verticalSpace16,
             Text(
               S.of(context).ActivityType,

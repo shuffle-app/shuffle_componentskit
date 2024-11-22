@@ -337,7 +337,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               keyboardType: TextInputType.url,
               label: S.of(context).Website,
               hintText: 'https://coolplace.com',
-              inputFormatters: [HttpsPrefixFormatter()],
+              inputFormatters: [PrefixFormatter(prefix: 'https://')],
               validator: websiteValidator,
               controller: _websiteController,
             ).paddingSymmetric(horizontal: horizontalPadding),

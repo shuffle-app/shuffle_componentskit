@@ -5,6 +5,7 @@ import 'package:shuffle_components_kit/presentation/components/booking_component
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_subs_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/create_upsales_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class CreateBookingComponent extends StatefulWidget {
   final Function(BookingUiModel) onBookingCreated;
@@ -44,7 +45,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
   void initState() {
     super.initState();
     _bookingUiModel = widget.bookingUiModel ?? BookingUiModel(id: -1);
-    _priceController.text = '${widget.bookingUiModel?.price ?? ''} ${widget.currency ?? 'AED'}';
+    _priceController.text = widget.bookingUiModel?.price ?? '';
     _bookingLimitController.text = widget.bookingUiModel?.bookingLimit ?? '';
     _bookingLimitPerOneController.text = widget.bookingUiModel?.bookingLimitPerOne ?? '';
     _subsUiModels.addAll(_bookingUiModel.subsUiModel != null ? _bookingUiModel.subsUiModel! : []);
@@ -79,7 +80,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
   void didUpdateWidget(covariant CreateBookingComponent oldWidget) {
     if (oldWidget.bookingUiModel != widget.bookingUiModel) {
       _bookingUiModel = widget.bookingUiModel ?? BookingUiModel(id: -1);
-      _priceController.text = '${widget.bookingUiModel?.price ?? ''} ${widget.currency ?? 'AED'}';
+      _priceController.text = widget.bookingUiModel?.price ?? '';
       _bookingLimitController.text = widget.bookingUiModel?.bookingLimit ?? '';
       _bookingLimitPerOneController.text = widget.bookingUiModel?.bookingLimitPerOne ?? '';
       _subsUiModels.clear();
@@ -100,7 +101,13 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
       body: Form(
         key: _formKey,
         child: BlurredAppBarPage(
-          title: S.of(context).Booking,
+          customTitle: Flexible(
+            child: AutoSizeText(
+              S.of(context).Booking,
+              style: theme?.boldTextTheme.title1,
+              maxLines: 1,
+            ),
+          ),
           centerTitle: true,
           autoImplyLeading: true,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
