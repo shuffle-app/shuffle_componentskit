@@ -112,6 +112,7 @@ class FeedComponent extends StatelessWidget {
               showHints: showHints,
               lastPhaseScaleNotifier: subscribedUsersFeedIconScaleNotifier!,
               topPadding: MediaQuery.viewPaddingOf(context).top,
+              expandHint: showHints && subscribedProfiles.isEmpty,
               children: (subscribedProfiles.isEmpty ? null : subscribedProfiles)
                       ?.map(
                         (profile) => GestureDetector(

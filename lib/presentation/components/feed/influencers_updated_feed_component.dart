@@ -42,7 +42,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   void dispose() {
-    widget.onDispose?.call();
+    Future.delayed(Duration.zero, () => widget.onDispose?.call());
     super.dispose();
   }
 
