@@ -783,7 +783,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
               isAbleToRemove: true,
               onRemove: () {
                 final originalTimes = thisObject.value;
-                originalTimes.removeLast();
+                originalTimes.removeAt(i);
                 setState(() {
                   dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
                 });
