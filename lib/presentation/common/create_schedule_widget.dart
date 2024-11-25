@@ -92,7 +92,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     return Scaffold(
         body: Stack(children: [
       SizedBox(
-          height: 0.8.sh,
+          height: 1.sh,
           child: BlurredAppBarPage(
             autoImplyLeading: true,
             customTitle: AutoSizeText(S.of(context).Schedule, maxLines: 1, style: textStyle),
@@ -421,7 +421,17 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   bool selectableDayPredicate(DateTime day) {
-    final indexesOfWeekdays = weeklySchedule.map((e) => uiKitConstWeekdays.indexOf(e.key) + 1).toList();
+    final List<int> indexesOfWeekdays = [];
+
+    weeklySchedule.forEach(
+      (element) {
+        final index = element.key.split(',').map((e) {
+          return uiKitConstWeekdays.indexOf(e.trim()) + 1;
+        }).toList();
+        indexesOfWeekdays.addAll(index);
+      },
+    );
+
     return indexesOfWeekdays.contains(day.weekday);
   }
 
@@ -748,7 +758,6 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                       //     return;
                       //   }
                       // }
-
                       dailySchedule[index] = MapEntry(thisObject.key, [timeFrom, timeTo].nonNulls.toList());
                       setState(() {});
                     }
@@ -771,7 +780,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
               isAbleToRemove: true,
               onRemove: () {
                 final originalTimes = thisObject.value;
-                originalTimes.removeAt(i);
+                originalTimes.removeLast();
                 setState(() {
                   dailySchedule[index] = MapEntry(thisObject.key, originalTimes);
                 });
@@ -810,8 +819,13 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                         //     return;
                         //   }
                         // }
+                        final originalTimes = dailySchedule[index].value;
 
-                        dailySchedule[index] = MapEntry(thisObject.key, [timeFrom, timeTo].nonNulls.toList());
+                        final itemsToRemove = originalTimes.length.isEven ? 2 : 1;
+                        originalTimes.removeRange(originalTimes.length - itemsToRemove, originalTimes.length);
+
+                        dailySchedule[index] =
+                            MapEntry(thisObject.key, originalTimes + [timeFrom, timeTo].nonNulls.toList());
                         setState(() {});
                       }
                     });
