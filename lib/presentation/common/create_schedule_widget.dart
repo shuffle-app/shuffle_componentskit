@@ -90,162 +90,165 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     TextStyle? textStyle = theme?.boldTextTheme.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
     textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
     return Scaffold(
-        body: Stack(children: [
-      SizedBox(
-          height: 0.8.sh,
-          child: BlurredAppBarPage(
-            autoImplyLeading: true,
-            customTitle: AutoSizeText(S.of(context).Schedule, maxLines: 1, style: textStyle),
-            centerTitle: true,
-            animatedListKey: listKey,
-            childrenCount: initialItemsCount,
-            childrenPadding: EdgeInsets.symmetric(
-                horizontal: SpacingFoundation.horizontalSpacing12, vertical: SpacingFoundation.verticalSpacing4),
-            childrenBuilder: (context, index) {
-              if (index == 0) {
-                return Column(mainAxisSize: MainAxisSize.min, children: [
-                  SelectScheduleType(
-                    scheduleTypes: scheduleTypes,
-                    selectedScheduleName: selectedScheduleName,
-                    showWarningDialog: () => scheduleModel?.isNotEmpty ?? false,
-                    onSelectType: (type) {
-                      if (type != null) {
-                        if ((scheduleModel?.itemsCount ?? 0) > 1) {
-                          for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
-                            onMinusButtonPressed(index: i);
-                          }
-                        }
-                        setState(() {
-                          selectedScheduleName = type;
-                          if (type == UiScheduleTimeModel.scheduleType) {
-                            scheduleModel = UiScheduleTimeModel();
-                          } else if (type == UiScheduleDatesModel.scheduleType) {
-                            scheduleModel = UiScheduleDatesModel();
-                          } else if (type == UiScheduleDatesRangeModel.scheduleType) {
-                            scheduleModel = UiScheduleDatesRangeModel();
-                          }
-                        });
-                      }
-                      context.pop();
-                    },
-                  ).paddingOnly(bottom: availableTemplates.isEmpty ? SpacingFoundation.verticalSpacing16 : 0.0),
-                  if (availableTemplates.isNotEmpty) ...[
-                    SpacingFoundation.verticalSpace4,
-                    SelectTemplateType(
-                      scheduleTypes: availableTemplates,
-                      onChanged: (UiScheduleModel? selectedTemplate) {
-                        if (selectedTemplate != null) {
-                          if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                            for (var i = 0; i < scheduleModel!.itemsCount; i++) {
-                              onMinusButtonPressed(index: i);
-                            }
-                          }
-                          setState(() {
-                            scheduleModel = selectedTemplate;
-                            switch (scheduleModel.runtimeType) {
-                              case UiScheduleTimeModel _:
-                                selectedScheduleName = UiScheduleTimeModel.scheduleType;
-                                break;
-
-                              case UiScheduleDatesModel _:
-                                selectedScheduleName = UiScheduleDatesModel.scheduleType;
-                                break;
-
-                              case UiScheduleDatesRangeModel _:
-                                selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
-                            }
-                          });
-                          if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                            log('scheduleModel!.itemsCount ${scheduleModel!.itemsCount}');
-                            listKey.currentState!.insertAllItems(0, scheduleModel!.itemsCount);
-                          }
-
-                          context.pop();
-                        }
-                      },
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                  ]
-                ]);
-              }
-              return scheduleModel?.childrenBuilder(
-                      index: index - 1, onAdd: onAddButtonPressed, onRemove: onMinusButtonPressed) ??
-                  const SizedBox.shrink();
-            },
-          )),
-      Positioned(
-          bottom: 0,
-          left: SpacingFoundation.horizontalSpacing16,
-          right: SpacingFoundation.horizontalSpacing16,
-          child: UiKitCardWrapper(
-              borderRadius: BorderRadiusFoundation.all24,
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + SpacingFoundation.verticalSpacing8,
-              ),
-              color: theme?.colorScheme.surface,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  context.gradientButton(
-                    data: BaseUiKitButtonData(
-                      text: S.current.Save,
-                      onPressed: scheduleModel != null
-                          ? () {
-                              context.pop();
-                              widget.onScheduleCreated?.call(scheduleModel!);
-                            }
-                          : null,
-                    ),
-                  ),
-                  SpacingFoundation.verticalSpace8,
-                  if (scheduleModel != null)
-                    context.outlinedButton(
-                      data: BaseUiKitButtonData(
-                          text: S.of(context).SaveTemplate,
-                          onPressed: scheduleModel == null
-                              ? null
-                              : () async {
-                                  final textTheme = theme?.boldTextTheme;
-                                  final controller = TextEditingController();
-                                  final name = await showUiKitAlertDialog<String?>(
-                                      context,
-                                      AlertDialogData(
-                                          title: Text(
-                                            S.of(context).SaveTemplate,
-                                            style: textTheme?.title2
-                                                .copyWith(color: UiKitColors.lightHeadingTypographyColor),
-                                          ),
-                                          content: UiKitInputFieldNoIcon(
-                                            hintText: S.current.Title,
-                                            controller: controller,
-                                            autofocus: true,
-                                            textColor: UiKitColors.lightHeadingTypographyColor,
-                                            customLabelColor: UiKitColors.lightBodyTypographyColor,
-                                            fillColor: UiKitColors.lightSurface1,
-                                            borderRadius: BorderRadiusFoundation.all12,
-                                            label: S.of(context).TemplateName,
-                                          ),
-                                          actions: [
-                                            context.button(
-                                                data: BaseUiKitButtonData(
-                                                    backgroundColor: theme?.colorScheme.primary,
-                                                    textColor: theme?.colorScheme.inversePrimary,
-                                                    text: S.current.Save,
-                                                    fit: ButtonFit.fitWidth,
-                                                    onPressed: () => context.pop(result: controller.text)))
-                                          ],
-                                          defaultButtonText: S.current.Save,
-                                          onPop: () => context.pop(result: controller.text)));
-                                  if (name != null) {
-                                    scheduleModel!.templateName = name;
-                                    widget.onTemplateCreated?.call(scheduleModel!);
+        body: SizedBox(
+            height: 1.sh,
+            child: Stack(children: [
+              SizedBox(
+                  height: 0.83.sh,
+                  child: BlurredAppBarPage(
+                    autoImplyLeading: true,
+                    customTitle: AutoSizeText(S.of(context).Schedule, maxLines: 1, style: textStyle),
+                    centerTitle: true,
+                    animatedListKey: listKey,
+                    childrenCount: initialItemsCount,
+                    childrenPadding: EdgeInsets.symmetric(
+                        horizontal: SpacingFoundation.horizontalSpacing12,
+                        vertical: SpacingFoundation.verticalSpacing4),
+                    childrenBuilder: (context, index) {
+                      if (index == 0) {
+                        return Column(mainAxisSize: MainAxisSize.min, children: [
+                          SelectScheduleType(
+                            scheduleTypes: scheduleTypes,
+                            selectedScheduleName: selectedScheduleName,
+                            showWarningDialog: () => scheduleModel?.isNotEmpty ?? false,
+                            onSelectType: (type) {
+                              if (type != null) {
+                                if ((scheduleModel?.itemsCount ?? 0) > 1) {
+                                  for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
+                                    onMinusButtonPressed(index: i);
                                   }
-                                }),
-                    ),
-                ],
-              )))
-    ]));
+                                }
+                                setState(() {
+                                  selectedScheduleName = type;
+                                  if (type == UiScheduleTimeModel.scheduleType) {
+                                    scheduleModel = UiScheduleTimeModel();
+                                  } else if (type == UiScheduleDatesModel.scheduleType) {
+                                    scheduleModel = UiScheduleDatesModel();
+                                  } else if (type == UiScheduleDatesRangeModel.scheduleType) {
+                                    scheduleModel = UiScheduleDatesRangeModel();
+                                  }
+                                });
+                              }
+                              context.pop();
+                            },
+                          ).paddingOnly(bottom: availableTemplates.isEmpty ? SpacingFoundation.verticalSpacing16 : 0.0),
+                          if (availableTemplates.isNotEmpty) ...[
+                            SpacingFoundation.verticalSpace4,
+                            SelectTemplateType(
+                              scheduleTypes: availableTemplates,
+                              onChanged: (UiScheduleModel? selectedTemplate) {
+                                if (selectedTemplate != null) {
+                                  if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+                                    for (var i = 0; i < scheduleModel!.itemsCount; i++) {
+                                      onMinusButtonPressed(index: i);
+                                    }
+                                  }
+                                  setState(() {
+                                    scheduleModel = selectedTemplate;
+                                    switch (scheduleModel.runtimeType) {
+                                      case UiScheduleTimeModel _:
+                                        selectedScheduleName = UiScheduleTimeModel.scheduleType;
+                                        break;
+
+                                      case UiScheduleDatesModel _:
+                                        selectedScheduleName = UiScheduleDatesModel.scheduleType;
+                                        break;
+
+                                      case UiScheduleDatesRangeModel _:
+                                        selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+                                    }
+                                  });
+                                  if ((scheduleModel?.itemsCount ?? 0) >= 1) {
+                                    log('scheduleModel!.itemsCount ${scheduleModel!.itemsCount}');
+                                    listKey.currentState!.insertAllItems(0, scheduleModel!.itemsCount);
+                                  }
+
+                                  context.pop();
+                                }
+                              },
+                            ),
+                            SpacingFoundation.verticalSpace16,
+                          ]
+                        ]);
+                      }
+                      return scheduleModel?.childrenBuilder(
+                              index: index - 1, onAdd: onAddButtonPressed, onRemove: onMinusButtonPressed) ??
+                          const SizedBox.shrink();
+                    },
+                  )),
+              Positioned(
+                  bottom: 0,
+                  left: SpacingFoundation.horizontalSpacing16,
+                  right: SpacingFoundation.horizontalSpacing16,
+                  child: UiKitCardWrapper(
+                      borderRadius: BorderRadiusFoundation.all24,
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.paddingOf(context).bottom + SpacingFoundation.verticalSpacing8,
+                      ),
+                      color: theme?.colorScheme.surface,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          context.gradientButton(
+                            data: BaseUiKitButtonData(
+                              text: S.current.Save,
+                              onPressed: scheduleModel != null
+                                  ? () {
+                                      context.pop();
+                                      widget.onScheduleCreated?.call(scheduleModel!);
+                                    }
+                                  : null,
+                            ),
+                          ),
+                          SpacingFoundation.verticalSpace8,
+                          if (scheduleModel != null)
+                            context.outlinedButton(
+                              data: BaseUiKitButtonData(
+                                  text: S.of(context).SaveTemplate,
+                                  onPressed: scheduleModel == null
+                                      ? null
+                                      : () async {
+                                          final textTheme = theme?.boldTextTheme;
+                                          final controller = TextEditingController();
+                                          final name = await showUiKitAlertDialog<String?>(
+                                              context,
+                                              AlertDialogData(
+                                                  title: Text(
+                                                    S.of(context).SaveTemplate,
+                                                    style: textTheme?.title2
+                                                        .copyWith(color: UiKitColors.lightHeadingTypographyColor),
+                                                  ),
+                                                  content: UiKitInputFieldNoIcon(
+                                                    hintText: S.current.Title,
+                                                    controller: controller,
+                                                    autofocus: true,
+                                                    textColor: UiKitColors.lightHeadingTypographyColor,
+                                                    customLabelColor: UiKitColors.lightBodyTypographyColor,
+                                                    fillColor: UiKitColors.lightSurface1,
+                                                    borderRadius: BorderRadiusFoundation.all12,
+                                                    label: S.of(context).TemplateName,
+                                                  ),
+                                                  actions: [
+                                                    context.button(
+                                                        data: BaseUiKitButtonData(
+                                                            backgroundColor: theme?.colorScheme.primary,
+                                                            textColor: theme?.colorScheme.inversePrimary,
+                                                            text: S.current.Save,
+                                                            fit: ButtonFit.fitWidth,
+                                                            onPressed: () => context.pop(result: controller.text)))
+                                                  ],
+                                                  defaultButtonText: S.current.Save,
+                                                  onPop: () => context.pop(result: controller.text)));
+                                          if (name != null) {
+                                            scheduleModel!.templateName = name;
+                                            widget.onTemplateCreated?.call(scheduleModel!);
+                                          }
+                                        }),
+                            ),
+                        ],
+                      )))
+            ])));
   }
 }
 
