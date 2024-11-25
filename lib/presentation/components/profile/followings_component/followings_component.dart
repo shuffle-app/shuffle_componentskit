@@ -11,6 +11,7 @@ class FollowingsComponent extends StatelessWidget {
   final ValueChanged<int>? onMessage;
   final ValueChanged<int>? onFollow;
   final ValueChanged<int>? onUnfollow;
+  final ValueChanged<int>? onBlock;
 
   const FollowingsComponent({
     super.key,
@@ -19,6 +20,7 @@ class FollowingsComponent extends StatelessWidget {
     this.onMessage,
     this.onFollow,
     this.onUnfollow,
+    this.onBlock,
   });
 
   @override
@@ -66,9 +68,11 @@ class FollowingsComponent extends StatelessWidget {
                 const UiKitEmptyListPlaceHolder().paddingOnly(top: 0.35.sh),
               if (showFollowings)
                 ...(followings
-                        ?.map((e) => e
-                            .buildMenuItem(onMessageTap: onMessage, onUnFollowTap: onUnfollow)
-                            .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
+                        ?.map((e) => GestureDetector(
+                            onTap: e.onTap,
+                            child: e
+                                .buildMenuItem(onMessageTap: onMessage, onUnFollowTap: onUnfollow)
+                                .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12)))
                         .toList() ??
                     [
                       Text(S.of(context).NothingFound.toUpperCase(),
@@ -76,9 +80,15 @@ class FollowingsComponent extends StatelessWidget {
                     ])
               else
                 ...(followers
-                        ?.map((e) => e
-                            .buildMenuItem(onMessageTap: onMessage, onFollowTap: onFollow)
-                            .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12))
+                        ?.map((e) => GestureDetector(
+                            onTap: e.onTap,
+                            child: e
+                                .buildMenuItem(
+                                    onMessageTap: onMessage,
+                                    onFollowTap:
+                                        [UserTileType.pro, UserTileType.influencer].contains(e.type) ? onFollow : null,
+                                    onBlockTap: onBlock)
+                                .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12)))
                         .toList() ??
                     [
                       Text(S.of(context).NothingFound.toUpperCase(),

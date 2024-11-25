@@ -48,7 +48,7 @@ class UiOwnerModel {
         menuOptions: [
           if (onBlockTap != null)
             UiKitPopUpMenuButtonOption(
-              title: 'Block user',
+              title: 'Unsubscribe',
               value: 'Block user',
               onTap: () => onBlockTap(id),
             ),
