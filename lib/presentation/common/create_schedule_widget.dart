@@ -44,17 +44,12 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     scheduleModel = widget.scheduleToEdit;
     debugPrint('recieved schedule: $scheduleModel');
     if (scheduleModel != null) {
-      switch (scheduleModel.runtimeType) {
-        case UiScheduleTimeModel _:
-          selectedScheduleName = UiScheduleTimeModel.scheduleType;
-          break;
-
-        case UiScheduleDatesModel _:
-          selectedScheduleName = UiScheduleDatesModel.scheduleType;
-          break;
-
-        case UiScheduleDatesRangeModel _:
-          selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+      if (scheduleModel is UiScheduleTimeModel) {
+        selectedScheduleName = UiScheduleTimeModel.scheduleType;
+      } else if (scheduleModel is UiScheduleDatesModel) {
+        selectedScheduleName = UiScheduleDatesModel.scheduleType;
+      } else if (scheduleModel is UiScheduleDatesRangeModel) {
+        selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
       }
       if ((scheduleModel?.itemsCount ?? 0) >= 1) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
