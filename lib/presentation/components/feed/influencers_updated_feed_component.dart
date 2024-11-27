@@ -40,6 +40,14 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     UiKitCustomTab(title: S.current.Unread, customValue: 'unread', group: autoSizeGroup),
   ];
 
+  onReactionsTapped(int index, String reaction) async {
+    // Handle reaction tapped
+    await widget.onReactionsTapped?.call(index, reaction);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void dispose() {
     Future.delayed(Duration.zero, () => widget.onDispose?.call());
