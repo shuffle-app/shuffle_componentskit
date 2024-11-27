@@ -73,15 +73,15 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               controller: tabController,
               children: [
                 _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: widget.onReactionsTapped,
+                  onReactionsTapped: onReactionsTapped,
                   pagingController: widget.latestContentController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: widget.onReactionsTapped,
+                  onReactionsTapped: onReactionsTapped,
                   pagingController: widget.topContentController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: widget.onReactionsTapped,
+                  onReactionsTapped: onReactionsTapped,
                   pagingController: widget.unreadContentController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               ],

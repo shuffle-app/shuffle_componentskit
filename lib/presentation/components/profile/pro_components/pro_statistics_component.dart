@@ -26,8 +26,8 @@ class ProStatisticsComponent extends StatelessWidget {
   //   CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
   // ];
 
-  ProStatisticsComponent({
-    Key? key,
+  const ProStatisticsComponent({
+    super.key,
     required this.uniqueStatisticsModel,
     required this.viewsAndVisitorsStat,
     required this.feedbackStats,
@@ -42,7 +42,7 @@ class ProStatisticsComponent extends StatelessWidget {
     this.onStatisticsPopupMenuItemTapped,
     this.events,
     this.onEventTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

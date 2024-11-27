@@ -42,7 +42,6 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   @override
   void initState() {
     scheduleModel = widget.scheduleToEdit;
-    debugPrint('recieved schedule: $scheduleModel');
     if (scheduleModel != null) {
       if (scheduleModel is UiScheduleTimeModel) {
         selectedScheduleName = UiScheduleTimeModel.scheduleType;
