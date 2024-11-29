@@ -102,7 +102,8 @@ class MyEventsComponent extends StatelessWidget {
                   : ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: BorderedUserCircleAvatar(
-                        imageUrl: event.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
+                        imageUrl: event.owner?.logo ??
+                            event.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
                         size: 40.w,
                       ),
                       title: Text(
