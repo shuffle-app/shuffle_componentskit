@@ -56,6 +56,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
   late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
+  Key _refreshKey = UniqueKey();
 
   late UiPlaceModel _placeToEdit;
   late BookingUiModel? _bookingUiModel;
@@ -93,6 +94,12 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   //     _videos.removeAt(index);
   //   });
   // }
+
+  _handleLocaleChanged() {
+    setState(() {
+      _refreshKey = UniqueKey();
+    });
+  }
 
   _onPhotoDeleted(int index) {
     setState(() {
@@ -180,6 +187,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _locationController.text = widget.placeToEdit?.location ?? '';
       _bookingUiModel = widget.placeToEdit?.bookingUiModel;
     }
+    _handleLocaleChanged();
     super.didUpdateWidget(oldWidget);
   }
 
@@ -440,6 +448,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace4,
             UiKitCustomTabBar(
+              key: _refreshKey,
               selectedTab: _placeToEdit.contentType,
               onTappedTab: (index) {
                 setState(() {
