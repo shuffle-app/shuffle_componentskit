@@ -234,29 +234,19 @@ class _CreateOfferState extends State<CreateOffer> {
               selectedDates: _selectedDates,
               onCalenderTap: () async {
                 _selectedDates.clear();
-                final firstDate = await showUiKitCalendarDialog(
-                  context,
-                  firstDate: widget.firstDate,
-                  selectableDayPredicate: widget.selectableDayPredicate,
-                );
-                setState(() {
-                  _selectedDates.add(firstDate);
-                });
-                await Future.delayed(const Duration(milliseconds: 200));
-                if (_selectedDates[0] != null && context.mounted) {
-                  final lastDate = await showUiKitCalendarDialog(
-                    context,
-                    firstDate: widget.firstDate,
-                    selectableDayPredicate: widget.selectableDayPredicate,
-                  );
+                final dates = await showDateRangePickerDialog(context);
 
-                  if (lastDate != null && _selectedDates[0]!.isAtSameMomentAs(lastDate)) {
+                if (dates != null) {
+                  final DateTime now = DateTime.now();
+
+                  if ((!dates.start.isBefore(now) || !dates.end.isBefore(now)) ||
+                      (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
                     setState(() {
-                      _selectedDates.add(null);
+                      _selectedDates.addAll([dates.start, dates.end]);
                     });
                   } else {
                     setState(() {
-                      _selectedDates.add(lastDate);
+                      _selectedDates.add(null);
                     });
                   }
                 }
