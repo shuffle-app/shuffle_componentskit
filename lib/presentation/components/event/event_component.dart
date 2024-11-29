@@ -31,7 +31,6 @@ class EventComponent extends StatefulWidget {
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
 
-
   const EventComponent({
     super.key,
     required this.event,
@@ -203,7 +202,7 @@ class _EventComponentState extends State<EventComponent> {
                       : AlignmentDirectional.topStart,
                   children: [
                     SizedBox(
-                      width: 1.sw - (horizontalMargin * 2 + 35.w),
+                      width: 1.sw - (horizontalMargin * 2 + 40.w),
                       child: AutoSizeText(
                         widget.event.title!,
                         minFontSize: 18.w,
@@ -249,8 +248,8 @@ class _EventComponentState extends State<EventComponent> {
                   borderRadius: BorderRadiusFoundation.all24,
                   onTap: () => widget.onArchivePressed?.call(),
                   child: UiKitBadgeOutlined.text(
-                text: S.of(context).Archived,
-              )),
+                    text: S.of(context).Archived,
+                  )),
               SpacingFoundation.verticalSpace4,
             ],
             if (widget.event.owner != null)
