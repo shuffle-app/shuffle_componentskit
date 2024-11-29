@@ -57,6 +57,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
   late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
+  Key _refreshKey = UniqueKey();
 
   late UiEventModel _eventToEdit;
   late BookingUiModel? _bookingUiModel;
@@ -87,6 +88,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
     _bookingUiModel = widget.eventToEdit?.bookingUiModel;
+  }
+
+  _handleLocaleChanged() {
+    setState(() {
+      _refreshKey = UniqueKey();
+    });
   }
 
   _onVideoDeleted(int index) {
@@ -172,6 +179,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
       _bookingUiModel = widget.eventToEdit?.bookingUiModel;
     }
+    _handleLocaleChanged();
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -344,6 +353,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace4,
           UiKitCustomTabBar(
+            key: _refreshKey,
             selectedTab: _eventToEdit.contentType,
             onTappedTab: (index) {
               setState(() {

@@ -51,7 +51,9 @@ class EventlistComponent extends StatelessWidget {
                           color: Colors.white,
                         ).paddingOnly(right: 5.w)))),
             child: UiKitCardWrapper(
-                    padding: event.reviewStatus == null ? EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16) : null,
+                    padding: event.reviewStatus == null
+                        ? EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16)
+                        : null,
                     child: event.reviewStatus != null
                         ? DecoratedBox(
                             decoration: BoxDecoration(
@@ -67,7 +69,7 @@ class EventlistComponent extends StatelessWidget {
                         : ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: BorderedUserCircleAvatar(
-                              imageUrl:
+                              imageUrl: event.owner?.logo ??
                                   event.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,
                               size: 40.w,
                             ),

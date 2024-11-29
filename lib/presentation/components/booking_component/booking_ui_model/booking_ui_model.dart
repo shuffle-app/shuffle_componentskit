@@ -48,6 +48,21 @@ class BookingUiModel {
     );
   }
 
+  @override
+  String toString() {
+    return 'BookingUiModel('
+        'id: $id, '
+        'price: $price, '
+        'currency: $currency, '
+        'bookingLimit: $bookingLimit, '
+        'bookingLimitPerOne: $bookingLimitPerOne, '
+        'subsUiModel: $subsUiModel, '
+        'upsaleUiModel: $upsaleUiModel, '
+        'selectedDateTime: $selectedDateTime, '
+        'showSubsInContentCard: $showSubsInContentCard'
+        ')';
+  }
+
   String? validateCreation({bool checkDate = false}) {
     if (bookingLimit == null || bookingLimit!.isEmpty || bookingLimit == '0') {
       return S.current.XIsRequired(S.current.BookingLimit);
