@@ -20,6 +20,18 @@ abstract class InfluencerFeedItem {
     required this.userType,
     this.userReaction,
   });
+
+  @override
+  String toString() {
+    return 'InfluencerFeedItem('
+        'id: $id, '
+        'speciality: $speciality, '
+        'name: $name, '
+        'username: $username, '
+        'avatarUrl: $avatarUrl, '
+        'userType: $userType, '
+        'userReaction: $userReaction)';
+  }
 }
 
 class UpdatesFeedItem extends InfluencerFeedItem {
