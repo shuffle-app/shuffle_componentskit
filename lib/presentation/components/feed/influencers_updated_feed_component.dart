@@ -10,6 +10,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final ValueChanged<String>? onTappedTab;
   final VoidCallback? onDispose;
   final Function(int, String)? onReactionsTapped;
+  final ValueChanged<int>? onLongPress;
 
   final PagingController<int, InfluencerFeedItem> latestContentController;
   final PagingController<int, InfluencerFeedItem> topContentController;
@@ -23,6 +24,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     required this.topContentController,
     required this.unreadContentController,
     this.onReactionsTapped,
+    this.onLongPress,
   });
 
   @override
@@ -75,14 +77,17 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.latestContentController,
+                  onLongPress: widget.onLongPress,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.topContentController,
+                  onLongPress: widget.onLongPress,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.unreadContentController,
+                  onLongPress: widget.onLongPress,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               ],
             ),
@@ -96,10 +101,12 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final PagingController<int, InfluencerFeedItem> pagingController;
   final Function(int, String)? onReactionsTapped;
+  final ValueChanged<int>? onLongPress;
 
   const _PagedInfluencerFeedItemListBody({
     required this.pagingController,
     this.onReactionsTapped,
+    this.onLongPress,
   });
 
   double get _videoReactionPreviewWidth => 0.125.sw;
@@ -138,6 +145,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               sunglassesReactionsCount: item.sunglassesReactionsCount,
               smileyReactionsCount: item.smileyReactionsCount,
               onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+              onLongPress: () => onLongPress?.call(item.id),
               children: _children(item, regularTextTheme),
             ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
           } else if (item is PostFeedItem) {
@@ -155,6 +163,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               text: item.text,
               onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
               hasNewMark: item.newMark,
+              onLongPress: () => onLongPress?.call(item.id),
             ).paddingOnly(bottom: bottomPadding);
           } else if (item is UpdatesFeedItem) {
             return UiKitContentUpdatesCard(
@@ -164,6 +173,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               authorAvatarUrl: item.avatarUrl,
               authorUserType: item.userType,
               onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+              onLongPress: () => onLongPress?.call(item.id),
               children: _children(item, regularTextTheme),
             ).paddingOnly(bottom: bottomPadding);
           } else {
