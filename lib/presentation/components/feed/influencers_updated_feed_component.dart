@@ -10,6 +10,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final ValueChanged<String>? onTappedTab;
   final VoidCallback? onDispose;
   final Function(int, String)? onReactionsTapped;
+  final ValueChanged<int>? onLongPress;
 
   final PagingController<int, InfluencerFeedItem> latestContentController;
   final PagingController<int, InfluencerFeedItem> topContentController;
@@ -23,6 +24,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     required this.topContentController,
     required this.unreadContentController,
     this.onReactionsTapped,
+    this.onLongPress,
   });
 
   @override
@@ -75,14 +77,17 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.latestContentController,
+                  onLongPress: widget.onLongPress,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.topContentController,
+                  onLongPress: widget.onLongPress,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.unreadContentController,
+                  onLongPress: widget.onLongPress,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               ],
             ),
@@ -96,10 +101,12 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final PagingController<int, InfluencerFeedItem> pagingController;
   final Function(int, String)? onReactionsTapped;
+  final ValueChanged<int>? onLongPress;
 
   const _PagedInfluencerFeedItemListBody({
     required this.pagingController,
     this.onReactionsTapped,
+    this.onLongPress,
   });
 
   double get _videoReactionPreviewWidth => 0.125.sw;
@@ -138,6 +145,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               sunglassesReactionsCount: item.sunglassesReactionsCount,
               smileyReactionsCount: item.smileyReactionsCount,
               onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+              onLongPress: () => onLongPress?.call(item.id),
               children: _children(item, regularTextTheme),
             ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
           } else if (item is PostFeedItem) {
@@ -155,6 +163,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               text: item.text,
               onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
               hasNewMark: item.newMark,
+              onLongPress: () => onLongPress?.call(item.id),
             ).paddingOnly(bottom: bottomPadding);
           } else if (item is UpdatesFeedItem) {
             return UiKitContentUpdatesCard(
@@ -164,6 +173,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               authorAvatarUrl: item.avatarUrl,
               authorUserType: item.userType,
               onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+              onLongPress: () => onLongPress?.call(item.id),
               children: _children(item, regularTextTheme),
             ).paddingOnly(bottom: bottomPadding);
           } else {
@@ -203,12 +213,12 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             ).toList(),
           ),
         ),
-      if (item.newPhotos != null)
+      if (item.newPhotos != null && item.newPhotos!.isNotEmpty)
         UiKitStaggeredMediaRow(
           mediaList: item.newPhotos!,
           visibleMediaCount: 4,
         ),
-      if (item.newVideos != null)
+      if (item.newVideos != null && item.newVideos!.isNotEmpty)
         ...item.newVideos!.map((video) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewVideos,
@@ -217,7 +227,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: video.subtitle,
           );
         }),
-      if (item.newFeedbacks != null)
+      if (item.newFeedbacks != null && item.newFeedbacks!.isNotEmpty)
         ...item.newFeedbacks!.map((feedback) {
           return UiKitContentUpdateWithLeadingImage(
             imageUrl: feedback.previewImage,
@@ -226,7 +236,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: feedback.subtitle,
           );
         }),
-      if (item.newVideoReactions != null)
+      if (item.newVideoReactions != null && item.newVideoReactions!.isNotEmpty)
         UiKitCustomChildContentUpdateWidget(
           height: _videoReactionPreviewWidth * 1.7,
           child: UiKitContentRowWithHiddenItems(
@@ -258,7 +268,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               : '',
           subtitle: item.newVoices!.first.content?.title ?? '',
         ),
-      if (item.newRoutes != null)
+      if (item.newRoutes != null && item.newRoutes!.isNotEmpty)
         ...item.newRoutes!.map((route) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewRoutes,
@@ -267,7 +277,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: '${route.routeAPointName} - ${route.routeBPointName}',
           );
         }),
-      if (item.newVideoInterviews != null)
+      if (item.newVideoInterviews != null && item.newVideoInterviews!.isNotEmpty)
         ...item.newVideoInterviews!.map((interview) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewInterviews,
@@ -276,7 +286,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: interview.title,
           );
         }),
-      if (item.newContests != null)
+      if (item.newContests != null && item.newContests!.isNotEmpty)
         ...item.newContests!.map((contest) {
           return UiKitContestUpdateWidget(
             title: S.current.PlusXNewContests,
@@ -292,7 +302,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             height: _videoReactionPreviewWidth * 1.7,
           );
         }),
-      if (item.newPersonalTops != null)
+      if (item.newPersonalTops != null && item.newPersonalTops!.isNotEmpty)
         ...item.newPersonalTops!.map((top) {
           return UiKitContentUpdateWithLeadingImage(
             title: '${(S.current.Top).toUpperCase()} ${top.title}',
@@ -304,7 +314,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 : '',
           );
         }),
-      if (item.newPersonalRespects != null)
+      if (item.newPersonalRespects != null && item.newPersonalRespects!.isNotEmpty)
         UiKitCustomChildContentUpdateWidget(
           height: 0.16875.sw,
           child: UiKitContentRowWithHiddenItems(
@@ -339,7 +349,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
           title:
               '${S.current.Chat.toUpperCase()} ${S.current.PlusXNewChatComments(item.commentsUpdate!.commentsCount)}',
         ),
-      if (item.newContent != null)
+      if (item.newContent != null && item.newContent!.isNotEmpty)
         ...item.newContent!.map((content) {
           return UiKitContentUpdateWithLeadingImage(
             imageUrl: content.media.isNotEmpty ? content.media.first.link : '',
