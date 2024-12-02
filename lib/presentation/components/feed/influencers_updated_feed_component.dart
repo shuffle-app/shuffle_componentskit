@@ -213,12 +213,12 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             ).toList(),
           ),
         ),
-      if (item.newPhotos != null)
+      if (item.newPhotos != null && item.newPhotos!.isNotEmpty)
         UiKitStaggeredMediaRow(
           mediaList: item.newPhotos!,
           visibleMediaCount: 4,
         ),
-      if (item.newVideos != null)
+      if (item.newVideos != null && item.newVideos!.isNotEmpty)
         ...item.newVideos!.map((video) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewVideos,
@@ -227,7 +227,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: video.subtitle,
           );
         }),
-      if (item.newFeedbacks != null)
+      if (item.newFeedbacks != null && item.newFeedbacks!.isNotEmpty)
         ...item.newFeedbacks!.map((feedback) {
           return UiKitContentUpdateWithLeadingImage(
             imageUrl: feedback.previewImage,
@@ -236,7 +236,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: feedback.subtitle,
           );
         }),
-      if (item.newVideoReactions != null)
+      if (item.newVideoReactions != null && item.newVideoReactions!.isNotEmpty)
         UiKitCustomChildContentUpdateWidget(
           height: _videoReactionPreviewWidth * 1.7,
           child: UiKitContentRowWithHiddenItems(
@@ -268,7 +268,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               : '',
           subtitle: item.newVoices!.first.content?.title ?? '',
         ),
-      if (item.newRoutes != null)
+      if (item.newRoutes != null && item.newRoutes!.isNotEmpty)
         ...item.newRoutes!.map((route) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewRoutes,
@@ -277,7 +277,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: '${route.routeAPointName} - ${route.routeBPointName}',
           );
         }),
-      if (item.newVideoInterviews != null)
+      if (item.newVideoInterviews != null && item.newVideoInterviews!.isNotEmpty)
         ...item.newVideoInterviews!.map((interview) {
           return UiKitContentUpdateWithLeadingImage(
             title: S.current.PlusXNewInterviews,
@@ -286,7 +286,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             subtitle: interview.title,
           );
         }),
-      if (item.newContests != null)
+      if (item.newContests != null && item.newContests!.isNotEmpty)
         ...item.newContests!.map((contest) {
           return UiKitContestUpdateWidget(
             title: S.current.PlusXNewContests,
@@ -302,7 +302,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             height: _videoReactionPreviewWidth * 1.7,
           );
         }),
-      if (item.newPersonalTops != null)
+      if (item.newPersonalTops != null && item.newPersonalTops!.isNotEmpty)
         ...item.newPersonalTops!.map((top) {
           return UiKitContentUpdateWithLeadingImage(
             title: '${(S.current.Top).toUpperCase()} ${top.title}',
@@ -314,7 +314,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 : '',
           );
         }),
-      if (item.newPersonalRespects != null)
+      if (item.newPersonalRespects != null && item.newPersonalRespects!.isNotEmpty)
         UiKitCustomChildContentUpdateWidget(
           height: 0.16875.sw,
           child: UiKitContentRowWithHiddenItems(
@@ -349,7 +349,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
           title:
               '${S.current.Chat.toUpperCase()} ${S.current.PlusXNewChatComments(item.commentsUpdate!.commentsCount)}',
         ),
-      if (item.newContent != null)
+      if (item.newContent != null && item.newContent!.isNotEmpty)
         ...item.newContent!.map((content) {
           return UiKitContentUpdateWithLeadingImage(
             imageUrl: content.media.isNotEmpty ? content.media.first.link : '',
