@@ -153,6 +153,8 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Dates);
     } else if (upsalesValidator(upsalesItems?.join(',')) != null) {
       return S.current.XIsRequired(S.current.Upsales);
+    } else if (media.isEmpty) {
+      return S.current.XIsRequired(S.current.Photos);
     }
 
     return null;
