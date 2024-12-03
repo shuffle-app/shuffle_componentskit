@@ -141,6 +141,7 @@ class ChatComponent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Flexible(
                           child: Text(
@@ -148,7 +149,7 @@ class ChatComponent extends StatelessWidget {
                             style: theme?.boldTextTheme.caption1Bold.copyWith(overflow: TextOverflow.ellipsis),
                           ),
                         ),
-                        SpacingFoundation.horizontalSpace12,
+                        SpacingFoundation.horizontalSpacing6.widthBox,
                         if (chatData.userType == UserTileType.influencer) InfluencerAccountMark(),
                         if (chatData.userType == UserTileType.premium) PremiumAccountMark(),
                         if (chatData.userType == UserTileType.pro) ProAccountMark(),
