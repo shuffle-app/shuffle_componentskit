@@ -15,6 +15,11 @@ class PublicProProfileComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel>? onVideoReactionTapped;
   final ValueChanged<FeedbackUiModel>? onFeedbackTapped;
   final Map<int, int?> feedbacksHelpfulCountsData;
+  final int? heartEyesCount;
+  final int? likesCount;
+  final int? sunglassesCount;
+  final int? firesCount;
+  final int? smileyCount;
 
   const PublicProProfileComponent({
     super.key,
@@ -27,6 +32,11 @@ class PublicProProfileComponent extends StatelessWidget {
     this.onFeedbackLiked,
     this.onVideoReactionTapped,
     this.onFeedbackTapped,
+    this.heartEyesCount,
+    this.likesCount,
+    this.sunglassesCount,
+    this.firesCount,
+    this.smileyCount,
   });
 
   @override
@@ -125,6 +135,11 @@ class PublicProProfileComponent extends StatelessWidget {
                           previewImage: event.verticalPreview?.link ?? '',
                           contentDate: event.startDayForEvent ?? DateTime.now(),
                           properties: [...event.tags, ...event.baseTags],
+                          firesCount: firesCount,
+                          heartEyesCount: heartEyesCount,
+                          likesCount: likesCount,
+                          smileyCount: smileyCount,
+                          sunglassesCount: sunglassesCount,
                           videoReactions: event.reactions
                               ?.map<ProfileVideoReaction>(
                                 (reaction) => ProfileVideoReaction(
