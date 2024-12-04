@@ -149,7 +149,7 @@ class ChatComponent extends StatelessWidget {
                             style: theme?.boldTextTheme.caption1Bold.copyWith(overflow: TextOverflow.ellipsis),
                           ),
                         ),
-                        SpacingFoundation.horizontalSpacing6.widthBox,
+                        SpacingFoundation.horizontalSpace6,
                         if (chatData.userType == UserTileType.influencer) InfluencerAccountMark(),
                         if (chatData.userType == UserTileType.premium) PremiumAccountMark(),
                         if (chatData.userType == UserTileType.pro) ProAccountMark(),
