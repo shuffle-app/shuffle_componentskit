@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:collection/collection.dart';
 
 class ArchiveComponent extends StatelessWidget {
   final List<UiEventModel> events;
@@ -106,9 +105,7 @@ class ArchiveComponent extends StatelessWidget {
                                 : ListTile(
                                     contentPadding: EdgeInsets.zero,
                                     leading: BorderedUserCircleAvatar(
-                                      imageUrl: event.media
-                                          .firstWhereOrNull((element) => element.type == UiKitMediaType.image)
-                                          ?.link,
+                                      imageUrl: event.verticalPreview?.link,
                                       size: 40.w,
                                     ),
                                     title: Text(
