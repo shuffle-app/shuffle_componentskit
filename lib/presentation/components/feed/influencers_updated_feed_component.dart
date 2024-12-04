@@ -68,7 +68,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
           UiKitCustomTabBar(
             tabController: tabController,
             tabs: _tabs,
-            onTappedTab: (index) => widget.onTappedTab,
+            onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           Expanded(
             child: TabBarView(

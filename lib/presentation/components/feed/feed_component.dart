@@ -138,15 +138,15 @@ class FeedComponent extends StatelessWidget {
                           userName: 'F L',
                         )),
                     SizedBox(
-                        width: 0.6.sw,
-                        child: GradientableWidget(
-                            gradient: GradientFoundation.attentionCard,
-                            child: AutoSizeText(
-                              S.current.DontLiveAlone,
-                              maxLines: 2,
-                              style: theme?.boldTextTheme.caption1Medium.copyWith(color: Colors.white),
-                              textAlign: TextAlign.center,
-                            )))
+                        width: 0.75.sw,
+                        child:  GradientableWidget(
+                                gradient: GradientFoundation.attentionCard,
+                                child: AutoSizeText(
+                                  S.current.DontLiveAlone,
+                                  maxLines: 2,
+                                  style: theme?.boldTextTheme.caption1Medium.copyWith(color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                )).paddingOnly(top:10))
                   ],
             ),
           ),
