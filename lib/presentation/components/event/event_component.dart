@@ -248,7 +248,7 @@ class _EventComponentState extends State<EventComponent> {
                   borderRadius: BorderRadiusFoundation.all24,
                   onTap: () => widget.onArchivePressed?.call(),
                   child: UiKitBadgeOutlined.text(
-                    text: S.of(context).Archived,
+                    text: S.of(context).UnArchive,
                   )),
               SpacingFoundation.verticalSpace4,
             ],
