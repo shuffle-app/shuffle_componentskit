@@ -110,6 +110,8 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.Website);
     } else if (placeType == null || placeType!.title.isEmpty) {
       return S.current.XIsRequired(S.current.PlaceType);
+    } else if (media.isEmpty) {
+      return S.current.XIsRequired(S.current.Photos);
     }
 
     return null;
