@@ -41,6 +41,8 @@ class PlaceComponent extends StatefulWidget {
   final VoidCallback? onOfferButtonTap;
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
+  final ValueNotifier<String?>? translateDescription;
+  final ValueNotifier<bool>? showTranslateButton;
 
   const PlaceComponent({
     super.key,
@@ -72,6 +74,8 @@ class PlaceComponent extends StatefulWidget {
     this.bookingNotifier,
     this.onSpendPointTap,
     this.onArchivePressed,
+    this.translateDescription,
+    this.showTranslateButton,
   });
 
   @override
@@ -237,7 +241,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
               borderRadius: BorderRadiusFoundation.all24,
               onTap: () => widget.onArchivePressed?.call(),
               child: UiKitBadgeOutlined.text(
-                text: S.of(context).UnArchive,
+                text: S.of(context).Archived,
               )),
         ],
         SpacingFoundation.verticalSpace16,
@@ -246,7 +250,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
           rating: widget.place.rating,
           media: widget.place.media,
           description: widget.place.description,
+          translateDescription: widget.translateDescription,
           baseTags: widget.place.baseTags,
+          showTranslateButton: widget.showTranslateButton,
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
           branches: widget.place.branches,
