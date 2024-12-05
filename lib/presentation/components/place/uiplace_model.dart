@@ -112,6 +112,8 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.PlaceType);
     } else if (media.isEmpty) {
       return S.current.XIsRequired(S.current.Photos);
+    }else if(schedule!=null && !schedule!.validateDate) {
+      return S.current.APeriodOrPartOfPeriodOfTimeCannotBeInPast;
     }
 
     return null;

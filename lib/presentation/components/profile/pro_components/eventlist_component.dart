@@ -37,7 +37,7 @@ class EventlistComponent extends StatelessWidget {
         final event = events[index];
         return Dismissible(
             key: ValueKey(event.id),
-            onDismissed: (_) => onDelete(event),
+            confirmDismiss: (_) => onDelete(event),
             direction: DismissDirection.endToStart,
             background: ClipRRect(
                 clipBehavior: Clip.hardEdge,

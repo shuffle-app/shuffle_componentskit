@@ -311,6 +311,8 @@ abstract class UiScheduleModel {
   DateTime? get endDay;
 
   bool get isNotEmpty;
+
+  bool get validateDate;
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
@@ -441,6 +443,9 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   bool get isNotEmpty => weeklySchedule.any((e) => e.value.isNotEmpty);
+
+  @override
+  bool get validateDate => true;
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
@@ -636,6 +641,12 @@ class UiScheduleDatesModel extends UiScheduleModel {
 
   @override
   bool get isNotEmpty => dailySchedule.any((e) => e.key.isNotEmpty);
+
+  @override
+  bool get validateDate {
+    final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
+    return daysList.every((e) => e.isAfter(DateTime.now().toLocal()) || (e.isAtSameDay));
+  }
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
@@ -884,6 +895,12 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
 
   @override
   bool get isNotEmpty => dailySchedule.any((e) => e.key.isNotEmpty);
+
+  @override
+  bool get validateDate {
+    final dateRanges = dailySchedule.map((e) => getDateRangeFromKey(e.key)).nonNulls.toList();
+    return dateRanges.every((range) => (range.start.isAfter(DateTime.now()) || range.start.isAtSameDay) || range.end.isAfter(DateTime.now()));
+  }
 }
 
 class _CardListWrapper extends StatelessWidget {

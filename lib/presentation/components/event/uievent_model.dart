@@ -155,6 +155,8 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Upsales);
     } else if (media.isEmpty) {
       return S.current.XIsRequired(S.current.Photos);
+    } else if(schedule!=null && !schedule!.validateDate) {
+      return S.current.APeriodOrPartOfPeriodOfTimeCannotBeInPast;
     }
 
     return null;
