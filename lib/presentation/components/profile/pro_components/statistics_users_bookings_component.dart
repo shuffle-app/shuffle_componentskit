@@ -77,7 +77,7 @@ class StatisticsUsersBookingsComponent extends StatelessWidget {
             ),
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         SizedBox(
-          height: onCreateReminder != null ? 0.55.sh : 0.5.sh,
+          height: onCreateReminder != null ? 0.55.sh : 0.7.sh,
           child: TabBarView(
             controller: tabController,
             children: [
