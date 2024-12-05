@@ -30,6 +30,8 @@ class EventComponent extends StatefulWidget {
   final VoidCallback? onOfferButtonTap;
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
+  final ValueNotifier<String?>? translateDescription;
+  final ValueNotifier<bool>? showTranslateButton;
 
   const EventComponent({
     super.key,
@@ -54,6 +56,8 @@ class EventComponent extends StatefulWidget {
     this.onOfferButtonTap,
     this.bookingNotifier,
     this.onSpendPointTap,
+    this.translateDescription,
+    this.showTranslateButton,
   });
 
   @override
@@ -74,9 +78,12 @@ class _EventComponentState extends State<EventComponent> {
   bool? canLeaveFeedback;
 
   bool isHide = true;
+  bool isTranslate = false;
 
   late double scrollPosition;
   final ScrollController listViewController = ScrollController();
+
+  String currentDescription = '';
 
   @override
   void initState() {
@@ -87,6 +94,8 @@ class _EventComponentState extends State<EventComponent> {
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
+      currentDescription = widget.event.description ?? '';
+
       setState(() {});
     });
   }
@@ -202,7 +211,7 @@ class _EventComponentState extends State<EventComponent> {
                       : AlignmentDirectional.topStart,
                   children: [
                     SizedBox(
-                      width: 1.sw - (horizontalMargin * 2 + 40.w),
+                      width: 1.sw - (horizontalMargin * 2 + 35.w),
                       child: AutoSizeText(
                         widget.event.title!,
                         minFontSize: 18.w,
@@ -248,7 +257,7 @@ class _EventComponentState extends State<EventComponent> {
                   borderRadius: BorderRadiusFoundation.all24,
                   onTap: () => widget.onArchivePressed?.call(),
                   child: UiKitBadgeOutlined.text(
-                    text: S.of(context).UnArchive,
+                    text: S.of(context).Archived,
                   )),
               SpacingFoundation.verticalSpace4,
             ],
@@ -310,8 +319,20 @@ class _EventComponentState extends State<EventComponent> {
         if (widget.event.description != null) ...[
           RepaintBoundary(
               child: DescriptionWidget(
-            description: widget.event.description!,
+            description: currentDescription,
+            showTranslateButton: widget.showTranslateButton,
+            onTranslateTap: () {
+              setState(() {
+                isTranslate = !isTranslate;
+                currentDescription = (isTranslate &&
+                        widget.translateDescription?.value != null &&
+                        widget.translateDescription!.value!.isNotEmpty)
+                    ? widget.translateDescription!.value!
+                    : widget.event.description ?? '';
+              });
+            },
             isHide: isHide,
+            isTranslate: isTranslate,
             onReadLess: () {
               setState(() {
                 listViewController
