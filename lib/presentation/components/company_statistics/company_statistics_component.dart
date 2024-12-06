@@ -6,13 +6,13 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../place/uiplace_model.dart';
 
 class CompanyStatisticsComponent extends StatefulWidget {
-  final UniqueStatisticsModel uniqueStatisticsModel;
-  final UiKitLineChartData<num> viewsAndVisitorsStat;
+  final UniqueStatisticsModel? uniqueStatisticsModel;
+  final UiKitLineChartData<num>? viewsAndVisitorsStat;
   final UiKitLineChartAdditionalData? viewsAndVisitorsAdditionalData;
-  final UiKitLineChartData<num> feedbackStats;
-  final UiKitLineChartData<num> bookingAndFavorites;
-  final UiKitLineChartData<num> invites;
-  final List<UiKitMiniChartData> miniChartData;
+  final UiKitLineChartData<num>? feedbackStats;
+  final UiKitLineChartData<num>? bookingAndFavorites;
+  final UiKitLineChartData<num>? invites;
+  final List<UiKitMiniChartData>? miniChartData;
   final TabController tabController;
   final ValueChanged<String?>? onTabTapped;
   final ValueChanged<UiEventModel>? onEventTapped;
@@ -24,13 +24,13 @@ class CompanyStatisticsComponent extends StatefulWidget {
   final List<UiPlaceModel>? places;
 
   const CompanyStatisticsComponent({
-    Key? key,
-    required this.uniqueStatisticsModel,
-    required this.viewsAndVisitorsStat,
-    required this.feedbackStats,
-    required this.bookingAndFavorites,
-    required this.invites,
-    required this.miniChartData,
+    super.key,
+    this.uniqueStatisticsModel,
+    this.viewsAndVisitorsStat,
+    this.feedbackStats,
+    this.bookingAndFavorites,
+    this.invites,
+    this.miniChartData,
     required this.tabController,
     this.viewsAndVisitorsAdditionalData,
     this.onTabTapped,
@@ -41,7 +41,7 @@ class CompanyStatisticsComponent extends StatefulWidget {
     this.places,
     this.onEventTapped,
     this.onPlaceTapped,
-  }) : super(key: key);
+  });
 
   @override
   State<CompanyStatisticsComponent> createState() => _CompanyStatisticsComponentState();
@@ -78,151 +78,157 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
         //   tabs: _chartTabs,
         // ),
         // SpacingFoundation.verticalSpace16,
-        UiKitLineChart(
-          loading: widget.loadingVisitorsStatistics,
-          chartData: widget.viewsAndVisitorsStat.copyWith(
-            popUpMenuOptions: [
-              S.current.Settings,
-              S.current.DownloadPdf,
-            ],
+        if (widget.viewsAndVisitorsStat != null)
+          UiKitLineChart(
+            loading: widget.loadingVisitorsStatistics,
+            chartData: widget.viewsAndVisitorsStat!.copyWith(
+              popUpMenuOptions: [
+                S.current.Settings,
+                S.current.DownloadPdf,
+              ],
+            ),
+            popUpMenuItemSelected: widget.onStatisticsPopupMenuItemTapped,
+            chartAdditionalData: widget.viewsAndVisitorsAdditionalData,
           ),
-          popUpMenuItemSelected: widget.onStatisticsPopupMenuItemTapped,
-          chartAdditionalData: widget.viewsAndVisitorsAdditionalData,
-        ),
         SpacingFoundation.verticalSpace16,
-        UiKitLineChart(
-          chartData: widget.feedbackStats,
-        ),
+        if (widget.feedbackStats != null)
+          UiKitLineChart(
+            chartData: widget.feedbackStats!,
+          ),
         SpacingFoundation.verticalSpace16,
-        UiKitLineChart(
-          chartData: widget.bookingAndFavorites,
-          action: widget.onFeedbackStatActionTapped,
-        ),
+        if (widget.bookingAndFavorites != null)
+          UiKitLineChart(
+            chartData: widget.bookingAndFavorites!,
+            action: widget.onFeedbackStatActionTapped,
+          ),
         SpacingFoundation.verticalSpace16,
-        UiKitLineChart(
-          chartData: widget.invites,
-        ),
+        if (widget.invites != null)
+          UiKitLineChart(
+            chartData: widget.invites!,
+          ),
         SpacingFoundation.verticalSpace16,
-        UiKitCardWrapper(
-          color: colorScheme?.surface3,
-          padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-          child: UiKitMiniChart(data: widget.miniChartData),
-        ),
+        if (widget.miniChartData != null)
+          UiKitCardWrapper(
+            color: colorScheme?.surface3,
+            padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+            child: UiKitMiniChart(data: widget.miniChartData!),
+          ),
         SpacingFoundation.verticalSpace16,
         Text(
           S.current.UniqueStatistics,
           style: boldTextTheme?.title1,
         ),
         SpacingFoundation.verticalSpace16,
-        UiKitCardWrapper(
-          color: colorScheme?.surface3,
-          padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UiKitGlowingProgressIndicator(
-                maxWidth: 1.sw - 16,
-                progressColor: ColorsFoundation.warning,
-                maxValue: widget.uniqueStatisticsModel.ratingBarProgress.maxValue,
-                value: widget.uniqueStatisticsModel.ratingBarProgress.value,
-                title: widget.uniqueStatisticsModel.ratingBarProgress.title,
-              ),
-              UiKitRoundedDivider(
-                thickness: 2,
-                height: SpacingFoundation.verticalSpacing32,
-              ),
-              UiKitVerticalTitledInfoBoard(
-                title: S.current.MostActiveAgeSegment,
-                infoList: [
-                  TitledInfoModel(
-                    title: S.current.Gender,
-                    info: widget.uniqueStatisticsModel.mostActiveAgeSegment.gender,
-                  ),
-                  TitledInfoModel(
-                    title: S.current.Age,
-                    info: widget.uniqueStatisticsModel.mostActiveAgeSegment.name,
-                  ),
-                  TitledInfoModel(
-                    title: S.current.Interests,
-                    info: widget.uniqueStatisticsModel.mostActiveAgeSegment.interests.join(', '),
-                  ),
-                ],
-              ),
-              UiKitRoundedDivider(
-                thickness: 2,
-                height: SpacingFoundation.verticalSpacing32,
-              ),
-              Text(
-                S.current.ViewSources,
-                style: boldTextTheme?.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
-              ),
-              SpacingFoundation.verticalSpace2,
-              SizedBox(
-                height: 0.275625.sw,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: UiKitPieChart(data: widget.uniqueStatisticsModel.viewSourcesData),
+        if (widget.uniqueStatisticsModel != null)
+          UiKitCardWrapper(
+            color: colorScheme?.surface3,
+            padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                UiKitGlowingProgressIndicator(
+                  maxWidth: 1.sw - 16,
+                  progressColor: ColorsFoundation.warning,
+                  maxValue: widget.uniqueStatisticsModel!.ratingBarProgress.maxValue,
+                  value: widget.uniqueStatisticsModel!.ratingBarProgress.value,
+                  title: widget.uniqueStatisticsModel!.ratingBarProgress.title,
+                ),
+                UiKitRoundedDivider(
+                  thickness: 2,
+                  height: SpacingFoundation.verticalSpacing32,
+                ),
+                UiKitVerticalTitledInfoBoard(
+                  title: S.current.MostActiveAgeSegment,
+                  infoList: [
+                    TitledInfoModel(
+                      title: S.current.Gender,
+                      info: widget.uniqueStatisticsModel!.mostActiveAgeSegment.gender,
                     ),
-                    SpacingFoundation.horizontalSpace24,
-                    Expanded(
-                      flex: 8,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: widget.uniqueStatisticsModel.viewSourcesData.legend
-                            .map<Widget>(
-                              (legendItem) => UiKitChartLegendWidget(
-                                valueTitle: legendItem.title,
-                                value: legendItem.value,
-                                leading: Container(
-                                  width: SpacingFoundation.verticalSpacing8,
-                                  height: SpacingFoundation.verticalSpacing8,
-                                  decoration: BoxDecoration(
-                                    color: legendItem.color,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical2),
+                    TitledInfoModel(
+                      title: S.current.Age,
+                      info: widget.uniqueStatisticsModel!.mostActiveAgeSegment.name,
+                    ),
+                    TitledInfoModel(
+                      title: S.current.Interests,
+                      info: widget.uniqueStatisticsModel!.mostActiveAgeSegment.interests.join(', '),
                     ),
                   ],
                 ),
-              ),
-              // UiKitRoundedDivider(
-              //   thickness: 2,
-              //   height: SpacingFoundation.verticalSpacing32,
-              // ),
-              // if (widget.uniqueStatisticsModel.topEventsDate != null &&
-              //     widget.uniqueStatisticsModel.topEventTitles != null)
-              //   UiKitRankedTitledBoard(
-              //     title: S.current.TopEventsFor(
-              //       formatDateWithCustomPattern('MMMM dd', widget.uniqueStatisticsModel.topEventsDate!),
-              //     ),
-              //     rankItems: widget.uniqueStatisticsModel.topEventTitles!,
-              //   ),
-              // if (widget.uniqueStatisticsModel.topEventsDate != null &&
-              //     widget.uniqueStatisticsModel.topEventTitles != null)
-              //   UiKitRoundedDivider(
-              //     thickness: 2,
-              //     height: SpacingFoundation.verticalSpacing32,
-              //   ),
-              // UiKitGlowingProgressIndicator(
-              //   maxWidth: 1.sw - 16,
-              //   progressColor: ColorsFoundation.success,
-              //   maxValue: widget.uniqueStatisticsModel.interestBarProgress.maxValue,
-              //   value: widget.uniqueStatisticsModel.interestBarProgress.value,
-              //   title: widget.uniqueStatisticsModel.interestBarProgress.title,
-              // ),
-            ],
+                UiKitRoundedDivider(
+                  thickness: 2,
+                  height: SpacingFoundation.verticalSpacing32,
+                ),
+                Text(
+                  S.current.ViewSources,
+                  style: boldTextTheme?.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
+                ),
+                SpacingFoundation.verticalSpace2,
+                SizedBox(
+                  height: 0.275625.sw,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: UiKitPieChart(data: widget.uniqueStatisticsModel!.viewSourcesData),
+                      ),
+                      SpacingFoundation.horizontalSpace24,
+                      Expanded(
+                        flex: 8,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: widget.uniqueStatisticsModel!.viewSourcesData.legend
+                              .map<Widget>(
+                                (legendItem) => UiKitChartLegendWidget(
+                                  valueTitle: legendItem.title,
+                                  value: legendItem.value,
+                                  leading: Container(
+                                    width: SpacingFoundation.verticalSpacing8,
+                                    height: SpacingFoundation.verticalSpacing8,
+                                    decoration: BoxDecoration(
+                                      color: legendItem.color,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical2),
+                      ),
+                    ],
+                  ),
+                ),
+                // UiKitRoundedDivider(
+                //   thickness: 2,
+                //   height: SpacingFoundation.verticalSpacing32,
+                // ),
+                // if (widget.uniqueStatisticsModel.topEventsDate != null &&
+                //     widget.uniqueStatisticsModel.topEventTitles != null)
+                //   UiKitRankedTitledBoard(
+                //     title: S.current.TopEventsFor(
+                //       formatDateWithCustomPattern('MMMM dd', widget.uniqueStatisticsModel.topEventsDate!),
+                //     ),
+                //     rankItems: widget.uniqueStatisticsModel.topEventTitles!,
+                //   ),
+                // if (widget.uniqueStatisticsModel.topEventsDate != null &&
+                //     widget.uniqueStatisticsModel.topEventTitles != null)
+                //   UiKitRoundedDivider(
+                //     thickness: 2,
+                //     height: SpacingFoundation.verticalSpacing32,
+                //   ),
+                // UiKitGlowingProgressIndicator(
+                //   maxWidth: 1.sw - 16,
+                //   progressColor: ColorsFoundation.success,
+                //   maxValue: widget.uniqueStatisticsModel.interestBarProgress.maxValue,
+                //   value: widget.uniqueStatisticsModel.interestBarProgress.value,
+                //   title: widget.uniqueStatisticsModel.interestBarProgress.title,
+                // ),
+              ],
+            ),
           ),
-        ),
         SpacingFoundation.verticalSpace16,
         UiKitCustomTabBar(
           tabs: _contentTabs,

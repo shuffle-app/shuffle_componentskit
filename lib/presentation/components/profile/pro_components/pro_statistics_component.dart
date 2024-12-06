@@ -4,13 +4,13 @@ import 'package:shuffle_components_kit/presentation/components/event/uievent_mod
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ProStatisticsComponent extends StatelessWidget {
-  final UniqueStatisticsModel uniqueStatisticsModel;
-  final UiKitLineChartData<num> viewsAndVisitorsStat;
+  final UniqueStatisticsModel? uniqueStatisticsModel;
+  final UiKitLineChartData<num>? viewsAndVisitorsStat;
   final UiKitLineChartAdditionalData? viewsAndVisitorsAdditionalData;
-  final UiKitLineChartData<num> feedbackStats;
-  final UiKitLineChartData<num> bookingAndFavorites;
-  final UiKitLineChartData<num> invites;
-  final List<UiKitMiniChartData> miniChartData;
+  final UiKitLineChartData<num>? feedbackStats;
+  final UiKitLineChartData<num>? bookingAndFavorites;
+  final UiKitLineChartData<num>? invites;
+  final List<UiKitMiniChartData>? miniChartData;
   final TabController tabController;
   final ValueChanged<String?>? onTabTapped;
   final ValueChanged<UiEventModel>? onEventTapped;
@@ -28,12 +28,12 @@ class ProStatisticsComponent extends StatelessWidget {
 
   const ProStatisticsComponent({
     super.key,
-    required this.uniqueStatisticsModel,
-    required this.viewsAndVisitorsStat,
-    required this.feedbackStats,
-    required this.bookingAndFavorites,
-    required this.invites,
-    required this.miniChartData,
+    this.uniqueStatisticsModel,
+    this.viewsAndVisitorsStat,
+    this.feedbackStats,
+    this.bookingAndFavorites,
+    this.invites,
+    this.miniChartData,
     required this.tabController,
     this.viewsAndVisitorsAdditionalData,
     this.onTabTapped,
@@ -62,10 +62,11 @@ class ProStatisticsComponent extends StatelessWidget {
         //   tabs: _tabs,
         // ),
         // SpacingFoundation.verticalSpace16,
+        if(viewsAndVisitorsStat!=null)
         UiKitLineChart(
           key: ValueKey(viewsAndVisitorsStat),
           loading: loadingVisitorsStatistics,
-          chartData: viewsAndVisitorsStat.copyWith(
+          chartData: viewsAndVisitorsStat!.copyWith(
             popUpMenuOptions: [
               S.current.Settings,
               S.current.DownloadPdf,
@@ -75,29 +76,33 @@ class ProStatisticsComponent extends StatelessWidget {
           chartAdditionalData: viewsAndVisitorsAdditionalData,
         ),
         SpacingFoundation.verticalSpace16,
+        if(feedbackStats!=null)
         UiKitLineChart(
           loading: loadingVisitorsStatistics,
           key: ValueKey(feedbackStats),
-          chartData: feedbackStats,
+          chartData: feedbackStats!,
         ),
         SpacingFoundation.verticalSpace16,
+        if(bookingAndFavorites!=null)
         UiKitLineChart(
           loading: loadingVisitorsStatistics,
           key: ValueKey(bookingAndFavorites),
-          chartData: bookingAndFavorites,
+          chartData: bookingAndFavorites!,
           action: onFeedbackStatActionTapped,
         ),
         SpacingFoundation.verticalSpace16,
+        if(invites!=null)
         UiKitLineChart(
           loading: loadingVisitorsStatistics,
           key: ValueKey(invites),
-          chartData: invites,
+          chartData: invites!,
         ),
         SpacingFoundation.verticalSpace16,
+        if(miniChartData!=null)
         UiKitCardWrapper(
           color: colorScheme?.surface3,
           padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-          child: UiKitMiniChart(data: miniChartData),
+          child: UiKitMiniChart(data: miniChartData!),
         ),
         SpacingFoundation.verticalSpace16,
         Text(
@@ -105,6 +110,7 @@ class ProStatisticsComponent extends StatelessWidget {
           style: boldTextTheme?.title1,
         ),
         SpacingFoundation.verticalSpace16,
+        if(uniqueStatisticsModel!=null)
         UiKitCardWrapper(
           color: colorScheme?.surface3,
           padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
@@ -115,9 +121,9 @@ class ProStatisticsComponent extends StatelessWidget {
               UiKitGlowingProgressIndicator(
                 maxWidth: 1.sw - 16,
                 progressColor: ColorsFoundation.warning,
-                maxValue: uniqueStatisticsModel.ratingBarProgress.maxValue,
-                value: uniqueStatisticsModel.ratingBarProgress.value,
-                title: uniqueStatisticsModel.ratingBarProgress.title,
+                maxValue: uniqueStatisticsModel!.ratingBarProgress.maxValue,
+                value: uniqueStatisticsModel!.ratingBarProgress.value,
+                title: uniqueStatisticsModel!.ratingBarProgress.title,
               ),
               UiKitRoundedDivider(
                 thickness: 2,
@@ -128,15 +134,15 @@ class ProStatisticsComponent extends StatelessWidget {
                 infoList: [
                   TitledInfoModel(
                     title: S.current.Gender,
-                    info: uniqueStatisticsModel.mostActiveAgeSegment.gender,
+                    info: uniqueStatisticsModel!.mostActiveAgeSegment.gender,
                   ),
                   TitledInfoModel(
                     title: S.current.Age,
-                    info: uniqueStatisticsModel.mostActiveAgeSegment.name,
+                    info: uniqueStatisticsModel!.mostActiveAgeSegment.name,
                   ),
                   TitledInfoModel(
                     title: S.current.Interests,
-                    info: uniqueStatisticsModel.mostActiveAgeSegment.interests.join(', '),
+                    info: uniqueStatisticsModel!.mostActiveAgeSegment.interests.join(', '),
                   ),
                 ],
               ),
@@ -156,7 +162,7 @@ class ProStatisticsComponent extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 4,
-                      child: UiKitPieChart(data: uniqueStatisticsModel.viewSourcesData),
+                      child: UiKitPieChart(data: uniqueStatisticsModel!.viewSourcesData),
                     ),
                     SpacingFoundation.horizontalSpace24,
                     Expanded(
@@ -165,7 +171,7 @@ class ProStatisticsComponent extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: uniqueStatisticsModel.viewSourcesData.legend
+                        children: uniqueStatisticsModel!.viewSourcesData.legend
                             .map<Widget>(
                               (legendItem) => UiKitChartLegendWidget(
                                 valueTitle: legendItem.title,
