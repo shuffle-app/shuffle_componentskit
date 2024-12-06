@@ -10,6 +10,7 @@ class PublicProProfileComponent extends StatelessWidget {
   final ProfileStats? profileStats;
   final UiKitLineChartData<num>? bookingsAndInvitesChartData;
   final List<UiEventModel>? events;
+  final ValueChanged<int>? onEventTapped;
   final bool loadingEvents;
   final ValueChanged<FeedbackUiModel>? onFeedbackLiked;
   final ValueChanged<VideoReactionUiModel>? onVideoReactionTapped;
@@ -27,6 +28,7 @@ class PublicProProfileComponent extends StatelessWidget {
     this.onFeedbackLiked,
     this.onVideoReactionTapped,
     this.onFeedbackTapped,
+    this.onEventTapped,
   });
 
   @override
@@ -122,6 +124,7 @@ class PublicProProfileComponent extends StatelessWidget {
                       .map<Widget>(
                         (event) => UiKitProUserProfileEventCard(
                           title: event.title ?? '',
+                          onTap: () => onEventTapped?.call(event.id),
                           previewImage: event.verticalPreview?.link ?? '',
                           contentDate: event.startDayForEvent ?? DateTime.now(),
                           properties: [...event.tags, ...event.baseTags],
