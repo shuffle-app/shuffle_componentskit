@@ -121,7 +121,8 @@ class FeedComponent extends StatelessWidget {
                           ? subscribedUsersFeedIconScaleNotifier!
                           : ValueNotifier(0.0),
                       topPadding: MediaQuery.viewPaddingOf(context).top,
-                      expandHint: showHints && subscribedProfiles.isEmpty,
+                      expandHint: showHints,
+                      // expandHint: showHints && subscribedProfiles.isEmpty,
                       children: (subscribedProfiles.isEmpty ? null : subscribedProfiles)
                               ?.map(
                                 (profile) => GestureDetector(
@@ -139,15 +140,15 @@ class FeedComponent extends StatelessWidget {
                               )
                               .toList() ??
                           [
-                            Opacity(
-                                opacity: 0.5,
-                                child: context.userAvatar(
-                                  size: UserAvatarSize.x40x40,
-                                  type: UserTileType.influencer,
-                                  userName: 'F L',
-                                )),
+                            // Opacity(
+                            //     opacity: 0.5,
+                            //     child: context.userAvatar(
+                            //       size: UserAvatarSize.x40x40,
+                            //       type: UserTileType.influencer,
+                            //       userName: 'F L',
+                            //     )),
                             SizedBox(
-                                width: 0.75.sw,
+                                width: 0.9.sw,
                                 child: GradientableWidget(
                                     gradient: GradientFoundation.attentionCard,
                                     child: AutoSizeText(
