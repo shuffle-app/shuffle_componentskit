@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -11,6 +12,8 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final VoidCallback? onDispose;
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
+  final VoidCallback? onCheckVisibleItems;
+  final ScrollController? scrollController;
 
   final PagingController<int, InfluencerFeedItem> latestContentController;
   final PagingController<int, InfluencerFeedItem> topContentController;
@@ -20,11 +23,13 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     super.key,
     this.onTappedTab,
     this.onDispose,
+    this.onCheckVisibleItems,
     required this.latestContentController,
     required this.topContentController,
     required this.unreadContentController,
     this.onReactionsTapped,
     this.onLongPress,
+    this.scrollController,
   });
 
   @override
@@ -77,17 +82,23 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.latestContentController,
+                  onCheckVisibleItems: widget.onCheckVisibleItems,
                   onLongPress: widget.onLongPress,
+                  scrollController: widget.scrollController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.topContentController,
+                  onCheckVisibleItems: widget.onCheckVisibleItems,
                   onLongPress: widget.onLongPress,
+                  scrollController: widget.scrollController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
                   onReactionsTapped: onReactionsTapped,
                   pagingController: widget.unreadContentController,
+                  onCheckVisibleItems: widget.onCheckVisibleItems,
                   onLongPress: widget.onLongPress,
+                  scrollController: widget.scrollController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               ],
             ),
@@ -102,11 +113,15 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final PagingController<int, InfluencerFeedItem> pagingController;
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
+  final VoidCallback? onCheckVisibleItems;
+  final ScrollController? scrollController;
 
-  const _PagedInfluencerFeedItemListBody({
+  _PagedInfluencerFeedItemListBody({
     required this.pagingController,
+    this.onCheckVisibleItems,
     this.onReactionsTapped,
     this.onLongPress,
+    this.scrollController,
   });
 
   double get _videoReactionPreviewWidth => 0.125.sw;
@@ -122,64 +137,79 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO somnitelno
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      onCheckVisibleItems?.call();
+    });
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
 
-    return PagedListView.separated(
-      padding: EdgeInsets.only(
-        bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
-        top: EdgeInsetsFoundation.vertical16,
-      ),
-      pagingController: pagingController,
-      separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-      builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
-        itemBuilder: (context, item, index) {
-          final isLast = index == pagingController.itemList!.length - 1;
-          double bottomPadding = isLast ? 0 : 16.0;
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (t) {
+        onCheckVisibleItems?.call();
 
-          if (item is ShufflePostFeedItem) {
-            return UiKitContentUpdatesCard.fromShuffle(
-              text: item.text,
-              heartEyesReactionsCount: item.heartEyesReactionsCount,
-              likeReactionsCount: item.likeReactionsCount,
-              fireReactionsCount: item.fireReactionsCount,
-              sunglassesReactionsCount: item.sunglassesReactionsCount,
-              smileyReactionsCount: item.smileyReactionsCount,
-              onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-              onLongPress: () => onLongPress?.call(item.id),
-              children: _children(item, regularTextTheme),
-            ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
-          } else if (item is PostFeedItem) {
-            return UiKitPostCard(
-              authorName: item.name,
-              authorUsername: item.username,
-              authorAvatarUrl: item.avatarUrl,
-              authorSpeciality: item.speciality,
-              authorUserType: item.userType,
-              heartEyesCount: item.heartEyesReactionsCount,
-              likesCount: item.likeReactionsCount,
-              sunglassesCount: item.sunglassesReactionsCount,
-              firesCount: item.fireReactionsCount,
-              smileyCount: item.smileyReactionsCount,
-              text: item.text,
-              onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-              hasNewMark: item.newMark,
-              onLongPress: () => onLongPress?.call(item.id),
-            ).paddingOnly(bottom: bottomPadding);
-          } else if (item is UpdatesFeedItem) {
-            return UiKitContentUpdatesCard(
-              authorSpeciality: item.speciality,
-              authorName: item.name,
-              authorUsername: item.username,
-              authorAvatarUrl: item.avatarUrl,
-              authorUserType: item.userType,
-              onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-              onLongPress: () => onLongPress?.call(item.id),
-              children: _children(item, regularTextTheme),
-            ).paddingOnly(bottom: bottomPadding);
-          } else {
-            throw UnimplementedError('Unknown item type: ${item.runtimeType}');
-          }
-        },
+        return true;
+      },
+      child: PagedListView.separated(
+        scrollController: scrollController,
+        padding: EdgeInsets.only(
+          bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
+          top: EdgeInsetsFoundation.vertical16,
+        ),
+        pagingController: pagingController,
+        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+        builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
+          itemBuilder: (context, item, index) {
+            final isLast = index == pagingController.itemList!.length - 1;
+            double bottomPadding = isLast ? 0 : 16.0;
+
+            if (item is ShufflePostFeedItem) {
+              return UiKitContentUpdatesCard.fromShuffle(
+                key: item.key,
+                text: item.text,
+                heartEyesReactionsCount: item.heartEyesReactionsCount,
+                likeReactionsCount: item.likeReactionsCount,
+                fireReactionsCount: item.fireReactionsCount,
+                sunglassesReactionsCount: item.sunglassesReactionsCount,
+                smileyReactionsCount: item.smileyReactionsCount,
+                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                onLongPress: () => onLongPress?.call(item.id),
+                children: _children(item, regularTextTheme),
+              ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
+            } else if (item is PostFeedItem) {
+              return UiKitPostCard(
+                key: item.key,
+                authorName: item.name,
+                authorUsername: item.username,
+                authorAvatarUrl: item.avatarUrl,
+                authorSpeciality: item.speciality,
+                authorUserType: item.userType,
+                heartEyesCount: item.heartEyesReactionsCount,
+                likesCount: item.likeReactionsCount,
+                sunglassesCount: item.sunglassesReactionsCount,
+                firesCount: item.fireReactionsCount,
+                smileyCount: item.smileyReactionsCount,
+                text: item.text,
+                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                hasNewMark: item.newMark,
+                onLongPress: () => onLongPress?.call(item.id),
+              ).paddingOnly(bottom: bottomPadding);
+            } else if (item is UpdatesFeedItem) {
+              return UiKitContentUpdatesCard(
+                key: item.key,
+                authorSpeciality: item.speciality,
+                authorName: item.name,
+                authorUsername: item.username,
+                authorAvatarUrl: item.avatarUrl,
+                authorUserType: item.userType,
+                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                onLongPress: () => onLongPress?.call(item.id),
+                children: _children(item, regularTextTheme),
+              ).paddingOnly(bottom: bottomPadding);
+            } else {
+              throw UnimplementedError('Unknown item type: ${item.runtimeType}');
+            }
+          },
+        ),
       ),
     );
   }
