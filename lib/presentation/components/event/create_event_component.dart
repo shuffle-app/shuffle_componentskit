@@ -356,8 +356,15 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             key: _refreshKey,
             selectedTab: _eventToEdit.contentType,
             onTappedTab: (index) {
+              final oldContentType = _eventToEdit.contentType;
+
               setState(() {
                 _eventToEdit.contentType = ['both', 'leisure', 'business'][index];
+
+                if (_eventToEdit.contentType != oldContentType) {
+                  _eventToEdit.eventType = null;
+                  _eventToEdit.niche = null;
+                }
               });
             },
             tabs: [
