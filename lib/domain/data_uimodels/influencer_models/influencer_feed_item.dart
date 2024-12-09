@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
 abstract class InfluencerFeedItem {
   final int id;
+  final GlobalKey? key;
   final String speciality;
   final String name;
   final String username;
@@ -13,6 +15,7 @@ abstract class InfluencerFeedItem {
 
   InfluencerFeedItem({
     required this.id,
+    this.key,
     required this.speciality,
     required this.name,
     required this.username,
@@ -56,6 +59,7 @@ class UpdatesFeedItem extends InfluencerFeedItem {
     required super.avatarUrl,
     required super.userType,
     super.userReaction,
+    super.key,
     this.newPhotos,
     this.newVideos,
     this.newFeedbacks,
@@ -83,6 +87,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
   ShufflePostFeedItem({
     required this.text,
     required super.id,
+    super.key,
     super.userReaction,
     this.videos,
     this.heartEyesReactionsCount = 0,
@@ -142,6 +147,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
       commentsUpdate: commentsUpdate,
       newContent: newContent,
       userReaction: userReaction,
+      key: super.key,
     );
   }
 }
@@ -168,6 +174,7 @@ class PostFeedItem extends InfluencerFeedItem {
     required this.fireReactionsCount,
     required this.sunglassesReactionsCount,
     required this.smileyReactionsCount,
+    super.key,
     super.userReaction,
     this.newMark = false,
   });
@@ -201,6 +208,7 @@ class PostFeedItem extends InfluencerFeedItem {
       smileyReactionsCount: smileyReactionsCount ?? this.smileyReactionsCount,
       newMark: newMark ?? this.newMark,
       userReaction: userReaction,
+      key: super.key,
     );
   }
 }
