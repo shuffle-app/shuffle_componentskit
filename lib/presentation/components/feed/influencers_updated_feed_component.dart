@@ -138,9 +138,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //TODO somnitelno
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      onCheckVisibleItems?.call();
-    });
+    Future.microtask(() => onCheckVisibleItems?.call());
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
 
     return NotificationListener<ScrollUpdateNotification>(
