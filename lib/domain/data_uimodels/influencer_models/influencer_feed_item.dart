@@ -12,6 +12,7 @@ abstract class InfluencerFeedItem {
   final String avatarUrl;
   final UserTileType userType;
   String? userReaction;
+  final String? createdAt;
 
   InfluencerFeedItem({
     required this.id,
@@ -22,6 +23,7 @@ abstract class InfluencerFeedItem {
     required this.avatarUrl,
     required this.userType,
     this.userReaction,
+    this.createdAt,
   });
 
   @override
@@ -35,6 +37,16 @@ abstract class InfluencerFeedItem {
         'userType: $userType, '
         'userReaction: $userReaction)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return (other is InfluencerFeedItem || other is UpdatesFeedItem || other is ShufflePostFeedItem || other is PostFeedItem) &&
+        (other as InfluencerFeedItem).id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
 }
 
 class UpdatesFeedItem extends InfluencerFeedItem {
@@ -60,6 +72,7 @@ class UpdatesFeedItem extends InfluencerFeedItem {
     required super.userType,
     super.userReaction,
     super.key,
+    super.createdAt,
     this.newPhotos,
     this.newVideos,
     this.newFeedbacks,
@@ -89,6 +102,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
     required super.id,
     super.key,
     super.userReaction,
+    super.createdAt,
     this.videos,
     this.heartEyesReactionsCount = 0,
     this.likeReactionsCount = 0,
@@ -148,6 +162,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
       newContent: newContent,
       userReaction: userReaction,
       key: super.key,
+      createdAt: createdAt,
     );
   }
 }
@@ -168,6 +183,7 @@ class PostFeedItem extends InfluencerFeedItem {
     required super.username,
     required super.avatarUrl,
     required super.userType,
+    super.createdAt,
     required this.text,
     required this.heartEyesReactionsCount,
     required this.likeReactionsCount,
@@ -208,7 +224,8 @@ class PostFeedItem extends InfluencerFeedItem {
       smileyReactionsCount: smileyReactionsCount ?? this.smileyReactionsCount,
       newMark: newMark ?? this.newMark,
       userReaction: userReaction,
-      key: super.key,
+      key: key,
+      createdAt: createdAt,
     );
   }
 }

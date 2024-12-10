@@ -12,6 +12,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final VoidCallback? onDispose;
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
+  final ValueChanged<int>? onSharePress;
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
 
@@ -29,6 +30,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     required this.unreadContentController,
     this.onReactionsTapped,
     this.onLongPress,
+    this.onSharePress,
     this.scrollController,
   });
 
@@ -84,6 +86,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                   pagingController: widget.latestContentController,
                   onCheckVisibleItems: widget.onCheckVisibleItems,
                   onLongPress: widget.onLongPress,
+                  onSharePress: widget.onSharePress,
                   scrollController: widget.scrollController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
@@ -91,6 +94,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                   pagingController: widget.topContentController,
                   onCheckVisibleItems: widget.onCheckVisibleItems,
                   onLongPress: widget.onLongPress,
+                  onSharePress: widget.onSharePress,
                   scrollController: widget.scrollController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
                 _PagedInfluencerFeedItemListBody(
@@ -98,6 +102,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                   pagingController: widget.unreadContentController,
                   onCheckVisibleItems: widget.onCheckVisibleItems,
                   onLongPress: widget.onLongPress,
+                  onSharePress: widget.onSharePress,
                   scrollController: widget.scrollController,
                 ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               ],
@@ -113,14 +118,16 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final PagingController<int, InfluencerFeedItem> pagingController;
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
+  final ValueChanged<int>? onSharePress;
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
 
-  _PagedInfluencerFeedItemListBody({
+  const _PagedInfluencerFeedItemListBody({
     required this.pagingController,
     this.onCheckVisibleItems,
     this.onReactionsTapped,
     this.onLongPress,
+    this.onSharePress,
     this.scrollController,
   });
 
@@ -162,12 +169,14 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               return UiKitContentUpdatesCard.fromShuffle(
                 key: item.key,
                 text: item.text,
+                onSharePress: () => onSharePress?.call(item.id),
                 heartEyesReactionsCount: item.heartEyesReactionsCount,
                 likeReactionsCount: item.likeReactionsCount,
                 fireReactionsCount: item.fireReactionsCount,
                 sunglassesReactionsCount: item.sunglassesReactionsCount,
                 smileyReactionsCount: item.smileyReactionsCount,
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                createdAt: item.createdAt,
                 onLongPress: () => onLongPress?.call(item.id),
                 children: _children(item, regularTextTheme),
               ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
@@ -179,12 +188,14 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 authorAvatarUrl: item.avatarUrl,
                 authorSpeciality: item.speciality,
                 authorUserType: item.userType,
+                onSharePress: () => onSharePress?.call(item.id),
                 heartEyesCount: item.heartEyesReactionsCount,
                 likesCount: item.likeReactionsCount,
                 sunglassesCount: item.sunglassesReactionsCount,
                 firesCount: item.fireReactionsCount,
                 smileyCount: item.smileyReactionsCount,
                 text: item.text,
+                createdAt: item.createdAt ?? '',
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 hasNewMark: item.newMark,
                 onLongPress: () => onLongPress?.call(item.id),
@@ -192,9 +203,11 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             } else if (item is UpdatesFeedItem) {
               return UiKitContentUpdatesCard(
                 key: item.key,
+                createdAt: item.createdAt ?? '',
                 authorSpeciality: item.speciality,
                 authorName: item.name,
                 authorUsername: item.username,
+                onSharePress: () => onSharePress?.call(item.id),
                 authorAvatarUrl: item.avatarUrl,
                 authorUserType: item.userType,
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
