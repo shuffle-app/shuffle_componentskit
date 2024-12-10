@@ -73,7 +73,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     Uint8List? bytes;
     if (horizontal == null) return;
     if (horizontal.startsWith('http')) {
-      bytes = await _getBytesFromUrl(horizontal);
+      bytes = await getBytesFromUrl(horizontal);
     }
     unawaited(showDialog(
         context: context,
@@ -107,7 +107,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     if (vertical == null) return;
     Uint8List? bytes;
     if (vertical.startsWith('http')) {
-      bytes = await _getBytesFromUrl(vertical);
+      bytes = await getBytesFromUrl(vertical);
     }
     unawaited(showDialog(
         context: context,
@@ -193,10 +193,7 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     return selected;
   }
 
-  Future<Uint8List?> _getBytesFromUrl(String url) async {
-    final image = await CustomCacheManager.imageInstance.getSingleFile(url);
-    return await image.readAsBytes();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -515,4 +512,9 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
         ).paddingAll(EdgeInsetsFoundation.all24),
     );
   }
+}
+
+Future<Uint8List?> getBytesFromUrl(String url) async {
+  final image = await CustomCacheManager.imageInstance.getSingleFile(url);
+  return await image.readAsBytes();
 }
