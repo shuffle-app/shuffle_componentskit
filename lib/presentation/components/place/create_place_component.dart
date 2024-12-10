@@ -451,12 +451,15 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               key: _refreshKey,
               selectedTab: _placeToEdit.contentType,
               onTappedTab: (index) {
+                final oldContentType = _placeToEdit.contentType;
+
                 setState(() {
-                  _placeToEdit.contentType = [
-                    'both',
-                    'leisure',
-                    'business',
-                  ][index];
+                  _placeToEdit.contentType = ['both', 'leisure', 'business'][index];
+
+                  if (_placeToEdit.contentType != oldContentType) {
+                    _placeToEdit.placeType = null;
+                    _placeToEdit.niche = null;
+                  }
                 });
               },
               tabs: [
