@@ -80,7 +80,12 @@ class ContentStatisticsComponent extends StatelessWidget {
         UiKitLineChart(
           key: ValueKey(viewsAndVisitorsStat),
           loading: loadingVisitorsStatistics,
-          chartData: viewsAndVisitorsStat!,
+          chartData: viewsAndVisitorsStat!.copyWith(
+            popUpMenuOptions: [
+              S.current.Settings,
+              S.current.DownloadPdf,
+            ],
+          ),
           popUpMenuItemSelected: onStatisticsPopupMenuItemTapped,
           chartAdditionalData: viewsAndVisitorsAdditionalData,
         ),
