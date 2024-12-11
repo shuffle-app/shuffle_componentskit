@@ -7,6 +7,7 @@ class BookingBarcodeComponent extends StatelessWidget {
   final String? title;
   final ValueChanged<String>? onShare;
   final String? imageUrl;
+  final bool isBeenActivated;
 
   const BookingBarcodeComponent({
     super.key,
@@ -14,6 +15,7 @@ class BookingBarcodeComponent extends StatelessWidget {
     this.title,
     this.onShare,
     this.imageUrl,
+    this.isBeenActivated = false,
   });
 
   @override
@@ -61,13 +63,16 @@ class BookingBarcodeComponent extends StatelessWidget {
                         child: ImageWidget(
                           height: 15.h,
                           iconData: ShuffleUiKitIcons.share,
-                          color: theme?.colorScheme.inversePrimary,
+                          color: isBeenActivated ? ColorsFoundation.mutedText : theme?.colorScheme.inversePrimary,
                         ),
                       ),
                     ],
                   ),
                   SpacingFoundation.verticalSpace16,
-                  CustomBarcode(barcodeNumber: e),
+                  CustomBarcode(
+                    barcodeNumber: e,
+                    isBeenActivated: isBeenActivated,
+                  ),
                   SpacingFoundation.verticalSpace24,
                   Divider(
                     color: theme?.colorScheme.surface2,
