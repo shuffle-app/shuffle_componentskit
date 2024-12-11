@@ -159,11 +159,11 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
           top: EdgeInsetsFoundation.vertical16,
         ),
         pagingController: pagingController,
-        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,
         builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
           itemBuilder: (context, item, index) {
             final isLast = index == pagingController.itemList!.length - 1;
-            double bottomPadding = isLast ? 0 : 16.0;
+            double bottomPadding = isLast ? 0 : SpacingFoundation.verticalSpacing8;
 
             if (item is ShufflePostFeedItem) {
               return UiKitContentUpdatesCard.fromShuffle(
