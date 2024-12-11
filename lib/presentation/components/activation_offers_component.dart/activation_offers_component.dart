@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ActivationOffersComponent extends StatelessWidget {
   final UniversalNotOfferRemUiModel? offerUiModel;
@@ -23,7 +24,15 @@ class ActivationOffersComponent extends StatelessWidget {
 
     return Scaffold(
       body: BlurredAppBarPage(
-        title: S.of(context).Offer,
+        customTitle: Expanded(
+          child: AutoSizeText(
+            S.of(context).Offer,
+            style: boldTextTheme?.title1,
+            textAlign: TextAlign.center,
+            wrapWords: false,
+            maxLines: 1,
+          ),
+        ),
         centerTitle: true,
         autoImplyLeading: true,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
