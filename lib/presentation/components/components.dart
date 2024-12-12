@@ -156,3 +156,4 @@ export 'barcode_scan_component/barcode_scan_component.dart';
 export 'barcode/share_booking_barcode.dart';
 export 'location/change_location/change_location_bottom_sheet.dart';
 export 'publications/create_publication_web_component.dart';
+export 'show_followers_in_notification_component/show_followers_in_notification.dart';
