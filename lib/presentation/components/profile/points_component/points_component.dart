@@ -201,7 +201,7 @@ class PointsComponent extends StatelessWidget {
                     RowGradientCircle(
                       level: uiUserPointsProgressBarModel.level,
                       progressInCircle:
-                          (uiUserPointsProgressBarModel.actual - (uiUserPointsProgressBarModel.level * 400) / 100)
+                          ((uiUserPointsProgressBarModel.actual - (uiUserPointsProgressBarModel.level * 400)) / 100)
                               .toInt(),
                     ).paddingAll(EdgeInsetsFoundation.all8),
                     SpacingFoundation.horizontalSpace4,
