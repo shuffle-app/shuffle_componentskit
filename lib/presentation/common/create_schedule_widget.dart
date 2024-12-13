@@ -34,6 +34,7 @@ class CreateScheduleWidget extends StatefulWidget {
 class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   late final int initialItemsCount = 2;
   String? selectedScheduleName;
+  String? selectedTemplateName;
 
   UiScheduleModel? scheduleModel;
 
@@ -113,6 +114,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                   }
                                 }
                                 setState(() {
+                                  selectedTemplateName = null;
                                   selectedScheduleName = type;
                                   if (type == UiScheduleTimeModel.scheduleType) {
                                     scheduleModel = UiScheduleTimeModel();
@@ -130,34 +132,35 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                             SpacingFoundation.verticalSpace4,
                             SelectTemplateType(
                               scheduleTypes: availableTemplates,
-                              onChanged: (UiScheduleModel? selectedTemplate) {
+                              selectedScheduleName: selectedTemplateName,
+                              onChanged: (selectedTemplate) {
                                 if (selectedTemplate != null) {
-                                  if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                                    for (var i = 0; i < scheduleModel!.itemsCount; i++) {
+                                  if ((scheduleModel?.itemsCount ?? 0) > 1) {
+                                    for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
                                       onMinusButtonPressed(index: i);
                                     }
                                   }
                                   setState(() {
-                                    scheduleModel = selectedTemplate;
-                                    switch (scheduleModel.runtimeType) {
-                                      case UiScheduleTimeModel _:
-                                        selectedScheduleName = UiScheduleTimeModel.scheduleType;
-                                        break;
-
-                                      case UiScheduleDatesModel _:
-                                        selectedScheduleName = UiScheduleDatesModel.scheduleType;
-                                        break;
-
-                                      case UiScheduleDatesRangeModel _:
-                                        selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+                                    scheduleModel = selectedTemplate.getNonNullKeysSchedule();
+                                    selectedTemplateName = selectedTemplate.templateName;
+                                    final type = selectedTemplate.runtimeType;
+                                    if (type == UiScheduleTimeModel.scheduleType.runtimeType) {
+                                      selectedScheduleName = UiScheduleTimeModel.scheduleType;
+                                    } else if (type == UiScheduleDatesModel.scheduleType.runtimeType) {
+                                      selectedScheduleName = UiScheduleDatesModel.scheduleType;
+                                    } else if (type == UiScheduleDatesRangeModel.scheduleType.runtimeType) {
+                                      selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
                                     }
                                   });
                                   if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                                    log('scheduleModel!.itemsCount ${scheduleModel!.itemsCount}');
-                                    listKey.currentState!.insertAllItems(0, scheduleModel!.itemsCount);
-                                  }
+                                    // Pre-fill the list with existing items.
+                                    listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+                                    Future.delayed(Duration.zero, () {
+                                      onMinusButtonPressed();
+                                    });
 
-                                  context.pop();
+                                    context.pop();
+                                  }
                                 }
                               },
                             ),
@@ -236,7 +239,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                                   onPop: () => context.pop(result: controller.text)));
                                           if (name != null) {
                                             scheduleModel!.templateName = name;
-                                            widget.onTemplateCreated?.call(scheduleModel!);
+                                            widget.onTemplateCreated?.call(scheduleModel!.getNonNullKeysSchedule());
                                           }
                                         }),
                             ),
@@ -313,6 +316,8 @@ abstract class UiScheduleModel {
   bool get isNotEmpty;
 
   bool get validateDate;
+
+  UiScheduleModel getNonNullKeysSchedule();
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
@@ -446,6 +451,11 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   bool get validateDate => true;
+
+  @override
+  UiScheduleModel getNonNullKeysSchedule() {
+    return UiScheduleTimeModel(weeklySchedule.where((element)=>element.key.isNotEmpty).toList());
+  }
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
@@ -646,6 +656,11 @@ class UiScheduleDatesModel extends UiScheduleModel {
   bool get validateDate {
     final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
     return daysList.every((e) => e.isAfter(DateTime.now().toLocal()) || (e.isAtSameDay));
+  }
+
+  @override
+  UiScheduleModel getNonNullKeysSchedule() {
+   return UiScheduleDatesModel(dailySchedule.where((element) => element.key.isNotEmpty).toList());
   }
 }
 
@@ -899,7 +914,13 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
   @override
   bool get validateDate {
     final dateRanges = dailySchedule.map((e) => getDateRangeFromKey(e.key)).nonNulls.toList();
-    return dateRanges.every((range) => (range.start.isAfter(DateTime.now()) || range.start.isAtSameDay) || range.end.isAfter(DateTime.now()));
+    return dateRanges.every((range) =>
+        (range.start.isAfter(DateTime.now()) || range.start.isAtSameDay) || range.end.isAfter(DateTime.now()));
+  }
+
+  @override
+  UiScheduleModel getNonNullKeysSchedule() {
+    return UiScheduleDatesRangeModel(dailySchedule.where((element) => element.key.isNotEmpty).toList());
   }
 }
 
