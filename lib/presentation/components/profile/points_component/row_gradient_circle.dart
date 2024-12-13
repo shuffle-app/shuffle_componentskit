@@ -61,7 +61,7 @@ class RowGradientCircle extends StatelessWidget {
                   ? 0
                   : level >= 2
                       ? 3
-                      : progressInCircle,
+                      : progressInCircle - 400,
             ),
           ),
         ),
@@ -87,7 +87,7 @@ class RowGradientCircle extends StatelessWidget {
                   ? 0
                   : level >= 3
                       ? 3
-                      : progressInCircle,
+                      : progressInCircle - 800,
             ),
           ),
         ),

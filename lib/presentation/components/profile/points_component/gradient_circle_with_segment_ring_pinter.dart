@@ -68,7 +68,7 @@ class GradientCircleWithSegmentedRingPainter extends CustomPainter {
         i >= level ? transparentRingPaint : ringPaint,
       );
 
-      if (i <= level - 3) {
+      if (i <= level - 4) {
         canvas.drawCircle(center, radius, gradientPaint);
       }
     }
