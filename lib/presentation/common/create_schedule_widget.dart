@@ -740,9 +740,11 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                 if (dailySchedule[index].key.isNotEmpty) {
                   setState(() {
                     if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                      dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                      dailySchedule[index] =
+                          MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]);
                     } else {
-                      dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                      dailySchedule
+                          .add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]));
                     }
                   });
                 } else {
@@ -798,9 +800,11 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
               onAdd: () {
                 setState(() {
                   if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                    dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                    dailySchedule[index] =
+                        MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]);
                   } else {
-                    dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                    dailySchedule
+                        .add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]));
                   }
                 });
               },
