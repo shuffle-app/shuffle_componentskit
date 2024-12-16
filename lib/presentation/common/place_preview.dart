@@ -120,7 +120,7 @@ class PlacePreview extends StatelessWidget {
                       children: [
                         UiKitPhotoSlider(
                           media: place.media.isEmpty ? [UiKitMediaPhoto(link: '')] : place.media,
-                          onTap: () => onTap?.call(place.id),
+                          onTap: (index) => onTap?.call(place.id),
                           width: size.width - horizontalMargin * 2,
                           weatherType: place.weatherType,
                         ),
