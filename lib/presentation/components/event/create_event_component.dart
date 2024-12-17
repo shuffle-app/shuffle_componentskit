@@ -652,14 +652,14 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           setState(() {
                             _eventToEdit.schedule = model;
                             _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join(', ');
+                                .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join(',')}')
+                                .join('; ');
                           });
                         } else if (model is UiScheduleDatesRangeModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
                             _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
+                                .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join('/')}')
                                 .join(', ');
                           });
                         } else if (model is UiScheduleTimeModel) {
@@ -667,7 +667,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                             _eventToEdit.schedule = model;
                             _eventToEdit.scheduleString = model.weeklySchedule
                                 .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join(', ');
+                                .join('; ');
                           });
                         }
                       },

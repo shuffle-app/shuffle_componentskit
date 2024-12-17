@@ -305,6 +305,22 @@ abstract class UiScheduleModel {
     }).toList();
   }
 
+  static List<MapEntry<String, List<TimeRange>>> decodeScheduleTimeRange(String scheduleString) {
+    return scheduleString.split(';').map((schedule) {
+      final parts = schedule.split(':');
+      return MapEntry(
+          parts[0],
+          parts[1].split(',').map((timeRange) {
+            final parts = timeRange.split('/');
+            return TimeRange(
+                start: TimeOfDay(hour: int.parse(parts[0].split('-')[0]), minute: int.parse(parts[0].split('-')[1])),
+                end: parts.length > 1
+                    ? TimeOfDay(hour: int.parse(parts[1].split('-')[0]), minute: int.parse(parts[1].split('-')[1]))
+                    : null);
+          }).toList());
+    }).toList();
+  }
+
   List<List<String>> getReadableScheduleString();
 
   bool selectableDayPredicate(DateTime day);
@@ -670,9 +686,9 @@ class UiScheduleDatesModel extends UiScheduleModel {
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
   static const String scheduleType = 'Date Range - Time';
-  final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
+  final List<MapEntry<String, List<TimeRange>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
-  UiScheduleDatesRangeModel([List<MapEntry<String, List<TimeOfDay>>>? schedule]) {
+  UiScheduleDatesRangeModel([List<MapEntry<String, List<TimeRange>>>? schedule]) {
     if (schedule != null && schedule.isNotEmpty) {
       dailySchedule.clear();
       dailySchedule.addAll(schedule);
@@ -684,7 +700,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
     String? errorText;
 
     return StatefulBuilder(builder: (context, setState) {
-      final MapEntry<String, List<TimeOfDay>> thisObject =
+      final MapEntry<String, List<TimeRange>> thisObject =
           dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
       log('rebuild is here $thisObject', name: 'UiScheduleDatesRangeModel');
       final now = DateTime.now();
@@ -740,11 +756,11 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                 if (dailySchedule[index].key.isNotEmpty) {
                   setState(() {
                     if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                      dailySchedule[index] =
-                          MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]);
+                      dailySchedule[index] = MapEntry(thisObject.key,
+                          [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]);
                     } else {
-                      dailySchedule
-                          .add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]));
+                      dailySchedule.add(MapEntry(thisObject.key,
+                          [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]));
                     }
                   });
                 } else {
@@ -787,24 +803,24 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                       //     return;
                       //   }
                       // }
-                      dailySchedule[index] = MapEntry(thisObject.key, [timeFrom, timeTo].nonNulls.toList());
+                      dailySchedule[index] = MapEntry(thisObject.key, [TimeRange(start: timeFrom, end: timeTo)]);
                       setState(() {});
                     }
                   });
                 },
               ))
         else
-          for (var (i, timeRange) in listTimeDayToTimeRange(thisObject.value).indexed)
+          for (var (i, timeRange) in thisObject.value.indexed)
             UiKitAddableFormField(
               title: S.current.TimeRange,
               onAdd: () {
                 setState(() {
                   if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                    dailySchedule[index] =
-                        MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]);
+                    dailySchedule[index] = MapEntry(
+                        thisObject.key, [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]);
                   } else {
-                    dailySchedule
-                        .add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now(), TimeOfDay.now()]));
+                    dailySchedule.add(MapEntry(thisObject.key,
+                        [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]));
                   }
                 });
               },
@@ -855,8 +871,8 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                         final itemsToRemove = originalTimes.length.isEven ? 2 : 1;
                         originalTimes.removeRange(originalTimes.length - itemsToRemove, originalTimes.length);
 
-                        dailySchedule[index] =
-                            MapEntry(thisObject.key, originalTimes + [timeFrom, timeTo].nonNulls.toList());
+                        dailySchedule[index] = MapEntry(thisObject.key,
+                            originalTimes + [TimeRange(start: timeFrom, end: timeTo)].nonNulls.toList());
                         setState(() {});
                       }
                     });
@@ -880,7 +896,8 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
   @override
   String encodeSchedule() {
     return dailySchedule
-        .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
+        .map((e) =>
+            '${e.key}:${e.value.map((time) => '${time.start?.hour}-${time.start?.minute}/${time.end != null ? '${time.end!.hour}-${time.end!.minute}' : ''} ').join(',')}')
         .join(';');
   }
 
