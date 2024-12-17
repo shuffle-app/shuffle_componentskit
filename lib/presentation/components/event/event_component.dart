@@ -291,6 +291,7 @@ class _EventComponentState extends State<EventComponent> {
                         initialIndex: index,
                         tag: heroTag,
                       ),
+                        nativeTransition: false
                     );
                   }
                 },

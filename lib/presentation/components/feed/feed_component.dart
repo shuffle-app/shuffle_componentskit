@@ -109,20 +109,23 @@ class FeedComponent extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               controller: scrollController,
               slivers: [
-                if (!canShowSubscribedUsers || feedOpenedState!.value == FeedOpenedState.initial)
-                  MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox,
+                if (!canShowSubscribedUsers)
+                  MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox
+                else if (feedOpenedState!.value == FeedOpenedState.initial)
+                  UiKitAnimatedPullToShowHint(
+                    scaleNotifier: subscribedUsersFeedIconScaleNotifier!,
+                    topPadding: MediaQuery.viewPaddingOf(context).top,
+                  ).wrapSliverBox,
+                // MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox,
                 if (subscribedUsersFeedIconScaleNotifier != null &&
                     canShowSubscribedUsers &&
                     feedOpenedState!.value != FeedOpenedState.initial)
                   SliverPersistentHeader(
                     delegate: UiKitAnimatedPullToShowDelegate(
-                      showHints: showHints,
                       lastPhaseScaleNotifier: feedOpenedState!.value == FeedOpenedState.avaliableForOpeningFeed
                           ? subscribedUsersFeedIconScaleNotifier!
                           : ValueNotifier(0.0),
                       topPadding: MediaQuery.viewPaddingOf(context).top,
-                      expandHint: showHints,
-                      // expandHint: showHints && subscribedProfiles.isEmpty,
                       children: (subscribedProfiles.isEmpty ? null : subscribedProfiles)
                               ?.map(
                                 (profile) => GestureDetector(

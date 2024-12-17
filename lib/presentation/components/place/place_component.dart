@@ -267,6 +267,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 initialIndex: index,
                 tag: heroTag,
               ),
+              nativeTransition: false
             );
           },
           actions: [
