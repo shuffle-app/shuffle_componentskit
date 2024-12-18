@@ -178,6 +178,8 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 createdAt: item.createdAt,
                 onLongPress: () => onLongPress?.call(item.id),
+                showTranslateButton: item.showTranslateButton,
+                translateText: item.translateText,
                 children: _children(item, regularTextTheme),
               ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
             } else if (item is PostFeedItem) {
@@ -199,6 +201,8 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 hasNewMark: item.newMark,
                 onLongPress: () => onLongPress?.call(item.id),
+                showTranslateButton: item.showTranslateButton,
+                translateText: item.translateText,
               ).paddingOnly(bottom: bottomPadding);
             } else if (item is UpdatesFeedItem) {
               return UiKitContentUpdatesCard(
