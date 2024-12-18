@@ -13,6 +13,7 @@ abstract class InfluencerFeedItem {
   final UserTileType userType;
   String? userReaction;
   final String? createdAt;
+  final ValueNotifier<bool>? showTranslateButton;
 
   InfluencerFeedItem({
     required this.id,
@@ -24,6 +25,7 @@ abstract class InfluencerFeedItem {
     required this.userType,
     this.userReaction,
     this.createdAt,
+    this.showTranslateButton,
   });
 
   @override
@@ -35,18 +37,21 @@ abstract class InfluencerFeedItem {
         'username: $username, '
         'avatarUrl: $avatarUrl, '
         'userType: $userType, '
-        'userReaction: $userReaction)';
+        'userReaction: $userReaction,)'
+        'showTranslateButton: ${showTranslateButton?.value}';
   }
 
   @override
   bool operator ==(Object other) {
-    return (other is InfluencerFeedItem || other is UpdatesFeedItem || other is ShufflePostFeedItem || other is PostFeedItem) &&
+    return (other is InfluencerFeedItem ||
+            other is UpdatesFeedItem ||
+            other is ShufflePostFeedItem ||
+            other is PostFeedItem) &&
         (other as InfluencerFeedItem).id == id;
   }
 
   @override
   int get hashCode => id.hashCode;
-
 }
 
 class UpdatesFeedItem extends InfluencerFeedItem {
@@ -85,6 +90,7 @@ class UpdatesFeedItem extends InfluencerFeedItem {
     this.newPersonalRespects,
     this.commentsUpdate,
     this.newContent,
+    super.showTranslateButton,
   });
 }
 
@@ -96,6 +102,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
   final int sunglassesReactionsCount;
   final int smileyReactionsCount;
   final List<UiKitMediaVideo>? videos;
+  final ValueNotifier<String>? translateText;
 
   ShufflePostFeedItem({
     required this.text,
@@ -121,6 +128,8 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
     super.newPersonalRespects,
     super.commentsUpdate,
     super.newContent,
+    this.translateText,
+    super.showTranslateButton,
   }) : super(
           speciality: '',
           name: 'Shuffle',
@@ -138,6 +147,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
     int? smileyReactionsCount,
     List<UiKitMediaVideo>? videos,
     String? userReaction,
+    ValueNotifier<String>? translateText,
   }) {
     return ShufflePostFeedItem(
       id: id,
@@ -163,6 +173,8 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
       userReaction: userReaction,
       key: super.key,
       createdAt: createdAt,
+      translateText: translateText ?? this.translateText,
+      showTranslateButton: super.showTranslateButton,
     );
   }
 }
@@ -175,6 +187,7 @@ class PostFeedItem extends InfluencerFeedItem {
   final int sunglassesReactionsCount;
   final int smileyReactionsCount;
   final bool newMark;
+  final ValueNotifier<String>? translateText;
 
   PostFeedItem({
     required super.id,
@@ -193,6 +206,8 @@ class PostFeedItem extends InfluencerFeedItem {
     super.key,
     super.userReaction,
     this.newMark = false,
+    this.translateText,
+    super.showTranslateButton,
   });
 
   PostFeedItem copyWith({
@@ -208,6 +223,7 @@ class PostFeedItem extends InfluencerFeedItem {
     String? username,
     String? userType,
     String? userReaction,
+    ValueNotifier<String>? translateText,
   }) {
     return PostFeedItem(
       id: id,
@@ -226,6 +242,8 @@ class PostFeedItem extends InfluencerFeedItem {
       userReaction: userReaction,
       key: key,
       createdAt: createdAt,
+      translateText: translateText ?? this.translateText,
+      showTranslateButton: super.showTranslateButton,
     );
   }
 }
