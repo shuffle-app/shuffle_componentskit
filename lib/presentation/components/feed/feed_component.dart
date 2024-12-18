@@ -109,7 +109,7 @@ class FeedComponent extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               controller: scrollController,
               slivers: [
-                if (!canShowSubscribedUsers)
+                if (!canShowSubscribedUsers || (feedOpenedState!.value == FeedOpenedState.initial && !showHints))
                   MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox
                 else if (feedOpenedState!.value == FeedOpenedState.initial)
                   UiKitAnimatedPullToShowHint(
