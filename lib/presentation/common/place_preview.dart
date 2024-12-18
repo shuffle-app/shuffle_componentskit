@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -87,32 +88,31 @@ class PlacePreview extends StatelessWidget {
               builder: (context, snapshot) => Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    onLongPressStart: showFavoriteBtn
+                    onLongPressStart: showFavoriteBtn || onFavoriteChanged == null
                         ? null
                         : (event) {
+                            log('longpress start');
                             FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
                               intensities: [140, 150, 170, 200],
                               pattern: [20, 15, 10, 5],
                             ));
                           },
-                    onLongPress: showFavoriteBtn
+                    onLongPress: showFavoriteBtn || onFavoriteChanged == null
                         ? null
                         : () {
-                            if (onFavoriteChanged != null) {
-                              onFavoriteChanged!();
-                              if (snapshot.data ?? false) {
-                                _animationNotifier.value = LottieAnimation(
-                                  lottiePath: GraphicsFoundation.instance.animations.lottie.starOutline.path,
-                                );
-                              } else {
-                                _animationNotifier.value = LottieAnimation(
-                                  lottiePath: GraphicsFoundation.instance.animations.lottie.starFill.path,
-                                );
-                              }
-                              Future.delayed(const Duration(milliseconds: 1500), () {
-                                _animationNotifier.value = null;
-                              });
+                            onFavoriteChanged?.call();
+                            if (snapshot.data ?? false) {
+                              _animationNotifier.value = LottieAnimation(
+                                lottiePath: GraphicsFoundation.instance.animations.lottie.starOutline.path,
+                              );
+                            } else {
+                              _animationNotifier.value = LottieAnimation(
+                                lottiePath: GraphicsFoundation.instance.animations.lottie.starFill.path,
+                              );
                             }
+                            Future.delayed(const Duration(milliseconds: 1500), () {
+                              _animationNotifier.value = null;
+                            });
                           },
                     child: Stack(
                       clipBehavior: Clip.none,
