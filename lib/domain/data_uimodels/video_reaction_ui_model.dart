@@ -1,7 +1,8 @@
 import 'package:shuffle_uikit/ui_kit/molecules/tiles/user/base_user_tile.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoReactionUiModel {
-  final String? videoUrl;
+  final String videoUrl;
   final String? previewImageUrl;
   final String? authorAvatarUrl;
   final String? authorName;
@@ -23,6 +24,7 @@ class VideoReactionUiModel {
   int? nextReactionId;
   int? previousReactionId;
   bool isViewed;
+  late final VideoPlayerController videoController;
 
   VideoReactionUiModel({
     required this.id,
@@ -33,7 +35,7 @@ class VideoReactionUiModel {
     this.placeName,
     this.eventName,
     this.placeId,
-    this.videoUrl,
+    required this.videoUrl,
     this.previewImageUrl,
     this.authorName,
     this.authorAvatarUrl,
@@ -47,16 +49,15 @@ class VideoReactionUiModel {
     this.previousReactionId,
     this.createdAt,
     this.isViewed = false,
-  });
+  }) {
+    videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))..initialize();
+  }
 
   bool get empty => id == -1;
 
   bool get isReactionForEvent => parentContentType == 'event';
 
   bool get isReactionForPlace => parentContentType == 'place';
-
-  factory VideoReactionUiModel.empty() => VideoReactionUiModel(
-      id: -1, authorId: -1, parentContentType: '', parentContentId: -1, authorType: UserTileType.ordinary);
 
   VideoReactionUiModel copyWith({
     String? videoUrl,
@@ -98,7 +99,7 @@ class VideoReactionUiModel {
       previousReactionId: previousReactionId ?? this.previousReactionId,
       isViewed: isViewed ?? this.isViewed,
       authorType: authorType ?? this.authorType,
-      createdAt: createdAt?? this.createdAt,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 

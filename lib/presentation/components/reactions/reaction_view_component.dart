@@ -68,7 +68,8 @@ class ReactionViewComponent extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         UiKitFullScreenPortraitVideoPlayer(
-          videoUrl: videoReactionModel.videoUrl!,
+          videoUrl: videoReactionModel.videoUrl,
+          videoPlayer: videoReactionModel.videoController,
           coverImageUrl: videoReactionModel.previewImageUrl,
           onProgressChanged: (progress) => videoProgressNotifier.value = progress,
           onTapUp: _tapUpHandler,
