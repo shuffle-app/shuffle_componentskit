@@ -868,11 +868,13 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                         // }
                         final originalTimes = dailySchedule[index].value;
 
-                        final itemsToRemove = originalTimes.length.isEven ? 2 : 1;
-                        originalTimes.removeRange(originalTimes.length - itemsToRemove, originalTimes.length);
+                        originalTimes.remove(timeRange);
 
-                        dailySchedule[index] = MapEntry(thisObject.key,
-                            originalTimes + [TimeRange(start: timeFrom, end: timeTo)].nonNulls.toList());
+                        // final itemsToRemove = originalTimes.length.isEven ? 2 : 1;
+                        // originalTimes.removeRange(originalTimes.length - itemsToRemove, originalTimes.length);
+
+                        dailySchedule[index] =
+                            MapEntry(thisObject.key, [...originalTimes, TimeRange(start: timeFrom, end: timeTo)]);
                         setState(() {});
                       }
                     });
