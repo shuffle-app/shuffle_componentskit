@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:shuffle_uikit/ui_kit/molecules/tiles/user/base_user_tile.dart';
 import 'package:video_player/video_player.dart';
+import 'package:path_provider/path_provider.dart';
 
 class VideoReactionUiModel {
   final String videoUrl;
@@ -24,7 +29,7 @@ class VideoReactionUiModel {
   int? nextReactionId;
   int? previousReactionId;
   bool isViewed;
-  late final VideoPlayerController videoController;
+  VideoPlayerController? videoController;
 
   VideoReactionUiModel({
     required this.id,
@@ -50,7 +55,24 @@ class VideoReactionUiModel {
     this.createdAt,
     this.isViewed = false,
   }) {
-    videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))..initialize();
+    //TODO get file from cache folder or create a file and download it
+    if (kIsWeb) {
+      videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))..initialize();
+    } else {
+      () async {
+        final tempDir = await getTemporaryDirectory();
+        final filename = videoUrl.split('/').last;
+        final fileFromCache = File('${tempDir.path}/video_cache/$id-$filename');
+        if (fileFromCache.existsSync()) {
+          videoController = VideoPlayerController.file(fileFromCache)..initialize();
+        } else {
+          final videoData = await _getFileFromUrl(videoUrl);
+          await fileFromCache.create(recursive: true);
+          await fileFromCache.writeAsBytes(videoData);
+          videoController = VideoPlayerController.file(fileFromCache)..initialize();
+        }
+      }();
+    }
   }
 
   bool get empty => id == -1;
@@ -110,4 +132,13 @@ class VideoReactionUiModel {
 
   @override
   int get hashCode => id.hashCode;
+}
+
+Future<Uint8List> _getFileFromUrl(String url) async {
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    return response.bodyBytes;
+  } else {
+    throw Exception('Failed to load data from $url');
+  }
 }
