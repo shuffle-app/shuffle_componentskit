@@ -69,7 +69,8 @@ class VideoReactionUiModel {
           final videoData = await _getFileFromUrl(videoUrl);
           await fileFromCache.create(recursive: true);
           await fileFromCache.writeAsBytes(videoData);
-          videoController = VideoPlayerController.file(fileFromCache)..initialize();
+          videoController ??= VideoPlayerController.file(fileFromCache)
+              ..initialize();
         }
       }();
     }
