@@ -235,7 +235,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               positionModel: model.positionModel,
               videos: _videos,
               photos: _photos,
-              hideVideosSelection: true,
               onVideoAddRequested: _onVideoAddRequested,
               onVideoDeleted: _onVideoDeleted,
               onPhotoAddRequested: _onPhotoAddRequested,
