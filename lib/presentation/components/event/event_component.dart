@@ -281,7 +281,7 @@ class _EventComponentState extends State<EventComponent> {
                 onTap: (index) {
                   if (index != null) {
                     final media = widget.event.media[index];
-                    if ((media.videoLink != null && media.videoLink!.isNotEmpty) || media.link.isEmpty) return;
+                    if (media.type == UiKitMediaType.video || media.link.isEmpty) return;
 
                     final heroTag = '${media.link}--$index';
 
@@ -291,7 +291,8 @@ class _EventComponentState extends State<EventComponent> {
                         initialIndex: index,
                         tag: heroTag,
                       ),
-                        nativeTransition: false
+                      nativeTransition: false,
+                      transitionDuration: const Duration(milliseconds: 500)
                     );
                   }
                 },

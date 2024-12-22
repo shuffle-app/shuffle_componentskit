@@ -15,7 +15,6 @@ class PhotoVideoSelector extends StatelessWidget {
   final GlobalKey<ReorderableListState> listVideosKey;
   final Function(int index) onPhotoDeleted;
   final Function(int index)? onVideoDeleted;
-  final bool hideVideosSelection;
 
   const PhotoVideoSelector({
     super.key,
@@ -28,7 +27,6 @@ class PhotoVideoSelector extends StatelessWidget {
     this.onVideoReorderRequested,
     required this.onPhotoDeleted,
     this.onVideoDeleted,
-    this.hideVideosSelection = false,
     this.positionModel,
     required this.listPhotosKey,
     required this.listVideosKey,
@@ -155,68 +153,67 @@ class PhotoVideoSelector extends StatelessWidget {
             ],
           ),
         ),
-        if (!hideVideosSelection)
-          SizedBox(
-            height: itemsSize.height * 1.2,
-            width: double.infinity,
-            child: Stack(
-              alignment: Alignment.centerRight,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      S.of(context).Video,
-                      style: theme?.regularTextTheme.labelSmall,
-                    ).paddingSymmetric(horizontal: horizontalPadding),
-                    Expanded(
-                      child: ReorderableListView.builder(
-                        key: listVideosKey,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) => Stack(
-                          key: ValueKey(videos[index].link),
-                          alignment: Alignment.topRight,
-                          children: [
-                            ClipPath(
-                              clipper: ShapeBorderClipper(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusFoundation.all8,
-                                ),
-                              ),
-                              child: videos[index].widget(itemsSize),
-                            ).paddingAll(4),
-                            context.outlinedButton(
-                              hideBorder: true,
-                              data: BaseUiKitButtonData(
-                                onPressed: () => onVideoDeleted?.call(index),
-                                iconInfo: BaseUiKitButtonIconData(
-                                  iconData: ShuffleUiKitIcons.x,
-                                  size: 6,
-                                ),
+        SizedBox(
+          height: itemsSize.height * 1.2,
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    S.of(context).Video,
+                    style: theme?.regularTextTheme.labelSmall,
+                  ).paddingSymmetric(horizontal: horizontalPadding),
+                  Expanded(
+                    child: ReorderableListView.builder(
+                      key: listVideosKey,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) => Stack(
+                        key: ValueKey(videos[index].link),
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipPath(
+                            clipper: ShapeBorderClipper(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusFoundation.all8,
                               ),
                             ),
-                          ],
-                        ),
-                        itemCount: videos.length,
-                        onReorder: onVideoReorderRequested!,
+                            child: videos[index].widget(itemsSize),
+                          ).paddingAll(4),
+                          context.outlinedButton(
+                            hideBorder: true,
+                            data: BaseUiKitButtonData(
+                              onPressed: () => onVideoDeleted?.call(index),
+                              iconInfo: BaseUiKitButtonIconData(
+                                iconData: ShuffleUiKitIcons.x,
+                                size: 6,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      itemCount: videos.length,
+                      onReorder: onVideoReorderRequested!,
+                    ),
+                  ),
+                ],
+              ),
+              context
+                  .outlinedButton(
+                    data: BaseUiKitButtonData(
+                      onPressed: onVideoAddRequested,
+                      iconInfo: BaseUiKitButtonIconData(
+                        iconData: ShuffleUiKitIcons.videoplus,
+                        size: 16.h,
                       ),
                     ),
-                  ],
-                ),
-                context
-                    .outlinedButton(
-                      data: BaseUiKitButtonData(
-                        onPressed: onVideoAddRequested,
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.videoplus,
-                          size: 16.h,
-                        ),
-                      ),
-                    )
-                    .paddingSymmetric(horizontal: horizontalPadding)
-              ],
-            ),
+                  )
+                  .paddingSymmetric(horizontal: horizontalPadding)
+            ],
           ),
+        ),
       ],
     );
   }

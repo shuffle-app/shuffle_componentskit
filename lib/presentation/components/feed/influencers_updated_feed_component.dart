@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:ui';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -67,55 +69,91 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 1.sh,
-      width: 1.sw,
-      child: Column(
-        children: [
-          MediaQuery.viewPaddingOf(context).top.heightBox,
-          SpacingFoundation.verticalSpace16,
-          UiKitCustomTabBar(
-            tabController: tabController,
-            tabs: _tabs,
-            onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
-          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: [
-                _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: onReactionsTapped,
-                  pagingController: widget.latestContentController,
-                  onCheckVisibleItems: widget.onCheckVisibleItems,
-                  onLongPress: widget.onLongPress,
-                  onSharePress: widget.onSharePress,
-                  scrollController: widget.scrollController,
-                  onReadTap: widget.onReadTap,
-                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: onReactionsTapped,
-                  pagingController: widget.topContentController,
-                  onCheckVisibleItems: widget.onCheckVisibleItems,
-                  onLongPress: widget.onLongPress,
-                  onSharePress: widget.onSharePress,
-                  scrollController: widget.scrollController,
-                  onReadTap: widget.onReadTap,
-                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: onReactionsTapped,
-                  pagingController: widget.unreadContentController,
-                  onCheckVisibleItems: widget.onCheckVisibleItems,
-                  onLongPress: widget.onLongPress,
-                  onSharePress: widget.onSharePress,
-                  scrollController: widget.scrollController,
-                  onReadTap: widget.onReadTap,
-                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        ClipRRect(
+            borderRadius: BorderRadiusFoundation.onlyBottom24,
+            clipper: _CustomBlurClipper(topPadding: MediaQuery.viewPaddingOf(context).top),
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                child: SafeArea(
+                    bottom: false,
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      SizedBox(
+                          width: double.infinity,
+                          child: UiKitCustomTabBar(
+                            tabController: tabController,
+                            tabs: _tabs,
+                            clipBorderRadius: BorderRadiusFoundation.all24r,
+                            onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
+                          ))
+                    ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
+
+        // SizedBox(
+        // height: 1.sh,
+        // width: 1.sw,
+        // child: Column(
+        //   children: [
+        //     MediaQuery.viewPaddingOf(context).top.heightBox,
+        //     SpacingFoundation.verticalSpace16,
+        //     UiKitCustomTabBar(
+        //       tabController: tabController,
+        //       tabs: _tabs,
+        //       onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
+        //     ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+        //     Expanded(
+        //       child:
+        TabBarView(
+          controller: tabController,
+          children: [
+            _PagedInfluencerFeedItemListBody(
+              onReactionsTapped: onReactionsTapped,
+              pagingController: widget.latestContentController,
+              onCheckVisibleItems: widget.onCheckVisibleItems,
+              onLongPress: widget.onLongPress,
+              onSharePress: widget.onSharePress,
+              scrollController: widget.scrollController,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            _PagedInfluencerFeedItemListBody(
+              onReactionsTapped: onReactionsTapped,
+              pagingController: widget.topContentController,
+              onCheckVisibleItems: widget.onCheckVisibleItems,
+              onLongPress: widget.onLongPress,
+              onSharePress: widget.onSharePress,
+              scrollController: widget.scrollController,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            _PagedInfluencerFeedItemListBody(
+              onReactionsTapped: onReactionsTapped,
+              pagingController: widget.unreadContentController,
+              onCheckVisibleItems: widget.onCheckVisibleItems,
+              onLongPress: widget.onLongPress,
+              onSharePress: widget.onSharePress,
+              scrollController: widget.scrollController,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+          ],
+        ),
+        // ),
+      ].reversed.toList(),
+      // ),
     );
+  }
+}
+
+class _CustomBlurClipper extends CustomClipper<RRect> {
+  final double topPadding;
+
+  const _CustomBlurClipper({this.topPadding = 60});
+
+  @override
+  RRect getClip(Size size) {
+    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, topPadding + 40.h),
+        bottomLeft: const Radius.circular(24), bottomRight: const Radius.circular(24));
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<RRect> oldClipper) {
+    return true;
   }
 }
 
@@ -163,7 +201,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         scrollController: scrollController,
         padding: EdgeInsets.only(
           bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
-          top: EdgeInsetsFoundation.vertical16,
+          top: MediaQuery.of(context).viewPadding.top + 45.h,
         ),
         pagingController: pagingController,
         separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,

@@ -76,6 +76,9 @@ class ReactionViewComponent extends StatelessWidget {
           onVerticalSwipe: _verticalSwipeHandler,
           onVideoComplete: onSingleTapRight,
           onVideoInited: onVideoStarted,
+          onSetPlayer: (value) {
+            videoReactionModel.videoController = value;
+          },
         ),
         Positioned(
           top: 0,

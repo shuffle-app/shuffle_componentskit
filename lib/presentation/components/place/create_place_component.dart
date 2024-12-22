@@ -89,11 +89,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _bookingUiModel = widget.placeToEdit?.bookingUiModel;
   }
 
-  // _onVideoDeleted(int index) {
-  //   setState(() {
-  //     _videos.removeAt(index);
-  //   });
-  // }
+  _onVideoDeleted(int index) {
+    setState(() {
+      _videos.removeAt(index);
+    });
+  }
 
   _handleLocaleChanged() {
     setState(() {
@@ -138,14 +138,14 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     }
   }
 
-  // _onVideoAddRequested() async {
-  //   final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
-  //   if (videoFile != null) {
-  //     setState(() {
-  //       _videos.add(UiKitMediaVideo(link: videoFile.path));
-  //     });
-  //   }
-  // }
+  _onVideoAddRequested() async {
+    final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (videoFile != null) {
+      setState(() {
+        _videos.add(UiKitMediaVideo(link: videoFile.path));
+      });
+    }
+  }
 
   _onPhotoReorderRequested(int oldIndex, int newIndex) {
     if (oldIndex != newIndex) {
@@ -155,11 +155,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     }
   }
 
-  // _onVideoReorderRequested(int oldIndex, int newIndex) {
-  //   setState(() {
-  //     _videos.insert(newIndex, _videos.removeAt(oldIndex));
-  //   });
-  // }
+  _onVideoReorderRequested(int oldIndex, int newIndex) {
+    setState(() {
+      _videos.insert(newIndex, _videos.removeAt(oldIndex));
+    });
+  }
 
   @override
   void didUpdateWidget(covariant CreatePlaceComponent oldWidget) {
@@ -313,19 +313,18 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             PhotoVideoSelector(
-                hideVideosSelection: true,
-                positionModel: model.positionModel,
-                // videos: _videos,
-                photos: _photos,
-                // onVideoAddRequested: _onVideoAddRequested,
-                // onVideoDeleted: _onVideoDeleted,
-                onPhotoAddRequested: _onPhotoAddRequested,
-                onPhotoDeleted: _onPhotoDeleted,
-                onPhotoReorderRequested: _onPhotoReorderRequested,
-                listPhotosKey: _reordablePhotokey,
-                listVideosKey: _reordableVideokey
-                // onVideoReorderRequested: _onVideoReorderRequested,
-                ),
+              positionModel: model.positionModel,
+              videos: _videos,
+              photos: _photos,
+              onVideoAddRequested: _onVideoAddRequested,
+              onVideoDeleted: _onVideoDeleted,
+              onPhotoAddRequested: _onPhotoAddRequested,
+              onPhotoDeleted: _onPhotoDeleted,
+              onPhotoReorderRequested: _onPhotoReorderRequested,
+              listPhotosKey: _reordablePhotokey,
+              listVideosKey: _reordableVideokey,
+              onVideoReorderRequested: _onVideoReorderRequested,
+            ),
             SpacingFoundation.verticalSpace24,
             IntrinsicHeight(
               child: UiKitInputFieldNoFill(
