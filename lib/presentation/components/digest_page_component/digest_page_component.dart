@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_uikit/ui_kit/atoms/cards/digest_content_card.dart';
@@ -59,9 +57,6 @@ class DigestPageComponent extends StatelessWidget {
 
           e.descriptionNotifier?.value =
               isTranslate.value ? (e.descriptionTranslate?.value ?? e.description ?? '') : e.description ?? '';
-
-          log('e.descriptionTranslate?.value ${e.descriptionTranslate?.value}');
-          log(' e.descriptionNotifier?.value  ${e.descriptionNotifier?.value}');
         },
       );
     }
@@ -131,7 +126,6 @@ class DigestPageComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace8,
                     if (e.descriptionNotifier != null && e.descriptionNotifier!.value.isNotEmpty)
                       ValueListenableBuilder(
-                        // вот этот текст не меняется
                         valueListenable: e.descriptionNotifier!,
                         builder: (_, descriptionTranslate, __) => Text(
                           descriptionTranslate,
