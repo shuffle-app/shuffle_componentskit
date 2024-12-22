@@ -114,6 +114,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               scrollController: widget.scrollController,
+              onReadTap: widget.onReadTap,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
@@ -122,6 +123,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               scrollController: widget.scrollController,
+              onReadTap: widget.onReadTap,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
@@ -130,6 +132,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               scrollController: widget.scrollController,
+              onReadTap: widget.onReadTap,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ],
         ),
