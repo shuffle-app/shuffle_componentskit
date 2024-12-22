@@ -54,6 +54,79 @@ abstract class InfluencerFeedItem {
   int get hashCode => id.hashCode;
 }
 
+class DigestFeedItem extends InfluencerFeedItem {
+  final String? title;
+  final String? underTitleText;
+  final List<DigestUiModel>? digestUiModels;
+  final int heartEyesReactionsCount;
+  final int likeReactionsCount;
+  final int fireReactionsCount;
+  final int sunglassesReactionsCount;
+  final int smileyReactionsCount;
+  final VoidCallback? onReadTap;
+  final ValueNotifier<String>? translateTitle;
+  final ValueNotifier<String>? translateUnderTitle;
+
+  DigestFeedItem({
+    required super.id,
+    required super.key,
+    this.title,
+    this.underTitleText,
+    this.digestUiModels,
+    this.heartEyesReactionsCount = 0,
+    this.likeReactionsCount = 0,
+    this.fireReactionsCount = 0,
+    this.sunglassesReactionsCount = 0,
+    this.smileyReactionsCount = 0,
+    this.onReadTap,
+    super.createdAt,
+    super.userReaction,
+    this.translateTitle,
+    this.translateUnderTitle,
+    super.showTranslateButton,
+  }) : super(
+          speciality: '',
+          name: 'Shuffle',
+          username: '',
+          avatarUrl: GraphicsFoundation.instance.png.avatars.avatar13.path,
+          userType: UserTileType.influencer,
+        );
+
+  DigestFeedItem copyWith({
+    String? title,
+    String? underTitleText,
+    List<DigestUiModel>? digestUiModels,
+    int? heartEyesReactionsCount,
+    int? likeReactionsCount,
+    int? fireReactionsCount,
+    int? sunglassesReactionsCount,
+    int? smileyReactionsCount,
+    VoidCallback? onReadTap,
+    String? userReaction,
+    ValueNotifier<String>? translateTitle,
+    ValueNotifier<String>? translateUnderTitle,
+  }) {
+    return DigestFeedItem(
+      key: super.key,
+      id: id,
+      createdAt: createdAt,
+      title: title ?? this.title,
+      underTitleText: underTitleText ?? this.underTitleText,
+      digestUiModels: digestUiModels ?? this.digestUiModels,
+      heartEyesReactionsCount: heartEyesReactionsCount ?? this.heartEyesReactionsCount,
+      likeReactionsCount: likeReactionsCount ?? this.likeReactionsCount,
+      fireReactionsCount: fireReactionsCount ?? this.fireReactionsCount,
+      sunglassesReactionsCount: sunglassesReactionsCount ?? this.sunglassesReactionsCount,
+      smileyReactionsCount: smileyReactionsCount ?? this.smileyReactionsCount,
+      onReadTap: onReadTap ?? this.onReadTap,
+      userReaction: userReaction,
+      translateTitle: translateTitle ?? this.translateTitle,
+      translateUnderTitle: translateUnderTitle ?? this.translateUnderTitle,
+      showTranslateButton: super.showTranslateButton,
+    );
+  }
+}
+
 class UpdatesFeedItem extends InfluencerFeedItem {
   final List<UiKitMediaPhoto>? newPhotos;
   final List<VideoUpdateItem>? newVideos;
