@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:shuffle_uikit/ui_kit/organisms/pinned_publication/pinned_publication.dart';
 
 import '../../../domain/data_uimodels/influencer_models/influencer_feed_item.dart';
 
@@ -23,6 +24,10 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final PagingController<int, InfluencerFeedItem> topContentController;
   final PagingController<int, InfluencerFeedItem> unreadContentController;
 
+  final ValueNotifier<InfluencerFeedItem?>? pinnedPublication;
+  final bool showPinnedPublication;
+  final VoidCallback? onPinnedPublicationTap;
+
   const InfluencersUpdatedFeedComponent({
     super.key,
     this.onTappedTab,
@@ -36,6 +41,9 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.onSharePress,
     this.onReadTap,
     this.scrollController,
+    this.pinnedPublication,
+    this.showPinnedPublication = false,
+    this.onPinnedPublicationTap,
   });
 
   @override
@@ -61,10 +69,43 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     }
   }
 
+  late bool _isCardVisible;
+  double topPaddingForPinned = 50.h;
+  BorderRadius clipBorderRadius = BorderRadiusFoundation.all24r;
+
+  _toggleCardVisibility() {
+    setState(() {
+      _isCardVisible =
+          tabController.index == 0 && (widget.showPinnedPublication && widget.pinnedPublication?.value != null);
+      clipBorderRadius = _isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
+      topPaddingForPinned = _isCardVisible ? (0.38.sw) : 50.h;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication != null;
+    widget.pinnedPublication?.addListener(_toggleCardVisibility);
+    Future.delayed(Duration.zero, () => _toggleCardVisibility());
+
+    tabController.addListener(_toggleCardVisibility);
+  }
+
   @override
   void dispose() {
+    tabController.removeListener(_toggleCardVisibility);
+    widget.pinnedPublication?.removeListener(_toggleCardVisibility);
+
     Future.delayed(Duration.zero, () => widget.onDispose?.call());
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant InfluencersUpdatedFeedComponent oldWidget) {
+    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication != null;
+
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -72,23 +113,49 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     return Stack(
       fit: StackFit.expand,
       children: [
-        ClipRRect(
-            borderRadius: BorderRadiusFoundation.onlyBottom24,
-            clipper: _CustomBlurClipper(topPadding: MediaQuery.viewPaddingOf(context).top),
-            child: BackdropFilter(
+        Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadiusFoundation.onlyBottom24,
+              clipper: _CustomBlurClipper(topPadding: MediaQuery.viewPaddingOf(context).top),
+              child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                 child: SafeArea(
-                    bottom: false,
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      SizedBox(
-                          width: double.infinity,
-                          child: UiKitCustomTabBar(
-                            tabController: tabController,
-                            tabs: _tabs,
-                            clipBorderRadius: BorderRadiusFoundation.all24r,
-                            onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
-                          ))
-                    ]).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)))),
+                  bottom: false,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: UiKitCustomTabBar(
+                      tabController: tabController,
+                      tabs: _tabs,
+                      clipBorderRadius: clipBorderRadius,
+                      onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
+                    ),
+                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+                ),
+              ),
+            ),
+            if (widget.pinnedPublication?.value is ShufflePostFeedItem)
+              PinnedPublication(
+                text: (widget.pinnedPublication?.value as ShufflePostFeedItem).text,
+                images: (widget.pinnedPublication?.value as ShufflePostFeedItem).newPhotos?.map((e) => e.link).toList(),
+                onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                isCardVisible: _isCardVisible,
+              )
+            else if (widget.pinnedPublication?.value is PostFeedItem)
+              PinnedPublication(
+                text: (widget.pinnedPublication?.value as PostFeedItem).text,
+                onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                isCardVisible: _isCardVisible,
+              )
+            else if (widget.pinnedPublication?.value is UpdatesFeedItem)
+              PinnedPublication(
+                text: (widget.pinnedPublication?.value as UpdatesFeedItem).name,
+                images: (widget.pinnedPublication?.value as UpdatesFeedItem).newPhotos?.map((e) => e.link).toList(),
+                onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                isCardVisible: _isCardVisible,
+              )
+          ],
+        ),
 
         // SizedBox(
         // height: 1.sh,
@@ -104,17 +171,22 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
         //     ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         //     Expanded(
         //       child:
+
         TabBarView(
           controller: tabController,
           children: [
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.latestContentController,
-              onCheckVisibleItems: widget.onCheckVisibleItems,
+              onCheckVisibleItems: () {
+                clipBorderRadius = !_isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
+                widget.onCheckVisibleItems?.call();
+              },
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
+              topPadding: topPaddingForPinned,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
@@ -124,6 +196,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onSharePress: widget.onSharePress,
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
+              topPadding: topPaddingForPinned,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
@@ -133,6 +206,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onSharePress: widget.onSharePress,
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
+              topPadding: topPaddingForPinned,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ],
         ),
@@ -150,7 +224,7 @@ class _CustomBlurClipper extends CustomClipper<RRect> {
 
   @override
   RRect getClip(Size size) {
-    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, topPadding + 40.h),
+    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, topPadding + 43.h),
         bottomLeft: const Radius.circular(24), bottomRight: const Radius.circular(24));
   }
 
@@ -169,6 +243,8 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
 
+  final double? topPadding;
+
   const _PagedInfluencerFeedItemListBody({
     required this.pagingController,
     this.onCheckVisibleItems,
@@ -177,6 +253,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
     this.onSharePress,
     this.onReadTap,
     this.scrollController,
+    this.topPadding,
   });
 
   double get _videoReactionPreviewWidth => 0.125.sw;
@@ -204,7 +281,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         scrollController: scrollController,
         padding: EdgeInsets.only(
           bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
-          top: MediaQuery.of(context).viewPadding.top + 45.h,
+          top: MediaQuery.of(context).viewPadding.top + (topPadding?.toDouble() ?? 0.0),
         ),
         pagingController: pagingController,
         separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,
