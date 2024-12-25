@@ -405,7 +405,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
     final yOffset = shufflePostVideoWidgetHeight / 2 - playButtonSize.height / 2;
 
     return [
-      if (item is ShufflePostFeedItem && item.videos != null)
+      if (item is ShufflePostFeedItem && item.videos != null && item.videos!.isNotEmpty)
         UiKitCustomChildContentUpdateWidget(
           height: shufflePostVideoWidgetHeight,
           child: Row(
