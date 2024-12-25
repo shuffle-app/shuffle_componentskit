@@ -1,12 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:shuffle_uikit/ui_kit/organisms/pinned_publication/pinned_publication.dart';
 
 import '../../../domain/data_uimodels/influencer_models/influencer_feed_item.dart';
 
@@ -19,6 +16,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
+  final TextEditingController? searchController;
 
   final PagingController<int, InfluencerFeedItem> latestContentController;
   final PagingController<int, InfluencerFeedItem> topContentController;
@@ -44,6 +42,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.pinnedPublication,
     this.showPinnedPublication = false,
     this.onPinnedPublicationTap,
+    this.searchController,
   });
 
   @override
@@ -72,6 +71,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   late bool _isCardVisible;
   double topPaddingForPinned = 50.h;
   BorderRadius clipBorderRadius = BorderRadiusFoundation.all24r;
+
+  bool isSearchActivated = false;
+  final FocusNode _searchFocusNode = FocusNode();
 
   _toggleCardVisibility() {
     setState(() {
@@ -123,14 +125,39 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                 child: SafeArea(
                   bottom: false,
                   child: SizedBox(
-                    width: double.infinity,
-                    child: UiKitCustomTabBar(
-                      tabController: tabController,
-                      tabs: _tabs,
-                      clipBorderRadius: clipBorderRadius,
-                      onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
-                    ),
-                  ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+                      width: double.infinity,
+                      child: AnimatedCrossFade(
+                        crossFadeState: isSearchActivated ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                        duration: const Duration(milliseconds: 500),
+                        firstCurve: Curves.bounceInOut,
+                        secondCurve: Curves.easeInOut,
+                        firstChild: GestureDetector(
+                            onLongPress: () {
+                              setState(() {
+                                isSearchActivated = true;
+                              });
+                              Future.delayed(
+                                  Duration.zero, () => FocusManager.instance.rootScope.requestFocus(_searchFocusNode));
+                            },
+                            child: UiKitCustomTabBar(
+                              tabController: tabController,
+                              tabs: _tabs,
+                              clipBorderRadius: clipBorderRadius,
+                              onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
+                            )),
+                        secondChild: UiKitInputFieldRightIcon(
+                          controller: widget.searchController ?? TextEditingController(),
+                          borderRadius: clipBorderRadius,
+                          autofocus: true,
+                          focusNode: _searchFocusNode,
+                          onIconPressed: () {
+                            setState(() {
+                              isSearchActivated = false;
+                            });
+                            widget.searchController?.clear();
+                          },
+                        ),
+                      ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)),
                 ),
               ),
             ),
