@@ -69,8 +69,17 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   }
 
   late bool _isCardVisible;
-  double topPaddingForPinned = 50.h;
-  BorderRadius clipBorderRadius = BorderRadiusFoundation.all24r;
+
+  double get topPaddingForPinned {
+    if (isSearchActivated) {
+      return _isCardVisible ? (0.38.sw + 40.h) : 88.h;
+    } else {
+      return _isCardVisible ? (0.38.sw) : 50.h;
+    }
+  }
+
+  BorderRadius get clipBorderRadius =>
+      _isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
 
   bool isSearchActivated = false;
   final FocusNode _searchFocusNode = FocusNode();
@@ -79,8 +88,6 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     setState(() {
       _isCardVisible =
           tabController.index == 0 && (widget.showPinnedPublication && widget.pinnedPublication?.value != null);
-      clipBorderRadius = _isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
-      topPaddingForPinned = _isCardVisible ? (0.38.sw) : 50.h;
     });
   }
 
@@ -92,10 +99,28 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     Future.delayed(Duration.zero, () => _toggleCardVisibility());
 
     tabController.addListener(_toggleCardVisibility);
+    widget.scrollController?.addListener(_scrollListener);
+  }
+
+  _scrollListener() {
+    if (widget.scrollController!.offset < -50.h && !isSearchActivated) {
+      setState(() {
+        isSearchActivated = true;
+      });
+      Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
+    }
+    // else if (widget.scrollController!.offset > 50.h && isSearchActivated) {
+    //   setState(() {
+    //     isSearchActivated = false;
+    //   });
+    //
+    //   _searchFocusNode.unfocus();
+    // }
   }
 
   @override
   void dispose() {
+    widget.scrollController?.removeListener(_scrollListener);
     tabController.removeListener(_toggleCardVisibility);
     widget.pinnedPublication?.removeListener(_toggleCardVisibility);
 
@@ -112,6 +137,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = context.uiKitTheme?.colorScheme;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -123,42 +149,16 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                 child: SafeArea(
-                  bottom: false,
-                  child: SizedBox(
+                    bottom: false,
+                    child: SizedBox(
                       width: double.infinity,
-                      child: AnimatedCrossFade(
-                        crossFadeState: isSearchActivated ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                        duration: const Duration(milliseconds: 500),
-                        firstCurve: Curves.bounceInOut,
-                        secondCurve: Curves.easeInOut,
-                        firstChild: GestureDetector(
-                            onLongPress: () {
-                              setState(() {
-                                isSearchActivated = true;
-                              });
-                              Future.delayed(
-                                  Duration.zero, () => FocusManager.instance.rootScope.requestFocus(_searchFocusNode));
-                            },
-                            child: UiKitCustomTabBar(
-                              tabController: tabController,
-                              tabs: _tabs,
-                              clipBorderRadius: clipBorderRadius,
-                              onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
-                            )),
-                        secondChild: UiKitInputFieldRightIcon(
-                          controller: widget.searchController ?? TextEditingController(),
-                          borderRadius: clipBorderRadius,
-                          autofocus: true,
-                          focusNode: _searchFocusNode,
-                          onIconPressed: () {
-                            setState(() {
-                              isSearchActivated = false;
-                            });
-                            widget.searchController?.clear();
-                          },
-                        ),
-                      ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)),
-                ),
+                      child: UiKitCustomTabBar(
+                        tabController: tabController,
+                        tabs: _tabs,
+                        clipBorderRadius: clipBorderRadius,
+                        onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
+                      ),
+                    ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)),
               ),
             ),
             if (widget.pinnedPublication?.value is ShufflePostFeedItem)
@@ -180,24 +180,30 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                 images: (widget.pinnedPublication?.value as UpdatesFeedItem).newPhotos?.map((e) => e.link).toList(),
                 onPinnedPublicationTap: widget.onPinnedPublicationTap,
                 isCardVisible: _isCardVisible,
-              )
+              ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: isSearchActivated
+                  ? UiKitInputFieldRightIcon(
+                      controller: widget.searchController ?? TextEditingController(),
+                      borderRadius: BorderRadiusFoundation.all24r,
+                      autofocus: true,
+                      fillColor: colorScheme?.surface2,
+                      hintText: S.current.Search,
+                      focusNode: _searchFocusNode,
+                      onIconPressed: () {
+                        setState(() {
+                          isSearchActivated = false;
+                        });
+                        _searchFocusNode.unfocus();
+                        widget.searchController?.clear();
+                      },
+                    ).paddingSymmetric(
+                      horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical12)
+                  : const SizedBox.shrink(),
+            ),
           ],
         ),
-
-        // SizedBox(
-        // height: 1.sh,
-        // width: 1.sw,
-        // child: Column(
-        //   children: [
-        //     MediaQuery.viewPaddingOf(context).top.heightBox,
-        //     SpacingFoundation.verticalSpace16,
-        //     UiKitCustomTabBar(
-        //       tabController: tabController,
-        //       tabs: _tabs,
-        //       onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
-        //     ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-        //     Expanded(
-        //       child:
 
         TabBarView(
           controller: tabController,
@@ -205,10 +211,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.latestContentController,
-              onCheckVisibleItems: () {
-                clipBorderRadius = !_isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
-                widget.onCheckVisibleItems?.call();
-              },
+              onCheckVisibleItems: widget.onCheckVisibleItems,
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               scrollController: widget.scrollController,
