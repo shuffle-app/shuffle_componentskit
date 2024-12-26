@@ -668,6 +668,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                               companyAnswered: false,
                               rating: feedback.feedbackRating,
                               text: feedback.feedbackText,
+                              media: feedback.media,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                               onPressed: () {
                                 if (widget.onFeedbackTap != null) {

@@ -127,7 +127,7 @@ class PhotoVideoSelector extends StatelessWidget {
                                 left: 0,
                                 child: ColoredBox(
                                     color: Colors.black.withOpacity(0.5),
-                                    child: Text('cover'.toUpperCase(),
+                                    child: Text(S.current.Cover.toUpperCase(),
                                             textAlign: TextAlign.center,
                                             style: theme?.boldTextTheme.caption3Medium.copyWith(color: Colors.white))
                                         .paddingOnly(top: 4)))
@@ -201,7 +201,7 @@ class PhotoVideoSelector extends StatelessWidget {
                 ],
               ),
               context
-                  .outlinedButton(
+                  .smallOutlinedButton(
                     data: BaseUiKitButtonData(
                       onPressed: onVideoAddRequested,
                       iconInfo: BaseUiKitButtonIconData(

@@ -27,6 +27,7 @@ class FeedbackReaderComponent extends StatelessWidget {
           final e = reviews[index];
           return UiKitFeedbackCard(
               text: e.feedbackText,
+              media: e.media,
               onLike: () => onHelpfulTap?.call(e.id),
               title: e.feedbackAuthorName,
               avatarUrl: e.feedbackAuthorPhoto,

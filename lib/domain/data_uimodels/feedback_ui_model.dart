@@ -15,6 +15,7 @@ class FeedbackUiModel {
   final int? placeId;
   final int? eventId;
   final VoidCallback? onTap;
+  final List<BaseUiKitMedia> media;
 
   FeedbackUiModel(
       {required this.feedbackAuthorName,
@@ -29,6 +30,7 @@ class FeedbackUiModel {
       this.helpfulCount,
       this.placeId,
       this.eventId,
+      this.media = const [],
       this.onTap});
 
   factory FeedbackUiModel.empty() => FeedbackUiModel(
@@ -49,6 +51,7 @@ class FeedbackUiModel {
       bool? helpfulForUser,
       int? placeId,
       int? eventId,
+      List<BaseUiKitMedia>? media,
       VoidCallback? onTap}) {
     return FeedbackUiModel(
         feedbackAuthorName: feedbackAuthorName ?? this.feedbackAuthorName,
@@ -61,6 +64,7 @@ class FeedbackUiModel {
         feedbackText: feedbackText,
         empty: empty,
         id: id,
+        media: media ?? this.media,
         placeId: placeId ?? this.placeId,
         eventId: eventId ?? this.eventId,
         onTap: onTap ?? this.onTap);

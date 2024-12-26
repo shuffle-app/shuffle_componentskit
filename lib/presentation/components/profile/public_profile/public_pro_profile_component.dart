@@ -147,6 +147,7 @@ class PublicProProfileComponent extends StatelessWidget {
                                   datePosted: feedback.feedbackDateTime,
                                   companyAnswered: false,
                                   text: feedback.feedbackText,
+                                  media: feedback.media,
                                   rating: feedback.feedbackRating,
                                   isHelpful: feedback.helpfulForUser,
                                   helpfulCount: feedbacksHelpfulCountsData[feedback.id],

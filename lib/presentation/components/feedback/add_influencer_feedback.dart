@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/review_ui_model.dart';
+import 'package:shuffle_components_kit/presentation/common/common.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddInfluencerFeedbackComponent extends StatefulWidget {
   final UiUniversalModel? uiUniversalModel;
@@ -35,18 +39,11 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
   bool? addToPersonalTopToggled;
   int rating = 0;
 
-  @override
-  void didUpdateWidget(covariant AddInfluencerFeedbackComponent oldWidget) {
-    if (oldWidget.reviewUiModel != widget.reviewUiModel) {
-      rating = widget.reviewUiModel?.rating ?? 0;
+  late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
+  late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
 
-      if (widget.reviewUiModel != null) {
-        personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
-        addToPersonalTopToggled = widget.reviewUiModel?.isAddToPersonalTop ?? false;
-      }
-    }
-    super.didUpdateWidget(oldWidget);
-  }
+  final List<BaseUiKitMedia> _videos = [];
+  final List<BaseUiKitMedia> _photos = [];
 
   @override
   void initState() {
@@ -60,6 +57,65 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
     }
 
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant AddInfluencerFeedbackComponent oldWidget) {
+    if (oldWidget.reviewUiModel != widget.reviewUiModel) {
+      rating = widget.reviewUiModel?.rating ?? 0;
+
+      if (widget.reviewUiModel != null) {
+        personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
+        addToPersonalTopToggled = widget.reviewUiModel?.isAddToPersonalTop ?? false;
+      }
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  _onPhotoAddRequested() async {
+    final imageFiles = await ImagePicker().pickMultiImage();
+    if (imageFiles.isNotEmpty) {
+      setState(() {
+        for (final imageFile in imageFiles) {
+          _photos.add(UiKitMediaPhoto(link: imageFile.path));
+        }
+      });
+    }
+  }
+
+  _onVideoAddRequested() async {
+    final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (videoFile != null) {
+      setState(() {
+        _videos.add(UiKitMediaVideo(link: videoFile.path));
+      });
+    }
+  }
+
+  _onPhotoReorderRequested(int oldIndex, int newIndex) {
+    if (oldIndex != newIndex) {
+      setState(() {
+        _photos.insert(min(newIndex, _photos.length - 1), _photos.removeAt(oldIndex));
+      });
+    }
+  }
+
+  _onVideoReorderRequested(int oldIndex, int newIndex) {
+    setState(() {
+      _videos.insert(newIndex, _videos.removeAt(oldIndex));
+    });
+  }
+
+  _onVideoDeleted(int index) {
+    setState(() {
+      _videos.removeAt(index);
+    });
+  }
+
+  _onPhotoDeleted(int index) {
+    setState(() {
+      _photos.removeAt(index);
+    });
   }
 
   @override
@@ -115,6 +171,18 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
             ),
             popOverMessage: S.current.AddInfluencerFeedbackPopOverText,
           ),
+          SpacingFoundation.verticalSpace24,
+          PhotoVideoSelector(
+              videos: _videos,
+              photos: _photos,
+              onPhotoAddRequested: _onPhotoAddRequested,
+              onPhotoReorderRequested: _onPhotoReorderRequested,
+              onPhotoDeleted: _onPhotoDeleted,
+              onVideoAddRequested: _onVideoAddRequested,
+              onVideoReorderRequested: _onVideoReorderRequested,
+              onVideoDeleted: _onVideoDeleted,
+              listPhotosKey: _reordablePhotokey,
+              listVideosKey: _reordableVideokey),
           SpacingFoundation.verticalSpace24,
           if (widget.userTileType == UserTileType.influencer) ...[
             Row(
@@ -197,6 +265,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
                                     rating: rating,
                                     reviewDescription: widget.feedbackTextController.text,
                                     reviewTime: widget.reviewUiModel?.reviewTime ?? DateTime.now(),
+                                    media: [..._photos, ..._videos],
                                   ),
                                 );
                               }

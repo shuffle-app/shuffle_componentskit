@@ -609,6 +609,7 @@ class _EventComponentState extends State<EventComponent> {
                               text: feedback.feedbackText,
                               rating: feedback.feedbackRating,
                               isHelpful: feedback.helpfulForUser,
+                              media: feedback.media,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                               onPressed: () {
                                 if (widget.onFeedbackTap != null) {
