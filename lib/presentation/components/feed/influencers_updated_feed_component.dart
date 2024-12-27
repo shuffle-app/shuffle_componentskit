@@ -94,7 +94,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   @override
   void initState() {
     super.initState();
-    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication != null;
+    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
     widget.pinnedPublication?.addListener(_toggleCardVisibility);
     Future.delayed(Duration.zero, () => _toggleCardVisibility());
 
@@ -130,7 +130,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   void didUpdateWidget(covariant InfluencersUpdatedFeedComponent oldWidget) {
-    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication != null;
+    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
 
     super.didUpdateWidget(oldWidget);
   }
