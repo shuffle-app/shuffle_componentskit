@@ -53,7 +53,7 @@ class PublicProProfileComponent extends StatelessWidget {
         style: textStyle,
         textAlign: TextAlign.center,
       )),
-      customToolbarBaseHeight: 100,
+      customToolbarBaseHeight: (uiProfileModel.name ?? '').length > 15 ? 100 : null,
       autoImplyLeading: true,
       bodyBottomSpace: verticalMargin,
       childrenPadding: EdgeInsets.zero,
