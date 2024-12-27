@@ -364,7 +364,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 hasNewMark: item.newMark,
                 onLongPress: () => onLongPress?.call(item.id),
-                onProfilePress: () => onProfilePress?.call(item.userId),
+                onProfilePress: item.userType == UserTileType.pro ? () => onProfilePress?.call(item.userId) : null,
                 showTranslateButton: item.showTranslateButton,
                 translateText: item.translateText,
               ).paddingOnly(bottom: bottomPadding);
