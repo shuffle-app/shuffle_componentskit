@@ -13,6 +13,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
   final ValueChanged<int>? onSharePress;
+  final ValueChanged<int?>? onProfilePress;
   final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
@@ -37,6 +38,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.onReactionsTapped,
     this.onLongPress,
     this.onSharePress,
+    this.onProfilePress,
     this.onReadTap,
     this.scrollController,
     this.pinnedPublication,
@@ -214,6 +216,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onCheckVisibleItems: widget.onCheckVisibleItems,
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
+              onProfilePress: widget.onProfilePress,
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
@@ -224,6 +227,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onCheckVisibleItems: widget.onCheckVisibleItems,
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
+              onProfilePress: widget.onProfilePress,
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
@@ -234,6 +238,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onCheckVisibleItems: widget.onCheckVisibleItems,
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
+              onProfilePress: widget.onProfilePress,
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
@@ -269,6 +274,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
   final ValueChanged<int>? onSharePress;
+  final ValueChanged<int?>? onProfilePress;
   final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
@@ -281,6 +287,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
     this.onReactionsTapped,
     this.onLongPress,
     this.onSharePress,
+    this.onProfilePress,
     this.onReadTap,
     this.scrollController,
     this.topPadding,
@@ -309,6 +316,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
       },
       child: PagedListView.separated(
         scrollController: scrollController,
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
           bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
           top: MediaQuery.of(context).viewPadding.top + (topPadding?.toDouble() ?? 0.0),
@@ -356,6 +364,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 hasNewMark: item.newMark,
                 onLongPress: () => onLongPress?.call(item.id),
+                onProfilePress: () => onProfilePress?.call(item.userId),
                 showTranslateButton: item.showTranslateButton,
                 translateText: item.translateText,
               ).paddingOnly(bottom: bottomPadding);

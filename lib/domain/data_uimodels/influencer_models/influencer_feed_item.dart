@@ -5,6 +5,7 @@ import '../../../shuffle_components_kit.dart';
 
 abstract class InfluencerFeedItem {
   final int id;
+  final int? userId;
   final GlobalKey? key;
   final String speciality;
   final String name;
@@ -24,6 +25,7 @@ abstract class InfluencerFeedItem {
     required this.avatarUrl,
     required this.userType,
     this.userReaction,
+    this.userId,
     this.createdAt,
     this.showTranslateButton,
   });
@@ -264,6 +266,7 @@ class PostFeedItem extends InfluencerFeedItem {
 
   PostFeedItem({
     required super.id,
+    required super.userId,
     required super.speciality,
     required super.name,
     required super.username,
@@ -297,9 +300,11 @@ class PostFeedItem extends InfluencerFeedItem {
     String? userType,
     String? userReaction,
     ValueNotifier<String>? translateText,
+    int? userId,
   }) {
     return PostFeedItem(
       id: id,
+      userId: userId ?? this.userId,
       avatarUrl: super.avatarUrl,
       userType: super.userType,
       speciality: speciality ?? this.speciality,
