@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -54,23 +55,29 @@ class VideoReactionUiModel {
     this.previousReactionId,
     this.createdAt,
     this.isViewed = false,
+    this.videoController,
   }) {
-    //TODO get file from cache folder or create a file and download it
+    if(videoController!=null) return;
     if (kIsWeb) {
       videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))..initialize();
     } else {
       () async {
-        final tempDir = await getTemporaryDirectory();
-        final filename = videoUrl.split('/').last;
-        final fileFromCache = File('${tempDir.path}/video_cache/$id-$filename');
-        if (fileFromCache.existsSync()) {
-          videoController = VideoPlayerController.file(fileFromCache)..initialize();
-        } else {
-          final videoData = await _getFileFromUrl(videoUrl);
-          await fileFromCache.create(recursive: true);
-          await fileFromCache.writeAsBytes(videoData);
-          videoController ??= VideoPlayerController.file(fileFromCache)
-              ..initialize();
+        try {
+          final tempDir = await getTemporaryDirectory();
+          final filename = videoUrl.split('/').last;
+          final fileFromCache = File('${tempDir.path}/video_cache/$id-$filename${filename.contains('.mp4') ? '':'.mp4'}');
+          if (fileFromCache.existsSync()) {
+            videoController = VideoPlayerController.file(fileFromCache);
+            await videoController?.initialize();
+          } else {
+            final videoData = await _getFileFromUrl(videoUrl);
+            await fileFromCache.create(recursive: true);
+            await fileFromCache.writeAsBytes(videoData);
+            videoController = VideoPlayerController.file(fileFromCache);
+            await videoController?.initialize();
+          }
+        } catch (e, st) {
+          log('videoReaction retrieve from /video_cache/$id-${videoUrl.split('/').last} error: $e $st');
         }
       }();
     }
@@ -123,6 +130,7 @@ class VideoReactionUiModel {
       isViewed: isViewed ?? this.isViewed,
       authorType: authorType ?? this.authorType,
       createdAt: createdAt ?? this.createdAt,
+      videoController: videoController,
     );
   }
 

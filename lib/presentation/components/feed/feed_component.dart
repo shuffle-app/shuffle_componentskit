@@ -579,7 +579,8 @@ class FeedComponent extends StatelessWidget {
                     separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
                     pagingController: controller,
                   ),
-                  if (preserveScrollPosition) SizedBox(height: 0.8.sh).wrapSliverBox,
+                  if (preserveScrollPosition) SizedBox(height: 0.8.sh - kBottomNavigationBarHeight).wrapSliverBox,
+                  kBottomNavigationBarHeight.heightBox.wrapSliverBox
                 ],
               ],
             ).paddingSymmetric(
