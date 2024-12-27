@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_uikit/ui_kit/atoms/cards/digest_content_card.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class DigestPageComponent extends StatelessWidget {
   final String? title;
@@ -15,6 +16,8 @@ class DigestPageComponent extends StatelessWidget {
   late final ValueNotifier<String> underTitleNotifier;
   late final ValueNotifier<bool> isTranslate;
 
+  final Function(int placeOrEventId, bool isEvent)? onPlaceOrEventTap;
+
   DigestPageComponent({
     super.key,
     this.title,
@@ -23,6 +26,7 @@ class DigestPageComponent extends StatelessWidget {
     this.showTranslateButton,
     this.titleTranslateText,
     this.underTitleTranslateText,
+    this.onPlaceOrEventTap,
   }) {
     titleNotifier = ValueNotifier<String>(title ?? '');
     underTitleNotifier = ValueNotifier<String>(underTitleText ?? '');
@@ -62,7 +66,14 @@ class DigestPageComponent extends StatelessWidget {
     }
 
     return BlurredAppBarPage(
-      title: S.of(context).ShuffleDigest,
+      customTitle: Flexible(
+        child: AutoSizeText(
+          S.of(context).ShuffleDigest,
+          style: theme?.boldTextTheme.title1,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+        ),
+      ),
       centerTitle: true,
       autoImplyLeading: true,
       children: [
@@ -117,12 +128,19 @@ class DigestPageComponent extends StatelessWidget {
         if (digestUiModels != null && digestUiModels!.isNotEmpty)
           ...digestUiModels!.map(
             (e) {
+              final id = e.placeId ?? e.eventId ?? -1;
+              final isEvent = e.eventId != null;
+
               return UiKitCardWrapper(
                 color: colorScheme?.surface1,
                 padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    DigestContentCard(digestUiModel: e),
+                    GestureDetector(
+                      onTap: () => onPlaceOrEventTap?.call(id, isEvent),
+                      child: DigestContentCard(digestUiModel: e),
+                    ),
                     SpacingFoundation.verticalSpace8,
                     if (e.descriptionNotifier != null && e.descriptionNotifier!.value.isNotEmpty)
                       ValueListenableBuilder(
