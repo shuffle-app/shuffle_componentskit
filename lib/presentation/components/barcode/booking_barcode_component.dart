@@ -3,7 +3,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class BookingBarcodeComponent extends StatelessWidget {
-  final List<String> tickets;
+  final Map<String, bool>? tickets;
   final String? title;
   final ValueChanged<String>? onShare;
   final String? imageUrl;
@@ -19,7 +19,7 @@ class BookingBarcodeComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final isNotEmptyTickets = tickets.isNotEmpty;
+    final isNotEmptyTickets = tickets != null && tickets!.isNotEmpty;
 
     return Column(
       children: [
@@ -43,7 +43,7 @@ class BookingBarcodeComponent extends StatelessWidget {
           ],
         ),
         if (isNotEmptyTickets)
-          ...tickets.map(
+          ...tickets!.entries.map(
             (e) {
               return Column(
                 children: [
@@ -52,22 +52,34 @@ class BookingBarcodeComponent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '${S.of(context).Ticket} ${tickets.indexWhere((element) => element == e) + 1}',
+                          '${S.of(context).Ticket} ${tickets!.keys.toList().indexWhere((element) => element == e.key) + 1}',
                           style: theme?.boldTextTheme.body,
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => onShare?.call(e),
+                        onTap: () {
+                          if (!e.value) {
+                            onShare?.call(e.key);
+                          }
+                        },
                         child: ImageWidget(
                           height: 15.h,
                           iconData: ShuffleUiKitIcons.share,
-                          color: theme?.colorScheme.inversePrimary,
+                          color: e.value ? ColorsFoundation.mutedText : theme?.colorScheme.inversePrimary,
                         ),
                       ),
                     ],
                   ),
                   SpacingFoundation.verticalSpace16,
-                  CustomBarcode(barcodeNumber: e),
+                  CustomBarcode(
+                    barcodeNumber: e.key,
+                    isBeenActivated: e.value,
+                  ),
+                  if (e.value)
+                    Text(
+                      S.of(context).BarcodeAlreadyBeenActivated,
+                      style: theme?.regularTextTheme.caption1,
+                    ).paddingOnly(top: SpacingFoundation.verticalSpacing16),
                   SpacingFoundation.verticalSpace24,
                   Divider(
                     color: theme?.colorScheme.surface2,

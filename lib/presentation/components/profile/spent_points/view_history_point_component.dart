@@ -3,6 +3,9 @@ import 'package:shuffle_components_kit/domain/data_uimodels/point_history_univer
 import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
+final AutoSizeGroup _group = AutoSizeGroup();
 
 class ViewHistoryPointComponent extends StatefulWidget {
   const ViewHistoryPointComponent({
@@ -44,10 +47,12 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
             UiKitCustomTab(
               title: S.current.Activation,
               customValue: 'activation',
+              group: _group,
             ),
             UiKitCustomTab(
               title: S.current.Accrual,
               customValue: 'accrual',
+              group: _group,
             ),
           ],
         ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
