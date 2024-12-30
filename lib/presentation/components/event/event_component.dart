@@ -87,6 +87,7 @@ class _EventComponentState extends State<EventComponent> {
 
   @override
   void initState() {
+    currentDescription = widget.event.description ?? '';
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       canLeaveFeedback = await widget.canLeaveFeedback(widget.event.id);
@@ -94,8 +95,6 @@ class _EventComponentState extends State<EventComponent> {
       reactionsPagingController.notifyPageRequestListeners(1);
       feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
       feedbackPagingController.notifyPageRequestListeners(1);
-      currentDescription = widget.event.description ?? '';
-
       setState(() {});
     });
   }
