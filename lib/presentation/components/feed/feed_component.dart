@@ -440,7 +440,7 @@ class FeedComponent extends StatelessWidget {
                     NotificationListener(
                         onNotification: (notification) {
                           if (notification is ScrollUpdateNotification) {
-                            if (notification.metrics.pixels >= notification.metrics.maxScrollExtent * 0.8) {
+                            if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
                               onLoadMoreChips?.call();
                             }
                           }
@@ -453,7 +453,7 @@ class FeedComponent extends StatelessWidget {
                                 primary: false,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: feed.filterChips!.length + 2,
+                                itemCount: feed.filterChips!.length + 1 + (hasFavourites ? 1 : 0),
                                 itemBuilder: (context, index) {
                                   if (index == 0) {
                                     return RollingDiceButton(

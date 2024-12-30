@@ -31,6 +31,7 @@ class VideoReactionUiModel {
   int? previousReactionId;
   bool isViewed;
   VideoPlayerController? videoController;
+  final String? tempDirPath;
 
   VideoReactionUiModel({
     required this.id,
@@ -56,6 +57,7 @@ class VideoReactionUiModel {
     this.createdAt,
     this.isViewed = false,
     this.videoController,
+    this.tempDirPath
   }) {
     if (videoController != null) return;
 
@@ -67,17 +69,17 @@ class VideoReactionUiModel {
       videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
     } else {
       try {
-        final tempDir = await getTemporaryDirectory();
+        Directory? tempDir = tempDirPath !=null ? null : await getTemporaryDirectory();
         final filename = videoUrl.split('/').last;
         final fileFromCache =
-            File('${tempDir.path}/video_cache/$id-$filename${filename.contains('.mp4') ? '' : '.mp4'}');
+            File('${tempDirPath ?? tempDir?.path}/video_cache/$id-$filename${filename.contains('.mp4') ? '' : '.mp4'}');
         if (fileFromCache.existsSync()) {
           videoController = VideoPlayerController.file(fileFromCache);
         } else {
           final videoData = await _getFileFromUrl(videoUrl);
           await fileFromCache.create(recursive: true);
           await fileFromCache.writeAsBytes(videoData);
-          videoController ??= VideoPlayerController.file(fileFromCache);
+          videoController = VideoPlayerController.file(fileFromCache);
         }
       } catch (e, st) {
         log('videoReaction retrieve from /video_cache/$id-${videoUrl.split('/').last} error: $e $st',
