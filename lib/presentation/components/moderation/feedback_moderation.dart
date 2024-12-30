@@ -133,6 +133,7 @@ class _FeedbackItemState extends State<FeedbackItem> {
                 helpfulCount: widget.feedBackModel.helpfulCount,
                 text: widget.feedBackModel.text,
                 maxLines: 20,
+                media: widget.feedBackModel.media,
               ),
             ),
             SpacingFoundation.horizontalSpace16,
@@ -159,7 +160,7 @@ class _FeedbackItemState extends State<FeedbackItem> {
         ),
         if (showExpandIsTap) ...[
           SpacingFoundation.verticalSpace24,
-          ...?widget.companyFeedbackItemUiModel?.indexed.map((e) {
+          ...widget.companyFeedbackItemUiModel?.indexed.map((e) {
                 final index = e.$1;
 
                 return FeedbackItem(
@@ -205,6 +206,7 @@ class FeedbackItemUiModel {
   final bool isModerated;
   final VoidCallback onModerated;
   final VoidCallback removeFunction;
+  final List<BaseUiKitMedia> media;
 
   FeedbackItemUiModel({
     required this.title,
@@ -217,6 +219,7 @@ class FeedbackItemUiModel {
     required this.removeFunction,
     required this.isModerated,
     required this.onModerated,
+    this.media = const [],
   });
 }
 

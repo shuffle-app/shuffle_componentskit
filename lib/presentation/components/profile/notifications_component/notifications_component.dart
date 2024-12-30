@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class NotificationsComponent extends StatelessWidget {
   final PositionModel? screenParams;
@@ -20,7 +21,14 @@ class NotificationsComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlurredAppBarPage(
       physics: const NeverScrollableScrollPhysics(),
-      title: S.of(context).Notifications,
+      customTitle: Flexible(
+        child: AutoSizeText(
+          S.of(context).Notifications,
+          style: context.uiKitTheme?.boldTextTheme.title1,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+        ),
+      ),
       autoImplyLeading: true,
       centerTitle: true,
       childrenPadding: EdgeInsets.only(

@@ -61,6 +61,7 @@ class AllReviewsComponent extends StatelessWidget {
                     datePosted: feedback.feedbackDateTime,
                     companyAnswered: false,
                     text: feedback.feedbackText,
+                    media: feedback.media,
                     helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                     onPressed: ()=>onFeedbackTapped.call(feedback),
                   ),

@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
+import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -12,12 +12,20 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final VoidCallback? onDispose;
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
+  final ValueChanged<int>? onSharePress;
+  final ValueChanged<int?>? onProfilePress;
+  final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
+  final TextEditingController? searchController;
 
   final PagingController<int, InfluencerFeedItem> latestContentController;
   final PagingController<int, InfluencerFeedItem> topContentController;
   final PagingController<int, InfluencerFeedItem> unreadContentController;
+
+  final ValueNotifier<InfluencerFeedItem?>? pinnedPublication;
+  final bool showPinnedPublication;
+  final VoidCallback? onPinnedPublicationTap;
 
   const InfluencersUpdatedFeedComponent({
     super.key,
@@ -29,7 +37,14 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     required this.unreadContentController,
     this.onReactionsTapped,
     this.onLongPress,
+    this.onSharePress,
+    this.onProfilePress,
+    this.onReadTap,
     this.scrollController,
+    this.pinnedPublication,
+    this.showPinnedPublication = false,
+    this.onPinnedPublicationTap,
+    this.searchController,
   });
 
   @override
@@ -55,57 +70,202 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     }
   }
 
+  late bool _isCardVisible;
+
+  double get topPaddingForPinned {
+    if (isSearchActivated) {
+      return _isCardVisible ? (0.38.sw + 40.h) : 88.h;
+    } else {
+      return _isCardVisible ? (0.38.sw) : 50.h;
+    }
+  }
+
+  BorderRadius get clipBorderRadius =>
+      _isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
+
+  bool isSearchActivated = false;
+  final FocusNode _searchFocusNode = FocusNode();
+
+  _toggleCardVisibility() {
+    setState(() {
+      _isCardVisible =
+          tabController.index == 0 && (widget.showPinnedPublication && widget.pinnedPublication?.value != null);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
+    widget.pinnedPublication?.addListener(_toggleCardVisibility);
+    Future.delayed(Duration.zero, () => _toggleCardVisibility());
+
+    tabController.addListener(_toggleCardVisibility);
+    widget.scrollController?.addListener(_scrollListener);
+  }
+
+  _scrollListener() {
+    if (widget.scrollController!.offset < -50.h && !isSearchActivated) {
+      setState(() {
+        isSearchActivated = true;
+      });
+      Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
+    }
+    // else if (widget.scrollController!.offset > 50.h && isSearchActivated) {
+    //   setState(() {
+    //     isSearchActivated = false;
+    //   });
+    //
+    //   _searchFocusNode.unfocus();
+    // }
+  }
+
   @override
   void dispose() {
+    widget.scrollController?.removeListener(_scrollListener);
+    tabController.removeListener(_toggleCardVisibility);
+    widget.pinnedPublication?.removeListener(_toggleCardVisibility);
+
     Future.delayed(Duration.zero, () => widget.onDispose?.call());
     super.dispose();
   }
 
   @override
+  void didUpdateWidget(covariant InfluencersUpdatedFeedComponent oldWidget) {
+    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 1.sh,
-      width: 1.sw,
-      child: Column(
-        children: [
-          MediaQuery.viewPaddingOf(context).top.heightBox,
-          SpacingFoundation.verticalSpace16,
-          UiKitCustomTabBar(
-            tabController: tabController,
-            tabs: _tabs,
-            onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
-          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: [
-                _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: onReactionsTapped,
-                  pagingController: widget.latestContentController,
-                  onCheckVisibleItems: widget.onCheckVisibleItems,
-                  onLongPress: widget.onLongPress,
-                  scrollController: widget.scrollController,
-                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: onReactionsTapped,
-                  pagingController: widget.topContentController,
-                  onCheckVisibleItems: widget.onCheckVisibleItems,
-                  onLongPress: widget.onLongPress,
-                  scrollController: widget.scrollController,
-                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-                _PagedInfluencerFeedItemListBody(
-                  onReactionsTapped: onReactionsTapped,
-                  pagingController: widget.unreadContentController,
-                  onCheckVisibleItems: widget.onCheckVisibleItems,
-                  onLongPress: widget.onLongPress,
-                  scrollController: widget.scrollController,
-                ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-              ],
+    final colorScheme = context.uiKitTheme?.colorScheme;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadiusFoundation.onlyBottom24,
+              clipper: _CustomBlurClipper(topPadding: MediaQuery.viewPaddingOf(context).top),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                child: SafeArea(
+                    bottom: false,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: UiKitCustomTabBar(
+                        tabController: tabController,
+                        tabs: _tabs,
+                        clipBorderRadius: clipBorderRadius,
+                        onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
+                      ),
+                    ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)),
+              ),
             ),
-          ),
-        ],
-      ),
+            if (widget.pinnedPublication?.value is ShufflePostFeedItem)
+              PinnedPublication(
+                text: (widget.pinnedPublication?.value as ShufflePostFeedItem).text,
+                images: (widget.pinnedPublication?.value as ShufflePostFeedItem).newPhotos?.map((e) => e.link).toList(),
+                onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                isCardVisible: _isCardVisible,
+              )
+            else if (widget.pinnedPublication?.value is PostFeedItem)
+              PinnedPublication(
+                text: (widget.pinnedPublication?.value as PostFeedItem).text,
+                onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                isCardVisible: _isCardVisible,
+              )
+            else if (widget.pinnedPublication?.value is UpdatesFeedItem)
+              PinnedPublication(
+                text: (widget.pinnedPublication?.value as UpdatesFeedItem).name,
+                images: (widget.pinnedPublication?.value as UpdatesFeedItem).newPhotos?.map((e) => e.link).toList(),
+                onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                isCardVisible: _isCardVisible,
+              ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: isSearchActivated
+                  ? UiKitInputFieldRightIcon(
+                      controller: widget.searchController ?? TextEditingController(),
+                      borderRadius: BorderRadiusFoundation.all24r,
+                      autofocus: true,
+                      fillColor: colorScheme?.surface2,
+                      hintText: S.current.Search,
+                      focusNode: _searchFocusNode,
+                      onIconPressed: () {
+                        setState(() {
+                          isSearchActivated = false;
+                        });
+                        _searchFocusNode.unfocus();
+                        widget.searchController?.clear();
+                      },
+                    ).paddingSymmetric(
+                      horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical12)
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        ),
+
+        TabBarView(
+          controller: tabController,
+          children: [
+            _PagedInfluencerFeedItemListBody(
+              onReactionsTapped: onReactionsTapped,
+              pagingController: widget.latestContentController,
+              onCheckVisibleItems: widget.onCheckVisibleItems,
+              onLongPress: widget.onLongPress,
+              onSharePress: widget.onSharePress,
+              onProfilePress: widget.onProfilePress,
+              scrollController: widget.scrollController,
+              onReadTap: widget.onReadTap,
+              topPadding: topPaddingForPinned,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            _PagedInfluencerFeedItemListBody(
+              onReactionsTapped: onReactionsTapped,
+              pagingController: widget.topContentController,
+              onCheckVisibleItems: widget.onCheckVisibleItems,
+              onLongPress: widget.onLongPress,
+              onSharePress: widget.onSharePress,
+              onProfilePress: widget.onProfilePress,
+              scrollController: widget.scrollController,
+              onReadTap: widget.onReadTap,
+              topPadding: topPaddingForPinned,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+            _PagedInfluencerFeedItemListBody(
+              onReactionsTapped: onReactionsTapped,
+              pagingController: widget.unreadContentController,
+              onCheckVisibleItems: widget.onCheckVisibleItems,
+              onLongPress: widget.onLongPress,
+              onSharePress: widget.onSharePress,
+              onProfilePress: widget.onProfilePress,
+              scrollController: widget.scrollController,
+              onReadTap: widget.onReadTap,
+              topPadding: topPaddingForPinned,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+          ],
+        ),
+        // ),
+      ].reversed.toList(),
+      // ),
     );
+  }
+}
+
+class _CustomBlurClipper extends CustomClipper<RRect> {
+  final double topPadding;
+
+  const _CustomBlurClipper({this.topPadding = 60});
+
+  @override
+  RRect getClip(Size size) {
+    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, topPadding + 43.h),
+        bottomLeft: const Radius.circular(24), bottomRight: const Radius.circular(24));
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<RRect> oldClipper) {
+    return true;
   }
 }
 
@@ -113,15 +273,24 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final PagingController<int, InfluencerFeedItem> pagingController;
   final Function(int, String)? onReactionsTapped;
   final ValueChanged<int>? onLongPress;
+  final ValueChanged<int>? onSharePress;
+  final ValueChanged<int?>? onProfilePress;
+  final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
   final ScrollController? scrollController;
 
-  _PagedInfluencerFeedItemListBody({
+  final double? topPadding;
+
+  const _PagedInfluencerFeedItemListBody({
     required this.pagingController,
     this.onCheckVisibleItems,
     this.onReactionsTapped,
     this.onLongPress,
+    this.onSharePress,
+    this.onProfilePress,
+    this.onReadTap,
     this.scrollController,
+    this.topPadding,
   });
 
   double get _videoReactionPreviewWidth => 0.125.sw;
@@ -147,28 +316,33 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
       },
       child: PagedListView.separated(
         scrollController: scrollController,
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
           bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
-          top: EdgeInsetsFoundation.vertical16,
+          top: MediaQuery.of(context).viewPadding.top + (topPadding?.toDouble() ?? 0.0),
         ),
         pagingController: pagingController,
-        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,
         builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
           itemBuilder: (context, item, index) {
             final isLast = index == pagingController.itemList!.length - 1;
-            double bottomPadding = isLast ? 0 : 16.0;
+            double bottomPadding = isLast ? 0 : SpacingFoundation.verticalSpacing8;
 
             if (item is ShufflePostFeedItem) {
               return UiKitContentUpdatesCard.fromShuffle(
                 key: item.key,
                 text: item.text,
+                onSharePress: () => onSharePress?.call(item.id),
                 heartEyesReactionsCount: item.heartEyesReactionsCount,
                 likeReactionsCount: item.likeReactionsCount,
                 fireReactionsCount: item.fireReactionsCount,
                 sunglassesReactionsCount: item.sunglassesReactionsCount,
                 smileyReactionsCount: item.smileyReactionsCount,
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                createdAt: item.createdAt,
                 onLongPress: () => onLongPress?.call(item.id),
+                showTranslateButton: item.showTranslateButton,
+                translateText: item.translateText,
                 children: _children(item, regularTextTheme),
               ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
             } else if (item is PostFeedItem) {
@@ -179,27 +353,52 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 authorAvatarUrl: item.avatarUrl,
                 authorSpeciality: item.speciality,
                 authorUserType: item.userType,
+                onSharePress: () => onSharePress?.call(item.id),
                 heartEyesCount: item.heartEyesReactionsCount,
                 likesCount: item.likeReactionsCount,
                 sunglassesCount: item.sunglassesReactionsCount,
                 firesCount: item.fireReactionsCount,
                 smileyCount: item.smileyReactionsCount,
                 text: item.text,
+                createdAt: item.createdAt ?? '',
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 hasNewMark: item.newMark,
                 onLongPress: () => onLongPress?.call(item.id),
+                onProfilePress: item.userType == UserTileType.pro ? () => onProfilePress?.call(item.userId) : null,
+                showTranslateButton: item.showTranslateButton,
+                translateText: item.translateText,
               ).paddingOnly(bottom: bottomPadding);
             } else if (item is UpdatesFeedItem) {
               return UiKitContentUpdatesCard(
                 key: item.key,
+                createdAt: item.createdAt ?? '',
                 authorSpeciality: item.speciality,
                 authorName: item.name,
                 authorUsername: item.username,
+                onSharePress: () => onSharePress?.call(item.id),
                 authorAvatarUrl: item.avatarUrl,
                 authorUserType: item.userType,
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 onLongPress: () => onLongPress?.call(item.id),
                 children: _children(item, regularTextTheme),
+              ).paddingOnly(bottom: bottomPadding);
+            } else if (item is DigestFeedItem) {
+              return UiKitDigestCard(
+                key: item.key,
+                title: item.title,
+                digestUiModels: item.digestUiModels,
+                underTitleText: item.underTitleText,
+                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                heartEyesReactionsCount: item.heartEyesReactionsCount,
+                likeReactionsCount: item.likeReactionsCount,
+                fireReactionsCount: item.fireReactionsCount,
+                sunglassesReactionsCount: item.sunglassesReactionsCount,
+                smileyReactionsCount: item.smileyReactionsCount,
+                createdAt: item.createdAt ?? '',
+                onReadTap: () => onReadTap?.call(item.id),
+                showTranslateButton: item.showTranslateButton,
+                titleTranslateText: item.translateTitle,
+                underTitleTranslateText: item.translateUnderTitle,
               ).paddingOnly(bottom: bottomPadding);
             } else {
               throw UnimplementedError('Unknown item type: ${item.runtimeType}');
@@ -218,7 +417,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
     final yOffset = shufflePostVideoWidgetHeight / 2 - playButtonSize.height / 2;
 
     return [
-      if (item is ShufflePostFeedItem && item.videos != null)
+      if (item is ShufflePostFeedItem && item.videos != null && item.videos!.isNotEmpty)
         UiKitCustomChildContentUpdateWidget(
           height: shufflePostVideoWidgetHeight,
           child: Row(

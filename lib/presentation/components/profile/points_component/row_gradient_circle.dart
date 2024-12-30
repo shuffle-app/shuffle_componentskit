@@ -35,7 +35,7 @@ class RowGradientCircle extends StatelessWidget {
             painter: GradientCircleWithSegmentedRingPainter(
               theme: theme,
               customGradient: GradientFoundation.bronzeGradient,
-              level: level >= 1 ? 3 : progressInCircle,
+              level: level >= 1 ? 4 : progressInCircle,
             ),
           ),
         ),
@@ -60,7 +60,7 @@ class RowGradientCircle extends StatelessWidget {
               level: level < 1
                   ? 0
                   : level >= 2
-                      ? 3
+                      ? 4
                       : progressInCircle,
             ),
           ),
@@ -86,8 +86,8 @@ class RowGradientCircle extends StatelessWidget {
               level: level < 2
                   ? 0
                   : level >= 3
-                      ? 3
-                      : progressInCircle,
+                      ? 4
+                      : progressInCircle ,
             ),
           ),
         ),

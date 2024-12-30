@@ -5,12 +5,16 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class CreatePublicationWebComponent extends StatefulWidget {
   final Size itemsSize;
   final List<UiKitMediaPhoto> photos;
+  final List<UiKitMediaVideo> videos;
   final TextEditingController descriptionController;
   final VoidCallback? onDescriptionTapped;
   final VoidCallback onPhotoAddRequested;
+  final VoidCallback onVideoAddRequested;
   final VoidCallback? onCreateTap;
   final ValueChanged<int> onPhotoDeleted;
+  final ValueChanged<int> onVideoDeleted;
   final Function(int oldIndex, int newIndex) onPhotoReorderRequested;
+  final Function(int oldIndex, int newIndex) onVideoReorderRequested;
 
   const CreatePublicationWebComponent({
     super.key,
@@ -20,8 +24,12 @@ class CreatePublicationWebComponent extends StatefulWidget {
     required this.onPhotoAddRequested,
     required this.onPhotoReorderRequested,
     required this.onPhotoDeleted,
-    required this.photos,
+    this.photos = const [],
+    this.videos = const [],
     this.onCreateTap,
+    required this.onVideoAddRequested,
+    required this.onVideoReorderRequested,
+    required this.onVideoDeleted,
   });
 
   @override
@@ -30,12 +38,15 @@ class CreatePublicationWebComponent extends StatefulWidget {
 
 class _CreatePublicationWebComponentState extends State<CreatePublicationWebComponent> {
   final GlobalKey<ReorderableListState> listPhotosKey = GlobalKey<ReorderableListState>();
+  final GlobalKey<ReorderableListState> listVideosKey = GlobalKey<ReorderableListState>();
 
   final List<BaseUiKitMedia> _photos = [];
+  final List<BaseUiKitMedia> _videos = [];
 
   @override
   void initState() {
     _photos.addAll(widget.photos);
+    _videos.addAll(widget.videos);
     super.initState();
   }
 
@@ -44,6 +55,8 @@ class _CreatePublicationWebComponentState extends State<CreatePublicationWebComp
     super.didUpdateWidget(oldWidget);
     _photos.clear();
     _photos.addAll(widget.photos);
+    _videos.clear();
+    _videos.addAll(widget.videos);
   }
 
   @override
@@ -144,6 +157,90 @@ class _CreatePublicationWebComponentState extends State<CreatePublicationWebComp
                         .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
                   ),
                   if (_photos.isEmpty)
+                    Positioned(
+                      right: EdgeInsetsFoundation.vertical16,
+                      child: Text(
+                        S.of(context).OrDragFilesHere.toLowerCase(),
+                        style: theme?.boldTextTheme.caption1Medium.copyWith(
+                          color: theme.colorScheme.darkNeutral900,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        SpacingFoundation.verticalSpace16,
+        WebFormField(
+          title: S.of(context).VideoUploadFiles,
+          isRequired: true,
+          child: SizedBox(
+            height: widget.itemsSize.height * 1.2,
+            width: double.infinity,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: theme?.colorScheme.surface1,
+                borderRadius: BorderRadiusFoundation.all12,
+                border: Border.fromBorderSide(
+                  BorderSide(width: 1, color: theme?.colorScheme.surface5 ?? Colors.black),
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.centerRight,
+                children: [
+                  ReorderableListView.builder(
+                    key: listVideosKey,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) => Stack(
+                      key: ValueKey(_videos[index].link),
+                      alignment: Alignment.topRight,
+                      children: [
+                        ClipPath(
+                          clipper: ShapeBorderClipper(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all8),
+                          ),
+                          child: _videos[index].widget(widget.itemsSize),
+                        ).paddingAll(4),
+                        context.outlinedButton(
+                            hideBorder: true,
+                            data: BaseUiKitButtonData(
+                                onPressed: () => widget.onVideoDeleted.call(index),
+                                iconInfo: BaseUiKitButtonIconData(
+                                  iconData: ShuffleUiKitIcons.x,
+                                  size: 8,
+                                ))),
+                      ],
+                    ),
+                    itemCount: _videos.length,
+                    onReorder: widget.onVideoReorderRequested,
+                  ),
+                  Positioned(
+                    left: 0,
+                    child: context
+                        .badgeButtonNoValue(
+                          data: BaseUiKitButtonData(
+                            onPressed: widget.onVideoAddRequested,
+                            iconWidget: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  border: Border.fromBorderSide(
+                                    BorderSide(color: context.uiKitTheme!.colorScheme.darkNeutral500, width: 1),
+                                  ),
+                                  borderRadius: BorderRadiusFoundation.all12,
+                                ),
+                                child: ImageWidget(
+                                  svgAsset: GraphicsFoundation.instance.svg.gradientPlus,
+                                  color: theme?.colorScheme.inversePrimary,
+                                  height: 18,
+                                  width: 18,
+                                ).paddingAll(EdgeInsetsFoundation.all12)),
+                          ),
+                        )
+                        .paddingOnly(left: EdgeInsetsFoundation.horizontal16),
+                  ),
+                  if (_videos.isEmpty)
                     Positioned(
                       right: EdgeInsetsFoundation.vertical16,
                       child: Text(

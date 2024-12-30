@@ -34,6 +34,7 @@ class CreateScheduleWidget extends StatefulWidget {
 class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
   late final int initialItemsCount = 2;
   String? selectedScheduleName;
+  String? selectedTemplateName;
 
   UiScheduleModel? scheduleModel;
 
@@ -113,6 +114,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                   }
                                 }
                                 setState(() {
+                                  selectedTemplateName = null;
                                   selectedScheduleName = type;
                                   if (type == UiScheduleTimeModel.scheduleType) {
                                     scheduleModel = UiScheduleTimeModel();
@@ -130,34 +132,35 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                             SpacingFoundation.verticalSpace4,
                             SelectTemplateType(
                               scheduleTypes: availableTemplates,
-                              onChanged: (UiScheduleModel? selectedTemplate) {
+                              selectedScheduleName: selectedTemplateName,
+                              onChanged: (selectedTemplate) {
                                 if (selectedTemplate != null) {
-                                  if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                                    for (var i = 0; i < scheduleModel!.itemsCount; i++) {
+                                  if ((scheduleModel?.itemsCount ?? 0) > 1) {
+                                    for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
                                       onMinusButtonPressed(index: i);
                                     }
                                   }
                                   setState(() {
-                                    scheduleModel = selectedTemplate;
-                                    switch (scheduleModel.runtimeType) {
-                                      case UiScheduleTimeModel _:
-                                        selectedScheduleName = UiScheduleTimeModel.scheduleType;
-                                        break;
-
-                                      case UiScheduleDatesModel _:
-                                        selectedScheduleName = UiScheduleDatesModel.scheduleType;
-                                        break;
-
-                                      case UiScheduleDatesRangeModel _:
-                                        selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+                                    scheduleModel = selectedTemplate.getNonNullKeysSchedule();
+                                    selectedTemplateName = selectedTemplate.templateName;
+                                    final type = selectedTemplate.runtimeType;
+                                    if (type == UiScheduleTimeModel.scheduleType.runtimeType) {
+                                      selectedScheduleName = UiScheduleTimeModel.scheduleType;
+                                    } else if (type == UiScheduleDatesModel.scheduleType.runtimeType) {
+                                      selectedScheduleName = UiScheduleDatesModel.scheduleType;
+                                    } else if (type == UiScheduleDatesRangeModel.scheduleType.runtimeType) {
+                                      selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
                                     }
                                   });
                                   if ((scheduleModel?.itemsCount ?? 0) >= 1) {
-                                    log('scheduleModel!.itemsCount ${scheduleModel!.itemsCount}');
-                                    listKey.currentState!.insertAllItems(0, scheduleModel!.itemsCount);
-                                  }
+                                    // Pre-fill the list with existing items.
+                                    listKey.currentState!.insertAllItems(1, scheduleModel!.itemsCount);
+                                    Future.delayed(Duration.zero, () {
+                                      onMinusButtonPressed();
+                                    });
 
-                                  context.pop();
+                                    context.pop();
+                                  }
                                 }
                               },
                             ),
@@ -236,7 +239,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                                   onPop: () => context.pop(result: controller.text)));
                                           if (name != null) {
                                             scheduleModel!.templateName = name;
-                                            widget.onTemplateCreated?.call(scheduleModel!);
+                                            widget.onTemplateCreated?.call(scheduleModel!.getNonNullKeysSchedule());
                                           }
                                         }),
                             ),
@@ -302,6 +305,22 @@ abstract class UiScheduleModel {
     }).toList();
   }
 
+  static List<MapEntry<String, List<TimeRange>>> decodeScheduleTimeRange(String scheduleString) {
+    return scheduleString.split(';').map((schedule) {
+      final parts = schedule.split(':');
+      return MapEntry(
+          parts[0],
+          parts[1].split(',').map((timeRange) {
+            final parts = timeRange.split('/');
+            return TimeRange(
+                start: TimeOfDay(hour: int.parse(parts[0].split('-')[0]), minute: int.parse(parts[0].split('-')[1])),
+                end: parts.length > 1
+                    ? TimeOfDay(hour: int.parse(parts[1].split('-')[0]), minute: int.parse(parts[1].split('-')[1]))
+                    : null);
+          }).toList());
+    }).toList();
+  }
+
   List<List<String>> getReadableScheduleString();
 
   bool selectableDayPredicate(DateTime day);
@@ -313,6 +332,8 @@ abstract class UiScheduleModel {
   bool get isNotEmpty;
 
   bool get validateDate;
+
+  UiScheduleModel getNonNullKeysSchedule();
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {
@@ -446,6 +467,13 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   bool get validateDate => true;
+
+  @override
+  UiScheduleModel getNonNullKeysSchedule() {
+    final newSchedule = UiScheduleTimeModel(weeklySchedule.where((element) => element.key.isNotEmpty).toList());
+    newSchedule.templateName = templateName;
+    return newSchedule;
+  }
 }
 
 class UiScheduleDatesModel extends UiScheduleModel {
@@ -647,13 +675,20 @@ class UiScheduleDatesModel extends UiScheduleModel {
     final daysList = dailySchedule.map((e) => getDateFromKey(e.key)).nonNulls.toList();
     return daysList.every((e) => e.isAfter(DateTime.now().toLocal()) || (e.isAtSameDay));
   }
+
+  @override
+  UiScheduleModel getNonNullKeysSchedule() {
+    final newSchedule = UiScheduleDatesModel(dailySchedule.where((element) => element.key.isNotEmpty).toList());
+    newSchedule.templateName = templateName;
+    return newSchedule;
+  }
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
   static const String scheduleType = 'Date Range - Time';
-  final List<MapEntry<String, List<TimeOfDay>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
+  final List<MapEntry<String, List<TimeRange>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
-  UiScheduleDatesRangeModel([List<MapEntry<String, List<TimeOfDay>>>? schedule]) {
+  UiScheduleDatesRangeModel([List<MapEntry<String, List<TimeRange>>>? schedule]) {
     if (schedule != null && schedule.isNotEmpty) {
       dailySchedule.clear();
       dailySchedule.addAll(schedule);
@@ -665,7 +700,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
     String? errorText;
 
     return StatefulBuilder(builder: (context, setState) {
-      final MapEntry<String, List<TimeOfDay>> thisObject =
+      final MapEntry<String, List<TimeRange>> thisObject =
           dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
       log('rebuild is here $thisObject', name: 'UiScheduleDatesRangeModel');
       final now = DateTime.now();
@@ -721,9 +756,11 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                 if (dailySchedule[index].key.isNotEmpty) {
                   setState(() {
                     if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                      dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                      dailySchedule[index] = MapEntry(thisObject.key,
+                          [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]);
                     } else {
-                      dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                      dailySchedule.add(MapEntry(thisObject.key,
+                          [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]));
                     }
                   });
                 } else {
@@ -766,22 +803,24 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                       //     return;
                       //   }
                       // }
-                      dailySchedule[index] = MapEntry(thisObject.key, [timeFrom, timeTo].nonNulls.toList());
+                      dailySchedule[index] = MapEntry(thisObject.key, [TimeRange(start: timeFrom, end: timeTo)]);
                       setState(() {});
                     }
                   });
                 },
               ))
         else
-          for (var (i, timeRange) in listTimeDayToTimeRange(thisObject.value).indexed)
+          for (var (i, timeRange) in thisObject.value.indexed)
             UiKitAddableFormField(
               title: S.current.TimeRange,
               onAdd: () {
                 setState(() {
                   if (dailySchedule.isNotEmpty && dailySchedule.length > index) {
-                    dailySchedule[index] = MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]);
+                    dailySchedule[index] = MapEntry(
+                        thisObject.key, [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]);
                   } else {
-                    dailySchedule.add(MapEntry(thisObject.key, [...thisObject.value, TimeOfDay.now()]));
+                    dailySchedule.add(MapEntry(thisObject.key,
+                        [...thisObject.value, TimeRange(start: TimeOfDay.now(), end: TimeOfDay.now())]));
                   }
                 });
               },
@@ -829,11 +868,13 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
                         // }
                         final originalTimes = dailySchedule[index].value;
 
-                        final itemsToRemove = originalTimes.length.isEven ? 2 : 1;
-                        originalTimes.removeRange(originalTimes.length - itemsToRemove, originalTimes.length);
+                        originalTimes.remove(timeRange);
+
+                        // final itemsToRemove = originalTimes.length.isEven ? 2 : 1;
+                        // originalTimes.removeRange(originalTimes.length - itemsToRemove, originalTimes.length);
 
                         dailySchedule[index] =
-                            MapEntry(thisObject.key, originalTimes + [timeFrom, timeTo].nonNulls.toList());
+                            MapEntry(thisObject.key, [...originalTimes, TimeRange(start: timeFrom, end: timeTo)]);
                         setState(() {});
                       }
                     });
@@ -857,7 +898,8 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
   @override
   String encodeSchedule() {
     return dailySchedule
-        .map((e) => '${e.key}:${e.value.map((time) => '${time.hour}-${time.minute}').join(',')}')
+        .map((e) =>
+            '${e.key}:${e.value.map((time) => '${time.start?.hour}-${time.start?.minute}/${time.end != null ? '${time.end!.hour}-${time.end!.minute}' : ''} ').join(',')}')
         .join(';');
   }
 
@@ -866,7 +908,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
     return dailySchedule
         .map((e) => [
               '${getDateRangeFromKey(e.key)!.toPrettyString()}:',
-              e.value.map((time) => time.normalizedString).join(' - ')
+              e.value.map((time) => time.normalizedString).join(',')
             ])
         .toList();
   }
@@ -899,7 +941,15 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
   @override
   bool get validateDate {
     final dateRanges = dailySchedule.map((e) => getDateRangeFromKey(e.key)).nonNulls.toList();
-    return dateRanges.every((range) => (range.start.isAfter(DateTime.now()) || range.start.isAtSameDay) || range.end.isAfter(DateTime.now()));
+    return dateRanges.every((range) =>
+        (range.start.isAfter(DateTime.now()) || range.start.isAtSameDay) || range.end.isAfter(DateTime.now()));
+  }
+
+  @override
+  UiScheduleModel getNonNullKeysSchedule() {
+    final newSchedule = UiScheduleDatesRangeModel(dailySchedule.where((element) => element.key.isNotEmpty).toList());
+    newSchedule.templateName = templateName;
+    return newSchedule;
   }
 }
 

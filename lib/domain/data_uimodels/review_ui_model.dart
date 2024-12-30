@@ -1,3 +1,5 @@
+import 'package:shuffle_uikit/shuffle_uikit.dart';
+
 class ReviewUiModel {
   final int? rating;
   final String reviewDescription;
@@ -5,6 +7,7 @@ class ReviewUiModel {
   final bool? isPersonalRespect;
   final bool? isAddToPersonalTop;
   final String? personalTopTitle;
+  final List<BaseUiKitMedia> media;
 
 
   ReviewUiModel({
@@ -14,6 +17,7 @@ class ReviewUiModel {
     this.isPersonalRespect,
     this.isAddToPersonalTop,
     this.personalTopTitle,
+    this.media = const [],
   });
 
 

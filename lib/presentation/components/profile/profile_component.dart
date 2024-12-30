@@ -333,6 +333,7 @@ class ProfileComponent extends StatelessWidget {
                               datePosted: feedback.feedbackDateTime,
                               companyAnswered: false,
                               text: feedback.feedbackText,
+                              media: feedback.media,
                               isHelpful: feedback.helpfulForUser,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                               onPressed: () => onFeedbackCardPressed?.call(feedback),

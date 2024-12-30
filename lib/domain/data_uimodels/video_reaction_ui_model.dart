@@ -1,7 +1,14 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:shuffle_uikit/ui_kit/molecules/tiles/user/base_user_tile.dart';
+import 'package:video_player/video_player.dart';
+import 'package:path_provider/path_provider.dart';
 
 class VideoReactionUiModel {
-  final String? videoUrl;
+  final String videoUrl;
   final String? previewImageUrl;
   final String? authorAvatarUrl;
   final String? authorName;
@@ -23,6 +30,7 @@ class VideoReactionUiModel {
   int? nextReactionId;
   int? previousReactionId;
   bool isViewed;
+  VideoPlayerController? videoController;
 
   VideoReactionUiModel({
     required this.id,
@@ -33,7 +41,7 @@ class VideoReactionUiModel {
     this.placeName,
     this.eventName,
     this.placeId,
-    this.videoUrl,
+    required this.videoUrl,
     this.previewImageUrl,
     this.authorName,
     this.authorAvatarUrl,
@@ -47,16 +55,39 @@ class VideoReactionUiModel {
     this.previousReactionId,
     this.createdAt,
     this.isViewed = false,
-  });
+    this.videoController,
+  }) {
+    if(videoController!=null) return;
+    if (kIsWeb) {
+      videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))..initialize();
+    } else {
+      () async {
+        try {
+          final tempDir = await getTemporaryDirectory();
+          final filename = videoUrl.split('/').last;
+          final fileFromCache = File('${tempDir.path}/video_cache/$id-$filename${filename.contains('.mp4') ? '':'.mp4'}');
+          if (fileFromCache.existsSync()) {
+            videoController = VideoPlayerController.file(fileFromCache);
+            await videoController?.initialize();
+          } else {
+            final videoData = await _getFileFromUrl(videoUrl);
+            await fileFromCache.create(recursive: true);
+            await fileFromCache.writeAsBytes(videoData);
+            videoController = VideoPlayerController.file(fileFromCache);
+            await videoController?.initialize();
+          }
+        } catch (e, st) {
+          log('videoReaction retrieve from /video_cache/$id-${videoUrl.split('/').last} error: $e $st');
+        }
+      }();
+    }
+  }
 
   bool get empty => id == -1;
 
   bool get isReactionForEvent => parentContentType == 'event';
 
   bool get isReactionForPlace => parentContentType == 'place';
-
-  factory VideoReactionUiModel.empty() => VideoReactionUiModel(
-      id: -1, authorId: -1, parentContentType: '', parentContentId: -1, authorType: UserTileType.ordinary);
 
   VideoReactionUiModel copyWith({
     String? videoUrl,
@@ -98,7 +129,8 @@ class VideoReactionUiModel {
       previousReactionId: previousReactionId ?? this.previousReactionId,
       isViewed: isViewed ?? this.isViewed,
       authorType: authorType ?? this.authorType,
-      createdAt: createdAt?? this.createdAt,
+      createdAt: createdAt ?? this.createdAt,
+      videoController: videoController,
     );
   }
 
@@ -109,4 +141,13 @@ class VideoReactionUiModel {
 
   @override
   int get hashCode => id.hashCode;
+}
+
+Future<Uint8List> _getFileFromUrl(String url) async {
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    return response.bodyBytes;
+  } else {
+    throw Exception('Failed to load data from $url');
+  }
 }

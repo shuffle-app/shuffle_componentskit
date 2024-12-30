@@ -256,6 +256,21 @@ class _PlaceComponentState extends State<PlaceComponent> {
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
           branches: widget.place.branches,
+          onImageTap: (index) {
+            final media = widget.place.media[index];
+            final heroTag = '${media.link}--$index';
+            if (media.link.isEmpty) return;
+
+            context.push(
+              PhotoDialog(
+                images: widget.place.media.map((e) => e.link).toList(),
+                initialIndex: index,
+                tag: heroTag,
+              ),
+              nativeTransition: false,
+              transitionDuration: const Duration(milliseconds: 500),
+            );
+          },
           actions: [
             if (widget.complaintFormComponent != null)
               context.smallOutlinedButton(
@@ -653,6 +668,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                               companyAnswered: false,
                               rating: feedback.feedbackRating,
                               text: feedback.feedbackText,
+                              media: feedback.media,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                               onPressed: () {
                                 if (widget.onFeedbackTap != null) {

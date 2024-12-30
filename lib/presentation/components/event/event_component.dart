@@ -278,7 +278,24 @@ class _EventComponentState extends State<EventComponent> {
             children: [
               UiKitPhotoSlider(
                 media: widget.event.media,
-                onTap: null,
+                onTap: (index) {
+                  if (index != null) {
+                    final media = widget.event.media[index];
+                    if (media.type == UiKitMediaType.video || media.link.isEmpty) return;
+
+                    final heroTag = '${media.link}--$index';
+
+                    context.push(
+                      PhotoDialog(
+                        images: widget.event.media.map((e) => e.link).toList(),
+                        initialIndex: index,
+                        tag: heroTag,
+                      ),
+                      nativeTransition: false,
+                      transitionDuration: const Duration(milliseconds: 500)
+                    );
+                  }
+                },
                 width: 1.sw - horizontalMargin * 2,
                 actions: [
                   if (widget.complaintFormComponent != null)
@@ -592,6 +609,7 @@ class _EventComponentState extends State<EventComponent> {
                               text: feedback.feedbackText,
                               rating: feedback.feedbackRating,
                               isHelpful: feedback.helpfulForUser,
+                              media: feedback.media,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
                               onPressed: () {
                                 if (widget.onFeedbackTap != null) {
