@@ -48,7 +48,7 @@ abstract class InfluencerFeedItem {
     return (other is InfluencerFeedItem ||
             other is UpdatesFeedItem ||
             other is ShufflePostFeedItem ||
-            other is PostFeedItem) &&
+            other is PostFeedItem || other is DigestFeedItem) &&
         (other as InfluencerFeedItem).id == id;
   }
 
