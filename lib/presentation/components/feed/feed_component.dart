@@ -37,7 +37,6 @@ class FeedComponent extends StatelessWidget {
   final ValueNotifier<double>? tiltNotifier;
   final ScrollController? scrollController;
   final bool showHints;
-  final Set<FeedModule> loadedModules;
 
   const FeedComponent({
     super.key,
@@ -66,7 +65,6 @@ class FeedComponent extends StatelessWidget {
     this.onLoadMoreChips,
     this.subscribedUsersFeedIconScaleNotifier,
     this.subscribedProfiles = const [],
-    this.loadedModules = const {},
     this.onSubscribedUserTapped,
     this.subscribedProfilesHintNotifier,
     this.tiltNotifier,
@@ -261,7 +259,7 @@ class FeedComponent extends StatelessWidget {
                     AnimatedSize(
                             alignment: Alignment.topCenter,
                             duration: appeareDuration,
-                            child: feed.recommendedEvent != null && loadedModules.contains(FeedModule.global)
+                            child: feed.recommendedEvent != null
                                 ? UiKitTiltWrapper(
                                     tiltNotifier: tiltNotifier,
                                     child: UiKitAccentCard(
@@ -347,194 +345,161 @@ class FeedComponent extends StatelessWidget {
                             ]
                           ])).wrapSliverBox,
                   if ((feedLeisureModel.showFeelings ?? true)) ...[
-                    AnimatedSize(
-                            alignment: Alignment.topCenter,
-                            duration: appeareDuration,
-                            child: !loadedModules.contains(FeedModule.feeling)
-                                ? const SizedBox.shrink()
-                                : TitleWithHowItWorks(
-                                    title: feelingText,
-                                    textStyle: themeTitleStyle,
-                                    shouldShow: feed.showHowItWorksTitle,
-                                    howItWorksWidget: HowItWorksWidget(
-                                      title: S.current.FeedFeelingsHiwTitle,
-                                      subtitle: S.current.FeedFeelingsHiwSubtitle,
-                                      hintTiles: [
-                                        HintCardUiModel(
-                                          imageUrl: GraphicsFoundation.instance.png.map.path,
-                                          title: S.current.FeedFeelingsHiwItems(0),
-                                        ),
-                                        HintCardUiModel(
-                                          imageUrl: GraphicsFoundation.instance.png.dart.path,
-                                          title: S.current.FeedFeelingsHiwItems(1),
-                                        ),
-                                        HintCardUiModel(
-                                          imageUrl: GraphicsFoundation.instance.png.sunClouds.path,
-                                          title: S.current.FeedFeelingsHiwItems(2),
-                                        ),
-                                        HintCardUiModel(
-                                          imageUrl: GraphicsFoundation.instance.png.smileMood.path,
-                                          title: S.current.FeedFeelingsHiwItems(3),
-                                        ),
-                                      ],
-                                      onPop: onHowItWorksPoped,
-                                    ),
-                                  ).paddingSymmetric(horizontal: horizontalMargin))
-                        .wrapSliverBox,
+                    TitleWithHowItWorks(
+                      title: feelingText,
+                      textStyle: themeTitleStyle,
+                      shouldShow: feed.showHowItWorksTitle,
+                      howItWorksWidget: HowItWorksWidget(
+                        title: S.current.FeedFeelingsHiwTitle,
+                        subtitle: S.current.FeedFeelingsHiwSubtitle,
+                        hintTiles: [
+                          HintCardUiModel(
+                            imageUrl: GraphicsFoundation.instance.png.map.path,
+                            title: S.current.FeedFeelingsHiwItems(0),
+                          ),
+                          HintCardUiModel(
+                            imageUrl: GraphicsFoundation.instance.png.dart.path,
+                            title: S.current.FeedFeelingsHiwItems(1),
+                          ),
+                          HintCardUiModel(
+                            imageUrl: GraphicsFoundation.instance.png.sunClouds.path,
+                            title: S.current.FeedFeelingsHiwItems(2),
+                          ),
+                          HintCardUiModel(
+                            imageUrl: GraphicsFoundation.instance.png.smileMood.path,
+                            title: S.current.FeedFeelingsHiwItems(3),
+                          ),
+                        ],
+                        onPop: onHowItWorksPoped,
+                      ),
+                    ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
                     SpacingFoundation.verticalSpace16.wrapSliverBox,
-                    AnimatedSize(
-                            alignment: Alignment.topCenter,
-                            duration: appeareDuration,
-                            child: !loadedModules.contains(FeedModule.feeling)
-                                ? const SizedBox.shrink()
-                                : FingerprintSwitch(
-                                    height: (size.width - horizontalMargin * 2) * 0.54,
-                                    isHealthKitEnabled: feed.isHealthKitEnabled,
-                                    title: Text(
-                                      S.of(context).Guess,
-                                      style:
-                                          context.uiKitTheme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
-                                    ),
-                                    backgroundImage: ImageWidget(
-                                      width: double.infinity,
-                                      svgAsset: GraphicsFoundation.instance.svg.dubaiSilhouette,
-                                      fit: BoxFit.fitWidth,
-                                      color: context.uiKitTheme?.colorScheme.surface1,
-                                    ),
-                                    animationPath: isLightTheme
-                                        ? GraphicsFoundation.instance.animations.lottie.fingerprintWhite.path
-                                        : GraphicsFoundation.instance.animations.lottie.fingerprintBlack.path,
-                                    isCompleted: mood != null,
-                                    onCompleted: onMoodCompleted,
-                                    onPressed: onMoodCheck,
-                                    onPressedShouldRecall: feed.shouldRecallOnMoodTap,
-                                    onCompletedWidget: mood != null
-                                        ? UiKitMessageCardWithIcon(
-                                            message: mood!.title,
-                                            iconLink: mood!.logo,
-                                            layoutDirection: Axis.vertical,
-                                            onPressed: onMoodPressed == null ? null : () => onMoodPressed!(),
-                                          )
-                                        : const SizedBox.shrink(),
-                                  ).paddingSymmetric(horizontal: horizontalMargin))
-                        .wrapSliverBox,
+                    FingerprintSwitch(
+                      height: (size.width - horizontalMargin * 2) * 0.54,
+                      isHealthKitEnabled: feed.isHealthKitEnabled,
+                      title: Text(
+                        S.of(context).Guess,
+                        style: context.uiKitTheme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
+                      ),
+                      backgroundImage: ImageWidget(
+                        width: double.infinity,
+                        svgAsset: GraphicsFoundation.instance.svg.dubaiSilhouette,
+                        fit: BoxFit.fitWidth,
+                        color: context.uiKitTheme?.colorScheme.surface1,
+                      ),
+                      animationPath: isLightTheme
+                          ? GraphicsFoundation.instance.animations.lottie.fingerprintWhite.path
+                          : GraphicsFoundation.instance.animations.lottie.fingerprintBlack.path,
+                      isCompleted: mood != null,
+                      onCompleted: onMoodCompleted,
+                      onPressed: onMoodCheck,
+                      onPressedShouldRecall: feed.shouldRecallOnMoodTap,
+                      onCompletedWidget: mood != null
+                          ? UiKitMessageCardWithIcon(
+                              message: mood!.title,
+                              iconLink: mood!.logo,
+                              layoutDirection: Axis.vertical,
+                              onPressed: onMoodPressed == null ? null : () => onMoodPressed!(),
+                            )
+                          : const SizedBox.shrink(),
+                    ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
                     SpacingFoundation.verticalSpace24.wrapSliverBox,
                   ],
                 ],
                 if ((feedLeisureModel.showPlaces ?? true)) ...[
-                  AnimatedSize(
-                          alignment: Alignment.topCenter,
-                          duration: appeareDuration,
-                          child: !loadedModules.contains(FeedModule.feed)
-                              ? const SizedBox.shrink()
-                              : TitleWithHowItWorks(
-                                  title: S.of(context).YouBetterCheckThisOut,
-                                  textStyle: themeTitleStyle,
-                                  shouldShow: feed.showHowItWorksBody,
-                                  howItWorksWidget: HowItWorksWidget(
-                                    title: S.current.FeedRandomizerHiwTitle,
-                                    subtitle: S.current.FeedRandomizerHiwSubtitle,
-                                    hintTiles: [
-                                      HintCardUiModel(
-                                        imageUrl: GraphicsFoundation.instance.png.events.path,
-                                        title: S.current.FeedRandomizerHiwItems(0),
-                                      ),
-                                      HintCardUiModel(
-                                        imageUrl: GraphicsFoundation.instance.png.filtering.path,
-                                        title: S.current.FeedRandomizerHiwItems(1),
-                                      ),
-                                      HintCardUiModel(
-                                        imageUrl: GraphicsFoundation.instance.png.chipsSelect.path,
-                                        title: S.current.FeedRandomizerHiwItems(2),
-                                      ),
-                                      HintCardUiModel(
-                                        imageUrl: GraphicsFoundation.instance.png.pressScroll.path,
-                                        title: S.current.FeedRandomizerHiwItems(3),
-                                      ),
-                                    ],
-                                    onPop: onHowItWorksPopedBody,
-                                  ),
-                                ).paddingSymmetric(horizontal: horizontalMargin))
-                      .wrapSliverBox,
+                  TitleWithHowItWorks(
+                    title: S.of(context).YouBetterCheckThisOut,
+                    textStyle: themeTitleStyle,
+                    shouldShow: feed.showHowItWorksBody,
+                    howItWorksWidget: HowItWorksWidget(
+                      title: S.current.FeedRandomizerHiwTitle,
+                      subtitle: S.current.FeedRandomizerHiwSubtitle,
+                      hintTiles: [
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.events.path,
+                          title: S.current.FeedRandomizerHiwItems(0),
+                        ),
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.filtering.path,
+                          title: S.current.FeedRandomizerHiwItems(1),
+                        ),
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.chipsSelect.path,
+                          title: S.current.FeedRandomizerHiwItems(2),
+                        ),
+                        HintCardUiModel(
+                          imageUrl: GraphicsFoundation.instance.png.pressScroll.path,
+                          title: S.current.FeedRandomizerHiwItems(3),
+                        ),
+                      ],
+                      onPop: onHowItWorksPopedBody,
+                    ),
+                  ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,
                   if (feed.filterChips != null && feed.filterChips!.isNotEmpty) ...[
                     SpacingFoundation.verticalSpace8.wrapSliverBox,
-                    AnimatedSize(
-                            alignment: Alignment.topCenter,
-                            duration: appeareDuration,
-                            child: !loadedModules.contains(FeedModule.feed)
-                                ? const SizedBox.shrink()
-                                : NotificationListener(
-                                    onNotification: (notification) {
-                                      if (notification is ScrollUpdateNotification) {
-                                        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent * 0.8) {
-                                          onLoadMoreChips?.call();
-                                        }
-                                      }
-                                      return false;
-                                    },
-                                    child: ConstrainedBox(
-                                        constraints: BoxConstraints.loose(Size(double.infinity, 40.h)),
-                                        child: ListView.builder(
-                                            padding: EdgeInsets.only(left: horizontalMargin),
-                                            primary: false,
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: feed.filterChips!.length + 2,
-                                            itemBuilder: (context, index) {
-                                              if (index == 0) {
-                                                return RollingDiceButton(
-                                                    onPressed: (value) {
-                                                      final Set<String> list = {};
-                                                      for (int i in value) {
-                                                        list.add(feed.filterChips![i].title);
-                                                      }
+                    NotificationListener(
+                        onNotification: (notification) {
+                          if (notification is ScrollUpdateNotification) {
+                            if (notification.metrics.pixels >= notification.metrics.maxScrollExtent * 0.8) {
+                              onLoadMoreChips?.call();
+                            }
+                          }
+                          return false;
+                        },
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints.loose(Size(double.infinity, 40.h)),
+                            child: ListView.builder(
+                                padding: EdgeInsets.only(left: horizontalMargin),
+                                primary: false,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: feed.filterChips!.length + 2,
+                                itemBuilder: (context, index) {
+                                  if (index == 0) {
+                                    return RollingDiceButton(
+                                        onPressed: (value) {
+                                          final Set<String> list = {};
+                                          for (int i in value) {
+                                            list.add(feed.filterChips![i].title);
+                                          }
 
-                                                      onTagSortPressed?.call('Random', list);
-                                                    },
-                                                    length: feed.filterChips?.length ?? 0);
-                                              } else if (index == 1) {
-                                                if (hasFavourites) {
-                                                  return UiKitTitledFilterChip(
-                                                    //const flag for showing favorites is 'Favorites'
-                                                    selected: feed.activeFilterChips
-                                                            ?.map((e) => e.title)
-                                                            .contains('Favorites') ??
-                                                        false,
-                                                    title: S.of(context).Favorites,
-                                                    onPressed: onTagSortPressed == null
-                                                        ? null
-                                                        : () => onTagSortPressed!('Favorites'),
-                                                    icon: ShuffleUiKitIcons.starfill,
-                                                  ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
-                                                } else {
-                                                  return SpacingFoundation.horizontalSpace8;
-                                                }
-                                              } else {
-                                                return feed.filterChips!
-                                                    .map((e) => UiKitTitledFilterChip(
-                                                          selected: feed.activeFilterChips
-                                                                  ?.map((e) => e.title)
-                                                                  .contains(e.title) ??
-                                                              false,
-                                                          title: e.title,
-                                                          onPressed: onTagSortPressed == null
-                                                              ? null
-                                                              : () => onTagSortPressed!(e.title),
-                                                          icon: e.icon,
-                                                        ).paddingOnly(right: horizontalMargin))
-                                                    .toList()[index - 2];
-                                              }
-                                            }))))
-                        .wrapSliverBox,
+                                          onTagSortPressed?.call('Random', list);
+                                        },
+                                        length: feed.filterChips?.length ?? 0);
+                                  } else if (index == 1) {
+                                    if (hasFavourites) {
+                                      return UiKitTitledFilterChip(
+                                        //const flag for showing favorites is 'Favorites'
+                                        selected:
+                                            feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
+                                        title: S.of(context).Favorites,
+                                        onPressed:
+                                            onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                                        icon: ShuffleUiKitIcons.starfill,
+                                      ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
+                                    } else {
+                                      return SpacingFoundation.horizontalSpace8;
+                                    }
+                                  } else {
+                                    return feed.filterChips!
+                                        .map((e) => UiKitTitledFilterChip(
+                                              selected: feed.activeFilterChips?.map((e) => e.title).contains(e.title) ??
+                                                  false,
+                                              title: e.title,
+                                              onPressed:
+                                                  onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                                              icon: e.icon,
+                                            ).paddingOnly(right: horizontalMargin))
+                                        .toList()[index - 2];
+                                  }
+                                }))).wrapSliverBox,
                   ],
                   SpacingFoundation.verticalSpace24.wrapSliverBox,
                   PagedSliverList.separated(
                     shrinkWrapFirstPageIndicators: true,
                     builderDelegate: PagedChildBuilderDelegate(
                       animateTransitions: true,
-                      firstPageProgressIndicatorBuilder: (c) =>
-                          (loadedModules.contains(FeedModule.feed) ? progressIndicator : null) ??
-                          const SizedBox.shrink(),
+                      firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
                       newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
                       itemBuilder: (_, item, index) {
                         item as UiUniversalModel;
