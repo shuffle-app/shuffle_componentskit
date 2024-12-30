@@ -285,14 +285,13 @@ class _EventComponentState extends State<EventComponent> {
                     final heroTag = '${media.link}--$index';
 
                     context.push(
-                      PhotoDialog(
-                        images: widget.event.media.map((e) => e.link).toList(),
-                        initialIndex: index,
-                        tag: heroTag,
-                      ),
-                      nativeTransition: false,
-                      transitionDuration: const Duration(milliseconds: 500)
-                    );
+                        PhotoDialog(
+                          images: widget.event.media.map((e) => e.link).toList(),
+                          initialIndex: index,
+                          tag: heroTag,
+                        ),
+                        nativeTransition: false,
+                        transitionDuration: const Duration(milliseconds: 500));
                   }
                 },
                 width: 1.sw - horizontalMargin * 2,
@@ -400,29 +399,32 @@ class _EventComponentState extends State<EventComponent> {
             right: horizontalMargin,
             bottom: SpacingFoundation.verticalSpacing24,
           ),
-        Row(
-          children: [
-            Expanded(
-              child: AddToSchedulerEventActionCard(
-                group: group,
-                action: null,
-                rasterIconAsset: GraphicsFoundation.instance.png.events,
-                value: '',
-                buttonTitle: S.of(context).Add,
+        ColoredBox(
+          color: theme?.colorScheme.surface ?? ColorsFoundation.surface,
+          child: Row(
+            children: [
+              Expanded(
+                child: AddToSchedulerEventActionCard(
+                  group: group,
+                  action: null,
+                  rasterIconAsset: GraphicsFoundation.instance.png.events,
+                  value: '',
+                  buttonTitle: S.of(context).Add,
+                ),
               ),
-            ),
-            SpacingFoundation.horizontalSpace8,
-            Expanded(
-              child: PointBalancePlaceActionCard(
-                value: widget.event.userPoints?.toString() ?? '0',
-                group: group,
-                rasterIconAsset: GraphicsFoundation.instance.png.money,
-                buttonTitle: S.of(context).SpendIt,
-                action: widget.onSpendPointTap,
+              SpacingFoundation.horizontalSpace8,
+              Expanded(
+                child: PointBalancePlaceActionCard(
+                  value: widget.event.userPoints?.toString() ?? '0',
+                  group: group,
+                  rasterIconAsset: GraphicsFoundation.instance.png.money,
+                  buttonTitle: S.of(context).SpendIt,
+                  action: widget.onSpendPointTap,
+                ),
               ),
-            ),
-          ],
-        ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
+            ],
+          ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
+        ),
         if (widget.bookingNotifier != null)
           ListenableBuilder(
             listenable: widget.bookingNotifier!,
