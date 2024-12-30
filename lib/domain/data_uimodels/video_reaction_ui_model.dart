@@ -57,29 +57,32 @@ class VideoReactionUiModel {
     this.isViewed = false,
     this.videoController,
   }) {
-    if(videoController!=null) return;
+    if (videoController != null) return;
+
+    createController();
+  }
+
+  createController() async {
     if (kIsWeb) {
-      videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))..initialize();
+      videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
     } else {
-      () async {
-        try {
-          final tempDir = await getTemporaryDirectory();
-          final filename = videoUrl.split('/').last;
-          final fileFromCache = File('${tempDir.path}/video_cache/$id-$filename${filename.contains('.mp4') ? '':'.mp4'}');
-          if (fileFromCache.existsSync()) {
-            videoController = VideoPlayerController.file(fileFromCache);
-            await videoController?.initialize();
-          } else {
-            final videoData = await _getFileFromUrl(videoUrl);
-            await fileFromCache.create(recursive: true);
-            await fileFromCache.writeAsBytes(videoData);
-            videoController = VideoPlayerController.file(fileFromCache);
-            await videoController?.initialize();
-          }
-        } catch (e, st) {
-          log('videoReaction retrieve from /video_cache/$id-${videoUrl.split('/').last} error: $e $st');
+      try {
+        final tempDir = await getTemporaryDirectory();
+        final filename = videoUrl.split('/').last;
+        final fileFromCache =
+            File('${tempDir.path}/video_cache/$id-$filename${filename.contains('.mp4') ? '' : '.mp4'}');
+        if (fileFromCache.existsSync()) {
+          videoController = VideoPlayerController.file(fileFromCache);
+        } else {
+          final videoData = await _getFileFromUrl(videoUrl);
+          await fileFromCache.create(recursive: true);
+          await fileFromCache.writeAsBytes(videoData);
+          videoController ??= VideoPlayerController.file(fileFromCache);
         }
-      }();
+      } catch (e, st) {
+        log('videoReaction retrieve from /video_cache/$id-${videoUrl.split('/').last} error: $e $st',
+            name: 'VideoReactionUiModel');
+      }
     }
   }
 
