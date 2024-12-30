@@ -6,14 +6,14 @@ class TicketUiModel {
   final int ticketsCount;
   final List<TicketItem<UpsaleUiModel>?>? upsales;
   TicketItem<SubsUiModel>? subs;
-  final List<String?>? bookingOrderTickets;
+  final Map<String, bool>? mapTickets;
 
   TicketUiModel({
     required this.id,
     this.ticketsCount = 0,
     this.upsales,
     this.subs,
-    this.bookingOrderTickets,
+    this.mapTickets,
   });
 
   TicketUiModel.refund({
@@ -21,7 +21,7 @@ class TicketUiModel {
     this.ticketsCount = 0,
     this.upsales,
     this.subs,
-    this.bookingOrderTickets,
+    this.mapTickets,
   });
 
   int get totalUpsalesCount {
@@ -59,14 +59,14 @@ class TicketUiModel {
     int? ticketsCount,
     List<TicketItem<UpsaleUiModel>?>? upsales,
     TicketItem<SubsUiModel>? subs,
-    List<String?>? bookingOrderTickets,
+    Map<String, bool>? mapTickets,
   }) {
     return TicketUiModel(
       id: id ?? this.id,
       ticketsCount: ticketsCount ?? this.ticketsCount,
       upsales: upsales ?? this.upsales,
       subs: subs ?? this.subs,
-      bookingOrderTickets: bookingOrderTickets ?? this.bookingOrderTickets,
+      mapTickets: this.mapTickets ?? mapTickets,
     );
   }
 }
