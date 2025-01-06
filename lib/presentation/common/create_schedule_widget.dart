@@ -254,10 +254,10 @@ const _paddingMultiplier = 4.2;
 abstract class UiScheduleModel {
   String? templateName;
 
-  TimeRange createTimeRange(TimeOfDay start, TimeOfDay end) {
+  TimeRange createTimeRange(TimeOfDay start, TimeOfDay? end) {
     return TimeRange(
       start: TimeOfDay(hour: start.hour, minute: start.minute),
-      end: TimeOfDay(hour: end.hour, minute: end.minute),
+      end: end == null ? null : TimeOfDay(hour: end.hour, minute: end.minute),
     );
   }
 
@@ -353,8 +353,6 @@ class UiScheduleTimeModel extends UiScheduleModel {
     return StatefulBuilder(builder: (context, setState) {
       final MapEntry<String, List<TimeOfDay>> thisObject =
           weeklySchedule.isNotEmpty && weeklySchedule.length > index ? weeklySchedule[index] : const MapEntry('', []);
-      log('rebuild is here $thisObject', name: 'UiScheduleTimeModel');
-      log('index is $index', name: 'UiScheduleTimeModel');
       return _CardListWrapper(
         children: [
           UiKitAddableFormField(
@@ -375,8 +373,9 @@ class UiScheduleTimeModel extends UiScheduleModel {
                   }
                 : null,
             child: AddableFormChildTime<TimeRange>(
-              initialValue:
-                  thisObject.value.isEmpty ? null : createTimeRange(thisObject.value.first, thisObject.value.last),
+              initialValue: thisObject.value.isEmpty
+                  ? null
+                  : createTimeRange(thisObject.value.first, thisObject.value.length > 1 ? thisObject.value.last : null),
               onChanged: () => showUiKitTimeFromToDialog(
                 navigatorKey.currentContext!,
                 (TimeOfDay? from, TimeOfDay? to) {
@@ -389,7 +388,6 @@ class UiScheduleTimeModel extends UiScheduleModel {
                       } else {
                         weeklySchedule.add(MapEntry(thisObject.key, newValues.map((e) => e!).toList()));
                       }
-                      log('weeklySchedule ${weeklySchedule}', name: 'UiScheduleTimeModel');
                     });
                   }
                 },
@@ -494,7 +492,6 @@ class UiScheduleDatesModel extends UiScheduleModel {
     return StatefulBuilder(builder: (context, setState) {
       final MapEntry<String, List<TimeOfDay>> thisObject =
           dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
-      log('rebuild is here $thisObject', name: 'UiScheduleDatesModel');
       return _CardListWrapper(children: [
         UiKitAddableFormField(
             title: S.current.Date,
