@@ -26,6 +26,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final ValueNotifier<InfluencerFeedItem?>? pinnedPublication;
   final bool showPinnedPublication;
   final VoidCallback? onPinnedPublicationTap;
+  final RichText? weather;
 
   const InfluencersUpdatedFeedComponent({
     super.key,
@@ -45,6 +46,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.showPinnedPublication = false,
     this.onPinnedPublicationTap,
     this.searchController,
+    this.weather,
   });
 
   @override
@@ -73,11 +75,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   late bool _isCardVisible;
 
   double get topPaddingForPinned {
-    if (isSearchActivated) {
-      return _isCardVisible ? (0.38.sw + 40.h) : 88.h;
-    } else {
-      return _isCardVisible ? (0.38.sw) : 50.h;
-    }
+    // if (isSearchActivated) {
+    return _isCardVisible ? (0.38.sw + 40.h) : 88.h;
+    // } else {
+    //   return _isCardVisible ? (0.38.sw) : 50.h;
+    // }
   }
 
   BorderRadius get clipBorderRadius =>
@@ -101,28 +103,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     Future.delayed(Duration.zero, () => _toggleCardVisibility());
 
     tabController.addListener(_toggleCardVisibility);
-    widget.scrollController?.addListener(_scrollListener);
-  }
-
-  _scrollListener() {
-    if (widget.scrollController!.offset < -50.h && !isSearchActivated) {
-      setState(() {
-        isSearchActivated = true;
-      });
-      Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
-    }
-    // else if (widget.scrollController!.offset > 50.h && isSearchActivated) {
-    //   setState(() {
-    //     isSearchActivated = false;
-    //   });
-    //
-    //   _searchFocusNode.unfocus();
-    // }
   }
 
   @override
   void dispose() {
-    widget.scrollController?.removeListener(_scrollListener);
+    // widget.scrollController?.removeListener(_scrollListener);
     tabController.removeListener(_toggleCardVisibility);
     widget.pinnedPublication?.removeListener(_toggleCardVisibility);
 
@@ -186,27 +171,39 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: isSearchActivated
-                  ? UiKitInputFieldRightIcon(
-                      controller: widget.searchController ?? TextEditingController(),
-                      borderRadius: BorderRadiusFoundation.all24r,
-                      autofocus: true,
-                      fillColor: colorScheme?.surface2,
-                      hintText: S.current.Search,
-                      focusNode: _searchFocusNode,
-                      onIconPressed: () {
+                  ? UiKitInputFieldNoFill(
+                          controller: widget.searchController ?? TextEditingController(),
+                          autofocus: true,
+                          hintText: S.current.Search,
+                          focusNode: _searchFocusNode,
+                          label: '',
+                          icon: context.iconButtonNoPadding(
+                              data: BaseUiKitButtonData(
+                            onPressed: () {
+                              setState(() {
+                                isSearchActivated = false;
+                              });
+                              _searchFocusNode.unfocus();
+                              widget.searchController?.clear();
+                            },
+                            iconInfo: BaseUiKitButtonIconData(
+                                iconData: ShuffleUiKitIcons.x, color: colorScheme?.inversePrimary),
+                          )))
+                      .paddingSymmetric(
+                          horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical20)
+                  : StatusWeatherSearchBar(
+                      onSearchPressed: () {
                         setState(() {
-                          isSearchActivated = false;
+                          isSearchActivated = true;
                         });
-                        _searchFocusNode.unfocus();
-                        widget.searchController?.clear();
+                        Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
                       },
+                      weather: widget.weather,
                     ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical12)
-                  : const SizedBox.shrink(),
+                      horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical12),
             ),
           ],
         ),
-
         TabBarView(
           controller: tabController,
           children: [
@@ -245,9 +242,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ],
         ),
-        // ),
       ].reversed.toList(),
-      // ),
     );
   }
 }
