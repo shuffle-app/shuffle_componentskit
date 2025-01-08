@@ -1,4 +1,5 @@
 import 'package:shuffle_components_kit/domain/data_uimodels/subscription_offer_model.dart';
+import 'package:shuffle_uikit/ui_models/places/base_ui_kit_media.dart';
 
 class UiCompanySubscriptionModel {
   final String companyName;
@@ -10,6 +11,7 @@ class UiCompanySubscriptionModel {
   final String? offersTitle;
   final String termsOfServiceUrl;
   final String privacyPolicyUrl;
+  final UiKitTag? tag;
 
   UiCompanySubscriptionModel({
     required this.companyName,
@@ -21,5 +23,6 @@ class UiCompanySubscriptionModel {
     this.selectedInitialOffer,
     required this.termsOfServiceUrl,
     required this.privacyPolicyUrl,
+    this.tag,
   });
 }
