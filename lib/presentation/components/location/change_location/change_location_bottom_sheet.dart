@@ -6,7 +6,7 @@ changeLocationBottomSheet({
   VoidCallback? onMyLocationTap,
   ValueChanged<String>? onSelectCity,
   Map<String, List<String>>? countriesCities,
-  String? selectedCity,
+  ValueNotifier<String?>? selectedCity,
   double? topPadding,
 }) {
   return showUiKitGeneralFullScreenDialog(
@@ -28,7 +28,7 @@ class ChangeLocationApp extends StatefulWidget {
   final VoidCallback? onMyLocationTap;
   final ValueChanged<String>? onSelectCity;
   final Map<String, List<String>>? countriesCities;
-  final String? selectedCity;
+  final ValueNotifier<String?>? selectedCity;
   const ChangeLocationApp({
     super.key,
     this.onMyLocationTap,
@@ -47,7 +47,23 @@ class _ChangeLocationAppState extends State<ChangeLocationApp> {
   @override
   void initState() {
     super.initState();
-    selectedCity = widget.selectedCity ?? S.current.NothingFound;
+    selectedCity = widget.selectedCity?.value ?? S.current.NothingFound;
+    if(widget.selectedCity!= null) {
+      widget.selectedCity!.addListener(_cityChangeListener);
+    }
+  }
+
+  _cityChangeListener() {
+    setState(() {
+      selectedCity = widget.selectedCity?.value?? S.current.NothingFound;
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.selectedCity?.removeListener(_cityChangeListener);
+    widget.selectedCity?.dispose();
+    super.dispose();
   }
 
   @override
