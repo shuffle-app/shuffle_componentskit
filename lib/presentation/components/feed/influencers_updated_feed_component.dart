@@ -71,12 +71,13 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   }
 
   late bool _isCardVisible;
+  bool _hasImageInPinned = false;
 
   double get topPaddingForPinned {
     if (isSearchActivated) {
       return _isCardVisible ? (0.38.sw + 40.h) : 88.h;
     } else {
-      return _isCardVisible ? (0.38.sw) : 50.h;
+      return _isCardVisible ? (_hasImageInPinned ? 0.38.sw : 0.32.sw) : 50.h;
     }
   }
 
@@ -107,6 +108,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   _scrollListener() {
     if (widget.scrollController!.offset < -50.h && !isSearchActivated) {
       setState(() {
+        _isCardVisible = false;
         isSearchActivated = true;
       });
       Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
@@ -163,25 +165,42 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                     ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)),
               ),
             ),
-            if (widget.pinnedPublication?.value is ShufflePostFeedItem)
-              PinnedPublication(
-                text: (widget.pinnedPublication?.value as ShufflePostFeedItem).text,
-                images: (widget.pinnedPublication?.value as ShufflePostFeedItem).newPhotos?.map((e) => e.link).toList(),
-                onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                isCardVisible: _isCardVisible,
-              )
-            else if (widget.pinnedPublication?.value is PostFeedItem)
-              PinnedPublication(
-                text: (widget.pinnedPublication?.value as PostFeedItem).text,
-                onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                isCardVisible: _isCardVisible,
-              )
-            else if (widget.pinnedPublication?.value is UpdatesFeedItem)
-              PinnedPublication(
-                text: (widget.pinnedPublication?.value as UpdatesFeedItem).name,
-                images: (widget.pinnedPublication?.value as UpdatesFeedItem).newPhotos?.map((e) => e.link).toList(),
-                onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                isCardVisible: _isCardVisible,
+            if (widget.pinnedPublication?.value != null)
+              Builder(
+                builder: (context) {
+                  final pinnedPublication = widget.pinnedPublication!.value;
+                  List<String>? images;
+
+                  if (pinnedPublication is ShufflePostFeedItem) {
+                    images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
+                    _hasImageInPinned = images != null && images.isNotEmpty;
+
+                    return PinnedPublication(
+                      text: pinnedPublication.text,
+                      images: images,
+                      onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                      isCardVisible: _isCardVisible,
+                    );
+                  } else if (pinnedPublication is PostFeedItem) {
+                    return PinnedPublication(
+                      text: pinnedPublication.text,
+                      onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                      isCardVisible: _isCardVisible,
+                    );
+                  } else if (pinnedPublication is UpdatesFeedItem) {
+                    images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
+                    _hasImageInPinned = images != null && images.isNotEmpty;
+
+                    return PinnedPublication(
+                      text: pinnedPublication.name,
+                      images: images,
+                      onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                      isCardVisible: _isCardVisible,
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                },
               ),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
@@ -196,6 +215,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                       onIconPressed: () {
                         setState(() {
                           isSearchActivated = false;
+                          _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
                         });
                         _searchFocusNode.unfocus();
                         widget.searchController?.clear();
