@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
+import 'package:shuffle_components_kit/presentation/utils/validators.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import 'users_bookings_control.dart';
@@ -12,8 +13,10 @@ class BookingsControlUserList extends StatefulWidget {
   final Function(String? value, int userId)? onPopupMenuSelected;
   final ValueChanged<UserBookingsControlUiModel>? onRequestsRefund;
   final ValueChanged<List<UserBookingsControlUiModel>?>? refundEveryone;
+  final ValueChanged<String>? onChangeBookingUrl;
   final bool canBookingEdit;
   final bool isLoading;
+  final String? bookingUrl;
 
   const BookingsControlUserList({
     super.key,
@@ -25,6 +28,8 @@ class BookingsControlUserList extends StatefulWidget {
     this.onRequestsRefund,
     this.canBookingEdit = false,
     this.isLoading = false,
+    this.bookingUrl,
+    this.onChangeBookingUrl,
   });
 
   @override
@@ -33,13 +38,23 @@ class BookingsControlUserList extends StatefulWidget {
 
 class _BookingsControlUserListState extends State<BookingsControlUserList> {
   bool checkBoxOn = false;
+  bool isUrlBooking = false;
+  bool isLinkValid = false;
+
+  final TextEditingController bookingUrlController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<List<UserBookingsControlUiModel>> groupedUsers = [];
 
   @override
   void initState() {
     super.initState();
-    sortedUserList();
-    groupUserList();
+    isUrlBooking = widget.bookingUrl != null && widget.bookingUrl!.isNotEmpty;
+    if (isUrlBooking) {
+      bookingUrlController.text = widget.bookingUrl!;
+    } else {
+      sortedUserList();
+      groupUserList();
+    }
   }
 
   void sortedUserList() {
@@ -122,26 +137,44 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                   ],
                 ),
               ),
-              if (widget.canBookingEdit)
-                GestureDetector(
-                  onTap: widget.onBookingEdit,
-                  child: ImageWidget(
-                    link: GraphicsFoundation.instance.svg.pencil.path,
-                    color: theme?.colorScheme.inversePrimary,
-                  ),
-                )
-              else
-                GestureDetector(
-                  onTap: widget.onBookingEdit,
-                  child: ImageWidget(
-                    iconData: ShuffleUiKitIcons.view,
-                    color: theme?.colorScheme.inversePrimary,
-                  ),
-                )
+              if (!isUrlBooking)
+                if (widget.canBookingEdit)
+                  GestureDetector(
+                    onTap: widget.onBookingEdit,
+                    child: ImageWidget(
+                      link: GraphicsFoundation.instance.svg.pencil.path,
+                      color: theme?.colorScheme.inversePrimary,
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: widget.onBookingEdit,
+                    child: ImageWidget(
+                      iconData: ShuffleUiKitIcons.view,
+                      color: theme?.colorScheme.inversePrimary,
+                    ),
+                  )
             ],
           ),
           if (widget.isLoading)
             const Center(child: CircularProgressIndicator())
+          else if (isUrlBooking)
+            Form(
+              key: _formKey,
+              child: UiKitInputFieldNoFill(
+                label: 'URL',
+                keyboardType: TextInputType.url,
+                hintText: 'https://yoursite.com',
+                inputFormatters: [PrefixFormatter(prefix: 'https://')],
+                controller: bookingUrlController,
+                validator: bookingWebsiteValidator,
+                onChanged: (value) {
+                  setState(() {
+                    isLinkValid = _formKey.currentState!.validate();
+                  });
+                },
+              ),
+            )
           else if (groupedUsers.isNotEmpty) ...[
             ...groupedUsers.map(
               (group) => Column(
@@ -218,7 +251,24 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                 ],
               ),
             )
-          : null,
+          : isLinkValid
+              ? SizedBox(
+                  height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
+                  width: 1.sw,
+                  child: context
+                      .gradientButton(
+                        data: BaseUiKitButtonData(
+                          text: S.of(context).Save.toUpperCase(),
+                          onPressed: () => widget.onChangeBookingUrl?.call(bookingUrlController.text),
+                        ),
+                      )
+                      .paddingOnly(
+                        left: EdgeInsetsFoundation.all16,
+                        right: EdgeInsetsFoundation.all16,
+                        bottom: EdgeInsetsFoundation.vertical24,
+                      ),
+                )
+              : null,
     );
   }
 }

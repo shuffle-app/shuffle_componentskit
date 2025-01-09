@@ -78,33 +78,9 @@ class _CompanySubscriptionComponentState extends State<CompanySubscriptionCompon
                 ),
                 SpacingFoundation.horizontalSpace12,
                 Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        widget.uiModel.companyName,
-                        style: boldTextTheme?.subHeadline,
-                      ),
-                      SpacingFoundation.verticalSpace2,
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ImageWidget(
-                            link: widget.uiModel.nicheIconPath,
-                            height: 14.h,
-                            width: 14.h,
-                            fit: BoxFit.cover,
-                            color: ColorsFoundation.darkNeutral500,
-                          ),
-                          SpacingFoundation.horizontalSpace2,
-                          Text(
-                            widget.uiModel.nicheTitle,
-                            style: boldTextTheme?.caption2Bold,
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: CompanyProfileInfo(
+                    companyName: widget.uiModel.companyName,
+                    tags: widget.uiModel.tag != null ? [widget.uiModel.tag!] : null,
                   ),
                 ),
               ],
