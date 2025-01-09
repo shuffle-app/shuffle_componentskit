@@ -239,7 +239,11 @@ class _CreateOfferState extends State<CreateOffer> {
                 if (dates != null) {
                   final DateTime now = DateTime.now();
 
-                  if ((!dates.start.isBefore(now) || !dates.end.isBefore(now)) ||
+                  if (dates.start.isAtSameDayAs(dates.end)) {
+                    setState(() {
+                      _selectedDates.addAll([dates.start]);
+                    });
+                  } else if ((!dates.start.isBefore(now) || !dates.end.isBefore(now)) ||
                       (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
                     setState(() {
                       _selectedDates.addAll([dates.start, dates.end]);

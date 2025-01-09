@@ -175,7 +175,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
       title: '80’s theme invites only party',
       owner: UiOwnerModel(
         name: 'name',
-        // id: '1',
+        id: 1,
         type: UserTileType.ordinary,
         onTap: () {},
       ),
@@ -287,7 +287,7 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                         imageUrl: GraphicsFoundation.instance.png.avatars.avatar1.path,
                         onShare: (ticketNumber) {},
                         title: 'Teste',
-                        tickets: tickets,
+                        tickets: {},
                       ),
                     ),
                   );

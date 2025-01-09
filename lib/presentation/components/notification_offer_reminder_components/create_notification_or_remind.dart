@@ -153,56 +153,34 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
             selectedDates: _selectedDates,
             dateToWord: true,
             onCalenderTap: () async {
-              await showUiKitCalendarFromToDialog(
-                context,
-                lastDate: (widget.lastDate != null &&
-                        widget.lastDate!.isAfter(DateTime.now()) &&
-                        !widget.lastDate!.isAtSameDay)
-                    ? widget.lastDate
-                    : null,
-                (from, to) {
+              _selectedDates.clear();
+              final dates = await showDateRangePickerDialog(context);
+
+              if (dates != null) {
+                final DateTime now = DateTime.now();
+
+                if (dates.start.isAtSameDayAs(dates.end)) {
                   setState(() {
-                    _selectedDates.clear();
-                    (from != null && (from!.isAfter(DateTime.now()) || from!.isAtSameDay))
-                        ? _selectedDates.add(from)
-                        : from = null;
-                    (from != null && from != to) ? _selectedDates.add(to) : _selectedDates.add(null);
+                    _selectedDates.addAll([dates.start]);
                   });
-                },
-              );
+                } else if ((!dates.start.isBefore(now) || !dates.end.isBefore(now)) ||
+                    (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
+                  setState(() {
+                    _selectedDates.addAll([dates.start, dates.end]);
+                  });
+                } else {
+                  setState(() {
+                    _selectedDates.add(null);
+                  });
+                }
+              }
             },
           ),
           SpacingFoundation.verticalSpace24,
           if (!widget.isNotification) ...[
-            Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    S.of(context).PersonalizeYourReminder,
-                    style: theme?.regularTextTheme.labelSmall,
-                  ),
-                ),
-                SpacingFoundation.horizontalSpace12,
-                Builder(
-                  builder: (context) => GestureDetector(
-                    onTap: () => showUiKitPopover(
-                      context,
-                      customMinHeight: 30.h,
-                      showButton: false,
-                      title: Text(
-                        S.of(context).ByDefaultYourReminderWillDisplay,
-                        style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.info,
-                      width: 16.w,
-                      color: theme?.colorScheme.darkNeutral900,
-                    ),
-                  ),
-                ),
-              ],
+            Text(
+              S.of(context).PersonalizeYourReminder,
+              style: theme?.regularTextTheme.labelSmall,
             ),
             SpacingFoundation.verticalSpace2,
             UiKitSelectedIconWidget(

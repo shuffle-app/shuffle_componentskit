@@ -128,7 +128,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                     child: ImageWidget(
                       height: 60.h,
                       fit: BoxFit.fitHeight,
-                      link: GraphicsFoundation.instance.svg.indexFingerHands.path,
+                      link: GraphicsFoundation.instance.png.indexFingerHands.path,
                     ),
                   )
                 ],
@@ -157,6 +157,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                     onDismissed: () => widget.onRemoveItem?.call(offer?.id),
                     onEdit: () {
                       widget.onEditItem?.call(offer?.id);
+                      editingItemId = null;
                     },
                     onLongPress: () => _onLongPress(offer?.id),
                     onActivateTap: () => widget.onActivateTap?.call(offer?.id),

@@ -155,19 +155,19 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SpacingFoundation.horizontalSpace8,
-                  Flexible(
-                    child: context.button(
-                      data: BaseUiKitButtonData(
-                        onPressed: onActivateTap,
-                        backgroundColor: theme?.colorScheme.surface3,
-                        iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.chevronright,
-                          color: theme?.colorScheme.headingTypography,
+                  if ((universalNotOfferRemUiModel?.isOffer ?? false))
+                    Flexible(
+                      child: context.button(
+                        data: BaseUiKitButtonData(
+                          onPressed: onActivateTap,
+                          backgroundColor: theme?.colorScheme.surface3,
+                          iconInfo: BaseUiKitButtonIconData(
+                            iconData: ShuffleUiKitIcons.chevronright,
+                            color: theme?.colorScheme.headingTypography,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    ).paddingOnly(left: SpacingFoundation.horizontalSpacing8),
                 ],
               ).paddingAll(EdgeInsetsFoundation.all12),
               if (isEditingMode)
