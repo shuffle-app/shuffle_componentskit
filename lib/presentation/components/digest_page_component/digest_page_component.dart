@@ -103,7 +103,7 @@ class DigestPageComponent extends StatelessWidget {
                         )
                       : const SizedBox.shrink(),
                 ),
-              ),
+              ).paddingOnly(left: SpacingFoundation.horizontalSpacing8),
           ],
         ).paddingOnly(
           bottom: SpacingFoundation.verticalSpacing24,
@@ -112,17 +112,15 @@ class DigestPageComponent extends StatelessWidget {
           right: horizontalSpacing,
         ),
         if (underTitleNotifier.value.isNotEmpty)
-          Expanded(
-            child: ValueListenableBuilder<String>(
-              valueListenable: underTitleNotifier,
-              builder: (_, underTitleTranslate, __) => Text(
-                underTitleTranslate,
-                style: regularTextTheme?.body,
-              ).paddingOnly(
-                bottom: SpacingFoundation.verticalSpacing24,
-                left: horizontalSpacing,
-                right: horizontalSpacing,
-              ),
+          ValueListenableBuilder<String>(
+            valueListenable: underTitleNotifier,
+            builder: (_, underTitleTranslate, __) => Text(
+              underTitleTranslate,
+              style: regularTextTheme?.body,
+            ).paddingOnly(
+              bottom: SpacingFoundation.verticalSpacing24,
+              left: horizontalSpacing,
+              right: horizontalSpacing,
             ),
           ),
         if (digestUiModels != null && digestUiModels!.isNotEmpty)
