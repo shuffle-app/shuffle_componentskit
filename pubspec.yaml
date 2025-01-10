@@ -29,6 +29,9 @@ dependencies:
   #for scan barcode
   mobile_scanner: ^6.0.2
 
+  #scroll controller 
+  anchor_scroll_controller: ^0.4.4
+
   #configuration libs
   http: ^1.2.1
   path_provider: ^2.1.5
