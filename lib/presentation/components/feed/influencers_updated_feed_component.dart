@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:anchor_scroll_controller/anchor_scroll_controller.dart';
 
 import '../../../domain/data_uimodels/influencer_models/influencer_feed_item.dart';
 
@@ -16,7 +18,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final ValueChanged<int?>? onProfilePress;
   final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
-  final ScrollController? scrollController;
+  final AnchorScrollController? scrollController;
   final TextEditingController? searchController;
 
   final PagingController<int, InfluencerFeedItem> latestContentController;
@@ -76,11 +78,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   bool _hasImageInPinned = false;
 
   double get topPaddingForPinned {
-    // if (isSearchActivated) {
-    // return _isCardVisible ? (0.38.sw + 40.h) : 88.h;
-    // } else {
-    return _isCardVisible ? (_hasImageInPinned ? 0.38.sw : 0.32.sw) : 50.h;
-    // }
+    if (isSearchActivated) {
+      return _isCardVisible ? (0.38.sw + 40.h) : 105.h;
+    } else {
+      return _isCardVisible ? (_hasImageInPinned ? 0.38.sw : 0.32.sw) : 50.h;
+    }
   }
 
   BorderRadius get clipBorderRadius =>
@@ -111,6 +113,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     if (widget.scrollController!.offset < -50.h && !isSearchActivated) {
       setState(() {
         isSearchActivated = true;
+        _isCardVisible = false;
       });
       Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
     }
@@ -125,7 +128,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   void dispose() {
-    // widget.scrollController?.removeListener(_scrollListener);
+    widget.scrollController?.removeListener(_scrollListener);
     tabController.removeListener(_toggleCardVisibility);
     widget.pinnedPublication?.removeListener(_toggleCardVisibility);
 
@@ -172,34 +175,53 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                   final pinnedPublication = widget.pinnedPublication!.value;
                   List<String>? images;
 
-                  if (pinnedPublication is ShufflePostFeedItem) {
-                    images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
+                  if (pinnedPublication is DigestFeedItem) {
+                    images = (pinnedPublication.digestUiModels != null && pinnedPublication.digestUiModels!.isNotEmpty
+                        ? pinnedPublication.digestUiModels![0].imageUrl != null &&
+                                pinnedPublication.digestUiModels![0].imageUrl!.isNotEmpty
+                            ? [pinnedPublication.digestUiModels![0].imageUrl!]
+                            : null
+                        : null);
                     _hasImageInPinned = images != null && images.isNotEmpty;
 
                     return PinnedPublication(
-                      text: pinnedPublication.text,
+                      text: pinnedPublication.title ?? '',
                       images: images,
                       onPinnedPublicationTap: widget.onPinnedPublicationTap,
                       isCardVisible: _isCardVisible,
                     );
-                  } else if (pinnedPublication is PostFeedItem) {
-                    return PinnedPublication(
-                      text: pinnedPublication.text,
-                      onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                      isCardVisible: _isCardVisible,
-                    );
-                  } else if (pinnedPublication is UpdatesFeedItem) {
+                  } else if (pinnedPublication is ShufflePostFeedItem) {
                     images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
                     _hasImageInPinned = images != null && images.isNotEmpty;
 
                     return PinnedPublication(
-                      text: pinnedPublication.name,
+                      text: pinnedPublication.text,
                       images: images,
                       onPinnedPublicationTap: widget.onPinnedPublicationTap,
                       isCardVisible: _isCardVisible,
                     );
                   }
+                  // else if (pinnedPublication is PostFeedItem) {
+                  //   log('abob PostFeedItem');
 
+                  //   return PinnedPublication(
+                  //     text: pinnedPublication.text,
+                  //     onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                  //     isCardVisible: _isCardVisible,
+                  //   );
+                  // } else if (pinnedPublication is UpdatesFeedItem) {
+                  //   log('abob UpdatesFeedItem');
+
+                  //   images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
+                  //   _hasImageInPinned = images != null && images.isNotEmpty;
+
+                  //   return PinnedPublication(
+                  //     text: pinnedPublication.name,
+                  //     images: images,
+                  //     onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                  //     isCardVisible: _isCardVisible,
+                  //   );
+                  // }
                   return const SizedBox.shrink();
                 },
               ),
@@ -207,31 +229,29 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               duration: const Duration(milliseconds: 200),
               child: isSearchActivated
                   ? UiKitInputFieldNoFill(
-                          controller: widget.searchController ?? TextEditingController(),
-                          autofocus: true,
-                          hintText: S.current.Search,
-                          focusNode: _searchFocusNode,
-                          label: '',
-                          icon: context.iconButtonNoPadding(
-                              data: BaseUiKitButtonData(
-                            onPressed: () {
-                              setState(() {
-                                isSearchActivated = false;
-                                _isCardVisible =
-                                    widget.showPinnedPublication && widget.pinnedPublication?.value != null;
-                              });
-                              _searchFocusNode.unfocus();
-                              widget.searchController?.clear();
-                            },
-                            iconInfo: BaseUiKitButtonIconData(
-                                iconData: ShuffleUiKitIcons.x, color: colorScheme?.inversePrimary),
-                          )))
-                      .paddingSymmetric(
-                          horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical20)
+                      controller: widget.searchController ?? TextEditingController(),
+                      autofocus: true,
+                      hintText: S.current.Search,
+                      focusNode: _searchFocusNode,
+                      label: '',
+                      icon: context.iconButtonNoPadding(
+                          data: BaseUiKitButtonData(
+                        onPressed: () {
+                          setState(() {
+                            isSearchActivated = false;
+                            _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
+                          });
+                          _searchFocusNode.unfocus();
+                          widget.searchController?.clear();
+                        },
+                        iconInfo:
+                            BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.x, color: colorScheme?.inversePrimary),
+                      ))).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16, vertical: 0.0)
                   : StatusWeatherSearchBar(
                       onSearchPressed: () {
                         setState(() {
                           isSearchActivated = true;
+                          _isCardVisible = false;
                         });
                         Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
                       },
@@ -309,7 +329,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final ValueChanged<int?>? onProfilePress;
   final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
-  final ScrollController? scrollController;
+  final AnchorScrollController? scrollController;
 
   final double? topPadding;
 
@@ -359,9 +379,11 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
           itemBuilder: (context, item, index) {
             final isLast = index == pagingController.itemList!.length - 1;
             double bottomPadding = isLast ? 0 : SpacingFoundation.verticalSpacing8;
+            log(' item id ${item.id} ');
 
+            late final Widget child;
             if (item is ShufflePostFeedItem) {
-              return UiKitContentUpdatesCard.fromShuffle(
+              child = UiKitContentUpdatesCard.fromShuffle(
                 key: item.key,
                 text: item.text,
                 onSharePress: () => onSharePress?.call(item.id),
@@ -378,7 +400,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 children: _children(item, regularTextTheme),
               ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
             } else if (item is PostFeedItem) {
-              return UiKitPostCard(
+              child = UiKitPostCard(
                 key: item.key,
                 authorName: item.name,
                 authorUsername: item.username,
@@ -401,7 +423,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 translateText: item.translateText,
               ).paddingOnly(bottom: bottomPadding);
             } else if (item is UpdatesFeedItem) {
-              return UiKitContentUpdatesCard(
+              child = UiKitContentUpdatesCard(
                 key: item.key,
                 createdAt: item.createdAt ?? '',
                 authorSpeciality: item.speciality,
@@ -415,7 +437,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 children: _children(item, regularTextTheme),
               ).paddingOnly(bottom: bottomPadding);
             } else if (item is DigestFeedItem) {
-              return UiKitDigestCard(
+              child = UiKitDigestCard(
                 key: item.key,
                 title: item.title,
                 digestUiModels: item.digestUiModels,
@@ -433,8 +455,14 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 underTitleTranslateText: item.translateUnderTitle,
               ).paddingOnly(bottom: bottomPadding);
             } else {
-              throw UnimplementedError('Unknown item type: ${item.runtimeType}');
+              child = throw UnimplementedError('Unknown item type: ${item.runtimeType}');
             }
+
+            return AnchorItemWrapper(
+              index: index,
+              controller: scrollController,
+              child: child,
+            );
           },
         ),
       ),
