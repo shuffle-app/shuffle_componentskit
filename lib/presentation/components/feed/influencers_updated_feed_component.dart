@@ -29,6 +29,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final bool showPinnedPublication;
   final VoidCallback? onPinnedPublicationTap;
   final RichText? weather;
+  final bool pinnedIsLoading;
 
   const InfluencersUpdatedFeedComponent({
     super.key,
@@ -49,6 +50,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.onPinnedPublicationTap,
     this.searchController,
     this.weather,
+    this.pinnedIsLoading = false,
   });
 
   @override
@@ -79,9 +81,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   double get topPaddingForPinned {
     if (isSearchActivated) {
-      return _isCardVisible ? (0.38.sw + 40.h) : 105.h;
+      return 0.33.sw;
     } else {
-      return _isCardVisible ? (_hasImageInPinned ? 0.38.sw : 0.32.sw) : 50.h;
+      return _isCardVisible ? (_hasImageInPinned ? 0.36.sw : 0.28.sw) : 50.h;
     }
   }
 
@@ -107,6 +109,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
     tabController.addListener(_toggleCardVisibility);
     widget.scrollController?.addListener(_scrollListener);
+
+    //Add empty value for show status bar in pageView
+    widget.latestContentController.value.itemList?.add(DigestFeedItem(id: -1, key: GlobalKey()));
+    widget.topContentController.value.itemList?.add(DigestFeedItem(id: -1, key: GlobalKey()));
+    widget.unreadContentController.itemList?.add(DigestFeedItem(id: -1, key: GlobalKey()));
   }
 
   _scrollListener() {
@@ -117,13 +124,14 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
       });
       Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
     }
-    // else if (widget.scrollController!.offset > 50.h && isSearchActivated) {
-    //   setState(() {
-    //     isSearchActivated = false;
-    //   });
-    //
-    //   _searchFocusNode.unfocus();
-    // }
+  }
+
+  _onSearchPressed() {
+    setState(() {
+      isSearchActivated = true;
+      _isCardVisible = false;
+    });
+    Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
   }
 
   @override
@@ -131,6 +139,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     widget.scrollController?.removeListener(_scrollListener);
     tabController.removeListener(_toggleCardVisibility);
     widget.pinnedPublication?.removeListener(_toggleCardVisibility);
+    widget.searchController?.clear();
 
     Future.delayed(Duration.zero, () => widget.onDispose?.call());
     super.dispose();
@@ -138,7 +147,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   void didUpdateWidget(covariant InfluencersUpdatedFeedComponent oldWidget) {
-    _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
+    _isCardVisible = !isSearchActivated && widget.showPinnedPublication && widget.pinnedPublication?.value != null;
 
     super.didUpdateWidget(oldWidget);
   }
@@ -189,6 +198,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                       images: images,
                       onPinnedPublicationTap: widget.onPinnedPublicationTap,
                       isCardVisible: _isCardVisible,
+                      pinnedIsLoading: widget.pinnedIsLoading,
                     );
                   } else if (pinnedPublication is ShufflePostFeedItem) {
                     images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
@@ -199,29 +209,10 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                       images: images,
                       onPinnedPublicationTap: widget.onPinnedPublicationTap,
                       isCardVisible: _isCardVisible,
+                      pinnedIsLoading: widget.pinnedIsLoading,
                     );
                   }
-                  // else if (pinnedPublication is PostFeedItem) {
-                  //   log('abob PostFeedItem');
 
-                  //   return PinnedPublication(
-                  //     text: pinnedPublication.text,
-                  //     onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                  //     isCardVisible: _isCardVisible,
-                  //   );
-                  // } else if (pinnedPublication is UpdatesFeedItem) {
-                  //   log('abob UpdatesFeedItem');
-
-                  //   images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
-                  //   _hasImageInPinned = images != null && images.isNotEmpty;
-
-                  //   return PinnedPublication(
-                  //     text: pinnedPublication.name,
-                  //     images: images,
-                  //     onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                  //     isCardVisible: _isCardVisible,
-                  //   );
-                  // }
                   return const SizedBox.shrink();
                 },
               ),
@@ -247,17 +238,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                         iconInfo:
                             BaseUiKitButtonIconData(iconData: ShuffleUiKitIcons.x, color: colorScheme?.inversePrimary),
                       ))).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16, vertical: 0.0)
-                  : StatusWeatherSearchBar(
-                      onSearchPressed: () {
-                        setState(() {
-                          isSearchActivated = true;
-                          _isCardVisible = false;
-                        });
-                        Future.delayed(const Duration(seconds: 1), () => _searchFocusNode.requestFocus());
-                      },
-                      weather: widget.weather,
-                    ).paddingSymmetric(
-                      horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical12),
+                  : SizedBox.shrink(),
             ),
           ],
         ),
@@ -274,6 +255,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
+              onSearchPressed: _onSearchPressed,
+              isSearchActivated: isSearchActivated,
+              weather: widget.weather,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
@@ -285,6 +269,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
+              onSearchPressed: _onSearchPressed,
+              isSearchActivated: isSearchActivated,
+              weather: widget.weather,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
               onReactionsTapped: onReactionsTapped,
@@ -296,6 +283,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               scrollController: widget.scrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
+              onSearchPressed: _onSearchPressed,
+              isSearchActivated: isSearchActivated,
+              weather: widget.weather,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ],
         ),
@@ -330,6 +320,9 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final ValueChanged<int>? onReadTap;
   final VoidCallback? onCheckVisibleItems;
   final AnchorScrollController? scrollController;
+  final VoidCallback? onSearchPressed;
+  final bool isSearchActivated;
+  final RichText? weather;
 
   final double? topPadding;
 
@@ -343,6 +336,9 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
     this.onReadTap,
     this.scrollController,
     this.topPadding,
+    this.onSearchPressed,
+    this.isSearchActivated = false,
+    this.weather,
   });
 
   double get _videoReactionPreviewWidth => 0.125.sw;
@@ -363,7 +359,6 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
     return NotificationListener<ScrollUpdateNotification>(
       onNotification: (t) {
         onCheckVisibleItems?.call();
-
         return true;
       },
       child: PagedListView.separated(
@@ -377,7 +372,17 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,
         builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
           itemBuilder: (context, item, index) {
-            final isLast = index == pagingController.itemList!.length - 1;
+            if (index == 0 && !isSearchActivated) {
+              return StatusWeatherSearchBar(
+                onSearchPressed: onSearchPressed,
+                weather: weather,
+              ).paddingSymmetric(
+                horizontal: EdgeInsetsFoundation.horizontal16,
+                vertical: EdgeInsetsFoundation.vertical12,
+              );
+            }
+
+            final isLast = index - 1 == pagingController.itemList!.length - 1;
             double bottomPadding = isLast ? 0 : SpacingFoundation.verticalSpacing8;
             log(' item id ${item.id} ');
 
