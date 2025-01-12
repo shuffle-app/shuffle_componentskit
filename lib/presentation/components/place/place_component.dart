@@ -714,6 +714,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                       launchUrlString('tel:${url}');
                     } else if (url == 'times' && widget.place.schedule != null) {
                       showTimeInfoDialog(context, widget.place.schedule!.getReadableScheduleString());
+                    } else if (widget.place.location != null && widget.place.location!.isNotEmpty) {
+                      showAddressInfoDialog(context, widget.place.location);
                     }
                   },
                   child: UiKitTitledDescriptionGridWidget(
