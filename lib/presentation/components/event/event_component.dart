@@ -642,24 +642,28 @@ class _EventComponentState extends State<EventComponent> {
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
         if (widget.event.descriptionItems != null)
           ...widget.event.descriptionItems!.map(
-            (e) => GestureDetector(
-              onTap: () {
-                if (e.descriptionUrl == 'times' && widget.event.schedule != null) {
-                  showTimeInfoDialog(context, widget.event.schedule!.getReadableScheduleString());
-                } else if (e.descriptionUrl != null) {
-                  launchUrlString(e.descriptionUrl!);
-                } else if (e.description.startsWith('http')) {
-                  launchUrlString(e.description);
-                } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
-                  launchUrlString('tel:${e.description}');
-                }
-              },
-              child: TitledAccentInfo(
-                title: e.title,
-                info: e.description,
-                showFullInfo: true,
-              ),
-            ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin),
+            (e) {
+              final bool isSchedule = e.descriptionUrl == 'times' && widget.event.schedule != null;
+
+              return GestureDetector(
+                onTap: () {
+                  if (isSchedule) {
+                    showTimeInfoDialog(context, widget.event.schedule!.getReadableScheduleString());
+                  } else if (e.descriptionUrl != null) {
+                    launchUrlString(e.descriptionUrl!);
+                  } else if (e.description.startsWith('http')) {
+                    launchUrlString(e.description);
+                  } else if (e.description.replaceAll(RegExp(r'[0-9]'), '').replaceAll('+', '').trim().isEmpty) {
+                    launchUrlString('tel:${e.description}');
+                  }
+                },
+                child: TitledAccentInfo(
+                  title: e.title,
+                  info: e.description,
+                  showFullInfo: !isSchedule,
+                ),
+              ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing4, horizontal: horizontalMargin);
+            },
           ),
         (kBottomNavigationBarHeight * 1.5).heightBox
       ],
