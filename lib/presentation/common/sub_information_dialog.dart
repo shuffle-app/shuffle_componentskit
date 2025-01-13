@@ -71,7 +71,6 @@ subInformationDialog(
                         child: ImageWidget(
                           height: 0.4.sh,
                           link: sub.photoPath,
-                          fit: BoxFit.fill,
                         ),
                       ),
                     ),
