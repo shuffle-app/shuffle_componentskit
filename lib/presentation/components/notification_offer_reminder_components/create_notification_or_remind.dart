@@ -7,14 +7,14 @@ class CreateNotificationOrRemind extends StatefulWidget {
   final bool isNotification;
   final UniversalNotOfferRemUiModel? universalNotOfferRemUiModel;
   final ValueChanged<UniversalNotOfferRemUiModel>? onCreate;
-  final DateTime? lastDate;
+  final bool Function(DateTime)? selectableDayPredicate;
 
   const CreateNotificationOrRemind({
     super.key,
     this.isNotification = true,
     this.universalNotOfferRemUiModel,
     this.onCreate,
-    this.lastDate,
+    this.selectableDayPredicate,
   });
 
   @override
@@ -151,6 +151,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
           SpacingFoundation.verticalSpace2,
           UiKitSelectDateWidget(
             selectedDates: _selectedDates,
+            selectableDayPredicate: widget.selectableDayPredicate,
             dateToWord: true,
             onCalenderTap: () async {
               _selectedDates.clear();
@@ -158,6 +159,18 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
 
               if (dates != null) {
                 final DateTime now = DateTime.now();
+
+                if (widget.selectableDayPredicate != null && !widget.selectableDayPredicate!(dates.start)) {
+                  setState(() {
+                    _selectedDates.add(null);
+                  });
+                  return;
+                } else if (widget.selectableDayPredicate != null && !widget.selectableDayPredicate!(dates.end)) {
+                  setState(() {
+                    _selectedDates.add(null);
+                  });
+                  return;
+                }
 
                 if (dates.start.isAtSameDayAs(dates.end)) {
                   setState(() {
