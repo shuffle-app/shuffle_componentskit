@@ -231,6 +231,7 @@ class _CreateOfferState extends State<CreateOffer> {
             ),
             SpacingFoundation.verticalSpace2,
             UiKitSelectDateWidget(
+              selectableDayPredicate: widget.selectableDayPredicate,
               selectedDates: _selectedDates,
               onCalenderTap: () async {
                 _selectedDates.clear();
@@ -238,6 +239,18 @@ class _CreateOfferState extends State<CreateOffer> {
 
                 if (dates != null) {
                   final DateTime now = DateTime.now();
+
+                  if (widget.selectableDayPredicate != null && !widget.selectableDayPredicate!(dates.start)) {
+                    setState(() {
+                      _selectedDates.add(null);
+                    });
+                    return;
+                  } else if (widget.selectableDayPredicate != null && !widget.selectableDayPredicate!(dates.end)) {
+                    setState(() {
+                      _selectedDates.add(null);
+                    });
+                    return;
+                  }
 
                   if (dates.start.isAtSameDayAs(dates.end)) {
                     setState(() {

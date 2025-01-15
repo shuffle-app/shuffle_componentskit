@@ -155,7 +155,8 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if ((universalNotOfferRemUiModel?.isOffer ?? false))
+                  if ((universalNotOfferRemUiModel?.isOffer ?? false)) ...[
+                    SpacingFoundation.horizontalSpace8,
                     Flexible(
                       child: context.button(
                         data: BaseUiKitButtonData(
@@ -167,7 +168,8 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ).paddingOnly(left: SpacingFoundation.horizontalSpacing8),
+                    ),
+                  ]
                 ],
               ).paddingAll(EdgeInsetsFoundation.all12),
               if (isEditingMode)
