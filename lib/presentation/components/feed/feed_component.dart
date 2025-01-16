@@ -29,8 +29,7 @@ class FeedComponent extends StatelessWidget {
   final ValueChanged<int?>? onNichePressed;
   final bool hasFavourites;
   final bool canShowVideoReactions;
-  final bool canShowSubscribedUsers;
-  final ValueNotifier<double>? subscribedUsersFeedIconScaleNotifier;
+  final ValueNotifier<double> subscribedUsersFeedIconScaleNotifier;
   final List<UiProfileModel> subscribedProfiles;
   final ValueChanged<int>? onSubscribedUserTapped;
   final ValueChanged<double>? subscribedProfilesHintNotifier;
@@ -44,7 +43,6 @@ class FeedComponent extends StatelessWidget {
     required this.controller,
     required this.showBusinessContent,
     this.canShowVideoReactions = false,
-    this.canShowSubscribedUsers = false,
     this.storiesPagingController,
     this.onReactionTapped,
     this.feedOpenedState,
@@ -63,7 +61,7 @@ class FeedComponent extends StatelessWidget {
     this.onListItemPressed,
     this.onAdvertisementPressed,
     this.onLoadMoreChips,
-    this.subscribedUsersFeedIconScaleNotifier,
+    required this.subscribedUsersFeedIconScaleNotifier,
     this.subscribedProfiles = const [],
     this.onSubscribedUserTapped,
     this.subscribedProfilesHintNotifier,
@@ -107,21 +105,19 @@ class FeedComponent extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               controller: scrollController,
               slivers: [
-                if (!canShowSubscribedUsers || (feedOpenedState!.value == FeedOpenedState.initial && !showHints))
+                if (feedOpenedState!.value == FeedOpenedState.initial && !showHints)
                   MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox
                 else if (feedOpenedState!.value == FeedOpenedState.initial)
                   UiKitAnimatedPullToShowHint(
-                    scaleNotifier: subscribedUsersFeedIconScaleNotifier!,
+                    scaleNotifier: subscribedUsersFeedIconScaleNotifier,
                     topPadding: MediaQuery.viewPaddingOf(context).top,
                   ).wrapSliverBox,
                 // MediaQuery.viewPaddingOf(context).top.heightBox.wrapSliverBox,
-                if (subscribedUsersFeedIconScaleNotifier != null &&
-                    canShowSubscribedUsers &&
-                    feedOpenedState!.value != FeedOpenedState.initial)
+                if (feedOpenedState!.value != FeedOpenedState.initial)
                   SliverPersistentHeader(
                     delegate: UiKitAnimatedPullToShowDelegate(
                       lastPhaseScaleNotifier: feedOpenedState!.value == FeedOpenedState.avaliableForOpeningFeed
-                          ? subscribedUsersFeedIconScaleNotifier!
+                          ? subscribedUsersFeedIconScaleNotifier
                           : ValueNotifier(0.0),
                       topPadding: MediaQuery.viewPaddingOf(context).top,
                       children: (subscribedProfiles.isEmpty ? null : subscribedProfiles)
