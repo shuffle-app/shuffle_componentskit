@@ -42,6 +42,12 @@ class DigestPageComponent extends StatelessWidget {
     final colorScheme = theme?.colorScheme;
     final isLightTheme = theme?.themeMode == ThemeMode.light;
 
+    final shufflePostVideoWidgetHeight = 0.16845.sw * 0.75;
+    final shufflePostVideoWidgetWidth = 0.16845.sw;
+    final playButtonSize = Size(32.w, 24.h);
+    final xOffset = shufflePostVideoWidgetWidth / 2 - playButtonSize.width / 2;
+    final yOffset = shufflePostVideoWidgetHeight / 2 - playButtonSize.height / 2;
+
     final horizontalSpacing = SpacingFoundation.horizontalSpacing16;
 
     void toggleTranslation() {
@@ -61,6 +67,9 @@ class DigestPageComponent extends StatelessWidget {
 
           e.descriptionNotifier?.value =
               isTranslate.value ? (e.descriptionTranslate?.value ?? e.description ?? '') : e.description ?? '';
+
+          e.subTitleNotifier?.value =
+              isTranslate.value ? (e.subTitleTranslate?.value ?? e.subTitle ?? '') : e.subTitle ?? '';
         },
       );
     }
@@ -83,9 +92,12 @@ class DigestPageComponent extends StatelessWidget {
               Expanded(
                 child: ValueListenableBuilder<String>(
                   valueListenable: titleNotifier,
-                  builder: (_, titleTranslate, __) => Text(
-                    titleTranslate,
-                    style: boldTextTheme?.title2,
+                  builder: (_, titleTranslate, __) => GradientableWidget(
+                    gradient: GradientFoundation.attentionCard,
+                    child: Text(
+                      titleTranslate,
+                      style: boldTextTheme?.title2,
+                    ),
                   ),
                 ),
               ),
@@ -129,31 +141,97 @@ class DigestPageComponent extends StatelessWidget {
               final id = e.placeId ?? e.eventId ?? -1;
               final isEvent = e.eventId != null;
 
-              return UiKitCardWrapper(
-                color: colorScheme?.surface1,
-                padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () => onPlaceOrEventTap?.call(id, isEvent),
-                      child: DigestContentCard(digestUiModel: e),
-                    ),
-                    SpacingFoundation.verticalSpace8,
-                    if (e.descriptionNotifier != null && e.descriptionNotifier!.value.isNotEmpty)
-                      ValueListenableBuilder(
-                        valueListenable: e.descriptionNotifier!,
-                        builder: (_, descriptionTranslate, __) => Text(
-                          descriptionTranslate,
-                          style: regularTextTheme?.caption2,
-                        ),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (e.subTitleNotifier != null && e.subTitleNotifier!.value.isNotEmpty)
+                    ValueListenableBuilder<String>(
+                      valueListenable: e.subTitleNotifier!,
+                      builder: (_, subTitle, __) => Text(
+                        subTitle,
+                        style: theme?.boldTextTheme.subHeadline,
+                      ).paddingOnly(
+                        bottom: SpacingFoundation.verticalSpacing24,
+                        left: horizontalSpacing,
+                        right: horizontalSpacing,
                       ),
-                  ],
-                ),
-              ).paddingOnly(
-                bottom: SpacingFoundation.verticalSpacing24,
-                left: horizontalSpacing,
-                right: horizontalSpacing,
+                    ),
+                  if (e.placeId != null || e.eventId != null)
+                    UiKitCardWrapper(
+                      color: colorScheme?.surface1,
+                      padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () => onPlaceOrEventTap?.call(id, isEvent),
+                            child: DigestContentCard(digestUiModel: e),
+                          ),
+                          SpacingFoundation.verticalSpace8,
+                          if (e.contentDescriptionNotifier != null && e.contentDescriptionNotifier!.value.isNotEmpty)
+                            ValueListenableBuilder<String>(
+                              valueListenable: e.contentDescriptionNotifier!,
+                              builder: (_, contentDescriptionTranslate, __) => Text(
+                                contentDescriptionTranslate,
+                                style: regularTextTheme?.caption4Regular,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing24,
+                      left: horizontalSpacing,
+                      right: horizontalSpacing,
+                    ),
+                  if (e.newPhotos != null && e.newPhotos!.isNotEmpty)
+                    UiKitStaggeredMediaRow(
+                      mediaList: e.newPhotos!,
+                      visibleMediaCount: 4,
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing24,
+                      left: horizontalSpacing,
+                      right: horizontalSpacing,
+                    ),
+                  if (e.newVideos != null && e.newVideos!.isNotEmpty)
+                    UiKitCustomChildContentUpdateWidget(
+                      height: shufflePostVideoWidgetHeight,
+                      child: Row(
+                        children: e.newVideos!.map(
+                          (video) {
+                            final isLast = e.newVideos!.last == video;
+
+                            return SizedBox(
+                              height: shufflePostVideoWidgetHeight,
+                              child: UiKitMediaVideoWidget(
+                                width: shufflePostVideoWidgetWidth,
+                                playButtonCustomOffset: Offset(xOffset, yOffset),
+                                media: video,
+                                borderRadius: BorderRadiusFoundation.all8,
+                              ).paddingOnly(right: isLast ? 0 : EdgeInsetsFoundation.horizontal16),
+                            );
+                          },
+                        ).toList(),
+                      ),
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing24,
+                      left: horizontalSpacing,
+                      right: horizontalSpacing,
+                    ),
+                  if (e.descriptionNotifier != null && e.descriptionNotifier!.value.isNotEmpty)
+                    ValueListenableBuilder(
+                      valueListenable: e.descriptionNotifier!,
+                      builder: (_, descriptionTranslate, __) => Text(
+                        descriptionTranslate,
+                        style: regularTextTheme?.caption2,
+                      ),
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing24,
+                      left: horizontalSpacing,
+                      right: horizontalSpacing,
+                    ),
+                ],
               );
             },
           ),

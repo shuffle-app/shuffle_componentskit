@@ -103,17 +103,27 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   @override
   void initState() {
     super.initState();
+    //Add empty value for show status bar in pageView
+    Future.delayed(Duration.zero, () {
+      if (mounted) {
+        if (widget.latestContentController.itemList?.isEmpty ?? true) {
+          widget.latestContentController.itemList = [DigestFeedItem(id: -1, key: GlobalKey())];
+        }
+        if (widget.topContentController.itemList?.isEmpty ?? true) {
+          widget.topContentController.itemList = [DigestFeedItem(id: -1, key: GlobalKey())];
+        }
+        if (widget.unreadContentController.itemList?.isEmpty ?? true) {
+          widget.unreadContentController.itemList = [DigestFeedItem(id: -1, key: GlobalKey())];
+        }
+      }
+    });
+
     _isCardVisible = widget.showPinnedPublication && widget.pinnedPublication?.value != null;
     widget.pinnedPublication?.addListener(_toggleCardVisibility);
     Future.delayed(Duration.zero, () => _toggleCardVisibility());
 
     tabController.addListener(_toggleCardVisibility);
     widget.scrollController?.addListener(_scrollListener);
-
-    //Add empty value for show status bar in pageView
-    widget.latestContentController.value.itemList?.add(DigestFeedItem(id: -1, key: GlobalKey()));
-    widget.topContentController.value.itemList?.add(DigestFeedItem(id: -1, key: GlobalKey()));
-    widget.unreadContentController.itemList?.add(DigestFeedItem(id: -1, key: GlobalKey()));
   }
 
   _scrollListener() {
