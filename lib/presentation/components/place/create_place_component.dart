@@ -187,6 +187,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _locationController.text = widget.placeToEdit?.location ?? '';
       _bookingUiModel = widget.placeToEdit?.bookingUiModel;
     }
+    //handle location changes
+    if(oldWidget.placeToEdit?.location == null ||oldWidget.placeToEdit?.location == '') {
+      _locationController.text = widget.placeToEdit?.location ?? '';
+    }
     _handleLocaleChanged();
     super.didUpdateWidget(oldWidget);
   }
