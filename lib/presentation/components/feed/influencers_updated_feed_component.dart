@@ -443,6 +443,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
               ).paddingOnly(bottom: bottomPadding);
             } else if (item is DigestFeedItem) {
               child = UiKitDigestCard(
+                onSharePress: () => onSharePress?.call(item.id),
                 key: item.key,
                 title: item.title,
                 digestUiModels: item.digestUiModels,
