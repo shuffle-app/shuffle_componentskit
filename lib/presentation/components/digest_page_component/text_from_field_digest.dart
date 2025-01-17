@@ -6,18 +6,20 @@ class TextFromFieldDigest extends StatelessWidget {
   final String title;
   final TextEditingController? controller;
   final VoidCallback? onTap;
+  final bool? wrapIgnorePointer;
 
   const TextFromFieldDigest({
     super.key,
     required this.title,
     this.controller,
     this.onTap,
+    this.wrapIgnorePointer,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final bool isReadOnly = controller == null;
+    final bool isReadOnly = wrapIgnorePointer ?? (controller == null);
     final Widget child = UiKitInputFieldNoIcon(
       controller: controller ?? TextEditingController(),
       readOnly: isReadOnly,
