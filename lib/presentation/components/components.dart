@@ -158,3 +158,4 @@ export 'location/change_location/change_location_bottom_sheet.dart';
 export 'publications/create_publication_web_component.dart';
 export 'show_followers_in_notification_component/show_followers_in_notification.dart';
 export 'digest_page_component/digest_page_component.dart';
+export 'digest_page_component/text_from_field_digest.dart';
