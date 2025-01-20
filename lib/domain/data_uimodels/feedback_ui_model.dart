@@ -12,6 +12,7 @@ class FeedbackUiModel {
   int? helpfulCount;
   final bool? helpfulForUser;
   final int id;
+  final int? feedbackAuthorId;
   final int? placeId;
   final int? eventId;
   final VoidCallback? onTap;
@@ -28,6 +29,7 @@ class FeedbackUiModel {
       this.feedbackRating,
       this.feedbackAuthorType,
       this.helpfulCount,
+      this.feedbackAuthorId,
       this.placeId,
       this.eventId,
       this.media = const [],
@@ -49,6 +51,7 @@ class FeedbackUiModel {
       UserTileType? feedbackAuthorType,
       int? helpfulCount,
       bool? helpfulForUser,
+      int? feedbackAuthorId,
       int? placeId,
       int? eventId,
       List<BaseUiKitMedia>? media,
@@ -64,6 +67,7 @@ class FeedbackUiModel {
         feedbackText: feedbackText,
         empty: empty,
         id: id,
+        feedbackAuthorId: feedbackAuthorId?? this.feedbackAuthorId,
         media: media ?? this.media,
         placeId: placeId ?? this.placeId,
         eventId: eventId ?? this.eventId,

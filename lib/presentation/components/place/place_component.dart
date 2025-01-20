@@ -43,6 +43,7 @@ class PlaceComponent extends StatefulWidget {
   final VoidCallback? onSpendPointTap;
   final ValueNotifier<String?>? translateDescription;
   final ValueNotifier<bool>? showTranslateButton;
+  final int? currentUserId;
 
   const PlaceComponent({
     super.key,
@@ -76,6 +77,7 @@ class PlaceComponent extends StatefulWidget {
     this.onArchivePressed,
     this.translateDescription,
     this.showTranslateButton,
+    this.currentUserId,
   });
 
   @override
@@ -677,7 +679,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                   feedback.onTap?.call();
                                 }
                               },
-                              onLike: () {
+                              onLike: widget.currentUserId == feedback.feedbackAuthorId
+                                  ? null
+                                  : () {
                                 final feedbackId = feedback.id;
                                 if (likedReviews.contains(feedbackId)) {
                                   likedReviews.remove(feedbackId);

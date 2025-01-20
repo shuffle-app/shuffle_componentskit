@@ -14,6 +14,7 @@ changeLocationBottomSheet({
     GeneralDialogData(
       topPadding: topPadding ?? (1.sw <= 380 ? 0.6.sw : 0.8.sw),
       useRootNavigator: false,
+      isWidgetScrollable: true,
       child: ChangeLocationApp(
         countriesCities: countriesCities,
         onMyLocationTap: onMyLocationTap,
@@ -29,6 +30,7 @@ class ChangeLocationApp extends StatefulWidget {
   final ValueChanged<String>? onSelectCity;
   final Map<String, List<String>>? countriesCities;
   final ValueNotifier<String?>? selectedCity;
+
   const ChangeLocationApp({
     super.key,
     this.onMyLocationTap,
@@ -48,14 +50,14 @@ class _ChangeLocationAppState extends State<ChangeLocationApp> {
   void initState() {
     super.initState();
     selectedCity = widget.selectedCity?.value ?? S.current.NothingFound;
-    if(widget.selectedCity!= null) {
+    if (widget.selectedCity != null) {
       widget.selectedCity!.addListener(_cityChangeListener);
     }
   }
 
   _cityChangeListener() {
     setState(() {
-      selectedCity = widget.selectedCity?.value?? S.current.NothingFound;
+      selectedCity = widget.selectedCity?.value ?? S.current.NothingFound;
     });
   }
 
@@ -141,68 +143,68 @@ class _ChangeLocationAppState extends State<ChangeLocationApp> {
         ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         SpacingFoundation.verticalSpace16,
         if (widget.countriesCities != null && widget.countriesCities!.isNotEmpty)
-          ListView(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: widget.countriesCities!.entries.map((entry) {
-              final country = entry.key;
-              final cities = entry.value;
-              String? lastCity;
+          Expanded(
+              child: ColoredBox(
+                  color: colorScheme?.surface1 ?? ColorsFoundation.darkNeutral900,
+                  child: ListView.separated(
+                      separatorBuilder: (context, _) => Divider(
+                            thickness: 2.h,
+                            color: colorScheme?.surface2,
+                          ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
+                      itemCount: widget.countriesCities!.entries.length,
+                      shrinkWrap: true,
+                      // physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final entry = widget.countriesCities!.entries.elementAt(index);
+                        final country = entry.key;
+                        final cities = entry.value;
+                        // String? lastCity;
 
-              return ColoredBox(
-                color: colorScheme?.surface1 ?? ColorsFoundation.darkNeutral900,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      country.toUpperCase(),
-                      style: boldTextTheme?.caption1UpperCaseMedium.copyWith(
-                        color: ColorsFoundation.mutedText,
-                      ),
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    ...cities.map(
-                      (city) {
-                        lastCity = city;
-                        if (selectedCity == city) {
-                          return GradientableWidget(
-                            gradient: GradientFoundation.attentionCard,
-                            child: Text(
-                              city,
-                              style: boldTextTheme?.caption1Medium.copyWith(color: Colors.white),
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              country.toUpperCase(),
+                              style: boldTextTheme?.caption1UpperCaseMedium.copyWith(
+                                color: ColorsFoundation.mutedText,
+                              ),
                             ),
-                          );
-                        } else {
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                selectedCity = city;
-                              });
-                              widget.onSelectCity?.call(city);
-                            },
-                            child: Text(
-                              city,
-                              style: boldTextTheme?.caption1Medium,
+                            SpacingFoundation.verticalSpace16,
+                            ...cities.map(
+                              (city) {
+                                // lastCity = city;
+                                if (selectedCity == city) {
+                                  return GradientableWidget(
+                                    gradient: GradientFoundation.attentionCard,
+                                    child: Text(
+                                      city,
+                                      style: boldTextTheme?.caption1Medium.copyWith(color: Colors.white),
+                                    ),
+                                  );
+                                } else {
+                                  return InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedCity = city;
+                                      });
+                                      widget.onSelectCity?.call(city);
+                                    },
+                                    child: Text(
+                                      city,
+                                      style: boldTextTheme?.caption1Medium,
+                                    ),
+                                  );
+                                }
+                              },
                             ),
-                          );
-                        }
-                      },
-                    ),
-                    SpacingFoundation.verticalSpace16,
-                    Divider(
-                      thickness: 2.h,
-                      color: colorScheme?.surface2,
-                    ),
-                    if (lastCity == cities.last && country != widget.countriesCities?.keys.last)
-                      SpacingFoundation.verticalSpace16
-                  ],
-                ).paddingSymmetric(
-                  horizontal: SpacingFoundation.horizontalSpacing16,
-                  vertical: country == widget.countriesCities?.keys.first ? SpacingFoundation.verticalSpacing4 : 0,
-                ),
-              );
-            }).toList(),
-          )
+                          ],
+                        ).paddingSymmetric(
+                          horizontal: SpacingFoundation.horizontalSpacing16,
+                          vertical:
+                              country == widget.countriesCities?.keys.first ? SpacingFoundation.verticalSpacing4 : 0,
+                        );
+                      }))),
       ],
     );
   }

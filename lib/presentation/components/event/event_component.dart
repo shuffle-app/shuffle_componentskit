@@ -32,6 +32,7 @@ class EventComponent extends StatefulWidget {
   final VoidCallback? onSpendPointTap;
   final ValueNotifier<String?>? translateDescription;
   final ValueNotifier<bool>? showTranslateButton;
+  final int? currentUserId;
 
   const EventComponent({
     super.key,
@@ -58,6 +59,7 @@ class EventComponent extends StatefulWidget {
     this.onSpendPointTap,
     this.translateDescription,
     this.showTranslateButton,
+    this.currentUserId,
   });
 
   @override
@@ -619,19 +621,21 @@ class _EventComponentState extends State<EventComponent> {
                                   feedback.onTap?.call();
                                 }
                               },
-                              onLike: () {
-                                final feedbackId = feedback.id;
-                                if (likedReviews.contains(feedbackId)) {
-                                  likedReviews.remove(feedbackId);
-                                  widget.onDislikedFeedback?.call(feedbackId);
-                                  _updateFeedbackList(feedbackId, -1);
-                                } else {
-                                  likedReviews.add(feedbackId);
-                                  widget.onLikedFeedback?.call(feedbackId);
-                                  _updateFeedbackList(feedbackId, 1);
-                                }
-                                setState(() {});
-                              },
+                              onLike: widget.currentUserId == feedback.feedbackAuthorId
+                                  ? null
+                                  : () {
+                                      final feedbackId = feedback.id;
+                                      if (likedReviews.contains(feedbackId)) {
+                                        likedReviews.remove(feedbackId);
+                                        widget.onDislikedFeedback?.call(feedbackId);
+                                        _updateFeedbackList(feedbackId, -1);
+                                      } else {
+                                        likedReviews.add(feedbackId);
+                                        widget.onLikedFeedback?.call(feedbackId);
+                                        _updateFeedbackList(feedbackId, 1);
+                                      }
+                                      setState(() {});
+                                    },
                             ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
                           );
                         },
