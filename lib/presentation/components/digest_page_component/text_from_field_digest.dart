@@ -7,6 +7,7 @@ class TextFromFieldDigest extends StatelessWidget {
   final TextEditingController? controller;
   final VoidCallback? onTap;
   final bool? wrapIgnorePointer;
+  final bool isRequired;
 
   const TextFromFieldDigest({
     super.key,
@@ -14,6 +15,7 @@ class TextFromFieldDigest extends StatelessWidget {
     this.controller,
     this.onTap,
     this.wrapIgnorePointer,
+    this.isRequired = false,
   });
 
   @override
@@ -35,7 +37,7 @@ class TextFromFieldDigest extends StatelessWidget {
       onTap: onTap,
       child: WebFormField(
         title: title,
-        isRequired: true,
+        isRequired: isRequired,
         child: isReadOnly ? IgnorePointer(child: child) : child,
       ),
     );
