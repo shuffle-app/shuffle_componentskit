@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/unique_statistics_model.dart';
 import 'package:shuffle_components_kit/presentation/components/event/uievent_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import '../place/uiplace_model.dart';
 
@@ -65,10 +66,19 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
+    TextStyle? textStyle = boldTextTheme?.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    textStyle = textStyle?.copyWith(color: colorScheme?.inversePrimary);
 
     return BlurredAppBarPage(
-      centerTitle: true,
-      title: S.current.Statistics,
+      customTitle: Expanded(
+        child: AutoSizeText(
+          S.current.Statistics,
+          maxLines: 1,
+          style: textStyle,
+          textAlign: TextAlign.center,
+        ),
+      ),
+      expandTitle: true,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,
