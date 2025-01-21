@@ -910,7 +910,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
     return dailySchedule
         .map((e) => [
               '${getDateRangeFromKey(e.key)!.toPrettyString()}:',
-              e.value.map((time) => time.normalizedString).join(',')
+              e.value.map((time) => time.normalizedString).join(', ')
             ])
         .toList();
   }
