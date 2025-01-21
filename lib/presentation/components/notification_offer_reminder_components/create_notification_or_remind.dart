@@ -85,7 +85,14 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
 
     return Scaffold(
       body: BlurredAppBarPage(
-        title: widget.isNotification ? S.of(context).Notification : S.of(context).Reminder,
+        customTitle: Flexible(
+          child: AutoSizeText(
+            widget.isNotification ? S.of(context).Notification : S.of(context).Reminder,
+            style: theme?.boldTextTheme.title1,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+          ),
+        ),
         centerTitle: true,
         autoImplyLeading: true,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),

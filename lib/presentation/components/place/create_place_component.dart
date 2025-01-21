@@ -188,7 +188,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       _bookingUiModel = widget.placeToEdit?.bookingUiModel;
     }
     //handle location changes
-    if(oldWidget.placeToEdit?.location == null ||oldWidget.placeToEdit?.location == '') {
+    if (oldWidget.placeToEdit?.location == null || oldWidget.placeToEdit?.location == '') {
       _locationController.text = widget.placeToEdit?.location ?? '';
     }
     _handleLocaleChanged();
@@ -412,17 +412,38 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   data: BaseUiKitButtonData(
                     onPressed: () {
                       context.push(CreateScheduleWidget(
-                        scheduleToEdit: _placeToEdit.schedule is UiScheduleTimeModel ? _placeToEdit.schedule : null,
+                        scheduleToEdit: [UiScheduleDatesModel, UiScheduleDatesRangeModel, UiScheduleTimeModel]
+                                .contains(_placeToEdit.schedule.runtimeType)
+                            ? _placeToEdit.schedule
+                            : null,
                         availableTemplates: widget.availableTimeTemplates,
                         onTemplateCreated: widget.onTimeTemplateCreated,
-                        availableTypes: const [UiScheduleTimeModel.scheduleType],
+                        availableTypes: const [
+                          UiScheduleTimeModel.scheduleType,
+                          UiScheduleDatesModel.scheduleType,
+                          UiScheduleDatesRangeModel.scheduleType
+                        ],
                         onScheduleCreated: (model) {
-                          if (model is UiScheduleTimeModel) {
+                          if (model is UiScheduleDatesModel) {
+                            setState(() {
+                              _placeToEdit.schedule = model;
+                              _placeToEdit.scheduleString = model.dailySchedule
+                                  .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join(',')}')
+                                  .join('; ');
+                            });
+                          } else if (model is UiScheduleDatesRangeModel) {
+                            setState(() {
+                              _placeToEdit.schedule = model;
+                              _placeToEdit.scheduleString = model.dailySchedule
+                                  .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join('/')}')
+                                  .join(', ');
+                            });
+                          } else if (model is UiScheduleTimeModel) {
                             setState(() {
                               _placeToEdit.schedule = model;
                               _placeToEdit.scheduleString = model.weeklySchedule
                                   .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                  .join(', ');
+                                  .join('; ');
                             });
                           }
                         },
@@ -497,7 +518,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 });
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace24,
             if (_placeToEdit.contentType == 'business') ...[
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.niche != null ? [_placeToEdit.niche!] : null,
