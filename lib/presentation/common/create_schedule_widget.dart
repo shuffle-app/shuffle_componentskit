@@ -642,7 +642,10 @@ class UiScheduleDatesModel extends UiScheduleModel {
   @override
   List<List<String>> getReadableScheduleString() {
     return dailySchedule
-        .map((e) => ['${dateFormatToString(e.key)}:', e.value.map((time) => time.normalizedString).join(', ')])
+        .map((e) => [
+              '${dateFormatToString(e.key, locale: Localizations.localeOf(navigatorKey.currentContext!).languageCode)}:',
+              e.value.map((time) => time.normalizedString).join(', ')
+            ])
         .toList();
   }
 
