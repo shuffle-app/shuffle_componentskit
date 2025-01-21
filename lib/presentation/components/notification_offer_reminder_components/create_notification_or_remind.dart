@@ -166,27 +166,26 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
 
               if (dates != null) {
                 final DateTime now = DateTime.now();
+                final List<DateTime> generateDateList = generateDateRange([dates.start, dates.end]);
 
-                if (widget.selectableDayPredicate != null && !widget.selectableDayPredicate!(dates.start)) {
+                if (generateDateList.isEmpty) {
                   setState(() {
                     _selectedDates.add(null);
                   });
-                  return;
-                } else if (widget.selectableDayPredicate != null && !widget.selectableDayPredicate!(dates.end)) {
+                } else if (widget.selectableDayPredicate != null &&
+                    !generateDateList.any((element) => widget.selectableDayPredicate!(element))) {
                   setState(() {
                     _selectedDates.add(null);
                   });
-                  return;
-                }
-
-                if (dates.start.isAtSameDayAs(dates.end)) {
-                  setState(() {
-                    _selectedDates.addAll([dates.start]);
-                  });
-                } else if ((!dates.start.isBefore(now) || !dates.end.isBefore(now)) ||
+                } else if ((!dates.start.isBefore(now)) ||
+                    (((!dates.start.isBefore(now) || dates.start.isAtSameDay) && !dates.end.isBefore(now))) ||
                     (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
                   setState(() {
                     _selectedDates.addAll([dates.start, dates.end]);
+                  });
+                } else if (dates.start.isAtSameDayAs(dates.end)) {
+                  setState(() {
+                    _selectedDates.addAll([dates.start]);
                   });
                 } else {
                   setState(() {
