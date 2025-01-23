@@ -36,6 +36,9 @@ class AddInfluencerFeedbackComponent extends StatefulWidget {
 }
 
 class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackComponent> {
+  final GlobalKey _addToPersonalTopKey = GlobalKey();
+  final GlobalKey _personalRespectKey = GlobalKey();
+
   bool? personalRespectToggled;
   bool? addToPersonalTopToggled;
   final FocusNode _focusNode = FocusNode();
@@ -64,17 +67,28 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
 
     _focusNode.addListener(() async {
       if (_focusNode.hasFocus && !isKeyboardVisible) {
-        await Future.delayed(Duration(milliseconds: 300));
-
-        unawaited(_scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-        ));
+        updateScrollPosition();
       }
     });
 
     super.initState();
+  }
+
+  updateScrollPosition() async {
+    final bool isInfluencer = widget.userTileType == UserTileType.influencer;
+    final double personalWidgetHeight =
+        isInfluencer ? _getWidgetSize(_addToPersonalTopKey).height + _getWidgetSize(_personalRespectKey).height : 0.0;
+
+    await Future.delayed(Duration(milliseconds: 200));
+    final double position = _scrollController.position.maxScrollExtent -
+        personalWidgetHeight -
+        (isInfluencer ? (SpacingFoundation.verticalSpacing24 * 2) : 0.0);
+
+    unawaited(_scrollController.animateTo(
+      position,
+      duration: Duration(milliseconds: 120),
+      curve: Curves.easeInOut,
+    ));
   }
 
   @override
@@ -134,6 +148,11 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
     setState(() {
       _photos.removeAt(index);
     });
+  }
+
+  Size _getWidgetSize(GlobalKey key) {
+    final RenderBox? renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+    return renderBox?.size ?? Size(0, 0);
   }
 
   @override
@@ -211,13 +230,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
               maxSymbols: 1500,
               onTap: () async {
                 if (!isKeyboardVisible) {
-                  await Future.delayed(Duration(milliseconds: 300));
-
-                  unawaited(_scrollController.animateTo(
-                    _scrollController.position.maxScrollExtent,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.easeInOut,
-                  ));
+                  updateScrollPosition();
                 }
               },
             ),
@@ -226,6 +239,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
           SpacingFoundation.verticalSpace24,
           if (widget.userTileType == UserTileType.influencer) ...[
             Row(
+              key: _personalRespectKey,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
@@ -249,6 +263,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
             ),
             SpacingFoundation.verticalSpace24,
             Row(
+              key: _addToPersonalTopKey,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
