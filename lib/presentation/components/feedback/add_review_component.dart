@@ -134,6 +134,7 @@ class _AddReviewComponentState extends State<AddReviewComponent> {
                             ? () {
                                 widget.onConfirm.call(
                                   ReviewUiModel(
+                                    id: widget.reviewUiModel?.id ?? -1,
                                     // rating: widget.rating,
                                     reviewDescription: widget.reviewController.text,
                                     reviewTime: widget.reviewUiModel?.reviewTime ?? DateTime.now(),
