@@ -18,7 +18,9 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final ValueChanged<int?>? onProfilePress;
   final ValueChanged<int>? onReadTap;
   final ValueChanged<int>? onCheckVisibleItems;
-  final AnchorScrollController? scrollController;
+  final AnchorScrollController? latestScrollController;
+  final AnchorScrollController? topScrollController;
+  final AnchorScrollController? unreadScrollController;
   final TextEditingController? searchController;
 
   final PagingController<int, InfluencerFeedItem> latestContentController;
@@ -44,7 +46,9 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.onSharePress,
     this.onProfilePress,
     this.onReadTap,
-    this.scrollController,
+    this.latestScrollController,
+    this.topScrollController,
+    this.unreadScrollController,
     this.pinnedPublication,
     this.showPinnedPublication = false,
     this.onPinnedPublicationTap,
@@ -62,11 +66,23 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   late final tabController = TabController(length: 3, vsync: this);
   final autoSizeGroup = AutoSizeGroup();
 
+  late final latestPublicationsKey = UniqueKey();
+  late final topPublicationsKey = UniqueKey();
+  late final unreadPublicationsKey = UniqueKey();
+
+  final Duration sizingDuration = Duration(milliseconds: 100);
+
+  double? disappearingHeight;
+
   late final _tabs = [
-    UiKitCustomTab(title: S.current.Latest, customValue: 'latest', group: autoSizeGroup),
-    UiKitCustomTab(title: S.current.Top, customValue: 'top', group: autoSizeGroup),
-    UiKitCustomTab(title: S.current.Unread, customValue: 'unread', group: autoSizeGroup),
+    UiKitCustomTab(title: S.current.Latest.toUpperCase(), customValue: 'latest', group: autoSizeGroup,height: 20.h,),
+    UiKitCustomTab(title: S.current.Top.toUpperCase(), customValue: 'top', group: autoSizeGroup,height: 20.h),
+    UiKitCustomTab(title: S.current.Unread.toUpperCase(), customValue: 'unread', group: autoSizeGroup,height: 20.h),
   ];
+
+  double latestScrollOffset = 0.0;
+  double topScrollOffset = 0.0;
+  double unreadScrollOffset = 0.0;
 
   onReactionsTapped(int index, String reaction) async {
     // Handle reaction tapped
@@ -81,11 +97,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   double get topPaddingForPinned {
     if (showSearchBar && !isSearchBarActivated) {
-      return 0.28.sw;
+      return 0.235.sw;
     } else if (isSearchBarActivated) {
-      return 0.34.sw;
+      return 0.30.sw;
     } else {
-      return _isCardVisible ? (_hasImageInPinned ? 0.36.sw : 0.28.sw) : 50.h;
+      return _isCardVisible ? (_hasImageInPinned ? 0.32.sw : 0.25.sw) : 50.h;
     }
   }
 
@@ -96,11 +112,32 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   bool isSearchBarActivated = false;
   final FocusNode _searchFocusNode = FocusNode();
 
+  final Duration scrollToDuration = const Duration(milliseconds: 150);
+  final Curve scrollToCurve = Curves.easeOut;
+
   _toggleCardVisibility() {
+    final index = tabController.index;
     setState(() {
-      _isCardVisible = tabController.index == 0 &&
-          (widget.showPinnedPublication && widget.pinnedPublication?.value != null && !showSearchBar);
+      _isCardVisible =
+          index == 0 && (widget.showPinnedPublication && widget.pinnedPublication?.value != null && !showSearchBar);
     });
+
+    widget.onTappedTab?.call(_tabs[index].customValue!);
+
+    switch (_tabs[index].customValue) {
+      case 'latest':
+        widget.latestScrollController?.jumpTo(latestScrollOffset);
+        // widget.latestScrollController?.animateTo(latestScrollOffset, duration: scrollToDuration, curve: scrollToCurve);
+        break;
+      case 'top':
+        widget.topScrollController?.jumpTo(topScrollOffset);
+        // widget.topScrollController?.animateTo(topScrollOffset, duration: scrollToDuration, curve: scrollToCurve);
+        break;
+      case 'unread':
+        widget.unreadScrollController?.jumpTo(unreadScrollOffset);
+        // widget.unreadScrollController?.animateTo(unreadScrollOffset, duration: scrollToDuration, curve: scrollToCurve);
+        break;
+    }
   }
 
   @override
@@ -111,21 +148,39 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     Future.delayed(Duration.zero, () => _toggleCardVisibility());
 
     tabController.addListener(_toggleCardVisibility);
-    widget.scrollController?.addListener(_scrollListener);
+    widget.latestScrollController?.addListener(_scrollListener);
+    widget.topScrollController?.addListener(_scrollTopListener);
+    widget.unreadScrollController?.addListener(_unreadScrollListener);
+  }
+
+  _scrollTopListener() {
+    topScrollOffset = widget.topScrollController!.offset;
+  }
+
+  _unreadScrollListener() {
+    unreadScrollOffset = widget.unreadScrollController!.offset;
   }
 
   _scrollListener() {
-    if (widget.scrollController!.offset < -50.h && !showSearchBar) {
+    if (!mounted) return;
+    latestScrollOffset = widget.latestScrollController!.offset;
+    if (widget.latestScrollController!.offset < -50.h && !showSearchBar) {
       setState(() {
         showSearchBar = true;
         _isCardVisible = false;
       });
-    } else if (widget.scrollController!.offset > 50.h && showSearchBar && !isSearchBarActivated) {
+    } else if (widget.latestScrollController!.offset > 44.h && showSearchBar && !isSearchBarActivated) {
       setState(() {
-        showSearchBar = false;
-        _isCardVisible =
-            tabController.index == 0 && (widget.showPinnedPublication && widget.pinnedPublication?.value != null);
+        disappearingHeight = 0;
       });
+      Future.delayed(
+          sizingDuration,
+          () => setState(() {
+                showSearchBar = false;
+                _isCardVisible = tabController.index == 0 &&
+                    (widget.showPinnedPublication && widget.pinnedPublication?.value != null);
+                disappearingHeight = null;
+              }));
     }
   }
 
@@ -138,7 +193,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   void dispose() {
-    widget.scrollController?.removeListener(_scrollListener);
+    widget.latestScrollController?.removeListener(_scrollTopListener);
+    widget.unreadScrollController?.removeListener(_unreadScrollListener);
+    widget.topScrollController?.removeListener(_scrollTopListener);
     tabController.removeListener(_toggleCardVisibility);
     widget.pinnedPublication?.removeListener(_toggleCardVisibility);
     widget.searchController?.clear();
@@ -150,6 +207,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.uiKitTheme?.colorScheme;
+    final currentTabIndex = tabController.index;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -162,15 +220,30 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                 filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                 child: SafeArea(
                     bottom: false,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: UiKitCustomTabBar(
-                        tabController: tabController,
-                        tabs: _tabs,
-                        clipBorderRadius: clipBorderRadius,
-                        onTappedTab: (index) => widget.onTappedTab?.call(_tabs[index].customValue!),
-                      ),
-                    ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)),
+                    child: UiKitCustomTabBar(
+                      tabController: tabController,
+                      tabs: _tabs,
+                      clipBorderRadius: clipBorderRadius,
+                      onTappedTab: (index) {
+                        //checking double tap on
+                        if (currentTabIndex == index) {
+                          switch (_tabs[index].customValue) {
+                            case 'latest':
+                              widget.latestScrollController
+                                  ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
+                              break;
+                            case 'top':
+                              widget.topScrollController
+                                  ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
+                              break;
+                            case 'unread':
+                              widget.unreadScrollController
+                                  ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
+                              break;
+                          }
+                        }
+                      },
+                    ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12)),
               ),
             ),
             if (widget.pinnedPublication?.value != null)
@@ -215,58 +288,38 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               duration: const Duration(milliseconds: 200),
               child: showSearchBar
                   ? !isSearchBarActivated
-                      ? StatusWeatherSearchBar(
-                          onSearchPressed: _onSearchPressed,
-                          weather: widget.weather,
-                        ).paddingSymmetric(
-                          horizontal: EdgeInsetsFoundation.horizontal16,
-                          vertical: EdgeInsetsFoundation.vertical12,
-                        )
-                      : SizedBox(
-                          width: 1.sw,
-                          height: 40.h,
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: context.uiKitTheme?.colorScheme.surface2,
-                                  borderRadius: BorderRadiusFoundation.all24r,
-                                ),
-                              ),
-                              UiKitInputFieldNoFill(
-                                controller: widget.searchController ?? TextEditingController(),
-                                autofocus: true,
-                                hintText: S.current.Search,
-                                focusNode: _searchFocusNode,
-                                label: '',
-                                icon: context.iconButtonNoPadding(
-                                  data: BaseUiKitButtonData(
-                                    onPressed: () {
-                                      setState(() {
-                                        isSearchBarActivated = false;
-                                      });
-                                      _searchFocusNode.unfocus();
-                                      widget.searchController?.clear();
-                                      Future.delayed(Duration.zero, () {
-                                        widget.latestContentController.refresh();
-                                        widget.topContentController.refresh();
-                                        widget.unreadContentController.refresh();
-                                      });
-                                    },
-                                    iconInfo: BaseUiKitButtonIconData(
-                                        iconData: ShuffleUiKitIcons.x, color: colorScheme?.inversePrimary),
-                                  ),
-                                ),
+                      ? AnimatedSize(
+                          duration: sizingDuration,
+                          child: SizedBox(
+                              height: disappearingHeight,
+                              child: StatusWeatherSearchBar(
+                                onSearchPressed: _onSearchPressed,
+                                weather: widget.weather,
                               ).paddingSymmetric(
                                 horizontal: EdgeInsetsFoundation.horizontal16,
-                                vertical: SpacingFoundation.verticalSpacing4,
-                              ),
-                            ],
+                                vertical: EdgeInsetsFoundation.vertical12,
+                              )))
+                      : UiKitInputFieldRightIcon(
+                          controller: widget.searchController ?? TextEditingController(),
+                          autofocus: true,
+                          hintText: S.current.Search,
+                          focusNode: _searchFocusNode,
+                          icon: context.iconButtonNoPadding(
+                            data: BaseUiKitButtonData(
+                              onPressed: () {
+                                setState(() {
+                                  isSearchBarActivated = false;
+                                });
+                                _searchFocusNode.unfocus();
+                                widget.searchController?.text = '';
+                              },
+                              iconInfo: BaseUiKitButtonIconData(
+                                  iconData: ShuffleUiKitIcons.x, color: colorScheme?.inversePrimary),
+                            ),
                           ),
                         ).paddingSymmetric(
                           horizontal: EdgeInsetsFoundation.horizontal16,
-                          vertical: EdgeInsetsFoundation.vertical12,
+                          vertical: SpacingFoundation.verticalSpacing4,
                         )
                   : SizedBox.shrink(),
             ),
@@ -276,13 +329,14 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
           controller: tabController,
           children: [
             _PagedInfluencerFeedItemListBody(
+              key: latestPublicationsKey,
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.latestContentController,
               onCheckVisibleItems: widget.onCheckVisibleItems,
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               onProfilePress: widget.onProfilePress,
-              scrollController: widget.scrollController,
+              scrollController: widget.latestScrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
               onSearchPressed: _onSearchPressed,
@@ -290,13 +344,14 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               weather: widget.weather,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
+              key: topPublicationsKey,
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.topContentController,
               onCheckVisibleItems: widget.onCheckVisibleItems,
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               onProfilePress: widget.onProfilePress,
-              scrollController: widget.scrollController,
+              scrollController: widget.topScrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
               onSearchPressed: _onSearchPressed,
@@ -304,13 +359,14 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               weather: widget.weather,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
+              key: unreadPublicationsKey,
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.unreadContentController,
               onCheckVisibleItems: widget.onCheckVisibleItems,
               onLongPress: widget.onLongPress,
               onSharePress: widget.onSharePress,
               onProfilePress: widget.onProfilePress,
-              scrollController: widget.scrollController,
+              scrollController: widget.unreadScrollController,
               onReadTap: widget.onReadTap,
               topPadding: topPaddingForPinned,
               onSearchPressed: _onSearchPressed,
@@ -331,7 +387,7 @@ class _CustomBlurClipper extends CustomClipper<RRect> {
 
   @override
   RRect getClip(Size size) {
-    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, topPadding + 43.h),
+    return RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 1.sw, topPadding + 33.h),
         bottomLeft: const Radius.circular(24), bottomRight: const Radius.circular(24));
   }
 
@@ -353,23 +409,22 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final VoidCallback? onSearchPressed;
   final bool isSearchActivated;
   final RichText? weather;
-
   final double? topPadding;
 
-  const _PagedInfluencerFeedItemListBody({
-    required this.pagingController,
-    this.onCheckVisibleItems,
-    this.onReactionsTapped,
-    this.onLongPress,
-    this.onSharePress,
-    this.onProfilePress,
-    this.onReadTap,
-    this.scrollController,
-    this.topPadding,
-    this.onSearchPressed,
-    this.isSearchActivated = false,
-    this.weather,
-  });
+  const _PagedInfluencerFeedItemListBody(
+      {required this.pagingController,
+      this.onCheckVisibleItems,
+      this.onReactionsTapped,
+      this.onLongPress,
+      this.onSharePress,
+      this.onProfilePress,
+      this.onReadTap,
+      this.scrollController,
+      this.topPadding,
+      this.onSearchPressed,
+      this.isSearchActivated = false,
+      this.weather,
+      super.key});
 
   double get _videoReactionPreviewWidth => 0.125.sw;
 
@@ -397,7 +452,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
           bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
-          top: MediaQuery.of(context).viewPadding.top + (topPadding?.toDouble() ?? 0.0),
+          top: MediaQuery.viewPaddingOf(context).top,
         ),
         pagingController: pagingController,
         separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,
@@ -489,7 +544,10 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             return AnchorItemWrapper(
               index: index,
               controller: scrollController,
-              child: child,
+              child: index == 0
+                  ? AnimatedSize(
+                      duration: const Duration(milliseconds: 350), child: child.paddingOnly(top: topPadding ?? 0))
+                  : child,
             );
           },
         ),
