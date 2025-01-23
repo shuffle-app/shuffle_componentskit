@@ -617,8 +617,8 @@ class _EventComponentState extends State<EventComponent> {
                               onPressed: () async {
                                 if (widget.onFeedbackTap != null) {
                                   await widget.onFeedbackTap?.call(feedback).then(
-                                    (value) {
-                                      if (value) {
+                                    (isEdited) {
+                                      if (isEdited) {
                                         feedbackPagingController.refresh();
                                         feedbackPagingController.notifyPageRequestListeners(1);
                                       }
