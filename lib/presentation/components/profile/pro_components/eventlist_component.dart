@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:collection/collection.dart';
 
 class EventlistComponent extends StatelessWidget {
   final List<UiEventModel> events;
