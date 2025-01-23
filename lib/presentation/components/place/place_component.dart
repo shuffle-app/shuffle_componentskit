@@ -675,8 +675,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                               onPressed: () async {
                                 if (widget.onFeedbackTap != null) {
                                   await widget.onFeedbackTap?.call(feedback).then(
-                                    (value) {
-                                      if (value) {
+                                    (isEdited) {
+                                      if (isEdited) {
                                         feedbacksPagedController.refresh();
                                         feedbacksPagedController.notifyPageRequestListeners(1);
                                       }
