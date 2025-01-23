@@ -323,11 +323,13 @@ class ProfileComponent extends StatelessWidget {
                       ).paddingAll(EdgeInsetsFoundation.all16)
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
                         spacing: SpacingFoundation.horizontalSpacing8,
-                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: UiKitFeedbackCard()),
                         itemBuilder: (context, feedback, index) {
                           return SizedBox(
                             width: 0.95.sw,
                             child: UiKitFeedbackCard(
+                              showTranslateButton: feedback.showTranslateButton,
+                              translateText: feedback.translateText,
                               title: feedback.feedbackAuthorName,
                               avatarUrl: feedback.feedbackAuthorPhoto,
                               datePosted: feedback.feedbackDateTime,

@@ -1,6 +1,7 @@
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ReviewUiModel {
+  final int id;
   final int? rating;
   final String reviewDescription;
   final DateTime reviewTime;
@@ -9,8 +10,8 @@ class ReviewUiModel {
   final String? personalTopTitle;
   final List<BaseUiKitMedia> media;
 
-
   ReviewUiModel({
+    required this.id,
     this.rating,
     required this.reviewDescription,
     required this.reviewTime,
@@ -20,11 +21,10 @@ class ReviewUiModel {
     this.media = const [],
   });
 
-
   @override
   String toString() {
-
     return '''
+    id: $id,
     rating: $rating,
     reviewDescription: $reviewDescription,
     reviewTime: $reviewTime,

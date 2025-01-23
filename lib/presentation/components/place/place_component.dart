@@ -28,7 +28,7 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> placeFeedbackLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
-  final ValueChanged<FeedbackUiModel>? onFeedbackTap;
+  final Future<bool> Function(FeedbackUiModel)? onFeedbackTap;
   final Future<bool> Function()? onAddFeedbackTapped;
   final Future<bool> Function(int placeId) canLeaveFeedbackCallback;
   final Future<bool> Function(int eventId) canLeaveFeedbackForEventCallback;
@@ -649,7 +649,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
                         leftPadding: horizontalMargin,
                         spacing: SpacingFoundation.horizontalSpacing8,
-                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: UiKitFeedbackCard()),
                         noItemsFoundIndicator: SizedBox(
                           width: 1.sw,
                           child: Center(
@@ -672,9 +672,16 @@ class _PlaceComponentState extends State<PlaceComponent> {
                               text: feedback.feedbackText,
                               media: feedback.media,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                              onPressed: () {
+                              onPressed: () async {
                                 if (widget.onFeedbackTap != null) {
-                                  widget.onFeedbackTap?.call(feedback);
+                                  await widget.onFeedbackTap?.call(feedback).then(
+                                    (isEdited) {
+                                      if (isEdited) {
+                                        feedbacksPagedController.refresh();
+                                        feedbacksPagedController.notifyPageRequestListeners(1);
+                                      }
+                                    },
+                                  );
                                 } else {
                                   feedback.onTap?.call();
                                 }
@@ -682,18 +689,18 @@ class _PlaceComponentState extends State<PlaceComponent> {
                               onLike: widget.currentUserId == feedback.feedbackAuthorId
                                   ? null
                                   : () {
-                                final feedbackId = feedback.id;
-                                if (likedReviews.contains(feedbackId)) {
-                                  likedReviews.remove(feedbackId);
-                                  widget.onDislikedFeedback?.call(feedbackId);
-                                  _updateFeedbackList(feedbackId, -1);
-                                } else {
-                                  likedReviews.add(feedbackId);
-                                  widget.onLikedFeedback?.call(feedbackId);
-                                  _updateFeedbackList(feedbackId, 1);
-                                }
-                                setState(() {});
-                              },
+                                      final feedbackId = feedback.id;
+                                      if (likedReviews.contains(feedbackId)) {
+                                        likedReviews.remove(feedbackId);
+                                        widget.onDislikedFeedback?.call(feedbackId);
+                                        _updateFeedbackList(feedbackId, -1);
+                                      } else {
+                                        likedReviews.add(feedbackId);
+                                        widget.onLikedFeedback?.call(feedbackId);
+                                        _updateFeedbackList(feedbackId, 1);
+                                      }
+                                      setState(() {});
+                                    },
                             ).paddingOnly(left: index == 0 ? horizontalMargin : 0),
                           );
                         },

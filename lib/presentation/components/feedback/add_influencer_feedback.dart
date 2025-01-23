@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -35,10 +36,16 @@ class AddInfluencerFeedbackComponent extends StatefulWidget {
 }
 
 class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackComponent> {
+  final GlobalKey _addToPersonalTopKey = GlobalKey();
+  final GlobalKey _personalRespectKey = GlobalKey();
+
   bool? personalRespectToggled;
   bool? addToPersonalTopToggled;
+  final FocusNode _focusNode = FocusNode();
+  bool get isKeyboardVisible => MediaQuery.of(context).viewInsets.bottom > 0;
   int rating = 0;
 
+  final ScrollController _scrollController = ScrollController();
   late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
   late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
 
@@ -50,13 +57,38 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
     if (widget.reviewUiModel != null) {
       rating = widget.reviewUiModel?.rating ?? 0;
       widget.feedbackTextController.text = widget.reviewUiModel?.reviewDescription ?? '';
+      _photos.addAll(widget.reviewUiModel!.media.where((element) => element.type == UiKitMediaType.image));
+      _videos.addAll(widget.reviewUiModel!.media.where((element) => element.type == UiKitMediaType.video));
     }
     if (widget.userTileType == UserTileType.influencer) {
       personalRespectToggled = widget.reviewUiModel?.isPersonalRespect ?? false;
       addToPersonalTopToggled = widget.reviewUiModel?.isAddToPersonalTop ?? false;
     }
 
+    _focusNode.addListener(() async {
+      if (_focusNode.hasFocus && !isKeyboardVisible) {
+        updateScrollPosition();
+      }
+    });
+
     super.initState();
+  }
+
+  updateScrollPosition() async {
+    final bool isInfluencer = widget.userTileType == UserTileType.influencer;
+    final double personalWidgetHeight =
+        isInfluencer ? _getWidgetSize(_addToPersonalTopKey).height + _getWidgetSize(_personalRespectKey).height : 0.0;
+
+    await Future.delayed(Duration(milliseconds: 200));
+    final double position = _scrollController.position.maxScrollExtent -
+        personalWidgetHeight -
+        (isInfluencer ? (SpacingFoundation.verticalSpacing24 * 2) : 0.0);
+
+    unawaited(_scrollController.animateTo(
+      position,
+      duration: Duration(milliseconds: 120),
+      curve: Curves.easeInOut,
+    ));
   }
 
   @override
@@ -118,12 +150,25 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
     });
   }
 
+  Size _getWidgetSize(GlobalKey key) {
+    final RenderBox? renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+    return renderBox?.size ?? Size(0, 0);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
+        controller: _scrollController,
         autoImplyLeading: true,
         centerTitle: true,
         title: S.current.AddFeedback,
@@ -153,6 +198,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
           ),
           SpacingFoundation.verticalSpace24,
           UiKitRatingBarWithStars(
+            rating: rating,
             onRatingChanged: (value) {
               setState(() {
                 rating = value;
@@ -160,32 +206,40 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
             },
           ),
           SpacingFoundation.verticalSpace24,
+          PhotoVideoSelector(
+            videos: _videos,
+            photos: _photos,
+            onPhotoAddRequested: _onPhotoAddRequested,
+            onPhotoReorderRequested: _onPhotoReorderRequested,
+            onPhotoDeleted: _onPhotoDeleted,
+            onVideoAddRequested: _onVideoAddRequested,
+            onVideoReorderRequested: _onVideoReorderRequested,
+            onVideoDeleted: _onVideoDeleted,
+            listPhotosKey: _reordablePhotokey,
+            listVideosKey: _reordableVideokey,
+          ),
+          SpacingFoundation.verticalSpace24,
           UiKitTitledWrappedInput(
             title: S.current.AddFeedbackFieldTitle,
             input: UiKitSymbolsCounterInputField(
+              focusNode: _focusNode,
               controller: widget.feedbackTextController,
               enabled: true,
               obscureText: false,
               hintText: S.current.AddFeedbackFieldHint,
               maxSymbols: 1500,
+              onTap: () async {
+                if (!isKeyboardVisible) {
+                  updateScrollPosition();
+                }
+              },
             ),
             popOverMessage: S.current.AddInfluencerFeedbackPopOverText,
           ),
           SpacingFoundation.verticalSpace24,
-          PhotoVideoSelector(
-              videos: _videos,
-              photos: _photos,
-              onPhotoAddRequested: _onPhotoAddRequested,
-              onPhotoReorderRequested: _onPhotoReorderRequested,
-              onPhotoDeleted: _onPhotoDeleted,
-              onVideoAddRequested: _onVideoAddRequested,
-              onVideoReorderRequested: _onVideoReorderRequested,
-              onVideoDeleted: _onVideoDeleted,
-              listPhotosKey: _reordablePhotokey,
-              listVideosKey: _reordableVideokey),
-          SpacingFoundation.verticalSpace24,
           if (widget.userTileType == UserTileType.influencer) ...[
             Row(
+              key: _personalRespectKey,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
@@ -209,6 +263,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
             ),
             SpacingFoundation.verticalSpace24,
             Row(
+              key: _addToPersonalTopKey,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
@@ -231,7 +286,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
               ],
             ),
             SpacingFoundation.verticalSpace24,
-          ]
+          ],
         ],
       ),
       bottomNavigationBar: KeyboardVisibilityBuilder(
@@ -260,6 +315,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
                             ? () {
                                 widget.onConfirm?.call(
                                   ReviewUiModel(
+                                    id: widget.reviewUiModel?.id ?? -1,
                                     isAddToPersonalTop: addToPersonalTopToggled,
                                     isPersonalRespect: personalRespectToggled,
                                     rating: rating,
