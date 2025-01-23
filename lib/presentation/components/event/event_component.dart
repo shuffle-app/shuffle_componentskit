@@ -24,7 +24,7 @@ class EventComponent extends StatefulWidget {
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
-  final ValueChanged<FeedbackUiModel>? onFeedbackTap;
+  final Future<bool> Function(FeedbackUiModel)? onFeedbackTap;
   final bool showOfferButton;
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
@@ -590,7 +590,7 @@ class _EventComponentState extends State<EventComponent> {
                     : UiKitHorizontalScrollableList<FeedbackUiModel>(
                         leftPadding: horizontalMargin,
                         spacing: SpacingFoundation.horizontalSpacing8,
-                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: const UiKitFeedbackCard()),
+                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: UiKitFeedbackCard()),
                         noItemsFoundIndicator: SizedBox(
                           width: 1.sw,
                           child: Center(
@@ -614,9 +614,16 @@ class _EventComponentState extends State<EventComponent> {
                               isHelpful: feedback.helpfulForUser,
                               media: feedback.media,
                               helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                              onPressed: () {
+                              onPressed: () async {
                                 if (widget.onFeedbackTap != null) {
-                                  widget.onFeedbackTap?.call(feedback);
+                                  await widget.onFeedbackTap?.call(feedback).then(
+                                    (value) {
+                                      if (value) {
+                                        feedbackPagingController.refresh();
+                                        feedbackPagingController.notifyPageRequestListeners(1);
+                                      }
+                                    },
+                                  );
                                 } else {
                                   feedback.onTap?.call();
                                 }
