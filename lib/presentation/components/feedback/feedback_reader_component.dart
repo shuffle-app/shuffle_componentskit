@@ -4,7 +4,11 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../../../shuffle_components_kit.dart';
 
 class FeedbackReaderComponent extends StatelessWidget {
-  const FeedbackReaderComponent({super.key, required this.reviews, this.onHelpfulTap});
+  const FeedbackReaderComponent({
+    super.key,
+    required this.reviews,
+    this.onHelpfulTap,
+  });
 
   final List<FeedbackUiModel> reviews;
   final ValueChanged<int>? onHelpfulTap;
@@ -26,17 +30,22 @@ class FeedbackReaderComponent extends StatelessWidget {
         itemBuilder: (context, index) {
           final e = reviews[index];
           return UiKitFeedbackCard(
-              text: e.feedbackText,
-              media: e.media,
-              onLike: () => onHelpfulTap?.call(e.id),
-              title: e.feedbackAuthorName,
-              avatarUrl: e.feedbackAuthorPhoto,
-              helpfulCount: e.helpfulCount,
-              datePosted: e.feedbackDateTime,
-              maxLines: 100,
-              rating: e.feedbackRating,
-              customBackgroundColor: theme?.colorScheme.surface,
-              userTileType: e.feedbackAuthorType);
+            text: e.feedbackText,
+            media: e.media,
+            onLike: () => onHelpfulTap?.call(e.id),
+            title: e.feedbackAuthorName,
+            avatarUrl: e.feedbackAuthorPhoto,
+            helpfulCount: e.helpfulCount,
+            datePosted: e.feedbackDateTime,
+            maxLines: 100,
+            rating: e.feedbackRating,
+            customBackgroundColor: theme?.colorScheme.surface,
+            userTileType: e.feedbackAuthorType,
+            showTranslateButton: e.showTranslateButton,
+            translateText: e.translateText,
+            onEdit: e.onEdit,
+            canEdit: e.canEdit,
+          );
         },
         separatorBuilder: (BuildContext context, int index) =>
             divider.paddingSymmetric(vertical: EdgeInsetsFoundation.vertical16),
