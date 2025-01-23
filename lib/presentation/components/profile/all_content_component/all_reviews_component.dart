@@ -45,7 +45,7 @@ class AllReviewsComponent extends StatelessWidget {
                 gradient: GradientFoundation.greyGradient,
                 child: SizedBox(
                   width: feedbackCardWidth,
-                  child: const UiKitFeedbackCard(),
+                  child: UiKitFeedbackCard(),
                 ),
               ),
               firstPageProgressIndicatorBuilder: (c) => const Center(child: LoadingWidget()),
@@ -55,6 +55,8 @@ class AllReviewsComponent extends StatelessWidget {
                 return SizedBox(
                   width: feedbackCardWidth,
                   child: UiKitFeedbackCard(
+                    showTranslateButton: feedback.showTranslateButton,
+                    translateText: feedback.translateText,
                     userTileType: feedback.feedbackAuthorType,
                     title: feedback.feedbackAuthorName,
                     avatarUrl: feedback.feedbackAuthorPhoto,
@@ -63,7 +65,7 @@ class AllReviewsComponent extends StatelessWidget {
                     text: feedback.feedbackText,
                     media: feedback.media,
                     helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                    onPressed: ()=>onFeedbackTapped.call(feedback),
+                    onPressed: () => onFeedbackTapped.call(feedback),
                   ),
                 );
               },
