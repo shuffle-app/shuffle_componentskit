@@ -67,25 +67,27 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   late final String wallpaper;
 
   late final tabController = TabController(length: 3, vsync: this);
+  late final PageController pageController = PageController();
   final autoSizeGroup = AutoSizeGroup();
 
-  late final latestPublicationsKey = UniqueKey();
-  late final topPublicationsKey = UniqueKey();
-  late final unreadPublicationsKey = UniqueKey();
+  late final latestPublicationsKey = PageStorageKey('latest');
+  late final topPublicationsKey = PageStorageKey('top');
+  late final unreadPublicationsKey = PageStorageKey('unread');
 
   final Duration sizingDuration = Duration(milliseconds: 100);
 
   double? disappearingHeight;
 
   late final _tabs = [
-    UiKitCustomTab(title: S.current.Latest.toUpperCase(), customValue: 'latest', group: autoSizeGroup, height: 20.h),
+    UiKitCustomTab(
+      title: S.current.Latest.toUpperCase(),
+      customValue: 'latest',
+      group: autoSizeGroup,
+      height: 20.h,
+    ),
     UiKitCustomTab(title: S.current.Top.toUpperCase(), customValue: 'top', group: autoSizeGroup, height: 20.h),
     UiKitCustomTab(title: S.current.Unread.toUpperCase(), customValue: 'unread', group: autoSizeGroup, height: 20.h),
   ];
-
-  double latestScrollOffset = 0.0;
-  double topScrollOffset = 0.0;
-  double unreadScrollOffset = 0.0;
 
   onReactionsTapped(int index, String reaction) async {
     // Handle reaction tapped
@@ -120,27 +122,13 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   _toggleCardVisibility() {
     final index = tabController.index;
+    widget.onTappedTab?.call(_tabs[index].customValue!);
+    debugPrint(
+        'Toggle card visibility here with index: $index widget.pinnedPublication?.value ${widget.pinnedPublication?.value}');
     setState(() {
       _isCardVisible =
           index == 0 && (widget.showPinnedPublication && widget.pinnedPublication?.value != null && !showSearchBar);
     });
-
-    widget.onTappedTab?.call(_tabs[index].customValue!);
-
-    switch (_tabs[index].customValue) {
-      case 'latest':
-        widget.latestScrollController?.jumpTo(latestScrollOffset);
-        // widget.latestScrollController?.animateTo(latestScrollOffset, duration: scrollToDuration, curve: scrollToCurve);
-        break;
-      case 'top':
-        widget.topScrollController?.jumpTo(topScrollOffset);
-        // widget.topScrollController?.animateTo(topScrollOffset, duration: scrollToDuration, curve: scrollToCurve);
-        break;
-      case 'unread':
-        widget.unreadScrollController?.jumpTo(unreadScrollOffset);
-        // widget.unreadScrollController?.animateTo(unreadScrollOffset, duration: scrollToDuration, curve: scrollToCurve);
-        break;
-    }
   }
 
   @override
@@ -152,8 +140,8 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
     tabController.addListener(_toggleCardVisibility);
     widget.latestScrollController?.addListener(_scrollListener);
-    widget.topScrollController?.addListener(_scrollTopListener);
-    widget.unreadScrollController?.addListener(_unreadScrollListener);
+    widget.topScrollController?.addListener(_scrollListener);
+    widget.unreadScrollController?.addListener(_scrollListener);
 
     wallpaper = [
       GraphicsFoundation.instance.svg.wallpaperFeed1.path,
@@ -165,23 +153,27 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     ][math.Random().nextInt(5)];
   }
 
-  _scrollTopListener() {
-    topScrollOffset = widget.topScrollController!.offset;
-  }
-
-  _unreadScrollListener() {
-    unreadScrollOffset = widget.unreadScrollController!.offset;
+  ScrollController get currentScrollController {
+    switch (tabController.index) {
+      case 0:
+        return widget.latestScrollController!;
+      case 1:
+        return widget.topScrollController!;
+      case 2:
+        return widget.unreadScrollController!;
+      default:
+        return widget.latestScrollController!;
+    }
   }
 
   _scrollListener() {
     if (!mounted) return;
-    latestScrollOffset = widget.latestScrollController!.offset;
-    if (widget.latestScrollController!.offset < -50.h && !showSearchBar) {
+    if (currentScrollController.offset < -50.h && !showSearchBar) {
       setState(() {
         showSearchBar = true;
         _isCardVisible = false;
       });
-    } else if (widget.latestScrollController!.offset > 44.h && showSearchBar && !isSearchBarActivated) {
+    } else if (currentScrollController.offset > 44.h && showSearchBar && !isSearchBarActivated) {
       setState(() {
         disappearingHeight = 0;
       });
@@ -205,9 +197,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   @override
   void dispose() {
-    widget.latestScrollController?.removeListener(_scrollTopListener);
-    widget.unreadScrollController?.removeListener(_unreadScrollListener);
-    widget.topScrollController?.removeListener(_scrollTopListener);
+    widget.latestScrollController?.removeListener(_scrollListener);
+    widget.topScrollController?.removeListener(_scrollListener);
+    widget.unreadScrollController?.removeListener(_scrollListener);
     tabController.removeListener(_toggleCardVisibility);
     widget.pinnedPublication?.removeListener(_toggleCardVisibility);
     widget.searchController?.clear();
@@ -225,77 +217,80 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
       children: [
         Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadiusFoundation.onlyBottom24,
-              clipper: _CustomBlurClipper(topPadding: MediaQuery.viewPaddingOf(context).top),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                child: SafeArea(
-                    bottom: false,
-                    child: UiKitCustomTabBar(
-                      tabController: tabController,
-                      tabs: _tabs,
-                      clipBorderRadius: clipBorderRadius,
-                      onTappedTab: (index) {
-                        //checking double tap on
-                        if (currentTabIndex == index) {
-                          switch (_tabs[index].customValue) {
-                            case 'latest':
-                              widget.latestScrollController
-                                  ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
-                              break;
-                            case 'top':
-                              widget.topScrollController
-                                  ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
-                              break;
-                            case 'unread':
-                              widget.unreadScrollController
-                                  ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
-                              break;
-                          }
-                        }
-                      },
-                    ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12)),
-              ),
-            ),
+            AnimatedSize(
+                duration: sizingDuration,
+                child: ClipRRect(
+                  borderRadius: BorderRadiusFoundation.onlyBottom24,
+                  clipper: _CustomBlurClipper(
+                      topPadding: MediaQuery.viewPaddingOf(context).top + (_isCardVisible ? 50.h : 0)),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                    child: SafeArea(
+                        bottom: false,
+                        child: UiKitCustomTabBar(
+                          tabController: tabController,
+                          tabs: _tabs,
+                          clipBorderRadius: clipBorderRadius,
+                          onTappedTab: (index) {
+                            //checking double tap on
+                            if (currentTabIndex == index) {
+                              switch (_tabs[index].customValue) {
+                                case 'latest':
+                                  widget.latestScrollController
+                                      ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
+                                  break;
+                                case 'top':
+                                  widget.topScrollController
+                                      ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
+                                  break;
+                                case 'unread':
+                                  widget.unreadScrollController
+                                      ?.animateTo(0.0, duration: scrollToDuration, curve: scrollToCurve);
+                                  break;
+                              }
+                            }
+                            pageController.animateToPage(index, duration: scrollToDuration, curve: scrollToCurve);
+                          },
+                        ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12)),
+                  ),
+                )),
             if (widget.pinnedPublication?.value != null)
-              Builder(
-                builder: (context) {
-                  final pinnedPublication = widget.pinnedPublication!.value;
-                  List<String>? images;
+              () {
+                final pinnedPublication = widget.pinnedPublication!.value;
+                List<String>? images;
 
-                  if (pinnedPublication is DigestFeedItem) {
-                    images = (pinnedPublication.digestUiModels != null && pinnedPublication.digestUiModels!.isNotEmpty
-                        ? pinnedPublication.digestUiModels![0].imageUrl != null &&
-                                pinnedPublication.digestUiModels![0].imageUrl!.isNotEmpty
-                            ? [pinnedPublication.digestUiModels![0].imageUrl!]
-                            : null
-                        : null);
-                    _hasImageInPinned = images != null && images.isNotEmpty;
+                if (pinnedPublication is DigestFeedItem) {
+                  images = (pinnedPublication.digestUiModels != null && pinnedPublication.digestUiModels!.isNotEmpty
+                      ? pinnedPublication.digestUiModels![0].imageUrl != null &&
+                              pinnedPublication.digestUiModels![0].imageUrl!.isNotEmpty
+                          ? [pinnedPublication.digestUiModels![0].imageUrl!]
+                          : null
+                      : null);
+                  _hasImageInPinned = images != null && images.isNotEmpty;
 
-                    return PinnedPublication(
-                      text: pinnedPublication.title ?? '',
-                      images: images,
-                      onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                      isCardVisible: _isCardVisible,
-                      pinnedIsLoading: widget.pinnedIsLoading,
-                    );
-                  } else if (pinnedPublication is ShufflePostFeedItem) {
-                    images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
-                    _hasImageInPinned = images != null && images.isNotEmpty;
+                  return PinnedPublication(
+                    text: pinnedPublication.title ?? '',
+                    images: images,
+                    onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                    isCardVisible: _isCardVisible,
+                    pinnedIsLoading: widget.pinnedIsLoading,
+                  );
+                } else if (pinnedPublication is ShufflePostFeedItem) {
+                  images = pinnedPublication.newPhotos?.map((e) => e.link).toList();
+                  _hasImageInPinned = images != null && images.isNotEmpty;
 
-                    return PinnedPublication(
-                      text: pinnedPublication.text,
-                      images: images,
-                      onPinnedPublicationTap: widget.onPinnedPublicationTap,
-                      isCardVisible: _isCardVisible,
-                      pinnedIsLoading: widget.pinnedIsLoading,
-                    );
-                  }
+                  return PinnedPublication(
+                    text: pinnedPublication.text,
+                    images: images,
+                    onPinnedPublicationTap: widget.onPinnedPublicationTap,
+                    isCardVisible: _isCardVisible,
+                    pinnedIsLoading: widget.pinnedIsLoading,
+                  );
+                }
 
-                  return const SizedBox.shrink();
-                },
-              ),
+                return const SizedBox.shrink();
+              }()
+                  .paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: showSearchBar
@@ -337,11 +332,16 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             ),
           ],
         ),
-        TabBarView(
-          controller: tabController,
+        //TODO think about page view
+        PageView(
+          controller: pageController,
+          onPageChanged: (value) {
+            debugPrint('latestScrollController.offset: ${widget.latestScrollController?.offset}');
+            tabController.animateTo(value);
+          },
           children: [
             _PagedInfluencerFeedItemListBody(
-              key: latestPublicationsKey,
+              pageStorageKey: latestPublicationsKey,
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.latestContentController,
               onCheckVisibleItems: widget.onCheckVisibleItems,
@@ -356,7 +356,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               weather: widget.weather,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
-              key: topPublicationsKey,
+              pageStorageKey: topPublicationsKey,
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.topContentController,
               onCheckVisibleItems: widget.onCheckVisibleItems,
@@ -371,7 +371,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               weather: widget.weather,
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
             _PagedInfluencerFeedItemListBody(
-              key: unreadPublicationsKey,
+              pageStorageKey: unreadPublicationsKey,
               onReactionsTapped: onReactionsTapped,
               pagingController: widget.unreadContentController,
               onCheckVisibleItems: widget.onCheckVisibleItems,
@@ -426,6 +426,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final bool isSearchActivated;
   final RichText? weather;
   final double? topPadding;
+  final PageStorageKey? pageStorageKey;
 
   const _PagedInfluencerFeedItemListBody(
       {required this.pagingController,
@@ -440,7 +441,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
       this.onSearchPressed,
       this.isSearchActivated = false,
       this.weather,
-      super.key});
+      this.pageStorageKey});
 
   double get _videoReactionPreviewWidth => 0.125.sw;
 
@@ -464,6 +465,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         return true;
       },
       child: PagedListView.separated(
+        key: pageStorageKey,
         scrollController: scrollController,
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
@@ -477,7 +479,6 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             final isLast = index == pagingController.itemList!.length;
             double bottomPadding = isLast ? 0 : SpacingFoundation.verticalSpacing8;
             indexOfItem.value = index;
-            log(' item id ${item.id} ');
 
             late final Widget child;
             if (item is ShufflePostFeedItem) {
