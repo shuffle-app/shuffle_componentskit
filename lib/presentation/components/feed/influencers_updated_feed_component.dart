@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
-import 'dart:math' as math;
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +31,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final VoidCallback? onPinnedPublicationTap;
   final RichText? weather;
   final bool pinnedIsLoading;
+  final SvgGenImage? wallpaper;
 
   const InfluencersUpdatedFeedComponent({
     super.key,
@@ -56,6 +55,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.searchController,
     this.weather,
     this.pinnedIsLoading = false,
+    this.wallpaper,
   });
 
   @override
@@ -64,8 +64,6 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
 
 class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeedComponent>
     with SingleTickerProviderStateMixin {
-  late final String wallpaper;
-
   late final tabController = TabController(length: 3, vsync: this);
   late final PageController pageController = PageController();
   final autoSizeGroup = AutoSizeGroup();
@@ -111,7 +109,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   }
 
   BorderRadius get clipBorderRadius =>
-      _isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
+      _isCardVisible ? BorderRadiusFoundation.onlyTop16 : BorderRadiusFoundation.all24r;
 
   bool showSearchBar = false;
   bool isSearchBarActivated = false;
@@ -142,15 +140,6 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     widget.latestScrollController?.addListener(_scrollListener);
     widget.topScrollController?.addListener(_scrollListener);
     widget.unreadScrollController?.addListener(_scrollListener);
-
-    wallpaper = [
-      GraphicsFoundation.instance.svg.wallpaperFeed1.path,
-      GraphicsFoundation.instance.svg.wallpaperFeed2.path,
-      GraphicsFoundation.instance.svg.wallpaperFeed3.path,
-      GraphicsFoundation.instance.svg.wallpaperFeed4.path,
-      GraphicsFoundation.instance.svg.wallpaperFeed5.path,
-      GraphicsFoundation.instance.svg.wallpaperFeed6.path,
-    ][math.Random().nextInt(5)];
   }
 
   ScrollController get currentScrollController {
@@ -387,10 +376,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ],
         ),
-        ImageWidget(
-          fit: BoxFit.fill,
-          link: wallpaper,
-        )
+        if (widget.wallpaper != null)
+          ImageWidget(
+            fit: BoxFit.fill,
+            svgAsset: widget.wallpaper,
+          )
       ].reversed.toList(),
     );
   }
