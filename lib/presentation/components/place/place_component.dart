@@ -19,7 +19,7 @@ class PlaceComponent extends StatefulWidget {
   final VoidCallback? onEditPressed;
   final VoidCallback? onArchivePressed;
   final Future<bool> Function()? onAddReactionTapped;
-  final Future<List<UiEventModel>>? events;
+  final ValueNotifier<List<UiEventModel>?>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
   final VoidCallback? onSharePressed;
@@ -211,6 +211,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
     return ListView(
       addAutomaticKeepAlives: false,
+      cacheExtent: 0.0,
       physics: const BouncingScrollPhysics(),
       controller: listViewController,
       children: [
@@ -351,202 +352,213 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   : const SizedBox.shrink(),
             ),
           ),
-        if (widget.isEligibleForEdit)
-          FutureBuilder<List<UiEventModel>>(
-            future: widget.events,
-            builder: (context, snapshot) => UiKitCardWrapper(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        S.of(context).UpcomingEvent,
-                        style: boldTextTheme?.subHeadline,
-                      ),
-                      SpacingFoundation.horizontalSpace16,
-                      Builder(
-                        builder: (context) => GestureDetector(
-                          onTap: () => showUiKitPopover(
-                            context,
-                            customMinHeight: 30.h,
-                            showButton: false,
-                            title: Text(
-                              S.current.HintNumberEventsForPro,
-                              style: theme?.regularTextTheme.body.copyWith(
-                                color: Colors.black87,
+        if (widget.isEligibleForEdit && widget.events!.value != null)
+          ValueListenableBuilder(
+            valueListenable: widget.events!,
+            builder: (context, _, __) => AnimatedSize(
+              duration: Duration(milliseconds: 250),
+              child: UiKitCardWrapper(
+                width: 1.sw,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          S.of(context).UpcomingEvent,
+                          style: boldTextTheme?.subHeadline,
+                        ),
+                        SpacingFoundation.horizontalSpace16,
+                        Builder(
+                          builder: (context) => GestureDetector(
+                            onTap: () => showUiKitPopover(
+                              context,
+                              customMinHeight: 30.h,
+                              showButton: false,
+                              title: Text(
+                                S.current.HintNumberEventsForPro,
+                                style: theme?.regularTextTheme.body.copyWith(
+                                  color: Colors.black87,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          child: ImageWidget(
-                            iconData: ShuffleUiKitIcons.info,
-                            width: 16.w,
-                            color: theme?.colorScheme.darkNeutral900,
+                            child: ImageWidget(
+                              iconData: ShuffleUiKitIcons.info,
+                              width: 16.w,
+                              color: theme?.colorScheme.darkNeutral900,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  if (snapshot.data != null && snapshot.data!.isNotEmpty) ...[
-                    SpacingFoundation.verticalSpace8,
-                    for (UiEventModel event in snapshot.data!)
-                      if (event.moderationStatus != null)
-                        InkWell(
-                          onTap: () => widget.onEventTap?.call(event),
-                          borderRadius: BorderRadiusFoundation.all24,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadiusFoundation.all24,
-                                gradient: LinearGradient(
-                                    colors: [theme!.colorScheme.inversePrimary.withOpacity(0.3), Colors.transparent])),
-                            child: Center(
-                              child: Text(
-                                event.reviewStatus!,
-                                style: boldTextTheme?.caption1Bold.copyWith(color: Colors.white),
-                              ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing8),
+                      ],
+                    ),
+                    if (widget.events!.value != null && widget.events!.value!.isNotEmpty) ...[
+                      SpacingFoundation.verticalSpace8,
+                      for (UiEventModel event in widget.events!.value!)
+                        if (event.moderationStatus != null)
+                          InkWell(
+                            onTap: () => widget.onEventTap?.call(event),
+                            borderRadius: BorderRadiusFoundation.all24,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadiusFoundation.all24,
+                                  gradient: LinearGradient(colors: [
+                                    theme!.colorScheme.inversePrimary.withOpacity(0.3),
+                                    Colors.transparent
+                                  ])),
+                              child: Center(
+                                child: Text(
+                                  event.reviewStatus!,
+                                  style: boldTextTheme?.caption1Bold.copyWith(color: Colors.white),
+                                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing8),
+                              ),
                             ),
-                          ),
-                        ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16)
-                      else
-                        ListTile(
-                          isThreeLine: false,
-                          contentPadding: EdgeInsets.zero,
-                          leading: BorderedUserCircleAvatar(
-                            imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
-                            size: 40.w,
-                          ),
-                          title: Text(
-                            event.title ?? '',
-                            style: boldTextTheme?.caption1Bold,
-                          ),
-                          subtitle: event.scheduleString != null
-                              ? Text(
-                                  event.scheduleString!,
-                                  style: boldTextTheme?.caption1Medium.copyWith(
-                                    color: colorScheme?.darkNeutral500,
+                          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16)
+                        else
+                          ListTile(
+                            isThreeLine: false,
+                            contentPadding: EdgeInsets.zero,
+                            leading: BorderedUserCircleAvatar(
+                              imageUrl: event.media.firstWhere((element) => element.type == UiKitMediaType.image).link,
+                              size: 40.w,
+                            ),
+                            title: Text(
+                              event.title ?? '',
+                              style: boldTextTheme?.caption1Bold,
+                            ),
+                            subtitle: event.scheduleString != null
+                                ? Text(
+                                    event.scheduleString!,
+                                    style: boldTextTheme?.caption1Medium.copyWith(
+                                      color: colorScheme?.darkNeutral500,
+                                    ),
+                                  )
+                                : null,
+                            // event.date != null
+                            //     ? Text(
+                            //         DateFormat('MMMM d').format(event.date!),
+                            //         style: theme?.boldTextTheme.caption1Medium.copyWith(
+                            //           color: theme.colorScheme.darkNeutral500,
+                            //         ),
+                            //       )
+                            //     : const SizedBox.shrink(),
+                            trailing: context
+                                .smallButton(
+                                  data: BaseUiKitButtonData(
+                                    onPressed: () {
+                                      if (widget.onEventTap != null) {
+                                        widget.onEventTap?.call(event);
+                                      } else {
+                                        buildComponent(
+                                          context,
+                                          ComponentEventModel.fromJson(config['event']),
+                                          ComponentBuilder(
+                                            child: EventComponent(
+                                              event: event,
+                                              canLeaveVideoReaction: widget.canLeaveVideoReaction,
+                                              canLeaveFeedback: widget.canLeaveFeedbackForEventCallback,
+                                              feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
+                                              reactionsLoaderCallback: widget.eventReactionLoaderCallback,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    iconInfo: BaseUiKitButtonIconData(
+                                      iconData: CupertinoIcons.right_chevron,
+                                      color: colorScheme?.inversePrimary,
+                                      size: 20.w,
+                                    ),
                                   ),
                                 )
-                              : null,
-                          // event.date != null
-                          //     ? Text(
-                          //         DateFormat('MMMM d').format(event.date!),
-                          //         style: theme?.boldTextTheme.caption1Medium.copyWith(
-                          //           color: theme.colorScheme.darkNeutral500,
-                          //         ),
-                          //       )
-                          //     : const SizedBox.shrink(),
-                          trailing: context
-                              .smallButton(
-                                data: BaseUiKitButtonData(
-                                  onPressed: () {
-                                    if (widget.onEventTap != null) {
-                                      widget.onEventTap?.call(event);
-                                    } else {
-                                      buildComponent(
-                                        context,
-                                        ComponentEventModel.fromJson(config['event']),
-                                        ComponentBuilder(
-                                          child: EventComponent(
-                                            event: event,
-                                            canLeaveVideoReaction: widget.canLeaveVideoReaction,
-                                            canLeaveFeedback: widget.canLeaveFeedbackForEventCallback,
-                                            feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
-                                            reactionsLoaderCallback: widget.eventReactionLoaderCallback,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  iconInfo: BaseUiKitButtonIconData(
-                                    iconData: CupertinoIcons.right_chevron,
-                                    color: colorScheme?.inversePrimary,
-                                    size: 20.w,
-                                  ),
-                                ),
-                              )
-                              .paddingOnly(top: SpacingFoundation.verticalSpacing4),
-                        )
+                                .paddingOnly(top: SpacingFoundation.verticalSpacing4),
+                          )
+                    ],
+                    SpacingFoundation.verticalSpace16,
+                    context.gradientButton(
+                      data: BaseUiKitButtonData(
+                        text: S.of(context).CreateEvent,
+                        onPressed: widget.onEventCreate,
+                        fit: ButtonFit.fitWidth,
+                      ),
+                    )
                   ],
-                  SpacingFoundation.verticalSpace16,
-                  context.gradientButton(
-                    data: BaseUiKitButtonData(
-                      text: S.of(context).CreateEvent,
-                      onPressed: widget.onEventCreate,
-                      fit: ButtonFit.fitWidth,
-                    ),
-                  )
-                ],
+                ).paddingSymmetric(
+                  horizontal: SpacingFoundation.horizontalSpacing16,
+                  vertical: SpacingFoundation.verticalSpacing8,
+                ),
               ).paddingSymmetric(
-                horizontal: SpacingFoundation.horizontalSpacing16,
-                vertical: SpacingFoundation.verticalSpacing8,
+                horizontal: horizontalMargin,
+                vertical: EdgeInsetsFoundation.vertical24,
               ),
-            ).paddingSymmetric(
-              horizontal: horizontalMargin,
-              vertical: EdgeInsetsFoundation.vertical24,
             ),
           )
-        else
-          FutureBuilder<List<UiEventModel>>(
-            future: widget.events,
-            builder: (context, snapshot) => Row(
-              mainAxisSize: MainAxisSize.max,
-              children: () {
-                log('here we are building ${snapshot.data?.length ?? 0} events', name: 'PlaceComponent');
+        else if (widget.events != null)
+          ValueListenableBuilder(
+            valueListenable: widget.events!,
+            builder: (context, _, __) {
+              log('place test tut  ${widget.events!.value != null && widget.events!.value!.isNotEmpty}');
 
-                final List<UiEventModel> tempSorted = List.from(snapshot.data ?? []);
-                if (tempSorted.isNotEmpty) {
-                  tempSorted.sort(
-                      (a, b) => (a.startDayForEvent ?? DateTime.now()).compareTo(b.startDayForEvent ?? DateTime.now()));
-                }
+              return AnimatedSize(
+                duration: const Duration(milliseconds: 250),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: () {
+                    final List<UiEventModel> tempSorted = List.from(widget.events?.value ?? []);
+                    if (tempSorted.isNotEmpty) {
+                      tempSorted.sort((a, b) =>
+                          (a.startDayForEvent ?? DateTime.now()).compareTo(b.startDayForEvent ?? DateTime.now()));
+                    }
 
-                final closestEvent = tempSorted.firstOrNull;
+                    final closestEvent = tempSorted.firstOrNull;
 
-                final Duration daysToEvent =
-                    (closestEvent?.startDayForEvent ?? DateTime.now()).difference(DateTime.now());
+                    final Duration daysToEvent =
+                        (closestEvent?.startDayForEvent ?? DateTime.now()).difference(DateTime.now());
 
-                return [
-                  Expanded(
-                    child: UpcomingEventPlaceActionCard(
-                      value: closestEvent == null
-                          ? 'none'
-                          : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
-                      group: _group,
-                      rasterIconAsset: GraphicsFoundation.instance.png.events,
-                      action: closestEvent == null
-                          ? null
-                          : () {
-                              if (widget.onEventTap != null) {
-                                widget.onEventTap?.call(closestEvent);
-                              }
-                              // else {
-                              //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
-                              //       ComponentBuilder(child: EventComponent(event: closestEvent!,
-                              //   feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
-                              //   reactionsLoaderCallback: widget.eventReactionLoaderCallback,
-                              // ),
-                              // ),);
-                              // }
-                            },
-                    ),
-                  ),
-                  SpacingFoundation.horizontalSpace8,
-                  Expanded(
-                    child: PointBalancePlaceActionCard(
-                      value: widget.place.userPoints?.toString() ?? '0',
-                      group: _group,
-                      rasterIconAsset: GraphicsFoundation.instance.png.money,
-                      buttonTitle: S.of(context).SpendIt,
-                      action: widget.onSpendPointTap,
-                      //     () {
-                      //   log('balance was pressed');
-                      // },
-                    ),
-                  ),
-                ];
-              }(),
-            ),
+                    return [
+                      Expanded(
+                        child: UpcomingEventPlaceActionCard(
+                          value: closestEvent == null
+                              ? 'none'
+                              : S.current.WithInDays(daysToEvent.inDays > 0 ? daysToEvent.inDays : 0),
+                          group: _group,
+                          rasterIconAsset: GraphicsFoundation.instance.png.events,
+                          action: closestEvent == null
+                              ? null
+                              : () {
+                                  if (widget.onEventTap != null) {
+                                    widget.onEventTap?.call(closestEvent);
+                                  }
+                                  // else {
+                                  //   buildComponent(context, ComponentEventModel.fromJson(config['event']),
+                                  //       ComponentBuilder(child: EventComponent(event: closestEvent!,
+                                  //   feedbackLoaderCallback: widget.eventFeedbackLoaderCallback,
+                                  //   reactionsLoaderCallback: widget.eventReactionLoaderCallback,
+                                  // ),
+                                  // ),);
+                                  // }
+                                },
+                        ),
+                      ),
+                      SpacingFoundation.horizontalSpace8,
+                      Expanded(
+                        child: PointBalancePlaceActionCard(
+                          value: widget.place.userPoints?.toString() ?? '0',
+                          group: _group,
+                          rasterIconAsset: GraphicsFoundation.instance.png.money,
+                          buttonTitle: S.of(context).SpendIt,
+                          action: widget.onSpendPointTap,
+                          //     () {
+                          //   log('balance was pressed');
+                          // },
+                        ),
+                      ),
+                    ];
+                  }(),
+                ),
+              );
+            },
           ).paddingSymmetric(horizontal: horizontalMargin, vertical: EdgeInsetsFoundation.vertical24),
         if (!_noReactions || widget.canLeaveVideoReaction)
           ValueListenableBuilder(
