@@ -283,7 +283,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
                   return const SizedBox.shrink();
                 },
-              ),
+              ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: showSearchBar
