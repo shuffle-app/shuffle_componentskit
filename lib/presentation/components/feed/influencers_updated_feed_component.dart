@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
+import 'dart:math' as math;
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,8 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
 
 class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeedComponent>
     with SingleTickerProviderStateMixin {
+  late final String wallpaper;
+
   late final tabController = TabController(length: 3, vsync: this);
   final autoSizeGroup = AutoSizeGroup();
 
@@ -75,9 +78,9 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   double? disappearingHeight;
 
   late final _tabs = [
-    UiKitCustomTab(title: S.current.Latest.toUpperCase(), customValue: 'latest', group: autoSizeGroup,height: 20.h,),
-    UiKitCustomTab(title: S.current.Top.toUpperCase(), customValue: 'top', group: autoSizeGroup,height: 20.h),
-    UiKitCustomTab(title: S.current.Unread.toUpperCase(), customValue: 'unread', group: autoSizeGroup,height: 20.h),
+    UiKitCustomTab(title: S.current.Latest.toUpperCase(), customValue: 'latest', group: autoSizeGroup, height: 20.h),
+    UiKitCustomTab(title: S.current.Top.toUpperCase(), customValue: 'top', group: autoSizeGroup, height: 20.h),
+    UiKitCustomTab(title: S.current.Unread.toUpperCase(), customValue: 'unread', group: autoSizeGroup, height: 20.h),
   ];
 
   double latestScrollOffset = 0.0;
@@ -151,6 +154,15 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     widget.latestScrollController?.addListener(_scrollListener);
     widget.topScrollController?.addListener(_scrollTopListener);
     widget.unreadScrollController?.addListener(_unreadScrollListener);
+
+    wallpaper = [
+      GraphicsFoundation.instance.svg.wallpaperFeed1.path,
+      GraphicsFoundation.instance.svg.wallpaperFeed2.path,
+      GraphicsFoundation.instance.svg.wallpaperFeed3.path,
+      GraphicsFoundation.instance.svg.wallpaperFeed4.path,
+      GraphicsFoundation.instance.svg.wallpaperFeed5.path,
+      GraphicsFoundation.instance.svg.wallpaperFeed6.path,
+    ][math.Random().nextInt(5)];
   }
 
   _scrollTopListener() {
@@ -375,6 +387,10 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ],
         ),
+        ImageWidget(
+          fit: BoxFit.fill,
+          link: wallpaper,
+        )
       ].reversed.toList(),
     );
   }
