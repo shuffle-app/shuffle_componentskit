@@ -629,7 +629,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   style: boldTextTheme?.body,
                 ),
                 color: colorScheme?.surface1,
-                contentHeight: _noFeedbacks ? 0 : 0.28.sh,
+                contentHeight: _noFeedbacks ? 0 : 0.5.sw,
                 action: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 250),
                   child: canLeaveFeedback ?? false
