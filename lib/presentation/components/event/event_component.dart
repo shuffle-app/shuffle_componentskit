@@ -192,6 +192,8 @@ class _EventComponentState extends State<EventComponent> {
     final boldTextTheme = theme?.boldTextTheme;
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
 
+    final isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
+
     return ListView(
       controller: listViewController,
       physics: const BouncingScrollPhysics(),
@@ -557,7 +559,7 @@ class _EventComponentState extends State<EventComponent> {
             valueListenable: feedbackPagingController,
             builder: (context, value, child) {
               return UiKitColoredAccentBlock(
-                contentHeight: _noFeedbacks ? 0 : 0.28.sh,
+                contentHeight: _noFeedbacks ? 0 : (isSmallScreen ? 166.8.h: 0.28.sh),
                 color: colorScheme?.surface1,
                 title: Text(
                   _noFeedbacks ? S.of(context).NoReviewsMessage : S.of(context).ReviewsByCritics,

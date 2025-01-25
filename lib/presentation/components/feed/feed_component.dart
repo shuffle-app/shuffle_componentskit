@@ -448,6 +448,7 @@ class FeedComponent extends StatelessWidget {
                                 padding: EdgeInsets.only(left: horizontalMargin),
                                 primary: false,
                                 shrinkWrap: true,
+                                cacheExtent: 0.0,
                                 scrollDirection: Axis.horizontal,
                                 itemCount: feed.filterChips!.length + 1 + (hasFavourites ? 1 : 0),
                                 itemBuilder: (context, index) {

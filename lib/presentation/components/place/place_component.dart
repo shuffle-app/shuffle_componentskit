@@ -209,6 +209,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
     final colorScheme = theme?.colorScheme;
     final boldTextTheme = theme?.boldTextTheme;
 
+    final isSmallScreen = MediaQuery.sizeOf(context).width <= 375;
+
     return ListView(
       addAutomaticKeepAlives: false,
       cacheExtent: 0.0,
@@ -629,7 +631,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   style: boldTextTheme?.body,
                 ),
                 color: colorScheme?.surface1,
-                contentHeight: _noFeedbacks ? 0 : 0.5.sw,
+                contentHeight: _noFeedbacks ? 0 : (isSmallScreen ? 166.8.h: 0.28.sh),
                 action: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 250),
                   child: canLeaveFeedback ?? false
