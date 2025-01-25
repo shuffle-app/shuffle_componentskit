@@ -271,34 +271,18 @@ class SearchComponent extends StatelessWidget {
                 constraints: BoxConstraints.loose(Size(double.infinity, 40.h)),
                 child: ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
-                primary: false,
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (_,__)=>horizontalMargin.widthBox,
-                itemCount: search.filterChips!.length,
-                itemBuilder: (context, index) => UiKitTitledFilterChip(
-    selected: search.activeFilterChips?.contains(search.filterChips![index].title) ?? false,
+                  primary: false,
+                  cacheExtent: 0.0,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (_, __) => horizontalMargin.widthBox,
+                  itemCount: search.filterChips!.length,
+                  itemBuilder: (context, index) => UiKitTitledFilterChip(
+                    selected: search.activeFilterChips?.contains(search.filterChips![index].title) ?? false,
                     title: search.filterChips![index].title,
-                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(search.filterChips![index].title),
+                    onPressed:
+                        onTagSortPressed == null ? null : () => onTagSortPressed!(search.filterChips![index].title),
                     icon: search.filterChips![index].icon,
-
-    ),
-                // child: Row(
-                //   children: [
-                //     horizontalMargin.widthBox,
-                //     Wrap(
-                //       spacing: SpacingFoundation.verticalSpacing8,
-                //       children: search.filterChips!
-                //           .map(
-                //             (e) => UiKitTitledFilterChip(
-                //               selected: search.activeFilterChips?.contains(e.title) ?? false,
-                //               title: e.title,
-                //               onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                //               icon: e.icon,
-                //             ),
-                //           )
-                //           .toList(),
-                //     )
-                //   ],
+                  ),
                 ),
               ),
             ],
