@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +31,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
   final VoidCallback? onPinnedPublicationTap;
   final RichText? weather;
   final bool pinnedIsLoading;
+  final SvgGenImage? wallpaper;
 
   const InfluencersUpdatedFeedComponent({
     super.key,
@@ -55,6 +55,7 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
     this.searchController,
     this.weather,
     this.pinnedIsLoading = false,
+    this.wallpaper,
   });
 
   @override
@@ -108,7 +109,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   }
 
   BorderRadius get clipBorderRadius =>
-      _isCardVisible ? BorderRadiusFoundation.onlyTop24 : BorderRadiusFoundation.all24r;
+      _isCardVisible ? BorderRadiusFoundation.onlyTop16 : BorderRadiusFoundation.all24r;
 
   bool showSearchBar = false;
   bool isSearchBarActivated = false;
@@ -375,6 +376,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
           ],
         ),
+        if (widget.wallpaper != null)
+          ImageWidget(
+            fit: BoxFit.fill,
+            svgAsset: widget.wallpaper,
+          )
       ].reversed.toList(),
     );
   }
