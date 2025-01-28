@@ -423,7 +423,7 @@ class FeedComponent extends StatelessWidget {
                         SpacingFoundation.verticalSpace16,
                         if (myCount == null || myCount == 0)
                           BigActivityFeedWidget(
-                            onTap: onMyActionTap,
+                            onTap: onCommonActionTap,
                             commonCount: commonCount,
                           )
                         else
