@@ -424,7 +424,7 @@ class FeedComponent extends StatelessWidget {
                         if (myCount == null || myCount == 0)
                           BigActivityFeedWidget(
                             onTap: onMyActionTap,
-                            myCount: myCount,
+                            commonCount: commonCount,
                           )
                         else
                           SmallActivityFeedWidget(
