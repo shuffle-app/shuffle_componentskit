@@ -11,6 +11,7 @@ showCompleteInfluencerDialog({
   int? maxReviewProgress,
   int? actualVideoReactionProgress,
   int? maxVideoReactionProgress,
+  VoidCallback? onContinue,
 }) {
   final theme = context.uiKitTheme;
   final width = 1.sw <= 380 ? 0.4.sw : 0.44.sw;
@@ -53,11 +54,6 @@ showCompleteInfluencerDialog({
                   Text(
                     S.of(context).YouProgressed,
                     style: theme?.boldTextTheme.title2.copyWith(color: theme.colorScheme.primary),
-                  ),
-                  SpacingFoundation.verticalSpace16,
-                  Text(
-                    S.of(context).AvailableSoon,
-                    style: theme?.regularTextTheme.body.copyWith(color: theme.colorScheme.primary),
                   ),
                   SpacingFoundation.verticalSpace16,
                   Row(
@@ -126,6 +122,11 @@ showCompleteInfluencerDialog({
                         ],
                       ),
                     ],
+                  ),
+                  SpacingFoundation.verticalSpace16,
+                  context.gradientButton(
+                    data: BaseUiKitButtonData(
+                        onPressed: onContinue, text: S.of(context).Continue, fit: ButtonFit.fitWidth),
                   )
                 ],
               ),

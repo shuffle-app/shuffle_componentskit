@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class InfluencerToolsComponent extends StatelessWidget {
   final List<String> newToolsInfluencerList;
   final List<InfluencerToolUiModel> influencerUiModelList;
-  final Function() onTap;
+  final VoidCallback? onTap;
 
   const InfluencerToolsComponent({
     super.key,
@@ -48,13 +48,15 @@ class InfluencerToolsComponent extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ImageWidget(
-                        svgAsset: GraphicsFoundation.instance.svg.gradientStar,
-                        color: Colors.white,
-                        width: 0.0625.sw,
-                        height: 0.0625.sw,
-                        fit: BoxFit.cover,
-                      ),
+                      GradientableWidget(
+                          gradient: GradientFoundation.defaultLinearGradient,
+                          child: ImageWidget(
+                            svgAsset: GraphicsFoundation.instance.svg.gradientStar,
+                            color: Colors.white,
+                            width: 0.0625.sw,
+                            height: 0.0625.sw,
+                            fit: BoxFit.cover,
+                          )),
                       SpacingFoundation.horizontalSpace8,
                       Expanded(
                         child: Text(
