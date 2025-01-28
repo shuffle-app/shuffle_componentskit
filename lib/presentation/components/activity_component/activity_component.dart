@@ -28,6 +28,9 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
   final autoSizeGroup = AutoSizeGroup();
   late final tabController = TabController(length: 2, vsync: this);
 
+  late final myActivityKey = PageStorageKey('my');
+  late final commonActivityKey = PageStorageKey('common');
+
   late final _tabs = [
     UiKitCustomTab(title: S.current.My.toUpperCase(), customValue: 'my', group: autoSizeGroup, height: 28.h),
     UiKitCustomTab(title: S.current.Common.toUpperCase(), customValue: 'common', group: autoSizeGroup, height: 28.h),
@@ -36,7 +39,7 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
   @override
   void initState() {
     super.initState();
-    tabController.animateTo(widget.isMyActivity ? 0 : 1, duration: Duration(milliseconds: 300));
+    tabController.animateTo(widget.isMyActivity ? 0 : 1);
   }
 
   @override
@@ -44,6 +47,7 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
     return BlurredAppBarPage(
       title: S.current.WheresTheActivity,
       autoImplyLeading: true,
+      physics: NeverScrollableScrollPhysics(),
       centerTitle: true,
       customToolbarBaseHeight: 80.w,
       children: [
@@ -59,7 +63,9 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
             controller: tabController,
             children: [
               PagedListView.separated(
-                padding: EdgeInsets.only(bottom: SpacingFoundation.verticalSpacing40 * 2),
+                key: myActivityKey,
+                padding: EdgeInsets.only(
+                    bottom: SpacingFoundation.verticalSpacing24 + MediaQuery.viewInsetsOf(context).bottom),
                 pagingController: widget.myActivityPaginationController,
                 separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
                 builderDelegate: PagedChildBuilderDelegate<ActivityUiModel>(
@@ -74,7 +80,9 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
                 ),
               ),
               PagedListView.separated(
-                padding: EdgeInsets.only(bottom: SpacingFoundation.verticalSpacing40 * 2),
+                key: commonActivityKey,
+                padding: EdgeInsets.only(
+                    bottom: SpacingFoundation.verticalSpacing24 + MediaQuery.viewInsetsOf(context).bottom),
                 pagingController: widget.commonActivityPaginationController,
                 separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
                 builderDelegate: PagedChildBuilderDelegate<ActivityUiModel>(
