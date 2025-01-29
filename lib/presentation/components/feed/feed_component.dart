@@ -36,6 +36,10 @@ class FeedComponent extends StatelessWidget {
   final ValueNotifier<double>? tiltNotifier;
   final ScrollController? scrollController;
   final bool showHints;
+  final VoidCallback? onMyActionTap;
+  final VoidCallback? onCommonActionTap;
+  final int? myCount;
+  final int? commonCount;
 
   const FeedComponent({
     super.key,
@@ -68,6 +72,10 @@ class FeedComponent extends StatelessWidget {
     this.tiltNotifier,
     this.scrollController,
     this.showHints = true,
+    this.onCommonActionTap,
+    this.onMyActionTap,
+    this.myCount,
+    this.commonCount,
   });
 
   @override
@@ -402,6 +410,35 @@ class FeedComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace24.wrapSliverBox,
                   ],
                 ],
+                if ((commonCount != null && commonCount != 0) || (myCount != null && myCount != 0))
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.current.WheresTheActivity,
+                          style: themeTitleStyle,
+                        ),
+                        SpacingFoundation.verticalSpace16,
+                        if (myCount == null || myCount == 0)
+                          BigActivityFeedWidget(
+                            onTap: onCommonActionTap,
+                            commonCount: commonCount,
+                          )
+                        else
+                          SmallActivityFeedWidget(
+                            onMyActionTap: onMyActionTap,
+                            onCommonActionTap: onCommonActionTap,
+                            myCount: myCount,
+                            commonCount: commonCount,
+                          ),
+                      ],
+                    ),
+                  )
+                      .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing24)
+                      .wrapSliverBox,
+
                 if ((feedLeisureModel.showPlaces ?? true)) ...[
                   TitleWithHowItWorks(
                     title: S.of(context).YouBetterCheckThisOut,
