@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -496,7 +497,8 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 authorAvatarUrl: item.avatarUrl,
                 authorSpeciality: item.speciality,
                 authorUserType: item.userType,
-                onSharePress: () => onSharePress?.call(item.id),
+                //to allow this button only for admin
+                onSharePress: kIsWeb ? () => onSharePress?.call(item.id) : null,
                 heartEyesCount: item.heartEyesReactionsCount,
                 likesCount: item.likeReactionsCount,
                 sunglassesCount: item.sunglassesReactionsCount,
@@ -518,7 +520,8 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 authorSpeciality: item.speciality,
                 authorName: item.name,
                 authorUsername: item.username,
-                onSharePress: () => onSharePress?.call(item.id),
+                //to allow this button only for admin
+                onSharePress: kIsWeb ? () => onSharePress?.call(item.id) : null,
                 authorAvatarUrl: item.avatarUrl,
                 authorUserType: item.userType,
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),

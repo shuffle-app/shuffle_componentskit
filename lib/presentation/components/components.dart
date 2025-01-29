@@ -95,6 +95,7 @@ export 'profile/profile_component.dart';
 export 'profile/profile_preferences/edit_default_profile_preferences_component.dart';
 export 'profile/profile_preferences/ui_edit_default_profile_preferences_model.dart';
 export 'profile/public_profile/public_pro_profile_component.dart';
+export 'profile/public_profile/public_influencer_profile_component.dart';
 export 'profile/settings_component/settings_component.dart';
 export 'profile/spent_points/spent_points_component.dart';
 export 'profile/spent_points/ui_model_discounts.dart';
