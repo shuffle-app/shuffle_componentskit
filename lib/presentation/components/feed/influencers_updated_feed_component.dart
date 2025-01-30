@@ -212,7 +212,8 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                 child: ClipRRect(
                   borderRadius: BorderRadiusFoundation.onlyBottom24,
                   clipper: _CustomBlurClipper(
-                      topPadding: MediaQuery.viewPaddingOf(context).top + (_isCardVisible ? 50.h : 0)),
+                      topPadding: MediaQuery.viewPaddingOf(context).top +
+                          (_isCardVisible ? (_hasImageInPinned ? 50.h : 30.h) : 0)),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                     child: SafeArea(
@@ -404,6 +405,8 @@ class _CustomBlurClipper extends CustomClipper<RRect> {
   }
 }
 
+final ValueNotifier<int> indexOfItem = ValueNotifier<int>(0);
+
 class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   final PagingController<int, InfluencerFeedItem> pagingController;
   final Function(int, String)? onReactionsTapped;
@@ -448,7 +451,6 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final regularTextTheme = context.uiKitTheme?.regularTextTheme;
-    final ValueNotifier<int> indexOfItem = ValueNotifier<int>(0);
 
     return NotificationListener<ScrollUpdateNotification>(
       onNotification: (t) {
@@ -458,7 +460,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
       child: PagedListView.separated(
         key: pageStorageKey,
         scrollController: scrollController,
-        physics: const BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: EdgeInsets.only(
           bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
           top: MediaQuery.viewPaddingOf(context).top,
@@ -483,7 +485,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 sunglassesReactionsCount: item.sunglassesReactionsCount,
                 smileyReactionsCount: item.smileyReactionsCount,
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-                createdAt: item.createdAt,
+                viewShareDate: item.viewShareDate,
                 onLongPress: () => onLongPress?.call(item.id),
                 showTranslateButton: item.showTranslateButton,
                 translateText: item.translateText,
@@ -505,7 +507,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 firesCount: item.fireReactionsCount,
                 smileyCount: item.smileyReactionsCount,
                 text: item.text,
-                createdAt: item.createdAt ?? '',
+                viewShareDate: item.viewShareDate,
                 onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
                 hasNewMark: item.newMark,
                 onLongPress: () => onLongPress?.call(item.id),
@@ -516,7 +518,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
             } else if (item is UpdatesFeedItem) {
               child = UiKitContentUpdatesCard(
                 key: item.key,
-                createdAt: item.createdAt ?? '',
+                viewShareDate: item.viewShareDate,
                 authorSpeciality: item.speciality,
                 authorName: item.name,
                 authorUsername: item.username,
@@ -541,7 +543,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 fireReactionsCount: item.fireReactionsCount,
                 sunglassesReactionsCount: item.sunglassesReactionsCount,
                 smileyReactionsCount: item.smileyReactionsCount,
-                createdAt: item.createdAt ?? '',
+                viewShareDate: item.viewShareDate,
                 onReadTap: () => onReadTap?.call(item.id),
                 showTranslateButton: item.showTranslateButton,
                 titleTranslateText: item.translateTitle,
