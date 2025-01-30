@@ -13,7 +13,7 @@ abstract class InfluencerFeedItem {
   final String avatarUrl;
   final UserTileType userType;
   String? userReaction;
-  final String? createdAt;
+  final ViewShareDate? viewShareDate;
   final ValueNotifier<bool>? showTranslateButton;
 
   InfluencerFeedItem({
@@ -26,7 +26,7 @@ abstract class InfluencerFeedItem {
     required this.userType,
     this.userReaction,
     this.userId,
-    this.createdAt,
+    this.viewShareDate,
     this.showTranslateButton,
   });
 
@@ -48,7 +48,8 @@ abstract class InfluencerFeedItem {
     return (other is InfluencerFeedItem ||
             other is UpdatesFeedItem ||
             other is ShufflePostFeedItem ||
-            other is PostFeedItem || other is DigestFeedItem) &&
+            other is PostFeedItem ||
+            other is DigestFeedItem) &&
         (other as InfluencerFeedItem).id == id;
   }
 
@@ -81,7 +82,7 @@ class DigestFeedItem extends InfluencerFeedItem {
     this.sunglassesReactionsCount = 0,
     this.smileyReactionsCount = 0,
     this.onReadTap,
-    super.createdAt,
+    super.viewShareDate,
     super.userReaction,
     this.translateTitle,
     this.translateUnderTitle,
@@ -111,7 +112,7 @@ class DigestFeedItem extends InfluencerFeedItem {
     return DigestFeedItem(
       key: super.key,
       id: id,
-      createdAt: createdAt,
+      viewShareDate: viewShareDate,
       title: title ?? this.title,
       underTitleText: underTitleText ?? this.underTitleText,
       digestUiModels: digestUiModels ?? this.digestUiModels,
@@ -152,7 +153,7 @@ class UpdatesFeedItem extends InfluencerFeedItem {
     required super.userType,
     super.userReaction,
     super.key,
-    super.createdAt,
+    super.viewShareDate,
     this.newPhotos,
     this.newVideos,
     this.newFeedbacks,
@@ -184,7 +185,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
     required super.id,
     super.key,
     super.userReaction,
-    super.createdAt,
+    super.viewShareDate,
     this.videos,
     this.heartEyesReactionsCount = 0,
     this.likeReactionsCount = 0,
@@ -247,7 +248,7 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
       newContent: newContent,
       userReaction: userReaction,
       key: super.key,
-      createdAt: createdAt,
+      viewShareDate: viewShareDate,
       translateText: translateText ?? this.translateText,
       showTranslateButton: super.showTranslateButton,
     );
@@ -272,7 +273,7 @@ class PostFeedItem extends InfluencerFeedItem {
     required super.username,
     required super.avatarUrl,
     required super.userType,
-    super.createdAt,
+    super.viewShareDate,
     required this.text,
     required this.heartEyesReactionsCount,
     required this.likeReactionsCount,
@@ -319,7 +320,7 @@ class PostFeedItem extends InfluencerFeedItem {
       newMark: newMark ?? this.newMark,
       userReaction: userReaction,
       key: key,
-      createdAt: createdAt,
+      viewShareDate: viewShareDate,
       translateText: translateText ?? this.translateText,
       showTranslateButton: super.showTranslateButton,
     );
