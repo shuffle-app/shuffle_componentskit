@@ -7,6 +7,7 @@ class ChatItemUiModel {
   final int? contentId;
   final Type? contentType;
   final String chatTitle;
+  final String? chatName;
   final String? subtitle;
   final String? avatarUrl;
   final String? contentTitle;
@@ -35,7 +36,7 @@ class ChatItemUiModel {
     return formatDifference(lastMessageTime);
   }
 
-  ChatItemUiModel({
+  const ChatItemUiModel({
     required this.id,
     required this.chatTitle,
     required this.userIsOwner,
@@ -47,6 +48,7 @@ class ChatItemUiModel {
     this.lastMessageSenderName,
     this.readOnlyChat = false,
     this.disabled = false,
+    this.chatName,
     this.contentTags,
     this.owner,
     this.contentId,
@@ -87,6 +89,7 @@ class ChatItemUiModel {
     String? lastMessageSenderName,
     bool? readOnlyChat,
     List<ChatMessageUiModel>? firstPageMessages,
+    String? chatName,
   }) {
     return ChatItemUiModel(
       id: id,
@@ -114,6 +117,7 @@ class ChatItemUiModel {
       deletionDate: deletionDate ?? this.deletionDate,
       disabled: disabled ?? this.disabled,
       firstPageMessages: firstPageMessages ?? this.firstPageMessages,
+      chatName: chatName?? this.chatName,
     );
   }
 

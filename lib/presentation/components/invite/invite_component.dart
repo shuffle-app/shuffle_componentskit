@@ -12,10 +12,13 @@ class InviteComponent extends StatefulWidget {
     this.selfInvitationModel,
     this.initialDate,
     this.onRemoveUserOptionTap,
+    this.onShareOptionTap,
     this.onDisabledUserTileTap,
     this.onAddWishTap,
     this.onInviteTap,
     this.changeDate,
+    this.onChatTap,
+    this.chatModels = const [],
   }) : assert(
           selfInvitationModel != null ? onRemoveUserOptionTap != null : changeDate != null,
           'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
@@ -27,11 +30,14 @@ class InviteComponent extends StatefulWidget {
 
   final UiInvitePersonModel? selfInvitationModel;
   final VoidCallback? onRemoveUserOptionTap;
+  final VoidCallback? onShareOptionTap;
   final VoidCallback? onDisabledUserTileTap;
   final Future Function(String value, DateTime? date)? onAddWishTap;
   final Future<DateTime?> Function()? changeDate;
   final DateTime? initialDate;
   final Future Function(List<UiInvitePersonModel>)? onInviteTap;
+  final List<UiInviteChatModel> chatModels;
+  final ValueChanged<int>? onChatTap;
 
   @override
   State<InviteComponent> createState() => _InviteComponentState();
@@ -124,9 +130,22 @@ class _InviteComponentState extends State<InviteComponent> {
                     horizontal: EdgeInsetsFoundation.horizontal16,
                     vertical: EdgeInsetsFoundation.vertical8,
                   ),
-                  itemCount: widget.persons.length,
+                  itemCount: widget.persons.length + widget.chatModels.length,
                   itemBuilder: (_, index) {
-                    final person = widget.persons[index];
+                    if (index < widget.chatModels.length) {
+                      final chatModel = widget.chatModels[index];
+                      return UiKitChatTile(
+                          chatTitle: chatModel.chatTitle,
+                          adminName: chatModel.adminName,
+                          date: chatModel.date,
+                          userTileType: chatModel.userTileType,
+                          avatarUrl: chatModel.avatarUrl,
+                          chatMembersCount: chatModel.chatMembersCount,
+                          onTap: () => widget.onChatTap?.call(chatModel.id),
+                          numberInList: index + 1);
+                    }
+
+                    final person = widget.persons[index - widget.chatModels.length];
 
                     return UiKitUserTileWithCheckbox(
                       name: person.name,
@@ -164,6 +183,12 @@ class _InviteComponentState extends State<InviteComponent> {
                         _wishController.text = widget.selfInvitationModel!.description;
                       });
                     },
+                  ),
+                  UiKitPopUpMenuButtonOption(
+                    title: S.of(context).Share,
+                    value: 'Share',
+                    textColor: colorScheme?.surface,
+                    onTap: widget.onShareOptionTap,
                   ),
                   UiKitPopUpMenuButtonOption(
                     title: S.of(context).DeleteFromList,

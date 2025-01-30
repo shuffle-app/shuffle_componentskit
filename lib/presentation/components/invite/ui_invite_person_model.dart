@@ -33,3 +33,22 @@ class UiInvitePersonModel extends UiInviteToFavoritePlacesModel {
   @override
   int get hashCode => id.hashCode;
 }
+
+class UiInviteChatModel extends UiInviteToFavoritePlacesModel {
+  final int id;
+  final String chatTitle;
+  final String adminName;
+  final String? avatarUrl;
+  final UserTileType? userTileType;
+  final int chatMembersCount;
+
+  const UiInviteChatModel({
+    required this.id,
+    required this.chatTitle,
+    required this.adminName,
+    this.chatMembersCount = 0,
+    this.avatarUrl,
+    this.userTileType,
+    super.date,
+  });
+}

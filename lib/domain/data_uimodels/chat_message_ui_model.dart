@@ -8,6 +8,7 @@ class ChatMessageUiModel {
   final String? additionalText;
   final String? gradientableText;
   final String? infoMessageTitle;
+  final String? chatName;
   final bool senderIsMe;
   final String? senderName;
   final String? senderAvatar;
@@ -22,7 +23,7 @@ class ChatMessageUiModel {
 
   bool get isInvitation => messageType == MessageType.invitation && invitationData != null;
 
-  ChatMessageUiModel({
+  const ChatMessageUiModel({
     required this.timeSent,
     required this.messageId,
     required this.senderId,
@@ -31,6 +32,7 @@ class ChatMessageUiModel {
     required this.isRead,
     required this.isLastMessageToDate,
     this.additionalText,
+    this.chatName,
     this.connectId,
     this.gradientableText,
     this.senderName,
@@ -125,7 +127,7 @@ class ChatMessageInvitationData {
   final UserTileType receiverUserType;
   final bool hasAcceptedInvite;
 
-  ChatMessageInvitationData({
+  const ChatMessageInvitationData({
     required this.receiverId,
     required this.senderId,
     required this.senderUserName,

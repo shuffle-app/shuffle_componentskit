@@ -1,7 +1,7 @@
 class UiInviteToFavoritePlacesModel {
   final DateTime? date;
 
-  UiInviteToFavoritePlacesModel({
+  const UiInviteToFavoritePlacesModel({
     this.date,
   });
 }

@@ -69,6 +69,7 @@ class ChatComponent extends StatelessWidget {
           ? GestureDetector(
               onTap: onPinnedMessageTap,
               child: UiKitInfoText(
+                chatName: pinnedMessage!.chatName,
                 text: pinnedMessage!.message!,
                 title: pinnedMessage!.infoMessageTitle,
                 centerText: !pinnedMessage!.messageId.isNegative,
