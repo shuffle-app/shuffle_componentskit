@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'bookings_control_ui_models/user_bookings_control_ui_model.dart';
 
@@ -11,6 +12,7 @@ class UsersBookingsControl extends StatelessWidget {
   final VoidCallback? onCheckBoxTap;
   final VoidCallback? onRequestsRefund;
   final Function(String? value, int userId)? onPopupMenuSelected;
+  final int? noShows;
 
   const UsersBookingsControl({
     super.key,
@@ -21,6 +23,7 @@ class UsersBookingsControl extends StatelessWidget {
     this.onCheckBoxTap,
     this.onRequestsRefund,
     this.onPopupMenuSelected,
+    this.noShows,
   });
 
   @override
@@ -89,9 +92,13 @@ class UsersBookingsControl extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          element.profile?.name ?? '',
-                          style: boldTextTheme?.caption1Medium,
+                        Flexible(
+                          child: AutoSizeText(
+                            element.profile?.name ?? '',
+                            style: boldTextTheme?.caption1Medium,
+                            maxLines: 2,
+                            wrapWords: false,
+                          ),
                         ),
                         if (element.profile?.userTileType == UserTileType.influencer) ...[
                           SpacingFoundation.horizontalSpace8,
@@ -101,21 +108,28 @@ class UsersBookingsControl extends StatelessWidget {
                         ]
                       ],
                     ),
-                    Text(
-                      element.profile?.nickname ?? '',
-                      style: boldTextTheme?.caption1Bold.copyWith(
-                        color: ColorsFoundation.mutedText,
+                    Flexible(
+                      child: AutoSizeText(
+                        element.profile?.nickname ?? '',
+                        style: boldTextTheme?.caption1Bold.copyWith(color: ColorsFoundation.mutedText),
+                        maxLines: 2,
                       ),
                     ),
                   ],
                 ),
               ),
+              if (noShows != null && noShows! > 0)
+                UiKitNoShowCard(noShows: noShows!).paddingOnly(
+                  left: SpacingFoundation.horizontalSpacing8,
+                  right: checkBox ? SpacingFoundation.horizontalSpacing8 : 0.0,
+                ),
               checkBox
                   ? UiKitCheckbox(
                       isActive: element.isSelected,
                       onChanged: onCheckBoxTap,
                     )
                   : PopupMenuButton(
+                      padding: EdgeInsets.all(0.0),
                       icon: const ImageWidget(iconData: ShuffleUiKitIcons.morevert),
                       splashRadius: 1,
                       // menuPadding: EdgeInsets.all(EdgeInsetsFoundation.all24),
