@@ -5,6 +5,7 @@ class UserBookingsControlUiModel {
   final UiProfileModel? profile;
   final TicketUiModel? ticketUiModel;
   final TicketUiModel? refundUiModel;
+  final int? noShows;
   bool isSelected;
 
   UserBookingsControlUiModel({
@@ -12,6 +13,7 @@ class UserBookingsControlUiModel {
     this.profile,
     this.ticketUiModel,
     this.refundUiModel,
+    this.noShows,
     this.isSelected = false,
   });
 
@@ -20,6 +22,7 @@ class UserBookingsControlUiModel {
     UiProfileModel? profile,
     TicketUiModel? ticketUiModel,
     TicketUiModel? refundUiModel,
+    int? noShows,
     bool? isSelected,
   }) {
     return UserBookingsControlUiModel(
@@ -27,6 +30,7 @@ class UserBookingsControlUiModel {
       profile: profile ?? this.profile,
       ticketUiModel: ticketUiModel ?? this.ticketUiModel,
       refundUiModel: refundUiModel ?? this.refundUiModel,
+      noShows: noShows ?? this.noShows,
       isSelected: isSelected ?? this.isSelected,
     );
   }
