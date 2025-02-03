@@ -25,6 +25,7 @@ class CreateEventComponent extends StatefulWidget {
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
   final bool Function(BookingUiModel)? onBookingTap;
   final List<String> availableTagOptions;
+  final Future<String?> Function()? onCityChanged;
 
   const CreateEventComponent({
     super.key,
@@ -39,6 +40,7 @@ class CreateEventComponent extends StatefulWidget {
     this.onTimeTemplateCreated,
     this.onBookingTap,
     this.availableTagOptions = const [],
+    this.onCityChanged,
   });
 
   @override
@@ -48,6 +50,7 @@ class CreateEventComponent extends StatefulWidget {
 class _CreateEventComponentState extends State<CreateEventComponent> {
   late final TextEditingController _titleController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
+  late final TextEditingController _cityController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
@@ -75,6 +78,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _titleController.text = widget.eventToEdit?.title ?? '';
     _descriptionController.text = widget.eventToEdit?.description ?? '';
     _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
+    _cityController.text = widget.eventToEdit?.city ?? '';
     _locationController.text = widget.eventToEdit?.location ?? '';
     _priceController.text = widget.eventToEdit?.price ?? '';
     _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
@@ -157,6 +161,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   void didUpdateWidget(covariant CreateEventComponent oldWidget) {
+    _cityController.text = widget.eventToEdit?.city ?? '';
+
     if (oldWidget.eventToEdit != widget.eventToEdit) {
       _bookingUrlController.text = widget.eventToEdit?.bookingUrl ?? '';
       _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
@@ -253,6 +259,18 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               expands: true,
               validator: descriptionValidator,
             ),
+          ).paddingSymmetric(horizontal: horizontalPadding),
+          SpacingFoundation.verticalSpace24,
+          UiKitInputFieldNoFill(
+            onTap: () async {
+              _cityController.text = await widget.onCityChanged?.call() ?? '';
+              _eventToEdit.city = _cityController.text;
+
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            label: S.of(context).City,
+            readOnly: true,
+            controller: _cityController,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
@@ -773,6 +791,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                 fit: ButtonFit.fitWidth,
                 onPressed: () {
                   _formKey.currentState?.validate();
+                  _eventToEdit.city = _cityController.text;
                   _eventToEdit.title = _titleController.text;
                   _eventToEdit.description = _descriptionController.text;
                   _eventToEdit.media = [..._photos, ..._videos];
