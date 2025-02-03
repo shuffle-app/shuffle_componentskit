@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class CompanyHomeScreenComponent extends StatelessWidget {
+class CompanyHomeScreenComponent extends StatefulWidget {
   final String name;
   final String? avatarUrl;
   final List<String>? interests;
@@ -11,6 +11,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   final VoidCallback? onCreatePlace;
   final ValueChanged<int>? onPlaceTapped;
   final List<UiKitStats>? profileStats;
+  final Future<String?> Function(String?)? onCityChanged;
+  final bool showSelectCity;
 
   const CompanyHomeScreenComponent({
     super.key,
@@ -22,7 +24,16 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     this.onCreatePlace,
     this.onPlaceTapped,
     this.profileStats,
+    this.onCityChanged,
+    this.showSelectCity = false,
   });
+
+  @override
+  State<CompanyHomeScreenComponent> createState() => _CompanyHomeScreenComponentState();
+}
+
+class _CompanyHomeScreenComponentState extends State<CompanyHomeScreenComponent> {
+  ValueNotifier<String> selectedCity = ValueNotifier<String>(S.current.SelectCity);
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +56,12 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               height: MediaQuery.viewPaddingOf(context).top,
             ),
             ProfileCard(
-              name: name,
-              avatarUrl: avatarUrl,
+              name: widget.name,
+              avatarUrl: widget.avatarUrl,
               tags: [
-                if (tag != null) tag!,
+                if (widget.tag != null) widget.tag!,
               ],
-              interests: interests,
+              interests: widget.interests,
               // badge: DynamicGradientPlate(
               //   content: Row(
               //     mainAxisSize: MainAxisSize.min,
@@ -66,11 +77,21 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               //   ),
               // ),
               profileType: ProfileCardType.company,
-              profileStats: profileStats,
+              profileStats: widget.profileStats,
             ).paddingSymmetric(
               horizontal: horizontalMargin,
             ),
             SpacingFoundation.verticalSpace24,
+            if (widget.showSelectCity)
+              SelectedCityRow(
+                selectedCity: selectedCity,
+                onTap: () async {
+                  final city = await widget.onCityChanged?.call(selectedCity.value) ?? S.current.SelectCity;
+                  selectedCity.value = city == selectedCity.value ? S.current.SelectCity : city;
+
+                  setState(() {});
+                },
+              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing24),
             Row(children: [
               Text(
                 S.of(context).Places,
@@ -101,28 +122,28 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               horizontal: horizontalMargin,
             ),
             SpacingFoundation.verticalSpace24,
-            if (places.isEmpty)
+            if (widget.places.isEmpty)
               UiKitTitledActionCard(
                 title: S.of(context).CreateYourPlaceAndInvitePeople,
                 actionButton: context.gradientButton(
                   data: BaseUiKitButtonData(
                     text: S.of(context).CreatePlace.toUpperCase(),
-                    onPressed: onCreatePlace,
+                    onPressed: widget.onCreatePlace,
                   ),
                 ),
               ).paddingSymmetric(
                 horizontal: horizontalMargin,
               ),
-            if (places.isNotEmpty)
+            if (widget.places.isNotEmpty)
               ListView.separated(
                 padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final item = places.elementAt(index);
+                  final item = widget.places.elementAt(index);
 
                   return PlacePreview(
-                    onTap: (id) => onPlaceTapped?.call(id),
+                    onTap: (id) => widget.onPlaceTapped?.call(id),
                     place: item,
                     model: model,
                     status: item.moderationStatus,
@@ -130,14 +151,14 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                   );
                 },
                 separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
-                itemCount: places.length,
+                itemCount: widget.places.length,
               ),
-            if (places.isNotEmpty) ...[
+            if (widget.places.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
               context
                   .gradientButton(
                     data: BaseUiKitButtonData(
-                        text: S.of(context).CreatePlace, onPressed: onCreatePlace, fit: ButtonFit.fitWidth),
+                        text: S.of(context).CreatePlace, onPressed: widget.onCreatePlace, fit: ButtonFit.fitWidth),
                   )
                   .paddingSymmetric(
                     horizontal: horizontalMargin,
