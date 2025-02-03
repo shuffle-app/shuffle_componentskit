@@ -20,6 +20,8 @@ class UiPlaceModel {
   List<UiDescriptionItemModel>? descriptionItems;
   String? scheduleString;
   String? location;
+  int? cityId;
+  String? city;
   String? website;
   String? phone;
   String? price;
@@ -43,6 +45,8 @@ class UiPlaceModel {
       this.title,
       this.scheduleString,
       this.location,
+      this.cityId,
+      this.city,
       this.media = const [],
       this.verticalPreview,
       this.logo,
@@ -112,7 +116,7 @@ class UiPlaceModel {
       return S.current.XIsRequired(S.current.PlaceType);
     } else if (media.isEmpty) {
       return S.current.XIsRequired(S.current.Photos);
-    }else if(schedule!=null && !schedule!.validateDate) {
+    } else if (schedule != null && !schedule!.validateDate) {
       return S.current.APeriodOrPartOfPeriodOfTimeCannotBeInPast;
     }
 
@@ -136,6 +140,8 @@ class UiPlaceModel {
     List<UiDescriptionItemModel>? descriptionItems,
     String? scheduleString,
     String? location,
+    int? cityId,
+    String? city,
     String? website,
     String? phone,
     String? price,
@@ -169,6 +175,8 @@ class UiPlaceModel {
         logo: logo ?? this.logo,
         scheduleString: scheduleString ?? this.scheduleString,
         location: location ?? this.location,
+        cityId: cityId ?? this.cityId,
+        city: city ?? this.city,
         website: website ?? this.website,
         phone: phone ?? this.phone,
         price: price ?? this.price,
