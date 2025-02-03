@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class CompanyHomeScreenComponent extends StatefulWidget {
+class CompanyHomeScreenComponent extends StatelessWidget {
   final String name;
   final String? avatarUrl;
   final List<String>? interests;
@@ -29,13 +29,6 @@ class CompanyHomeScreenComponent extends StatefulWidget {
   });
 
   @override
-  State<CompanyHomeScreenComponent> createState() => _CompanyHomeScreenComponentState();
-}
-
-class _CompanyHomeScreenComponentState extends State<CompanyHomeScreenComponent> {
-  ValueNotifier<String> selectedCity = ValueNotifier<String>(S.current.SelectCity);
-
-  @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final textTheme = theme?.boldTextTheme;
@@ -56,12 +49,12 @@ class _CompanyHomeScreenComponentState extends State<CompanyHomeScreenComponent>
               height: MediaQuery.viewPaddingOf(context).top,
             ),
             ProfileCard(
-              name: widget.name,
-              avatarUrl: widget.avatarUrl,
+              name: name,
+              avatarUrl: avatarUrl,
               tags: [
-                if (widget.tag != null) widget.tag!,
+                if (tag != null) tag!,
               ],
-              interests: widget.interests,
+              interests: interests,
               // badge: DynamicGradientPlate(
               //   content: Row(
               //     mainAxisSize: MainAxisSize.min,
@@ -77,19 +70,17 @@ class _CompanyHomeScreenComponentState extends State<CompanyHomeScreenComponent>
               //   ),
               // ),
               profileType: ProfileCardType.company,
-              profileStats: widget.profileStats,
+              profileStats: profileStats,
             ).paddingSymmetric(
               horizontal: horizontalMargin,
             ),
             SpacingFoundation.verticalSpace24,
-            if (widget.showSelectCity)
+            if (showSelectCity)
               SelectedCityRow(
                 selectedCity: selectedCity,
                 onTap: () async {
-                  final city = await widget.onCityChanged?.call(selectedCity.value) ?? S.current.SelectCity;
+                  final city = await onCityChanged?.call(selectedCity.value) ?? S.current.SelectCity;
                   selectedCity.value = city == selectedCity.value ? S.current.SelectCity : city;
-
-                  setState(() {});
                 },
               ).paddingOnly(bottom: SpacingFoundation.verticalSpacing24),
             Row(children: [
@@ -122,43 +113,42 @@ class _CompanyHomeScreenComponentState extends State<CompanyHomeScreenComponent>
               horizontal: horizontalMargin,
             ),
             SpacingFoundation.verticalSpace24,
-            if (widget.places.isEmpty)
+            if (places.isEmpty)
               UiKitTitledActionCard(
                 title: S.of(context).CreateYourPlaceAndInvitePeople,
                 actionButton: context.gradientButton(
                   data: BaseUiKitButtonData(
                     text: S.of(context).CreatePlace.toUpperCase(),
-                    onPressed: widget.onCreatePlace,
+                    onPressed: onCreatePlace,
                   ),
                 ),
               ).paddingSymmetric(
                 horizontal: horizontalMargin,
               ),
-            if (widget.places.isNotEmpty)
-              ListView.separated(
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  final item = widget.places.elementAt(index);
+            ListView.separated(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final item = places.elementAt(index);
 
-                  return PlacePreview(
-                    onTap: (id) => widget.onPlaceTapped?.call(id),
-                    place: item,
-                    model: model,
-                    status: item.moderationStatus,
-                    updatedAt: item.updatedAt,
-                  );
-                },
-                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
-                itemCount: widget.places.length,
-              ),
-            if (widget.places.isNotEmpty) ...[
+                return PlacePreview(
+                  onTap: (id) => onPlaceTapped?.call(id),
+                  place: item,
+                  model: model,
+                  status: item.moderationStatus,
+                  updatedAt: item.updatedAt,
+                );
+              },
+              separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
+              itemCount: places.length,
+            ),
+            if (places.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
               context
                   .gradientButton(
                     data: BaseUiKitButtonData(
-                        text: S.of(context).CreatePlace, onPressed: widget.onCreatePlace, fit: ButtonFit.fitWidth),
+                        text: S.of(context).CreatePlace, onPressed: onCreatePlace, fit: ButtonFit.fitWidth),
                   )
                   .paddingSymmetric(
                     horizontal: horizontalMargin,
@@ -174,3 +164,5 @@ class _CompanyHomeScreenComponentState extends State<CompanyHomeScreenComponent>
     );
   }
 }
+
+final ValueNotifier<String> selectedCity = ValueNotifier<String>(S.current.SelectCity);
