@@ -28,6 +28,7 @@ class ChatItemUiModel {
   final DateTime deletionDate;
   final bool disabled;
   final bool readOnlyChat;
+  final bool? joinRequested;
   final List<ChatMessageUiModel>? firstPageMessages;
 
   int? get membersCount => members?.length;
@@ -60,6 +61,7 @@ class ChatItemUiModel {
     this.userType = UserTileType.ordinary,
     this.avatarUrl,
     this.contentTitle,
+    this.joinRequested,
     this.contentAvatar,
     this.hasAcceptedInvite = false,
     this.firstPageMessages,
@@ -90,6 +92,7 @@ class ChatItemUiModel {
     bool? readOnlyChat,
     List<ChatMessageUiModel>? firstPageMessages,
     String? chatName,
+    bool? joinRequested,
   }) {
     return ChatItemUiModel(
       id: id,
@@ -117,10 +120,22 @@ class ChatItemUiModel {
       deletionDate: deletionDate ?? this.deletionDate,
       disabled: disabled ?? this.disabled,
       firstPageMessages: firstPageMessages ?? this.firstPageMessages,
-      chatName: chatName?? this.chatName,
+      chatName: chatName ?? this.chatName,
+      joinRequested: joinRequested ?? this.joinRequested,
     );
   }
 
   @override
-  String toString() =>'ChatItemUiModel id $id isGroupChat $isGroupChat';
+  String toString() =>
+      'ChatItemUiModel id $id isGroupChat $isGroupChat members: ${members?.map((e) => '(id: ${e.id}, name: ${e.name})').join(', ')}';
+
+  @override
+  bool operator ==(Object other) =>
+      other is ChatItemUiModel &&
+      id == other.id &&
+      members?.length == other.members?.length &&
+      (members ?? []).every((e) => other.members?.contains(e) ?? false);
+
+  @override
+  int get hashCode => id.hashCode * ((members?.isEmpty ?? true) ? 1 : members!.length);
 }

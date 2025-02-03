@@ -4,6 +4,8 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'hidden_chat_mocked_component.dart';
+
 //ignore_for_file: no-empty-block
 
 class ChatComponent extends StatelessWidget {
@@ -27,6 +29,9 @@ class ChatComponent extends StatelessWidget {
   final VoidCallback? onPinnedMessageTap;
   final void Function(int userId, UserTileType userType)? onProfileTapped;
   final double keyboardPadding;
+  final bool isGuestView;
+  final VoidCallback? onRequestToJoinChat;
+  final VoidCallback? onShareChat;
 
   const ChatComponent({
     super.key,
@@ -50,12 +55,70 @@ class ChatComponent extends StatelessWidget {
     this.onReplyMessageTap,
     this.onProfileTapped,
     this.keyboardPadding = 0,
+    this.isGuestView = false,
+    this.onRequestToJoinChat,
+    this.onShareChat,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final isLightThemeOn = theme?.themeMode == ThemeMode.light;
+
+    late final Widget? trailingWidget;
+    if (isGuestView) {
+      if (chatData.joinRequested != null && chatData.joinRequested!) {
+        //leave null
+        trailingWidget = null;
+      } else {
+        trailingWidget = context.midSizeOutlinedButton(
+          data: BaseUiKitButtonData(
+            iconWidget: ImageWidget(
+              svgAsset: GraphicsFoundation.instance.svg.login,
+            ),
+            onPressed: onRequestToJoinChat,
+          ),
+        );
+      }
+    } else if ((chatData.members?.isEmpty ?? false) ||
+        chatData.readOnlyChat ||
+        (chatData.hasAcceptedInvite && !chatData.isGroupChat)) {
+      trailingWidget = context.midSizeOutlinedButton(
+        data: BaseUiKitButtonData(
+          iconInfo: BaseUiKitButtonIconData(
+            iconData: ShuffleUiKitIcons.logout,
+          ),
+          onPressed: onLeaveChat,
+        ),
+      );
+    } else if (chatData.isGroupChat && !chatData.userIsOwner) {
+      trailingWidget = UiKitPopUpMenuButton.optionWithIcon(options: [
+        UiKitPopUpMenuButtonOption(
+          title: S.of(context).Share,
+          icon: ShuffleUiKitIcons.share,
+          value: 'share',
+          onTap: onShareChat,
+        ),
+        UiKitPopUpMenuButtonOption(
+          title: S.of(context).Edit,
+          icon: ShuffleUiKitIcons.logout,
+          value: 'leave',
+          onTap: onLeaveChat,
+        ),
+      ]);
+    } else {
+      trailingWidget = SizedBox.fromSize(
+        size: Size(0.125.sw, 0.125.sw),
+        child: context.smallGradientButton(
+          data: BaseUiKitButtonData(
+            iconInfo: BaseUiKitButtonIconData(
+              iconData: ShuffleUiKitIcons.profileplus,
+            ),
+            onPressed: onInviteToAnotherPlace,
+          ),
+        ),
+      );
+    }
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
@@ -82,29 +145,7 @@ class ChatComponent extends StatelessWidget {
             )
           : null,
       scrollController: scrollController,
-      appBarTrailing: (chatData.isGroupChat && !chatData.userIsOwner) ||
-              chatData.hasAcceptedInvite ||
-              (chatData.members?.isEmpty ?? false) ||
-              chatData.readOnlyChat
-          ? context.midSizeOutlinedButton(
-              data: BaseUiKitButtonData(
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.logout,
-                ),
-                onPressed: onLeaveChat,
-              ),
-            )
-          : SizedBox.fromSize(
-              size: Size(0.125.sw, 0.125.sw),
-              child: context.smallGradientButton(
-                data: BaseUiKitButtonData(
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: ShuffleUiKitIcons.profileplus,
-                  ),
-                  onPressed: onInviteToAnotherPlace,
-                ),
-              ),
-            ),
+      appBarTrailing: trailingWidget,
       customTitle: Expanded(
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -190,9 +231,15 @@ class ChatComponent extends StatelessWidget {
             text: ' ',
           ),
         ),
-        noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
-          message: S.of(context).NoMessagesYet,
-        ),
+        noItemsFoundIndicatorBuilder: (context) => isGuestView
+            ? Center(
+                child: HiddenChatMockedComponent(
+                  onJoinChatRequest: chatData.joinRequested == true ? null : onRequestToJoinChat,
+                ),
+              )
+            : UiKitEmptyListPlaceHolder(
+                message: S.of(context).NoMessagesYet,
+              ),
         itemBuilder: (context, item, index) {
           if (item.messageType == MessageType.info) {
             return VisibilityDetector(

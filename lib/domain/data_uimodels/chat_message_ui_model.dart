@@ -179,4 +179,4 @@ class ChatMessageInvitationData {
   }
 }
 
-enum MessageType { message, invitation, info }
+enum MessageType { message, invitation, info, joinRequest }
