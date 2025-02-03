@@ -127,7 +127,8 @@ class ChatComponent extends StatelessWidget {
       canFoldAppBar: false,
       reverse: true,
       physics: const NeverScrollableScrollPhysics(),
-      keyboardPadding: keyboardPadding,
+      pagingPhysics: isGuestView ? const NeverScrollableScrollPhysics() : null,
+      keyboardPadding: isGuestView ? 0 : keyboardPadding,
       topFixedAddition: pinnedMessage != null
           ? GestureDetector(
               onTap: onPinnedMessageTap,
@@ -215,10 +216,9 @@ class ChatComponent extends StatelessWidget {
           ),
         ),
       ),
-      hideBottomSpace: chatData.readOnlyChat,
-      bottomSheetHeight: 1.sw * 0.275 - (1.sw <= 380 ? SpacingFoundation.verticalSpacing8 : 0),
-      bodyBottomSpace: kBottomNavigationBarHeight +
-          (chatData.isGroupChat ? SpacingFoundation.verticalSpacing16 : SpacingFoundation.verticalSpacing4),
+      bottomSheetHeight: isGuestView ? 0 : (1.sw * 0.275 - (1.sw <= 380 ? SpacingFoundation.verticalSpacing8 : 0)),
+      bodyBottomSpace: (kBottomNavigationBarHeight +
+          (chatData.isGroupChat ? SpacingFoundation.verticalSpacing16 : SpacingFoundation.verticalSpacing4)),
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),

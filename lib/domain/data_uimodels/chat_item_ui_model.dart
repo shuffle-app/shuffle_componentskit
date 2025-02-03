@@ -10,8 +10,6 @@ class ChatItemUiModel {
   final String? chatName;
   final String? subtitle;
   final String? avatarUrl;
-  final String? contentTitle;
-  final String? contentAvatar;
   final String lastMessage;
   final DateTime lastMessageTime;
   final String? lastMessageSenderName;
@@ -60,9 +58,7 @@ class ChatItemUiModel {
     this.subtitle,
     this.userType = UserTileType.ordinary,
     this.avatarUrl,
-    this.contentTitle,
     this.joinRequested,
-    this.contentAvatar,
     this.hasAcceptedInvite = false,
     this.firstPageMessages,
   });
@@ -111,8 +107,6 @@ class ChatItemUiModel {
       unreadMessageCount: unreadMessageCount ?? this.unreadMessageCount,
       userType: userType ?? this.userType,
       contentTags: contentTags ?? this.contentTags,
-      contentTitle: contentTitle ?? this.contentTitle,
-      contentAvatar: contentAvatar ?? this.contentAvatar,
       tag: tag ?? this.tag,
       isGroupChat: isGroupChat ?? this.isGroupChat,
       userIsOwner: userIsOwner ?? this.userIsOwner,
@@ -127,7 +121,7 @@ class ChatItemUiModel {
 
   @override
   String toString() =>
-      'ChatItemUiModel id $id isGroupChat $isGroupChat members: ${members?.map((e) => '(id: ${e.id}, name: ${e.name})').join(', ')}';
+      'ChatItemUiModel id $id isGroupChat $isGroupChat members: ${members?.map((e) => '(id: ${e.id}, name: ${e.name})').join(', ')} and title: $chatTitle';
 
   @override
   bool operator ==(Object other) =>

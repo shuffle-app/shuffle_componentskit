@@ -17,6 +17,7 @@ class HiddenChatMockedComponent extends StatelessWidget {
       Text(
         onJoinChatRequest == null ? S.of(context).YouAskedToBeAddedToTheChat : S.of(context).PrivateChatApply,
         style: theme?.boldTextTheme.title2,
+        textAlign: TextAlign.center,
       ),
       SpacingFoundation.verticalSpace14,
       if (onJoinChatRequest != null)
@@ -39,16 +40,16 @@ class HiddenChatMockedComponent extends StatelessWidget {
         height: 0.7.sh,
         child: Stack(
           alignment: Alignment.center,
-          fit: StackFit.expand,
           children: [
             ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 25.0, sigmaY: 25.0),
+                imageFilter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
                 child: Column(
                   children: List.generate(
                       6,
                       (index) => UiKitChatOutCard(
                             id: index,
                             timeOfDay: today,
+                            brightness: Brightness.dark,
                             text:
                                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut est ac massa commodo semper.',
                             sentByMe: index.isEven,
@@ -58,10 +59,11 @@ class HiddenChatMockedComponent extends StatelessWidget {
                 border: BorderSide(color: Colors.white, width: 1.0),
                 borderRadius: BorderRadiusFoundation.all24,
                 padding: EdgeInsets.all(EdgeInsetsFoundation.all24),
+                color: Colors.black12,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: dialogChildren,
-                ))
+                )).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16)
           ],
         ));
   }
