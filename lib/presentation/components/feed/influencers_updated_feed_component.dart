@@ -101,11 +101,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
 
   double get topPaddingForPinned {
     if (showSearchBar && !isSearchBarActivated) {
-      return 0.235.sw;
+      return 0.245.sw;
     } else if (isSearchBarActivated) {
-      return 0.30.sw;
+      return 0.40.sw;
     } else {
-      return _isCardVisible ? (_hasImageInPinned ? 0.32.sw : 0.25.sw) : 50.h;
+      return _isCardVisible ? (_hasImageInPinned ? 0.36.sw : 0.29.sw) : 60.h;
     }
   }
 
@@ -213,7 +213,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                   borderRadius: BorderRadiusFoundation.onlyBottom24,
                   clipper: _CustomBlurClipper(
                       topPadding: MediaQuery.viewPaddingOf(context).top +
-                          (_isCardVisible ? (_hasImageInPinned ? 50.h : 30.h) : 0)),
+                          (_isCardVisible ? (_hasImageInPinned ? 65.h : 40.h) : 10.h)),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                     child: SafeArea(
@@ -242,7 +242,10 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                             }
                             pageController.animateToPage(index, duration: scrollToDuration, curve: scrollToCurve);
                           },
-                        ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12)),
+                        ).paddingOnly(
+                            left: EdgeInsetsFoundation.horizontal12,
+                            right: EdgeInsetsFoundation.horizontal12,
+                            top: SpacingFoundation.verticalSpacing12)),
                   ),
                 )),
             if (widget.pinnedPublication?.value != null)
