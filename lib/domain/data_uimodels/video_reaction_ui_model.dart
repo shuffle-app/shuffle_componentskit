@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shuffle_uikit/ui_kit/molecules/tiles/user/base_user_tile.dart';
+import 'package:shuffle_uikit/ui_models/reaction/reaction_statistic_ui_model.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -32,6 +33,7 @@ class VideoReactionUiModel {
   bool isViewed;
   VideoPlayerController? videoController;
   final String? tempDirPath;
+  final ReactionStatisticUiModel? reactionStatisticUiModel;
 
   VideoReactionUiModel({
     required this.id,
@@ -57,7 +59,8 @@ class VideoReactionUiModel {
     this.createdAt,
     this.isViewed = false,
     this.videoController,
-    this.tempDirPath
+    this.tempDirPath,
+    this.reactionStatisticUiModel,
   }) {
     if (videoController != null) return;
 
@@ -69,7 +72,7 @@ class VideoReactionUiModel {
       videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
     } else {
       try {
-        Directory? tempDir = tempDirPath !=null ? null : await getTemporaryDirectory();
+        Directory? tempDir = tempDirPath != null ? null : await getTemporaryDirectory();
         final filename = videoUrl.split('/').last;
         final fileFromCache =
             File('${tempDirPath ?? tempDir?.path}/video_cache/$id-$filename${filename.contains('.mp4') ? '' : '.mp4'}');
@@ -112,6 +115,7 @@ class VideoReactionUiModel {
     bool? isViewed,
     UserTileType? authorType,
     DateTime? createdAt,
+    ReactionStatisticUiModel? reactionStatisticUiModel,
   }) {
     return VideoReactionUiModel(
       id: id,
@@ -136,6 +140,7 @@ class VideoReactionUiModel {
       authorType: authorType ?? this.authorType,
       createdAt: createdAt ?? this.createdAt,
       videoController: videoController,
+      reactionStatisticUiModel: reactionStatisticUiModel ?? this.reactionStatisticUiModel,
     );
   }
 
