@@ -99,13 +99,19 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   late bool _isCardVisible;
   bool _hasImageInPinned = false;
 
-  double get topPaddingForPinned {
+  double topPaddingForPinned(BuildContext context) {
+    final isZeroInsertsTop = MediaQuery.viewInsetsOf(context).top == 0;
+
     if (showSearchBar && !isSearchBarActivated) {
-      return 0.245.sw;
+      return isZeroInsertsTop ? 0.245.sw : 0.235.sw;
     } else if (isSearchBarActivated) {
-      return 0.40.sw;
+      return isZeroInsertsTop ? 0.40.sw : 0.30.sw;
     } else {
-      return _isCardVisible ? (_hasImageInPinned ? 0.36.sw : 0.29.sw) : 60.h;
+      if (_isCardVisible) {
+        return (_hasImageInPinned ? (isZeroInsertsTop ? 0.36.sw : 0.32.sw) : (isZeroInsertsTop ? 0.29.sw : 0.25.sw));
+      } else {
+        return (isZeroInsertsTop ? 60.h : 50.h);
+      }
     }
   }
 
@@ -202,6 +208,8 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   Widget build(BuildContext context) {
     final colorScheme = context.uiKitTheme?.colorScheme;
     final currentTabIndex = tabController.index;
+    final isZeroInsertsTop = MediaQuery.viewInsetsOf(context).top == 0;
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -213,7 +221,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                   borderRadius: BorderRadiusFoundation.onlyBottom24,
                   clipper: _CustomBlurClipper(
                       topPadding: MediaQuery.viewPaddingOf(context).top +
-                          (_isCardVisible ? (_hasImageInPinned ? 65.h : 40.h) : 10.h)),
+                          (_isCardVisible
+                              ? (_hasImageInPinned
+                                  ? (isZeroInsertsTop ? 65.h : 50.h)
+                                  : (isZeroInsertsTop ? 40.h : 30.h))
+                              : (isZeroInsertsTop ? 10.h : 0))),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                     child: SafeArea(
@@ -245,7 +257,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                         ).paddingOnly(
                             left: EdgeInsetsFoundation.horizontal12,
                             right: EdgeInsetsFoundation.horizontal12,
-                            top: SpacingFoundation.verticalSpacing12)),
+                            top: isZeroInsertsTop ? SpacingFoundation.verticalSpacing12 : 0)),
                   ),
                 )),
             if (widget.pinnedPublication?.value != null)
@@ -344,7 +356,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onProfilePress: widget.onProfilePress,
               scrollController: widget.latestScrollController,
               onReadTap: widget.onReadTap,
-              topPadding: topPaddingForPinned,
+              topPadding: topPaddingForPinned(context),
               onSearchPressed: _onSearchPressed,
               isSearchActivated: showSearchBar,
               weather: widget.weather,
@@ -359,7 +371,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onProfilePress: widget.onProfilePress,
               scrollController: widget.topScrollController,
               onReadTap: widget.onReadTap,
-              topPadding: topPaddingForPinned,
+              topPadding: topPaddingForPinned(context),
               onSearchPressed: _onSearchPressed,
               isSearchActivated: showSearchBar,
               weather: widget.weather,
@@ -374,7 +386,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onProfilePress: widget.onProfilePress,
               scrollController: widget.unreadScrollController,
               onReadTap: widget.onReadTap,
-              topPadding: topPaddingForPinned,
+              topPadding: topPaddingForPinned(context),
               onSearchPressed: _onSearchPressed,
               isSearchActivated: showSearchBar,
               weather: widget.weather,
