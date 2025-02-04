@@ -266,6 +266,26 @@ class ChatComponent extends StatelessWidget {
                 ],
               ),
             );
+          } else if (item.messageType == MessageType.joinRequest) {
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${item.senderName} ${S.of(context).WantToJoin}',
+                    style: theme?.boldTextTheme.caption3Medium,
+                  ),
+                  SpacingFoundation.verticalSpace4,
+                  context.outlinedGradientButton(
+                      data: BaseUiKitButtonData(text: S.of(context).Allow, onPressed: onRequestToJoinChat),
+                      gradient: GradientFoundation.gradientBorder)
+                ],
+              ),
+            );
           } else if (item.senderIsMe) {
             if (item.isInvitation && item.invitationData != null) {
               return VisibilityDetector(
