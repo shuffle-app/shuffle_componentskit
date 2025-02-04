@@ -20,6 +20,7 @@ class ContentStatisticsComponent extends StatelessWidget {
   final UiEventModel? event;
 
   String get title => place?.title ?? event?.title ?? '';
+  String get city => place?.city ?? event?.city ?? '';
 
   // final _tabs = [
   //   CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
@@ -69,7 +70,26 @@ class ContentStatisticsComponent extends StatelessWidget {
       //         : null,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
-        SpacingFoundation.verticalSpace16,
+        if (city.isNotEmpty)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadiusFoundation.all24r,
+                  color: ColorsFoundation.neutral24,
+                ),
+                child: Text(
+                  city,
+                  style: boldTextTheme?.caption3Medium,
+                ).paddingSymmetric(
+                  horizontal: SpacingFoundation.horizontalSpacing8,
+                  vertical: SpacingFoundation.verticalSpacing4,
+                ),
+              )
+            ],
+          ).paddingOnly(top: SpacingFoundation.verticalSpacing8),
+        SpacingFoundation.verticalSpace8,
         // UiKitTabBarWithUnderlineIndicator(
         //   tabController: tabController,
         //   onTappedTab: (index) => onTabTapped?.call(_tabs.elementAtOrNull(index)?.customValue),

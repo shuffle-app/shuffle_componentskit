@@ -25,6 +25,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final ValueChanged<UiScheduleModel>? onTimeTemplateCreated;
   final bool Function(BookingUiModel)? onBookingTap;
   final List<String> availableTagOptions;
+  final Future<String?> Function()? onCityChanged;
 
   const CreatePlaceComponent({
     super.key,
@@ -39,6 +40,7 @@ class CreatePlaceComponent extends StatefulWidget {
     this.onNicheChanged,
     this.onBookingTap,
     this.availableTagOptions = const [],
+    this.onCityChanged,
   });
 
   @override
@@ -50,6 +52,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _phoneController = TextEditingController();
   late final TextEditingController _websiteController = TextEditingController();
   late final TextEditingController _locationController = TextEditingController();
+  late final TextEditingController _cityController = TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
@@ -71,6 +74,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _titleController.text = widget.placeToEdit?.title ?? '';
     _descriptionController.text = widget.placeToEdit?.description ?? '';
     _locationController.text = widget.placeToEdit?.location ?? '';
+    _cityController.text = widget.placeToEdit?.city ?? '';
     _placeToEdit = widget.placeToEdit ??
         UiPlaceModel(
           id: -1,
@@ -191,6 +195,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     if (oldWidget.placeToEdit?.location == null || oldWidget.placeToEdit?.location == '') {
       _locationController.text = widget.placeToEdit?.location ?? '';
     }
+
+    _cityController.text = widget.placeToEdit?.city ?? '';
     _handleLocaleChanged();
     super.didUpdateWidget(oldWidget);
   }
@@ -234,6 +240,18 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               : null,
           children: [
             SpacingFoundation.verticalSpace16,
+            UiKitInputFieldNoFill(
+              onTap: () async {
+                _cityController.text = await widget.onCityChanged?.call() ?? '';
+                _placeToEdit.city = _cityController.text;
+
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              label: S.of(context).City,
+              readOnly: true,
+              controller: _cityController,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
               label: S.of(context).Address,
               onTap: () async {
@@ -797,6 +815,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                   text: S.of(context).Save.toUpperCase(),
                   onPressed: () {
                     _formKey.currentState?.validate();
+                    _placeToEdit.city = _cityController.text;
                     _placeToEdit.title = _titleController.text;
                     _placeToEdit.website = _websiteController.text.trim();
                     _placeToEdit.phone = _phoneController.text;
