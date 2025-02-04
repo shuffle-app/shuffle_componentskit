@@ -96,12 +96,12 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     }
   }
 
+  bool get isZeroInsertsTop => MediaQuery.viewInsetsOf(context).top == 0;
+
   late bool _isCardVisible;
   bool _hasImageInPinned = false;
 
   double topPaddingForPinned(BuildContext context) {
-    final isZeroInsertsTop = MediaQuery.viewInsetsOf(context).top == 0;
-
     if (showSearchBar && !isSearchBarActivated) {
       return isZeroInsertsTop ? 0.245.sw : 0.235.sw;
     } else if (isSearchBarActivated) {
@@ -208,7 +208,6 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   Widget build(BuildContext context) {
     final colorScheme = context.uiKitTheme?.colorScheme;
     final currentTabIndex = tabController.index;
-    final isZeroInsertsTop = MediaQuery.viewInsetsOf(context).top == 0;
 
     return Stack(
       fit: StackFit.expand,
