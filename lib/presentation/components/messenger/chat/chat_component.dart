@@ -354,7 +354,71 @@ class ChatComponent extends StatelessWidget {
                 ],
               ),
             );
-          } else {
+          } else if (item.messageType == MessageType.joinRequest){
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                  UiKitChatInCard(
+                    onUsernameTapped: () => onProfileTapped?.call(
+                      item.senderId,
+                      item.senderProfileType ?? UserTileType.ordinary,
+                    ),
+                    showAvatar: chatData.isGroupChat,
+                    avatarUrl: item.senderAvatar,
+                    senderName: item.senderName,
+                    senderType: item.senderProfileType,
+                    senderNickname: item.senderNickname ?? '',
+                    onReplyMessage: onReplyMessage,
+                    timeOfDay: item.timeSent,
+                    id: item.messageId,
+                    hasInvitation: true,
+                    child: UiKitInviteMessageContent(
+                      hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
+                      brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
+                      showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
+                      username: item.invitationData!.senderUserName,
+                      placeName: item.invitationData!.contentName,
+                      placeImagePath: item.invitationData!.contentImagePath,
+                      invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
+                      userType: item.invitationData!.senderUserType,
+                      onInvitePeopleTap: onAddMorePeople,
+                      onPlaceTap: () => onInvitationPlaceTap?.call(
+                        item.invitationData!.contentId,
+                        item.invitationData!.contentType,
+                      ),
+                      canDenyInvitation: chatData.readOnlyChat
+                          ? false
+                          : chatData.isGroupChat
+                          ? !item.invitationData!.hasAcceptedInvite
+                          : !chatData.hasAcceptedInvite,
+                      canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
+                      onAcceptTap: () {
+                        onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
+                      },
+                      onDenyTap: () {
+                        onDenyInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
+                      },
+                      tags: item.invitationData?.tags ?? [],
+                      customMessageData: chatData.isGroupChat
+                          ? null
+                          : InviteCustomMessageData(
+                        senderUserName: item.invitationData!.senderUserName,
+                        receiverUserName: item.invitationData!.receiverUserName,
+                        senderUserType: item.invitationData!.senderUserType,
+                        receiverUserType: item.invitationData!.receiverUserType,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else  {
             if (item.isInvitation && item.invitationData != null) {
               return VisibilityDetector(
                 key: Key(item.messageId.toString()),
