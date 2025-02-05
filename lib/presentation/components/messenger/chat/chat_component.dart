@@ -155,14 +155,12 @@ class ChatComponent extends StatelessWidget {
               onChatHeaderTapped?.call(chatData.contentId!, chatData.contentType!);
             } else if (!chatData.isGroupChat) {
               final owner = chatData.owner;
-              print(owner?.name);
               if (owner == null) return;
 
               if (!chatData.userIsOwner) {
                 onProfileTapped?.call(owner.id, owner.userType);
               } else {
                 final member = chatData.members?.firstWhere((member) => member.id != owner.id);
-                print(member?.name);
                 if (member == null) return;
 
                 onProfileTapped?.call(member.id, member.userType);
@@ -276,13 +274,15 @@ class ChatComponent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '${item.senderName} ${S.of(context).WantToJoin}',
+                    item.message!,
+                    // '${item.senderName} ${S.of(context).WantToJoin}',
                     style: theme?.boldTextTheme.caption3Medium,
                   ),
                   SpacingFoundation.verticalSpace4,
-                  context.outlinedGradientButton(
-                      data: BaseUiKitButtonData(text: S.of(context).Allow, onPressed: onRequestToJoinChat),
-                      gradient: GradientFoundation.gradientBorder)
+                  context.createSmallOutlinedButton(
+                      gradient: GradientFoundation.defaultLinearGradient,
+                      data: BaseUiKitButtonData(text: S.of(context).Allow, onPressed: onRequestToJoinChat,),
+                      )
                 ],
               ),
             );

@@ -33,6 +33,7 @@ class HiddenChatMockedComponent extends StatelessWidget {
         Text(
           S.of(context).WaitAdminResponse,
           style: theme?.boldTextTheme.body,
+          textAlign: TextAlign.center,
         ),
     ];
 
