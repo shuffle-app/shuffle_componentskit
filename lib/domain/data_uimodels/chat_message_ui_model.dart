@@ -4,6 +4,7 @@ class ChatMessageUiModel {
   final DateTime timeSent;
   final int messageId;
   final int senderId;
+  final int? chatJoinRequestId;
   final String? message;
   final String? additionalText;
   final String? gradientableText;
@@ -31,6 +32,7 @@ class ChatMessageUiModel {
     required this.messageType,
     required this.isRead,
     required this.isLastMessageToDate,
+    this.chatJoinRequestId,
     this.additionalText,
     this.chatName,
     this.connectId,
@@ -85,6 +87,7 @@ class ChatMessageUiModel {
     String? gradientableText,
     String? senderNickname,
     int? connectId,
+    int? chatJoinRequestId,
     String? additionalText,
     bool? isLastMessageToDate,
   }) {
@@ -107,6 +110,7 @@ class ChatMessageUiModel {
       gradientableText: gradientableText ?? this.gradientableText,
       senderNickname: senderNickname ?? this.senderNickname,
       isLastMessageToDate: isLastMessageToDate ?? this.isLastMessageToDate,
+      chatJoinRequestId: chatJoinRequestId?? this.chatJoinRequestId,
     );
   }
 }
