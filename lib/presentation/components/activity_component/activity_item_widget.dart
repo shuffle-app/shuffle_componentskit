@@ -41,54 +41,70 @@ class ActivityItemWidget extends StatelessWidget {
                 SpacingFoundation.horizontalSpace8,
                 if (activityUiModel?.title != null && activityUiModel!.title!.isNotEmpty)
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            activityUiModel!.title!,
-                            style: theme?.boldTextTheme.caption3Medium,
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              if (activityUiModel?.rating != null && activityUiModel?.rating != 0.0)
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ImageWidget(
-                                      iconData: ShuffleUiKitIcons.starfill,
-                                      color: colorScheme?.inverseSurface,
-                                      height: 0.040625.sw,
-                                      width: 0.040625.sw,
-                                      fit: BoxFit.cover,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final text = activityUiModel!.title!;
+                        final style = boldTextTheme?.caption3Medium;
+                        final maxWidth = constraints.maxWidth;
+
+                        final textPainter = TextPainter(
+                          text: TextSpan(text: text, style: style),
+                          maxLines: 1,
+                        );
+
+                        textPainter.layout(maxWidth: maxWidth);
+
+                        final isTwoLines = textPainter.didExceedMaxLines;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (!isTwoLines) SpacingFoundation.verticalSpace4,
+                            Text(
+                              text,
+                              style: style,
+                              maxLines: 2,
+                            ),
+                            Flexible(
+                              child: ListView(
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  if (activityUiModel?.rating != null && activityUiModel?.rating != 0.0)
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ImageWidget(
+                                          iconData: ShuffleUiKitIcons.starfill,
+                                          color: colorScheme?.inverseSurface,
+                                          height: 0.040625.sw,
+                                          width: 0.040625.sw,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        SpacingFoundation.horizontalSpace2,
+                                        Text(
+                                          doubleFormat(activityUiModel!.rating!),
+                                          style: boldTextTheme?.caption3Medium,
+                                        ).paddingOnly(top: SpacingFoundation.horizontalSpacing2),
+                                        SpacingFoundation.horizontalSpace12,
+                                      ],
                                     ),
-                                    SpacingFoundation.horizontalSpace2,
-                                    Text(
-                                      doubleFormat(activityUiModel!.rating!),
-                                      style: boldTextTheme?.caption3Medium,
-                                    ).paddingOnly(top: SpacingFoundation.horizontalSpacing2),
-                                    SpacingFoundation.horizontalSpace12,
-                                  ],
-                                ),
-                              if (activityUiModel?.tags != null && activityUiModel!.tags!.isNotEmpty)
-                                ...activityUiModel!.tags!.map(
-                                  (e) => UiKitTagWidget(
-                                    title: e.title,
-                                    icon: e.icon,
-                                  ).paddingOnly(right: SpacingFoundation.horizontalSpacing12),
-                                ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing10),
+                                  if (activityUiModel?.tags != null && activityUiModel!.tags!.isNotEmpty)
+                                    ...activityUiModel!.tags!.map(
+                                      (e) => UiKitTagWidget(
+                                        title: e.title,
+                                        icon: e.icon,
+                                      ).paddingOnly(right: SpacingFoundation.horizontalSpacing12),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing10);
+                      },
+                    ),
                   ),
                 SpacingFoundation.horizontalSpace12,
                 if (activityUiModel?.activity != null && activityUiModel?.activity != 0)

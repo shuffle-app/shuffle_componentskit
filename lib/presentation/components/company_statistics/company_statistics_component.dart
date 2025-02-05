@@ -49,12 +49,6 @@ class CompanyStatisticsComponent extends StatefulWidget {
 }
 
 class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent> {
-  final _chartTabs = [
-    CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
-    CustomTabData(title: S.current.OrganicStatistics, customValue: 'organic'),
-    CustomTabData(title: S.current.Promotion, customValue: 'promotion'),
-  ];
-
   final _contentTabs = [
     UiKitCustomTab(title: S.current.Places.toUpperCase(), customValue: 'places'),
     UiKitCustomTab(title: S.current.Events.toUpperCase(), customValue: 'events'),

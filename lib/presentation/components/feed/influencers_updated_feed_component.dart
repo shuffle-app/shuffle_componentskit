@@ -96,16 +96,22 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
     }
   }
 
+  bool get isZeroInsertsTop => MediaQuery.viewInsetsOf(context).top == 0;
+
   late bool _isCardVisible;
   bool _hasImageInPinned = false;
 
   double get topPaddingForPinned {
     if (showSearchBar && !isSearchBarActivated) {
-      return 0.235.sw;
+      return isZeroInsertsTop ? 0.245.sw : 0.235.sw;
     } else if (isSearchBarActivated) {
-      return 0.30.sw;
+      return isZeroInsertsTop ? 0.40.sw : 0.30.sw;
     } else {
-      return _isCardVisible ? (_hasImageInPinned ? 0.32.sw : 0.25.sw) : 50.h;
+      if (_isCardVisible) {
+        return (_hasImageInPinned ? (isZeroInsertsTop ? 0.36.sw : 0.32.sw) : (isZeroInsertsTop ? 0.29.sw : 0.25.sw));
+      } else {
+        return (isZeroInsertsTop ? 60.h : 50.h);
+      }
     }
   }
 
@@ -202,6 +208,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   Widget build(BuildContext context) {
     final colorScheme = context.uiKitTheme?.colorScheme;
     final currentTabIndex = tabController.index;
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -213,7 +220,11 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                   borderRadius: BorderRadiusFoundation.onlyBottom24,
                   clipper: _CustomBlurClipper(
                       topPadding: MediaQuery.viewPaddingOf(context).top +
-                          (_isCardVisible ? (_hasImageInPinned ? 50.h : 30.h) : 0)),
+                          (_isCardVisible
+                              ? (_hasImageInPinned
+                                  ? (isZeroInsertsTop ? 65.h : 50.h)
+                                  : (isZeroInsertsTop ? 40.h : 30.h))
+                              : (isZeroInsertsTop ? 10.h : 0))),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                     child: SafeArea(
@@ -242,7 +253,10 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                             }
                             pageController.animateToPage(index, duration: scrollToDuration, curve: scrollToCurve);
                           },
-                        ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal12)),
+                        ).paddingOnly(
+                            left: EdgeInsetsFoundation.horizontal12,
+                            right: EdgeInsetsFoundation.horizontal12,
+                            top: isZeroInsertsTop ? SpacingFoundation.verticalSpacing12 : 0)),
                   ),
                 )),
             if (widget.pinnedPublication?.value != null)
