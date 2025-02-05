@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:collection/collection.dart';
@@ -11,13 +13,15 @@ class SchedulerComponent extends StatefulWidget {
   //could be event component or place component
   final Future<List<UiUniversalModel>> Function(DateTime firstDay, DateTime lastDay) eventLoader;
   final Function(DateTime focusedDay)? onPageChanged;
+  final ValueChanged<UiUniversalModel>? openContentCallback;
 
   const SchedulerComponent(
       {super.key,
       required this.scrollController,
       required this.focusedDate,
       required this.eventLoader,
-      this.onPageChanged});
+      this.onPageChanged,
+      this.openContentCallback});
 
   @override
   State<SchedulerComponent> createState() => _SchedulerComponentState();
@@ -28,7 +32,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   final List<UiUniversalModel> currentContent = List.empty(growable: true);
   final Duration pageTransitionDuration = Duration(milliseconds: 300);
   final Curve pageTransitionCurve = Curves.easeInOut;
-  Key calendarKey = UniqueKey();
+  bool wasChangedDateToSpecific = false;
 
   PageController? pageController;
 
@@ -60,8 +64,8 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   }
 
   void fetchData() async {
-    debugPrint('Fetching data for: $firstDayToLoad - $lastDayToLoad with focusedDate: $focusedDate');
     setState(() {
+      wasChangedDateToSpecific = false;
       currentContent.clear();
     });
     currentContent.addAll(await widget.eventLoader(firstDayToLoad, lastDayToLoad));
@@ -73,7 +77,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                 ?.shouldVisitAt! ??
             focusedDate;
       }
-      calendarKey = UniqueKey();
     });
   }
 
@@ -88,11 +91,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             e.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
             e.media.firstWhere((el) => el.type == UiKitMediaType.image).link)
         .toList();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -131,7 +129,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
         ).paddingSymmetric(
             horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing16),
         UiKitCalendarCompact(
-          calendarKey: calendarKey,
           onCalendarCreated: (controller) {
             pageController = controller;
           },
@@ -159,14 +156,30 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           },
         ),
         SpacingFoundation.verticalSpace24,
-        Text(
-          S.of(context).Details,
-          style: theme?.boldTextTheme.title2,
-        ).paddingSymmetric(
-          horizontal: SpacingFoundation.horizontalSpacing16,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              S.of(context).Details,
+              style: theme?.boldTextTheme.title2,
+            ).paddingSymmetric(
+              horizontal: SpacingFoundation.horizontalSpacing16,
+            ),
+            wasChangedDateToSpecific ? Text(DateFormat('dd.MM.yyyy').format(focusedDate)) : const SizedBox.shrink(),
+          ],
         ),
         SpacingFoundation.verticalSpace16,
-        //TODO list of events
+        for (var content in (wasChangedDateToSpecific
+            ? currentContent.where((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)
+            : currentContent))
+          UiKitPlannerContentCard(
+            onTap: () => widget.openContentCallback?.call(content),
+            avatarPath: content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
+                content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
+            contentTitle: content.title ?? '',
+            tags: content.baseTags ?? [],
+            dateTime: content.shouldVisitAt ?? DateTime.now(),
+          )
       ],
     );
   }
