@@ -101,7 +101,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
   late bool _isCardVisible;
   bool _hasImageInPinned = false;
 
-  double topPaddingForPinned(BuildContext context) {
+  double get topPaddingForPinned {
     if (showSearchBar && !isSearchBarActivated) {
       return isZeroInsertsTop ? 0.245.sw : 0.235.sw;
     } else if (isSearchBarActivated) {
@@ -355,7 +355,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onProfilePress: widget.onProfilePress,
               scrollController: widget.latestScrollController,
               onReadTap: widget.onReadTap,
-              topPadding: topPaddingForPinned(context),
+              topPadding: topPaddingForPinned,
               onSearchPressed: _onSearchPressed,
               isSearchActivated: showSearchBar,
               weather: widget.weather,
@@ -370,7 +370,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onProfilePress: widget.onProfilePress,
               scrollController: widget.topScrollController,
               onReadTap: widget.onReadTap,
-              topPadding: topPaddingForPinned(context),
+              topPadding: topPaddingForPinned,
               onSearchPressed: _onSearchPressed,
               isSearchActivated: showSearchBar,
               weather: widget.weather,
@@ -385,7 +385,7 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
               onProfilePress: widget.onProfilePress,
               scrollController: widget.unreadScrollController,
               onReadTap: widget.onReadTap,
-              topPadding: topPaddingForPinned(context),
+              topPadding: topPaddingForPinned,
               onSearchPressed: _onSearchPressed,
               isSearchActivated: showSearchBar,
               weather: widget.weather,
