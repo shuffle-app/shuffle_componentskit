@@ -50,7 +50,6 @@ class ActivityItemWidget extends StatelessWidget {
                         final textPainter = TextPainter(
                           text: TextSpan(text: text, style: style),
                           maxLines: 1,
-                          textDirection: TextDirection.ltr,
                         );
 
                         textPainter.layout(maxWidth: maxWidth);
