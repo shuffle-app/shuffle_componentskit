@@ -282,7 +282,7 @@ class ChatComponent extends StatelessWidget {
                   context.createSmallOutlinedButton(
                     gradient: GradientFoundation.defaultLinearGradient,
                     data: BaseUiKitButtonData(
-                      text: S.of(context).Allow,
+                      text: S.of(context).Allow.toUpperCase(),
                       onPressed: () => onRequestToJoinChat?.call(item.chatJoinRequestId),
                     ),
                   )
