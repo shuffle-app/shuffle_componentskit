@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:collection/collection.dart';
@@ -65,7 +63,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
 
   void fetchData() async {
     setState(() {
-      wasChangedDateToSpecific = false;
       currentContent.clear();
     });
     currentContent.addAll(await widget.eventLoader(firstDayToLoad, lastDayToLoad));
@@ -141,6 +138,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             if (focusedDay.month != focusedDate.month) {
               setState(() {
                 focusedDate = focusedDay;
+                wasChangedDateToSpecific = false;
               });
               widget.onPageChanged?.call(focusedDay);
               fetchData();
@@ -152,6 +150,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           ) {
             setState(() {
               focusedDate = focusedDay;
+              wasChangedDateToSpecific = true;
             });
           },
         ),
@@ -179,7 +178,8 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             contentTitle: content.title ?? '',
             tags: content.baseTags ?? [],
             dateTime: content.shouldVisitAt ?? DateTime.now(),
-          )
+          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+        MediaQuery.of(context).viewInsets.bottom.heightBox
       ],
     );
   }
