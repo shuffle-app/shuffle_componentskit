@@ -30,7 +30,7 @@ class ChatComponent extends StatelessWidget {
   final void Function(int userId, UserTileType userType)? onProfileTapped;
   final double keyboardPadding;
   final bool isGuestView;
-  final VoidCallback? onRequestToJoinChat;
+  final Function? onRequestToJoinChat;
   final VoidCallback? onShareChat;
 
   const ChatComponent({
@@ -76,7 +76,7 @@ class ChatComponent extends StatelessWidget {
             iconWidget: ImageWidget(
               svgAsset: GraphicsFoundation.instance.svg.login,
             ),
-            onPressed: onRequestToJoinChat,
+            onPressed: () => onRequestToJoinChat?.call(),
           ),
         );
       }
@@ -232,7 +232,7 @@ class ChatComponent extends StatelessWidget {
         noItemsFoundIndicatorBuilder: (context) => isGuestView
             ? Center(
                 child: HiddenChatMockedComponent(
-                  onJoinChatRequest: chatData.joinRequested == true ? null : onRequestToJoinChat,
+                  onJoinChatRequest: chatData.joinRequested == true ? null : () => onRequestToJoinChat?.call(),
                 ),
               )
             : UiKitEmptyListPlaceHolder(
@@ -264,7 +264,7 @@ class ChatComponent extends StatelessWidget {
                 ],
               ),
             );
-          } else if (item.messageType == MessageType.joinRequest) {
+          } else if (item.messageType == MessageType.joinRequest && item.chatJoinRequestId != null) {
             return VisibilityDetector(
               key: Key(item.messageId.toString()),
               onVisibilityChanged: (info) {
@@ -276,13 +276,16 @@ class ChatComponent extends StatelessWidget {
                   Text(
                     item.message!,
                     // '${item.senderName} ${S.of(context).WantToJoin}',
-                    style: theme?.boldTextTheme.caption3Medium,
+                    style: theme?.boldTextTheme.caption3Medium.copyWith(color: theme.colorScheme?.darkNeutral900),
                   ),
                   SpacingFoundation.verticalSpace4,
                   context.createSmallOutlinedButton(
-                      gradient: GradientFoundation.defaultLinearGradient,
-                      data: BaseUiKitButtonData(text: S.of(context).Allow, onPressed: onRequestToJoinChat,),
-                      )
+                    gradient: GradientFoundation.defaultLinearGradient,
+                    data: BaseUiKitButtonData(
+                      text: S.of(context).Allow.toUpperCase(),
+                      onPressed: () => onRequestToJoinChat?.call(item.chatJoinRequestId),
+                    ),
+                  )
                 ],
               ),
             );
@@ -374,7 +377,7 @@ class ChatComponent extends StatelessWidget {
                 ],
               ),
             );
-          } else if (item.messageType == MessageType.joinRequest){
+          } else  if (item.messageType == MessageType.joinRequest){
             return VisibilityDetector(
               key: Key(item.messageId.toString()),
               onVisibilityChanged: (info) {
