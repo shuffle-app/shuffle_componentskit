@@ -20,7 +20,7 @@ class ActivityItemWidget extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, size) {
-        final calculatedHeight = size.maxWidth * 0.2463;
+        final calculatedHeight = size.maxWidth * 0.22;
         final sideInfoCardsWidth = size.maxWidth * 0.1597;
 
         return Material(
@@ -33,14 +33,14 @@ class ActivityItemWidget extends StatelessWidget {
               children: [
                 SpacingFoundation.horizontalSpace12,
                 ClipRRect(
-                  borderRadius: BorderRadiusFoundation.all12,
+                  borderRadius: BorderRadiusFoundation.all10,
                   child: ImageWidget(
                     link: activityUiModel?.imageUrl,
                     fit: BoxFit.cover,
                     height: 0.13.sw,
                     width: 0.18.sw,
                   ),
-                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing14),
+                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing12),
                 SpacingFoundation.horizontalSpace8,
                 if (activityUiModel?.title != null && activityUiModel!.title!.isNotEmpty)
                   Expanded(
@@ -127,6 +127,7 @@ class ActivityItemWidget extends StatelessWidget {
                           color: colorScheme?.inversePrimary,
                           svgAsset: GraphicsFoundation.instance.svg.twoPeople,
                           fit: BoxFit.fitHeight,
+                          height: 18.w,
                         ),
                         SpacingFoundation.verticalSpace4,
                         AutoSizeText(
