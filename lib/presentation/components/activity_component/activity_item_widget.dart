@@ -37,7 +37,8 @@ class ActivityItemWidget extends StatelessWidget {
                   child: ImageWidget(
                     link: activityUiModel?.imageUrl,
                     fit: BoxFit.cover,
-                    width: 0.2.sw,
+                    height: 0.13.sw,
+                    width: 0.18.sw,
                   ),
                 ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing14),
                 SpacingFoundation.horizontalSpace8,
@@ -99,6 +100,9 @@ class ActivityItemWidget extends StatelessWidget {
                                       (e) => UiKitTagWidget(
                                         title: e.title,
                                         icon: e.icon,
+                                        customTextStyle: boldTextTheme?.caption3Medium.copyWith(
+                                          color: ColorsFoundation.mutedText,
+                                        ),
                                       ).paddingOnly(right: SpacingFoundation.horizontalSpacing12),
                                     ),
                                 ],
