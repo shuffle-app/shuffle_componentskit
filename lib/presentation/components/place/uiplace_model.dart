@@ -25,7 +25,7 @@ class UiPlaceModel {
   String? website;
   String? phone;
   String? price;
-  Future<List<HorizontalCaptionedImageData>?>? Function()? branches;
+  final ValueNotifier<List<HorizontalCaptionedImageData>?>? branches;
   UiScheduleModel? schedule;
   UiKitTag? niche;
   String? contentType;
@@ -145,7 +145,7 @@ class UiPlaceModel {
     String? website,
     String? phone,
     String? price,
-    Future<List<HorizontalCaptionedImageData>?>? Function()? branches,
+    final ValueNotifier<List<HorizontalCaptionedImageData>?>? branches,
     UiScheduleModel? schedule,
     UiKitTag? niche,
     String? contentType,
@@ -203,6 +203,7 @@ class UiPlaceModel {
         houseNumberController = TextEditingController(),
         apartmentNumberController = TextEditingController(),
         bookingUiModel = null,
+        branches = null,
         archived = false,
         baseTags = const [] {
     if (baseTags.isEmpty) {
