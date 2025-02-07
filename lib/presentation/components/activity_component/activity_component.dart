@@ -26,20 +26,22 @@ class ActivityComponent extends StatefulWidget {
 
 class _ActivityComponentState extends State<ActivityComponent> with TickerProviderStateMixin {
   final autoSizeGroup = AutoSizeGroup();
-  late final tabController = TabController(length: 2, vsync: this);
+  late final TabController tabController;
 
   late final myActivityKey = PageStorageKey('my');
   late final commonActivityKey = PageStorageKey('common');
 
-  late final _tabs = [
-    UiKitCustomTab.small(title: S.current.My.toUpperCase(), customValue: 'my', group: autoSizeGroup),
-    UiKitCustomTab.small(title: S.current.Common.toUpperCase(), customValue: 'common', group: autoSizeGroup),
-  ];
+  late final List<UiKitCustomTab> _tabs;
 
   @override
   void initState() {
     super.initState();
-    tabController.animateTo(widget.isMyActivity ? 0 : 1);
+    _tabs = [
+      UiKitCustomTab.small(title: S.current.My.toUpperCase(), customValue: 'my', group: autoSizeGroup),
+      UiKitCustomTab.small(title: S.current.Common.toUpperCase(), customValue: 'common', group: autoSizeGroup),
+    ];
+    int selectedTabIndex = _tabs.indexWhere((tab) => tab.customValue == (widget.isMyActivity ? 'my' : 'common'));
+    tabController = TabController(length: 2, vsync: this, initialIndex: selectedTabIndex);
   }
 
   @override

@@ -66,7 +66,6 @@ class InfluencersUpdatedFeedComponent extends StatefulWidget {
 class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeedComponent>
     with SingleTickerProviderStateMixin {
   late final tabController = TabController(length: 3, vsync: this);
-  late final PageController pageController = PageController();
   final autoSizeGroup = AutoSizeGroup();
 
   late final latestPublicationsKey = PageStorageKey('latest');
@@ -251,7 +250,6 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
                                   break;
                               }
                             }
-                            pageController.animateToPage(index, duration: scrollToDuration, curve: scrollToCurve);
                           },
                         ).paddingOnly(
                             left: EdgeInsetsFoundation.horizontal12,
@@ -337,13 +335,8 @@ class _InfluencersUpdatedFeedComponentState extends State<InfluencersUpdatedFeed
             ),
           ],
         ),
-        //TODO think about page view
-        PageView(
-          controller: pageController,
-          onPageChanged: (value) {
-            debugPrint('latestScrollController.offset: ${widget.latestScrollController?.offset}');
-            tabController.animateTo(value);
-          },
+        TabBarView(
+          controller: tabController,
           children: [
             _PagedInfluencerFeedItemListBody(
               pageStorageKey: latestPublicationsKey,
