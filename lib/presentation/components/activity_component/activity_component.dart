@@ -32,8 +32,8 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
   late final commonActivityKey = PageStorageKey('common');
 
   late final _tabs = [
-    UiKitCustomTab(title: S.current.My.toUpperCase(), customValue: 'my', group: autoSizeGroup, height: 28.h),
-    UiKitCustomTab(title: S.current.Common.toUpperCase(), customValue: 'common', group: autoSizeGroup, height: 28.h),
+    UiKitCustomTab(title: S.current.My.toUpperCase(), customValue: 'my', group: autoSizeGroup, height: 20.h),
+    UiKitCustomTab(title: S.current.Common.toUpperCase(), customValue: 'common', group: autoSizeGroup, height: 20.h),
   ];
 
   @override
@@ -56,7 +56,10 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
           tabs: _tabs,
           clipBorderRadius: BorderRadiusFoundation.all24r,
           onTappedTab: (index) {},
-        ).paddingAll(EdgeInsetsFoundation.all16),
+        ).paddingSymmetric(
+          horizontal: SpacingFoundation.horizontalSpacing16,
+          vertical: SpacingFoundation.verticalSpacing16,
+        ),
         SizedBox(
           height: 0.75.sh,
           child: TabBarView(
