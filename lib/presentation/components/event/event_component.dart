@@ -559,7 +559,7 @@ class _EventComponentState extends State<EventComponent> {
             valueListenable: feedbackPagingController,
             builder: (context, value, child) {
               return UiKitColoredAccentBlock(
-                contentHeight: _noFeedbacks ? 0 : (isSmallScreen ? 168.5.h : 0.28.sh),
+                contentHeight: _noFeedbacks ? 0 : (isSmallScreen ? 168.5.h : 0.286.sh),
                 color: colorScheme?.surface1,
                 title: Text(
                   _noFeedbacks ? S.of(context).NoReviewsMessage : S.of(context).ReviewsByCritics,
