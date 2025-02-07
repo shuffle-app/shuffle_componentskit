@@ -56,7 +56,10 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
           tabs: _tabs,
           clipBorderRadius: BorderRadiusFoundation.all24r,
           onTappedTab: (index) {},
-        ).paddingAll(EdgeInsetsFoundation.all16),
+        ).paddingSymmetric(
+          horizontal: SpacingFoundation.horizontalSpacing16,
+          vertical: SpacingFoundation.verticalSpacing16,
+        ),
         SizedBox(
           height: 0.75.sh,
           child: TabBarView(
