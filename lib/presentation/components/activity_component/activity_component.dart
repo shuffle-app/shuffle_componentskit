@@ -32,8 +32,8 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
   late final commonActivityKey = PageStorageKey('common');
 
   late final _tabs = [
-    UiKitCustomTab(title: S.current.My.toUpperCase(), customValue: 'my', group: autoSizeGroup, height: 20.h),
-    UiKitCustomTab(title: S.current.Common.toUpperCase(), customValue: 'common', group: autoSizeGroup, height: 20.h),
+    UiKitCustomTab.small(title: S.current.My.toUpperCase(), customValue: 'my', group: autoSizeGroup),
+    UiKitCustomTab.small(title: S.current.Common.toUpperCase(), customValue: 'common', group: autoSizeGroup),
   ];
 
   @override

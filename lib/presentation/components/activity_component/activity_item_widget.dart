@@ -31,7 +31,7 @@ class ActivityItemWidget extends StatelessWidget {
             height: calculatedHeight,
             child: Row(
               children: [
-                SpacingFoundation.horizontalSpace12,
+                1.sw <= 380 ? SpacingFoundation.horizontalSpace12 : SpacingFoundation.horizontalSpace16,
                 ClipRRect(
                   borderRadius: BorderRadiusFoundation.all10,
                   child: ImageWidget(
