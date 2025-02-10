@@ -16,6 +16,8 @@ class UiEventModel extends Advertisable {
   String? currency;
   UiScheduleModel? schedule;
   String? description;
+  String? city;
+  int? cityId;
   String? location;
   UiKitTag? eventType;
   String? price;
@@ -50,6 +52,8 @@ class UiEventModel extends Advertisable {
     this.eventType,
     this.media = const [],
     this.description,
+    this.city,
+    this.cityId,
     this.location,
     this.verticalPreview,
     this.tags = const [],
@@ -155,7 +159,7 @@ class UiEventModel extends Advertisable {
       return S.current.XIsRequired(S.current.Upsales);
     } else if (media.isEmpty) {
       return S.current.XIsRequired(S.current.Photos);
-    } else if(schedule!=null && !schedule!.validateDate) {
+    } else if (schedule != null && !schedule!.validateDate) {
       return S.current.APeriodOrPartOfPeriodOfTimeCannotBeInPast;
     }
 
@@ -171,6 +175,8 @@ class UiEventModel extends Advertisable {
         isRecurrent = false,
         scheduleString = null,
         description = null,
+        city = null,
+        cityId = null,
         location = null,
         eventType = null,
         reviewStatus = null,
@@ -211,6 +217,8 @@ class UiEventModel extends Advertisable {
     bool? isRecurrent,
     String? scheduleString,
     String? description,
+    String? city,
+    int? cityId,
     String? location,
     UiKitTag? eventType,
     String? price,
@@ -247,6 +255,8 @@ class UiEventModel extends Advertisable {
         isRecurrent: isRecurrent ?? this.isRecurrent,
         scheduleString: scheduleString ?? this.scheduleString,
         description: description ?? this.description,
+        city: city ?? this.city,
+        cityId: cityId ?? this.cityId,
         location: location ?? this.location,
         eventType: eventType ?? this.eventType,
         price: price ?? this.price,

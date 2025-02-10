@@ -4,10 +4,12 @@ class ChatMessageUiModel {
   final DateTime timeSent;
   final int messageId;
   final int senderId;
+  final int? chatJoinRequestId;
   final String? message;
   final String? additionalText;
   final String? gradientableText;
   final String? infoMessageTitle;
+  final String? chatName;
   final bool senderIsMe;
   final String? senderName;
   final String? senderAvatar;
@@ -22,7 +24,7 @@ class ChatMessageUiModel {
 
   bool get isInvitation => messageType == MessageType.invitation && invitationData != null;
 
-  ChatMessageUiModel({
+  const ChatMessageUiModel({
     required this.timeSent,
     required this.messageId,
     required this.senderId,
@@ -30,7 +32,9 @@ class ChatMessageUiModel {
     required this.messageType,
     required this.isRead,
     required this.isLastMessageToDate,
+    this.chatJoinRequestId,
     this.additionalText,
+    this.chatName,
     this.connectId,
     this.gradientableText,
     this.senderName,
@@ -83,6 +87,7 @@ class ChatMessageUiModel {
     String? gradientableText,
     String? senderNickname,
     int? connectId,
+    int? chatJoinRequestId,
     String? additionalText,
     bool? isLastMessageToDate,
   }) {
@@ -105,6 +110,7 @@ class ChatMessageUiModel {
       gradientableText: gradientableText ?? this.gradientableText,
       senderNickname: senderNickname ?? this.senderNickname,
       isLastMessageToDate: isLastMessageToDate ?? this.isLastMessageToDate,
+      chatJoinRequestId: chatJoinRequestId?? this.chatJoinRequestId,
     );
   }
 }
@@ -125,7 +131,7 @@ class ChatMessageInvitationData {
   final UserTileType receiverUserType;
   final bool hasAcceptedInvite;
 
-  ChatMessageInvitationData({
+  const ChatMessageInvitationData({
     required this.receiverId,
     required this.senderId,
     required this.senderUserName,
@@ -177,4 +183,4 @@ class ChatMessageInvitationData {
   }
 }
 
-enum MessageType { message, invitation, info }
+enum MessageType { message, invitation, info, joinRequest }

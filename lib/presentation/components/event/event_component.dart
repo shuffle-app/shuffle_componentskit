@@ -24,7 +24,7 @@ class EventComponent extends StatefulWidget {
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
   final ValueChanged<int>? onDislikedFeedback;
-  final Future<bool> Function(FeedbackUiModel)? onFeedbackTap;
+  final Future<EditReviewModel> Function(FeedbackUiModel)? onFeedbackTap;
   final bool showOfferButton;
   final int? priceForOffer;
   final VoidCallback? onOfferButtonTap;
@@ -33,6 +33,7 @@ class EventComponent extends StatefulWidget {
   final ValueNotifier<String?>? translateDescription;
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
+  final Set<int>? likedReviews;
 
   const EventComponent({
     super.key,
@@ -60,6 +61,7 @@ class EventComponent extends StatefulWidget {
     this.translateDescription,
     this.showTranslateButton,
     this.currentUserId,
+    this.likedReviews,
   });
 
   @override
@@ -70,8 +72,6 @@ class _EventComponentState extends State<EventComponent> {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
-
-  Set<int> likedReviews = {};
 
   bool get _noFeedbacks => feedbackPagingController.itemList?.isEmpty ?? true;
 
@@ -139,7 +139,7 @@ class _EventComponentState extends State<EventComponent> {
   void _onFeedbackPageRequest(int page) async {
     final data = await widget.feedbackLoaderCallback(page, widget.event.id);
     if (data.any((e) => feedbackPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
-    likedReviews.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
+    widget.likedReviews?.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
       feedbackPagingController.appendLastPage(data);
       return;
@@ -559,7 +559,7 @@ class _EventComponentState extends State<EventComponent> {
             valueListenable: feedbackPagingController,
             builder: (context, value, child) {
               return UiKitColoredAccentBlock(
-                contentHeight: _noFeedbacks ? 0 : (isSmallScreen ? 166.8.h: 0.28.sh),
+                contentHeight: _noFeedbacks ? 0 : (isSmallScreen ? 168.5.h : 0.286.sh),
                 color: colorScheme?.surface1,
                 title: Text(
                   _noFeedbacks ? S.of(context).NoReviewsMessage : S.of(context).ReviewsByCritics,
@@ -576,11 +576,13 @@ class _EventComponentState extends State<EventComponent> {
                                 iconData: ShuffleUiKitIcons.plus,
                               ),
                               onPressed: () => widget.onAddFeedbackTapped?.call().then((addedFeedback) {
-                                setState(() {
-                                  canLeaveFeedback = false;
-                                  feedbackPagingController.refresh();
-                                  feedbackPagingController.notifyPageRequestListeners(1);
-                                });
+                                if (addedFeedback) {
+                                  setState(() {
+                                    canLeaveFeedback = false;
+                                    feedbackPagingController.refresh();
+                                    feedbackPagingController.notifyPageRequestListeners(1);
+                                  });
+                                }
                               }),
                             ),
                           )
@@ -619,11 +621,24 @@ class _EventComponentState extends State<EventComponent> {
                               onPressed: () async {
                                 if (widget.onFeedbackTap != null) {
                                   await widget.onFeedbackTap?.call(feedback).then(
-                                    (isEdited) {
-                                      if (isEdited) {
+                                    (model) {
+                                      if (model.isEdited) {
                                         feedbackPagingController.refresh();
                                         feedbackPagingController.notifyPageRequestListeners(1);
                                       }
+                                      final feedbackId = feedback.id;
+
+                                      if ((model.countToUpdate ?? 0) > 0) {
+                                        widget.likedReviews?.add(feedbackId);
+                                        widget.onLikedFeedback?.call(feedbackId);
+                                        _updateFeedbackList(feedbackId, 1);
+                                      } else if ((model.countToUpdate ?? 0) < 0) {
+                                        widget.likedReviews?.remove(feedbackId);
+                                        widget.onDislikedFeedback?.call(feedbackId);
+                                        _updateFeedbackList(feedbackId, -1);
+                                      }
+
+                                      setState(() {});
                                     },
                                   );
                                 } else {
@@ -634,12 +649,12 @@ class _EventComponentState extends State<EventComponent> {
                                   ? null
                                   : () {
                                       final feedbackId = feedback.id;
-                                      if (likedReviews.contains(feedbackId)) {
-                                        likedReviews.remove(feedbackId);
+                                      if (widget.likedReviews != null && widget.likedReviews!.contains(feedbackId)) {
+                                        widget.likedReviews?.remove(feedbackId);
                                         widget.onDislikedFeedback?.call(feedbackId);
                                         _updateFeedbackList(feedbackId, -1);
                                       } else {
-                                        likedReviews.add(feedbackId);
+                                        widget.likedReviews?.add(feedbackId);
                                         widget.onLikedFeedback?.call(feedbackId);
                                         _updateFeedbackList(feedbackId, 1);
                                       }

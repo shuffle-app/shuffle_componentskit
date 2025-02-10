@@ -111,7 +111,25 @@ class UiProfileModel {
         badge: const ProMemberPlate(),
       );
     } else {
-      return const ProfileCard();
+      return ProfileCard(
+          profileCardBody: InfluencerPublicProfileCardBody(
+            registrationDate: userCreatedAt ?? DateTime.now(),
+            onSocialLinksPressed: onSocialLinksPressed,
+            socialLinks: socialLinks,
+            name: name,
+            nickname: nickname,
+            avatarUrl: avatarUrl,
+            interests: allInterests,
+            matchingInterests: matchingInterests,
+            onShare: onShare,
+            onFollow: onFollow,
+            phone: phone,
+            email: email,
+            following: following,
+            followers: followers ?? 0,
+            speciality: specialization,
+          ),
+          badge: const InfluencerMemberPlate());
     }
   }
 

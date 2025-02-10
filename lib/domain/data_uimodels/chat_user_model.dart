@@ -11,7 +11,7 @@ class ChatMemberModel {
   final bool canBeKicked;
   final int? chatConnectId;
 
-  ChatMemberModel({
+  const ChatMemberModel({
     required this.id,
     required this.name,
     required this.username,
@@ -56,4 +56,10 @@ class ChatMemberModel {
       chatConnectId: chatConnectId ?? this.chatConnectId,
     );
   }
+
+  @override
+  bool operator ==(Object other) => other is ChatMemberModel && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

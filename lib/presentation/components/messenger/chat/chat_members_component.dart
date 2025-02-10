@@ -9,11 +9,11 @@ class ChatMembersComponent extends StatelessWidget {
   final bool canDeleteUsers;
 
   const ChatMembersComponent({
-    Key? key,
+    super.key,
     required this.members,
     required this.canDeleteUsers,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

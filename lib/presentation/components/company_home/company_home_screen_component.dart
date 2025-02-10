@@ -11,6 +11,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   final VoidCallback? onCreatePlace;
   final ValueChanged<int>? onPlaceTapped;
   final List<UiKitStats>? profileStats;
+  final Future<String?> Function(String?)? onCityChanged;
+  final bool showSelectCity;
 
   const CompanyHomeScreenComponent({
     super.key,
@@ -22,6 +24,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     this.onCreatePlace,
     this.onPlaceTapped,
     this.profileStats,
+    this.onCityChanged,
+    this.showSelectCity = false,
   });
 
   @override
@@ -71,6 +75,14 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               horizontal: horizontalMargin,
             ),
             SpacingFoundation.verticalSpace24,
+            if (showSelectCity)
+              SelectedCityRow(
+                selectedCity: selectedCity,
+                onTap: () async {
+                  final city = await onCityChanged?.call(selectedCity.value) ?? S.current.SelectCity;
+                  selectedCity.value = city == selectedCity.value ? S.current.SelectCity : city;
+                },
+              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing24),
             Row(children: [
               Text(
                 S.of(context).Places,
@@ -113,25 +125,24 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               ).paddingSymmetric(
                 horizontal: horizontalMargin,
               ),
-            if (places.isNotEmpty)
-              ListView.separated(
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  final item = places.elementAt(index);
+            ListView.separated(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final item = places.elementAt(index);
 
-                  return PlacePreview(
-                    onTap: (id) => onPlaceTapped?.call(id),
-                    place: item,
-                    model: model,
-                    status: item.moderationStatus,
-                    updatedAt: item.updatedAt,
-                  );
-                },
-                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
-                itemCount: places.length,
-              ),
+                return PlacePreview(
+                  onTap: (id) => onPlaceTapped?.call(id),
+                  place: item,
+                  model: model,
+                  status: item.moderationStatus,
+                  updatedAt: item.updatedAt,
+                );
+              },
+              separatorBuilder: (context, index) => SpacingFoundation.verticalSpace24,
+              itemCount: places.length,
+            ),
             if (places.isNotEmpty) ...[
               SpacingFoundation.verticalSpace24,
               context
@@ -153,3 +164,5 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     );
   }
 }
+
+final ValueNotifier<String> selectedCity = ValueNotifier<String>(S.current.SelectCity);

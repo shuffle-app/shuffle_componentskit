@@ -142,6 +142,14 @@ class ReactionViewComponent extends StatelessWidget {
             eventDate: videoReactionModel.eventDate,
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         ),
+        if (videoReactionModel.reactionStatisticUiModel != null)
+          Positioned(
+            right: 0.0,
+            bottom: SpacingFoundation.verticalSpacing40 * 4.5,
+            child: UiKitColumnStatisticReaction(
+              reactionStatisticUiModel: videoReactionModel.reactionStatisticUiModel,
+            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+          ),
         Positioned(
           width: 1.sw,
           bottom: SpacingFoundation.verticalSpacing24 + SpacingFoundation.verticalSpacing16,

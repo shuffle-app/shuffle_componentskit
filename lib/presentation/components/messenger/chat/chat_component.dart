@@ -4,6 +4,8 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'hidden_chat_mocked_component.dart';
+
 //ignore_for_file: no-empty-block
 
 class ChatComponent extends StatelessWidget {
@@ -27,6 +29,9 @@ class ChatComponent extends StatelessWidget {
   final VoidCallback? onPinnedMessageTap;
   final void Function(int userId, UserTileType userType)? onProfileTapped;
   final double keyboardPadding;
+  final bool isGuestView;
+  final Function? onRequestToJoinChat;
+  final VoidCallback? onShareChat;
 
   const ChatComponent({
     super.key,
@@ -50,12 +55,70 @@ class ChatComponent extends StatelessWidget {
     this.onReplyMessageTap,
     this.onProfileTapped,
     this.keyboardPadding = 0,
+    this.isGuestView = false,
+    this.onRequestToJoinChat,
+    this.onShareChat,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
     final isLightThemeOn = theme?.themeMode == ThemeMode.light;
+
+    late final Widget? trailingWidget;
+    if (isGuestView) {
+      if (chatData.joinRequested != null && chatData.joinRequested!) {
+        //leave null
+        trailingWidget = null;
+      } else {
+        trailingWidget = context.midSizeOutlinedButton(
+          data: BaseUiKitButtonData(
+            iconWidget: ImageWidget(
+              svgAsset: GraphicsFoundation.instance.svg.login,
+            ),
+            onPressed: () => onRequestToJoinChat?.call(),
+          ),
+        );
+      }
+    } else if ((chatData.members?.isEmpty ?? false) ||
+        chatData.readOnlyChat ||
+        (chatData.hasAcceptedInvite && !chatData.isGroupChat)) {
+      trailingWidget = context.midSizeOutlinedButton(
+        data: BaseUiKitButtonData(
+          iconInfo: BaseUiKitButtonIconData(
+            iconData: ShuffleUiKitIcons.logout,
+          ),
+          onPressed: onLeaveChat,
+        ),
+      );
+    } else if (chatData.isGroupChat && !chatData.userIsOwner) {
+      trailingWidget = UiKitPopUpMenuButton.optionWithIcon(options: [
+        UiKitPopUpMenuButtonOption(
+          title: S.of(context).Share,
+          icon: ShuffleUiKitIcons.share,
+          value: 'share',
+          onTap: onShareChat,
+        ),
+        UiKitPopUpMenuButtonOption(
+          title: S.of(context).Edit,
+          icon: ShuffleUiKitIcons.logout,
+          value: 'leave',
+          onTap: onLeaveChat,
+        ),
+      ]);
+    } else {
+      trailingWidget = SizedBox.fromSize(
+        size: Size(0.125.sw, 0.125.sw),
+        child: context.smallGradientButton(
+          data: BaseUiKitButtonData(
+            iconInfo: BaseUiKitButtonIconData(
+              iconData: ShuffleUiKitIcons.profileplus,
+            ),
+            onPressed: onInviteToAnotherPlace,
+          ),
+        ),
+      );
+    }
 
     return BlurredAppPageWithPagination<ChatMessageUiModel>(
       paginationController: pagingController,
@@ -64,11 +127,13 @@ class ChatComponent extends StatelessWidget {
       canFoldAppBar: false,
       reverse: true,
       physics: const NeverScrollableScrollPhysics(),
-      keyboardPadding: keyboardPadding,
+      pagingPhysics: isGuestView ? const NeverScrollableScrollPhysics() : null,
+      keyboardPadding: isGuestView ? 0 : keyboardPadding,
       topFixedAddition: pinnedMessage != null
           ? GestureDetector(
               onTap: onPinnedMessageTap,
               child: UiKitInfoText(
+                chatName: pinnedMessage!.chatName,
                 text: pinnedMessage!.message!,
                 title: pinnedMessage!.infoMessageTitle,
                 centerText: !pinnedMessage!.messageId.isNegative,
@@ -81,29 +146,7 @@ class ChatComponent extends StatelessWidget {
             )
           : null,
       scrollController: scrollController,
-      appBarTrailing: (chatData.isGroupChat && !chatData.userIsOwner) ||
-              chatData.hasAcceptedInvite ||
-              (chatData.members?.isEmpty ?? false) ||
-              chatData.readOnlyChat
-          ? context.midSizeOutlinedButton(
-              data: BaseUiKitButtonData(
-                iconInfo: BaseUiKitButtonIconData(
-                  iconData: ShuffleUiKitIcons.logout,
-                ),
-                onPressed: onLeaveChat,
-              ),
-            )
-          : SizedBox.fromSize(
-              size: Size(0.125.sw, 0.125.sw),
-              child: context.smallGradientButton(
-                data: BaseUiKitButtonData(
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: ShuffleUiKitIcons.profileplus,
-                  ),
-                  onPressed: onInviteToAnotherPlace,
-                ),
-              ),
-            ),
+      appBarTrailing: trailingWidget,
       customTitle: Expanded(
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -112,14 +155,12 @@ class ChatComponent extends StatelessWidget {
               onChatHeaderTapped?.call(chatData.contentId!, chatData.contentType!);
             } else if (!chatData.isGroupChat) {
               final owner = chatData.owner;
-              print(owner?.name);
               if (owner == null) return;
 
               if (!chatData.userIsOwner) {
                 onProfileTapped?.call(owner.id, owner.userType);
               } else {
                 final member = chatData.members?.firstWhere((member) => member.id != owner.id);
-                print(member?.name);
                 if (member == null) return;
 
                 onProfileTapped?.call(member.id, member.userType);
@@ -173,10 +214,9 @@ class ChatComponent extends StatelessWidget {
           ),
         ),
       ),
-      hideBottomSpace: chatData.readOnlyChat,
-      bottomSheetHeight: 1.sw * 0.275 - (1.sw <= 380 ? SpacingFoundation.verticalSpacing8 : 0),
-      bodyBottomSpace: kBottomNavigationBarHeight +
-          (chatData.isGroupChat ? SpacingFoundation.verticalSpacing16 : SpacingFoundation.verticalSpacing4),
+      bottomSheetHeight: isGuestView ? 0 : (1.sw * 0.275 - (1.sw <= 380 ? SpacingFoundation.verticalSpacing8 : 0)),
+      bodyBottomSpace: (kBottomNavigationBarHeight +
+          (chatData.isGroupChat ? SpacingFoundation.verticalSpacing16 : SpacingFoundation.verticalSpacing4)),
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),
@@ -189,9 +229,15 @@ class ChatComponent extends StatelessWidget {
             text: ' ',
           ),
         ),
-        noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
-          message: S.of(context).NoMessagesYet,
-        ),
+        noItemsFoundIndicatorBuilder: (context) => isGuestView
+            ? Center(
+                child: HiddenChatMockedComponent(
+                  onJoinChatRequest: chatData.joinRequested == true ? null : () => onRequestToJoinChat?.call(),
+                ),
+              )
+            : UiKitEmptyListPlaceHolder(
+                message: S.of(context).NoMessagesYet,
+              ),
         itemBuilder: (context, item, index) {
           if (item.messageType == MessageType.info) {
             return VisibilityDetector(
@@ -215,6 +261,31 @@ class ChatComponent extends StatelessWidget {
                     right: EdgeInsetsFoundation.horizontal20,
                     top: EdgeInsetsFoundation.vertical4,
                   ),
+                ],
+              ),
+            );
+          } else if (item.messageType == MessageType.joinRequest && item.chatJoinRequestId != null) {
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    item.message!,
+                    // '${item.senderName} ${S.of(context).WantToJoin}',
+                    style: theme?.boldTextTheme.caption3Medium.copyWith(color: theme.colorScheme?.darkNeutral900),
+                  ),
+                  SpacingFoundation.verticalSpace4,
+                  context.createSmallOutlinedButton(
+                    gradient: GradientFoundation.defaultLinearGradient,
+                    data: BaseUiKitButtonData(
+                      text: S.of(context).Allow.toUpperCase(),
+                      onPressed: () => onRequestToJoinChat?.call(item.chatJoinRequestId),
+                    ),
+                  )
                 ],
               ),
             );
@@ -306,7 +377,71 @@ class ChatComponent extends StatelessWidget {
                 ],
               ),
             );
-          } else {
+          } else  if (item.messageType == MessageType.joinRequest){
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                  UiKitChatInCard(
+                    onUsernameTapped: () => onProfileTapped?.call(
+                      item.senderId,
+                      item.senderProfileType ?? UserTileType.ordinary,
+                    ),
+                    showAvatar: chatData.isGroupChat,
+                    avatarUrl: item.senderAvatar,
+                    senderName: item.senderName,
+                    senderType: item.senderProfileType,
+                    senderNickname: item.senderNickname ?? '',
+                    onReplyMessage: onReplyMessage,
+                    timeOfDay: item.timeSent,
+                    id: item.messageId,
+                    hasInvitation: true,
+                    child: UiKitInviteMessageContent(
+                      hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
+                      brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
+                      showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
+                      username: item.invitationData!.senderUserName,
+                      placeName: item.invitationData!.contentName,
+                      placeImagePath: item.invitationData!.contentImagePath,
+                      invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
+                      userType: item.invitationData!.senderUserType,
+                      onInvitePeopleTap: onAddMorePeople,
+                      onPlaceTap: () => onInvitationPlaceTap?.call(
+                        item.invitationData!.contentId,
+                        item.invitationData!.contentType,
+                      ),
+                      canDenyInvitation: chatData.readOnlyChat
+                          ? false
+                          : chatData.isGroupChat
+                          ? !item.invitationData!.hasAcceptedInvite
+                          : !chatData.hasAcceptedInvite,
+                      canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
+                      onAcceptTap: () {
+                        onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
+                      },
+                      onDenyTap: () {
+                        onDenyInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
+                      },
+                      tags: item.invitationData?.tags ?? [],
+                      customMessageData: chatData.isGroupChat
+                          ? null
+                          : InviteCustomMessageData(
+                        senderUserName: item.invitationData!.senderUserName,
+                        receiverUserName: item.invitationData!.receiverUserName,
+                        senderUserType: item.invitationData!.senderUserType,
+                        receiverUserType: item.invitationData!.receiverUserType,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else  {
             if (item.isInvitation && item.invitationData != null) {
               return VisibilityDetector(
                 key: Key(item.messageId.toString()),

@@ -38,10 +38,11 @@ class PublicProProfileComponent extends StatelessWidget {
     final ComponentProfileModel model = ComponentProfileModel.fromJson(config['profile']);
     final horizontalMargin = (model.positionModel?.horizontalMargin ?? 0).toDouble();
     final verticalMargin = (model.positionModel?.verticalMargin ?? 0).toDouble();
-    final boldTextTheme = context.uiKitTheme?.boldTextTheme;
-    final theme = context.uiKitTheme;
 
-    TextStyle? textStyle = theme?.boldTextTheme.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
+    final theme = context.uiKitTheme;
+    final boldTextTheme = theme?.boldTextTheme;
+
+    TextStyle? textStyle = boldTextTheme?.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
     textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
 
     return BlurredAppBarPage(

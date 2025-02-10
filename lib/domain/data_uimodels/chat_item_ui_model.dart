@@ -7,10 +7,9 @@ class ChatItemUiModel {
   final int? contentId;
   final Type? contentType;
   final String chatTitle;
+  final String? chatName;
   final String? subtitle;
   final String? avatarUrl;
-  final String? contentTitle;
-  final String? contentAvatar;
   final String lastMessage;
   final DateTime lastMessageTime;
   final String? lastMessageSenderName;
@@ -27,6 +26,7 @@ class ChatItemUiModel {
   final DateTime deletionDate;
   final bool disabled;
   final bool readOnlyChat;
+  final bool? joinRequested;
   final List<ChatMessageUiModel>? firstPageMessages;
 
   int? get membersCount => members?.length;
@@ -35,7 +35,7 @@ class ChatItemUiModel {
     return formatDifference(lastMessageTime);
   }
 
-  ChatItemUiModel({
+  const ChatItemUiModel({
     required this.id,
     required this.chatTitle,
     required this.userIsOwner,
@@ -47,6 +47,7 @@ class ChatItemUiModel {
     this.lastMessageSenderName,
     this.readOnlyChat = false,
     this.disabled = false,
+    this.chatName,
     this.contentTags,
     this.owner,
     this.contentId,
@@ -57,8 +58,7 @@ class ChatItemUiModel {
     this.subtitle,
     this.userType = UserTileType.ordinary,
     this.avatarUrl,
-    this.contentTitle,
-    this.contentAvatar,
+    this.joinRequested,
     this.hasAcceptedInvite = false,
     this.firstPageMessages,
   });
@@ -87,6 +87,8 @@ class ChatItemUiModel {
     String? lastMessageSenderName,
     bool? readOnlyChat,
     List<ChatMessageUiModel>? firstPageMessages,
+    String? chatName,
+    bool? joinRequested,
   }) {
     return ChatItemUiModel(
       id: id,
@@ -105,8 +107,6 @@ class ChatItemUiModel {
       unreadMessageCount: unreadMessageCount ?? this.unreadMessageCount,
       userType: userType ?? this.userType,
       contentTags: contentTags ?? this.contentTags,
-      contentTitle: contentTitle ?? this.contentTitle,
-      contentAvatar: contentAvatar ?? this.contentAvatar,
       tag: tag ?? this.tag,
       isGroupChat: isGroupChat ?? this.isGroupChat,
       userIsOwner: userIsOwner ?? this.userIsOwner,
@@ -114,9 +114,22 @@ class ChatItemUiModel {
       deletionDate: deletionDate ?? this.deletionDate,
       disabled: disabled ?? this.disabled,
       firstPageMessages: firstPageMessages ?? this.firstPageMessages,
+      chatName: chatName ?? this.chatName,
+      joinRequested: joinRequested ?? this.joinRequested,
     );
   }
 
   @override
-  String toString() =>'ChatItemUiModel id $id isGroupChat $isGroupChat';
+  String toString() =>
+      'ChatItemUiModel id $id isGroupChat $isGroupChat members: ${members?.map((e) => '(id: ${e.id}, name: ${e.name})').join(', ')} and title: $chatTitle';
+
+  @override
+  bool operator ==(Object other) =>
+      other is ChatItemUiModel &&
+      id == other.id &&
+      members?.length == other.members?.length &&
+      (members ?? []).every((e) => other.members?.contains(e) ?? false);
+
+  @override
+  int get hashCode => id.hashCode * ((members?.isEmpty ?? true) ? 1 : members!.length);
 }

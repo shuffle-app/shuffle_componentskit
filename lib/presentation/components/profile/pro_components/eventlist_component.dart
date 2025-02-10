@@ -4,28 +4,48 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class EventlistComponent extends StatelessWidget {
+class EventListComponent extends StatelessWidget {
   final List<UiEventModel> events;
   final Function(UiEventModel) onTap;
   final Function(UiEventModel) onDelete;
+  final Future<String?> Function(String?)? onCityChanged;
   final bool isArchive;
+  final GlobalKey<SliverAnimatedListState> animatedListKey;
 
-  EventlistComponent(
-      {super.key, required this.events, required this.onTap, required this.onDelete, this.isArchive = false});
-
-  final GlobalKey<AnimatedListState> _animatedListKey = GlobalKey<AnimatedListState>();
+  const EventListComponent({
+    super.key,
+    required this.events,
+    required this.onTap,
+    required this.onDelete,
+    required this.animatedListKey,
+    this.isArchive = false,
+    this.onCityChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final ValueNotifier<String> selectedCity = ValueNotifier<String>(S.current.SelectCity);
+    final Set<int?> citiesIds = events.map((element) => element.cityId).toSet();
+    final bool showSelectCity = citiesIds.length > 1;
 
     return BlurredAppBarPage(
       autoImplyLeading: true,
       title: isArchive ? S.of(context).Archive : S.of(context).MyEvents,
       centerTitle: true,
-      animatedListKey: _animatedListKey,
-      childrenCount: events.isEmpty ? 1 : events.length,
+      animatedListKey: animatedListKey,
+      childrenCount: events.isEmpty ? 1 : events.length + (showSelectCity ? 1 : 0),
       childrenBuilder: (context, index) {
+        if (index == 0 && showSelectCity) {
+          return SelectedCityRow(
+            selectedCity: selectedCity,
+            onTap: () async {
+              final city = await onCityChanged?.call(selectedCity.value) ?? S.current.SelectCity;
+              selectedCity.value = city == selectedCity.value ? S.current.SelectCity : city;
+            },
+          );
+        }
+
         if (events.isEmpty) {
           return Center(
             child: Text(S.of(context).NothingFound, style: theme?.boldTextTheme.caption1Bold).paddingSymmetric(
@@ -33,7 +53,7 @@ class EventlistComponent extends StatelessWidget {
           );
         }
 
-        final event = events[index];
+        final event = events[index - (showSelectCity ? 1 : 0)];
         return Dismissible(
             key: ValueKey(event.id),
             confirmDismiss: (_) => onDelete(event),
@@ -96,7 +116,7 @@ class EventlistComponent extends StatelessWidget {
                             ),
                           ))
                 .paddingSymmetric(
-                    horizontal: SpacingFoundation.horizontalSpacing8, vertical: SpacingFoundation.verticalSpacing8));
+                    horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8));
       },
     );
   }

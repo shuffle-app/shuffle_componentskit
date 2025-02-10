@@ -23,7 +23,7 @@ class _CustomBarcodeScannerState extends State<CustomBarcodeScanner> {
 
   Rect scanWindow(bool isUiWindow) {
     return Rect.fromCenter(
-      center: isUiWindow ? Offset.zero : Offset(1.sw / 2, 1.sh / 2),
+      center: isUiWindow ? Offset.zero : Offset(1.sw / 2, 1.sh / 2.4),
       width: isUiWindow ? width : 0.7.sw,
       height: isUiWindow ? height - 0.05.sw : 0.6.sh,
     );

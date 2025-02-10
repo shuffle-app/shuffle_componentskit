@@ -20,14 +20,20 @@ class AllChatsComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
+        GlobalComponent
+            .of(context)
+            ?.globalConfiguration
+            .appConfig
+            .content ?? GlobalConfiguration().appConfig.content;
 
     final model = ComponentModel.fromJson(config['chats']);
     final horizontalMargin = model.positionModel?.horizontalMargin?.toDouble() ?? EdgeInsetsFoundation.horizontal16;
     final verticalMargin = model.positionModel?.verticalMargin?.toDouble() ?? EdgeInsetsFoundation.vertical16;
 
     return BlurredAppPageWithPagination<ChatItemUiModel>(
-      title: S.of(context).Messages,
+      title: S
+          .of(context)
+          .Messages,
       centerTitle: true,
       autoImplyLeading: true,
       paginationController: controller,
@@ -35,29 +41,35 @@ class AllChatsComponent extends StatelessWidget {
       bodyBottomSpace: kBottomNavigationBarHeight + SpacingFoundation.verticalSpacing24,
       builderDelegate: PagedChildBuilderDelegate<ChatItemUiModel>(
         firstPageProgressIndicatorBuilder:
-            firstPageProgressIndicatorBuilder ?? (context) => const LoadingWidget().paddingOnly(bottom: 0.15.sh),
-        noItemsFoundIndicatorBuilder: (context) => UiKitEmptyListPlaceHolder(
-          message: S.of(context).NoMessagesYet,
-        ).paddingOnly(bottom: 0.15.sh),
-        newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
-          gradient: GradientFoundation.greyGradient,
-          child: UiKitMessageCard.empty(),
-        ),
-        itemBuilder: (context, item, index) => UiKitMessageCard(
-          key: ValueKey(item.unreadMessageCount),
-          disabled: item.disabled,
-          name: item.chatTitle,
-          subtitle: item.subtitle ?? item.tag?.title ?? '',
-          subtitleIconPath: item.tag?.icon,
-          lastMessageSenderName: item.lastMessageSenderName,
-          lastMessage: item.lastMessage,
-          lastMessageTime: item.lastMessageTimeFormatted,
-          avatarPath: item.avatarUrl ?? '',
-          userType: item.userType,
-          onTap: () => onChatSelected.call(item.id),
-          onDelete: () => onChatDeleted.call(item.id),
-          unreadMessageCount: item.unreadMessageCount,
-        ),
+        firstPageProgressIndicatorBuilder ?? (context) => const LoadingWidget().paddingOnly(bottom: 0.15.sh),
+        noItemsFoundIndicatorBuilder: (context) =>
+            UiKitEmptyListPlaceHolder(
+              message: S
+                  .of(context)
+                  .NoMessagesYet,
+            ).paddingOnly(bottom: 0.15.sh),
+        newPageProgressIndicatorBuilder: (context) =>
+            UiKitShimmerProgressIndicator(
+              gradient: GradientFoundation.greyGradient,
+              child: UiKitMessageCard.empty(),
+            ),
+        itemBuilder: (context, item, index) =>
+            UiKitMessageCard(
+              key: ValueKey(item.unreadMessageCount),
+              disabled: item.disabled,
+              chatName: item.chatName,
+              name: item.chatTitle,
+              subtitle: item.subtitle ?? item.tag?.title ?? '',
+              subtitleIconPath: item.tag?.icon,
+              lastMessageSenderName: item.lastMessageSenderName,
+              lastMessage: item.lastMessage,
+              lastMessageTime: item.lastMessageTimeFormatted,
+              avatarPath: item.avatarUrl ?? '',
+              userType: item.userType,
+              onTap: () => onChatSelected.call(item.id),
+              onDelete: () => onChatDeleted.call(item.id),
+              unreadMessageCount: item.unreadMessageCount,
+            ),
       ),
     );
   }
