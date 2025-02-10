@@ -76,10 +76,12 @@ class CompanyPresentationComponent extends StatelessWidget {
     branches: () async => [
       /// mock branches
       HorizontalCaptionedImageData(
+        placeId: -1,
         imageUrl: GraphicsFoundation.instance.png.leto3.path,
         caption: 'L’ETO Marina Mall',
       ),
       HorizontalCaptionedImageData(
+        placeId: -1,
         imageUrl: GraphicsFoundation.instance.png.leto2.path,
         caption: 'L’ETO Dubai Hills Mall',
       ),
