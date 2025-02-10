@@ -73,7 +73,7 @@ class CompanyPresentationComponent extends StatelessWidget {
         unique: true,
       ),
     ],
-    branches: () async => [
+    branches: ValueNotifier([
       /// mock branches
       HorizontalCaptionedImageData(
         placeId: -1,
@@ -85,7 +85,7 @@ class CompanyPresentationComponent extends StatelessWidget {
         imageUrl: GraphicsFoundation.instance.png.leto2.path,
         caption: 'L’ETO Dubai Hills Mall',
       ),
-    ],
+    ]),
   );
 
   final List<String> avatars = [

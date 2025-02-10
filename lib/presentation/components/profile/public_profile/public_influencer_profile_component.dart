@@ -2,17 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/public_profile/profile_highlights.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../../../domain/config_models/profile/component_profile_model.dart';
+import 'widget/influencer_reviews_tab.dart';
 
 class PublicInfluencerProfileComponent extends StatefulWidget {
   final UiProfileModel uiProfileModel;
   final ProfileStats? profileStats;
   final bool loadingContent;
+  final ValueNotifier<double>? tiltNotifier;
+  final PagingController<int, VideoReactionUiModel>? storiesPagingController;
+  final List<ProfilePlace>? profilePlaces;
+  final ValueChanged<VideoReactionUiModel>? onReactionTapped;
+  final List<InfluencerTopCategory>? influencerTopCategories;
+  final List<ContentPreviewWithRespect>? contentPreviewWithRespects;
+  final Function(int? placeId, int? eventId)? onItemTap;
+  final bool isLoading;
 
-  const PublicInfluencerProfileComponent(
-      {super.key, required this.uiProfileModel, this.profileStats, required this.loadingContent});
+  const PublicInfluencerProfileComponent({
+    super.key,
+    required this.uiProfileModel,
+    this.profileStats,
+    this.loadingContent = false,
+    this.tiltNotifier,
+    this.storiesPagingController,
+    this.profilePlaces,
+    this.onReactionTapped,
+    this.influencerTopCategories,
+    this.contentPreviewWithRespects,
+    this.onItemTap,
+    this.isLoading = false,
+  });
 
   @override
   State<PublicInfluencerProfileComponent> createState() => _PublicInfluencerProfileComponentState();
@@ -42,6 +64,7 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       specialTabsController.addListener(_specialTabsListener);
+      activityTabsController.addListener(_activityTabsListener);
       setSpecialTabsContentHeight(0);
       _setActivityTabsContentHeight(0);
     });
@@ -51,12 +74,13 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
     if (index == 0) {
       _activityTabsContentHeight = 6 *
           (bigScreen
-              ? 0.265.sh
+              ? 0.2.sh
               : midScreen
-                  ? 0.27.sh
-                  : 0.275.sh);
+                  ? 0.21.sh
+                  : 0.24.sh);
     } else if (index == 1) {
-      _activityTabsContentHeight = 4 * (bigScreen || midScreen ? 0.3.sh : 0.3575.sh);
+      _activityTabsContentHeight =
+          (widget.influencerTopCategories?.length ?? 1) * (bigScreen || midScreen ? 0.3.sh : 0.3575.sh);
     } else if (index == 2) {
       _activityTabsContentHeight = 2 *
           (bigScreen
@@ -76,6 +100,12 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
         curve: Curves.decelerate,
       );
     }
+  }
+
+  void _activityTabsListener() {
+    final tabIndex = activityTabsController.index;
+    _setActivityTabsContentHeight(tabIndex);
+    _animateToSpecialTabPosition();
   }
 
   void _specialTabsListener() {
@@ -243,8 +273,7 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
                       UiKitFeedbackCard(),
                     ],
                   ),
-                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16, horizontal: horizontalMargin)
-
+                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16, horizontal: horizontalMargin),
               // UiKitCustomTabBar.badged(
               //   key: specialTabsKey,
               //   tabController: specialTabsController,
@@ -263,17 +292,85 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
               //     // setSpecialTabsContentHeight(index);
               //   },
               // ),
-              // UiKitCustomTabBar(
-              //   tabController: activityTabsController,
-              //   tabs: [
-              //     UiKitCustomTab(title: S.current.Reviews.toUpperCase(), group: activityTabsSizeGroup),
-              //     UiKitCustomTab(title: S.current.Top.toUpperCase(), group: activityTabsSizeGroup),
-              //     UiKitCustomTab(title: S.current.Respect.toUpperCase(), group: activityTabsSizeGroup),
-              //   ],
-              //   onTappedTab: (index) {
-              //     _setActivityTabsContentHeight(index);
-              //   },
-              // ),
+              SizedBox(
+                height: 62.w,
+                child: ListView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    UiKitCustomTabBar.badged(
+                      key: specialTabsKey,
+                      tabController: activityTabsController,
+                      scrollable: true,
+                      tabs: [
+                        UiKitCustomTab(
+                            title: S.current.Reviews.toUpperCase(), group: activityTabsSizeGroup, height: 20.h),
+                        UiKitCustomTab(title: S.current.Top.toUpperCase(), group: activityTabsSizeGroup, height: 20.h),
+                        UiKitCustomTab(
+                            title: S.current.Respect.toUpperCase(), group: activityTabsSizeGroup, height: 20.h),
+                      ],
+                      onTappedTab: (index) {
+                        _setActivityTabsContentHeight(index);
+                        _animateToSpecialTabPosition();
+                      },
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing16,
+                      left: horizontalMargin,
+                      right: horizontalMargin,
+                    ),
+                  ],
+                ),
+              ),
+              widget.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                      .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing32)
+                  : SizedBox(
+                      height: _activityTabsContentHeight,
+                      child: TabBarView(
+                        controller: activityTabsController,
+                        children: [
+                          InfluencerReviewsTab(
+                            horizontalMargin: horizontalMargin,
+                            onItemTap: widget.onItemTap,
+                            onReactionTapped: widget.onReactionTapped,
+                            profilePlaces: widget.profilePlaces,
+                            storiesPagingController: widget.storiesPagingController,
+                            tiltNotifier: widget.tiltNotifier,
+                            onExpand: () {
+                              setState(() {
+                                _activityTabsContentHeight += (widget.profilePlaces!.length - 3) *
+                                    (bigScreen
+                                        ? 0.2.sh
+                                        : midScreen
+                                            ? 0.21.sh
+                                            : 0.24.sh);
+                              });
+                            },
+                          ),
+                          if (widget.influencerTopCategories != null && widget.influencerTopCategories!.isNotEmpty)
+                            InfluencerPersonalTop(
+                              categories: widget.influencerTopCategories!,
+                              onItemTap: widget.onItemTap,
+                            ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16)
+                          else
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text(S.current.NothingFound)],
+                            ),
+                          if (widget.contentPreviewWithRespects != null &&
+                              widget.contentPreviewWithRespects!.isNotEmpty)
+                            InfluencerRespectTab(
+                              items: widget.contentPreviewWithRespects!,
+                              onItemTap: widget.onItemTap,
+                            ).paddingSymmetric(horizontal: horizontalMargin)
+                          else
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text(S.current.NothingFound)],
+                            ),
+                        ],
+                      ),
+                    ),
             ],
     );
   }

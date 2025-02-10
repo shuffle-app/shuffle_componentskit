@@ -30,7 +30,7 @@ class ChatComponent extends StatelessWidget {
   final void Function(int userId, UserTileType userType)? onProfileTapped;
   final double keyboardPadding;
   final bool isGuestView;
-  final VoidCallback? onRequestToJoinChat;
+  final Function? onRequestToJoinChat;
   final VoidCallback? onShareChat;
 
   const ChatComponent({
@@ -76,7 +76,7 @@ class ChatComponent extends StatelessWidget {
             iconWidget: ImageWidget(
               svgAsset: GraphicsFoundation.instance.svg.login,
             ),
-            onPressed: onRequestToJoinChat,
+            onPressed: () => onRequestToJoinChat?.call(),
           ),
         );
       }
@@ -155,14 +155,12 @@ class ChatComponent extends StatelessWidget {
               onChatHeaderTapped?.call(chatData.contentId!, chatData.contentType!);
             } else if (!chatData.isGroupChat) {
               final owner = chatData.owner;
-              print(owner?.name);
               if (owner == null) return;
 
               if (!chatData.userIsOwner) {
                 onProfileTapped?.call(owner.id, owner.userType);
               } else {
                 final member = chatData.members?.firstWhere((member) => member.id != owner.id);
-                print(member?.name);
                 if (member == null) return;
 
                 onProfileTapped?.call(member.id, member.userType);
@@ -234,7 +232,7 @@ class ChatComponent extends StatelessWidget {
         noItemsFoundIndicatorBuilder: (context) => isGuestView
             ? Center(
                 child: HiddenChatMockedComponent(
-                  onJoinChatRequest: chatData.joinRequested == true ? null : onRequestToJoinChat,
+                  onJoinChatRequest: chatData.joinRequested == true ? null : () => onRequestToJoinChat?.call(),
                 ),
               )
             : UiKitEmptyListPlaceHolder(
@@ -263,6 +261,31 @@ class ChatComponent extends StatelessWidget {
                     right: EdgeInsetsFoundation.horizontal20,
                     top: EdgeInsetsFoundation.vertical4,
                   ),
+                ],
+              ),
+            );
+          } else if (item.messageType == MessageType.joinRequest && item.chatJoinRequestId != null) {
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    item.message!,
+                    // '${item.senderName} ${S.of(context).WantToJoin}',
+                    style: theme?.boldTextTheme.caption3Medium.copyWith(color: theme.colorScheme?.darkNeutral900),
+                  ),
+                  SpacingFoundation.verticalSpace4,
+                  context.createSmallOutlinedButton(
+                    gradient: GradientFoundation.defaultLinearGradient,
+                    data: BaseUiKitButtonData(
+                      text: S.of(context).Allow.toUpperCase(),
+                      onPressed: () => onRequestToJoinChat?.call(item.chatJoinRequestId),
+                    ),
+                  )
                 ],
               ),
             );
@@ -354,7 +377,71 @@ class ChatComponent extends StatelessWidget {
                 ],
               ),
             );
-          } else {
+          } else  if (item.messageType == MessageType.joinRequest){
+            return VisibilityDetector(
+              key: Key(item.messageId.toString()),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0.5) onMessageVisible?.call(item.messageId);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
+                  UiKitChatInCard(
+                    onUsernameTapped: () => onProfileTapped?.call(
+                      item.senderId,
+                      item.senderProfileType ?? UserTileType.ordinary,
+                    ),
+                    showAvatar: chatData.isGroupChat,
+                    avatarUrl: item.senderAvatar,
+                    senderName: item.senderName,
+                    senderType: item.senderProfileType,
+                    senderNickname: item.senderNickname ?? '',
+                    onReplyMessage: onReplyMessage,
+                    timeOfDay: item.timeSent,
+                    id: item.messageId,
+                    hasInvitation: true,
+                    child: UiKitInviteMessageContent(
+                      hasAcceptedInvite: chatData.isGroupChat ? false : item.invitationData!.hasAcceptedInvite,
+                      brightness: isLightThemeOn ? Brightness.light : Brightness.dark,
+                      showGang: item.invitationData!.invitedPeopleAvatarPaths.isNotEmpty && chatData.isGroupChat,
+                      username: item.invitationData!.senderUserName,
+                      placeName: item.invitationData!.contentName,
+                      placeImagePath: item.invitationData!.contentImagePath,
+                      invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
+                      userType: item.invitationData!.senderUserType,
+                      onInvitePeopleTap: onAddMorePeople,
+                      onPlaceTap: () => onInvitationPlaceTap?.call(
+                        item.invitationData!.contentId,
+                        item.invitationData!.contentType,
+                      ),
+                      canDenyInvitation: chatData.readOnlyChat
+                          ? false
+                          : chatData.isGroupChat
+                          ? !item.invitationData!.hasAcceptedInvite
+                          : !chatData.hasAcceptedInvite,
+                      canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
+                      onAcceptTap: () {
+                        onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
+                      },
+                      onDenyTap: () {
+                        onDenyInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
+                      },
+                      tags: item.invitationData?.tags ?? [],
+                      customMessageData: chatData.isGroupChat
+                          ? null
+                          : InviteCustomMessageData(
+                        senderUserName: item.invitationData!.senderUserName,
+                        receiverUserName: item.invitationData!.receiverUserName,
+                        senderUserType: item.invitationData!.senderUserType,
+                        receiverUserType: item.invitationData!.receiverUserType,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else  {
             if (item.isInvitation && item.invitationData != null) {
               return VisibilityDetector(
                 key: Key(item.messageId.toString()),
