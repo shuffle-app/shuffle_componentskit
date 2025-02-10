@@ -39,41 +39,43 @@ class UiPlaceModel {
   DateTime? updatedAt;
   String? moderationStatus;
   bool archived;
+  String? chainName;
 
-  UiPlaceModel(
-      {required this.id,
-      this.title,
-      this.scheduleString,
-      this.location,
-      this.cityId,
-      this.city,
-      this.media = const [],
-      this.verticalPreview,
-      this.logo,
-      this.phone,
-      this.website,
-      this.source,
-      required this.description,
-      this.rating,
-      this.status,
-      this.price,
-      this.placeType,
-      this.branches,
-      this.updatedAt,
-      required this.tags,
-      this.baseTags = const [],
-      this.weekdays = const [],
-      this.schedule,
-      this.niche,
-      this.contentType = 'both',
-      this.userPoints,
-      this.currency,
-      this.weatherType,
-      this.bookingUrl,
-      this.bookingUiModel,
-      this.moderationStatus,
-      this.archived = false})
-      : descriptionItems = [
+  UiPlaceModel({
+    required this.id,
+    this.title,
+    this.scheduleString,
+    this.location,
+    this.cityId,
+    this.city,
+    this.media = const [],
+    this.verticalPreview,
+    this.logo,
+    this.phone,
+    this.website,
+    this.source,
+    required this.description,
+    this.rating,
+    this.status,
+    this.price,
+    this.placeType,
+    this.branches,
+    this.updatedAt,
+    required this.tags,
+    this.baseTags = const [],
+    this.weekdays = const [],
+    this.schedule,
+    this.niche,
+    this.contentType = 'both',
+    this.userPoints,
+    this.currency,
+    this.weatherType,
+    this.bookingUrl,
+    this.bookingUiModel,
+    this.moderationStatus,
+    this.archived = false,
+    this.chainName,
+  })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
           if (phone != null && phone.isNotEmpty) UiDescriptionItemModel(title: S.current.Phone, description: phone),
@@ -158,6 +160,7 @@ class UiPlaceModel {
     BookingUiModel? bookingUiModel,
     DateTime? updatedAt,
     String? moderationStatus,
+    String? chainName,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -191,6 +194,7 @@ class UiPlaceModel {
         currency: currency ?? this.currency,
         updatedAt: updatedAt ?? this.updatedAt,
         moderationStatus: moderationStatus ?? this.moderationStatus,
+        chainName: chainName ?? this.chainName,
       );
 
   UiPlaceModel.empty()
