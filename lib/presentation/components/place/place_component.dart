@@ -45,6 +45,8 @@ class PlaceComponent extends StatefulWidget {
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
   final Set<int>? likedReviews;
+  final VoidCallback? onCreateBranchesTap;
+  final ValueChanged<int>? removeBranchItem;
 
   const PlaceComponent({
     super.key,
@@ -80,6 +82,8 @@ class PlaceComponent extends StatefulWidget {
     this.showTranslateButton,
     this.currentUserId,
     this.likedReviews,
+    this.onCreateBranchesTap,
+    this.removeBranchItem,
   });
 
   @override
@@ -90,6 +94,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
+
+  bool showUnlink = false;
 
   // Set<int> likedReviews = {};
 
@@ -262,6 +268,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
           showTranslateButton: widget.showTranslateButton,
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
+          onCreateBranchesTap: widget.onCreateBranchesTap,
+          removeBranchItem: widget.removeBranchItem,
+          branchName: widget.place.chainName,
           branches: widget.place.branches,
           onImageTap: (index) {
             final media = widget.place.media[index];
