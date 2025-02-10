@@ -118,7 +118,7 @@ class UsersBookingsControl extends StatelessWidget {
                   ],
                 ),
               ),
-              if (noShows != null && noShows! > 0)
+              if (noShows != null)
                 UiKitNoShowCard(noShows: noShows!).paddingOnly(
                   left: SpacingFoundation.horizontalSpacing8,
                   right: checkBox ? SpacingFoundation.horizontalSpacing8 : 0.0,
