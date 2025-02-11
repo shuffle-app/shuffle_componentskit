@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +13,8 @@ class SchedulerComponent extends StatefulWidget {
   final Future<List<UiUniversalModel>> Function(DateTime firstDay, DateTime lastDay) eventLoader;
   final Function(DateTime focusedDay)? onPageChanged;
   final ValueChanged<UiUniversalModel>? openContentCallback;
+  final ValueChanged<int>? onContentDeleted;
+  final ValueChanged<int>? onNotificationSetRequested;
 
   const SchedulerComponent(
       {super.key,
@@ -19,6 +22,8 @@ class SchedulerComponent extends StatefulWidget {
       required this.focusedDate,
       required this.eventLoader,
       this.onPageChanged,
+      this.onContentDeleted,
+      this.onNotificationSetRequested,
       this.openContentCallback});
 
   @override
@@ -31,6 +36,9 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   final Duration pageTransitionDuration = Duration(milliseconds: 300);
   final Curve pageTransitionCurve = Curves.easeInOut;
   bool wasChangedDateToSpecific = false;
+  final Duration showingDuration = const Duration(milliseconds: 100);
+  double showingOpacity = 0.0;
+  final List<int> deletedCards = List.empty(growable: true);
 
   PageController? pageController;
 
@@ -64,6 +72,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   void fetchData() async {
     setState(() {
       currentContent.clear();
+      showingOpacity = 0;
     });
     currentContent.addAll(await widget.eventLoader(firstDayToLoad, lastDayToLoad));
     setState(() {
@@ -74,6 +83,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                 ?.shouldVisitAt! ??
             focusedDate;
       }
+      showingOpacity = 1;
     });
   }
 
@@ -111,6 +121,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
               onTap: pageController?.page == 0
                   ? null
                   : () {
+                      FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
                       pageController?.previousPage(duration: pageTransitionDuration, curve: pageTransitionCurve);
                     },
               iconData: ShuffleUiKitIcons.chevronleft,
@@ -118,6 +129,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             SpacingFoundation.horizontalSpace16,
             FlatCircleButton(
               onTap: () {
+                FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
                 pageController?.nextPage(duration: pageTransitionDuration, curve: pageTransitionCurve);
               },
               iconData: ShuffleUiKitIcons.chevronright,
@@ -136,6 +148,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           lastDay: lastDay,
           onPageChanged: (DateTime focusedDay) {
             if (focusedDay.month != focusedDate.month) {
+              FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
               setState(() {
                 focusedDate = focusedDay;
                 wasChangedDateToSpecific = false;
@@ -147,10 +160,21 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           onDaySelected: (
             DateTime selectedDay,
             DateTime focusedDay,
-          ) {
+          ) async {
+            if (!selectedDay.isAtSameDayAs(focusedDay)) {
+              return;
+            }
+            setState(() {
+              showingOpacity = 0;
+            });
+            FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
+            await Future.delayed(
+              Duration.zero,
+            );
             setState(() {
               focusedDate = focusedDay;
               wasChangedDateToSpecific = true;
+              showingOpacity = 1;
             });
           },
         ),
@@ -171,14 +195,68 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
         for (var content in (wasChangedDateToSpecific
             ? currentContent.where((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)
             : currentContent))
-          UiKitPlannerContentCard(
-            onTap: () => widget.openContentCallback?.call(content),
-            avatarPath: content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
-                content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
-            contentTitle: content.title ?? '',
-            tags: content.baseTags ?? [],
-            dateTime: content.shouldVisitAt ?? DateTime.now(),
-          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+          AnimatedOpacity(
+              opacity: showingOpacity,
+              duration: showingDuration,
+              child: Dismissible(
+                  key: ValueKey(content.id),
+                  direction: DismissDirection.endToStart,
+                  background: ClipRRect(
+                      borderRadius: BorderRadiusFoundation.all24,
+                      clipBehavior: Clip.hardEdge,
+                      child: ColoredBox(
+                        color: Colors.red,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Icon(
+                            ShuffleUiKitIcons.trash,
+                            color: Colors.white,
+                          ),
+                        ).paddingOnly(right: SpacingFoundation.horizontalSpacing16),
+                      )),
+                  confirmDismiss: (direction) async {
+                    bool confirmation = false;
+
+                    await showUiKitAlertDialog(
+                        context,
+                        AlertDialogData(
+                            title: Text(
+                              S.of(context).YouSureToDeleteX(content.title ?? ''),
+                              style: theme?.boldTextTheme.title2.copyWith(color: Colors.black),
+                            ),
+                            defaultButtonText: S.of(context).Cancel,
+                            additionalButton: context.dialogButton(
+                                small: true,
+                                dialogButtonType: DialogButtonType.buttonRed,
+                                data: BaseUiKitButtonData(
+                                    text: S.of(context).Confirm,
+                                    onPressed: () {
+                                      confirmation = true;
+                                      navigatorKey.currentState?.pop();
+                                    }))));
+
+                    return confirmation;
+                  },
+                  dismissThresholds: {DismissDirection.endToStart: 0.5},
+                  onDismissed: (direction) async {
+                    setState(() {
+                      deletedCards.add(content.id);
+                      currentContent.removeWhere((e) => e.id == content.id);
+                    });
+                    widget.onContentDeleted?.call(content.id);
+                  },
+                  child: UiKitPlannerContentCard(
+                    onNotification: () => widget.onNotificationSetRequested?.call(content.id),
+                    showNotificationSet: content.hasNotificationSet,
+                    onTap: () => widget.openContentCallback?.call(content),
+                    avatarPath:
+                        content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
+                            content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
+                    contentTitle: content.title ?? '',
+                    tags: content.baseTags ?? [],
+                    dateTime: content.shouldVisitAt ?? DateTime.now(),
+                  ))).paddingSymmetric(
+              horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical8),
         MediaQuery.of(context).viewInsets.bottom.heightBox
       ],
     );

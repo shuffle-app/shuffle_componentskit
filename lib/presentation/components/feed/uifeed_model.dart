@@ -52,6 +52,7 @@ class UiUniversalModel extends Advertisable {
   DateTime? shouldVisitAt;
   final String? placeName;
   final bool isArchieved;
+  final bool hasNotificationSet;
 
   UiUniversalModel({
     required this.id,
@@ -72,6 +73,7 @@ class UiUniversalModel extends Advertisable {
     this.weatherType,
     this.placeName,
     this.isArchieved = false,
+    this.hasNotificationSet = false,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -92,6 +94,7 @@ class UiUniversalModel extends Advertisable {
     this.shouldVisitAt,
     this.weatherType,
     this.placeName,
+    this.hasNotificationSet = false,
     this.isArchieved = false,
   }) : super(isAdvertisement: true);
 
@@ -114,6 +117,7 @@ class UiUniversalModel extends Advertisable {
     this.weatherType,
     this.placeName,
     this.isArchieved = false,
+    this.hasNotificationSet = false,
   }) : super(isAdvertisement: false);
 
   factory UiUniversalModel.fromPlaceUiModel(UiPlaceModel placeModel) => UiUniversalModel(
@@ -165,4 +169,45 @@ class UiUniversalModel extends Advertisable {
 
   @override
   int get hashCode => id.hashCode ^ type.hashCode;
+
+  UiUniversalModel copyWith({
+    int? id,
+    String? type,
+    List<BaseUiKitMedia>? media,
+    String? description,
+    List<UiKitTag>? tags,
+    List<UiKitTag>? baseTags,
+    double? rating,
+    String? website,
+    List<String>? weekdays,
+    String? location,
+    String? source,
+    String? title,
+    Stream<bool>? isFavorite,
+    VoidCallback? onFavoriteChanged,
+    DateTime? shouldVisitAt,
+    PlaceWeatherType? weatherType,
+    String? placeName,
+    bool? isArchieved,
+    bool? hasNotificationSet,
+  }) => UiUniversalModel(
+    id: id?? this.id,
+    type: type?? this.type,
+    media: media?? this.media,
+    description: description?? this.description,
+    tags: tags?? this.tags,
+    baseTags: baseTags?? this.baseTags,
+    rating: rating?? this.rating,
+    website: website?? this.website,
+    weekdays: weekdays?? this.weekdays,
+    location: location?? this.location,
+    source: source?? this.source,
+    title: title?? this.title,
+    isFavorite: isFavorite?? this.isFavorite,
+    onFavoriteChanged: onFavoriteChanged?? this.onFavoriteChanged,
+    shouldVisitAt: shouldVisitAt?? this.shouldVisitAt,
+    weatherType: weatherType?? this.weatherType,
+    placeName: placeName?? this.placeName,
+    isArchieved: isArchieved?? this.isArchieved,
+  );
 }
