@@ -23,6 +23,7 @@ class ContentStatisticsComponent extends StatelessWidget {
   final VoidCallback? onAdvertisingShowTap;
 
   String get title => place?.title ?? event?.title ?? '';
+
   String get city => place?.city ?? event?.city ?? '';
 
   // final _tabs = [
@@ -232,7 +233,10 @@ class ContentStatisticsComponent extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 4,
-                        child: UiKitPieChart(data: uniqueStatisticsModel!.viewSourcesData),
+                        child: UiKitPieChart(
+                          data: uniqueStatisticsModel!.viewSourcesData,
+                          renderHeight: 0.275625.sw,
+                        ),
                       ),
                       SpacingFoundation.horizontalSpace24,
                       Expanded(

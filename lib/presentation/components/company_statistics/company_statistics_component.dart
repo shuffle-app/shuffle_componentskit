@@ -208,7 +208,10 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                     children: [
                       Expanded(
                         flex: 4,
-                        child: UiKitPieChart(data: widget.uniqueStatisticsModel!.viewSourcesData),
+                        child: UiKitPieChart(
+                          data: widget.uniqueStatisticsModel!.viewSourcesData,
+                          renderHeight: 0.275625.sw,
+                        ),
                       ),
                       SpacingFoundation.horizontalSpace24,
                       Expanded(
