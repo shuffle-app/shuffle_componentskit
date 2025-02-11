@@ -23,6 +23,7 @@ class CompanyStatisticsComponent extends StatefulWidget {
   final ValueChanged<String>? onStatisticsPopupMenuItemTapped;
   final List<UiEventModel>? events;
   final List<UiPlaceModel>? places;
+  final VoidCallback? onAdvertisingShowTap;
 
   const CompanyStatisticsComponent({
     super.key,
@@ -42,6 +43,7 @@ class CompanyStatisticsComponent extends StatefulWidget {
     this.places,
     this.onEventTapped,
     this.onPlaceTapped,
+    this.onAdvertisingShowTap,
   });
 
   @override
@@ -58,6 +60,7 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.uiKitTheme;
     final boldTextTheme = context.uiKitTheme?.boldTextTheme;
     final colorScheme = context.uiKitTheme?.colorScheme;
     TextStyle? textStyle = boldTextTheme?.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
@@ -99,6 +102,36 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
           UiKitLineChart(
             chartData: widget.feedbackStats!,
           ),
+        //TODO when back add noShows for statistic
+        // SpacingFoundation.verticalSpace16,
+        // UiKitCardWrapper(
+        //   color: theme?.colorScheme.surface3,
+        //   child: Column(
+        //     children: [
+        //       Row(
+        //         children: [
+        //           Expanded(
+        //             child: UiKitNoShowStatisticCard(
+        //               percent: 12,
+        //             ),
+        //           ),
+        //           SpacingFoundation.horizontalSpace8,
+        //           Expanded(
+        //             child: UiKitNoShowStatisticCard(
+        //               percent: 93,
+        //               isNoShows: false,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //       SpacingFoundation.verticalSpace8,
+        //       UiKitAdvertisingShowCard(
+        //         isBigShowUpPercent: true,
+        //         onTap: widget.onAdvertisingShowTap,
+        //       ),
+        //     ],
+        //   ).paddingAll(EdgeInsetsFoundation.all16),
+        // ),
         SpacingFoundation.verticalSpace16,
         if (widget.bookingAndFavorites != null)
           UiKitLineChart(

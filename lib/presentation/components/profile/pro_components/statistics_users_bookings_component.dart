@@ -29,7 +29,7 @@ class StatisticsUsersBookingsComponent extends StatelessWidget {
   ];
 
   StatisticsUsersBookingsComponent({
-    Key? key,
+    super.key,
     required this.dateRange,
     required this.tabController,
     required this.bookingUsersPaginationController,
@@ -38,7 +38,7 @@ class StatisticsUsersBookingsComponent extends StatelessWidget {
     this.onTappedTab,
     this.onCreateReminder,
     this.onShowReminders,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +111,7 @@ class StatisticsUsersBookingsComponent extends StatelessWidget {
                       imageUrl: item.avatarUrl,
                     ),
                     subtitle: item.username,
+                    noShows: item.noShows != null ? UiKitNoShowCard(noShows: item.noShows!) : null,
                   ),
                   firstPageProgressIndicatorBuilder: (context) => Column(
                     children: List.generate(
@@ -159,6 +160,7 @@ class StatisticsUsersBookingsComponent extends StatelessWidget {
                       imageUrl: item.avatarUrl,
                     ),
                     subtitle: item.username,
+                    noShows: item.noShows != null ? UiKitNoShowCard(noShows: item.noShows!) : null,
                   ),
                   firstPageProgressIndicatorBuilder: (context) => Column(
                     children: List.generate(
