@@ -83,6 +83,32 @@ class PlacePreview extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (place.chainName?.value != null && place.chainName!.value!.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ImageWidget(
+                  iconData: ShuffleUiKitIcons.unlink,
+                  color: ColorsFoundation.mutedText,
+                  width: 14.w,
+                  height: 14.w,
+                ),
+                SpacingFoundation.horizontalSpace12,
+                ValueListenableBuilder(
+                  valueListenable: place.chainName!,
+                  builder: (__, value, _) {
+                    return Text(
+                      value ?? S.of(context).Branches,
+                      style: theme?.boldTextTheme.caption1Medium.copyWith(color: ColorsFoundation.mutedText),
+                    );
+                  },
+                ),
+              ],
+            ).paddingOnly(
+              bottom: SpacingFoundation.verticalSpacing4,
+              right: SpacingFoundation.horizontalSpacing16,
+              left: SpacingFoundation.horizontalSpacing16,
+            ),
           StreamBuilder<bool>(
               stream: isFavorite ?? Stream.value(false),
               builder: (context, snapshot) => Align(
