@@ -46,7 +46,9 @@ class PlaceComponent extends StatefulWidget {
   final int? currentUserId;
   final Set<int>? likedReviews;
   final VoidCallback? onCreateBranchesTap;
+  final Function(int, String?)? onRenameBranchesTap;
   final ValueChanged<int>? removeBranchItem;
+  final bool showBranches;
 
   const PlaceComponent({
     super.key,
@@ -83,7 +85,9 @@ class PlaceComponent extends StatefulWidget {
     this.currentUserId,
     this.likedReviews,
     this.onCreateBranchesTap,
+    this.onRenameBranchesTap,
     this.removeBranchItem,
+    this.showBranches = false,
   });
 
   @override
@@ -269,7 +273,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
           onCreateBranchesTap: widget.onCreateBranchesTap,
+          onRenameTap: () =>
+              widget.onRenameBranchesTap?.call(widget.place.chainId ?? -1, widget.place.chainName?.value),
           removeBranchItem: widget.removeBranchItem,
+          showBranches: widget.showBranches,
           branchName: widget.place.chainName,
           branches: widget.place.branches,
           onImageTap: (index) {
