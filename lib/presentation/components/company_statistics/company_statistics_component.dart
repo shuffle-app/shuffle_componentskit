@@ -102,35 +102,36 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
           UiKitLineChart(
             chartData: widget.feedbackStats!,
           ),
-        SpacingFoundation.verticalSpace16,
-        UiKitCardWrapper(
-          color: theme?.colorScheme.surface3,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: UiKitNoShowStatisticCard(
-                      percent: 12,
-                    ),
-                  ),
-                  SpacingFoundation.horizontalSpace8,
-                  Expanded(
-                    child: UiKitNoShowStatisticCard(
-                      percent: 93,
-                      isNoShows: false,
-                    ),
-                  ),
-                ],
-              ),
-              SpacingFoundation.verticalSpace8,
-              UiKitAdvertisingShowCard(
-                isBigShowUpPercent: true,
-                onTap: widget.onAdvertisingShowTap,
-              ),
-            ],
-          ).paddingAll(EdgeInsetsFoundation.all16),
-        ),
+        //TODO when back add noShows for statistic
+        // SpacingFoundation.verticalSpace16,
+        // UiKitCardWrapper(
+        //   color: theme?.colorScheme.surface3,
+        //   child: Column(
+        //     children: [
+        //       Row(
+        //         children: [
+        //           Expanded(
+        //             child: UiKitNoShowStatisticCard(
+        //               percent: 12,
+        //             ),
+        //           ),
+        //           SpacingFoundation.horizontalSpace8,
+        //           Expanded(
+        //             child: UiKitNoShowStatisticCard(
+        //               percent: 93,
+        //               isNoShows: false,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //       SpacingFoundation.verticalSpace8,
+        //       UiKitAdvertisingShowCard(
+        //         isBigShowUpPercent: true,
+        //         onTap: widget.onAdvertisingShowTap,
+        //       ),
+        //     ],
+        //   ).paddingAll(EdgeInsetsFoundation.all16),
+        // ),
         SpacingFoundation.verticalSpace16,
         if (widget.bookingAndFavorites != null)
           UiKitLineChart(
