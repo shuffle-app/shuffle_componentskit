@@ -39,7 +39,8 @@ class UiPlaceModel {
   DateTime? updatedAt;
   String? moderationStatus;
   bool archived;
-  String? chainName;
+  ValueNotifier<String?>? chainName;
+  int? chainId;
 
   UiPlaceModel({
     required this.id,
@@ -75,6 +76,7 @@ class UiPlaceModel {
     this.moderationStatus,
     this.archived = false,
     this.chainName,
+    this.chainId,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
@@ -160,7 +162,8 @@ class UiPlaceModel {
     BookingUiModel? bookingUiModel,
     DateTime? updatedAt,
     String? moderationStatus,
-    String? chainName,
+    ValueNotifier<String?>? chainName,
+    int? chainId,
   }) =>
       UiPlaceModel(
         id: id ?? this.id,
@@ -195,6 +198,7 @@ class UiPlaceModel {
         updatedAt: updatedAt ?? this.updatedAt,
         moderationStatus: moderationStatus ?? this.moderationStatus,
         chainName: chainName ?? this.chainName,
+        chainId: chainId ?? this.chainId,
       );
 
   UiPlaceModel.empty()
