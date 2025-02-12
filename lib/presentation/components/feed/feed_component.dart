@@ -474,15 +474,18 @@ class FeedComponent extends StatelessWidget {
                     SpacingFoundation.verticalSpace8.wrapSliverBox,
                     ConstrainedBox(
                         constraints: BoxConstraints.loose(Size(double.infinity, 40.h)),
-                        child: ListView.builder(
+                        child: ListView.separated(
                             key: chipsPageStorageKey,
                             controller: chipsScrollController,
                             padding: EdgeInsets.only(left: horizontalMargin),
+                            addAutomaticKeepAlives: false,
+                            addRepaintBoundaries: false,
                             primary: false,
                             shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
+                            physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                             scrollDirection: Axis.horizontal,
                             itemCount: feed.filterChips!.length + 1 + (hasFavourites ? 1 : 0),
+                            separatorBuilder: (_, __) => horizontalMargin.widthBox,
                             itemBuilder: (context, index) {
                               if (index == 0) {
                                 return RollingDiceButton(
@@ -495,19 +498,14 @@ class FeedComponent extends StatelessWidget {
                                       onTagSortPressed?.call('Random', list);
                                     },
                                     length: feed.filterChips?.length ?? 0);
-                              } else if (index == 1) {
-                                if (hasFavourites) {
-                                  return UiKitTitledFilterChip(
-                                    //const flag for showing favorites is 'Favorites'
-                                    selected:
-                                        feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
-                                    title: S.of(context).Favorites,
-                                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
-                                    icon: ShuffleUiKitIcons.starfill,
-                                  ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing8);
-                                } else {
-                                  return SpacingFoundation.horizontalSpace8;
-                                }
+                              } else if (hasFavourites && index == 1) {
+                                return UiKitTitledFilterChip(
+                                  //const flag for showing favorites is 'Favorites'
+                                  selected: feed.activeFilterChips?.map((e) => e.title).contains('Favorites') ?? false,
+                                  title: S.of(context).Favorites,
+                                  onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!('Favorites'),
+                                  icon: ShuffleUiKitIcons.starfill,
+                                );
                               } else {
                                 return feed.filterChips!
                                     .map((e) => UiKitTitledFilterChip(
@@ -516,8 +514,8 @@ class FeedComponent extends StatelessWidget {
                                           title: e.title,
                                           onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
                                           icon: e.icon,
-                                        ).paddingOnly(right: horizontalMargin))
-                                    .toList()[index - 2];
+                                        ))
+                                    .toList()[index - (hasFavourites ? 2 : 1)];
                               }
                             })).wrapSliverBox,
                   ],
