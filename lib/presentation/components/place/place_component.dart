@@ -45,8 +45,8 @@ class PlaceComponent extends StatefulWidget {
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
   final Set<int>? likedReviews;
-  final VoidCallback? onCreateBranchesTap;
-  final Function(int, String?)? onRenameBranchesTap;
+  final Future<String?> Function()? onCreateBranchesTap;
+  final Future<String?> Function(int, String?)? onRenameBranchesTap;
   final ValueChanged<int>? removeBranchItem;
   final bool showBranches;
 
@@ -98,8 +98,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
-
-  bool showUnlink = false;
 
   // Set<int> likedReviews = {};
 
@@ -273,8 +271,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
           onCreateBranchesTap: widget.onCreateBranchesTap,
-          onRenameTap: () =>
-              widget.onRenameBranchesTap?.call(widget.place.chainId ?? -1, widget.place.chainName?.value),
+          onRenameTap: () async {
+            final upcomingName = widget.onRenameBranchesTap?.call(widget.place.chainId ?? -1, widget.place.chainName);
+            return upcomingName;
+          },
           removeBranchItem: widget.removeBranchItem,
           showBranches: widget.showBranches,
           branchName: widget.place.chainName,
