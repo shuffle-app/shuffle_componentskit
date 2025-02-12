@@ -17,6 +17,7 @@ class BookingsControlUserList extends StatefulWidget {
   final bool canBookingEdit;
   final bool isLoading;
   final String? bookingUrl;
+  final int? showUpRatio;
 
   const BookingsControlUserList({
     super.key,
@@ -30,6 +31,7 @@ class BookingsControlUserList extends StatefulWidget {
     this.isLoading = false,
     this.bookingUrl,
     this.onChangeBookingUrl,
+    this.showUpRatio,
   });
 
   @override
@@ -115,7 +117,6 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
         ),
         centerTitle: true,
         autoImplyLeading: true,
-        childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
           Row(
             children: [
@@ -155,9 +156,61 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                     ),
                   )
             ],
-          ),
+          ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+          if (widget.showUpRatio != null && widget.showUpRatio! > 0)
+            UiKitCardWrapper(
+              color: theme?.colorScheme.surface2,
+              border: BorderSide(color: ColorsFoundation.neutral16),
+              borderRadius: BorderRadiusFoundation.all8,
+              child: Row(
+                children: [
+                  SpacingFoundation.horizontalSpace12,
+                  Flexible(
+                    flex: 2,
+                    child: AutoSizeText(
+                      S.of(context).ShowUpRatio.toUpperCase(),
+                      style: theme?.regularTextTheme.caption1UpperCase,
+                      maxLines: 1,
+                    ),
+                  ),
+                  SpacingFoundation.horizontalSpace8,
+                  Builder(
+                    builder: (context) => GestureDetector(
+                      onTap: () => showUiKitPopover(
+                        context,
+                        customMinHeight: 30.h,
+                        showButton: false,
+                        title: Text(
+                          S.of(context).BookingPopUpText,
+                          style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      child: ImageWidget(
+                        iconData: ShuffleUiKitIcons.info,
+                        width: 16.w,
+                        color: theme?.colorScheme.darkNeutral900,
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  GradientableWidget(
+                    gradient: GradientFoundation.attentionCard,
+                    child: Text(
+                      '${widget.showUpRatio}%',
+                      style: boldTextTheme?.body,
+                    ),
+                  ),
+                  SpacingFoundation.horizontalSpace12,
+                ],
+              ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing10),
+            ).paddingOnly(
+              bottom: SpacingFoundation.horizontalSpacing16,
+              left: SpacingFoundation.horizontalSpacing16,
+              right: SpacingFoundation.horizontalSpacing16,
+            ),
           if (widget.isLoading)
-            const Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator()).paddingAll(EdgeInsetsFoundation.all16)
           else if (isUrlBooking)
             Form(
               key: _formKey,
@@ -174,7 +227,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                   });
                 },
               ),
-            )
+            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16)
           else if (groupedUsers.isNotEmpty) ...[
             ...groupedUsers.map(
               (group) => Column(
@@ -182,6 +235,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                     .map(
                       (e) => UsersBookingsControl(
                         element: e,
+                        noShows: e.noShows,
                         isFirst: e == group.first,
                         checkBox: checkBoxOn,
                         onLongPress: () => setState(() {
@@ -192,7 +246,11 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                         }),
                         onPopupMenuSelected: widget.onPopupMenuSelected,
                         onRequestsRefund: () => widget.onRequestsRefund?.call(e),
-                      ).paddingOnly(bottom: group.last == e ? SpacingFoundation.verticalSpacing16 : 0),
+                      ).paddingOnly(
+                        bottom: group.last == e ? SpacingFoundation.verticalSpacing16 : 0,
+                        left: SpacingFoundation.horizontalSpacing16,
+                        right: checkBoxOn ? SpacingFoundation.horizontalSpacing16 : 0.0,
+                      ),
                     )
                     .toList(),
               ),
@@ -202,7 +260,7 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
             Text(
               S.of(context).NoBookingsYet,
               style: boldTextTheme?.body,
-            )
+            ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16)
         ],
       ),
       bottomNavigationBar: groupedUsers.isNotEmpty

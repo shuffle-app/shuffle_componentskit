@@ -3,6 +3,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+final AutoSizeGroup _group = AutoSizeGroup();
+
 class ContentStatisticsComponent extends StatelessWidget {
   final TabController tabController;
   final UniqueStatisticsModel? uniqueStatisticsModel;
@@ -18,8 +20,10 @@ class ContentStatisticsComponent extends StatelessWidget {
   final ValueChanged<String>? onStatisticsPopupMenuItemTapped;
   final UiPlaceModel? place;
   final UiEventModel? event;
+  final VoidCallback? onAdvertisingShowTap;
 
   String get title => place?.title ?? event?.title ?? '';
+
   String get city => place?.city ?? event?.city ?? '';
 
   // final _tabs = [
@@ -44,6 +48,7 @@ class ContentStatisticsComponent extends StatelessWidget {
     this.onStatisticsPopupMenuItemTapped,
     this.place,
     this.event,
+    this.onAdvertisingShowTap,
   });
 
   @override
@@ -116,6 +121,38 @@ class ContentStatisticsComponent extends StatelessWidget {
             key: ValueKey(feedbackStats),
             chartData: feedbackStats!,
           ),
+        //TODO when back add noShows for statistic
+        // SpacingFoundation.verticalSpace16,
+        // UiKitCardWrapper(
+        //   color: theme?.colorScheme.surface3,
+        //   child: Column(
+        //     children: [
+        //       Row(
+        //         children: [
+        //           Expanded(
+        //             child: UiKitNoShowStatisticCard(
+        //               percent: 67,
+        //               group: _group,
+        //             ),
+        //           ),
+        //           SpacingFoundation.horizontalSpace8,
+        //           Expanded(
+        //             child: UiKitNoShowStatisticCard(
+        //               percent: 67,
+        //               isNoShows: false,
+        //               group: _group,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //       SpacingFoundation.verticalSpace8,
+        //       UiKitAdvertisingShowCard(
+        //         isBigShowUpPercent: true,
+        //         onTap: onAdvertisingShowTap,
+        //       ),
+        //     ],
+        //   ).paddingAll(EdgeInsetsFoundation.all16),
+        // ),
         SpacingFoundation.verticalSpace16,
         if (bookingAndFavorites != null)
           UiKitLineChart(
@@ -196,7 +233,10 @@ class ContentStatisticsComponent extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 4,
-                        child: UiKitPieChart(data: uniqueStatisticsModel!.viewSourcesData),
+                        child: UiKitPieChart(
+                          data: uniqueStatisticsModel!.viewSourcesData,
+                          renderHeight: 0.275625.sw,
+                        ),
                       ),
                       SpacingFoundation.horizontalSpace24,
                       Expanded(
