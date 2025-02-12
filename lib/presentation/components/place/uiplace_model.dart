@@ -39,7 +39,7 @@ class UiPlaceModel {
   DateTime? updatedAt;
   String? moderationStatus;
   bool archived;
-  ValueNotifier<String?>? chainName;
+  String? chainName;
   int? chainId;
 
   UiPlaceModel({
@@ -162,7 +162,7 @@ class UiPlaceModel {
     BookingUiModel? bookingUiModel,
     DateTime? updatedAt,
     String? moderationStatus,
-    ValueNotifier<String?>? chainName,
+    String? chainName,
     int? chainId,
   }) =>
       UiPlaceModel(
