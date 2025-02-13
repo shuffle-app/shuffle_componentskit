@@ -17,7 +17,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final UiPlaceModel? placeToEdit;
   final VoidCallback? onPlaceDeleted;
   final Future Function(UiPlaceModel) onPlaceCreated;
-  final Future<String?> Function()? getLocation;
+  final Future<String?> Function(String?)? getLocation;
   final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
   final List<UiKitTag> Function(String) propertiesOptions;
@@ -255,7 +255,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             UiKitInputFieldNoFill(
               label: S.of(context).Address,
               onTap: () async {
-                _locationController.text = await widget.getLocation?.call() ?? '';
+                _locationController.text = await widget.getLocation?.call(_cityController.text) ?? '';
                 _placeToEdit.location = _locationController.text;
               },
               readOnly: true,

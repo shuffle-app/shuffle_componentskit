@@ -17,7 +17,7 @@ class CreateEventComponent extends StatefulWidget {
   final UiEventModel? eventToEdit;
   final VoidCallback? onEventDeleted;
   final Future Function(UiEventModel) onEventCreated;
-  final Future<String?> Function()? getLocation;
+  final Future<String?> Function(String?)? getLocation;
   final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
   final List<UiKitTag> Function(String) propertiesOptions;
@@ -275,7 +275,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
             onTap: () async {
-              _locationController.text = await widget.getLocation?.call() ?? '';
+              _locationController.text = await widget.getLocation?.call(_cityController.text) ?? '';
               _eventToEdit.location = _locationController.text;
 
               FocusManager.instance.primaryFocus?.unfocus();
