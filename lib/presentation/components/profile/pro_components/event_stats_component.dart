@@ -21,10 +21,9 @@ class ContentStatisticsComponent extends StatelessWidget {
   final UiPlaceModel? place;
   final UiEventModel? event;
   final VoidCallback? onAdvertisingShowTap;
+  final String? city;
 
   String get title => place?.title ?? event?.title ?? '';
-
-  String get city => place?.city ?? event?.city ?? '';
 
   // final _tabs = [
   //   CustomTabData(title: S.current.GeneraFem, customValue: 'general'),
@@ -49,6 +48,7 @@ class ContentStatisticsComponent extends StatelessWidget {
     this.place,
     this.event,
     this.onAdvertisingShowTap,
+    this.city,
   });
 
   @override
@@ -75,7 +75,7 @@ class ContentStatisticsComponent extends StatelessWidget {
       //         : null,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
-        if (city.isNotEmpty)
+        if (city != null && city!.isNotEmpty)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -85,7 +85,7 @@ class ContentStatisticsComponent extends StatelessWidget {
                   color: ColorsFoundation.neutral24,
                 ),
                 child: Text(
-                  city,
+                  city!,
                   style: boldTextTheme?.caption3Medium,
                 ).paddingSymmetric(
                   horizontal: SpacingFoundation.horizontalSpacing8,
