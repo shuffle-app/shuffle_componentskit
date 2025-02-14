@@ -1,5 +1,3 @@
-import 'package:shuffle_uikit/shuffle_uikit.dart';
-
 final largeBanners = [
   'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/app-ads-banners/mock_ad_banner_1.png',
   'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/app-ads-banners/mock_ad_banner_2.png',
@@ -42,3 +40,8 @@ final smallBanners = [
   'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/app-ads-banners/mock_ad_banner_12.png',
   'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/app-ads-banners/mock_ad_banner_17.png'
 ];
+
+final thaiBanners = List.generate(
+    9,
+    (index) =>
+        'https://shuffle-app-production.s3.eu-west-2.amazonaws.com/static-files/app-ads-banners/Thailand-${index + 1}.png');

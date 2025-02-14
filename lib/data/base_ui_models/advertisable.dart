@@ -7,10 +7,17 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 abstract class Advertisable {
   final bool isAdvertisement;
+  int? _randomIndexForBanner;
+  List<String> _customSmallBanners = smallBanners;
+  List<String> _customMediumBanners = mediumBanners;
+  List<String> _customLargeBanners = largeBanners;
   late final UiKitSwiperAdCard largeTextBanner = _randomLargeTextBanner;
-  late final String smallBannerImage = _randomSmallBannerPicture;
-  late final String mediumBannerImage = _randomMediumBannerPicture;
-  late final String largeBannerImage = _randomLargeBannerPicture;
+
+  String get smallBannerImage => _randomSmallBannerPicture;
+
+  String get mediumBannerImage => _randomMediumBannerPicture;
+
+  String get largeBannerImage => _randomLargeBannerPicture;
   late final Widget smallTextBanner = _randomSmallTextAdBanner;
   @JsonKey(includeFromJson: false, includeToJson: false)
   late final AdvertisementBannerType bannerType;
@@ -24,6 +31,13 @@ abstract class Advertisable {
     } else {
       bannerType = AdvertisementBannerType.picture;
     }
+  }
+
+  void setBanners(List<String> smallBanners, List<String> mediumBanners, List<String> largeBanners) {
+    _randomIndexForBanner = null;
+    _customSmallBanners = smallBanners;
+    _customMediumBanners = mediumBanners;
+    _customLargeBanners = largeBanners;
   }
 
   Widget spinnerTextBanner(double customHeight) {
@@ -55,18 +69,21 @@ abstract class Advertisable {
   }
 
   String get _randomSmallBannerPicture {
-    final randomIndex = Random().nextInt(smallBanners.length - 1);
-    return smallBanners.elementAt(randomIndex);
+    final randomIndex = _randomIndexForBanner ?? Random().nextInt(_customSmallBanners.length - 1);
+    _randomIndexForBanner = randomIndex;
+    return _customSmallBanners.elementAt(randomIndex);
   }
 
   String get _randomMediumBannerPicture {
-    final randomIndex = Random().nextInt(mediumBanners.length - 1);
-    return mediumBanners.elementAt(randomIndex);
+    final randomIndex = _randomIndexForBanner ?? Random().nextInt(_customMediumBanners.length - 1);
+    _randomIndexForBanner = randomIndex;
+    return _customMediumBanners.elementAt(randomIndex);
   }
 
   String get _randomLargeBannerPicture {
-    final randomIndex = Random().nextInt(largeBanners.length - 1);
-    return largeBanners.elementAt(randomIndex);
+    final randomIndex = _randomIndexForBanner ?? Random().nextInt(_customLargeBanners.length - 1);
+    _randomIndexForBanner = randomIndex;
+    return _customLargeBanners.elementAt(randomIndex);
   }
 }
 
