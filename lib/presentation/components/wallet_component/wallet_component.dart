@@ -3,7 +3,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 /// Test variant, when implement really wallet refactor code first
 class WalletComponent extends StatefulWidget {
-  const WalletComponent({super.key});
+  final double? money;
+  const WalletComponent({super.key, this.money});
 
   @override
   State<WalletComponent> createState() => _WalletComponentState();
@@ -32,12 +33,14 @@ class _WalletComponentState extends State<WalletComponent> with SingleTickerProv
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 100),
-    )..addListener(() {
-        setState(() {
-          scrollOffset = _animation.value;
-        });
-      });
+      duration: const Duration(milliseconds: 100),
+    )..addListener(_animationListener);
+  }
+
+  _animationListener() {
+    setState(() {
+      scrollOffset = _animation.value;
+    });
   }
 
   void _animateBack() {
@@ -74,7 +77,7 @@ class _WalletComponentState extends State<WalletComponent> with SingleTickerProv
           ),
           18.h.heightBox,
           Text(
-            '\$ 934.00',
+            '\$ ${widget.money ?? 0}',
             style: theme?.boldTextTheme.title1,
           ),
           SpacingFoundation.verticalSpace2,
@@ -141,7 +144,7 @@ class _WalletComponentState extends State<WalletComponent> with SingleTickerProv
                         }
 
                         return AnimatedPositioned(
-                          duration: Duration(milliseconds: 600),
+                          duration: const Duration(milliseconds: 600),
                           curve: Curves.easeOut,
                           top: top,
                           left: 0,
@@ -197,56 +200,54 @@ class _WalletCard extends StatelessWidget {
     final theme = context.uiKitTheme;
     final isSmallDevice = 1.sw <= 380;
 
-    return SizedBox(
+    return UiKitCardWrapper(
       height: height,
-      child: UiKitCardWrapper(
-        borderRadius: BorderRadiusFoundation.all24,
-        border: BorderSide(
-          color: ColorsFoundation.neutral32,
-          width: 2.w,
-        ),
-        gradient: withOpacity ? null : GradientFoundation.walletCardGradient,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Opacity(
-              opacity: withOpacity ? 0.15 : 1.0,
+      borderRadius: BorderRadiusFoundation.all24,
+      border: BorderSide(
+        color: ColorsFoundation.neutral32,
+        width: 2.w,
+      ),
+      gradient: withOpacity ? null : GradientFoundation.walletCardGradient,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Opacity(
+            opacity: withOpacity ? 0.15 : 1.0,
+            child: ImageWidget(
+              height: isSmallDevice ? 0.6.sw : 0.7.sw,
+              width: 1.sw,
+              link: backgroundLink,
+              fit: BoxFit.cover,
+            ),
+          ),
+          if (topLink != null && topLink!.isNotEmpty)
+            Align(
+              alignment: Alignment.topLeft,
               child: ImageWidget(
-                height: isSmallDevice ? 0.6.sw : 0.7.sw,
-                width: 1.sw,
-                link: backgroundLink,
-                fit: BoxFit.cover,
+                height: isSmallDevice ? 0.4.sw : 0.35.sw,
+                width: 0.75.sw,
+                link: topLink,
+                fit: BoxFit.contain,
               ),
-            ),
-            if (topLink != null && topLink!.isNotEmpty)
-              Align(
-                alignment: Alignment.topLeft,
-                child: ImageWidget(
-                  height: isSmallDevice ? 0.4.sw : 0.35.sw,
-                  width: 0.75.sw,
-                  link: topLink,
-                  fit: BoxFit.contain,
-                ),
-              ).paddingAll(EdgeInsetsFoundation.all12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Corey Westervelt',
-                      style: theme?.boldTextTheme.caption3Medium.copyWith(
-                        color: ColorsFoundation.mutedText,
-                      ),
+            ).paddingAll(EdgeInsetsFoundation.all12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Corey Westervelt',
+                    style: theme?.boldTextTheme.caption3Medium.copyWith(
+                      color: ColorsFoundation.mutedText,
                     ),
-                  ],
-                ).paddingAll(EdgeInsetsFoundation.all16),
-              ],
-            ),
-          ],
-        ),
+                  ),
+                ],
+              ).paddingAll(EdgeInsetsFoundation.all16),
+            ],
+          ),
+        ],
       ),
     ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16);
   }
@@ -257,7 +258,7 @@ class WalletUiModel {
   final String? topLink;
   final bool withOpacity;
 
-  WalletUiModel({
+  const WalletUiModel({
     this.backgroundLink,
     this.topLink,
     this.withOpacity = false,
