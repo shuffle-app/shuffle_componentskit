@@ -33,7 +33,7 @@ class VideoReactionUiModel {
   bool isViewed;
   VideoPlayerController? videoController;
   final String? tempDirPath;
-  ValueNotifier<ReactionStatisticUiModel?>? reactionStatisticUiModel;
+  final ValueNotifier<ReactionStatisticUiModel?>? reactionStatisticUiModel;
 
   VideoReactionUiModel({
     required this.id,
@@ -92,7 +92,11 @@ class VideoReactionUiModel {
   }
 
   createReactionStatisticUiModel(ReactionStatisticUiModel? model) {
-    reactionStatisticUiModel = ValueNotifier(model);
+    reactionStatisticUiModel?.value = model;
+  }
+
+  disposeReactionStatisticUiModel() {
+    reactionStatisticUiModel?.dispose();
   }
 
   bool get empty => id == -1;
