@@ -95,7 +95,7 @@ class VideoReactionUiModel {
     reactionStatisticUiModel?.value = model;
   }
 
-  disposeReactionStatisticUiModel() {
+  void dispose() {
     reactionStatisticUiModel?.dispose();
   }
 
