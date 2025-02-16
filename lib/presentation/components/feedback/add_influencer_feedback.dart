@@ -252,7 +252,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
                 UiKitGradientSwitch(
                   switchedOn: personalRespectToggled ?? false,
                   onChanged: (value) {
-                    widget.onAddToPersonalTopToggled?.call(value).then(
+                    widget.onPersonalRespectToggled?.call(value).then(
                           (v) => setState(() {
                             personalRespectToggled = v;
                           }),
