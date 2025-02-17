@@ -478,11 +478,9 @@ class FeedComponent extends StatelessWidget {
                             key: chipsPageStorageKey,
                             controller: chipsScrollController,
                             padding: EdgeInsets.only(left: horizontalMargin),
-                            addAutomaticKeepAlives: false,
-                            addRepaintBoundaries: false,
                             primary: false,
                             shrinkWrap: true,
-                            physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                             scrollDirection: Axis.horizontal,
                             itemCount: feed.filterChips!.length + 1 + (hasFavourites ? 1 : 0),
                             separatorBuilder: (_, __) => horizontalMargin.widthBox,
@@ -507,15 +505,17 @@ class FeedComponent extends StatelessWidget {
                                   icon: ShuffleUiKitIcons.starfill,
                                 );
                               } else {
-                                return feed.filterChips!
-                                    .map((e) => UiKitTitledFilterChip(
-                                          selected:
-                                              feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false,
-                                          title: e.title,
-                                          onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
-                                          icon: e.icon,
-                                        ))
-                                    .toList()[index - (hasFavourites ? 2 : 1)];
+                                return feed.filterChips!.map((e) {
+                                  final selected =
+                                      feed.activeFilterChips?.map((e) => e.title).contains(e.title) ?? false;
+                                  return UiKitTitledFilterChip(
+                                    selected: selected,
+                                    title: e.title,
+                                    onPressed: onTagSortPressed == null ? null : () => onTagSortPressed!(e.title),
+                                    icon: e.icon,
+                                    loading: (feed.loadingFilterChips ?? false) && selected,
+                                  );
+                                }).toList()[index - (hasFavourites ? 2 : 1)];
                               }
                             })).wrapSliverBox,
                   ],

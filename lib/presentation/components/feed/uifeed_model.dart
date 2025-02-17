@@ -15,10 +15,11 @@ class UiFeedModel {
   final List<UiKitTag>? filterChips;
   final List<UiKitTag>? activeFilterChips;
   final List<UiKitTag>? niches;
+  final bool? loadingFilterChips;
 
   // final List<BusinessGlobalEventUiModel>? globalEvents;
 
-  UiFeedModel({
+  const UiFeedModel({
     this.filterChips,
     // this.globalEvents,
     this.activeFilterChips,
@@ -30,6 +31,7 @@ class UiFeedModel {
     // this.mixedItems
     this.recommendedBusinessEvents,
     this.niches,
+    this.loadingFilterChips
   });
 }
 
