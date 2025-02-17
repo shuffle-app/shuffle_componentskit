@@ -41,6 +41,7 @@ class FeedComponent extends StatelessWidget {
   final int? commonCount;
   final ScrollController? chipsScrollController;
   final PageStorageKey? chipsPageStorageKey;
+  final FilingsBackground filingsBackground;
 
   const FeedComponent({
     super.key,
@@ -78,6 +79,7 @@ class FeedComponent extends StatelessWidget {
     this.myCount,
     this.commonCount,
     this.chipsScrollController,
+    required this.filingsBackground,
   });
 
   @override
@@ -383,15 +385,10 @@ class FeedComponent extends StatelessWidget {
                     FingerprintSwitch(
                       height: (size.width - horizontalMargin * 2) * 0.54,
                       isHealthKitEnabled: feed.isHealthKitEnabled,
+                      filingsBackground: filingsBackground,
                       title: Text(
                         S.of(context).Guess,
                         style: context.uiKitTheme?.boldTextTheme.subHeadline.copyWith(color: Colors.white),
-                      ),
-                      backgroundImage: ImageWidget(
-                        width: double.infinity,
-                        svgAsset: GraphicsFoundation.instance.svg.dubaiSilhouette,
-                        fit: BoxFit.fitWidth,
-                        color: context.uiKitTheme?.colorScheme.surface1,
                       ),
                       animationPath: isLightTheme
                           ? GraphicsFoundation.instance.animations.lottie.fingerprintWhite.path
