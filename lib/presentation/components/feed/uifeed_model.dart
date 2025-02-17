@@ -35,6 +35,7 @@ class UiFeedModel {
 
 class UiUniversalModel extends Advertisable {
   final int id;
+  final int? cityId;
   final String type;
   final String? source;
   final double? rating;
@@ -62,6 +63,7 @@ class UiUniversalModel extends Advertisable {
     required this.tags,
     this.baseTags,
     this.rating,
+    this.cityId,
     this.website,
     this.weekdays,
     this.location,
@@ -84,6 +86,7 @@ class UiUniversalModel extends Advertisable {
     this.tags = const [],
     this.baseTags,
     this.rating,
+    this.cityId,
     this.website,
     this.weekdays,
     this.location,
@@ -106,6 +109,7 @@ class UiUniversalModel extends Advertisable {
     this.tags = const [],
     this.baseTags,
     this.website,
+    this.cityId,
     this.rating,
     this.weekdays,
     this.location,
@@ -122,17 +126,21 @@ class UiUniversalModel extends Advertisable {
 
   factory UiUniversalModel.fromPlaceUiModel(UiPlaceModel placeModel) => UiUniversalModel(
       id: placeModel.id,
+      cityId: placeModel.cityId,
       type: 'place',
       media: placeModel.media,
       rating: placeModel.rating,
       description: placeModel.description,
       tags: placeModel.tags,
+      location: placeModel.location,
+      baseTags: placeModel.baseTags,
       title: placeModel.title,
       isArchieved: placeModel.archived,
       weatherType: placeModel.weatherType);
 
   factory UiUniversalModel.fromEventUiModel(UiEventModel eventModel) => UiUniversalModel(
       id: eventModel.id,
+      cityId: eventModel.cityId,
       placeName: eventModel.owner?.name,
       type: 'event',
       media: eventModel.media,
@@ -141,6 +149,8 @@ class UiUniversalModel extends Advertisable {
       rating: eventModel.rating,
       title: eventModel.title,
       isArchieved: eventModel.archived,
+      baseTags: eventModel.baseTags,
+      location: eventModel.location,
       weatherType: eventModel.weatherType);
 
   factory UiUniversalModel.empty() => UiUniversalModel(

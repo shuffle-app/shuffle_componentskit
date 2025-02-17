@@ -23,6 +23,7 @@ class PlaceComponent extends StatefulWidget {
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
   final VoidCallback? onSharePressed;
+  final VoidCallback? onAddToSchedulerPressed;
   final PagedLoaderCallback<VideoReactionUiModel> placeReactionLoaderCallback;
   final PagedLoaderCallback<VideoReactionUiModel> eventReactionLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> placeFeedbackLoaderCallback;
@@ -70,6 +71,7 @@ class PlaceComponent extends StatefulWidget {
     this.onAddReactionTapped,
     this.onEventTap,
     this.onSharePressed,
+    this.onAddToSchedulerPressed,
     this.events,
     this.onLikedFeedback,
     this.onDislikedFeedback,
@@ -242,13 +244,20 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   ),
                   onPressed: () => widget.onEditPressed?.call(),
                 )
-              : GestureDetector(
-                  onTap: widget.onSharePressed,
-                  child: Icon(
-                    ShuffleUiKitIcons.share,
-                    color: colorScheme?.darkNeutral800,
+              : UiKitPopUpMenuButton.optionWithIcon(options: [
+                  UiKitPopUpMenuButtonOption(
+                    title: S.of(context).Share,
+                    icon: ShuffleUiKitIcons.share,
+                    value: 'share',
+                    onTap: widget.onSharePressed,
                   ),
-                ),
+                  UiKitPopUpMenuButtonOption(
+                    title: S.of(context).AddToScheduler,
+                    icon: ShuffleUiKitIcons.calendar,
+                    value: 'addToScheduler',
+                    onTap: widget.onAddToSchedulerPressed,
+                  ),
+                ]),
         ),
         if (widget.place.archived) ...[
           SpacingFoundation.verticalSpace8,

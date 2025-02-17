@@ -13,6 +13,7 @@ class EventComponent extends StatefulWidget {
   final bool isEligibleForEdit;
   final VoidCallback? onEditPressed;
   final VoidCallback? onSharePressed;
+  final VoidCallback? onAddToSchedulerPressed;
   final VoidCallback? onArchivePressed;
   final Future<bool> Function()? onAddReactionTapped;
   final PagedLoaderCallback<VideoReactionUiModel> reactionsLoaderCallback;
@@ -62,6 +63,7 @@ class EventComponent extends StatefulWidget {
     this.showTranslateButton,
     this.currentUserId,
     this.likedReviews,
+    this.onAddToSchedulerPressed,
   });
 
   @override
@@ -238,18 +240,23 @@ class _EventComponentState extends State<EventComponent> {
                           onPressed: () => widget.onEditPressed?.call(),
                         ),
                       )
-                    else if (widget.onSharePressed != null)
+                    else
                       Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: GestureDetector(
-                          onTap: widget.onSharePressed,
-                          child: ImageWidget(
-                            iconData: ShuffleUiKitIcons.share,
-                            color: context.uiKitTheme?.colorScheme.darkNeutral800,
-                          ),
-                        ),
-                      ),
+                          right: 0,
+                          child: UiKitPopUpMenuButton.optionWithIcon(options: [
+                            UiKitPopUpMenuButtonOption(
+                              title: S.of(context).Share,
+                              icon: ShuffleUiKitIcons.share,
+                              value: 'share',
+                              onTap: widget.onSharePressed,
+                            ),
+                            UiKitPopUpMenuButtonOption(
+                              title: S.of(context).AddToScheduler,
+                              icon: ShuffleUiKitIcons.calendar,
+                              value: 'addToScheduler',
+                              onTap: widget.onAddToSchedulerPressed,
+                            ),
+                          ]))
                   ],
                 ).paddingSymmetric(horizontal: horizontalMargin),
               ),

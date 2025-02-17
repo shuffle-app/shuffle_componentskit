@@ -13,8 +13,8 @@ class SchedulerComponent extends StatefulWidget {
   final Future<List<UiUniversalModel>> Function(DateTime firstDay, DateTime lastDay) eventLoader;
   final Function(DateTime focusedDay)? onPageChanged;
   final ValueChanged<UiUniversalModel>? openContentCallback;
-  final ValueChanged<int>? onContentDeleted;
-  final ValueChanged<int>? onNotificationSetRequested;
+  final ValueChanged<UiUniversalModel>? onContentDeleted;
+  final ValueChanged<UiUniversalModel>? onNotificationSetRequested;
 
   const SchedulerComponent(
       {super.key,
@@ -213,7 +213,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                             color: Colors.white,
                           ),
                         ).paddingOnly(right: SpacingFoundation.horizontalSpacing16),
-                      )),
+                      )).paddingAll(4),
                   confirmDismiss: (direction) async {
                     bool confirmation = false;
 
@@ -243,19 +243,20 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                       deletedCards.add(content.id);
                       currentContent.removeWhere((e) => e.id == content.id);
                     });
-                    widget.onContentDeleted?.call(content.id);
+                    widget.onContentDeleted?.call(content);
+                    await Future.delayed(const Duration(milliseconds: 500), fetchData);
                   },
                   child: UiKitPlannerContentCard(
-                    onNotification: () => widget.onNotificationSetRequested?.call(content.id),
-                    showNotificationSet: content.hasNotificationSet,
-                    onTap: () => widget.openContentCallback?.call(content),
-                    avatarPath:
-                        content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
-                            content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
-                    contentTitle: content.title ?? '',
-                    tags: content.baseTags ?? [],
-                    dateTime: content.shouldVisitAt ?? DateTime.now(),
-                  ))).paddingSymmetric(
+                        onNotification: () => widget.onNotificationSetRequested?.call(content),
+                        showNotificationSet: content.hasNotificationSet,
+                        onTap: () => widget.openContentCallback?.call(content),
+                        avatarPath:
+                            content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
+                                content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
+                        contentTitle: content.title ?? '',
+                        tags: content.baseTags ?? [],
+                        dateTime: content.shouldVisitAt ?? DateTime.now(),
+                      ))).paddingSymmetric(
               horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical8),
         MediaQuery.of(context).viewInsets.bottom.heightBox
       ],
