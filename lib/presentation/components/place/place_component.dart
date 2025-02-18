@@ -47,8 +47,8 @@ class PlaceComponent extends StatefulWidget {
   final int? currentUserId;
   final Set<int>? likedReviews;
   final Future<String?> Function()? onCreateBranchesTap;
-  final Future<String?> Function(int, String?)? onRenameBranchesTap;
-  final ValueChanged<int>? removeBranchItem;
+  final Future<String?> Function(String?)? onRenameBranchesTap;
+  final Future<String?> Function(int)? removeBranchItem;
   final bool showBranches;
 
   const PlaceComponent({
@@ -281,7 +281,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
           horizontalMargin: horizontalMargin,
           onCreateBranchesTap: widget.onCreateBranchesTap,
           onRenameTap: () async {
-            final upcomingName = widget.onRenameBranchesTap?.call(widget.place.chainId ?? -1, widget.place.chainName);
+            final upcomingName = widget.onRenameBranchesTap?.call(widget.place.chainName);
             return upcomingName;
           },
           removeBranchItem: widget.removeBranchItem,
