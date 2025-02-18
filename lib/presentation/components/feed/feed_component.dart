@@ -535,7 +535,7 @@ class FeedComponent extends StatelessWidget {
                                     availableWidth: 1.sw - (horizontalMargin * 2),
                                     onPressed: onAdvertisementPressed,
                                     imageLink: item.smallBannerImage,
-                                    title: advertisement.key,
+                                    title: item.title ?? advertisement.key,
                                     size: AdvertisementBannerSize.values.byName(
                                       advertisement.value.type ?? S.of(context).Small.toLowerCase(),
                                     ),

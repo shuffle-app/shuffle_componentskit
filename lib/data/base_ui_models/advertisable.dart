@@ -8,6 +8,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 abstract class Advertisable {
   final bool isAdvertisement;
   int? _randomIndexForBanner;
+  String? advertisementTitle;
   List<String> _customSmallBanners = smallBanners;
   List<String> _customMediumBanners = mediumBanners;
   List<String> _customLargeBanners = largeBanners;
