@@ -7,7 +7,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../../../domain/config_models/profile/component_profile_model.dart';
 
-class PublicInfluencerProfileComponent extends StatefulWidget {
+class PublicInfluencerProfileComponent extends StatelessWidget {
   final UiProfileModel uiProfileModel;
   final ProfileStats? profileStats;
   final bool loadingContent;
@@ -36,11 +36,6 @@ class PublicInfluencerProfileComponent extends StatefulWidget {
   });
 
   @override
-  State<PublicInfluencerProfileComponent> createState() => _PublicInfluencerProfileComponentState();
-}
-
-class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfileComponent> {
-  @override
   Widget build(BuildContext context) {
     final config =
         GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
@@ -58,16 +53,16 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
       centerTitle: true,
       customTitle: Expanded(
           child: AutoSizeText(
-        widget.uiProfileModel.name ?? '',
+        uiProfileModel.name ?? '',
         maxLines: 2,
         style: textStyle,
         textAlign: TextAlign.center,
       )),
-      customToolbarBaseHeight: (widget.uiProfileModel.name ?? '').length > 15 ? 100 : null,
+      customToolbarBaseHeight: (uiProfileModel.name ?? '').length > 15 ? 100 : null,
       autoImplyLeading: true,
       bodyBottomSpace: verticalMargin,
       childrenPadding: EdgeInsets.zero,
-      children: widget.uiProfileModel.userTileType != UserTileType.influencer
+      children: uiProfileModel.userTileType != UserTileType.influencer
           ? [
               0.2.sh.heightBox,
               ImageWidget(
@@ -87,7 +82,7 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
                             style: boldTextTheme?.title2.copyWith(color: Colors.transparent),
                           ),
                           TextSpan(
-                            text: ' @${widget.uiProfileModel.nickname ?? ''} ',
+                            text: ' @${uiProfileModel.nickname ?? ''} ',
                             style: boldTextTheme?.title2.copyWith(color: Colors.white),
                           ),
                           TextSpan(
@@ -107,7 +102,7 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
                           style: boldTextTheme?.title2,
                         ),
                         TextSpan(
-                          text: ' @${widget.uiProfileModel.nickname ?? ''} ',
+                          text: ' @${uiProfileModel.nickname ?? ''} ',
                           style: boldTextTheme?.title2.copyWith(color: Colors.transparent),
                         ),
                         TextSpan(
@@ -122,11 +117,11 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
             ]
           : [
               verticalMargin.heightBox,
-              widget.uiProfileModel.cardWidgetPublic.paddingSymmetric(horizontal: horizontalMargin),
-              if (widget.profileStats != null)
-                ProfileHighlights(profileStats: widget.profileStats!)
+              uiProfileModel.cardWidgetPublic.paddingSymmetric(horizontal: horizontalMargin),
+              if (profileStats != null)
+                ProfileHighlights(profileStats: profileStats!)
                     .paddingSymmetric(horizontal: horizontalMargin, vertical: SpacingFoundation.verticalSpacing16),
-              if (widget.loadingContent)
+              if (loadingContent)
                 UiKitShimmerProgressIndicator(
                   gradient: GradientFoundation.shunyGreyGradient,
                   child: UiKitProUserProfileEventCard(
@@ -138,18 +133,18 @@ class _PublicInfluencerProfileComponentState extends State<PublicInfluencerProfi
                     ],
                   ),
                 ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16, horizontal: horizontalMargin),
-              if (widget.isLoading)
+              if (isLoading)
                 Center(child: CircularProgressIndicator())
                     .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing32)
               else
                 InfluencerReviewsTopRespectWidget(
-                  contentPreviewWithRespects: widget.contentPreviewWithRespects,
-                  influencerTopCategories: widget.influencerTopCategories,
-                  onItemTap: widget.onItemTap,
-                  onReactionTapped: widget.onReactionTapped,
-                  profilePlaces: widget.profilePlaces,
-                  storiesPagingController: widget.storiesPagingController,
-                  tiltNotifier: widget.tiltNotifier,
+                  contentPreviewWithRespects: contentPreviewWithRespects,
+                  influencerTopCategories: influencerTopCategories,
+                  onItemTap: onItemTap,
+                  onReactionTapped: onReactionTapped,
+                  profilePlaces: profilePlaces,
+                  storiesPagingController: storiesPagingController,
+                  tiltNotifier: tiltNotifier,
                 )
             ],
     );
