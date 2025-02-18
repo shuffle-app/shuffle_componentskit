@@ -41,6 +41,7 @@ class InfluencerReviewsTab extends StatelessWidget {
                 height: 0.285.sw * 1.7,
                 width: 1.sw,
                 child: PagedListView<int, VideoReactionUiModel>.separated(
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   builderDelegate: PagedChildBuilderDelegate(
                     firstPageProgressIndicatorBuilder: (c) => Align(
@@ -90,7 +91,12 @@ class InfluencerReviewsTab extends StatelessWidget {
             onItemTap: onItemTap,
             horizontalMargin: EdgeInsetsFoundation.horizontal16,
             places: profilePlaces!,
-          ).paddingOnly(top: SpacingFoundation.verticalSpacing16),
+          ).paddingOnly(top: SpacingFoundation.verticalSpacing16)
+        else
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text(S.current.NothingFound)],
+          ).paddingOnly(top: SpacingFoundation.verticalSpacing24)
       ],
     );
   }
