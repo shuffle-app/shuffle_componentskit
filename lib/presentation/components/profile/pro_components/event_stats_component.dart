@@ -22,6 +22,8 @@ class ContentStatisticsComponent extends StatelessWidget {
   final UiEventModel? event;
   final VoidCallback? onAdvertisingShowTap;
   final String? city;
+  final int? noShows;
+  final int? showUp;
 
   String get title => place?.title ?? event?.title ?? '';
 
@@ -49,6 +51,8 @@ class ContentStatisticsComponent extends StatelessWidget {
     this.event,
     this.onAdvertisingShowTap,
     this.city,
+    this.noShows,
+    this.showUp,
   });
 
   @override
@@ -121,39 +125,38 @@ class ContentStatisticsComponent extends StatelessWidget {
             key: ValueKey(feedbackStats),
             chartData: feedbackStats!,
           ),
-        //TODO when back add noShows for statistic
-        // SpacingFoundation.verticalSpace16,
-        // UiKitCardWrapper(
-        //   color: theme?.colorScheme.surface3,
-        //   child: Column(
-        //     children: [
-        //       Row(
-        //         children: [
-        //           Expanded(
-        //             child: UiKitNoShowStatisticCard(
-        //               percent: 67,
-        //               group: _group,
-        //             ),
-        //           ),
-        //           SpacingFoundation.horizontalSpace8,
-        //           Expanded(
-        //             child: UiKitNoShowStatisticCard(
-        //               percent: 67,
-        //               isNoShows: false,
-        //               group: _group,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //       SpacingFoundation.verticalSpace8,
-        //       UiKitAdvertisingShowCard(
-        //         isBigShowUpPercent: true,
-        //         onTap: onAdvertisingShowTap,
-        //       ),
-        //     ],
-        //   ).paddingAll(EdgeInsetsFoundation.all16),
-        // ),
         SpacingFoundation.verticalSpace16,
+        if (noShows != null || showUp != null)
+          UiKitCardWrapper(
+            color: theme?.colorScheme.surface3,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: UiKitNoShowStatisticCard(
+                        percent: noShows,
+                        group: _group,
+                      ),
+                    ),
+                    SpacingFoundation.horizontalSpace8,
+                    Expanded(
+                      child: UiKitNoShowStatisticCard(
+                        percent: showUp,
+                        isNoShows: false,
+                        group: _group,
+                      ),
+                    ),
+                  ],
+                ),
+                SpacingFoundation.verticalSpace8,
+                UiKitAdvertisingShowCard(
+                  isBigShowUpPercent: true,
+                  onTap: onAdvertisingShowTap,
+                ),
+              ],
+            ).paddingAll(EdgeInsetsFoundation.all16),
+          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
         if (bookingAndFavorites != null)
           UiKitLineChart(
             loading: loadingVisitorsStatistics,
