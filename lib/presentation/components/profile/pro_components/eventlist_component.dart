@@ -35,6 +35,7 @@ class EventListComponent extends StatelessWidget {
       centerTitle: true,
       animatedListKey: animatedListKey,
       childrenCount: events.isEmpty ? 1 : events.length + (showSelectCity ? 1 : 0),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       childrenBuilder: (context, index) {
         if (index == 0 && showSelectCity) {
           return SelectedCityRow(
