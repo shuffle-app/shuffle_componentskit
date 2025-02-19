@@ -117,7 +117,7 @@ class ProStatisticsComponent extends StatelessWidget {
                 ),
                 SpacingFoundation.verticalSpace8,
                 UiKitAdvertisingShowCard(
-                  isBigShowUpPercent: true,
+                  isBigShowUpPercent: (showUp ?? 0) >= 70,
                   onTap: onAdvertisingShowTap,
                 ),
               ],
