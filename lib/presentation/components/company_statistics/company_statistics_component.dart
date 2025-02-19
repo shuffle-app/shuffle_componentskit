@@ -134,7 +134,7 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                 ),
                 SpacingFoundation.verticalSpace8,
                 UiKitAdvertisingShowCard(
-                  isBigShowUpPercent: true,
+                  isBigShowUpPercent: (widget.showUp ?? 0) >= 70,
                   onTap: widget.onAdvertisingShowTap,
                 ),
               ],
