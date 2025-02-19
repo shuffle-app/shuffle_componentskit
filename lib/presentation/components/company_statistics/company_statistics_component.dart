@@ -6,6 +6,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import '../place/uiplace_model.dart';
 
+final AutoSizeGroup _group = AutoSizeGroup();
+
 class CompanyStatisticsComponent extends StatefulWidget {
   final UniqueStatisticsModel? uniqueStatisticsModel;
   final UiKitLineChartData<num>? viewsAndVisitorsStat;
@@ -24,6 +26,8 @@ class CompanyStatisticsComponent extends StatefulWidget {
   final List<UiEventModel>? events;
   final List<UiPlaceModel>? places;
   final VoidCallback? onAdvertisingShowTap;
+  final int? noShows;
+  final int? showUp;
 
   const CompanyStatisticsComponent({
     super.key,
@@ -44,6 +48,8 @@ class CompanyStatisticsComponent extends StatefulWidget {
     this.onEventTapped,
     this.onPlaceTapped,
     this.onAdvertisingShowTap,
+    this.noShows,
+    this.showUp,
   });
 
   @override
@@ -102,37 +108,38 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
           UiKitLineChart(
             chartData: widget.feedbackStats!,
           ),
-        //TODO when back add noShows for statistic
-        // SpacingFoundation.verticalSpace16,
-        // UiKitCardWrapper(
-        //   color: theme?.colorScheme.surface3,
-        //   child: Column(
-        //     children: [
-        //       Row(
-        //         children: [
-        //           Expanded(
-        //             child: UiKitNoShowStatisticCard(
-        //               percent: 12,
-        //             ),
-        //           ),
-        //           SpacingFoundation.horizontalSpace8,
-        //           Expanded(
-        //             child: UiKitNoShowStatisticCard(
-        //               percent: 93,
-        //               isNoShows: false,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //       SpacingFoundation.verticalSpace8,
-        //       UiKitAdvertisingShowCard(
-        //         isBigShowUpPercent: true,
-        //         onTap: widget.onAdvertisingShowTap,
-        //       ),
-        //     ],
-        //   ).paddingAll(EdgeInsetsFoundation.all16),
-        // ),
         SpacingFoundation.verticalSpace16,
+        if (widget.noShows != null || widget.showUp != null)
+          UiKitCardWrapper(
+            color: colorScheme?.surface3,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: UiKitNoShowStatisticCard(
+                        percent: widget.noShows,
+                        group: _group,
+                      ),
+                    ),
+                    SpacingFoundation.horizontalSpace8,
+                    Expanded(
+                      child: UiKitNoShowStatisticCard(
+                        percent: widget.showUp,
+                        isNoShows: false,
+                        group: _group,
+                      ),
+                    ),
+                  ],
+                ),
+                SpacingFoundation.verticalSpace8,
+                UiKitAdvertisingShowCard(
+                  isBigShowUpPercent: true,
+                  onTap: widget.onAdvertisingShowTap,
+                ),
+              ],
+            ).paddingAll(EdgeInsetsFoundation.all16),
+          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
         if (widget.bookingAndFavorites != null)
           UiKitLineChart(
             chartData: widget.bookingAndFavorites!,

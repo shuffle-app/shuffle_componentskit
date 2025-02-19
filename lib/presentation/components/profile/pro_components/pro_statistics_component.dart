@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/unique_statistics_model.dart';
 import 'package:shuffle_components_kit/presentation/components/event/uievent_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
+final AutoSizeGroup _group = AutoSizeGroup();
 
 class ProStatisticsComponent extends StatelessWidget {
   final UniqueStatisticsModel? uniqueStatisticsModel;
@@ -18,6 +21,9 @@ class ProStatisticsComponent extends StatelessWidget {
   final bool loadingVisitorsStatistics;
   final ValueChanged<String>? onStatisticsPopupMenuItemTapped;
   final List<UiEventModel>? events;
+  final VoidCallback? onAdvertisingShowTap;
+  final int? noShows;
+  final int? showUp;
 
   /// bring back tabs when needed
   // final _tabs = [
@@ -42,6 +48,9 @@ class ProStatisticsComponent extends StatelessWidget {
     this.onStatisticsPopupMenuItemTapped,
     this.events,
     this.onEventTapped,
+    this.onAdvertisingShowTap,
+    this.noShows,
+    this.showUp,
   });
 
   @override
@@ -83,6 +92,37 @@ class ProStatisticsComponent extends StatelessWidget {
             chartData: feedbackStats!,
           ),
         SpacingFoundation.verticalSpace16,
+        if (noShows != null || showUp != null)
+          UiKitCardWrapper(
+            color: colorScheme?.surface3,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: UiKitNoShowStatisticCard(
+                        percent: noShows,
+                        group: _group,
+                      ),
+                    ),
+                    SpacingFoundation.horizontalSpace8,
+                    Expanded(
+                      child: UiKitNoShowStatisticCard(
+                        percent: showUp,
+                        isNoShows: false,
+                        group: _group,
+                      ),
+                    ),
+                  ],
+                ),
+                SpacingFoundation.verticalSpace8,
+                UiKitAdvertisingShowCard(
+                  isBigShowUpPercent: true,
+                  onTap: onAdvertisingShowTap,
+                ),
+              ],
+            ).paddingAll(EdgeInsetsFoundation.all16),
+          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
         if (bookingAndFavorites != null)
           UiKitLineChart(
             loading: loadingVisitorsStatistics,

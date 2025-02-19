@@ -157,58 +157,6 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                   )
             ],
           ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-          if (widget.showUpRatio != null && widget.showUpRatio! > 0)
-            UiKitCardWrapper(
-              color: theme?.colorScheme.surface2,
-              border: BorderSide(color: ColorsFoundation.neutral16),
-              borderRadius: BorderRadiusFoundation.all8,
-              child: Row(
-                children: [
-                  SpacingFoundation.horizontalSpace12,
-                  Flexible(
-                    flex: 2,
-                    child: AutoSizeText(
-                      S.of(context).ShowUpRatio.toUpperCase(),
-                      style: theme?.regularTextTheme.caption1UpperCase,
-                      maxLines: 1,
-                    ),
-                  ),
-                  SpacingFoundation.horizontalSpace8,
-                  Builder(
-                    builder: (context) => GestureDetector(
-                      onTap: () => showUiKitPopover(
-                        context,
-                        customMinHeight: 30.h,
-                        showButton: false,
-                        title: Text(
-                          S.of(context).BookingPopUpText,
-                          style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      child: ImageWidget(
-                        iconData: ShuffleUiKitIcons.info,
-                        width: 16.w,
-                        color: theme?.colorScheme.darkNeutral900,
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                  GradientableWidget(
-                    gradient: GradientFoundation.attentionCard,
-                    child: Text(
-                      '${widget.showUpRatio}%',
-                      style: boldTextTheme?.body,
-                    ),
-                  ),
-                  SpacingFoundation.horizontalSpace12,
-                ],
-              ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing10),
-            ).paddingOnly(
-              bottom: SpacingFoundation.horizontalSpacing16,
-              left: SpacingFoundation.horizontalSpacing16,
-              right: SpacingFoundation.horizontalSpacing16,
-            ),
           if (widget.isLoading)
             const Center(child: CircularProgressIndicator()).paddingAll(EdgeInsetsFoundation.all16)
           else if (isUrlBooking)
@@ -229,6 +177,59 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
               ),
             ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16)
           else if (groupedUsers.isNotEmpty) ...[
+            if (widget.showUpRatio != null && widget.showUpRatio! > 0 && groupedUsers.isNotEmpty)
+              UiKitCardWrapper(
+                color: theme?.colorScheme.surface2,
+                border: BorderSide(color: ColorsFoundation.neutral16),
+                borderRadius: BorderRadiusFoundation.all8,
+                child: Row(
+                  children: [
+                    SpacingFoundation.horizontalSpace12,
+                    Flexible(
+                      flex: 8,
+                      child: AutoSizeText(
+                        S.of(context).ShowUpRatio.toUpperCase(),
+                        style: theme?.regularTextTheme.caption1UpperCase,
+                        wrapWords: false,
+                        maxLines: 1,
+                      ),
+                    ),
+                    SpacingFoundation.horizontalSpace8,
+                    Builder(
+                      builder: (context) => GestureDetector(
+                        onTap: () => showUiKitPopover(
+                          context,
+                          customMinHeight: 30.h,
+                          showButton: false,
+                          title: Text(
+                            S.of(context).BookingPopUpText,
+                            style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        child: ImageWidget(
+                          iconData: ShuffleUiKitIcons.info,
+                          width: 16.w,
+                          color: theme?.colorScheme.darkNeutral900,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    GradientableWidget(
+                      gradient: GradientFoundation.attentionCard,
+                      child: Text(
+                        '${widget.showUpRatio}%',
+                        style: boldTextTheme?.body,
+                      ),
+                    ),
+                    SpacingFoundation.horizontalSpace12,
+                  ],
+                ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing10),
+              ).paddingOnly(
+                bottom: SpacingFoundation.horizontalSpacing16,
+                left: SpacingFoundation.horizontalSpacing16,
+                right: SpacingFoundation.horizontalSpacing16,
+              ),
             ...groupedUsers.map(
               (group) => Column(
                 children: group
