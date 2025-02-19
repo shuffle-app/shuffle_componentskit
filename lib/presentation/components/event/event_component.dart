@@ -35,6 +35,7 @@ class EventComponent extends StatefulWidget {
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
   final Set<int>? likedReviews;
+  final Function(int? id, UserTileType? userType)? onAvatarTap;
 
   const EventComponent({
     super.key,
@@ -64,6 +65,7 @@ class EventComponent extends StatefulWidget {
     this.currentUserId,
     this.likedReviews,
     this.onAddToSchedulerPressed,
+    this.onAvatarTap,
   });
 
   @override
@@ -615,6 +617,8 @@ class _EventComponentState extends State<EventComponent> {
                           return SizedBox(
                             width: 0.95.sw,
                             child: UiKitFeedbackCard(
+                              onAvatarTap: () =>
+                                  widget.onAvatarTap?.call(feedback.feedbackAuthorId, feedback.feedbackAuthorType),
                               title: feedback.feedbackAuthorName,
                               avatarUrl: feedback.feedbackAuthorPhoto,
                               userTileType: feedback.feedbackAuthorType,

@@ -9,11 +9,13 @@ class FeedbackReaderComponent extends StatelessWidget {
     required this.reviews,
     this.helpfulCount,
     this.onHelpfulTap,
+    this.onAvatarTap,
   });
 
   final List<FeedbackUiModel> reviews;
   final ValueChanged<int>? onHelpfulTap;
   final ValueNotifier<int>? helpfulCount;
+  final Function(int? id, UserTileType? userType)? onAvatarTap;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,7 @@ class FeedbackReaderComponent extends StatelessWidget {
                     translateText: e.translateText,
                     onEdit: e.onEdit,
                     canEdit: e.canEdit,
+                    onAvatarTap: () => onAvatarTap?.call(e.feedbackAuthorId, e.feedbackAuthorType),
                   ),
                 )
               : UiKitFeedbackCard(
@@ -68,6 +71,7 @@ class FeedbackReaderComponent extends StatelessWidget {
                   translateText: e.translateText,
                   onEdit: e.onEdit,
                   canEdit: e.canEdit,
+                  onAvatarTap: () => onAvatarTap?.call(e.feedbackAuthorId, e.feedbackAuthorType),
                 );
         },
         separatorBuilder: (BuildContext context, int index) =>

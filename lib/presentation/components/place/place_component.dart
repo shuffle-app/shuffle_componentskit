@@ -50,6 +50,7 @@ class PlaceComponent extends StatefulWidget {
   final Future<String?> Function(String?)? onRenameBranchesTap;
   final Future<String?> Function(int)? removeBranchItem;
   final bool showBranches;
+  final Function(int? id, UserTileType? userType)? onAvatarTap;
 
   const PlaceComponent({
     super.key,
@@ -90,6 +91,7 @@ class PlaceComponent extends StatefulWidget {
     this.onRenameBranchesTap,
     this.removeBranchItem,
     this.showBranches = false,
+    this.onAvatarTap,
   });
 
   @override
@@ -704,6 +706,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           return SizedBox(
                             width: 0.95.sw,
                             child: UiKitFeedbackCard(
+                              onAvatarTap: () =>
+                                  widget.onAvatarTap?.call(feedback.feedbackAuthorId, feedback.feedbackAuthorType),
                               title: feedback.feedbackAuthorName,
                               avatarUrl: feedback.feedbackAuthorPhoto,
                               userTileType: feedback.feedbackAuthorType,
