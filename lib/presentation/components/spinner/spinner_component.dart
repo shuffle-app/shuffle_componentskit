@@ -105,7 +105,7 @@ class SpinnerComponent extends StatelessWidget {
                                         availableWidth: 0.75.sw,
                                         customHeight: size.maxHeight * 0.76,
                                         imageLink: item.mediumBannerImage,
-                                        title: item.title ?? advertisement?.key ?? '',
+                                        title: item.advertisementTitle ?? advertisement?.key ?? '',
                                         onPressed: onAdvertisementTap,
                                         size:
                                             AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
