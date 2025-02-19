@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 /// Test variant, when implement really wallet refactor code first
 class WalletComponent extends StatefulWidget {
   final double? money;
-  const WalletComponent({super.key, this.money});
+  final UiProfileModel? user;
+
+  const WalletComponent({super.key, this.money, this.user});
 
   @override
   State<WalletComponent> createState() => _WalletComponentState();
@@ -18,14 +21,14 @@ class _WalletComponentState extends State<WalletComponent> with SingleTickerProv
   late Animation<double> _animation;
   late double firstCardTop;
 
-  final List<WalletUiModel> cards = [
-    WalletUiModel(backgroundLink: GraphicsFoundation.instance.png.wallet.card3.path),
+  late final List<WalletUiModel> cards = [
+    WalletUiModel(backgroundLink: GraphicsFoundation.instance.png.wallet.card3.path, owner: widget.user),
     WalletUiModel(
-      backgroundLink: GraphicsFoundation.instance.png.wallet.craiyon2.path,
-      topLink: GraphicsFoundation.instance.png.wallet.sW1.path,
-      withOpacity: true,
-    ),
-    WalletUiModel(backgroundLink: GraphicsFoundation.instance.png.wallet.card4.path),
+        backgroundLink: GraphicsFoundation.instance.png.wallet.craiyon2.path,
+        topLink: GraphicsFoundation.instance.png.wallet.sW1.path,
+        withOpacity: true,
+        owner: widget.user),
+    WalletUiModel(backgroundLink: GraphicsFoundation.instance.png.wallet.card4.path, owner: widget.user),
   ];
 
   @override
@@ -158,13 +161,7 @@ class _WalletComponentState extends State<WalletComponent> with SingleTickerProv
                                 }
                               });
                             },
-                            child: _WalletCard(
-                              height: cardHeight,
-                              isSelected: index == selectedIndex,
-                              backgroundLink: card.backgroundLink,
-                              topLink: card.topLink,
-                              withOpacity: card.withOpacity,
-                            ),
+                            child: _WalletCard(height: cardHeight, isSelected: index == selectedIndex, card: card),
                           ),
                         );
                       }).toList(),
@@ -181,16 +178,12 @@ class _WalletComponentState extends State<WalletComponent> with SingleTickerProv
 }
 
 class _WalletCard extends StatelessWidget {
-  final String? backgroundLink;
-  final String? topLink;
-  final bool withOpacity;
+  final WalletUiModel card;
   final double height;
   final bool isSelected;
 
   const _WalletCard({
-    this.backgroundLink,
-    this.topLink,
-    this.withOpacity = false,
+    required this.card,
     required this.height,
     this.isSelected = false,
   });
@@ -207,46 +200,49 @@ class _WalletCard extends StatelessWidget {
         color: ColorsFoundation.neutral32,
         width: 2.w,
       ),
-      gradient: withOpacity ? null : GradientFoundation.walletCardGradient,
+      gradient: card.withOpacity ? null : GradientFoundation.walletCardGradient,
       child: Stack(
         alignment: Alignment.center,
+        fit: StackFit.expand,
         children: [
           Opacity(
-            opacity: withOpacity ? 0.15 : 1.0,
+            opacity: card.withOpacity ? 0.15 : 1.0,
             child: ImageWidget(
               height: isSmallDevice ? 0.6.sw : 0.7.sw,
               width: 1.sw,
-              link: backgroundLink,
+              link: card.backgroundLink,
               fit: BoxFit.cover,
             ),
           ),
-          if (topLink != null && topLink!.isNotEmpty)
+          if (card.topLink != null && card.topLink!.isNotEmpty)
             Align(
               alignment: Alignment.topLeft,
               child: ImageWidget(
                 height: isSmallDevice ? 0.4.sw : 0.35.sw,
                 width: 0.75.sw,
-                link: topLink,
+                link: card.topLink,
                 fit: BoxFit.contain,
               ),
             ).paddingAll(EdgeInsetsFoundation.all12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Corey Westervelt',
-                    style: theme?.boldTextTheme.caption3Medium.copyWith(
-                      color: ColorsFoundation.mutedText,
-                    ),
-                  ),
-                ],
-              ).paddingAll(EdgeInsetsFoundation.all16),
-            ],
-          ),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     const Spacer(),
+          //     Row(
+          //       mainAxisAlignment: MainAxisAlignment.end,
+          //       children: [
+          Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                card.owner?.name ?? 'Corey Westervelt',
+                style: theme?.boldTextTheme.caption3Medium.copyWith(
+                  color: ColorsFoundation.mutedText,
+                ),
+                // ),
+                // ],
+              )).paddingAll(EdgeInsetsFoundation.all16),
+          // ],
+          // ),
         ],
       ),
     ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16);
@@ -257,10 +253,12 @@ class WalletUiModel {
   final String? backgroundLink;
   final String? topLink;
   final bool withOpacity;
+  final UiProfileModel? owner;
 
   const WalletUiModel({
     this.backgroundLink,
     this.topLink,
+    this.owner,
     this.withOpacity = false,
   });
 }
