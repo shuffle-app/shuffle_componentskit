@@ -185,36 +185,38 @@ class _BookingsControlUserListState extends State<BookingsControlUserList> {
                 child: Row(
                   children: [
                     SpacingFoundation.horizontalSpace12,
-                    Flexible(
-                      flex: 8,
-                      child: AutoSizeText(
-                        S.of(context).ShowUpRatio.toUpperCase(),
-                        style: theme?.regularTextTheme.caption1UpperCase,
-                        wrapWords: false,
-                        maxLines: 1,
-                      ),
-                    ),
-                    SpacingFoundation.horizontalSpace8,
-                    Builder(
-                      builder: (context) => GestureDetector(
-                        onTap: () => showUiKitPopover(
-                          context,
-                          customMinHeight: 30.h,
-                          showButton: false,
-                          title: Text(
-                            S.of(context).BookingPopUpText,
-                            style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                            textAlign: TextAlign.center,
+                    Expanded(
+                      child: Row(
+                        children: [
+                          AutoSizeText(
+                            S.of(context).ShowUpRatio.toUpperCase(),
+                            style: theme?.regularTextTheme.caption1UpperCase,
+                            wrapWords: false,
+                            maxLines: 1,
                           ),
-                        ),
-                        child: ImageWidget(
-                          iconData: ShuffleUiKitIcons.info,
-                          width: 16.w,
-                          color: theme?.colorScheme.darkNeutral900,
-                        ),
+                          SpacingFoundation.horizontalSpace8,
+                          Builder(
+                            builder: (context) => GestureDetector(
+                              onTap: () => showUiKitPopover(
+                                context,
+                                customMinHeight: 30.h,
+                                showButton: false,
+                                title: Text(
+                                  S.of(context).BookingPopUpText,
+                                  style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              child: ImageWidget(
+                                iconData: ShuffleUiKitIcons.info,
+                                width: 16.w,
+                                color: theme?.colorScheme.darkNeutral900,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Spacer(),
                     GradientableWidget(
                       gradient: GradientFoundation.attentionCard,
                       child: Text(
