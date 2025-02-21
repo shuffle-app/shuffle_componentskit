@@ -7,6 +7,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 final AutoSizeGroup group = AutoSizeGroup();
+final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
 
 class EventComponent extends StatefulWidget {
   final UiEventModel event;
@@ -28,7 +29,9 @@ class EventComponent extends StatefulWidget {
   final Future<EditReviewModel> Function(FeedbackUiModel)? onFeedbackTap;
   final bool showOfferButton;
   final int? priceForOffer;
+  final int? priceForRefresher;
   final VoidCallback? onOfferButtonTap;
+  final VoidCallback? onRefresherButtonTap;
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
   final ValueNotifier<String?>? translateDescription;
@@ -57,7 +60,9 @@ class EventComponent extends StatefulWidget {
     this.onFeedbackTap,
     this.showOfferButton = false,
     this.priceForOffer,
+    this.priceForRefresher,
     this.onOfferButtonTap,
+    this.onRefresherButtonTap,
     this.bookingNotifier,
     this.onSpendPointTap,
     this.translateDescription,
@@ -384,29 +389,24 @@ class _EventComponentState extends State<EventComponent> {
           SpacingFoundation.verticalSpace24,
         ],
         if (widget.showOfferButton)
-          UiKitCardWrapper(
-            color: theme?.colorScheme.surface1,
-            padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-            borderRadius: BorderRadiusFoundation.all24r,
-            child: Column(
-              children: [
-                Text(
-                  S.of(context).CreateAUSP(widget.priceForOffer ?? 5),
-                  style: boldTextTheme?.caption1Medium,
+          Row(
+            children: [
+              Expanded(
+                child: UiKitPersonalToolInContentCard(
+                  text: S.of(context).CreateAUSP(widget.priceForOffer ?? 5),
+                  group: _personalToolInContentCardGroup,
+                  onTap: widget.onOfferButtonTap,
                 ),
-                SpacingFoundation.verticalSpace4,
-                SizedBox(
-                  width: double.infinity,
-                  child: context.smallOutlinedButton(
-                    gradient: GradientFoundation.defaultLinearGradient,
-                    data: BaseUiKitButtonData(
-                      text: S.of(context).Offer.toUpperCase(),
-                      onPressed: widget.onOfferButtonTap,
-                    ),
-                  ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              Expanded(
+                child: UiKitPersonalToolInContentCard(
+                  group: _personalToolInContentCardGroup,
+                  text: S.of(context).SetUpARefresherForX(widget.priceForRefresher ?? 1),
+                  onTap: widget.onRefresherButtonTap,
                 ),
-              ],
-            ),
+              ),
+            ],
           ).paddingOnly(
             left: horizontalMargin,
             right: horizontalMargin,
