@@ -27,9 +27,8 @@ class RefresherItem extends StatelessWidget {
       child: Dismissible(
         key: GlobalKey(),
         direction: DismissDirection.endToStart,
-        background: SpacingFoundation.none,
         dismissThresholds: const {DismissDirection.endToStart: 0.6},
-        secondaryBackground: UiKitSecondaryBackgroundDismissible(),
+        background: UiKitBackgroundDismissible(),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.startToEnd) {
             return false;
