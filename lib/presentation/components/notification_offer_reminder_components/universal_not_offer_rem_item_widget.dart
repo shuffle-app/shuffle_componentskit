@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:shuffle_uikit/ui_kit/molecules/dismissible/ui_kit_secondary_background_dismissible.dart';
 
 class UniversalNotOfferRemItemWidget extends StatelessWidget {
   final UniversalNotOfferRemUiModel? universalNotOfferRemUiModel;
@@ -30,33 +31,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
       direction: DismissDirection.endToStart,
       background: SpacingFoundation.none,
       dismissThresholds: const {DismissDirection.endToStart: 0.6},
-      secondaryBackground: DecoratedBox(
-        decoration: BoxDecoration(
-          color: ColorsFoundation.red,
-          borderRadius: BorderRadiusFoundation.all24r,
-        ),
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              context.iconButtonNoPadding(
-                data: BaseUiKitButtonData(
-                  iconInfo: BaseUiKitButtonIconData(
-                    iconData: ShuffleUiKitIcons.trash,
-                  ),
-                ),
-              ),
-              SpacingFoundation.horizontalSpace2,
-              Text(
-                S.of(context).Remove,
-                style: theme?.boldTextTheme.caption2Medium,
-              ),
-              SpacingFoundation.horizontalSpace12,
-            ],
-          ),
-        ),
-      ),
+      secondaryBackground: UiKitSecondaryBackgroundDismissible(),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
           return false;
