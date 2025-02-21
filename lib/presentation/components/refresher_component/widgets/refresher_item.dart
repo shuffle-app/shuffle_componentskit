@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/refresher_component/ui_model/refresher_ui_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-import 'package:shuffle_uikit/ui_kit/molecules/dismissible/ui_kit_secondary_background_dismissible.dart';
 
 class RefresherItem extends StatelessWidget {
   final RefresherUiModel? item;
