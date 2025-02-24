@@ -10,9 +10,6 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-final AutoSizeGroup _group = AutoSizeGroup();
-final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
-
 class PlaceComponent extends StatefulWidget {
   final UiPlaceModel place;
   final bool isEligibleForEdit;
@@ -104,6 +101,9 @@ class PlaceComponent extends StatefulWidget {
 }
 
 class _PlaceComponentState extends State<PlaceComponent> {
+  final AutoSizeGroup _group = AutoSizeGroup();
+  final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
+
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);

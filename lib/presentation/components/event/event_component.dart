@@ -6,9 +6,6 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-final AutoSizeGroup group = AutoSizeGroup();
-final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
-
 class EventComponent extends StatefulWidget {
   final UiEventModel event;
   final bool isEligibleForEdit;
@@ -78,6 +75,9 @@ class EventComponent extends StatefulWidget {
 }
 
 class _EventComponentState extends State<EventComponent> {
+  final AutoSizeGroup group = AutoSizeGroup();
+  final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
+
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
