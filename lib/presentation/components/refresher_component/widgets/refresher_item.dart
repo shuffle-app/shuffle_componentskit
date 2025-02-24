@@ -21,11 +21,12 @@ class RefresherItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final colorScheme = theme?.colorScheme;
 
     return GestureDetector(
       onLongPress: onLongPress,
       child: Dismissible(
-        key: GlobalKey(),
+        key: ValueKey(item?.id),
         direction: DismissDirection.endToStart,
         dismissThresholds: const {DismissDirection.endToStart: 0.6},
         background: UiKitBackgroundDismissible(),
@@ -43,7 +44,7 @@ class RefresherItem extends StatelessWidget {
           }
         },
         child: UiKitCardWrapper(
-          color: theme?.colorScheme.surface2,
+          color: colorScheme?.surface2,
           borderRadius: BorderRadiusFoundation.all24r,
           child: Stack(
             children: [
@@ -108,12 +109,12 @@ class RefresherItem extends StatelessWidget {
                       child: context
                           .button(
                             data: BaseUiKitButtonData(
-                              borderColor: theme?.colorScheme.headingTypography,
+                              borderColor: colorScheme?.headingTypography,
                               onPressed: onEdit,
-                              backgroundColor: theme?.colorScheme.surface3,
+                              backgroundColor: colorScheme?.surface3,
                               iconInfo: BaseUiKitButtonIconData(
                                 iconPath: GraphicsFoundation.instance.svg.pencil.path,
-                                color: theme?.colorScheme.headingTypography,
+                                color: colorScheme?.headingTypography,
                               ),
                             ),
                           )
