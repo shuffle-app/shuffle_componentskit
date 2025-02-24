@@ -10,8 +10,6 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-final AutoSizeGroup _group = AutoSizeGroup();
-
 class PlaceComponent extends StatefulWidget {
   final UiPlaceModel place;
   final bool isEligibleForEdit;
@@ -39,7 +37,9 @@ class PlaceComponent extends StatefulWidget {
   final bool showInviteList;
   final bool showOfferButton;
   final int? priceForOffer;
+  final int? priceForRefresher;
   final VoidCallback? onOfferButtonTap;
+  final VoidCallback? onRefresherButtonTap;
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
   final ValueNotifier<String?>? translateDescription;
@@ -79,7 +79,9 @@ class PlaceComponent extends StatefulWidget {
     this.canLeaveVideoReaction = false,
     this.showOfferButton = false,
     this.priceForOffer,
+    this.priceForRefresher,
     this.onOfferButtonTap,
+    this.onRefresherButtonTap,
     this.bookingNotifier,
     this.onSpendPointTap,
     this.onArchivePressed,
@@ -99,6 +101,9 @@ class PlaceComponent extends StatefulWidget {
 }
 
 class _PlaceComponentState extends State<PlaceComponent> {
+  final AutoSizeGroup _group = AutoSizeGroup();
+  final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
+
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
   final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
@@ -331,32 +336,28 @@ class _PlaceComponentState extends State<PlaceComponent> {
           ],
         ),
         if (widget.showOfferButton)
-          UiKitCardWrapper(
-            color: theme?.colorScheme.surface1,
-            padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-            borderRadius: BorderRadiusFoundation.all24r,
-            child: Column(
-              children: [
-                Text(
-                  S.of(context).CreateAUSP(widget.priceForOffer ?? 5),
-                  style: boldTextTheme?.caption1Medium,
+          Row(
+            children: [
+              Expanded(
+                child: UiKitPersonalToolInContentCard(
+                  text: S.of(context).CreateAUSP(widget.priceForOffer ?? 5),
+                  group: _personalToolInContentCardGroup,
+                  onTap: widget.onOfferButtonTap,
                 ),
-                SpacingFoundation.verticalSpace4,
-                SizedBox(
-                  width: double.infinity,
-                  child: context.smallOutlinedButton(
-                    gradient: GradientFoundation.defaultLinearGradient,
-                    data: BaseUiKitButtonData(
-                      text: S.of(context).Offer.toUpperCase(),
-                      onPressed: widget.onOfferButtonTap,
-                    ),
-                  ),
+              ),
+              SpacingFoundation.horizontalSpace16,
+              Expanded(
+                child: UiKitPersonalToolInContentCard(
+                  group: _personalToolInContentCardGroup,
+                  text: S.of(context).SetUpARefresherForX(widget.priceForRefresher ?? 1),
+                  onTap: widget.onRefresherButtonTap,
                 ),
-              ],
-            ),
-          ).paddingSymmetric(
-            horizontal: horizontalMargin,
-            vertical: SpacingFoundation.verticalSpacing24,
+              ),
+            ],
+          ).paddingOnly(
+            left: horizontalMargin,
+            right: horizontalMargin,
+            bottom: SpacingFoundation.verticalSpacing24,
           ),
         if (widget.bookingNotifier != null)
           ListenableBuilder(

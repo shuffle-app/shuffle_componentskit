@@ -7,7 +7,7 @@ import '../../feed/uifeed_model.dart';
 
 class SchedulerComponent extends StatefulWidget {
   final ScrollController scrollController;
-  final DateTime focusedDate;
+  final DateTime? focusedDate;
 
   //could be event component or place component
   final Future<List<UiUniversalModel>> Function(DateTime firstDay, DateTime lastDay) eventLoader;
@@ -18,8 +18,7 @@ class SchedulerComponent extends StatefulWidget {
 
   const SchedulerComponent(
       {super.key,
-      required this.scrollController,
-      required this.focusedDate,
+      required this.scrollController, this.focusedDate,
       required this.eventLoader,
       this.onPageChanged,
       this.onContentDeleted,
@@ -31,7 +30,8 @@ class SchedulerComponent extends StatefulWidget {
 }
 
 class _SchedulerComponentState extends State<SchedulerComponent> with SingleTickerProviderStateMixin {
-  late DateTime focusedDate = widget.focusedDate;
+  DateTime? focusedDate;
+  DateTime get focusedDateGetter => focusedDate?? DateTime.now();
   final List<UiUniversalModel> currentContent = List.empty(growable: true);
   final Duration pageTransitionDuration = Duration(milliseconds: 300);
   final Curve pageTransitionCurve = Curves.easeInOut;
@@ -43,13 +43,13 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   PageController? pageController;
 
   DateTime get firstDayToLoad {
-    final firstMonthDay = DateTime(focusedDate.year, focusedDate.month, 1);
+    final firstMonthDay = DateTime(focusedDateGetter.year, focusedDateGetter.month, 1);
     return firstMonthDay.subtract(Duration(days: firstMonthDay.weekday - 1));
   }
 
   DateTime get lastDayToLoad {
-    final lastMonthDay = DateTime(focusedDate.year, focusedDate.month, 1)
-        .add(Duration(days: DateUtils.getDaysInMonth(focusedDate.year, focusedDate.month)))
+    final lastMonthDay = DateTime(focusedDateGetter.year, focusedDateGetter.month, 1)
+        .add(Duration(days: DateUtils.getDaysInMonth(focusedDateGetter.year, focusedDateGetter.month)))
         .subtract(Duration(days: 1));
     return lastMonthDay.add(Duration(days: 7 - lastMonthDay.weekday));
   }
@@ -75,16 +75,17 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
       showingOpacity = 0;
     });
     currentContent.addAll(await widget.eventLoader(firstDayToLoad, lastDayToLoad));
-    setState(() {
-      if (currentContent.isNotEmpty &&
-          !currentContent.any((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)) {
-        focusedDate = currentContent
-                .firstWhereOrNull((e) => e.shouldVisitAt != null && e.shouldVisitAt?.month == focusedDate.month)
-                ?.shouldVisitAt! ??
-            focusedDate;
-      }
-      showingOpacity = 1;
-    });
+    //TODO think about it
+    // setState(() {
+    //   if (currentContent.isNotEmpty &&
+    //       !currentContent.any((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)) {
+    //     focusedDate = currentContent
+    //             .firstWhereOrNull((e) => e.shouldVisitAt != null && e.shouldVisitAt?.month == focusedDate.month)
+    //             ?.shouldVisitAt! ??
+    //         focusedDate;
+    //   }
+    //   showingOpacity = 1;
+    // });
   }
 
   bool enabledDayPredicate(DateTime day) {
@@ -113,7 +114,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           children: [
             Expanded(
                 child: Text(
-              DateFormat('MMMM yyyy').format(focusedDate),
+              DateFormat('MMMM yyyy').format(focusedDateGetter),
               style: theme?.boldTextTheme.title2,
             )),
             SpacingFoundation.horizontalSpace4,
@@ -143,11 +144,11 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           },
           enabledDayPredicate: enabledDayPredicate,
           eventLoader: eventLoader,
-          focusedDate: focusedDate,
+          focusedDate: focusedDateGetter,
           firstDay: firstDay,
           lastDay: lastDay,
           onPageChanged: (DateTime focusedDay) {
-            if (focusedDay.month != focusedDate.month) {
+            if (focusedDay.month != focusedDate?.month) {
               FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
               setState(() {
                 focusedDate = focusedDay;
@@ -188,12 +189,12 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             ).paddingSymmetric(
               horizontal: SpacingFoundation.horizontalSpacing16,
             ),
-            wasChangedDateToSpecific ? Text(DateFormat('dd.MM.yyyy').format(focusedDate)) : const SizedBox.shrink(),
+            wasChangedDateToSpecific ? Text(DateFormat('dd.MM.yyyy').format(focusedDate!)) : const SizedBox.shrink(),
           ],
         ),
         SpacingFoundation.verticalSpace16,
         for (var content in (wasChangedDateToSpecific
-            ? currentContent.where((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)
+            ? currentContent.where((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate!) ?? false)
             : currentContent))
           AnimatedOpacity(
               opacity: showingOpacity,
@@ -201,19 +202,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
               child: Dismissible(
                   key: ValueKey(content.id),
                   direction: DismissDirection.endToStart,
-                  background: ClipRRect(
-                      borderRadius: BorderRadiusFoundation.all24,
-                      clipBehavior: Clip.hardEdge,
-                      child: ColoredBox(
-                        color: Colors.red,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            ShuffleUiKitIcons.trash,
-                            color: Colors.white,
-                          ),
-                        ).paddingOnly(right: SpacingFoundation.horizontalSpacing16),
-                      )).paddingAll(4),
+                  background: UiKitBackgroundDismissible(),
                   confirmDismiss: (direction) async {
                     bool confirmation = false;
 
@@ -223,6 +212,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                             title: Text(
                               S.of(context).YouSureToDeleteX(content.title ?? ''),
                               style: theme?.boldTextTheme.title2.copyWith(color: Colors.black),
+                              textAlign: TextAlign.center,
                             ),
                             defaultButtonText: S.of(context).Cancel,
                             additionalButton: context.dialogButton(
@@ -237,7 +227,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
 
                     return confirmation;
                   },
-                  dismissThresholds: {DismissDirection.endToStart: 0.5},
+                  dismissThresholds: {DismissDirection.endToStart: 0.6},
                   onDismissed: (direction) async {
                     setState(() {
                       deletedCards.add(content.id);
@@ -247,16 +237,16 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                     await Future.delayed(const Duration(milliseconds: 500), fetchData);
                   },
                   child: UiKitPlannerContentCard(
-                        onNotification: () => widget.onNotificationSetRequested?.call(content),
-                        showNotificationSet: content.hasNotificationSet,
-                        onTap: () => widget.openContentCallback?.call(content),
-                        avatarPath:
-                            content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
-                                content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
-                        contentTitle: content.title ?? '',
-                        tags: content.baseTags ?? [],
-                        dateTime: content.shouldVisitAt ?? DateTime.now(),
-                      ))).paddingSymmetric(
+                    onNotification: () => widget.onNotificationSetRequested?.call(content),
+                    showNotificationSet: content.hasNotificationSet,
+                    onTap: () => widget.openContentCallback?.call(content),
+                    avatarPath:
+                        content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
+                            content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
+                    contentTitle: content.title ?? '',
+                    tags: content.baseTags ?? [],
+                    dateTime: content.shouldVisitAt ?? DateTime.now(),
+                  ))).paddingSymmetric(
               horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical8),
         MediaQuery.of(context).viewInsets.bottom.heightBox
       ],
