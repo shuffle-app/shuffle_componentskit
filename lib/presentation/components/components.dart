@@ -165,3 +165,4 @@ export 'digest_page_component/text_from_field_digest.dart';
 export 'activity_component/activity_component.dart';
 export 'activity_component/activity_ui_model.dart';
 export 'wallet_component/wallet_component.dart';
+export 'add_voice_component/add_voice_component.dart';
