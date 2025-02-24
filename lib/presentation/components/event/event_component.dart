@@ -419,9 +419,9 @@ class _EventComponentState extends State<EventComponent> {
               Expanded(
                 child: AddToSchedulerEventActionCard(
                   group: group,
-                  action: null,
+                  action: widget.onAddToSchedulerPressed,
                   rasterIconAsset: GraphicsFoundation.instance.png.events,
-                  value: '',
+                  value: '\n',
                   buttonTitle: S.of(context).Add,
                 ),
               ),
