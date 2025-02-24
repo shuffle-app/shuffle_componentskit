@@ -201,19 +201,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
               child: Dismissible(
                   key: ValueKey(content.id),
                   direction: DismissDirection.endToStart,
-                  background: ClipRRect(
-                      borderRadius: BorderRadiusFoundation.all24,
-                      clipBehavior: Clip.hardEdge,
-                      child: ColoredBox(
-                        color: Colors.red,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            ShuffleUiKitIcons.trash,
-                            color: Colors.white,
-                          ),
-                        ).paddingOnly(right: SpacingFoundation.horizontalSpacing16),
-                      )).paddingAll(4),
+                  background: UiKitBackgroundDismissible(),
                   confirmDismiss: (direction) async {
                     bool confirmation = false;
 
@@ -247,16 +235,16 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                     await Future.delayed(const Duration(milliseconds: 500), fetchData);
                   },
                   child: UiKitPlannerContentCard(
-                        onNotification: () => widget.onNotificationSetRequested?.call(content),
-                        showNotificationSet: content.hasNotificationSet,
-                        onTap: () => widget.openContentCallback?.call(content),
-                        avatarPath:
-                            content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
-                                content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
-                        contentTitle: content.title ?? '',
-                        tags: content.baseTags ?? [],
-                        dateTime: content.shouldVisitAt ?? DateTime.now(),
-                      ))).paddingSymmetric(
+                    onNotification: () => widget.onNotificationSetRequested?.call(content),
+                    showNotificationSet: content.hasNotificationSet,
+                    onTap: () => widget.openContentCallback?.call(content),
+                    avatarPath:
+                        content.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
+                            content.media.firstWhere((el) => el.type == UiKitMediaType.image).link,
+                    contentTitle: content.title ?? '',
+                    tags: content.baseTags ?? [],
+                    dateTime: content.shouldVisitAt ?? DateTime.now(),
+                  ))).paddingSymmetric(
               horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical8),
         MediaQuery.of(context).viewInsets.bottom.heightBox
       ],
