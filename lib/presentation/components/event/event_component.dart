@@ -7,6 +7,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 final AutoSizeGroup group = AutoSizeGroup();
+final AutoSizeGroup _influencerGroup = AutoSizeGroup();
 
 class EventComponent extends StatefulWidget {
   final UiEventModel event;
@@ -36,6 +37,8 @@ class EventComponent extends StatefulWidget {
   final int? currentUserId;
   final Set<int>? likedReviews;
   final ValueChanged<BaseUiKitUserTileData?>? onAvatarTap;
+  final VoidCallback? onAddVoiceTap;
+  final VoidCallback? onInterviewTap;
 
   const EventComponent({
     super.key,
@@ -66,6 +69,8 @@ class EventComponent extends StatefulWidget {
     this.likedReviews,
     this.onAddToSchedulerPressed,
     this.onAvatarTap,
+    this.onAddVoiceTap,
+    this.onInterviewTap,
   });
 
   @override
@@ -681,6 +686,29 @@ class _EventComponentState extends State<EventComponent> {
               );
             },
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        Row(
+          children: [
+            Expanded(
+              child: UiKitInfluencerToolInContentCard(
+                group: _influencerGroup,
+                iconData: ShuffleUiKitIcons.record,
+                onTap: widget.onAddVoiceTap,
+                title: S.of(context).AddVoice,
+              ),
+            ),
+            SpacingFoundation.horizontalSpace12,
+            Expanded(
+              child: UiKitInfluencerToolInContentCard(
+                group: _influencerGroup,
+                iconData: ShuffleUiKitIcons.conversation,
+                onTap: widget.onInterviewTap,
+                title: S.of(context).Interview,
+              ),
+            ),
+          ],
+        ).paddingSymmetric(horizontal: horizontalMargin),
+        SpacingFoundation.verticalSpace24,
+
         if (widget.event.descriptionItems != null)
           ...widget.event.descriptionItems!.map(
             (e) {
