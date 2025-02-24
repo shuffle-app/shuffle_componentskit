@@ -44,6 +44,8 @@ class ProfileComponent extends StatelessWidget {
   final List<ContentPreviewWithRespect>? contentPreviewWithRespects;
   final Function(int? placeId, int? eventId)? onItemTap;
   final bool isLoading;
+  final VoidCallback? onStripeTap;
+  final StripeRegistrationStatus? stripeRegistrationStatus;
 
   const ProfileComponent({
     super.key,
@@ -82,6 +84,8 @@ class ProfileComponent extends StatelessWidget {
     this.contentPreviewWithRespects,
     this.onItemTap,
     this.isLoading = false,
+    this.onStripeTap,
+    this.stripeRegistrationStatus,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
@@ -197,6 +201,11 @@ class ProfileComponent extends StatelessWidget {
             ],
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.all16),
         )),
+        if (stripeRegistrationStatus != null)
+          UiKitStripeRegistrationTile(
+            status: stripeRegistrationStatus!,
+            onTap: onStripeTap,
+          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.all16, vertical: EdgeInsetsFoundation.vertical24),
         if (showRecommendedUsers) ...[
           SpacingFoundation.verticalSpace24,
           SizedBox(

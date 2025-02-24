@@ -13,6 +13,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
   final List<UiKitStats>? profileStats;
   final Future<String?> Function(String?)? onCityChanged;
   final bool showSelectCity;
+  final VoidCallback? onStripeTap;
+  final StripeRegistrationStatus? stripeRegistrationStatus;
 
   const CompanyHomeScreenComponent({
     super.key,
@@ -26,6 +28,8 @@ class CompanyHomeScreenComponent extends StatelessWidget {
     this.profileStats,
     this.onCityChanged,
     this.showSelectCity = false,
+    this.onStripeTap,
+    this.stripeRegistrationStatus,
   });
 
   @override
@@ -71,6 +75,14 @@ class CompanyHomeScreenComponent extends StatelessWidget {
               // ),
               profileType: ProfileCardType.company,
               profileStats: profileStats,
+              profileWidgets: stripeRegistrationStatus != null
+                  ? [
+                      UiKitStripeRegistrationTile(
+                        status: stripeRegistrationStatus!,
+                        onTap: onStripeTap,
+                      )
+                    ]
+                  : null,
             ).paddingSymmetric(
               horizontal: horizontalMargin,
             ),
