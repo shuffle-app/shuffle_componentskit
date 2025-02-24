@@ -90,28 +90,24 @@ class _RefresherComponentState extends State<RefresherComponent> {
               final item = widget.itemList![index];
               final isItemEditing = editingItemId == item?.id;
 
-              return GestureDetector(
-                onTap: _onTapOutside,
-                onLongPress: () => _onLongPress(item?.id),
-                child: TapRegion(
-                  onTapOutside: (_) {
-                    if (isItemEditing) {
-                      _onTapOutside();
-                    }
+              return TapRegion(
+                onTapOutside: (_) {
+                  if (isItemEditing) {
+                    _onTapOutside();
+                  }
+                },
+                child: RefresherItem(
+                  item: item,
+                  isEditingMode: isItemEditing,
+                  onDismissed: () => widget.onRemoveRefresher?.call(item?.id),
+                  onEdit: () {
+                    widget.onEditRefresher?.call(item?.id);
+                    editingItemId = null;
                   },
-                  child: RefresherItem(
-                    item: item,
-                    isEditingMode: isItemEditing,
-                    onDismissed: () => widget.onRemoveRefresher?.call(item?.id),
-                    onEdit: () {
-                      widget.onEditRefresher?.call(item?.id);
-                      editingItemId = null;
-                    },
-                    onLongPress: () => _onLongPress(item?.id),
-                  ).paddingOnly(
-                    top: index == 0 ? SpacingFoundation.verticalSpacing16 : 0.0,
-                    bottom: SpacingFoundation.verticalSpacing16,
-                  ),
+                  onLongPress: () => _onLongPress(item?.id),
+                ).paddingOnly(
+                  top: index == 0 ? SpacingFoundation.verticalSpacing16 : 0.0,
+                  bottom: SpacingFoundation.verticalSpacing16,
                 ),
               );
             } else {
