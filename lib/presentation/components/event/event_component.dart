@@ -86,6 +86,9 @@ class _EventComponentState extends State<EventComponent> {
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
 
+  bool cannotLeaveLike(id) =>
+      widget.currentUserId == id || widget.onLikedFeedback == null || widget.onDislikedFeedback == null;
+
   bool? canLeaveFeedback;
 
   bool isHide = true;
@@ -658,7 +661,7 @@ class _EventComponentState extends State<EventComponent> {
                                   feedback.onTap?.call();
                                 }
                               },
-                              onLike: widget.currentUserId == feedback.feedbackAuthorId
+                              onLike: cannotLeaveLike(feedback.feedbackAuthorId)
                                   ? null
                                   : () {
                                       final feedbackId = feedback.id;

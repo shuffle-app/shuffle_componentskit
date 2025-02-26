@@ -116,6 +116,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
 
+  bool cannotLeaveLike(id) => widget.currentUserId == id || widget.onLikedFeedback == null || widget.onDislikedFeedback == null;
+
   bool? canLeaveFeedback;
 
   @override
@@ -747,7 +749,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                   feedback.onTap?.call();
                                 }
                               },
-                              onLike: widget.currentUserId == feedback.feedbackAuthorId
+                              onLike: cannotLeaveLike(feedback.feedbackAuthorId)
                                   ? null
                                   : () {
                                       final feedbackId = feedback.id;
