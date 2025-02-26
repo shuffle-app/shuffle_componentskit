@@ -1,4 +1,4 @@
-import 'package:shuffle_components_kit/presentation/components/notification_offer_reminder_components/users_of_offer.dart';
+import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/localization/l10n.dart';
 
 class UniversalNotOfferRemUiModel {
@@ -13,8 +13,9 @@ class UniversalNotOfferRemUiModel {
   final DateTime? isLaunchedDate;
   final bool isOffer;
   final List<UsersOfOffer>? userOfOffer;
+  final TicketIssueStatus? status;
 
-  UniversalNotOfferRemUiModel({
+  const UniversalNotOfferRemUiModel({
     required this.id,
     this.title,
     this.pointPrice,
@@ -26,6 +27,7 @@ class UniversalNotOfferRemUiModel {
     this.isOffer = false,
     this.userOfOffer,
     this.iconId,
+    this.status,
   });
 
   UniversalNotOfferRemUiModel copyWith({
@@ -40,6 +42,7 @@ class UniversalNotOfferRemUiModel {
     bool? isOffer,
     List<UsersOfOffer>? userOfOffer,
     int? iconId,
+    TicketIssueStatus? status,
   }) {
     return UniversalNotOfferRemUiModel(
       id: id ?? this.id,
@@ -53,6 +56,7 @@ class UniversalNotOfferRemUiModel {
       isOffer: isOffer ?? this.isOffer,
       userOfOffer: userOfOffer ?? this.userOfOffer,
       iconId: iconId ?? this.iconId,
+      status: status?? this.status,
     );
   }
 

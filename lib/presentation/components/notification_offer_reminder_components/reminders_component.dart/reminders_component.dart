@@ -4,7 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class RemindersComponent extends StatelessWidget {
   final String? placeOrEventName;
-  final List<UniversalNotOfferRemUiModel?>? listReminders;
+  final List<UniversalNotOfferRemUiModel>? listReminders;
   final ValueChanged<int?>? onEditReminder;
   final ValueChanged<int?>? onRemoveReminder;
   final VoidCallback? onCreateReminder;

@@ -4,11 +4,11 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class OffersComponent extends StatelessWidget {
   final String? placeOrEventName;
-  final List<UniversalNotOfferRemUiModel?>? listOffers;
-  final ValueChanged<int?>? onEditOffer;
-  final ValueChanged<int?>? onRemoveOffer;
-  final ValueChanged<int?>? onActivateTap;
-
+  final List<UniversalNotOfferRemUiModel>? listOffers;
+  final ValueChanged<int>? onEditOffer;
+  final ValueChanged<int>? onRemoveOffer;
+  final ValueChanged<int>? onActivateTap;
+  final ValueChanged<int>? onPayTap;
   final VoidCallback? onCreateOffer;
   final GlobalKey<SliverAnimatedListState> listKey;
 
@@ -21,6 +21,7 @@ class OffersComponent extends StatelessWidget {
     this.onCreateOffer,
     this.onRemoveOffer,
     this.onActivateTap,
+    this.onPayTap,
   });
 
   @override
@@ -34,6 +35,7 @@ class OffersComponent extends StatelessWidget {
         onCreateItem: onCreateOffer,
         onEditItem: onEditOffer,
         onRemoveItem: onRemoveOffer,
+        onPayTap: onPayTap,
         onActivateTap: onActivateTap,
         whatCreate: S.of(context).Offer,
       ),

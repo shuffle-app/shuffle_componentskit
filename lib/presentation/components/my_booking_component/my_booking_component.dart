@@ -6,17 +6,19 @@ import 'my_booking_ui_model/my_booking_ui_model.dart';
 
 class MyBookingComponent extends StatelessWidget {
   final List<MyBookingUiModel>? myBookingUiModel;
-  final ValueChanged<int?>? onAlertCircleTap;
-  final ValueChanged<int?>? onBarCodeTap;
-  final ValueChanged<int?>? onLeaveFeedbackTap;
-  final ValueChanged<int?>? onFullRefundTap;
-  final ValueChanged<int?>? onPartialRefundTap;
+  final ValueChanged<int>? onAlertCircleTap;
+  final ValueChanged<int>? onBarCodeTap;
+  final ValueChanged<int>? onPayOrder;
+  final ValueChanged<int>? onLeaveFeedbackTap;
+  final ValueChanged<int>? onFullRefundTap;
+  final ValueChanged<int>? onPartialRefundTap;
   late final List<MyBookingUiModel>? myBookingUiModelUpcoming;
   late final List<MyBookingUiModel>? myBookingUiModelPast;
 
   MyBookingComponent({
     super.key,
     this.myBookingUiModel,
+    this.onPayOrder,
     this.onAlertCircleTap,
     this.onBarCodeTap,
     this.onLeaveFeedbackTap,
@@ -46,8 +48,9 @@ class MyBookingComponent extends StatelessWidget {
         if (myBookingUiModelUpcoming != null && myBookingUiModelUpcoming!.isNotEmpty)
           for (int index = 0; index < (myBookingUiModelUpcoming?.length ?? 0); index++)
             MyBookingItem(
-              myBookingUiModel: myBookingUiModelUpcoming?[index],
-              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelUpcoming?[index].id),
+              onPayTap: onPayOrder,
+              myBookingUiModel: myBookingUiModelUpcoming![index],
+              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelUpcoming![index].id),
               onBarCodeTap: onBarCodeTap,
               onFullRefundTap: onFullRefundTap,
               onLeaveFeedbackTap: onLeaveFeedbackTap,
@@ -95,8 +98,9 @@ class MyBookingComponent extends StatelessWidget {
         if (myBookingUiModelPast != null && myBookingUiModelPast!.isNotEmpty)
           for (int index = 0; index < (myBookingUiModelPast?.length ?? 0); index++)
             MyBookingItem(
-              myBookingUiModel: myBookingUiModelPast?[index],
-              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelPast?[index].id),
+              onPayTap: onPayOrder,
+              myBookingUiModel: myBookingUiModelPast![index],
+              onAlertCircleTap: () => onAlertCircleTap?.call(myBookingUiModelPast![index].id),
               onBarCodeTap: onBarCodeTap,
               onFullRefundTap: onFullRefundTap,
               onLeaveFeedbackTap: onLeaveFeedbackTap,

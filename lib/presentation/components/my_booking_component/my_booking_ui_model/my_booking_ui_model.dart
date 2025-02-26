@@ -11,8 +11,9 @@ class MyBookingUiModel {
   final DateTime? visitDate;
   final int? total;
   final String? categoryName;
+  final TicketIssueStatus? status;
 
-  MyBookingUiModel({
+  const MyBookingUiModel({
     required this.id,
     this.name,
     this.ticketUiModel,
@@ -21,6 +22,7 @@ class MyBookingUiModel {
     this.placeModel,
     this.visitDate,
     this.categoryName,
+    this.status,
   });
 
   bool get isPast {
@@ -55,4 +57,40 @@ class MyBookingUiModel {
       placeModel?.logo ??
       eventModel?.verticalPreview?.link ??
       eventModel?.media.firstWhereOrNull((e) => e.type == UiKitMediaType.image)?.link;
+
+  @override
+  bool operator ==(Object other) => other is MyBookingUiModel && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  MyBookingUiModel copyWith({
+    int? id,
+    String? name,
+    TicketUiModel? ticketUiModel,
+    int? total,
+    UiEventModel? eventModel,
+    UiPlaceModel? placeModel,
+    DateTime? visitDate,
+    String? categoryName,
+    TicketIssueStatus? status,
+  }) =>
+      MyBookingUiModel(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        ticketUiModel: ticketUiModel ?? this.ticketUiModel,
+        total: total ?? this.total,
+        eventModel: eventModel ?? this.eventModel,
+        placeModel: placeModel ?? this.placeModel,
+        visitDate: visitDate ?? this.visitDate,
+        categoryName: categoryName ?? this.categoryName,
+        status: status ?? this.status,
+      );
+}
+
+enum TicketIssueStatus {
+  unpaid,
+  paid,
+  cancelled,
+  refunded,
 }

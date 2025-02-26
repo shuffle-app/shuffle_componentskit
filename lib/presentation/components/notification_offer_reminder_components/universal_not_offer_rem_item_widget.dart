@@ -4,29 +4,32 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UniversalNotOfferRemItemWidget extends StatelessWidget {
-  final UniversalNotOfferRemUiModel? universalNotOfferRemUiModel;
+  final UniversalNotOfferRemUiModel model;
   final VoidCallback? onEdit;
   final VoidCallback? onActivateTap;
   final VoidCallback? onDismissed;
   final VoidCallback? onLongPress;
+  final VoidCallback? onPayTap;
   final bool isEditingMode;
 
   const UniversalNotOfferRemItemWidget({
     super.key,
-    this.universalNotOfferRemUiModel,
+    required this.model,
     this.onEdit,
     this.onActivateTap,
     this.onDismissed,
     this.isEditingMode = false,
     this.onLongPress,
+    this.onPayTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final caption4Muted = theme?.regularTextTheme.caption4Regular.copyWith(color: ColorsFoundation.mutedText);
 
     return Dismissible(
-      key: GlobalKey(),
+      key: ValueKey(model.id),
       direction: DismissDirection.endToStart,
       dismissThresholds: const {DismissDirection.endToStart: 0.6},
       background: UiKitBackgroundDismissible(),
@@ -44,7 +47,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
         }
       },
       child: GestureDetector(
-        onLongPress: onLongPress,
+        onLongPress: model.status == TicketIssueStatus.paid ? onLongPress : null,
         child: UiKitCardWrapper(
           color: theme?.colorScheme.surface1,
           borderRadius: BorderRadiusFoundation.all24r,
@@ -55,7 +58,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                   ImageWidget(
                     height: 45.h,
                     fit: BoxFit.fill,
-                    link: universalNotOfferRemUiModel?.iconPath ?? '',
+                    link: model.iconPath ?? '',
                   ),
                   SpacingFoundation.horizontalSpace4,
                   Flexible(
@@ -64,71 +67,98 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (universalNotOfferRemUiModel != null && (universalNotOfferRemUiModel?.isOffer ?? false))
+                        if (model.isOffer)
                           Text(
-                            universalNotOfferRemUiModel?.pointPrice == 0
+                            model.pointPrice == 0
                                 ? S.of(context).Free
-                                : '${stringWithSpace(universalNotOfferRemUiModel?.pointPrice ?? 0)} ${S.of(context).PointsInOffer(universalNotOfferRemUiModel?.pointPrice ?? 0)}',
+                                : '${stringWithSpace(model.pointPrice ?? 0)} ${S.of(context).PointsInOffer(model.pointPrice ?? 0)}',
                             style: theme?.boldTextTheme.caption1Bold,
                           ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
                         AutoSizeText(
-                          universalNotOfferRemUiModel?.title ?? S.of(context).NothingFound,
+                          model.title ?? S.of(context).NothingFound,
                           style: theme?.boldTextTheme.caption1Bold,
                         ),
                         SpacingFoundation.verticalSpace2,
-                        universalNotOfferRemUiModel?.selectedDates?.last != null
+                        model.selectedDates?.last != null
                             ? AutoSizeText(
-                                '${formatDateWithCustomPattern('dd.MM', (universalNotOfferRemUiModel!.selectedDates!.first ?? DateTime.now()).toLocal())} - ${formatDateWithCustomPattern('dd.MM.yyyy', universalNotOfferRemUiModel!.selectedDates!.last!.toLocal())}',
+                                '${formatDateWithCustomPattern('dd.MM', (model.selectedDates!.first ?? DateTime.now()).toLocal())} - ${formatDateWithCustomPattern('dd.MM.yyyy', model.selectedDates!.last!.toLocal())}',
                                 maxLines: 1,
                                 minFontSize: 10,
                                 style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
                               )
                             : Text(
-                                universalNotOfferRemUiModel?.selectedDates?.first?.year == DateTime.now().year
+                                model.selectedDates?.first?.year == DateTime.now().year
                                     ? formatDateWithCustomPattern(
                                         'MMMM d',
-                                        (universalNotOfferRemUiModel?.selectedDates?.first ?? DateTime.now()).toLocal(),
+                                        (model.selectedDates?.first ?? DateTime.now()).toLocal(),
                                       ).capitalize()
                                     : formatDateWithCustomPattern(
                                         'dd.MM.yyyy',
-                                        (universalNotOfferRemUiModel?.selectedDates?.first ?? DateTime.now()).toLocal(),
+                                        (model.selectedDates?.first ?? DateTime.now()).toLocal(),
                                       ),
                                 style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
                               ),
                         SpacingFoundation.verticalSpace2,
-                        Row(
-                          children: [
+                        if (model.status == TicketIssueStatus.unpaid)
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                             ImageWidget(
                               height: 10.h,
                               fit: BoxFit.fill,
                               color: ColorsFoundation.mutedText,
-                              iconData: universalNotOfferRemUiModel?.isLaunched ?? true
-                                  ? ShuffleUiKitIcons.playoutline
-                                  : ShuffleUiKitIcons.stopoutline,
+                              iconData: ShuffleUiKitIcons.stopoutline,
                             ),
                             SpacingFoundation.horizontalSpace2,
-                            Expanded(
-                              child: Text(
-                                universalNotOfferRemUiModel?.isLaunched ?? true
-                                    ? S.of(context).Launched
-                                    : S.of(context).Expired,
-                                style:
-                                    theme?.regularTextTheme.caption4Regular.copyWith(color: ColorsFoundation.mutedText),
+                            Flexible(
+                                child: Text(
+                              S.of(context).AwaitingPayment,
+                              style: caption4Muted,
+                            )),
+                            SpacingFoundation.horizontalSpace2,
+                            Flexible(
+                              child: context.smallGradientButton(
+                                data: BaseUiKitButtonData(
+                                  text: S.of(context).Pay,
+                                  onPressed: onPayTap,
+                                  fit: ButtonFit.fitWidth,
+                                ),
                               ),
-                            ),
-                            SpacingFoundation.horizontalSpace2,
-                            Text(
-                              formatDateWithCustomPattern('dd.MM.yyyy',
-                                  (universalNotOfferRemUiModel?.isLaunchedDate ?? DateTime.now()).toLocal()),
-                              style:
-                                  theme?.regularTextTheme.caption4Regular.copyWith(color: ColorsFoundation.mutedText),
-                            ),
-                          ],
-                        ),
+                            )
+                          ])
+                        else
+                          Row(
+                            children: [
+                              ImageWidget(
+                                height: 10.h,
+                                fit: BoxFit.fill,
+                                color: ColorsFoundation.mutedText,
+                                iconData:
+                                    model.isLaunched ? ShuffleUiKitIcons.playoutline : ShuffleUiKitIcons.stopoutline,
+                              ),
+                              SpacingFoundation.horizontalSpace2,
+                              Expanded(
+                                child: Text(
+                                  model.isLaunched
+                                      ? S.of(context).Launched
+                                      : DateTime.now().isBefore(model.isLaunchedDate!)
+                                          ? S.of(context).Pending
+                                          : S.of(context).Expired,
+                                  style: caption4Muted,
+                                ),
+                              ),
+                              SpacingFoundation.horizontalSpace2,
+                              Text(
+                                formatDateWithCustomPattern(
+                                    'dd.MM.yyyy', (model.isLaunchedDate ?? DateTime.now()).toLocal()),
+                                style: caption4Muted,
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
-                  if ((universalNotOfferRemUiModel?.isOffer ?? false)) ...[
+                  if (model.isOffer && model.status == TicketIssueStatus.paid) ...[
                     SpacingFoundation.horizontalSpace8,
                     Flexible(
                       child: context.button(

@@ -4,7 +4,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class NotificationComponent extends StatelessWidget {
   final String? placeOrEventName;
-  final List<UniversalNotOfferRemUiModel?>? listNotification;
+  final List<UniversalNotOfferRemUiModel>? listNotification;
   final ValueChanged<int?>? onEditNotification;
   final ValueChanged<int?>? onRemoveNotification;
   final VoidCallback? onCreateNotification;

@@ -7,11 +7,12 @@ class UniversalFormForNotOfferRem extends StatefulWidget {
   final String? nameForEmptyList;
   final String? title;
   final String? whatCreate;
-  final List<dynamic>? itemList;
-  final ValueChanged<int?>? onEditItem;
-  final ValueChanged<int?>? onRemoveItem;
+  final List<UniversalNotOfferRemUiModel>? itemList;
+  final ValueChanged<int>? onEditItem;
+  final ValueChanged<int>? onRemoveItem;
   final VoidCallback? onCreateItem;
-  final ValueChanged<int?>? onActivateTap;
+  final ValueChanged<int>? onActivateTap;
+  final ValueChanged<int>? onPayTap;
   final GlobalKey<SliverAnimatedListState> animatedListKey;
 
   const UniversalFormForNotOfferRem({
@@ -21,6 +22,7 @@ class UniversalFormForNotOfferRem extends StatefulWidget {
     this.onEditItem,
     this.onRemoveItem,
     this.onCreateItem,
+    this.onPayTap,
     this.onActivateTap,
     this.title,
     this.whatCreate,
@@ -136,15 +138,15 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
             ).paddingOnly(top: SpacingFoundation.verticalSpacing16);
           } else {
             if (index < widget.itemList!.length) {
-              final offer = widget.itemList?[index];
-              final isItemEditing = editingItemId == offer?.id;
+              final offer = widget.itemList![index];
+              final isItemEditing = editingItemId == offer.id;
 
               return GestureDetector(
                 onTap: () {
                   _onTapOutside();
                 },
                 onLongPress: () {
-                  _onLongPress(offer?.id);
+                  _onLongPress(offer.id);
                 },
                 child: TapRegion(
                   onTapOutside: (_) {
@@ -153,14 +155,15 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                     }
                   },
                   child: UniversalNotOfferRemItemWidget(
-                    universalNotOfferRemUiModel: offer,
-                    onDismissed: () => widget.onRemoveItem?.call(offer?.id),
+                    model: offer,
+                    onDismissed: () => widget.onRemoveItem?.call(offer.id),
                     onEdit: () {
-                      widget.onEditItem?.call(offer?.id);
+                      widget.onEditItem?.call(offer.id);
                       editingItemId = null;
                     },
-                    onLongPress: () => _onLongPress(offer?.id),
-                    onActivateTap: () => widget.onActivateTap?.call(offer?.id),
+                    onLongPress: () => _onLongPress(offer.id),
+                    onActivateTap: () => widget.onActivateTap?.call(offer.id),
+                    onPayTap: () => widget.onPayTap?.call(offer.id),
                     isEditingMode: isItemEditing,
                   ).paddingOnly(
                     bottom: offer != widget.itemList?.last ? SpacingFoundation.verticalSpacing16 : 0,
