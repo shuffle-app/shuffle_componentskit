@@ -38,6 +38,7 @@ class ProfileComponent extends StatelessWidget {
   final UiKitLineChartData<num>? bookingsAndInvitesChartData;
 
   ///Influencer
+  final List<ProfilePlace>? voices;
   final ValueNotifier<double>? tiltNotifier;
   final List<ProfilePlace>? profilePlaces;
   final List<InfluencerTopCategory>? influencerTopCategories;
@@ -76,6 +77,7 @@ class ProfileComponent extends StatelessWidget {
     this.bookingsAndInvitesChartData,
 
     ///Influencer
+    this.voices,
     this.tiltNotifier,
     this.profilePlaces,
     this.influencerTopCategories,
@@ -85,6 +87,8 @@ class ProfileComponent extends StatelessWidget {
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
+
+  bool get _hasVoices => voices?.any((e) => e.source != null) ?? false;
 
   String stringWithSpace(int text) {
     NumberFormat formatter = NumberFormat('#,###');
@@ -377,6 +381,33 @@ class ProfileComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace24,
         ],
+        //TODO
+        if (_hasVoices && voices != null && voices!.isNotEmpty)
+          UiKitShowMoreTitledSection(
+            onShowMore: () {},
+            title: S.current.Voice,
+            content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: voices!
+                    .map((e) {
+                      if (e.source != null) {
+                        return UiKitContentVoiceReactionCard(
+                          contentTitle: e.title,
+                          datePosted: e.createdAt,
+                          imageLink: GraphicsFoundation.instance.png.placeSocial1.path,
+                          customVoiceWidget: AudioPlayer(source: e.source!),
+                          properties: [],
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    })
+                    .take(2)
+                    .toList()),
+          ).paddingOnly(
+            bottom: SpacingFoundation.verticalSpacing16,
+          ),
         // SizedBox(
         //   width: double.infinity,
         //   child: Stack(
