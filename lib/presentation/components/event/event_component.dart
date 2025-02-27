@@ -38,6 +38,7 @@ class EventComponent extends StatefulWidget {
   final ValueChanged<BaseUiKitUserTileData?>? onAvatarTap;
   final VoidCallback? onAddVoiceTap;
   final VoidCallback? onInterviewTap;
+  final bool isInfluencer;
 
   const EventComponent({
     super.key,
@@ -72,6 +73,7 @@ class EventComponent extends StatefulWidget {
     this.onAvatarTap,
     this.onAddVoiceTap,
     this.onInterviewTap,
+    this.isInfluencer = false,
   });
 
   @override
@@ -686,27 +688,31 @@ class _EventComponentState extends State<EventComponent> {
               );
             },
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
-        Row(
-          children: [
-            Expanded(
-              child: UiKitInfluencerToolInContentCard(
-                group: _influencerGroup,
-                iconData: ShuffleUiKitIcons.record,
-                onTap: widget.onAddVoiceTap,
-                title: S.of(context).AddVoice,
-              ),
-            ),
-            SpacingFoundation.horizontalSpace12,
-            Expanded(
-              child: UiKitInfluencerToolInContentCard(
-                group: _influencerGroup,
-                iconData: ShuffleUiKitIcons.conversation,
-                onTap: widget.onInterviewTap,
-                title: S.of(context).Interview,
-              ),
-            ),
-          ],
-        ).paddingSymmetric(horizontal: horizontalMargin),
+        if (widget.isInfluencer)
+          SizedBox(
+            height: 1.sw <= 380 ? 0.33.sw : 0.29.sw,
+            child: Row(
+              children: [
+                Expanded(
+                  child: UiKitInfluencerToolInContentCard(
+                    group: _influencerGroup,
+                    iconData: ShuffleUiKitIcons.record,
+                    onTap: widget.onAddVoiceTap,
+                    title: S.of(context).Voice,
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace12,
+                Expanded(
+                  child: UiKitInfluencerToolInContentCard(
+                    group: _influencerGroup,
+                    iconData: ShuffleUiKitIcons.conversation,
+                    onTap: widget.onInterviewTap,
+                    title: S.of(context).Interview,
+                  ),
+                ),
+              ],
+            ).paddingSymmetric(horizontal: horizontalMargin),
+          ),
         SpacingFoundation.verticalSpace24,
 
         if (widget.event.descriptionItems != null)
