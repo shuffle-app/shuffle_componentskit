@@ -107,7 +107,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                               height: 10.h,
                               fit: BoxFit.fill,
                               color: ColorsFoundation.mutedText,
-                              iconData: ShuffleUiKitIcons.stopoutline,
+                              iconData: ShuffleUiKitIcons.stopfill,
                             ),
                             SpacingFoundation.horizontalSpace2,
                             Flexible(
@@ -134,7 +134,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                                 fit: BoxFit.fill,
                                 color: ColorsFoundation.mutedText,
                                 iconData:
-                                    model.isLaunched ? ShuffleUiKitIcons.playoutline : ShuffleUiKitIcons.stopoutline,
+                                    model.isLaunched ? ShuffleUiKitIcons.playfill : ShuffleUiKitIcons.stopfill,
                               ),
                               SpacingFoundation.horizontalSpace2,
                               Expanded(

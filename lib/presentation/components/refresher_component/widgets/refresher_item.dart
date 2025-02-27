@@ -74,8 +74,8 @@ class RefresherItem extends StatelessWidget {
                               fit: BoxFit.fill,
                               color: ColorsFoundation.mutedText,
                               iconData: item?.isLaunched ?? true
-                                  ? ShuffleUiKitIcons.playoutline
-                                  : ShuffleUiKitIcons.stopoutline,
+                                  ? ShuffleUiKitIcons.playfill
+                                  : ShuffleUiKitIcons.stopfill,
                             ),
                             SpacingFoundation.horizontalSpace2,
                             Expanded(
