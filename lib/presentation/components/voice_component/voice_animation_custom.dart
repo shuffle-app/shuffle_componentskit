@@ -111,7 +111,7 @@ class _VoiceAnimationCustomState extends State<VoiceAnimationCustom> {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() => _recordDuration++);
 
-      /// Ограничение на 30 минут
+      /// 30 minute limit
       if (_recordDuration > 1800) {
         _isTimeLimit = true;
         _stop();
@@ -164,7 +164,7 @@ class _VoiceAnimationCustomState extends State<VoiceAnimationCustom> {
                 _stop();
               }
             },
-            child: UiKitGradientedDecoratedButtonCurrent(
+            child: UiKitGradientedDecoratedButtonPrioritized(
               iconData: ShuffleUiKitIcons.record,
               audioLevel: 40 + (_amplitude?.current ?? 0.0),
             ),
@@ -172,7 +172,7 @@ class _VoiceAnimationCustomState extends State<VoiceAnimationCustom> {
         ),
         Positioned(
           bottom: 0.12.sh,
-          child: UiKitMockAudioWaveCurrent(
+          child: UiKitAudioWavePrioritized(
             amplitudes: _amplitudeList,
             scrollable: true,
           ),
