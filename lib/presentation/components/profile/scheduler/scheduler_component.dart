@@ -3,11 +3,12 @@ import 'package:shuffle_components_kit/services/navigation_service/navigation_ke
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 import '../../feed/uifeed_model.dart';
 
 class SchedulerComponent extends StatefulWidget {
   final ScrollController scrollController;
-  final DateTime? focusedDate;
+  final DateTime focusedDate;
 
   //could be event component or place component
   final Future<List<UiUniversalModel>> Function(DateTime firstDay, DateTime lastDay) eventLoader;
@@ -18,7 +19,8 @@ class SchedulerComponent extends StatefulWidget {
 
   const SchedulerComponent(
       {super.key,
-      required this.scrollController, this.focusedDate,
+      required this.scrollController,
+      required this.focusedDate,
       required this.eventLoader,
       this.onPageChanged,
       this.onContentDeleted,
@@ -30,8 +32,7 @@ class SchedulerComponent extends StatefulWidget {
 }
 
 class _SchedulerComponentState extends State<SchedulerComponent> with SingleTickerProviderStateMixin {
-  DateTime? focusedDate;
-  DateTime get focusedDateGetter => focusedDate?? DateTime.now();
+  late DateTime focusedDate = widget.focusedDate;
   final List<UiUniversalModel> currentContent = List.empty(growable: true);
   final Duration pageTransitionDuration = Duration(milliseconds: 300);
   final Curve pageTransitionCurve = Curves.easeInOut;
@@ -41,15 +42,25 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   final List<int> deletedCards = List.empty(growable: true);
 
   PageController? pageController;
+  CalendarFormat calendarFormat = CalendarFormat.week;
 
   DateTime get firstDayToLoad {
-    final firstMonthDay = DateTime(focusedDateGetter.year, focusedDateGetter.month, 1);
-    return firstMonthDay.subtract(Duration(days: firstMonthDay.weekday - 1));
+    if (calendarFormat == CalendarFormat.week) {
+      final firstWeekDay = focusedDate.subtract(Duration(days: focusedDate.weekday));
+      return firstWeekDay;
+    } else {
+      final firstMonthDay = DateTime(focusedDate.year, focusedDate.month, 1);
+      return firstMonthDay.subtract(Duration(days: firstMonthDay.weekday - 1));
+    }
   }
 
   DateTime get lastDayToLoad {
-    final lastMonthDay = DateTime(focusedDateGetter.year, focusedDateGetter.month, 1)
-        .add(Duration(days: DateUtils.getDaysInMonth(focusedDateGetter.year, focusedDateGetter.month)))
+    if (calendarFormat == CalendarFormat.week) {
+      final lastWeekDay = focusedDate.add(Duration(days: 7 - focusedDate.weekday));
+      return lastWeekDay;
+    }
+    final lastMonthDay = DateTime(focusedDate.year, focusedDate.month, 1)
+        .add(Duration(days: DateUtils.getDaysInMonth(focusedDate.year, focusedDate.month)))
         .subtract(Duration(days: 1));
     return lastMonthDay.add(Duration(days: 7 - lastMonthDay.weekday));
   }
@@ -58,7 +69,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
     final today = DateTime.now();
     final firstMonthDay = DateTime(today.year, today.month, 1);
     return firstMonthDay;
-    // return firstMonthDay.subtract(Duration(days: firstMonthDay.weekday - 1));
   }
 
   DateTime get lastDay => DateTime(DateTime.now().year + 1, 12, 31);
@@ -75,17 +85,16 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
       showingOpacity = 0;
     });
     currentContent.addAll(await widget.eventLoader(firstDayToLoad, lastDayToLoad));
-    //TODO think about it
-    // setState(() {
-    //   if (currentContent.isNotEmpty &&
-    //       !currentContent.any((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)) {
-    //     focusedDate = currentContent
-    //             .firstWhereOrNull((e) => e.shouldVisitAt != null && e.shouldVisitAt?.month == focusedDate.month)
-    //             ?.shouldVisitAt! ??
-    //         focusedDate;
-    //   }
-    //   showingOpacity = 1;
-    // });
+    setState(() {
+      if (currentContent.isNotEmpty &&
+          !currentContent.any((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)) {
+        focusedDate = currentContent
+                .firstWhereOrNull((e) => e.shouldVisitAt != null && e.shouldVisitAt?.month == focusedDate.month)
+                ?.shouldVisitAt! ??
+            focusedDate;
+      }
+      showingOpacity = 1;
+    });
   }
 
   bool enabledDayPredicate(DateTime day) {
@@ -114,7 +123,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           children: [
             Expanded(
                 child: Text(
-              DateFormat('MMMM yyyy').format(focusedDateGetter),
+              DateFormat('MMMM yyyy').format(focusedDate),
               style: theme?.boldTextTheme.title2,
             )),
             SpacingFoundation.horizontalSpace4,
@@ -139,16 +148,18 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
         ).paddingSymmetric(
             horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing16),
         UiKitCalendarCompact(
+          calendarFormat: calendarFormat,
           onCalendarCreated: (controller) {
             pageController = controller;
           },
           enabledDayPredicate: enabledDayPredicate,
+          wasChangedDateToSpecific: wasChangedDateToSpecific,
           eventLoader: eventLoader,
-          focusedDate: focusedDateGetter,
+          focusedDate: focusedDate,
           firstDay: firstDay,
           lastDay: lastDay,
           onPageChanged: (DateTime focusedDay) {
-            if (focusedDay.month != focusedDate?.month) {
+            if (focusedDay.month != focusedDate.month) {
               FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
               setState(() {
                 focusedDate = focusedDay;
@@ -189,12 +200,12 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             ).paddingSymmetric(
               horizontal: SpacingFoundation.horizontalSpacing16,
             ),
-            wasChangedDateToSpecific ? Text(DateFormat('dd.MM.yyyy').format(focusedDate!)) : const SizedBox.shrink(),
+            wasChangedDateToSpecific ? Text(DateFormat('dd.MM.yyyy').format(focusedDate)) : const SizedBox.shrink(),
           ],
         ),
         SpacingFoundation.verticalSpace16,
         for (var content in (wasChangedDateToSpecific
-            ? currentContent.where((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate!) ?? false)
+            ? currentContent.where((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)
             : currentContent))
           AnimatedOpacity(
               opacity: showingOpacity,
@@ -212,7 +223,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                             title: Text(
                               S.of(context).YouSureToDeleteX(content.title ?? ''),
                               style: theme?.boldTextTheme.title2.copyWith(color: Colors.black),
-                              textAlign: TextAlign.center,
                             ),
                             defaultButtonText: S.of(context).Cancel,
                             additionalButton: context.dialogButton(
@@ -227,7 +237,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
 
                     return confirmation;
                   },
-                  dismissThresholds: {DismissDirection.endToStart: 0.6},
+                  dismissThresholds: {DismissDirection.endToStart: 0.5},
                   onDismissed: (direction) async {
                     setState(() {
                       deletedCards.add(content.id);
