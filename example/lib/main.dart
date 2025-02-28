@@ -247,6 +247,19 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'Photo',
+                onPressed: () {
+                  context.push(
+                    Scaffold(
+                      body: InfluencerPhotoComponent(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'scanner barcode',
                 onPressed: () {
                   context.push(
@@ -1117,7 +1130,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     onCreateNotification: () {
                       context.push(
                         CreateNotificationOrRemind(
-                          lastDate: DateTime(2024, 9, 16),
                           onCreate: (notificationUiModel) async {
                             if (notificationUiModel != null) {
                               await uiKitPayDialog(
@@ -1160,7 +1172,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                       int index = _listNotification.indexWhere((element) => element?.id == id);
                       context.push(
                         CreateNotificationOrRemind(
-                          lastDate: DateTime(2024, 9, 16),
                           universalNotOfferRemUiModel: _listNotification[index],
                           onCreate: (notificationUiModel) async {
                             if (notificationUiModel != _listNotification[index]) {
@@ -1190,7 +1201,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
                     onCreateReminder: () {
                       context.push(
                         CreateNotificationOrRemind(
-                          lastDate: DateTime(2024, 9, 16),
                           isNotification: false,
                           onCreate: (reminderModel) async {
                             if (reminderModel != null) {
@@ -1222,7 +1232,6 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
 
                       context.push(
                         CreateNotificationOrRemind(
-                          lastDate: DateTime(2024, 9, 16),
                           isNotification: false,
                           universalNotOfferRemUiModel: _listReminders[index],
                           onCreate: (reminderModel) async {
