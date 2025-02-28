@@ -247,6 +247,17 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'voice recorder page',
+                onPressed: () {
+                  context.push(
+                    AddVoiceComponent(),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'Photo',
                 onPressed: () {
                   context.push(

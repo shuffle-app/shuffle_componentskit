@@ -23,6 +23,11 @@ dependencies:
   json_annotation: ^4.9.0
   json_serializable: ^6.9.2
 
+  #voice
+  flutter_sound_record: ^3.3.2
+  just_audio: ^0.9.21
+  file_picker: ^9.0.1
+
   #for barcode generate
   barcode_widget: ^2.0.4
 
