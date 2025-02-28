@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
@@ -37,7 +38,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   final Duration pageTransitionDuration = Duration(milliseconds: 300);
   final Curve pageTransitionCurve = Curves.easeInOut;
   bool wasChangedDateToSpecific = false;
-  final Duration showingDuration = const Duration(milliseconds: 100);
+  final Duration showingDuration = const Duration(milliseconds: 170);
   double showingOpacity = 0.0;
   final List<int> deletedCards = List.empty(growable: true);
 
@@ -79,11 +80,17 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
     super.initState();
   }
 
-  void fetchData() async {
+  void fetchData([DateTime? newFocusedDate]) async {
     setState(() {
-      currentContent.clear();
       showingOpacity = 0;
+      wasChangedDateToSpecific = false;
     });
+    Future.delayed(showingDuration, currentContent.clear);
+    if (newFocusedDate != null) {
+      setState(() {
+        focusedDate = newFocusedDate;
+      });
+    }
     currentContent.addAll(await widget.eventLoader(firstDayToLoad, lastDayToLoad));
     setState(() {
       if (currentContent.isNotEmpty &&
@@ -118,6 +125,24 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
       title: S.of(context).Scheduler,
       controller: widget.scrollController,
       centerTitle: true,
+      appBarTrailing: context.iconButtonNoPadding(
+          data: BaseUiKitButtonData(
+              onPressed: () {
+                setState(() {
+                  if (calendarFormat == CalendarFormat.week) {
+                    calendarFormat = CalendarFormat.month;
+                  } else {
+                    calendarFormat = CalendarFormat.week;
+                  }
+                  wasChangedDateToSpecific = false;
+                });
+                fetchData();
+              },
+              iconInfo: BaseUiKitButtonIconData(
+                  iconData: calendarFormat == CalendarFormat.week
+                      ? CupertinoIcons.calendar
+                      : CupertinoIcons.list_bullet_below_rectangle,
+                  color: theme?.colorScheme.inversePrimary))),
       children: [
         Row(
           children: [
@@ -159,14 +184,15 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           firstDay: firstDay,
           lastDay: lastDay,
           onPageChanged: (DateTime focusedDay) {
-            if (focusedDay.month != focusedDate.month) {
+            if (focusedDay.month != focusedDate.month || calendarFormat == CalendarFormat.week) {
               FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
-              setState(() {
-                focusedDate = focusedDay;
-                wasChangedDateToSpecific = false;
-              });
+
+              // setState(() {
+              //   focusedDate = focusedDay;
+              //   wasChangedDateToSpecific = false;
+              // });
               widget.onPageChanged?.call(focusedDay);
-              fetchData();
+              fetchData(focusedDay);
             }
           },
           onDaySelected: (
@@ -181,7 +207,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             });
             FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
             await Future.delayed(
-              Duration.zero,
+              showingDuration,
             );
             setState(() {
               focusedDate = focusedDay;
@@ -200,7 +226,12 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             ).paddingSymmetric(
               horizontal: SpacingFoundation.horizontalSpacing16,
             ),
-            wasChangedDateToSpecific ? Text(DateFormat('dd.MM.yyyy').format(focusedDate)) : const SizedBox.shrink(),
+            wasChangedDateToSpecific
+                ? Text(
+                    DateFormat('dd.MM.yyyy').format(focusedDate),
+                    style: theme?.regularTextTheme.bodyUpperCase.copyWith(color: ColorsFoundation.mutedText),
+                  )
+                : const SizedBox.shrink(),
           ],
         ),
         SpacingFoundation.verticalSpace16,
