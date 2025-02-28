@@ -36,6 +36,9 @@ class EventComponent extends StatefulWidget {
   final int? currentUserId;
   final Set<int>? likedReviews;
   final ValueChanged<BaseUiKitUserTileData?>? onAvatarTap;
+  final VoidCallback? onAddVoiceTap;
+  final VoidCallback? onInterviewTap;
+  final bool isInfluencer;
 
   const EventComponent({
     super.key,
@@ -68,6 +71,9 @@ class EventComponent extends StatefulWidget {
     this.likedReviews,
     this.onAddToSchedulerPressed,
     this.onAvatarTap,
+    this.onAddVoiceTap,
+    this.onInterviewTap,
+    this.isInfluencer = false,
   });
 
   @override
@@ -77,6 +83,7 @@ class EventComponent extends StatefulWidget {
 class _EventComponentState extends State<EventComponent> {
   final AutoSizeGroup group = AutoSizeGroup();
   final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
+  final AutoSizeGroup _influencerGroup = AutoSizeGroup();
 
   final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
 
@@ -684,6 +691,33 @@ class _EventComponentState extends State<EventComponent> {
               );
             },
           ).paddingOnly(bottom: EdgeInsetsFoundation.vertical24),
+        if (widget.isInfluencer)
+          SizedBox(
+            height: 1.sw <= 380 ? 0.33.sw : 0.29.sw,
+            child: Row(
+              children: [
+                Expanded(
+                  child: UiKitInfluencerToolInContentCard(
+                    group: _influencerGroup,
+                    iconData: ShuffleUiKitIcons.record,
+                    onTap: widget.onAddVoiceTap,
+                    title: S.of(context).Voice,
+                  ),
+                ),
+                SpacingFoundation.horizontalSpace12,
+                Expanded(
+                  child: UiKitInfluencerToolInContentCard(
+                    group: _influencerGroup,
+                    iconData: ShuffleUiKitIcons.conversation,
+                    onTap: widget.onInterviewTap,
+                    title: S.of(context).Interview,
+                  ),
+                ),
+              ],
+            ).paddingSymmetric(horizontal: horizontalMargin),
+          ),
+        SpacingFoundation.verticalSpace24,
+
         if (widget.event.descriptionItems != null)
           ...widget.event.descriptionItems!.map(
             (e) {
