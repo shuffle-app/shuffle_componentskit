@@ -701,7 +701,7 @@ class _EventComponentState extends State<EventComponent> {
                     group: _influencerGroup,
                     iconData: ShuffleUiKitIcons.record,
                     onTap: widget.onAddVoiceTap,
-                    title: S.of(context).Voice,
+                    title: S.of(context).AddVoice,
                   ),
                 ),
                 SpacingFoundation.horizontalSpace12,
