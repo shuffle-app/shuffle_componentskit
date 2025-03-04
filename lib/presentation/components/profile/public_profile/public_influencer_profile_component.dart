@@ -17,6 +17,8 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
   final ValueChanged<VideoReactionUiModel>? onReactionTapped;
   final List<InfluencerTopCategory>? influencerTopCategories;
   final List<ContentPreviewWithRespect>? contentPreviewWithRespects;
+  final List<InfluencerPhotoUiModel>? influencerPhotos;
+  final ValueChanged<int>? onShowMoreTap;
   final Function(int? placeId, int? eventId)? onItemTap;
   final bool isLoading;
 
@@ -30,6 +32,8 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
     this.profilePlaces,
     this.onReactionTapped,
     this.influencerTopCategories,
+    this.influencerPhotos,
+    this.onShowMoreTap,
     this.contentPreviewWithRespects,
     this.onItemTap,
     this.isLoading = false,
@@ -138,6 +142,8 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
                     .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing32)
               else
                 InfluencerReviewsTopRespectWidget(
+                  onShowMoreTap: onShowMoreTap,
+                  influencerPhotos: influencerPhotos,
                   contentPreviewWithRespects: contentPreviewWithRespects,
                   influencerTopCategories: influencerTopCategories,
                   onItemTap: onItemTap,
