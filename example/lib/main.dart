@@ -258,6 +258,19 @@ class _ComponentsTestPageState extends State<ComponentsTestPage> with TickerProv
             SpacingFoundation.verticalSpace16,
             context.button(
               data: BaseUiKitButtonData(
+                text: 'Photo',
+                onPressed: () {
+                  context.push(
+                    Scaffold(
+                      body: InfluencerPhotoComponent(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SpacingFoundation.verticalSpace16,
+            context.button(
+              data: BaseUiKitButtonData(
                 text: 'scanner barcode',
                 onPressed: () {
                   context.push(

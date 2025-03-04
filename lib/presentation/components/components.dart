@@ -171,3 +171,4 @@ export 'refresher_component/ui_model/refresher_ui_model.dart';
 export 'voice_component/add_voice_component.dart';
 export 'voice_component/audio_player.dart';
 export 'voice_component/voice_animation_custom.dart';
+export 'influencer_photo_component/influencer_photo_component.dart';

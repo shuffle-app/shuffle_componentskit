@@ -25,7 +25,6 @@ dependencies:
 
   #voice
   flutter_sound_record: ^3.3.2
-  just_audio: ^0.9.21
   file_picker: ^9.0.1
 
   #for barcode generate
@@ -36,6 +35,9 @@ dependencies:
 
   #scroll controller 
   anchor_scroll_controller: ^0.4.4
+
+  #photo masonry
+  flutter_dynamic_staggered_grid_view: ^1.0.0
 
   #configuration libs
   http: ^1.2.1
