@@ -38,6 +38,7 @@ class ProfileComponent extends StatelessWidget {
   final UiKitLineChartData<num>? bookingsAndInvitesChartData;
 
   ///Influencer
+  final List<InfluencerPhotoUiModel>? influencerPhotos;
   final List<ProfilePlace>? voices;
   final ValueNotifier<double>? tiltNotifier;
   final List<ProfilePlace>? profilePlaces;
@@ -47,6 +48,7 @@ class ProfileComponent extends StatelessWidget {
   final bool isLoading;
   final VoidCallback? onStripeTap;
   final StripeRegistrationStatus? stripeRegistrationStatus;
+  final ValueChanged<int>? onShowMoreTap;
 
   const ProfileComponent({
     super.key,
@@ -79,6 +81,7 @@ class ProfileComponent extends StatelessWidget {
     this.bookingsAndInvitesChartData,
 
     ///Influencer
+    this.influencerPhotos,
     this.voices,
     this.tiltNotifier,
     this.profilePlaces,
@@ -88,11 +91,10 @@ class ProfileComponent extends StatelessWidget {
     this.isLoading = false,
     this.onStripeTap,
     this.stripeRegistrationStatus,
+    this.onShowMoreTap,
   });
 
   bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
-
-  bool get _hasVoices => voices?.any((e) => e.source != null) ?? false;
 
   String stringWithSpace(int text) {
     NumberFormat formatter = NumberFormat('#,###');
@@ -270,7 +272,7 @@ class ProfileComponent extends StatelessWidget {
             itemCount: recommendedUsers?.length ?? 3,
           ),
         ],
-        SpacingFoundation.verticalSpace24,
+        if (profile.userTileType != UserTileType.influencer) SpacingFoundation.verticalSpace24,
         if (bookingsAndInvitesChartData != null)
           UiKitLineChart(chartData: bookingsAndInvitesChartData!).paddingAll(horizontalMargin),
         if (videoReactionsPagingController != null && profile.userTileType != UserTileType.influencer)
@@ -323,7 +325,7 @@ class ProfileComponent extends StatelessWidget {
           ),
         if (videoReactionsPagingController != null && profile.userTileType != UserTileType.influencer)
           SpacingFoundation.verticalSpace24,
-        if (feedbackPagingController != null)
+        if (feedbackPagingController != null && profile.userTileType != UserTileType.influencer)
           ValueListenableBuilder(
             valueListenable: feedbackPagingController!,
             builder: (context, value, child) {
@@ -390,33 +392,7 @@ class ProfileComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace24,
         ],
-        //TODO
-        if (_hasVoices && voices != null && voices!.isNotEmpty)
-          UiKitShowMoreTitledSection(
-            onShowMore: () {},
-            title: S.current.Voice,
-            content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: voices!
-                    .map((e) {
-                      if (e.source != null) {
-                        return UiKitContentVoiceReactionCard(
-                          contentTitle: e.title,
-                          datePosted: e.createdAt,
-                          imageLink: GraphicsFoundation.instance.png.placeSocial1.path,
-                          customVoiceWidget: AudioPlayer(source: e.source!),
-                          properties: [],
-                        );
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    })
-                    .take(2)
-                    .toList()),
-          ).paddingOnly(
-            bottom: SpacingFoundation.verticalSpacing16,
-          ),
+
         // SizedBox(
         //   width: double.infinity,
         //   child: Stack(
@@ -472,6 +448,8 @@ class ProfileComponent extends StatelessWidget {
         // ).paddingSymmetric(horizontal: horizontalMargin),
         if (profile.userTileType == UserTileType.influencer)
           InfluencerReviewsTopRespectWidget(
+            influencerPhotos: influencerPhotos,
+            voices: voices,
             contentPreviewWithRespects: contentPreviewWithRespects,
             influencerTopCategories: influencerTopCategories,
             isLoading: isLoading,
@@ -480,6 +458,7 @@ class ProfileComponent extends StatelessWidget {
             profilePlaces: profilePlaces,
             storiesPagingController: videoReactionsPagingController,
             tiltNotifier: tiltNotifier,
+            onShowMoreTap: onShowMoreTap,
           ),
         kBottomNavigationBarHeight.heightBox,
       ],
