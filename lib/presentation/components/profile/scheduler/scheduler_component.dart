@@ -140,7 +140,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
               },
               iconInfo: BaseUiKitButtonIconData(
                   iconData: calendarFormat == CalendarFormat.week
-                      ? CupertinoIcons.calendar
+                      ? ShuffleUiKitIcons.calendar
                       : CupertinoIcons.list_bullet_below_rectangle,
                   color: theme?.colorScheme.inversePrimary))),
       children: [
@@ -210,8 +210,12 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
               showingDuration,
             );
             setState(() {
+              if (focusedDate.isAtSameDayAs(focusedDay) && wasChangedDateToSpecific) {
+                wasChangedDateToSpecific = false;
+              } else {
+                wasChangedDateToSpecific = true;
+              }
               focusedDate = focusedDay;
-              wasChangedDateToSpecific = true;
               showingOpacity = 1;
             });
           },
