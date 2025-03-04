@@ -38,6 +38,7 @@ class UiFeedModel {
 class UiUniversalModel extends Advertisable {
   final int id;
   final int? cityId;
+  final int? schedulerId;
   final String type;
   final String? source;
   final double? rating;
@@ -75,6 +76,7 @@ class UiUniversalModel extends Advertisable {
     this.onFavoriteChanged,
     this.shouldVisitAt,
     this.weatherType,
+    this.schedulerId,
     this.placeName,
     this.isArchieved = false,
     this.hasNotificationSet = false,
@@ -89,6 +91,7 @@ class UiUniversalModel extends Advertisable {
     this.baseTags,
     this.rating,
     this.cityId,
+    this.schedulerId,
     this.website,
     this.weekdays,
     this.location,
@@ -112,6 +115,7 @@ class UiUniversalModel extends Advertisable {
     this.baseTags,
     this.website,
     this.cityId,
+    this.schedulerId,
     this.rating,
     this.weekdays,
     this.location,
@@ -202,6 +206,8 @@ class UiUniversalModel extends Advertisable {
     String? placeName,
     bool? isArchieved,
     bool? hasNotificationSet,
+    int? cityId,
+    int? schedulerId,
   }) => UiUniversalModel(
     id: id?? this.id,
     type: type?? this.type,
@@ -221,5 +227,8 @@ class UiUniversalModel extends Advertisable {
     weatherType: weatherType?? this.weatherType,
     placeName: placeName?? this.placeName,
     isArchieved: isArchieved?? this.isArchieved,
+    hasNotificationSet: hasNotificationSet?? this.hasNotificationSet,
+    cityId: cityId?? this.cityId,
+    schedulerId: schedulerId?? this.schedulerId,
   );
 }

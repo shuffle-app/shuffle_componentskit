@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/presentation.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:collection/collection.dart';
@@ -16,7 +17,7 @@ class SchedulerComponent extends StatefulWidget {
   final Function(DateTime focusedDay)? onPageChanged;
   final ValueChanged<UiUniversalModel>? openContentCallback;
   final ValueChanged<UiUniversalModel>? onContentDeleted;
-  final ValueChanged<UiUniversalModel>? onNotificationSetRequested;
+  final AsyncValueChanged<void, UiUniversalModel>? onNotificationSetRequested;
 
   const SchedulerComponent(
       {super.key,
@@ -80,11 +81,13 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
     super.initState();
   }
 
-  void fetchData([DateTime? newFocusedDate]) async {
-    setState(() {
-      showingOpacity = 0;
-      wasChangedDateToSpecific = false;
-    });
+  void fetchData({DateTime? newFocusedDate, bool needResetData = true}) async {
+    if (needResetData) {
+      setState(() {
+        showingOpacity = 0;
+        wasChangedDateToSpecific = false;
+      });
+    }
     Future.delayed(showingDuration, currentContent.clear);
     if (newFocusedDate != null) {
       setState(() {
@@ -192,7 +195,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
               //   wasChangedDateToSpecific = false;
               // });
               widget.onPageChanged?.call(focusedDay);
-              fetchData(focusedDay);
+              fetchData(newFocusedDate: focusedDay);
             }
           },
           onDaySelected: (
@@ -282,7 +285,8 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                     await Future.delayed(const Duration(milliseconds: 500), fetchData);
                   },
                   child: UiKitPlannerContentCard(
-                    onNotification: () => widget.onNotificationSetRequested?.call(content),
+                    onNotification: () =>
+                        widget.onNotificationSetRequested?.call(content).then((_) => fetchData(needResetData: false)),
                     showNotificationSet: content.hasNotificationSet,
                     onTap: () => widget.openContentCallback?.call(content),
                     avatarPath:
