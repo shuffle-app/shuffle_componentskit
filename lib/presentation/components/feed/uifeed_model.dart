@@ -54,6 +54,7 @@ class UiUniversalModel extends Advertisable {
   final VoidCallback? onFavoriteChanged;
   final PlaceWeatherType? weatherType;
   DateTime? shouldVisitAt;
+  DateTime? remaindAt;
   final String? placeName;
   final bool isArchieved;
   final bool hasNotificationSet;
@@ -69,6 +70,7 @@ class UiUniversalModel extends Advertisable {
     this.cityId,
     this.website,
     this.weekdays,
+    this.remaindAt,
     this.location,
     this.source,
     this.title,
@@ -95,6 +97,7 @@ class UiUniversalModel extends Advertisable {
     this.website,
     this.weekdays,
     this.location,
+    this.remaindAt,
     this.source,
     this.title,
     this.isFavorite,
@@ -118,6 +121,7 @@ class UiUniversalModel extends Advertisable {
     this.schedulerId,
     this.rating,
     this.weekdays,
+    this.remaindAt,
     this.location,
     this.source,
     this.title,
@@ -202,6 +206,7 @@ class UiUniversalModel extends Advertisable {
     Stream<bool>? isFavorite,
     VoidCallback? onFavoriteChanged,
     DateTime? shouldVisitAt,
+    DateTime? remaindAt,
     PlaceWeatherType? weatherType,
     String? placeName,
     bool? isArchieved,
@@ -230,5 +235,6 @@ class UiUniversalModel extends Advertisable {
     hasNotificationSet: hasNotificationSet?? this.hasNotificationSet,
     cityId: cityId?? this.cityId,
     schedulerId: schedulerId?? this.schedulerId,
+    remaindAt: remaindAt?? this.remaindAt,
   );
 }
