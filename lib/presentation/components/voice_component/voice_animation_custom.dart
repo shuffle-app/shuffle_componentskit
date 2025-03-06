@@ -1,8 +1,7 @@
 import 'dart:async';
-
+import 'package:record/record.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound_record/flutter_sound_record.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class VoiceAnimationCustom extends StatefulWidget {
@@ -33,7 +32,7 @@ class _VoiceAnimationCustomState extends State<VoiceAnimationCustom> {
   Timer? _timer;
   Timer? _ampTimer;
   Timer? _startDelayTimer;
-  final FlutterSoundRecord _audioRecorder = FlutterSoundRecord();
+  final AudioRecorder _audioRecorder = AudioRecorder();
   Amplitude? _amplitude;
   final List<double> _amplitudeList = [];
 
@@ -49,7 +48,7 @@ class _VoiceAnimationCustomState extends State<VoiceAnimationCustom> {
   Future<void> _start() async {
     try {
       if (await _audioRecorder.hasPermission()) {
-        await _audioRecorder.start();
+        await _audioRecorder.startStream(const RecordConfig(encoder: AudioEncoder.pcm16bits));
         widget.onPlay?.call();
 
         _isTimeLimit = false;

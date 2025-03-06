@@ -24,7 +24,7 @@ dependencies:
   json_serializable: ^6.9.2
 
   #voice
-  flutter_sound_record: ^3.3.2
+  record: ^5.2.1
   file_picker: ^9.0.1
 
   #for barcode generate
