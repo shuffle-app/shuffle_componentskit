@@ -50,6 +50,7 @@ class _PriceSelectorComponentState extends State<PriceSelectorComponent> {
 
   final _currencies = {
     'RUB': GraphicsFoundation.instance.svg.russia.path,
+    'BAT': GraphicsFoundation.instance.svg.thailand.path,
     'USD': GraphicsFoundation.instance.svg.usFlag.path,
     // 'hi' : GraphicsFoundation.instance.svg.india.path,
     'AED': GraphicsFoundation.instance.svg.arabic.path,
