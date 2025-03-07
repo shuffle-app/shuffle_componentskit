@@ -324,14 +324,14 @@ class UiEventModel extends Advertisable {
     'city': city,
     'houseNumber': houseNumberController.text,
     'apartmentNumber': apartmentNumberController.text,
-    'weatherType': weatherType?.toString(),
+    // 'weatherType': weatherType?.toString(),
     'bookingUrl': bookingUrl,
     // 'bookingUiModel': bookingUiModel?.toMap(),
-    'updatedAt': updatedAt?.millisecondsSinceEpoch,
-    'moderationStatus': moderationStatus,
-    'archived': archived,
+    // 'updatedAt': updatedAt?.millisecondsSinceEpoch,
+    // 'moderationStatus': moderationStatus,
+    // 'archived': archived,
     'currency': currency,
-    'userPoints': userPoints,
+    // 'userPoints': userPoints,
     'scheduleString': scheduleString,
     'scheduleType': schedule.runtimeType.toString(),
     'schedule': schedule?.encodeSchedule(),
@@ -351,7 +351,7 @@ class UiEventModel extends Advertisable {
     // 'booking': bookingUiModel?.toMap(),
     // 'owner': owner?.toMap(),
     // 'place': placeId!= null? PlaceModel.fromMap(PlaceModel.toMap(placeId)) : null,
-  };
+  }..removeWhere((k, v) => v == null);
 
   static UiEventModel fromMap(Map<String, dynamic> map) => UiEventModel(
     id: map['id'] as int? ?? -1,
