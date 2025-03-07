@@ -18,7 +18,7 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
   final List<InfluencerTopCategory>? influencerTopCategories;
   final List<ContentPreviewWithRespect>? contentPreviewWithRespects;
   final List<InfluencerPhotoUiModel>? influencerPhotos;
-  final ValueChanged<int>? onShowMoreTap;
+  final Future<void> Function(int)? onShowMoreTap;
   final Function(int? placeId, int? eventId)? onItemTap;
   final bool isLoading;
 
@@ -142,6 +142,7 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
                     .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing32)
               else
                 InfluencerReviewsTopRespectWidget(
+                  isPublic: true,
                   onShowMoreTap: onShowMoreTap,
                   influencerPhotos: influencerPhotos,
                   contentPreviewWithRespects: contentPreviewWithRespects,
