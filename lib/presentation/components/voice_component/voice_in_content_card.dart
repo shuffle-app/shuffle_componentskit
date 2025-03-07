@@ -22,10 +22,9 @@ class VoiceInContentCard extends StatefulWidget {
 
 class _VoicesUiContentCardState extends State<VoiceInContentCard> with WidgetsBindingObserver {
   final ap.AudioPlayer _audioPlayer = ap.AudioPlayer();
-  Duration? _duration;
   late StreamSubscription<ap.PlayerState> _playerStateChangedSubscription;
-  late StreamSubscription<Duration?> _durationChangedSubscription;
   bool _isPlaying = false;
+  Duration? _duration;
 
   Future<void> _init() async {
     await _audioPlayer.setAudioSource(widget.voice.source!);
@@ -65,18 +64,11 @@ class _VoicesUiContentCardState extends State<VoiceInContentCard> with WidgetsBi
       setState(() {});
     });
 
-    _durationChangedSubscription = _audioPlayer.durationStream.listen((dur) {
-      setState(() {
-        _duration = dur;
-      });
-    });
-
     _init();
     super.initState();
   }
 
   Future<void> play() {
-    // widget.onPlay?.call(this);
     return _audioPlayer.play();
   }
 
@@ -93,7 +85,6 @@ class _VoicesUiContentCardState extends State<VoiceInContentCard> with WidgetsBi
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _playerStateChangedSubscription.cancel();
-    _durationChangedSubscription.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -181,7 +172,7 @@ class _VoicesUiContentCardState extends State<VoiceInContentCard> with WidgetsBi
                       BorderedUserCircleAvatar(
                         imageUrl: widget.voice.user?.avatarUrl,
                         name: widget.voice.user?.name,
-                        size: 24,
+                        size: 24.w,
                         border: GradientFoundation.gradientBorder,
                       ),
                       SpacingFoundation.horizontalSpace8,
