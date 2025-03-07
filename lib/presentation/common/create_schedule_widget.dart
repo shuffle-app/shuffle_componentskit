@@ -334,6 +334,17 @@ abstract class UiScheduleModel {
   bool get validateDate;
 
   UiScheduleModel getNonNullKeysSchedule();
+
+  static UiScheduleModel? fromCachedString(String scheduleType, String cachedString) {
+    if (scheduleType == 'UiScheduleTimeModel') {
+      return UiScheduleTimeModel(decodeSchedule( cachedString));
+    } else if (scheduleType == 'UiScheduleDatesModel') {
+      return UiScheduleDatesModel(decodeSchedule(cachedString));
+    } else if (scheduleType == 'UiScheduleDatesRangeModel') {
+      return UiScheduleDatesRangeModel(decodeScheduleTimeRange(cachedString));
+    }
+    return null;
+  }
 }
 
 class UiScheduleTimeModel extends UiScheduleModel {

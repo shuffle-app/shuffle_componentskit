@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +16,7 @@ import '../../common/tags_selection_component.dart';
 class CreateEventComponent extends StatefulWidget {
   final UiEventModel? eventToEdit;
   final VoidCallback? onEventDeleted;
-  final Future Function(UiEventModel) onEventCreated;
+  final AsyncValueChanged<void, UiEventModel> onEventCreated;
   final Future<String?> Function(String?)? getLocation;
   final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
@@ -26,6 +26,7 @@ class CreateEventComponent extends StatefulWidget {
   final bool Function(BookingUiModel)? onBookingTap;
   final List<String> availableTagOptions;
   final Future<String?> Function()? onCityChanged;
+  final ValueChanged<UiEventModel>? onDraftChanged;
 
   const CreateEventComponent({
     super.key,
@@ -41,6 +42,7 @@ class CreateEventComponent extends StatefulWidget {
     this.onBookingTap,
     this.availableTagOptions = const [],
     this.onCityChanged,
+    this.onDraftChanged,
   });
 
   @override
@@ -188,6 +190,27 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _handleLocaleChanged();
 
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    widget.onDraftChanged?.call(_eventToEdit.copyWith(
+        city: _cityController.text,
+        title: _titleController.text,
+        description: _descriptionController.text,
+        media: [..._photos, ..._videos],
+        website: _websiteController.text.trim(),
+        phone: _phoneController.text,
+        price: _priceController.text.replaceAll(' ', ''),
+        bookingUrl: _bookingUrlController.text,
+        bookingUiModel: _bookingUiModel,
+        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+        upsalesItems: _upsalesSwitcher
+            ? (_upsalesController.text.isNotEmpty
+                ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
+                : null)
+            : null));
+    super.didChangeDependencies();
   }
 
   @override

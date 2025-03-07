@@ -77,6 +77,8 @@ class UiPlaceModel {
     this.archived = false,
     this.chainName,
     this.chainId,
+    String? houseNumber,
+    String? apartmentNumber,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
@@ -85,8 +87,8 @@ class UiPlaceModel {
           if (scheduleString != null)
             UiDescriptionItemModel(title: S.current.WorkHours, description: scheduleString, descriptionUrl: 'times'),
         ],
-        houseNumberController = TextEditingController(),
-        apartmentNumberController = TextEditingController() {
+        houseNumberController = TextEditingController(text: houseNumber),
+        apartmentNumberController = TextEditingController(text: apartmentNumber) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
     }
@@ -233,4 +235,78 @@ class UiPlaceModel {
 
   @override
   int get hashCode => id.hashCode;
+
+  Map<String, dynamic> toMap() => {
+    'title': title,
+    'description': description,
+    'tags': tags.map((tag) => tag.toMap()).toList(),
+    'baseTags': baseTags.map((tag) => tag.toMap()).toList(),
+    'logo': logo,
+    'website': website,
+    // 'location': location,
+    'phone': phone,
+    'price': price,
+    'placeType': placeType?.toMap(),
+    'weekdays': weekdays,
+    // 'descriptionItems': descriptionItems?.map((item) => item.toMap())?.toList(),
+    'cityId': cityId,
+    'city': city,
+    'houseNumber': houseNumberController.text,
+    'apartmentNumber': apartmentNumberController.text,
+    'weatherType': weatherType?.toString(),
+    'bookingUrl': bookingUrl,
+    // 'bookingUiModel': bookingUiModel?.toMap(),
+    'updatedAt': updatedAt?.millisecondsSinceEpoch,
+   'moderationStatus': moderationStatus,
+    'chainName': chainName,
+    'chainId': chainId,
+    'archived': archived,
+    'currency': currency,
+    'userPoints': userPoints,
+   'scheduleString': scheduleString,
+    'scheduleType': schedule.runtimeType.toString(),
+   'schedule': schedule?.encodeSchedule(),
+    'niche': niche?.id,
+    'contentType': contentType,
+    // 'branches': branches?.map((branch) => branch.toMap())?.toList(),
+   'media': media.map((media) => media.toMap()).toList(),
+  };
+
+  static UiPlaceModel fromMap(Map<String, dynamic> map) => UiPlaceModel(
+    id: map['id'] as int? ?? -1,
+    title: map['title'] as String,
+    description: map['description'] as String? ?? '',
+    tags: (map['tags'] as List?)?.map((item) => UiKitTag.fromMap(item)).toList()?? const [],
+    baseTags: (map['baseTags'] as List?)?.map((item) => UiKitTag.fromMap(item)).toList()?? const [],
+    logo: map['logo'] as String?,
+    website: map['website'] as String?,
+    // location: map['location'] as String,
+    phone: map['phone'] as String?,
+    price: map['price'] as String?,
+    placeType: map['placeType']!= null? UiKitTag.fromMap(map['placeType']) : null,
+    weekdays: map['weekdays'] as List<String>,
+    // descriptionItems: (map['descriptionItems'] as List?)?.map((item) => UiDescriptionItemModel.fromMap(item))?.toList(),
+    cityId: map['cityId'] as int?,
+    city: map['city'] as String?,
+    houseNumber:  map['houseNumber'] as String?,
+    apartmentNumber:  map['apartmentNumber'] as String? ,
+    weatherType: map['weatherType'] as PlaceWeatherType?,
+    bookingUrl: map['bookingUrl'] as String?,
+    // bookingUiModel: map['bookingUiModel']!= null? BookingUiModel.fromMap(map['bookingUiModel']) : null,
+    // updatedAt: map['updatedAt']?.toDateTimeFromMillisecondsSinceEpoch(),
+    moderationStatus: map['moderationStatus'] as String?,
+    chainName: map['chainName'] as String?,
+    chainId: map['chainId'] as int?,
+    archived: map['archived'] as bool? ?? false,
+    currency: map['currency'] as String?,
+    userPoints: map['userPoints'] as int?,
+    scheduleString: map['scheduleString'] as String?,
+    schedule: map['schedule']!= null && map['scheduleType']!=null ? UiScheduleModel.fromCachedString(map['scheduleType'],map['schedule']) : null,
+    niche: map['niche']!= null? UiKitTag.fromMap(map['niche']) : null,
+    contentType: map['contentType'] as String?,
+    // branches: map['branches']!= null? List.from(map['branches'].map((item) => HorizontalCaptionedImageData.fromMap(item))) : null,
+    media: map['media']!= null? List.from(map['media'].map((item) => BaseUiKitMedia.fromMap(item))) : const [],
+    // branches: map['branches']!= null? ValueNotifier<List<HorizontalCaptionedImageData>?>.value(List.from(map['branches'].map((item) => HorizontalCaptionedImageData.fromMap(item)))) : null,
+
+  );
 }

@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +16,7 @@ import '../../common/tags_selection_component.dart';
 class CreatePlaceComponent extends StatefulWidget {
   final UiPlaceModel? placeToEdit;
   final VoidCallback? onPlaceDeleted;
-  final Future Function(UiPlaceModel) onPlaceCreated;
+  final AsyncValueChanged<void, UiPlaceModel> onPlaceCreated;
   final Future<String?> Function(String?)? getLocation;
   final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
@@ -26,6 +26,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final bool Function(BookingUiModel)? onBookingTap;
   final List<String> availableTagOptions;
   final Future<String?> Function()? onCityChanged;
+  final ValueChanged<UiPlaceModel>? onDraftChanged;
 
   const CreatePlaceComponent({
     super.key,
@@ -41,6 +42,7 @@ class CreatePlaceComponent extends StatefulWidget {
     this.onBookingTap,
     this.availableTagOptions = const [],
     this.onCityChanged,
+    this.onDraftChanged,
   });
 
   @override
@@ -133,8 +135,12 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     // }
   }
 
+  Future? requestMediaFuture;
+
   _onLogoAddRequested() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (requestMediaFuture != null) return;
+    final file = await (requestMediaFuture ??= ImagePicker().pickImage(source: ImageSource.gallery));
+    requestMediaFuture = null;
     if (file != null) {
       setState(() {
         _placeToEdit.logo = file.path;
@@ -143,7 +149,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _onVideoAddRequested() async {
-    final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (requestMediaFuture != null) return;
+    final videoFile = await (requestMediaFuture ??= ImagePicker().pickVideo(source: ImageSource.gallery));
+    requestMediaFuture = null;
     if (videoFile != null) {
       setState(() {
         _videos.add(UiKitMediaVideo(link: videoFile.path));
@@ -199,6 +207,24 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _cityController.text = widget.placeToEdit?.city ?? '';
     _handleLocaleChanged();
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    widget.onDraftChanged?.call(_placeToEdit.copyWith(
+        city: _cityController.text,
+        title: _titleController.text,
+        description: _descriptionController.text,
+        media: [..._photos, ..._videos],
+        website: _websiteController.text.trim(),
+        phone: _phoneController.text,
+        price: _priceController.text.replaceAll(' ', ''),
+        bookingUrl: _bookingUrlController.text,
+        bookingUiModel: _bookingUiModel,
+        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+
+    ));
+    super.didChangeDependencies();
   }
 
   @override
