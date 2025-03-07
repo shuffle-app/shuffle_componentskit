@@ -133,7 +133,7 @@ class AudioPlayerState extends State<AudioPlayer> with WidgetsBindingObserver {
 
     return Dismissible(
       key: ValueKey(widget.source),
-      direction: DismissDirection.endToStart,
+      direction: widget.onDelete != null ? DismissDirection.endToStart : DismissDirection.none,
       dismissThresholds: const {DismissDirection.endToStart: 0.6},
       background: UiKitBackgroundDismissible(),
       confirmDismiss: (direction) async => direction == DismissDirection.endToStart,
