@@ -39,6 +39,7 @@ class ProfileComponent extends StatelessWidget {
 
   ///Influencer
   final List<InfluencerPhotoUiModel>? influencerPhotos;
+  final List<PostFeedItem>? influencerTweets;
   final List<ProfilePlace>? voices;
   final ValueNotifier<double>? tiltNotifier;
   final List<ProfilePlace>? profilePlaces;
@@ -48,7 +49,7 @@ class ProfileComponent extends StatelessWidget {
   final bool isLoading;
   final VoidCallback? onStripeTap;
   final StripeRegistrationStatus? stripeRegistrationStatus;
-  final ValueChanged<int>? onShowMoreTap;
+  final Future<void> Function(int)? onShowMoreTap;
 
   const ProfileComponent({
     super.key,
@@ -82,6 +83,7 @@ class ProfileComponent extends StatelessWidget {
 
     ///Influencer
     this.influencerPhotos,
+    this.influencerTweets,
     this.voices,
     this.tiltNotifier,
     this.profilePlaces,
@@ -448,6 +450,7 @@ class ProfileComponent extends StatelessWidget {
         // ).paddingSymmetric(horizontal: horizontalMargin),
         if (profile.userTileType == UserTileType.influencer)
           InfluencerReviewsTopRespectWidget(
+            influencerTweets: influencerTweets,
             influencerPhotos: influencerPhotos,
             voices: voices,
             contentPreviewWithRespects: contentPreviewWithRespects,
