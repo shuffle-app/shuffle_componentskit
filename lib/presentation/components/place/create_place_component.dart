@@ -212,17 +212,16 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   @override
   void didChangeDependencies() {
     widget.onDraftChanged?.call(_placeToEdit.copyWith(
-        city: _cityController.text,
-        title: _titleController.text,
-        description: _descriptionController.text,
-        media: [..._photos, ..._videos],
-        website: _websiteController.text.trim(),
-        phone: _phoneController.text,
-        price: _priceController.text.replaceAll(' ', ''),
-        bookingUrl: _bookingUrlController.text,
-        bookingUiModel: _bookingUiModel,
-        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
-
+      city: _cityController.text,
+      title: _titleController.text,
+      description: _descriptionController.text,
+      media: [..._photos, ..._videos],
+      website: _websiteController.text.trim(),
+      phone: _phoneController.text,
+      price: _priceController.text.replaceAll(' ', ''),
+      bookingUrl: _bookingUrlController.text,
+      bookingUiModel: _bookingUiModel,
+      verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
     ));
     super.didChangeDependencies();
   }
@@ -400,7 +399,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             UiKitInputFieldNoFill(
               prefixText: '+',
               keyboardType: TextInputType.phone,
-              inputFormatters: [americanInputFormatter],
+              inputFormatters: [
+                (_cityController.text.toLowerCase() == 'пхукет' || _cityController.text.toLowerCase() == 'phuket')
+                    ? phuketInternationalFormatter
+                    : americanInputFormatter
+              ],
               label: S.of(context).Phone,
               validator: phoneNumberValidator,
               controller: _phoneController,

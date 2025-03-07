@@ -54,6 +54,8 @@ class PlaceComponent extends StatefulWidget {
   final VoidCallback? onAddVoiceTap;
   final VoidCallback? onInterviewTap;
   final bool isInfluencer;
+  final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
+  final VoidCallback? onViewAllVoicesTap;
 
   const PlaceComponent({
     super.key,
@@ -100,6 +102,8 @@ class PlaceComponent extends StatefulWidget {
     this.onAddVoiceTap,
     this.onInterviewTap,
     this.isInfluencer = false,
+    this.voiceUiModels,
+    this.onViewAllVoicesTap,
   });
 
   @override
@@ -123,7 +127,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
   bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
 
-  bool cannotLeaveLike(id) => widget.currentUserId == id || widget.onLikedFeedback == null || widget.onDislikedFeedback == null;
+  bool cannotLeaveLike(id) =>
+      widget.currentUserId == id || widget.onLikedFeedback == null || widget.onDislikedFeedback == null;
 
   bool? canLeaveFeedback;
 
@@ -805,6 +810,26 @@ class _PlaceComponentState extends State<PlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalMargin),
           ),
         SpacingFoundation.verticalSpace24,
+        if (widget.voiceUiModels?.value != null && widget.voiceUiModels!.value!.isNotEmpty)
+          ValueListenableBuilder(
+            valueListenable: widget.voiceUiModels!,
+            builder: (_, voicesUiModel, __) {
+              final currentUiModel = voicesUiModel?.firstWhere((e) => e?.source != null);
+
+              if (currentUiModel != null) {
+                return VoiceInContentCard(
+                  voice: currentUiModel,
+                  onViewAllTap: widget.onViewAllVoicesTap,
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          ).paddingOnly(
+            bottom: SpacingFoundation.verticalSpacing24,
+            left: horizontalMargin,
+            right: horizontalMargin,
+          ),
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,
           spacing: SpacingFoundation.horizontalSpacing8,

@@ -339,7 +339,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitInputFieldNoFill(
             prefixText: '+',
             keyboardType: TextInputType.phone,
-            inputFormatters: [americanInputFormatter],
+            inputFormatters: [
+              (_cityController.text.toLowerCase() == 'пхукет' || _cityController.text.toLowerCase() == 'phuket')
+                  ? phuketInternationalFormatter
+                  : americanInputFormatter
+            ],
             label: S.of(context).Phone,
             controller: _phoneController,
             validator: phoneNumberValidator,
