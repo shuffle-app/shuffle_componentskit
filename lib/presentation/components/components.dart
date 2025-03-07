@@ -172,3 +172,5 @@ export 'voice_component/add_voice_component.dart';
 export 'voice_component/audio_player.dart';
 export 'voice_component/voice_animation_custom.dart';
 export 'influencer_photo_component/influencer_photo_component.dart';
+export 'news_component/news_component.dart';
+export 'news_component/create_news_component.dart';
