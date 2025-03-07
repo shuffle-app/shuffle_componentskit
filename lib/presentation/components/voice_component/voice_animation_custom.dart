@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,16 @@ class _VoiceAnimationCustomState extends State<VoiceAnimationCustom> {
   Future<void> _start() async {
     try {
       if (await _audioRecorder.hasPermission()) {
-        await _audioRecorder.startStream(const RecordConfig(encoder: AudioEncoder.pcm16bits));
+        const encoder = AudioEncoder.aacLc;
+
+        if (!await _isEncoderSupported(encoder)) {
+          return;
+        }
+        final path = await getTemporaryDirectory();
+        final dateTimeMillisecond = DateTime.now().microsecondsSinceEpoch;
+        final filePath = '${path.path}/${dateTimeMillisecond}audio.aac';
+        await _audioRecorder.start(RecordConfig(encoder: encoder), path: filePath);
+
         widget.onPlay?.call();
 
         _isTimeLimit = false;
@@ -131,6 +141,25 @@ class _VoiceAnimationCustomState extends State<VoiceAnimationCustom> {
     }
 
     return numberStr;
+  }
+
+  Future<bool> _isEncoderSupported(AudioEncoder encoder) async {
+    final isSupported = await _audioRecorder.isEncoderSupported(
+      encoder,
+    );
+
+    if (!isSupported) {
+      debugPrint('${encoder.name} is not supported on this platform.');
+      debugPrint('Supported encoders are:');
+
+      for (final e in AudioEncoder.values) {
+        if (await _audioRecorder.isEncoderSupported(e)) {
+          debugPrint('- ${e.name}');
+        }
+      }
+    }
+
+    return isSupported;
   }
 
   @override
