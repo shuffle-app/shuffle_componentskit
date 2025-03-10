@@ -193,27 +193,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   @override
-  void didChangeDependencies() {
-    widget.onDraftChanged?.call(_eventToEdit.copyWith(
-        city: _cityController.text,
-        title: _titleController.text,
-        description: _descriptionController.text,
-        media: [..._photos, ..._videos],
-        website: _websiteController.text.trim(),
-        phone: _phoneController.text,
-        price: _priceController.text.replaceAll(' ', ''),
-        bookingUrl: _bookingUrlController.text,
-        bookingUiModel: _bookingUiModel,
-        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
-        upsalesItems: _upsalesSwitcher
-            ? (_upsalesController.text.isNotEmpty
-                ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
-                : null)
-            : null));
-    super.didChangeDependencies();
-  }
-
-  @override
   void dispose() {
     super.dispose();
   }
@@ -232,6 +211,23 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     final tagTextStyle = context.uiKitTheme?.boldTextTheme.caption2Bold.copyWith(
       color: ColorsFoundation.darkNeutral500,
     );
+
+    widget.onDraftChanged?.call(_eventToEdit.copyWith(
+        city: _cityController.text,
+        title: _titleController.text,
+        description: _descriptionController.text,
+        media: [..._photos, ..._videos],
+        website: _websiteController.text.trim(),
+        phone: _phoneController.text,
+        price: _priceController.text.replaceAll(' ', ''),
+        bookingUrl: _bookingUrlController.text,
+        bookingUiModel: _bookingUiModel,
+        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+        upsalesItems: _upsalesSwitcher
+            ? (_upsalesController.text.isNotEmpty
+            ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
+            : null)
+            : null));
 
     return Form(
       key: _formKey,
@@ -258,6 +254,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             hintText: 'Event name',
             controller: _titleController,
             validator: titleValidator,
+            onFieldSubmitted: (_) {
+              setState(() {});
+            },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
@@ -279,6 +278,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               hintText: 'Something amazing about your event',
               controller: _descriptionController,
               textInputAction: TextInputAction.newline,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
               expands: true,
               validator: descriptionValidator,
             ),
@@ -288,6 +290,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             onTap: () async {
               _cityController.text = await widget.onCityChanged?.call() ?? '';
               _eventToEdit.city = _cityController.text;
+              setState(() {});
 
               FocusManager.instance.primaryFocus?.unfocus();
             },
@@ -300,6 +303,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             onTap: () async {
               _locationController.text = await widget.getLocation?.call(_cityController.text) ?? '';
               _eventToEdit.location = _locationController.text;
+              setState(() {});
 
               FocusManager.instance.primaryFocus?.unfocus();
             },
@@ -318,11 +322,17 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).BuildingNumber,
                 controller: _eventToEdit.houseNumberController,
+                onFieldSubmitted: (_) {
+                  setState(() {});
+                },
               ).paddingSymmetric(horizontal: horizontalPadding)),
               Expanded(
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).OfficeAppartmentNumber,
                 controller: _eventToEdit.apartmentNumberController,
+                onFieldSubmitted: (_) {
+                  setState(() {});
+                },
               ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
@@ -333,6 +343,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             inputFormatters: [PrefixFormatter(prefix: 'https://')],
             label: S.of(context).Website,
             controller: _websiteController,
+            onFieldSubmitted: (_) {
+              setState(() {});
+            },
             validator: websiteValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
@@ -346,6 +359,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ],
             label: S.of(context).Phone,
             controller: _phoneController,
+            onFieldSubmitted: (_) {
+              setState(() {});
+            },
             validator: phoneNumberValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
@@ -667,6 +683,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               label: S.of(context).Upsales,
               maxSymbols: 25,
               validator: upsalesValidator,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
               controller: _upsalesController,
               hintText: S.of(context).UpsalesAvailableHint,
             ).paddingSymmetric(horizontal: horizontalPadding),

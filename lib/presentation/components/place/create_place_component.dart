@@ -209,22 +209,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     super.didUpdateWidget(oldWidget);
   }
 
-  @override
-  void didChangeDependencies() {
-    widget.onDraftChanged?.call(_placeToEdit.copyWith(
-      city: _cityController.text,
-      title: _titleController.text,
-      description: _descriptionController.text,
-      media: [..._photos, ..._videos],
-      website: _websiteController.text.trim(),
-      phone: _phoneController.text,
-      price: _priceController.text.replaceAll(' ', ''),
-      bookingUrl: _bookingUrlController.text,
-      bookingUiModel: _bookingUiModel,
-      verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
-    ));
-    super.didChangeDependencies();
-  }
 
   @override
   void dispose() {
@@ -245,6 +229,19 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     final tagTextStyle = context.uiKitTheme?.boldTextTheme.caption2Bold.copyWith(
       color: ColorsFoundation.darkNeutral500,
     );
+
+    widget.onDraftChanged?.call(_placeToEdit.copyWith(
+      city: _cityController.text,
+      title: _titleController.text,
+      description: _descriptionController.text,
+      media: [..._photos, ..._videos],
+      website: _websiteController.text.trim(),
+      phone: _phoneController.text,
+      price: _priceController.text.replaceAll(' ', ''),
+      bookingUrl: _bookingUrlController.text,
+      bookingUiModel: _bookingUiModel,
+      verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+    ));
 
     return Form(
         key: _formKey,
@@ -271,6 +268,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 _placeToEdit.city = _cityController.text;
 
                 FocusManager.instance.primaryFocus?.unfocus();
+                setState(() {});
               },
               label: S.of(context).City,
               readOnly: true,
@@ -282,6 +280,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               onTap: () async {
                 _locationController.text = await widget.getLocation?.call(_cityController.text) ?? '';
                 _placeToEdit.location = _locationController.text;
+                setState(() {});
               },
               readOnly: true,
               controller: _locationController,
@@ -299,11 +298,17 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).BuildingNumber,
                   controller: _placeToEdit.houseNumberController,
+                  onFieldSubmitted: (_) {
+                    setState(() {});
+                  },
                 ).paddingSymmetric(horizontal: horizontalPadding)),
                 Expanded(
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).OfficeAppartmentNumber,
                   controller: _placeToEdit.apartmentNumberController,
+                  onFieldSubmitted: (_) {
+                    setState(() {});
+                  },
                 ).paddingSymmetric(horizontal: horizontalPadding)),
               ],
             ),
@@ -315,6 +320,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               hintText: 'Place name',
               onChanged: (_) {
                 _formKey.currentState?.validate();
+                setState(() {});
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
@@ -383,6 +389,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 expands: true,
                 onChanged: (_) {
                   _formKey.currentState?.validate();
+                  setState(() {});
                 },
               ),
             ).paddingSymmetric(horizontal: horizontalPadding),
@@ -394,6 +401,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               inputFormatters: [PrefixFormatter(prefix: 'https://')],
               validator: websiteValidator,
               controller: _websiteController,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
@@ -406,6 +416,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ],
               label: S.of(context).Phone,
               validator: phoneNumberValidator,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
               controller: _phoneController,
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
