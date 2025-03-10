@@ -4,12 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart' as ap;
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class AudioPlayer extends StatefulWidget {
   final ap.AudioSource source;
   final VoidCallback? onDelete;
   final List<double>? aptitudeList;
   final ValueChanged<AudioPlayerState>? onPlay;
+  final bool isPreview;
 
   const AudioPlayer({
     super.key,
@@ -17,6 +19,7 @@ class AudioPlayer extends StatefulWidget {
     this.onDelete,
     this.aptitudeList,
     this.onPlay,
+    this.isPreview = false,
   });
 
   @override
@@ -152,8 +155,8 @@ class AudioPlayerState extends State<AudioPlayer> with WidgetsBindingObserver {
                 }
               },
               child: Container(
-                height: 48.w,
-                width: 48.w,
+                height: 42.w,
+                width: 42.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(width: 2, color: Colors.white),
@@ -167,11 +170,16 @@ class AudioPlayerState extends State<AudioPlayer> with WidgetsBindingObserver {
                 ),
               ).paddingAll(EdgeInsetsFoundation.all4),
             ),
-            SpacingFoundation.horizontalSpace4,
+            widget.aptitudeList != null && widget.aptitudeList!.isNotEmpty
+                ? SpacingFoundation.horizontalSpace4
+                : SizedBox.shrink(),
             _buildSlider(theme),
-            Text(
+            AutoSizeText(
               displayDuration.toAudioTime(_duration),
-              style: theme?.boldTextTheme.caption1Medium.copyWith(color: ColorsFoundation.darkNeutral700),
+              style: theme?.boldTextTheme.caption1Medium.copyWith(
+                color: ColorsFoundation.darkNeutral700,
+                // fontSize: 12.w,
+              ),
             ),
           ],
         ),
@@ -184,7 +192,7 @@ class AudioPlayerState extends State<AudioPlayer> with WidgetsBindingObserver {
     final value = maxDuration.inMilliseconds > 0 ? _position.inMilliseconds / maxDuration.inMilliseconds : 0.0;
 
     return SizedBox(
-      width: 0.8.sw - _controlSize - (_timeTextSize * 1.5),
+      width: 0.8.sw - _controlSize - (_timeTextSize * (widget.isPreview ? 3 : 2)),
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [

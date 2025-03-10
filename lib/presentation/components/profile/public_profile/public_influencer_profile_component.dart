@@ -21,6 +21,7 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
   final ValueChanged<int>? onShowMoreTap;
   final Function(int? placeId, int? eventId)? onItemTap;
   final bool isLoading;
+  final List<VoiceUiModel>? voices;
 
   const PublicInfluencerProfileComponent({
     super.key,
@@ -37,6 +38,7 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
     this.contentPreviewWithRespects,
     this.onItemTap,
     this.isLoading = false,
+    this.voices,
   });
 
   @override
@@ -142,6 +144,7 @@ class PublicInfluencerProfileComponent extends StatelessWidget {
                     .paddingSymmetric(vertical: SpacingFoundation.verticalSpacing32)
               else
                 InfluencerReviewsTopRespectWidget(
+                  voices: voices,
                   onShowMoreTap: onShowMoreTap,
                   influencerPhotos: influencerPhotos,
                   contentPreviewWithRespects: contentPreviewWithRespects,

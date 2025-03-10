@@ -174,4 +174,5 @@ export 'voice_component/voice_animation_custom.dart';
 export 'voice_component/voice_ui_model.dart';
 export 'voice_component/show_all_voices_component.dart';
 export 'voice_component/voice_in_content_card.dart';
+export 'voice_component/inf_voices_component/inf_voices_component.dart';
 export 'influencer_photo_component/influencer_photo_component.dart';
