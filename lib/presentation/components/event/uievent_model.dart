@@ -347,7 +347,7 @@ class UiEventModel extends Advertisable {
     // 'downvotes': reactions?.where((r) => r.reactionType == 'downvote')?.length?? 0,
     // 'feedbacksHelpfulCounts': feedbacksHelpfulCounts?.toMap(),
     'isRecurrent': isRecurrent,
-    'upsales': upsalesItems,
+    // 'upsales': upsales,
     // 'booking': bookingUiModel?.toMap(),
     // 'owner': owner?.toMap(),
     // 'place': placeId!= null? PlaceModel.fromMap(PlaceModel.toMap(placeId)) : null,
@@ -385,7 +385,7 @@ class UiEventModel extends Advertisable {
     media: map['media']!= null? List.from(map['media'].map((item) => BaseUiKitMedia.fromMap(item))) : const [],
     // branches: map['branches']!= null? ValueNotifier<List<HorizontalCaptionedImageData>?>.value(List.from(map['branches'].map((item) => HorizontalCaptionedImageData.fromMap(item)))) : null,
 
-    upsalesItems: map['upsalesItems'] as List<String>?,
+    upsalesItems: map['upsalesItems'] !=null ? List.from((map['upsalesItems'] as List).map((item) => item as String?).nonNulls) : const [],
     ownerId: map['ownerId'] as int?,
     placeId: map['placeId'] as int?,
     // isAdvertisement: map['isAdvertisement'] as bool? ?? false,

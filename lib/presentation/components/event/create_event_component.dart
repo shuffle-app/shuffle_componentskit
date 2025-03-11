@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,6 +75,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   void initState() {
+    FocusManager.instance.addListener(_onFocusChanged);
     super.initState();
     _bookingUrlController.text = widget.eventToEdit?.bookingUrl ?? '';
     _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
@@ -192,8 +194,30 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     super.didUpdateWidget(oldWidget);
   }
 
+  _onFocusChanged() {
+    dev.log('focus changed', name: '_onFocusChanged');
+
+    widget.onDraftChanged?.call(_eventToEdit.copyWith(
+        city: _cityController.text,
+        title: _titleController.text,
+        description: _descriptionController.text,
+        media: [..._photos, ..._videos],
+        website: _websiteController.text.trim(),
+        phone: _phoneController.text,
+        price: _priceController.text.replaceAll(' ', ''),
+        bookingUrl: _bookingUrlController.text,
+        bookingUiModel: _bookingUiModel,
+        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+        upsalesItems: _upsalesSwitcher
+            ? (_upsalesController.text.isNotEmpty
+                ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
+                : null)
+            : null));
+  }
+
   @override
   void dispose() {
+    FocusManager.instance.removeListener(_onFocusChanged);
     super.dispose();
   }
 
@@ -211,23 +235,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     final tagTextStyle = context.uiKitTheme?.boldTextTheme.caption2Bold.copyWith(
       color: ColorsFoundation.darkNeutral500,
     );
-
-    widget.onDraftChanged?.call(_eventToEdit.copyWith(
-        city: _cityController.text,
-        title: _titleController.text,
-        description: _descriptionController.text,
-        media: [..._photos, ..._videos],
-        website: _websiteController.text.trim(),
-        phone: _phoneController.text,
-        price: _priceController.text.replaceAll(' ', ''),
-        bookingUrl: _bookingUrlController.text,
-        bookingUiModel: _bookingUiModel,
-        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
-        upsalesItems: _upsalesSwitcher
-            ? (_upsalesController.text.isNotEmpty
-            ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
-            : null)
-            : null));
 
     return Form(
       key: _formKey,

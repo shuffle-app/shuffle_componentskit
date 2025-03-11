@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,6 +72,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   void initState() {
+    FocusManager.instance.addListener(_onFocusChanged);
     super.initState();
     _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
     _titleController.text = widget.placeToEdit?.title ?? '';
@@ -94,6 +96,24 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _priceController.text = widget.placeToEdit?.price ?? '';
     _bookingUiModel = widget.placeToEdit?.bookingUiModel;
   }
+
+  _onFocusChanged(){
+    dev.log('focus changed',name: '_onFocusChanged');
+    widget.onDraftChanged?.call(_placeToEdit.copyWith(
+      city: _cityController.text,
+      title: _titleController.text,
+      description: _descriptionController.text,
+      media: [..._photos, ..._videos],
+      website: _websiteController.text.trim(),
+      phone: _phoneController.text,
+      price: _priceController.text.replaceAll(' ', ''),
+      bookingUrl: _bookingUrlController.text,
+      bookingUiModel: _bookingUiModel,
+      verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+    ));
+
+  }
+
 
   _onVideoDeleted(int index) {
     setState(() {
@@ -212,6 +232,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   void dispose() {
+    FocusManager.instance.removeListener(_onFocusChanged);
     super.dispose();
   }
 
@@ -229,19 +250,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     final tagTextStyle = context.uiKitTheme?.boldTextTheme.caption2Bold.copyWith(
       color: ColorsFoundation.darkNeutral500,
     );
-
-    widget.onDraftChanged?.call(_placeToEdit.copyWith(
-      city: _cityController.text,
-      title: _titleController.text,
-      description: _descriptionController.text,
-      media: [..._photos, ..._videos],
-      website: _websiteController.text.trim(),
-      phone: _phoneController.text,
-      price: _priceController.text.replaceAll(' ', ''),
-      bookingUrl: _bookingUrlController.text,
-      bookingUiModel: _bookingUiModel,
-      verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
-    ));
 
     return Form(
         key: _formKey,
