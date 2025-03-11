@@ -216,14 +216,16 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                                     style: textTheme?.title2
                                                         .copyWith(color: UiKitColors.lightHeadingTypographyColor),
                                                   ),
-                                                  content: UiKitInputFieldNoIcon(
+                                                  content: UiKitInputFieldNoFill(
                                                     hintText: S.current.Title,
                                                     controller: controller,
                                                     autofocus: true,
-                                                    textColor: UiKitColors.lightHeadingTypographyColor,
+                                                    cursorColor: UiKitColors.mutedText,
+                                                    customInputTextColor: UiKitColors.lightHeadingTypographyColor,
+                                                    // textColor: UiKitColors.lightHeadingTypographyColor,
                                                     customLabelColor: UiKitColors.lightBodyTypographyColor,
-                                                    fillColor: UiKitColors.lightSurface1,
-                                                    borderRadius: BorderRadiusFoundation.all12,
+                                                    // fillColor: UiKitColors.lightSurface1,
+                                                    // borderRadius: BorderRadiusFoundation.all12,
                                                     label: S.of(context).TemplateName,
                                                   ),
                                                   actions: [
