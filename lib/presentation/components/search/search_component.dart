@@ -7,6 +7,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class SearchComponent extends StatelessWidget {
   final TextEditingController searchController;
+  final List<UiUniversalModel> content;
   final ScrollController? scrollController;
   final UiSearchModel search;
   final VoidCallback? onFreeCardPressed;
@@ -23,6 +24,7 @@ class SearchComponent extends StatelessWidget {
     required this.searchController,
     required this.showBusinessContent,
     this.scrollController,
+    this.content = const [],
     required this.search,
     this.onPlaceTapped,
     this.chooseYourselfChips,
@@ -287,8 +289,8 @@ class SearchComponent extends StatelessWidget {
               ),
             ],
             SpacingFoundation.verticalSpace24,
-            ...search.content.map((e) => UiKitCompactOrderedRatingCard(
-                    order: search.content.indexOf(e) + 1,
+            ...content.map((e) => UiKitCompactOrderedRatingCard(
+                    order: content.indexOf(e) + 1,
                     rating: e.rating,
                     title: e.title,
                     imageLink: e.media.firstWhereOrNull((element) => element.type == UiKitMediaType.image)?.link,

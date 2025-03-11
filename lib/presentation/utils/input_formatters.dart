@@ -13,3 +13,10 @@ final americanInputFormatter = MaskTextInputFormatter(
     '#': RegExp(r'[0-9]'),
   },
 );
+
+final phuketInternationalFormatter = MaskTextInputFormatter(
+  mask: '66 ## ### ####',
+  filter: {
+    '#': RegExp(r'[0-9]'),
+  },
+);

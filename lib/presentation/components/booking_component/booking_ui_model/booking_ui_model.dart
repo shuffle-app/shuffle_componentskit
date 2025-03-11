@@ -83,4 +83,5 @@ class BookingUiModel {
         showSubsInContentCard = false,
         subsUiModel = List.empty(growable: true),
         upsaleUiModel = List.empty(growable: true);
+
 }

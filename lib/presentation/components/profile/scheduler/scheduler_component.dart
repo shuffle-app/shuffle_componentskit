@@ -224,23 +224,24 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           },
         ),
         SpacingFoundation.verticalSpace24,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              S.of(context).Details,
-              style: theme?.boldTextTheme.title2,
-            ).paddingSymmetric(
-              horizontal: SpacingFoundation.horizontalSpacing16,
-            ),
-            wasChangedDateToSpecific
-                ? Text(
-                    DateFormat('dd.MM.yyyy').format(focusedDate),
-                    style: theme?.regularTextTheme.bodyUpperCase.copyWith(color: ColorsFoundation.mutedText),
-                  )
-                : const SizedBox.shrink(),
-          ],
-        ),
+        if (currentContent.isNotEmpty)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.of(context).Details,
+                style: theme?.boldTextTheme.title2,
+              ).paddingSymmetric(
+                horizontal: SpacingFoundation.horizontalSpacing16,
+              ),
+              wasChangedDateToSpecific
+                  ? Text(
+                      DateFormat('dd.MM.yyyy').format(focusedDate),
+                      style: theme?.regularTextTheme.bodyUpperCase.copyWith(color: ColorsFoundation.mutedText),
+                    )
+                  : const SizedBox.shrink(),
+            ],
+          ),
         SpacingFoundation.verticalSpace16,
         for (var content in (wasChangedDateToSpecific
             ? currentContent.where((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)
@@ -297,6 +298,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                     dateTime: content.shouldVisitAt ?? DateTime.now(),
                   ))).paddingSymmetric(
               horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical8),
+        SpacingFoundation.verticalSpace24,
         MediaQuery.of(context).viewInsets.bottom.heightBox
       ],
     );

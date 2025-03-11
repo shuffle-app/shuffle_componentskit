@@ -1,5 +1,6 @@
 import 'dart:math';
-
+import 'dart:developer' as dev;
+import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +17,7 @@ import '../../common/tags_selection_component.dart';
 class CreatePlaceComponent extends StatefulWidget {
   final UiPlaceModel? placeToEdit;
   final VoidCallback? onPlaceDeleted;
-  final Future Function(UiPlaceModel) onPlaceCreated;
+  final AsyncValueChanged<void, UiPlaceModel> onPlaceCreated;
   final Future<String?> Function(String?)? getLocation;
   final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
@@ -26,6 +27,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final bool Function(BookingUiModel)? onBookingTap;
   final List<String> availableTagOptions;
   final Future<String?> Function()? onCityChanged;
+  final ValueChanged<UiPlaceModel>? onDraftChanged;
 
   const CreatePlaceComponent({
     super.key,
@@ -41,6 +43,7 @@ class CreatePlaceComponent extends StatefulWidget {
     this.onBookingTap,
     this.availableTagOptions = const [],
     this.onCityChanged,
+    this.onDraftChanged,
   });
 
   @override
@@ -69,6 +72,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
 
   @override
   void initState() {
+    FocusManager.instance.addListener(_onFocusChanged);
     super.initState();
     _bookingUrlController.text = widget.placeToEdit?.bookingUrl ?? '';
     _titleController.text = widget.placeToEdit?.title ?? '';
@@ -92,6 +96,24 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _priceController.text = widget.placeToEdit?.price ?? '';
     _bookingUiModel = widget.placeToEdit?.bookingUiModel;
   }
+
+  _onFocusChanged(){
+    dev.log('focus changed',name: '_onFocusChanged');
+    widget.onDraftChanged?.call(_placeToEdit.copyWith(
+      city: _cityController.text,
+      title: _titleController.text,
+      description: _descriptionController.text,
+      media: [..._photos, ..._videos],
+      website: _websiteController.text.trim(),
+      phone: _phoneController.text,
+      price: _priceController.text.replaceAll(' ', ''),
+      bookingUrl: _bookingUrlController.text,
+      bookingUiModel: _bookingUiModel,
+      verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+    ));
+
+  }
+
 
   _onVideoDeleted(int index) {
     setState(() {
@@ -133,8 +155,12 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     // }
   }
 
+  Future? requestMediaFuture;
+
   _onLogoAddRequested() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (requestMediaFuture != null) return;
+    final file = await (requestMediaFuture ??= ImagePicker().pickImage(source: ImageSource.gallery));
+    requestMediaFuture = null;
     if (file != null) {
       setState(() {
         _placeToEdit.logo = file.path;
@@ -143,7 +169,9 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   }
 
   _onVideoAddRequested() async {
-    final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (requestMediaFuture != null) return;
+    final videoFile = await (requestMediaFuture ??= ImagePicker().pickVideo(source: ImageSource.gallery));
+    requestMediaFuture = null;
     if (videoFile != null) {
       setState(() {
         _videos.add(UiKitMediaVideo(link: videoFile.path));
@@ -201,8 +229,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     super.didUpdateWidget(oldWidget);
   }
 
+
   @override
   void dispose() {
+    FocusManager.instance.removeListener(_onFocusChanged);
     super.dispose();
   }
 
@@ -246,6 +276,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 _placeToEdit.city = _cityController.text;
 
                 FocusManager.instance.primaryFocus?.unfocus();
+                setState(() {});
               },
               label: S.of(context).City,
               readOnly: true,
@@ -257,6 +288,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               onTap: () async {
                 _locationController.text = await widget.getLocation?.call(_cityController.text) ?? '';
                 _placeToEdit.location = _locationController.text;
+                setState(() {});
               },
               readOnly: true,
               controller: _locationController,
@@ -274,11 +306,17 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).BuildingNumber,
                   controller: _placeToEdit.houseNumberController,
+                  onFieldSubmitted: (_) {
+                    setState(() {});
+                  },
                 ).paddingSymmetric(horizontal: horizontalPadding)),
                 Expanded(
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).OfficeAppartmentNumber,
                   controller: _placeToEdit.apartmentNumberController,
+                  onFieldSubmitted: (_) {
+                    setState(() {});
+                  },
                 ).paddingSymmetric(horizontal: horizontalPadding)),
               ],
             ),
@@ -290,6 +328,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               hintText: 'Place name',
               onChanged: (_) {
                 _formKey.currentState?.validate();
+                setState(() {});
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
@@ -358,6 +397,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 expands: true,
                 onChanged: (_) {
                   _formKey.currentState?.validate();
+                  setState(() {});
                 },
               ),
             ).paddingSymmetric(horizontal: horizontalPadding),
@@ -369,14 +409,24 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               inputFormatters: [PrefixFormatter(prefix: 'https://')],
               validator: websiteValidator,
               controller: _websiteController,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
               prefixText: '+',
               keyboardType: TextInputType.phone,
-              inputFormatters: [americanInputFormatter],
+              inputFormatters: [
+                (_cityController.text.toLowerCase() == 'пхукет' || _cityController.text.toLowerCase() == 'phuket')
+                    ? phuketInternationalFormatter
+                    : americanInputFormatter
+              ],
               label: S.of(context).Phone,
               validator: phoneNumberValidator,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
               controller: _phoneController,
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,

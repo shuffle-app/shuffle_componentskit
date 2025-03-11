@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/voice_component/voice_animation_custom.dart';
+import 'package:shuffle_components_kit/presentation/components/voice_component/voice_ui_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:just_audio/just_audio.dart' as ap;
 
@@ -26,9 +27,8 @@ class AddVoiceComponent extends StatefulWidget {
 }
 
 class _AddVoiceComponentState extends State<AddVoiceComponent> {
-  final List<List<double>> _aptitudeList = List.empty(growable: true);
+  final List<double> buffAmplitude = List.empty(growable: true);
   final List<VoiceUiModel?> _voiceUiModels = List.empty(growable: true);
-  final List<ap.AudioSource?> _sources = List.empty(growable: true);
   bool showAudioPlayer = false;
 
   final ap.AudioPlayer _audioPlayer = ap.AudioPlayer();
@@ -45,7 +45,7 @@ class _AddVoiceComponentState extends State<AddVoiceComponent> {
 
     return Scaffold(
       bottomNavigationBar: SafeArea(
-        child: showAudioPlayer && _sources.isNotEmpty && !widget.isLoading
+        child: showAudioPlayer && _voiceUiModels.isNotEmpty && !widget.isLoading
             ? context
                 .gradientButton(
                   data: BaseUiKitButtonData(
@@ -84,12 +84,14 @@ class _AddVoiceComponentState extends State<AddVoiceComponent> {
               if (file.path != null && file.path!.isNotEmpty) {
                 final source = ap.AudioSource.uri(Uri.parse(file.path!));
 
-                _sources.add(source);
                 await _audioPlayer.setAudioSource(source);
                 _voiceUiModels.add(
                   VoiceUiModel(
+                    id: _voiceUiModels.length,
                     path: file.path,
                     duration: _audioPlayer.duration?.inMilliseconds,
+                    amplitudes: List.of([]),
+                    source: source,
                   ),
                 );
 
@@ -112,15 +114,14 @@ class _AddVoiceComponentState extends State<AddVoiceComponent> {
               child: Center(child: CircularProgressIndicator.adaptive()),
             )
           else ...[
-            if (showAudioPlayer && _sources.isNotEmpty)
-              ..._sources.asMap().entries.map((entry) {
-                final index = entry.key;
-                final e = entry.value;
-                if (e != null) {
+            if (showAudioPlayer && _voiceUiModels.isNotEmpty)
+              ..._voiceUiModels.map((item) {
+                if (item?.source != null) {
                   return AudioPlayer(
-                    source: e,
-                    aptitudeList: _aptitudeList.length > index ? _aptitudeList[index] : null,
-                    onDelete: () => _deleteItem(index),
+                    key: ValueKey(item!.path),
+                    source: item.source!,
+                    aptitudeList: item.amplitudes,
+                    onDelete: () => _deleteItem(_voiceUiModels.indexWhere((e) => e == item)),
                     onPlay: (playState) {
                       _stopCurrentPlayer();
                       _currentPlayer = playState;
@@ -139,21 +140,24 @@ class _AddVoiceComponentState extends State<AddVoiceComponent> {
               width: 1.sw,
               child: VoiceAnimationCustom(
                 onGetAmplitude: (amplitudes) {
-                  _aptitudeList.add(amplitudes);
+                  buffAmplitude.addAll(amplitudes);
                 },
                 onStop: (path) async {
                   final source = ap.AudioSource.uri(Uri.parse(path));
 
-                  _sources.add(source);
                   await _audioPlayer.setAudioSource(source);
 
                   _voiceUiModels.add(
                     VoiceUiModel(
+                      id: _voiceUiModels.length,
                       path: path,
                       duration: _audioPlayer.duration?.inMilliseconds,
+                      amplitudes: List.of(buffAmplitude),
+                      source: source,
                     ),
                   );
 
+                  buffAmplitude.clear();
                   showAudioPlayer = true;
                   setState(() {});
                 },
@@ -166,7 +170,9 @@ class _AddVoiceComponentState extends State<AddVoiceComponent> {
   }
 
   void _deleteItem(int index) {
-    _sources.removeAt(index);
+    dev.log('_deleteItem ${index}');
+    if (index == -1) return;
+    _voiceUiModels.removeAt(index);
     setState(() {});
   }
 

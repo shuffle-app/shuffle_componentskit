@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -49,6 +50,8 @@ class PhotoVideoSelector extends StatelessWidget {
         return 0;
       }
     });
+
+    final autoSizeGroup= AutoSizeGroup();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -127,8 +130,10 @@ class PhotoVideoSelector extends StatelessWidget {
                                 left: 0,
                                 child: ColoredBox(
                                     color: Colors.black.withOpacity(0.5),
-                                    child: Text(S.current.Cover.toUpperCase(),
+                                    child: AutoSizeText(S.current.Cover.toUpperCase(),
                                             textAlign: TextAlign.center,
+                                            maxLines: 1,
+                                            group: autoSizeGroup,
                                             style: theme?.boldTextTheme.caption3Medium.copyWith(color: Colors.white))
                                         .paddingOnly(top: 4)))
                         ],
@@ -165,6 +170,25 @@ class PhotoVideoSelector extends StatelessWidget {
                     S.of(context).Video,
                     style: theme?.regularTextTheme.labelSmall,
                   ).paddingSymmetric(horizontal: horizontalPadding),
+                  Builder(
+                    builder: (context) => GestureDetector(
+                      onTap: () => showUiKitPopover(
+                        context,
+                        customMinHeight: 30.h,
+                        showButton: false,
+                        title: Text(
+                          S.of(context).SupportedFormatsVideo,
+                          style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      child: ImageWidget(
+                        iconData: ShuffleUiKitIcons.info,
+                        width: 16.w,
+                        color: theme?.colorScheme.darkNeutral900,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: ReorderableListView.builder(
                       key: listVideosKey,

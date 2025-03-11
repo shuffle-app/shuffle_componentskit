@@ -1,5 +1,6 @@
 import 'dart:math';
-
+import 'dart:developer' as dev;
+import 'package:collection/collection.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +17,7 @@ import '../../common/tags_selection_component.dart';
 class CreateEventComponent extends StatefulWidget {
   final UiEventModel? eventToEdit;
   final VoidCallback? onEventDeleted;
-  final Future Function(UiEventModel) onEventCreated;
+  final AsyncValueChanged<void, UiEventModel> onEventCreated;
   final Future<String?> Function(String?)? getLocation;
   final Future<UiKitTag?> Function(String?)? onCategoryChanged;
   final Future<UiKitTag?> Function()? onNicheChanged;
@@ -26,6 +27,7 @@ class CreateEventComponent extends StatefulWidget {
   final bool Function(BookingUiModel)? onBookingTap;
   final List<String> availableTagOptions;
   final Future<String?> Function()? onCityChanged;
+  final ValueChanged<UiEventModel>? onDraftChanged;
 
   const CreateEventComponent({
     super.key,
@@ -41,6 +43,7 @@ class CreateEventComponent extends StatefulWidget {
     this.onBookingTap,
     this.availableTagOptions = const [],
     this.onCityChanged,
+    this.onDraftChanged,
   });
 
   @override
@@ -72,6 +75,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
 
   @override
   void initState() {
+    FocusManager.instance.addListener(_onFocusChanged);
     super.initState();
     _bookingUrlController.text = widget.eventToEdit?.bookingUrl ?? '';
     _upsalesSwitcher = widget.eventToEdit?.upsalesItems?.isNotEmpty ?? false;
@@ -190,8 +194,30 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     super.didUpdateWidget(oldWidget);
   }
 
+  _onFocusChanged() {
+    dev.log('focus changed', name: '_onFocusChanged');
+
+    widget.onDraftChanged?.call(_eventToEdit.copyWith(
+        city: _cityController.text,
+        title: _titleController.text,
+        description: _descriptionController.text,
+        media: [..._photos, ..._videos],
+        website: _websiteController.text.trim(),
+        phone: _phoneController.text,
+        price: _priceController.text.replaceAll(' ', ''),
+        bookingUrl: _bookingUrlController.text,
+        bookingUiModel: _bookingUiModel,
+        verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+        upsalesItems: _upsalesSwitcher
+            ? (_upsalesController.text.isNotEmpty
+                ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
+                : null)
+            : null));
+  }
+
   @override
   void dispose() {
+    FocusManager.instance.removeListener(_onFocusChanged);
     super.dispose();
   }
 
@@ -235,6 +261,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             hintText: 'Event name',
             controller: _titleController,
             validator: titleValidator,
+            onFieldSubmitted: (_) {
+              setState(() {});
+            },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
@@ -256,6 +285,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               hintText: 'Something amazing about your event',
               controller: _descriptionController,
               textInputAction: TextInputAction.newline,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
               expands: true,
               validator: descriptionValidator,
             ),
@@ -265,6 +297,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             onTap: () async {
               _cityController.text = await widget.onCityChanged?.call() ?? '';
               _eventToEdit.city = _cityController.text;
+              setState(() {});
 
               FocusManager.instance.primaryFocus?.unfocus();
             },
@@ -277,6 +310,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             onTap: () async {
               _locationController.text = await widget.getLocation?.call(_cityController.text) ?? '';
               _eventToEdit.location = _locationController.text;
+              setState(() {});
 
               FocusManager.instance.primaryFocus?.unfocus();
             },
@@ -295,11 +329,17 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).BuildingNumber,
                 controller: _eventToEdit.houseNumberController,
+                onFieldSubmitted: (_) {
+                  setState(() {});
+                },
               ).paddingSymmetric(horizontal: horizontalPadding)),
               Expanded(
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).OfficeAppartmentNumber,
                 controller: _eventToEdit.apartmentNumberController,
+                onFieldSubmitted: (_) {
+                  setState(() {});
+                },
               ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
@@ -310,15 +350,25 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             inputFormatters: [PrefixFormatter(prefix: 'https://')],
             label: S.of(context).Website,
             controller: _websiteController,
+            onFieldSubmitted: (_) {
+              setState(() {});
+            },
             validator: websiteValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           UiKitInputFieldNoFill(
             prefixText: '+',
             keyboardType: TextInputType.phone,
-            inputFormatters: [americanInputFormatter],
+            inputFormatters: [
+              (_cityController.text.toLowerCase() == 'пхукет' || _cityController.text.toLowerCase() == 'phuket')
+                  ? phuketInternationalFormatter
+                  : americanInputFormatter
+            ],
             label: S.of(context).Phone,
             controller: _phoneController,
+            onFieldSubmitted: (_) {
+              setState(() {});
+            },
             validator: phoneNumberValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
@@ -640,6 +690,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               label: S.of(context).Upsales,
               maxSymbols: 25,
               validator: upsalesValidator,
+              onFieldSubmitted: (_) {
+                setState(() {});
+              },
               controller: _upsalesController,
               hintText: S.of(context).UpsalesAvailableHint,
             ).paddingSymmetric(horizontal: horizontalPadding),

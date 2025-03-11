@@ -39,6 +39,8 @@ class EventComponent extends StatefulWidget {
   final VoidCallback? onAddVoiceTap;
   final VoidCallback? onInterviewTap;
   final bool isInfluencer;
+  final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
+  final VoidCallback? onViewAllVoicesTap;
 
   const EventComponent({
     super.key,
@@ -74,6 +76,8 @@ class EventComponent extends StatefulWidget {
     this.onAddVoiceTap,
     this.onInterviewTap,
     this.isInfluencer = false,
+    this.voiceUiModels,
+    this.onViewAllVoicesTap,
   });
 
   @override
@@ -717,7 +721,26 @@ class _EventComponentState extends State<EventComponent> {
             ).paddingSymmetric(horizontal: horizontalMargin),
           ),
         SpacingFoundation.verticalSpace24,
+        if (widget.voiceUiModels?.value != null && widget.voiceUiModels!.value!.isNotEmpty)
+          ValueListenableBuilder(
+            valueListenable: widget.voiceUiModels!,
+            builder: (_, voicesUiModel, __) {
+              final currentUiModel = voicesUiModel?.firstWhere((e) => e?.source != null);
 
+              if (currentUiModel != null) {
+                return VoiceInContentCard(
+                  voice: currentUiModel,
+                  onViewAllTap: widget.onViewAllVoicesTap,
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          ).paddingOnly(
+            bottom: SpacingFoundation.verticalSpacing24,
+            left: horizontalMargin,
+            right: horizontalMargin,
+          ),
         if (widget.event.descriptionItems != null)
           ...widget.event.descriptionItems!.map(
             (e) {

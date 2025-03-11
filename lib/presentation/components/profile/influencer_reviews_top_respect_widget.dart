@@ -12,11 +12,14 @@ import 'package:shuffle_components_kit/services/configuration/global_configurati
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:collection/src/iterable_extensions.dart';
+
+import '../voice_component/voice_ui_model.dart';
 
 class InfluencerReviewsTopRespectWidget extends StatefulWidget {
   final List<InfluencerPhotoUiModel>? influencerPhotos;
+  final List<VoiceUiModel>? voices;
   final List<PostFeedItem>? influencerTweets;
-  final List<ProfilePlace>? voices;
   final ValueNotifier<double>? tiltNotifier;
   final PagingController<int, VideoReactionUiModel>? storiesPagingController;
   final List<ProfilePlace>? profilePlaces;
@@ -73,6 +76,8 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
   final ScrollController scrollController = ScrollController();
   final ScrollController specialScrollController = ScrollController();
 
+  AudioPlayerState? _currentPlayer;
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +87,11 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
       setSpecialTabsContentHeight(0);
       _setActivityTabsContentHeight(0);
     });
+  }
+
+  void _handlePlayback(AudioPlayerState newPlayer) {
+    _currentPlayer?.pause();
+    _currentPlayer = newPlayer;
   }
 
   void _setActivityTabsContentHeight(int index) {
@@ -143,11 +153,23 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
 
   void setSpecialTabsContentHeight(int index) {
     if (index == 0) {
-      specialTabsHeight = bigScreen
-          ? 0.53.sh
-          : midScreen
-              ? 0.56.sh
-              : 0.59.sh;
+      specialTabsHeight = widget.voices != null && widget.voices!.isNotEmpty
+          ? bigScreen
+              ? 0.53.sh
+              : midScreen
+                  ? 0.56.sh
+                  : 0.59.sh
+          : widget.voices != null && widget.voices!.length == 1
+              ? bigScreen
+                  ? 0.27.sh
+                  : midScreen
+                      ? 0.28.sh
+                      : 0.30.sh
+              : bigScreen
+                  ? 0.105.sh
+                  : midScreen
+                      ? 0.13.sh
+                      : 0.19.sh;
       voiceBadgeCount = 0;
     } else if (index == 1) {
       specialTabsHeight = widget.influencerPhotos != null && widget.influencerPhotos!.isNotEmpty
@@ -216,6 +238,7 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
   void dispose() {
     specialTabsController.dispose();
     activityTabsController.dispose();
+    _currentPlayer?.dispose();
     super.dispose();
   }
 
@@ -276,7 +299,6 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
           child: TabBarView(
             controller: specialTabsController,
             children: [
-              //TODO
               if (widget.hasVoices && widget.voices != null && widget.voices!.isNotEmpty)
                 UiKitShowMoreTitledSection(
                   onShowMore: () async {
@@ -289,13 +311,40 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: widget.voices!
                           .map((e) {
+                            final contentTitle = e.eventUiModel?.title ?? e.placeUiModel?.title;
+                            final image = (e.placeUiModel?.media != null && e.placeUiModel!.media.isNotEmpty
+                                    ? e.placeUiModel!.media.first.link
+                                    : null) ??
+                                (e.eventUiModel?.media != null && e.eventUiModel!.media.isNotEmpty
+                                    ? e.eventUiModel!.media.first.link
+                                    : null);
+
+                            final imageLink = e.placeUiModel?.media.firstWhereOrNull(
+                                  (e) => e.previewType == UiKitPreviewType.horizontal,
+                                ) ??
+                                e.eventUiModel?.media.firstWhereOrNull(
+                                  (e) => e.previewType == UiKitPreviewType.horizontal,
+                                );
+                            final properties = [
+                              ...?e.eventUiModel?.tags,
+                              ...?e.eventUiModel?.baseTags,
+                              ...?e.placeUiModel?.tags,
+                              ...?e.placeUiModel?.baseTags,
+                            ];
+
                             if (e.source != null) {
                               return UiKitContentVoiceReactionCard(
-                                contentTitle: e.title,
-                                datePosted: e.createdAt,
-                                imageLink: GraphicsFoundation.instance.png.placeSocial1.path,
-                                customVoiceWidget: AudioPlayer(source: e.source!),
-                                properties: [],
+                                contentTitle: contentTitle ?? S.current.NothingFound,
+                                datePosted: e.createAt,
+                                imageLink: imageLink?.link ?? image,
+                                customVoiceWidget: AudioPlayer(
+                                  key: ValueKey(e.source),
+                                  source: e.source!,
+                                  aptitudeList: e.amplitudes,
+                                  isPreview: true,
+                                  onPlay: _handlePlayback,
+                                ),
+                                properties: properties,
                               );
                             } else {
                               return SizedBox.shrink();
