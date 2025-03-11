@@ -3,6 +3,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class UiSearchModel {
+  final List<UiUniversalModel> content;
   final List<UiKitTag>? filterChips;
   final List<String>? activeFilterChips;
   final String heroSearchTag;
@@ -10,6 +11,7 @@ class UiSearchModel {
 
   UiSearchModel({
     required this.heroSearchTag,
+    required this.content,
     this.filterChips,
     this.showHowItWorks = false,
     this.activeFilterChips,

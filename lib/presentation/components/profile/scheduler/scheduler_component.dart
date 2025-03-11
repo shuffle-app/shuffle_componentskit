@@ -17,7 +17,7 @@ class SchedulerComponent extends StatefulWidget {
   final Function(DateTime focusedDay)? onPageChanged;
   final ValueChanged<UiUniversalModel>? openContentCallback;
   final ValueChanged<UiUniversalModel>? onContentDeleted;
-  final AsyncValueChanged<void, UiUniversalModel>? onNotificationSetRequested;
+  final AsyncValueChanged<UiUniversalModel, UiUniversalModel>? onNotificationSetRequested;
 
   const SchedulerComponent(
       {super.key,
@@ -118,6 +118,13 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             e.media.firstWhereOrNull((el) => el.previewType == UiKitPreviewType.vertical)?.link ??
             e.media.firstWhere((el) => el.type == UiKitMediaType.image).link)
         .toList();
+  }
+
+  updateOne(UiUniversalModel event,) {
+    setState(() {
+      final index = currentContent.indexWhere((i) => i.id == event.id);
+      currentContent[index] = event;
+    });
   }
 
   @override
@@ -287,7 +294,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                   },
                   child: UiKitPlannerContentCard(
                     onNotification: () =>
-                        widget.onNotificationSetRequested?.call(content).then((_) => fetchData(needResetData: false)),
+                        widget.onNotificationSetRequested?.call(content).then((e) => updateOne(e)),
                     showNotificationSet: content.hasNotificationSet,
                     onTap: () => widget.openContentCallback?.call(content),
                     avatarPath:
