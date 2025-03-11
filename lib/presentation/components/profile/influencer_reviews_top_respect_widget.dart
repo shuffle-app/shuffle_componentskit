@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shuffle_components_kit/domain/config_models/profile/component_profile_model.dart';
+import 'package:shuffle_components_kit/domain/data_uimodels/influencer_models/influencer_feed_item.dart';
 import 'package:shuffle_components_kit/domain/data_uimodels/video_reaction_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/profile/public_profile/widget/influencer_reviews_tab.dart';
 import 'package:shuffle_components_kit/presentation/components/voice_component/audio_player.dart';
@@ -15,6 +19,7 @@ import '../voice_component/voice_ui_model.dart';
 class InfluencerReviewsTopRespectWidget extends StatefulWidget {
   final List<InfluencerPhotoUiModel>? influencerPhotos;
   final List<VoiceUiModel>? voices;
+  final List<PostFeedItem>? influencerTweets;
   final ValueNotifier<double>? tiltNotifier;
   final PagingController<int, VideoReactionUiModel>? storiesPagingController;
   final List<ProfilePlace>? profilePlaces;
@@ -22,11 +27,13 @@ class InfluencerReviewsTopRespectWidget extends StatefulWidget {
   final List<InfluencerTopCategory>? influencerTopCategories;
   final List<ContentPreviewWithRespect>? contentPreviewWithRespects;
   final Function(int? placeId, int? eventId)? onItemTap;
-  final ValueChanged<int>? onShowMoreTap;
+  final Future<void> Function(int)? onShowMoreTap;
   final bool isLoading;
+  final bool isPublic;
 
   const InfluencerReviewsTopRespectWidget({
     super.key,
+    this.influencerTweets,
     this.influencerPhotos,
     this.voices,
     this.tiltNotifier,
@@ -38,6 +45,7 @@ class InfluencerReviewsTopRespectWidget extends StatefulWidget {
     this.onItemTap,
     this.isLoading = false,
     this.onShowMoreTap,
+    this.isPublic = false,
   });
 
   bool get hasVoices => voices?.any((e) => e.source != null) ?? false;
@@ -49,7 +57,7 @@ class InfluencerReviewsTopRespectWidget extends StatefulWidget {
 class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTopRespectWidget>
     with TickerProviderStateMixin {
   //TODO length
-  late TabController specialTabsController = TabController(length: 2, vsync: this);
+  late TabController specialTabsController = TabController(length: widget.isPublic ? 2 : 3, vsync: this);
   late TabController activityTabsController = TabController(length: 3, vsync: this);
   late double specialTabsHeight = 2 * (bigScreen ? 0.265.sh : 0.325.sh);
   double _activityTabsContentHeight = 6 * 0.26.sh;
@@ -108,10 +116,19 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
     setState(() {});
   }
 
-  Future<void> _animateToTabPosition(GlobalKey key) async {
-    if (mounted) {
+  Future<void> _animateToSpecialTabPosition(int index) async {
+    final double offset = index * 100.0;
+    unawaited(specialScrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  Future<void> _animateToTabPosition() async {
+    if (mounted && tabsKey.currentContext != null) {
       await Scrollable.ensureVisible(
-        key.currentContext!,
+        tabsKey.currentContext!,
         duration: const Duration(milliseconds: 250),
         curve: Curves.decelerate,
       );
@@ -121,13 +138,13 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
   void _activityTabsListener() {
     final tabIndex = activityTabsController.index;
     _setActivityTabsContentHeight(tabIndex);
-    _animateToTabPosition(tabsKey);
+    _animateToTabPosition();
   }
 
   void _specialTabsListener() {
     final tabIndex = specialTabsController.index;
     setSpecialTabsContentHeight(tabIndex);
-    _animateToTabPosition(specialTabsKey);
+    _animateToSpecialTabPosition(tabIndex);
   }
 
   bool get bigScreen => 1.sw > 415;
@@ -167,34 +184,46 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                   ? 0.13.sh
                   : 0.19.sh;
       photoBadgeCount = 0;
-    } else if (index == 2) {
+    } else if (index == 2 && !widget.isPublic) {
+      specialTabsHeight = widget.influencerTweets != null && widget.influencerTweets!.isNotEmpty
+          ? bigScreen
+              ? 0.4.sh
+              : midScreen
+                  ? 0.425.sh
+                  : 0.485.sh
+          : bigScreen
+              ? 0.101.sh
+              : midScreen
+                  ? 0.101.sh
+                  : 0.101.sh;
+    } else if (index == (widget.isPublic ? 2 : 3)) {
       specialTabsHeight = bigScreen
           ? 0.385.sh
           : midScreen
               ? 0.36.sh
               : 0.4.sh;
       idealRouteBadgeCount = 0;
-    } else if (index == 3) {
+    } else if (index == (widget.isPublic ? 3 : 4)) {
       specialTabsHeight = bigScreen
           ? 0.5.sh
           : midScreen
               ? 0.515.sh
               : 0.6.sh;
       interviewBadgeCount = 0;
-    } else if (index == 4) {
+    } else if (index == (widget.isPublic ? 4 : 5)) {
       specialTabsHeight = bigScreen || midScreen ? 0.575.sh : 0.625.sh;
       chatBadgeCount = 0;
-    } else if (index == 5) {
+    } else if (index == (widget.isPublic ? 5 : 6)) {
       specialTabsHeight = bigScreen || midScreen ? 0.4.sh : 0.425.sh;
       nftBadgeCount = 0;
-    } else if (index == 6) {
+    } else if (index == (widget.isPublic ? 6 : 7)) {
       specialTabsHeight = bigScreen
           ? 0.5.sh
           : midScreen
               ? 0.55.sh
               : 0.65.sh;
       contestBadgeCount = 0;
-    } else if (index == 7) {
+    } else if (index == (widget.isPublic ? 7 : 8)) {
       specialTabsHeight = bigScreen
           ? 0.4025.sh
           : midScreen
@@ -232,6 +261,7 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
         SizedBox(
           height: 62.w,
           child: ListView(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             controller: specialScrollController,
             scrollDirection: Axis.horizontal,
             children: [
@@ -242,6 +272,8 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                 tabs: [
                   UiKitBadgedCustomTab(title: S.current.Voice, badgeValue: voiceBadgeCount, height: 20.h),
                   UiKitBadgedCustomTab(title: S.current.Photo, badgeValue: photoBadgeCount, height: 20.h),
+                  if (!widget.isPublic)
+                    UiKitBadgedCustomTab(title: S.current.News, badgeValue: photoBadgeCount, height: 20.h),
                   // UiKitBadgedCustomTab(title: S.current.IdealRoute, badgeValue: idealRouteBadgeCount),
                   // UiKitBadgedCustomTab(title: S.current.Interview, badgeValue: interviewBadgeCount),
                   // UiKitBadgedCustomTab(title: S.current.Chat, badgeValue: chatBadgeCount),
@@ -251,7 +283,7 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                 ],
                 onTappedTab: (index) {
                   setSpecialTabsContentHeight(index);
-                  _animateToTabPosition(specialTabsKey);
+                  _animateToSpecialTabPosition(index);
                 },
               ).paddingOnly(
                 bottom: SpacingFoundation.verticalSpacing16,
@@ -269,9 +301,9 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
             children: [
               if (widget.hasVoices && widget.voices != null && widget.voices!.isNotEmpty)
                 UiKitShowMoreTitledSection(
-                  onShowMore: () {
-                    widget.onShowMoreTap?.call(0);
-                    _currentPlayer = null;
+                  onShowMore: () async {
+                    await widget.onShowMoreTap?.call(0);
+                    setSpecialTabsContentHeight(0);
                   },
                   title: S.current.Voice,
                   content: Column(
@@ -330,7 +362,10 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                 ),
               UiKitShowMoreTitledSection(
                 title: S.current.Photo,
-                onShowMore: () => widget.onShowMoreTap?.call(1),
+                onShowMore: () async {
+                  await widget.onShowMoreTap?.call(1);
+                  setSpecialTabsContentHeight(1);
+                },
                 content: (widget.influencerPhotos != null && widget.influencerPhotos!.isNotEmpty)
                     ? UiKitPhotoSliderWithReactions(
                         photos: widget.influencerPhotos!.take(5).toList(),
@@ -339,7 +374,42 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [Text(S.current.NothingFound, style: boldTextTheme?.body)],
                       ),
-              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16)
+              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+              if (!widget.isPublic)
+                UiKitShowMoreTitledSection(
+                  contentHeight: specialTabsHeight - 0.11.sh,
+                  title: S.current.News,
+                  needOverflowContent: true,
+                  onShowMore: () async {
+                    await widget.onShowMoreTap?.call(2);
+                    setSpecialTabsContentHeight(2);
+                  },
+                  content: widget.influencerTweets != null && widget.influencerTweets!.isNotEmpty
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: widget.influencerTweets!
+                              .map(
+                                (e) => UiKitPostCard(
+                                  isFeed: false,
+                                  authorName: e.name,
+                                  authorUsername: e.username,
+                                  authorAvatarUrl: e.avatarUrl,
+                                  authorSpeciality: e.speciality,
+                                  authorUserType: e.userType,
+                                  heartEyesCount: e.heartEyesReactionsCount,
+                                  likesCount: e.likeReactionsCount,
+                                  sunglassesCount: e.sunglassesReactionsCount,
+                                  firesCount: e.fireReactionsCount,
+                                  smileyCount: e.smileyReactionsCount,
+                                  text: e.text,
+                                  createAt: e.createAt,
+                                ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                              )
+                              .take(2)
+                              .toList(),
+                        )
+                      : null,
+                ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16)
             ],
           ),
         ),
@@ -347,6 +417,7 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
         SizedBox(
           height: 62.w,
           child: ListView(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             controller: scrollController,
             scrollDirection: Axis.horizontal,
             children: [
@@ -361,7 +432,7 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                 ],
                 onTappedTab: (index) {
                   _setActivityTabsContentHeight(index);
-                  _animateToTabPosition(tabsKey);
+                  _animateToTabPosition();
                 },
               ).paddingOnly(
                 bottom: SpacingFoundation.verticalSpacing16,
