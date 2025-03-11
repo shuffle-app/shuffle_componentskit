@@ -39,7 +39,7 @@ class ProfileComponent extends StatelessWidget {
 
   ///Influencer
   final List<InfluencerPhotoUiModel>? influencerPhotos;
-  final List<ProfilePlace>? voices;
+  final List<VoiceUiModel>? voices;
   final ValueNotifier<double>? tiltNotifier;
   final List<ProfilePlace>? profilePlaces;
   final List<InfluencerTopCategory>? influencerTopCategories;

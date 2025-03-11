@@ -87,6 +87,7 @@ class _AddVoiceComponentState extends State<AddVoiceComponent> {
                 await _audioPlayer.setAudioSource(source);
                 _voiceUiModels.add(
                   VoiceUiModel(
+                    id: _voiceUiModels.length,
                     path: file.path,
                     duration: _audioPlayer.duration?.inMilliseconds,
                     amplitudes: List.of([]),
@@ -148,6 +149,7 @@ class _AddVoiceComponentState extends State<AddVoiceComponent> {
 
                   _voiceUiModels.add(
                     VoiceUiModel(
+                      id: _voiceUiModels.length,
                       path: path,
                       duration: _audioPlayer.duration?.inMilliseconds,
                       amplitudes: List.of(buffAmplitude),
