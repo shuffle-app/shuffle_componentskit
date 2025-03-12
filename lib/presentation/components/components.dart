@@ -176,3 +176,5 @@ export 'voice_component/show_all_voices_component.dart';
 export 'voice_component/voice_in_content_card.dart';
 export 'voice_component/inf_voices_component/inf_voices_component.dart';
 export 'influencer_photo_component/influencer_photo_component.dart';
+export 'promotions/add_promotions/add_promotions_component.dart';
+export 'promotions/promotions_component.dart';
