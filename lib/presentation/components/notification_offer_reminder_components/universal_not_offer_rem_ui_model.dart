@@ -14,6 +14,8 @@ class UniversalNotOfferRemUiModel {
   final bool isOffer;
   final List<UsersOfOffer>? userOfOffer;
   final TicketIssueStatus? status;
+  final String? imagePath;
+  final bool isPromo;
 
   const UniversalNotOfferRemUiModel({
     required this.id,
@@ -28,6 +30,8 @@ class UniversalNotOfferRemUiModel {
     this.userOfOffer,
     this.iconId,
     this.status,
+    this.imagePath,
+    this.isPromo = false,
   });
 
   UniversalNotOfferRemUiModel copyWith({
@@ -43,6 +47,8 @@ class UniversalNotOfferRemUiModel {
     List<UsersOfOffer>? userOfOffer,
     int? iconId,
     TicketIssueStatus? status,
+    String? imagePath,
+    bool? isPromo,
   }) {
     return UniversalNotOfferRemUiModel(
       id: id ?? this.id,
@@ -56,7 +62,9 @@ class UniversalNotOfferRemUiModel {
       isOffer: isOffer ?? this.isOffer,
       userOfOffer: userOfOffer ?? this.userOfOffer,
       iconId: iconId ?? this.iconId,
-      status: status?? this.status,
+      status: status ?? this.status,
+      imagePath: imagePath ?? this.imagePath,
+      isPromo: isPromo ?? this.isPromo,
     );
   }
 
@@ -82,7 +90,9 @@ class UniversalNotOfferRemUiModel {
         other.isLaunched == isLaunched &&
         other.isLaunchedDate == isLaunchedDate &&
         other.isOffer == isOffer &&
-        other.iconId == iconId;
+        other.iconId == iconId &&
+        other.imagePath == imagePath &&
+        other.isPromo == isPromo;
   }
 
   @override
@@ -96,11 +106,13 @@ class UniversalNotOfferRemUiModel {
         isLaunched.hashCode ^
         isLaunchedDate.hashCode ^
         isOffer.hashCode ^
-        iconId.hashCode;
+        iconId.hashCode ^
+        imagePath.hashCode ^
+        isPromo.hashCode;
   }
 
   @override
   String toString() {
-    return 'OfferUiModel(id: $id, title: $title, pointPrice: $pointPrice, iconId: $iconId, selectedDates: $selectedDates, notifyTheAudience: $notifyTheAudience, isLaunched: $isLaunched, isLaunchedDate: $isLaunchedDate)';
+    return 'OfferUiModel(id: $id, title: $title, pointPrice: $pointPrice, iconId: $iconId, selectedDates: $selectedDates, notifyTheAudience: $notifyTheAudience, isLaunched: $isLaunched, isLaunchedDate: $isLaunchedDate, imagePath : $imagePath, isPromo: $isPromo)';
   }
 }
