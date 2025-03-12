@@ -136,6 +136,7 @@ class MyEventsComponent extends StatelessWidget {
             ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
           context.gradientButton(
             data: BaseUiKitButtonData(
+              autoSizeGroup: AutoSizeGroup(),
                 onPressed: onTap, text: buttonText ?? S.of(context).CreateEvent, fit: ButtonFit.fitWidth),
           ),
         ],

@@ -47,8 +47,6 @@ class ProfileComponent extends StatelessWidget {
   final List<ContentPreviewWithRespect>? contentPreviewWithRespects;
   final Function(int? placeId, int? eventId)? onItemTap;
   final bool isLoading;
-  final VoidCallback? onStripeTap;
-  final StripeRegistrationStatus? stripeRegistrationStatus;
   final Future<void> Function(int)? onShowMoreTap;
 
   const ProfileComponent({
@@ -91,8 +89,6 @@ class ProfileComponent extends StatelessWidget {
     this.contentPreviewWithRespects,
     this.onItemTap,
     this.isLoading = false,
-    this.onStripeTap,
-    this.stripeRegistrationStatus,
     this.onShowMoreTap,
   });
 
@@ -209,11 +205,6 @@ class ProfileComponent extends StatelessWidget {
             ],
           ).paddingSymmetric(horizontal: EdgeInsetsFoundation.all16),
         )),
-        if (stripeRegistrationStatus != null)
-          UiKitStripeRegistrationTile(
-            status: stripeRegistrationStatus!,
-            onTap: onStripeTap,
-          ).paddingSymmetric(horizontal: EdgeInsetsFoundation.all16, vertical: EdgeInsetsFoundation.vertical24),
         if (showRecommendedUsers) ...[
           SpacingFoundation.verticalSpace24,
           SizedBox(
