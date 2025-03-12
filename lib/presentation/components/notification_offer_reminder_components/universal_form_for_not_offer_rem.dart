@@ -7,6 +7,7 @@ class UniversalFormForNotOfferRem extends StatefulWidget {
   final String? nameForEmptyList;
   final String? title;
   final String? whatCreate;
+  final String? customWhatCreate;
   final List<UniversalNotOfferRemUiModel>? itemList;
   final ValueChanged<int>? onEditItem;
   final ValueChanged<int>? onRemoveItem;
@@ -26,6 +27,7 @@ class UniversalFormForNotOfferRem extends StatefulWidget {
     this.onActivateTap,
     this.title,
     this.whatCreate,
+    this.customWhatCreate,
     required this.animatedListKey,
   });
 
@@ -119,10 +121,11 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                   Flexible(
                     flex: 3,
                     child: Text(
-                      S.of(context).CreateNewXForYourY(
-                            widget.whatCreate ?? S.of(context).Offer.toLowerCase(),
-                            widget.nameForEmptyList ?? S.of(context).Place.toLowerCase(),
-                          ),
+                      widget.customWhatCreate ??
+                          S.of(context).CreateNewXForYourY(
+                                widget.whatCreate ?? S.of(context).Offer.toLowerCase(),
+                                widget.nameForEmptyList ?? S.of(context).Place.toLowerCase(),
+                              ),
                       style: theme?.boldTextTheme.body,
                     ),
                   ),
