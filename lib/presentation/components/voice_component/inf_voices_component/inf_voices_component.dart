@@ -9,6 +9,7 @@ class InfVoicesComponent extends StatefulWidget {
   final GlobalKey<SliverAnimatedListState> listKey;
   final ValueChanged<int>? onRemoveVoice;
   final bool isOwner;
+  final Function(int? placeId, int? eventId)? onItemTap;
 
   const InfVoicesComponent({
     super.key,
@@ -16,6 +17,7 @@ class InfVoicesComponent extends StatefulWidget {
     required this.listKey,
     this.onRemoveVoice,
     this.isOwner = false,
+    this.onItemTap,
   });
 
   @override
@@ -103,6 +105,7 @@ class _InfVoicesComponentState extends State<InfVoicesComponent> {
             background: const UiKitBackgroundDismissible(),
             onDismissed: (_) => widget.onRemoveVoice?.call(voice.id),
             child: UiKitContentVoiceReactionCard(
+              onItemTap: () => widget.onItemTap?.call(place?.id, event?.id),
               contentTitle: contentTitle ?? S.current.NothingFound,
               datePosted: voice.createAt,
               imageLink: imageLink,
@@ -139,6 +142,7 @@ class _InfVoicesComponentState extends State<InfVoicesComponent> {
         final imageLink = horizontalMedia?.link ?? media?.firstOrNull?.link;
 
         return UiKitContentVoiceReactionCard(
+          onItemTap: () => widget.onItemTap?.call(place?.id, event?.id),
           contentTitle: (event?.title ?? place?.title) ?? S.current.NothingFound,
           datePosted: sources.firstOrNull?.createAt ?? DateTime.now(),
           imageLink: imageLink,
