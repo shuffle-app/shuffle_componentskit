@@ -264,27 +264,29 @@ class PostFeedItem extends InfluencerFeedItem {
   final int smileyReactionsCount;
   final bool newMark;
   final ValueNotifier<String>? translateText;
+  final DateTime? createAt;
 
   PostFeedItem({
     required super.id,
     required super.userId,
-    required super.speciality,
-    required super.name,
-    required super.username,
-    required super.avatarUrl,
-    required super.userType,
+    super.speciality = '',
+    super.name = '',
+    super.username = '',
+    super.avatarUrl = '',
+    super.userType = UserTileType.ordinary,
     super.viewShareDate,
     required this.text,
-    required this.heartEyesReactionsCount,
-    required this.likeReactionsCount,
-    required this.fireReactionsCount,
-    required this.sunglassesReactionsCount,
-    required this.smileyReactionsCount,
+    this.heartEyesReactionsCount = 0,
+    this.likeReactionsCount = 0,
+    this.fireReactionsCount = 0,
+    this.sunglassesReactionsCount = 0,
+    this.smileyReactionsCount = 0,
     super.key,
     super.userReaction,
     this.newMark = false,
     this.translateText,
     super.showTranslateButton,
+    this.createAt,
   });
 
   PostFeedItem copyWith({
@@ -302,6 +304,7 @@ class PostFeedItem extends InfluencerFeedItem {
     String? userReaction,
     ValueNotifier<String>? translateText,
     int? userId,
+    DateTime? createAt,
   }) {
     return PostFeedItem(
       id: id,
@@ -323,6 +326,7 @@ class PostFeedItem extends InfluencerFeedItem {
       viewShareDate: viewShareDate,
       translateText: translateText ?? this.translateText,
       showTranslateButton: super.showTranslateButton,
+      createAt: this.createAt ?? createAt,
     );
   }
 }
