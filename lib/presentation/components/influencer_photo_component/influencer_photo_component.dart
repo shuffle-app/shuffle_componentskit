@@ -29,6 +29,7 @@ class InfluencerPhotoComponent extends StatefulWidget {
 class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
   final List<InfluencerPhotoUiModel> _influencerPhoto = List.empty(growable: true);
   bool isDeletingMode = false;
+  final String _groupId = 'groupId';
 
   bool isOverlayVisible = false;
   OverlayEntry? overlayEntry;
@@ -75,15 +76,18 @@ class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
       autoImplyLeading: true,
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       appBarTrailing: isDeletingMode
-          ? GestureDetector(
-              onTap: () async {
-                final deletedIt = await widget.onDeleteTap?.call();
-                if (deletedIt ?? false) isDeletingMode = false;
-                setState(() {});
-              },
-              child: ImageWidget(
-                iconData: ShuffleUiKitIcons.trash,
-                color: colorsScheme?.inversePrimary,
+          ? TapRegion(
+              groupId: _groupId,
+              child: GestureDetector(
+                onTap: () async {
+                  final deletedIt = await widget.onDeleteTap?.call();
+                  if (deletedIt ?? false) isDeletingMode = false;
+                  setState(() {});
+                },
+                child: ImageWidget(
+                  iconData: ShuffleUiKitIcons.trash,
+                  color: colorsScheme?.inversePrimary,
+                ),
               ),
             )
           : SizedBox(width: 22.w),
@@ -157,37 +161,48 @@ class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
                           tag: heroTag,
                           child: ClipRRect(
                             borderRadius: BorderRadiusFoundation.all24r,
-                            child: GestureDetector(
-                              onLongPress: () {
+                            child: TapRegion(
+                              groupId: _groupId,
+                              onTapOutside: (event) {
                                 if (widget.isOwner) {
-                                  isDeletingMode = !isDeletingMode;
+                                  isDeletingMode = false;
                                   if (!isDeletingMode) widget.selectedIds?.clear();
 
                                   setState(() {});
                                 }
                               },
-                              onTap: () {
-                                if (isDeletingMode) {
-                                  if (widget.selectedIds?.contains(item.id) ?? false) {
-                                    widget.selectedIds?.removeWhere((e) => e == item.id);
-                                  } else {
-                                    widget.selectedIds?.add(item.id);
+                              child: GestureDetector(
+                                onLongPress: () {
+                                  if (widget.isOwner) {
+                                    isDeletingMode = !isDeletingMode;
+                                    if (!isDeletingMode) widget.selectedIds?.clear();
+
+                                    setState(() {});
                                   }
-                                  setState(() {});
-                                } else {
-                                  context.push(
-                                    PhotoDialog(
-                                      images: _influencerPhoto.map((e) => e.url).nonNulls.toList(),
-                                      initialIndex: indexOfPhoto,
-                                      tag: heroTag,
-                                    ),
-                                    nativeTransition: false,
-                                    transitionDuration: const Duration(milliseconds: 500),
-                                    useRootNavigator: true,
-                                  );
-                                }
-                              },
-                              child: ImageWidget(link: item.url),
+                                },
+                                onTap: () {
+                                  if (isDeletingMode) {
+                                    if (widget.selectedIds?.contains(item.id) ?? false) {
+                                      widget.selectedIds?.removeWhere((e) => e == item.id);
+                                    } else {
+                                      widget.selectedIds?.add(item.id);
+                                    }
+                                    setState(() {});
+                                  } else {
+                                    context.push(
+                                      PhotoDialog(
+                                        images: _influencerPhoto.map((e) => e.url).nonNulls.toList(),
+                                        initialIndex: indexOfPhoto,
+                                        tag: heroTag,
+                                      ),
+                                      nativeTransition: false,
+                                      transitionDuration: const Duration(milliseconds: 500),
+                                      useRootNavigator: true,
+                                    );
+                                  }
+                                },
+                                child: ImageWidget(link: item.url),
+                              ),
                             ),
                           ),
                         ),
@@ -195,17 +210,20 @@ class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
                           Positioned(
                             top: EdgeInsetsFoundation.all12,
                             right: EdgeInsetsFoundation.all12,
-                            child: UiKitCheckbox(
-                              isActive: widget.selectedIds?.contains(item.id) ?? false,
-                              borderColor: colorsScheme?.surface4,
-                              onChanged: () {
-                                if (widget.selectedIds?.contains(item.id) ?? false) {
-                                  widget.selectedIds?.removeWhere((e) => e == item.id);
-                                } else {
-                                  widget.selectedIds?.add(item.id);
-                                }
-                                setState(() {});
-                              },
+                            child: TapRegion(
+                              groupId: _groupId,
+                              child: UiKitCheckbox(
+                                isActive: widget.selectedIds?.contains(item.id) ?? false,
+                                borderColor: colorsScheme?.surface4,
+                                onChanged: () {
+                                  if (widget.selectedIds?.contains(item.id) ?? false) {
+                                    widget.selectedIds?.removeWhere((e) => e == item.id);
+                                  } else {
+                                    widget.selectedIds?.add(item.id);
+                                  }
+                                  setState(() {});
+                                },
+                              ),
                             ),
                           ),
                         if (!widget.isOwner)
