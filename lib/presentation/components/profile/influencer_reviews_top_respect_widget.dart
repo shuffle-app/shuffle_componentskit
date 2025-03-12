@@ -179,9 +179,9 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
                   ? 0.425.sh
                   : 0.485.sh
           : bigScreen
-              ? 0.105.sh
+              ? 0.15.sh
               : midScreen
-                  ? 0.13.sh
+                  ? 0.17.sh
                   : 0.19.sh;
       photoBadgeCount = 0;
     } else if (index == 2 && !widget.isPublic) {
