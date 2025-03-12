@@ -55,11 +55,19 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  ImageWidget(
-                    height: 45.h,
-                    fit: BoxFit.fill,
-                    link: model.iconPath ?? '',
-                  ),
+                  if (model.imagePath != null && model.imagePath!.isNotEmpty)
+                    context.userAvatar(
+                      size: UserAvatarSize.x40x40,
+                      type: UserTileType.ordinary,
+                      userName: '',
+                      imageUrl: model.imagePath,
+                    )
+                  else
+                    ImageWidget(
+                      height: 45.h,
+                      fit: BoxFit.fill,
+                      link: model.iconPath ?? '',
+                    ),
                   SpacingFoundation.horizontalSpace4,
                   Flexible(
                     flex: 3,
@@ -100,9 +108,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                               ),
                         SpacingFoundation.verticalSpace2,
                         if (model.status == TicketIssueStatus.unpaid)
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             ImageWidget(
                               height: 10.h,
                               fit: BoxFit.fill,
@@ -133,8 +139,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                                 height: 10.h,
                                 fit: BoxFit.fill,
                                 color: ColorsFoundation.mutedText,
-                                iconData:
-                                    model.isLaunched ? ShuffleUiKitIcons.playfill : ShuffleUiKitIcons.stopfill,
+                                iconData: model.isLaunched ? ShuffleUiKitIcons.playfill : ShuffleUiKitIcons.stopfill,
                               ),
                               SpacingFoundation.horizontalSpace2,
                               Expanded(
@@ -158,7 +163,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (model.isOffer && model.status == TicketIssueStatus.paid) ...[
+                  if ((model.isOffer && model.status == TicketIssueStatus.paid) || model.isPromo) ...[
                     SpacingFoundation.horizontalSpace8,
                     Flexible(
                       child: context.button(
