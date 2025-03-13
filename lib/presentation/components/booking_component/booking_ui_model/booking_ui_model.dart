@@ -13,6 +13,7 @@ class BookingUiModel {
   List<UpsaleUiModel>? upsaleUiModel;
   DateTime? selectedDateTime;
   bool showSubsInContentCard;
+  List<BookingPaymentType> selectedPaymentTypes;
 
   BookingUiModel({
     required this.id,
@@ -24,6 +25,7 @@ class BookingUiModel {
     this.upsaleUiModel,
     this.selectedDateTime,
     this.showSubsInContentCard = true,
+    this.selectedPaymentTypes = const [BookingPaymentType.onlineCrypto],
   });
 
   BookingUiModel copyWith({
@@ -75,6 +77,7 @@ class BookingUiModel {
 
   BookingUiModel.empty()
       : id = -1,
+        selectedPaymentTypes = const [BookingPaymentType.onlineCrypto],
         bookingLimit = '',
         bookingLimitPerOne = '',
         currency = 'AED',
@@ -83,5 +86,23 @@ class BookingUiModel {
         showSubsInContentCard = false,
         subsUiModel = List.empty(growable: true),
         upsaleUiModel = List.empty(growable: true);
+}
 
+enum BookingPaymentType { free, onlineCard, onlineCrypto, offlineCash, offlineQR }
+
+extension BookingPaymentNames on BookingPaymentType {
+  String get name {
+    switch (this) {
+      case BookingPaymentType.free:
+        return S.current.Free;
+      case BookingPaymentType.onlineCard:
+        return '${S.current.ForMoney} (Stripe)';
+      case BookingPaymentType.onlineCrypto:
+        return S.current.ForCrypto;
+      case BookingPaymentType.offlineCash:
+        return S.current.Cash;
+      case BookingPaymentType.offlineQR:
+        return 'QR code';
+    }
+  }
 }

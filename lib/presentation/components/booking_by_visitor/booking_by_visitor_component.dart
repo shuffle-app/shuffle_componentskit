@@ -4,7 +4,7 @@ import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class BookingByVisitorComponent extends StatefulWidget {
-  final BookingUiModel? bookingUiModel;
+  final BookingUiModel bookingUiModel;
   final TicketUiModel? ticketUiModel;
   final VoidCallback? onSelectedDate;
   final DateTime? selectedDate;
@@ -19,7 +19,7 @@ class BookingByVisitorComponent extends StatefulWidget {
 
   const BookingByVisitorComponent({
     super.key,
-    this.bookingUiModel,
+    required this.bookingUiModel,
     this.ticketUiModel,
     this.onSelectedDate,
     this.selectedDate,
@@ -58,11 +58,11 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   @override
   void initState() {
     super.initState();
-    _subs.addAll(widget.bookingUiModel?.subsUiModel ?? []);
-    _upsales.addAll(widget.bookingUiModel?.upsaleUiModel ?? []);
+    _subs.addAll(widget.bookingUiModel.subsUiModel ?? []);
+    _upsales.addAll(widget.bookingUiModel.upsaleUiModel ?? []);
     _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
     _subTicketCount = widget.ticketUiModel?.subs?.count ?? 0;
-    _ticketPrice = widget.bookingUiModel?.price != null ? double.parse(widget.bookingUiModel!.price!) : 0;
+    _ticketPrice = widget.bookingUiModel.price != null ? double.parse(widget.bookingUiModel.price!) : 0;
     _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
     _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
     _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
@@ -73,11 +73,11 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
     if (oldWidget.ticketUiModel != widget.ticketUiModel) {
       _subs.clear();
       _upsales.clear();
-      _subs.addAll(widget.bookingUiModel?.subsUiModel ?? []);
-      _upsales.addAll(widget.bookingUiModel?.upsaleUiModel ?? []);
+      _subs.addAll(widget.bookingUiModel.subsUiModel ?? []);
+      _upsales.addAll(widget.bookingUiModel.upsaleUiModel ?? []);
       _ticketCount = widget.ticketUiModel?.ticketsCount ?? 0;
       _subTicketCount = widget.ticketUiModel?.subs?.count ?? 0;
-      _ticketPrice = widget.bookingUiModel?.price != null ? double.parse(widget.bookingUiModel!.price!) : 0;
+      _ticketPrice = widget.bookingUiModel.price != null ? double.parse(widget.bookingUiModel.price!) : 0;
       _upsaleCount = widget.ticketUiModel?.totalUpsalesCount ?? 0;
       _upsaleTotalPrice = widget.ticketUiModel?.totalUpsalePrice ?? 0;
       _ticketUiModel = widget.ticketUiModel ?? TicketUiModel(id: -1);
@@ -143,12 +143,12 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
   }
 
   _onAddSubTicket() {
-    if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel?.bookingLimitPerOne ?? '999') ?? 999)) return;
+    if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel.bookingLimitPerOne ?? '999') ?? 999)) return;
     setState(() {
       if (_selectedSub != null) {
         _updateSubTicket(1);
-      } else if (widget.bookingUiModel?.subsUiModel == null ||
-          (widget.bookingUiModel?.subsUiModel != null && widget.bookingUiModel!.subsUiModel!.isEmpty)) {
+      } else if (widget.bookingUiModel.subsUiModel == null ||
+          (widget.bookingUiModel.subsUiModel != null && widget.bookingUiModel.subsUiModel!.isEmpty)) {
         _ticketCount++;
       } else {
         errorSelectSubisActive = true;
@@ -368,7 +368,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
           ],
           AutoSizeText(
-            '${S.of(context).TicketPrice} ${formatDouble(_ticketPrice)} ${widget.bookingUiModel?.currency ?? 'AED'}',
+            '${S.of(context).TicketPrice} ${formatDouble(_ticketPrice)} ${widget.bookingUiModel.currency ?? 'AED'}',
             style: theme?.boldTextTheme.title2,
             maxLines: 1,
           ).paddingSymmetric(horizontal: horizontalPadding),
@@ -431,9 +431,9 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             SpacingFoundation.verticalSpace16,
           ],
           SpacingFoundation.verticalSpace24,
-          if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel?.bookingLimitPerOne ?? '9999') ?? 9999))
+          if (_getTotalSubsTicketCount == (int.tryParse(widget.bookingUiModel.bookingLimitPerOne ?? '9999') ?? 9999))
             Text(
-              '${S.of(context).BookingLimitPerOne}: ${widget.bookingUiModel?.bookingLimitPerOne}',
+              '${S.of(context).BookingLimitPerOne}: ${widget.bookingUiModel.bookingLimitPerOne}',
               style: theme?.regularTextTheme.labelLarge,
             ).paddingOnly(left: horizontalPadding, bottom: SpacingFoundation.verticalSpacing24),
           if (_upsales.isNotEmpty) ...[
@@ -560,7 +560,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 bottom: SpacingFoundation.verticalSpacing24,
               ),
             Text(
-              '${S.of(context).Total}: ${formatDouble(_getTotalPrice)} ${widget.bookingUiModel?.currency ?? 'AED'}',
+              '${S.of(context).Total}: ${formatDouble(_getTotalPrice)} ${widget.bookingUiModel.currency ?? 'AED'}',
               style: theme?.boldTextTheme.title2,
             ).paddingSymmetric(horizontal: horizontalPadding),
           ],
@@ -576,13 +576,17 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                             _ticketUiModel.copyWith(ticketsCount: _getTotalSubsTicketCount),
                             _subs,
                             _upsales,
-                            widget.bookingUiModel?.id,
+                            widget.bookingUiModel.id,
                           );
                         }
                       : null,
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24),
+          Text(S.current.PaymentMethod, style: theme?.boldTextTheme.title2),
+          SpacingFoundation.verticalSpace16,
+          Text(widget.bookingUiModel.selectedPaymentTypes.map((e)=>e.name).join(', '), style: theme?.regularTextTheme.body,),
+          SpacingFoundation.verticalSpace16,
         ],
       ),
       bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _getTotalSubsTicketCount != 0
@@ -597,7 +601,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                             _ticketUiModel.copyWith(ticketsCount: _getTotalSubsTicketCount),
                             _subs,
                             _upsales,
-                            widget.bookingUiModel?.id,
+                            widget.bookingUiModel.id,
                           );
                         }
                       : null,
