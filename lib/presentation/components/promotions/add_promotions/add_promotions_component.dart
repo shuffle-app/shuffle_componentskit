@@ -5,29 +5,31 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class AddPromotionsComponent extends StatefulWidget {
-  final List<BookingsPlaceOrEventUiModel>? placesOrEvents;
+  final List<BookingsPlaceOrEventUiModel> placesOrEvents;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onPlaceItemTap;
   final ValueChanged<BookingsPlaceOrEventUiModel?>? onEventItemTap;
   final bool isLoading;
+  final bool isPro;
 
   late final List<BookingsPlaceOrEventUiModel> placeForEvent;
 
   AddPromotionsComponent({
     super.key,
-    this.placesOrEvents,
+    this.placesOrEvents = const [],
     this.onPlaceItemTap,
     this.onEventItemTap,
+    this.isPro = false,
     this.isLoading = false,
   }) {
     placeForEvent =
-        placesOrEvents?.where((element) => element.events != null && element.events!.isNotEmpty).toList() ?? [];
+        placesOrEvents.where((element) => element.events != null && element.events!.isNotEmpty).toList() ?? [];
   }
 
   @override
   State<AddPromotionsComponent> createState() => _AddPromotionsComponentState();
 }
 
-class _AddPromotionsComponentState extends State<AddPromotionsComponent> with TickerProviderStateMixin {
+class _AddPromotionsComponentState extends State<AddPromotionsComponent> with SingleTickerProviderStateMixin {
   late TabController tabController = TabController(length: 2, vsync: this);
 
   @override
@@ -43,7 +45,7 @@ class _AddPromotionsComponentState extends State<AddPromotionsComponent> with Ti
     return BlurredAppBarPage(
       customTitle: Flexible(
         child: AutoSizeText(
-          'Add promotions',
+          S.current.AddPromotion,
           style: theme?.boldTextTheme.title1,
           textAlign: TextAlign.center,
           maxLines: 1,
@@ -51,84 +53,106 @@ class _AddPromotionsComponentState extends State<AddPromotionsComponent> with Ti
       ),
       autoImplyLeading: true,
       physics: NeverScrollableScrollPhysics(),
-      children: [
-        SpacingFoundation.verticalSpace16,
-        UiKitCustomTabBar(
-          tabController: tabController,
-          tabs: [
-            UiKitCustomTab(title: S.current.Place.toUpperCase(), height: 40.h),
-            UiKitCustomTab(title: S.current.Events.toUpperCase(), height: 40.h),
-          ],
-          onTappedTab: (index) {},
-        ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-        SpacingFoundation.verticalSpace24,
-        SizedBox(
-          height: 0.8.sh,
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              ListView(
-                padding: EdgeInsets.all(0),
-                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                children: widget.placesOrEvents
-                        ?.where((e) => e.isPlace)
-                        .map(
-                          (e) => BookingsControlPlaceItemUiKit(
-                            title: e.title,
-                            description: e.description,
-                            imageUrl: e.imageUrl,
-                            onTap: () => widget.onPlaceItemTap?.call(e),
-                          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                        )
-                        .toList() ??
-                    [
-                      Center(
-                        child: Text(
-                          S.of(context).AddAtLeastOneXToPromoteIt(S.of(context).Place.toLowerCase()),
-                          style: theme?.boldTextTheme.body,
-                        ),
-                      ),
-                    ],
+      children: widget.isPro
+          ? widget.placesOrEvents.where((e) => !e.isPlace).isNotEmpty
+              ? widget.placesOrEvents
+                  .where((e) => !e.isPlace)
+                  .map(
+                    (e) => BookingsControlPlaceItemUiKit(
+                      title: e.title,
+                      description: e.description,
+                      imageUrl: e.imageUrl,
+                      onTap: () => widget.onEventItemTap?.call(e),
+                    ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16,vertical: SpacingFoundation.verticalSpacing6),
+                  )
+                  .toList()
+              : [
+                  Center(
+                    child: Text(
+                      S.of(context).AddAtLeastOneXToPromoteIt(S.of(context).Event.toLowerCase()),
+                      style: theme?.boldTextTheme.body,
+                    ).paddingAll(SpacingFoundation.horizontalSpacing16),
+                  ),
+                ]
+          : [
+              SpacingFoundation.verticalSpace16,
+              UiKitCustomTabBar(
+                tabController: tabController,
+                tabs: [
+                  UiKitCustomTab(title: S.current.Place.toUpperCase(), height: 40.h),
+                  UiKitCustomTab(title: S.current.Events.toUpperCase(), height: 40.h),
+                ],
+                onTappedTab: (index) {},
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-              ListView(
-                padding: EdgeInsets.all(0),
-                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                children: widget.placeForEvent.isNotEmpty
-                    ? widget.placeForEvent
-                        .map((e) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                BookingsControlEventItem(
+              SpacingFoundation.verticalSpace24,
+              SizedBox(
+                height: 0.8.sh,
+                child: TabBarView(
+                  controller: tabController,
+                  children: [
+                    ListView(
+                      padding: EdgeInsets.all(0),
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      children: widget.placesOrEvents.where((e) => e.isPlace).isNotEmpty
+                          ? widget.placesOrEvents
+                              .where((e) => e.isPlace)
+                              .map(
+                                (e) => BookingsControlPlaceItemUiKit(
                                   title: e.title,
                                   description: e.description,
-                                  events: e.events,
-                                  onTap: (id) {
-                                    widget.onEventItemTap?.call(
-                                      e.events?.firstWhere((e) => e.id == id),
-                                    );
-                                  },
+                                  imageUrl: e.imageUrl,
+                                  onTap: () => widget.onPlaceItemTap?.call(e),
+                                ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                              )
+                              .toList()
+                          : [
+                              Center(
+                                child: Text(
+                                  S.of(context).AddAtLeastOneXToPromoteIt(S.of(context).Place.toLowerCase()),
+                                  style: theme?.boldTextTheme.body,
                                 ),
-                                if (e != widget.placeForEvent.last)
-                                  Divider(
-                                    color: theme?.colorScheme.surface2,
-                                    thickness: 2.0,
-                                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                              ],
-                            ))
-                        .toList()
-                    : [
-                        Center(
-                          child: Text(
-                            S.of(context).AddAtLeastOneXToPromoteIt(S.of(context).Event.toLowerCase()),
-                            style: theme?.boldTextTheme.body,
-                          ),
-                        ),
-                      ],
-              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                              ),
+                            ],
+                    ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                    ListView(
+                      padding: EdgeInsets.all(0),
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      children: widget.placeForEvent.isNotEmpty
+                          ? widget.placeForEvent
+                              .map((e) => Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      BookingsControlEventItem(
+                                        title: e.title,
+                                        description: e.description,
+                                        events: e.events,
+                                        onTap: (id) {
+                                          widget.onEventItemTap?.call(
+                                            e.events?.firstWhere((e) => e.id == id),
+                                          );
+                                        },
+                                      ),
+                                      if (e != widget.placeForEvent.last)
+                                        Divider(
+                                          color: theme?.colorScheme.surface2,
+                                          thickness: 2.0,
+                                        ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
+                                    ],
+                                  ))
+                              .toList()
+                          : [
+                              Center(
+                                child: Text(
+                                  S.of(context).AddAtLeastOneXToPromoteIt(S.of(context).Event.toLowerCase()),
+                                  style: theme?.boldTextTheme.body,
+                                ),
+                              ),
+                            ],
+                    ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                  ],
+                ),
+              )
             ],
-          ),
-        )
-      ],
     );
   }
 }
