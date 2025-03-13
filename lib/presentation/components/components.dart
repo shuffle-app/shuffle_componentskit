@@ -180,3 +180,4 @@ export 'news_component/news_component.dart';
 export 'news_component/create_news_component.dart';
 export 'promotions/add_promotions/add_promotions_component.dart';
 export 'promotions/promotions_component.dart';
+export 'promotions/info_promotion_component.dart';
