@@ -80,11 +80,55 @@ class MyBookingItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (myBookingUiModel.status == TicketIssueStatus.unpaid) ...[
+              if (myBookingUiModel.total == 0) ...[
+                Text(
+                  '${S.current.Free} ${S.current.Ticket.toLowerCase()}',
+                  style: captionStyle,
+                ),
+                SpacingFoundation.horizontalSpace4,
+                Builder(
+                    builder: (context) => GestureDetector(
+                          onTap: () => showUiKitPopover(
+                            context,
+                            customMinHeight: 30.h,
+                            showButton: false,
+                            title: Text(
+                              S.of(context).ShowBarcode,
+                              style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          child: ImageWidget(
+                            iconData: ShuffleUiKitIcons.info,
+                            width: 16.w,
+                            color: theme?.colorScheme.darkNeutral900,
+                          ),
+                        )),
+                const Spacer()
+              ] else if (myBookingUiModel.status == TicketIssueStatus.unpaid && !myBookingUiModel.isPast) ...[
                 Text(
                   S.current.AwaitingPayment,
                   style: captionStyle,
                 ),
+                SpacingFoundation.horizontalSpace4,
+                Builder(
+                    builder: (context) => GestureDetector(
+                          onTap: () => showUiKitPopover(
+                            context,
+                            customMinHeight: 30.h,
+                            showButton: false,
+                            title: Text(
+                              S.of(context).YouHaveTimeToPayTicket,
+                              style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          child: ImageWidget(
+                            iconData: ShuffleUiKitIcons.info,
+                            width: 16.w,
+                            color: theme?.colorScheme.darkNeutral900,
+                          ),
+                        )),
                 const Spacer()
               ],
               Text(
@@ -149,7 +193,9 @@ class MyBookingItem extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Text(
-                '${myBookingUiModel.total ?? '0'} ${myBookingUiModel.currency ?? ''}',
+                myBookingUiModel.total == 0
+                    ? S.current.Free
+                    : '${myBookingUiModel.total ?? '0'} ${myBookingUiModel.currency ?? ''}',
                 style: boldTextTheme?.subHeadline,
               ),
             ),
@@ -166,7 +212,7 @@ class MyBookingItem extends StatelessWidget {
                 ),
               )
               .paddingOnly(top: SpacingFoundation.verticalSpacing16)
-        else if (myBookingUiModel.status == TicketIssueStatus.unpaid)
+        else if (myBookingUiModel.status == TicketIssueStatus.unpaid && myBookingUiModel.total != 0)
           context
               .smallGradientButton(
                 // padding: EdgeInsets.symmetric(vertical: SpacingFoundation.verticalSpacing6),
