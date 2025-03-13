@@ -13,6 +13,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import '../../../shuffle_components_kit.dart';
 import '../../common/photolist_editing_component.dart';
 import '../../common/tags_selection_component.dart';
+import '../booking_component/payment_type_selection/booking_payment_type_selection_component.dart';
 
 class CreatePlaceComponent extends StatefulWidget {
   final UiPlaceModel? placeToEdit;
@@ -28,6 +29,7 @@ class CreatePlaceComponent extends StatefulWidget {
   final List<String> availableTagOptions;
   final Future<String?> Function()? onCityChanged;
   final ValueChanged<UiPlaceModel>? onDraftChanged;
+  final StripeRegistrationStatus? stripeStatus;
 
   const CreatePlaceComponent({
     super.key,
@@ -44,6 +46,7 @@ class CreatePlaceComponent extends StatefulWidget {
     this.availableTagOptions = const [],
     this.onCityChanged,
     this.onDraftChanged,
+    this.stripeStatus,
   });
 
   @override
@@ -97,8 +100,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _bookingUiModel = widget.placeToEdit?.bookingUiModel;
   }
 
-  _onFocusChanged(){
-    dev.log('focus changed',name: '_onFocusChanged');
+  _onFocusChanged() {
+    dev.log('focus changed', name: '_onFocusChanged');
     widget.onDraftChanged?.call(_placeToEdit.copyWith(
       city: _cityController.text,
       title: _titleController.text,
@@ -111,9 +114,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       bookingUiModel: _bookingUiModel,
       verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
     ));
-
   }
-
 
   _onVideoDeleted(int index) {
     setState(() {
@@ -229,7 +230,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     super.didUpdateWidget(oldWidget);
   }
 
-
   @override
   void dispose() {
     FocusManager.instance.removeListener(_onFocusChanged);
@@ -306,17 +306,11 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).BuildingNumber,
                   controller: _placeToEdit.houseNumberController,
-                  onFieldSubmitted: (_) {
-                    setState(() {});
-                  },
                 ).paddingSymmetric(horizontal: horizontalPadding)),
                 Expanded(
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).OfficeAppartmentNumber,
                   controller: _placeToEdit.apartmentNumberController,
-                  onFieldSubmitted: (_) {
-                    setState(() {});
-                  },
                 ).paddingSymmetric(horizontal: horizontalPadding)),
               ],
             ),
@@ -409,9 +403,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               inputFormatters: [PrefixFormatter(prefix: 'https://')],
               validator: websiteValidator,
               controller: _websiteController,
-              onFieldSubmitted: (_) {
-                setState(() {});
-              },
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
             UiKitInputFieldNoFill(
@@ -424,9 +415,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               ],
               label: S.of(context).Phone,
               validator: phoneNumberValidator,
-              onFieldSubmitted: (_) {
-                setState(() {});
-              },
               controller: _phoneController,
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace24,
@@ -827,18 +815,22 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                               onBookingTap: () {
                                 context.pop();
                                 context.push(
-                                  CreateBookingComponent(
-                                    bookingUiModel: _bookingUiModel,
-                                    currency: _placeToEdit.currency,
-                                    onBookingCreated: (bookingUiModel) {
-                                      if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
-                                        _bookingUiModel = bookingUiModel;
-                                        setState(() {
-                                          _placeToEdit.bookingUrl = null;
-                                        });
-                                      }
-                                    },
-                                  ),
+                                  BookingPaymentTypeSelectionComponent(
+                                      stripeRegistrationStatus: widget.stripeStatus,
+                                      selectedPaymentTypes: _bookingUiModel?.selectedPaymentTypes ?? [],
+                                      goNext: (types) => CreateBookingComponent(
+                                            selectedTypes: types,
+                                            bookingUiModel: _bookingUiModel,
+                                            currency: _placeToEdit.currency,
+                                            onBookingCreated: (bookingUiModel) {
+                                              if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                                _bookingUiModel = bookingUiModel;
+                                                setState(() {
+                                                  _placeToEdit.bookingUrl = null;
+                                                });
+                                              }
+                                            },
+                                          )),
                                 );
                               },
                             ),

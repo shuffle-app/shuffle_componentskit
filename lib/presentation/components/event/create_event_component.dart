@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shuffle_components_kit/presentation/components/add_link_components/add_link_component.dart';
 import 'package:shuffle_components_kit/presentation/components/add_link_components/select_booking_link_component.dart';
+import 'package:shuffle_components_kit/presentation/components/booking_component/payment_type_selection/booking_payment_type_selection_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
@@ -28,6 +29,7 @@ class CreateEventComponent extends StatefulWidget {
   final List<String> availableTagOptions;
   final Future<String?> Function()? onCityChanged;
   final ValueChanged<UiEventModel>? onDraftChanged;
+  final StripeRegistrationStatus? stripeStatus;
 
   const CreateEventComponent({
     super.key,
@@ -44,6 +46,7 @@ class CreateEventComponent extends StatefulWidget {
     this.availableTagOptions = const [],
     this.onCityChanged,
     this.onDraftChanged,
+    this.stripeStatus,
   });
 
   @override
@@ -261,9 +264,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             hintText: 'Event name',
             controller: _titleController,
             validator: titleValidator,
-            onFieldSubmitted: (_) {
-              setState(() {});
-            },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
           PhotoVideoSelector(
@@ -285,9 +285,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               hintText: 'Something amazing about your event',
               controller: _descriptionController,
               textInputAction: TextInputAction.newline,
-              onFieldSubmitted: (_) {
-                setState(() {});
-              },
               expands: true,
               validator: descriptionValidator,
             ),
@@ -329,17 +326,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).BuildingNumber,
                 controller: _eventToEdit.houseNumberController,
-                onFieldSubmitted: (_) {
-                  setState(() {});
-                },
               ).paddingSymmetric(horizontal: horizontalPadding)),
               Expanded(
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).OfficeAppartmentNumber,
                 controller: _eventToEdit.apartmentNumberController,
-                onFieldSubmitted: (_) {
-                  setState(() {});
-                },
               ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
@@ -350,9 +341,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             inputFormatters: [PrefixFormatter(prefix: 'https://')],
             label: S.of(context).Website,
             controller: _websiteController,
-            onFieldSubmitted: (_) {
-              setState(() {});
-            },
             validator: websiteValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
@@ -366,9 +354,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ],
             label: S.of(context).Phone,
             controller: _phoneController,
-            onFieldSubmitted: (_) {
-              setState(() {});
-            },
             validator: phoneNumberValidator,
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
@@ -690,9 +675,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               label: S.of(context).Upsales,
               maxSymbols: 25,
               validator: upsalesValidator,
-              onFieldSubmitted: (_) {
-                setState(() {});
-              },
               controller: _upsalesController,
               hintText: S.of(context).UpsalesAvailableHint,
             ).paddingSymmetric(horizontal: horizontalPadding),
@@ -806,18 +788,22 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                             onBookingTap: () {
                               context.pop();
                               context.push(
-                                CreateBookingComponent(
-                                  bookingUiModel: _bookingUiModel,
-                                  currency: _eventToEdit.currency,
-                                  onBookingCreated: (bookingUiModel) {
-                                    if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
-                                      _bookingUiModel = bookingUiModel;
-                                      setState(() {
-                                        _eventToEdit.bookingUrl = null;
-                                      });
-                                    }
-                                  },
-                                ),
+                                BookingPaymentTypeSelectionComponent(
+                                    stripeRegistrationStatus: widget.stripeStatus,
+                                    selectedPaymentTypes: _bookingUiModel?.selectedPaymentTypes ?? [],
+                                    goNext: (types) => navigatorKey.currentContext?.push(CreateBookingComponent(
+                                          selectedTypes: types,
+                                          bookingUiModel: _bookingUiModel,
+                                          currency: _eventToEdit.currency,
+                                          onBookingCreated: (bookingUiModel) {
+                                            if (widget.onBookingTap?.call(bookingUiModel) ?? false) {
+                                              _bookingUiModel = bookingUiModel;
+                                              setState(() {
+                                                _eventToEdit.bookingUrl = null;
+                                              });
+                                            }
+                                          },
+                                        ))),
                               );
                             },
                           ),
