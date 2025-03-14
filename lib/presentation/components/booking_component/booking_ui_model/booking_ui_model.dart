@@ -86,6 +86,33 @@ class BookingUiModel {
         showSubsInContentCard = false,
         subsUiModel = List.empty(growable: true),
         upsaleUiModel = List.empty(growable: true);
+
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'price': price,
+        'currency': currency,
+        'bookingLimit': bookingLimit,
+        'bookingLimitPerOne': bookingLimitPerOne,
+        'subsUiModel': subsUiModel?.map((e) => e.toMap()).toList(),
+        'upsaleUiModel': upsaleUiModel?.map((e) => e.toMap()).toList(),
+        'selectedDateTime': selectedDateTime?.toIso8601String(),
+        'showSubsInContentCard': showSubsInContentCard,
+        'selectedPaymentTypes': selectedPaymentTypes.map((e) => e.index).toList(),
+      };
+
+  static BookingUiModel fromMap(Map<String, dynamic> map) {
+    return BookingUiModel(
+        id: map['id'] as int,
+        price: map['price'] as String?,
+        currency: map['currency'] as String?,
+        bookingLimit: map['bookingLimit'] as String?,
+        bookingLimitPerOne: map['bookingLimitPerOne'] as String?,
+        subsUiModel: map['subsUiModel']?.map((e) => SubsUiModel.fromMap(e))?.toList(),
+        upsaleUiModel: map['upsaleUiModel']?.map((e) => UpsaleUiModel.fromMap(e))?.toList(),
+        selectedDateTime: map['selectedDateTime']?.isEmpty ?? false ? null : DateTime.parse(map['selectedDateTime']!),
+        showSubsInContentCard: map['showSubsInContentCard'] as bool,
+        selectedPaymentTypes: map['selectedPaymentTypes']?.map((e) => fromIndex(e)));
+  }
 }
 
 enum BookingPaymentType { free, onlineCard, onlineCrypto, offlineCash, offlineQR }
@@ -104,5 +131,22 @@ extension BookingPaymentNames on BookingPaymentType {
       case BookingPaymentType.offlineQR:
         return 'QR code';
     }
+  }
+}
+
+BookingPaymentType fromIndex(int index) {
+  switch (index) {
+    case 0:
+      return BookingPaymentType.free;
+    case 1:
+      return BookingPaymentType.onlineCard;
+    case 2:
+      return BookingPaymentType.onlineCrypto;
+    case 3:
+      return BookingPaymentType.offlineCash;
+    case 4:
+      return BookingPaymentType.offlineQR;
+    default:
+      return BookingPaymentType.free;
   }
 }

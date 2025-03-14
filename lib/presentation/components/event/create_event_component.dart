@@ -802,6 +802,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                                 _eventToEdit.bookingUrl = null;
                                               });
                                             }
+                                            navigatorKey.currentContext?.pop();
                                           },
                                         ))),
                               );

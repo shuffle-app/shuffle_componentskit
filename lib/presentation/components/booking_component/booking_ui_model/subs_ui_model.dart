@@ -59,4 +59,26 @@ class SubsUiModel {
       actualbookingLimit: actualbookingLimit ?? this.actualbookingLimit,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'photoPath': photoPath,
+      'title': title,
+      'description': description,
+      'bookingLimit': bookingLimit,
+      'actualbookingLimit': actualbookingLimit,
+    };
+  }
+
+  static SubsUiModel fromMap(Map<String, dynamic> map) {
+    return SubsUiModel(
+      id: map['id'] as int,
+      photoPath: map['photoPath'] as String?,
+      title: map['title'] as String?,
+      description: map['description'] as String?,
+      bookingLimit: map['bookingLimit'] as String?,
+      actualbookingLimit: map['actualbookingLimit'] as String?,
+    );
+  }
 }
