@@ -64,7 +64,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
     final lastMonthDay = DateTime(focusedDate.year, focusedDate.month, 1)
         .add(Duration(days: DateUtils.getDaysInMonth(focusedDate.year, focusedDate.month)))
         .subtract(Duration(days: 1));
-    return lastMonthDay.add(Duration(days: 7 - lastMonthDay.weekday));
+    return lastMonthDay.add(Duration(days: 7 - lastMonthDay.weekday)).add(Duration(days: 1));
   }
 
   DateTime get firstDay {
