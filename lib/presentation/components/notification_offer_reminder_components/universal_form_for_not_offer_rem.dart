@@ -15,6 +15,7 @@ class UniversalFormForNotOfferRem extends StatefulWidget {
   final ValueChanged<int>? onActivateTap;
   final ValueChanged<int>? onPayTap;
   final GlobalKey<SliverAnimatedListState> animatedListKey;
+  final bool showPopOver;
 
   const UniversalFormForNotOfferRem({
     super.key,
@@ -29,6 +30,7 @@ class UniversalFormForNotOfferRem extends StatefulWidget {
     this.whatCreate,
     this.customWhatCreate,
     required this.animatedListKey,
+    this.showPopOver = true,
   });
 
   @override
@@ -78,26 +80,28 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
                   maxLines: 1,
                 ),
               ),
-              SpacingFoundation.horizontalSpace8,
-              Builder(
-                builder: (context) => GestureDetector(
-                  onTap: () => showUiKitPopover(
-                    context,
-                    customMinHeight: 30.h,
-                    showButton: false,
-                    title: Text(
-                      S.of(context).LongTapCardEdit,
-                      style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                      textAlign: TextAlign.center,
+              if (widget.showPopOver) ...[
+                SpacingFoundation.horizontalSpace8,
+                Builder(
+                  builder: (context) => GestureDetector(
+                    onTap: () => showUiKitPopover(
+                      context,
+                      customMinHeight: 30.h,
+                      showButton: false,
+                      title: Text(
+                        S.of(context).LongTapCardEdit,
+                        style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    child: ImageWidget(
+                      iconData: ShuffleUiKitIcons.info,
+                      width: 16.w,
+                      color: theme?.colorScheme.darkNeutral900,
                     ),
                   ),
-                  child: ImageWidget(
-                    iconData: ShuffleUiKitIcons.info,
-                    width: 16.w,
-                    color: theme?.colorScheme.darkNeutral900,
-                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
