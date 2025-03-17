@@ -59,4 +59,28 @@ class UpsaleUiModel {
       currency: currency ?? this.currency,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'photoPath': photoPath,
+      'description': description,
+      'limit': limit,
+      'actualLimit': actualLimit,
+      'price': price,
+      'currency': currency,
+    };
+  }
+
+  static UpsaleUiModel fromMap(Map<String, dynamic> map) {
+    return UpsaleUiModel(
+      id: map['id'],
+      photoPath: map['photoPath'],
+      description: map['description'],
+      limit: map['limit'],
+      actualLimit: map['actualLimit'],
+      price: map['price'],
+      currency: map['currency'],
+    );
+  }
 }

@@ -472,6 +472,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                         _bookingUiModel.bookingLimitPerOne = _bookingLimitPerOneController.text;
                         _bookingUiModel.subsUiModel = _subsUiModels;
                         _bookingUiModel.upsaleUiModel = _upsaleUiModels;
+                        _bookingUiModel.selectedPaymentTypes = widget.selectedTypes;
                         widget.onBookingCreated(_bookingUiModel);
                       }
                     },

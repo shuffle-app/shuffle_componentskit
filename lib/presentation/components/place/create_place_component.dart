@@ -829,6 +829,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                                   _placeToEdit.bookingUrl = null;
                                                 });
                                               }
+                                              navigatorKey.currentContext?.pop();
                                             },
                                           )),
                                 );
