@@ -47,7 +47,7 @@ class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
       }
     }
 
-    Future.delayed(Duration(seconds: 2 * 1000), () {
+    Future.delayed(Duration(milliseconds: 2 * 1000), () {
       setState(() {
         isButtonEnabled = true;
       });
