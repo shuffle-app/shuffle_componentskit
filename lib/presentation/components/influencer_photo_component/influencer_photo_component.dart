@@ -31,6 +31,7 @@ class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
   bool isDeletingMode = false;
   final String _groupId = 'groupId';
 
+  bool isButtonEnabled = false;
   bool isOverlayVisible = false;
   OverlayEntry? overlayEntry;
 
@@ -45,6 +46,12 @@ class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
         _influencerPhoto.insert(0, InfluencerPhotoUiModel(id: -1));
       }
     }
+
+    Future.delayed(Duration(milliseconds: 2 * 1000), () {
+      setState(() {
+        isButtonEnabled = true;
+      });
+    });
   }
 
   @override
@@ -235,6 +242,8 @@ class _InfluencerPhotoComponentState extends State<InfluencerPhotoComponent> {
                                 return TapRegion(
                                   behavior: HitTestBehavior.opaque,
                                   onTapInside: (value) {
+                                    if (!isButtonEnabled) return;
+
                                     if (widget.onReactionsTapped != null) {
                                       isOverlayVisible
                                           ? hideReactionOverlay(overlayEntry)

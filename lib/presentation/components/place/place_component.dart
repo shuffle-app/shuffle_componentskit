@@ -810,16 +810,21 @@ class _PlaceComponentState extends State<PlaceComponent> {
             ).paddingSymmetric(horizontal: horizontalMargin),
           ),
         SpacingFoundation.verticalSpace24,
-        if (widget.voiceUiModels?.value != null && widget.voiceUiModels!.value!.isNotEmpty)
-          ValueListenableBuilder(
-            valueListenable: widget.voiceUiModels!,
-            builder: (_, voicesUiModel, __) {
-              final currentUiModel = voicesUiModel?.firstWhere((e) => e?.source != null);
+        if (widget.voiceUiModels != null)
+          ListenableBuilder(
+            listenable: widget.voiceUiModels!,
+            builder: (ctx, _) {
+              if (widget.voiceUiModels?.value != null && widget.voiceUiModels!.value!.isNotEmpty) {
+                final currentUiModel = widget.voiceUiModels?.value?.firstWhere((e) => e?.source != null);
 
-              if (currentUiModel != null) {
-                return VoiceInContentCard(
-                  voice: currentUiModel,
-                  onViewAllTap: widget.onViewAllVoicesTap,
+                return AnimatedSize(
+                  duration: const Duration(milliseconds: 250),
+                  child: currentUiModel != null
+                      ? VoiceInContentCard(
+                          voice: currentUiModel,
+                          onViewAllTap: widget.onViewAllVoicesTap,
+                        )
+                      : SizedBox.shrink(),
                 );
               } else {
                 return SizedBox.shrink();

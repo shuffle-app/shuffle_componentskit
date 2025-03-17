@@ -80,7 +80,7 @@ class CompanyHomeScreenComponent extends StatelessWidget {
                       UiKitStripeRegistrationTile(
                         status: stripeRegistrationStatus!,
                         onTap: onStripeTap,
-                      )
+                      ).paddingSymmetric(horizontal: horizontalMargin)
                     ]
                   : null,
             ).paddingSymmetric(

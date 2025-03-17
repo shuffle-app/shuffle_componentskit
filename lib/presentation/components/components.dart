@@ -182,3 +182,7 @@ export 'promotions/add_promotions/add_promotions_component.dart';
 export 'promotions/promotions_component.dart';
 export 'promotions/audience/audience_ui_model.dart';
 export 'promotions/audience/audience_form_component.dart';
+export 'promotions/info_promotion_component.dart';
+export 'promotions/ui_models/promotion_launch_result_ui_model.dart';
+export 'promotions/widgets/custom_title_widget_promo.dart';
+export 'promotions/widgets/speedometer_painter.dart';
