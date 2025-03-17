@@ -117,7 +117,7 @@ class _InfluencerReviewsTopRespectWidgetState extends State<InfluencerReviewsTop
   }
 
   Future<void> _animateToSpecialTabPosition(int index) async {
-    final double offset = index * 100.0;
+    final double offset = index * (widget.isPublic ? 50.0 : 100.0);
     unawaited(specialScrollController.animateTo(
       offset,
       duration: const Duration(milliseconds: 250),
