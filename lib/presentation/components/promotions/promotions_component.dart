@@ -42,6 +42,7 @@ class PromotionsComponent extends StatelessWidget {
         onEditItem: onEditPromo,
         onRemoveItem: onRemovePromo,
         onActivateTap: onActivateTap,
+        showPopOver: false,
         customWhatCreate: S.of(context).CreateAPromotionForYourXAndIncreaseAttendance(
               '${isPlace ? S.of(context).PlacePromo.toLowerCase() : S.of(context).EventPromo.toLowerCase()} ${typeOfContent?.toLowerCase()} ${placeOrEventName}',
             ),
