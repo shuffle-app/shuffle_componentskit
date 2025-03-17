@@ -136,10 +136,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-
-    log('rebuild here $currentContent ');
-
-
     return BlurredAppBarPage(
       autoImplyLeading: true,
       title: S.of(context).Scheduler,
@@ -208,11 +204,6 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
             if (focusedDay.month != focusedDate.month || calendarFormat == CalendarFormat.week) {
               FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
 
-              // setState(() {
-              //   focusedDate = focusedDay;
-              //   wasChangedDateToSpecific = false;
-              // });
-              log('page changed $focusedDay');
               widget.onPageChanged?.call(focusedDay);
               fetchData(newFocusedDate: focusedDay);
             }
@@ -318,7 +309,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                   ))).paddingSymmetric(
               horizontal: EdgeInsetsFoundation.horizontal16, vertical: EdgeInsetsFoundation.vertical8),
         SpacingFoundation.verticalSpace24,
-        MediaQuery.of(context).viewInsets.bottom.heightBox
+        SpacingFoundation.bottomNavigationBarSpacing,
       ],
     );
   }

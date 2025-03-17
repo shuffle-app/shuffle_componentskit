@@ -263,7 +263,7 @@ class _EventComponentState extends State<EventComponent> {
                       )
                     else
                       Positioned(
-                          right: 0,
+                          right: -horizontalMargin -2,
                           child: UiKitPopUpMenuButton.optionWithIcon(options: [
                             UiKitPopUpMenuButtonOption(
                               title: S.of(context).Share,

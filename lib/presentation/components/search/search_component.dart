@@ -16,6 +16,7 @@ class SearchComponent extends StatelessWidget {
   final Function? onPlaceTapped;
   final Function? onTagSortPressed;
   final bool showBusinessContent;
+  final bool loadingFilterChips;
   final List<UiKitTitledCardWithBackground>? chooseYourselfChips;
 
   SearchComponent({
@@ -31,6 +32,7 @@ class SearchComponent extends StatelessWidget {
     this.onTagSortPressed,
     this.onFreeCardPressed,
     this.onSocialCardPressed,
+    required this.loadingFilterChips,
   });
 
   final _decorationItemsForFreeCards = [
@@ -282,6 +284,7 @@ class SearchComponent extends StatelessWidget {
                     onPressed:
                         onTagSortPressed == null ? null : () => onTagSortPressed!(search.filterChips![index].title),
                     icon: search.filterChips![index].icon,
+                    loading: loadingFilterChips && (search.activeFilterChips?.contains(search.filterChips![index].title) ?? false),
                   ),
                 ),
               ),
