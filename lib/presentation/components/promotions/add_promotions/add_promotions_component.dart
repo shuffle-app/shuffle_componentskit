@@ -21,8 +21,7 @@ class AddPromotionsComponent extends StatefulWidget {
     this.isPro = false,
     this.isLoading = false,
   }) {
-    placeForEvent =
-        placesOrEvents.where((element) => element.events != null && element.events!.isNotEmpty).toList() ?? [];
+    placeForEvent = placesOrEvents.where((element) => element.events != null && element.events!.isNotEmpty).toList();
   }
 
   @override
@@ -63,7 +62,10 @@ class _AddPromotionsComponentState extends State<AddPromotionsComponent> with Si
                       description: e.description,
                       imageUrl: e.imageUrl,
                       onTap: () => widget.onEventItemTap?.call(e),
-                    ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16,vertical: SpacingFoundation.verticalSpacing6),
+                    ).paddingSymmetric(
+                      horizontal: SpacingFoundation.horizontalSpacing16,
+                      vertical: SpacingFoundation.verticalSpacing6,
+                    ),
                   )
                   .toList()
               : [
@@ -86,7 +88,7 @@ class _AddPromotionsComponentState extends State<AddPromotionsComponent> with Si
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
               SpacingFoundation.verticalSpace24,
               SizedBox(
-                height: 0.8.sh,
+                height: 1.sw <= 380 ? 0.7.sh : 0.8.sh,
                 child: TabBarView(
                   controller: tabController,
                   children: [
