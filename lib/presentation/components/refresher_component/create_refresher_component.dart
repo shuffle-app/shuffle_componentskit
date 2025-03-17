@@ -134,34 +134,30 @@ class _CreateRefresherComponentState extends State<CreateRefresherComponent> {
           ],
         ),
       ),
-      bottomNavigationBar: SizedBox(
-        height: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical24,
-        child: SafeArea(
-          top: false,
-          child: context.gradientButton(
-            data: BaseUiKitButtonData(
-              text: S.of(context).SaveAndPay,
-              autoSizeGroup: AutoSizeGroup(),
-              fit: ButtonFit.fitWidth,
-              onPressed: () => widget.onCreateRefresher?.call(
-                RefresherUiModel(
-                  id: -1,
-                  weekText: _oneWeekSelected ? _oneWeekController.text : null,
-                  dayText: _oneDaySelected ? _oneDayController.text : null,
-                  hourText: _oneHourSelected ? _oneHourController.text : null,
-                  oneWeekSelected: _oneWeekSelected,
-                  oneDaySelected: _oneDaySelected,
-                  oneHourSelected: _oneHourSelected,
-                  isLaunched: true,
-                ),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: context.gradientButton(
+          data: BaseUiKitButtonData(
+            text: S.of(context).SaveAndPay,
+            autoSizeGroup: AutoSizeGroup(),
+            onPressed: () => widget.onCreateRefresher?.call(
+              RefresherUiModel(
+                id: -1,
+                weekText: _oneWeekSelected ? _oneWeekController.text : null,
+                dayText: _oneDaySelected ? _oneDayController.text : null,
+                hourText: _oneHourSelected ? _oneHourController.text : null,
+                oneWeekSelected: _oneWeekSelected,
+                oneDaySelected: _oneDaySelected,
+                oneHourSelected: _oneHourSelected,
+                isLaunched: true,
               ),
             ),
           ),
-        ).paddingOnly(
-          bottom: SpacingFoundation.verticalSpacing24,
-          left: SpacingFoundation.horizontalSpacing16,
-          right: SpacingFoundation.horizontalSpacing16,
         ),
+      ).paddingOnly(
+        bottom: SpacingFoundation.verticalSpacing24,
+        left: SpacingFoundation.horizontalSpacing16,
+        right: SpacingFoundation.horizontalSpacing16,
       ),
     );
   }
