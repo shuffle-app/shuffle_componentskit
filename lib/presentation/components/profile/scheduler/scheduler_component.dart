@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/presentation.dart';
@@ -58,13 +60,13 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
 
   DateTime get lastDayToLoad {
     if (calendarFormat == CalendarFormat.week) {
-      final lastWeekDay = focusedDate.add(Duration(days: 7 - focusedDate.weekday));
+      final lastWeekDay = focusedDate.add(Duration(days: 7 - focusedDate.weekday)).add(Duration(days: 1));
       return lastWeekDay;
     }
     final lastMonthDay = DateTime(focusedDate.year, focusedDate.month, 1)
         .add(Duration(days: DateUtils.getDaysInMonth(focusedDate.year, focusedDate.month)))
         .subtract(Duration(days: 1));
-    return lastMonthDay.add(Duration(days: 7 - lastMonthDay.weekday)).add(Duration(days: 1));
+    return lastMonthDay.add(Duration(days: 7 - lastMonthDay.weekday));
   }
 
   DateTime get firstDay {
@@ -81,20 +83,23 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
     super.initState();
   }
 
-  void fetchData({DateTime? newFocusedDate, bool needResetData = true}) async {
-    if (needResetData) {
+  void fetchData({DateTime? newFocusedDate}) async {
+
       setState(() {
         showingOpacity = 0;
         wasChangedDateToSpecific = false;
+        currentContent.clear();
       });
-    }
-    Future.delayed(showingDuration, currentContent.clear);
+
+    // final clearingFuture = Future.delayed(showingDuration, currentContent.clear);
     if (newFocusedDate != null) {
       setState(() {
         focusedDate = newFocusedDate;
       });
     }
-    currentContent.addAll(await widget.eventLoader(firstDayToLoad, lastDayToLoad));
+    final contentFuture  = widget.eventLoader(firstDayToLoad, lastDayToLoad);
+    await Future.delayed(showingDuration);
+    currentContent.addAll(await contentFuture);
     setState(() {
       if (currentContent.isNotEmpty &&
           !currentContent.any((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)) {
@@ -130,12 +135,17 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+
+
+    log('rebuild here $currentContent ');
+
+
     return BlurredAppBarPage(
       autoImplyLeading: true,
       title: S.of(context).Scheduler,
       controller: widget.scrollController,
       centerTitle: true,
-      appBarTrailing: context.iconButtonNoPadding(
+      appBarTrailing: context.boxIconButton(
           data: BaseUiKitButtonData(
               onPressed: () {
                 setState(() {
@@ -149,6 +159,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
                 fetchData();
               },
               iconInfo: BaseUiKitButtonIconData(
+                padding: EdgeInsets.all(EdgeInsetsFoundation.all24),
                   iconData: calendarFormat == CalendarFormat.week
                       ? ShuffleUiKitIcons.calendar
                       : CupertinoIcons.list_bullet_below_rectangle,
@@ -201,6 +212,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
               //   focusedDate = focusedDay;
               //   wasChangedDateToSpecific = false;
               // });
+              log('page changed $focusedDay');
               widget.onPageChanged?.call(focusedDay);
               fetchData(newFocusedDate: focusedDay);
             }
