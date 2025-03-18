@@ -19,7 +19,7 @@ class SelectScheduleType extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
-    return InkWell(
+    return GestureDetector(
       onTap: () async {
         if (showWarningDialog()) {
           await showUiKitAlertDialog(
