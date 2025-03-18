@@ -71,53 +71,67 @@ class EventListComponent extends StatelessWidget {
                           color: Colors.white,
                         ).paddingOnly(right: 5.w)))),
             child: UiKitCardWrapper(
-                    padding: event.reviewStatus == null
-                        ? EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16)
-                        : null,
-                    child: event.reviewStatus != null
-                        ? DecoratedBox(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadiusFoundation.all24,
-                                gradient: LinearGradient(
-                                    colors: [theme!.colorScheme.inversePrimary.withOpacity(0.3), Colors.transparent])),
-                            child: Center(
-                              child: Text(
-                                event.reviewStatus!,
-                                style: theme.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
-                              ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing8),
-                            ))
-                        : ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: BorderedUserCircleAvatar(
-                              imageUrl: event.verticalPreview?.link,
-                              size: 40.w,
-                            ),
-                            title: Text(
-                              event.title ?? '',
-                              style: theme?.boldTextTheme.caption1Bold,
-                            ),
-                            subtitle: event.startDayForEvent != null
-                                ? Text(
-                                    DateFormat('MMMM d').format(event.startDayForEvent!),
-                                    style: theme?.boldTextTheme.caption1Medium.copyWith(
-                                      color: theme.colorScheme.darkNeutral500,
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                            trailing: context.smallButton(
-                              data: BaseUiKitButtonData(
-                                backgroundColor: theme?.colorScheme.surface1,
-                                onPressed: () => onTap(event),
-                                iconInfo: BaseUiKitButtonIconData(
-                                  color: theme?.colorScheme.inversePrimary,
-                                  iconData: CupertinoIcons.right_chevron,
-                                  size: 20.w,
-                                ),
+              padding: event.reviewStatus == null
+                  ? EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing12)
+                  : null,
+              child: event.reviewStatus != null
+                  ? DecoratedBox(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadiusFoundation.all24,
+                          gradient: LinearGradient(
+                              colors: [theme!.colorScheme.inversePrimary.withOpacity(0.3), Colors.transparent])),
+                      child: Center(
+                        child: Text(
+                          event.reviewStatus!,
+                          style: theme.boldTextTheme.caption1Bold.copyWith(color: Colors.white),
+                        ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing8),
+                      ))
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        BorderedUserCircleAvatar(
+                          imageUrl: event.verticalPreview?.link,
+                          size: 40.w,
+                        ),
+                        SpacingFoundation.horizontalSpace8,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                event.title ?? '',
+                                style: theme?.boldTextTheme.caption1Bold,
                               ),
+                              SpacingFoundation.verticalSpace2,
+                              event.startDayForEvent != null
+                                  ? Text(
+                                      DateFormat('MMMM d').format(event.startDayForEvent!),
+                                      style: theme?.boldTextTheme.caption1Medium.copyWith(
+                                        color: theme.colorScheme.darkNeutral500,
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
+                        SpacingFoundation.horizontalSpace8,
+                        context.smallButton(
+                          data: BaseUiKitButtonData(
+                            backgroundColor: theme?.colorScheme.surface1,
+                            onPressed: () => onTap(event),
+                            iconInfo: BaseUiKitButtonIconData(
+                              color: theme?.colorScheme.inversePrimary,
+                              iconData: CupertinoIcons.right_chevron,
+                              size: 20.w,
                             ),
-                          ))
-                .paddingSymmetric(
-                    horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8));
+                          ),
+                        ),
+                      ],
+                    ).paddingSymmetric(
+                      vertical: SpacingFoundation.verticalSpacing12,
+                    ),
+            ).paddingSymmetric(
+                horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing8));
       },
     );
   }
