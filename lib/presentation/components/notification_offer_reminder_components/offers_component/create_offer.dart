@@ -251,15 +251,23 @@ class _CreateOfferState extends State<CreateOffer> {
                     setState(() {
                       _selectedDates.add(null);
                     });
-                  } else if ((!dates.start.isBefore(now)) ||
-                      (((!dates.start.isBefore(now) || dates.start.isAtSameDay) && !dates.end.isBefore(now))) ||
+                  } else if (dates.start.isAtSameDayAs(dates.end) && (!dates.start.isBefore(now)) ||
                       (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
+                    final dateEnd = dates.start.copyWith(day: dates.start.day + 1);
+
+                    if (widget.selectableDayPredicate != null && widget.selectableDayPredicate!(dateEnd)) {
+                      setState(() {
+                        _selectedDates.addAll([dates.start, dateEnd]);
+                      });
+                    } else {
+                      setState(() {
+                        _selectedDates.add(null);
+                      });
+                    }
+                  } else if ((!dates.start.isBefore(now)) ||
+                      (((!dates.start.isBefore(now) || dates.start.isAtSameDay) && !dates.end.isBefore(now)))) {
                     setState(() {
                       _selectedDates.addAll([dates.start, dates.end]);
-                    });
-                  } else if (dates.start.isAtSameDayAs(dates.end)) {
-                    setState(() {
-                      _selectedDates.addAll([dates.start]);
                     });
                   } else {
                     setState(() {
@@ -305,7 +313,7 @@ class _CreateOfferState extends State<CreateOffer> {
             if (widget.offerUiModel == null) ...[
               Center(
                 child: Text(
-                  S.of(context).FreeNowXLater(widget.offerPrice ?? 5),
+                  '${S.of(context).Price}: ${widget.offerPrice ?? 5}\$',
                   style: theme?.boldTextTheme.body,
                 ),
               ).paddingOnly(top: SpacingFoundation.verticalSpacing16),
