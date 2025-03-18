@@ -131,6 +131,7 @@ class _BookingPaymentTypeSelectionComponentState extends State<BookingPaymentTyp
                           ),
                         ),
                       ),
+                      const Spacer()
                     ],
                   ),
                   if (widget.stripeRegistrationStatus != null)
