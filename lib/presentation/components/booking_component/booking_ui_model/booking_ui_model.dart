@@ -98,18 +98,19 @@ class BookingUiModel {
         'selectedDateTime': selectedDateTime?.toIso8601String(),
         'showSubsInContentCard': showSubsInContentCard,
         'selectedPaymentTypes': selectedPaymentTypes.map((e) => e.index).toList(),
-      };
+      }..removeWhere((k, v) => v == null);
 
   static BookingUiModel fromMap(Map<String, dynamic> map) {
+    print('retrieving BookingUiModel from map: $map');
     return BookingUiModel(
         id: map['id'] as int,
         price: map['price'] as String?,
         currency: map['currency'] as String?,
         bookingLimit: map['bookingLimit'] as String?,
         bookingLimitPerOne: map['bookingLimitPerOne'] as String?,
-        subsUiModel: map['subsUiModel']?.map((e) => SubsUiModel.fromMap(e))?.toList(),
-        upsaleUiModel: map['upsaleUiModel']?.map((e) => UpsaleUiModel.fromMap(e))?.toList(),
-        selectedDateTime: map['selectedDateTime']?.isEmpty ?? false ? null : DateTime.parse(map['selectedDateTime']!),
+        subsUiModel: map['subsUiModel']?.map<SubsUiModel>((e) => SubsUiModel.fromMap(e))?.toList(),
+        upsaleUiModel: map['upsaleUiModel']?.map<UpsaleUiModel>((e) => UpsaleUiModel.fromMap(e))?.toList(),
+        selectedDateTime: (map['selectedDateTime']?.isEmpty ?? true) ? null : DateTime.parse(map['selectedDateTime']!),
         showSubsInContentCard: map['showSubsInContentCard'] as bool,
         selectedPaymentTypes: map['selectedPaymentTypes'] != null
             ? (map['selectedPaymentTypes'] as List).map((e) => fromIndex(e)).toList()

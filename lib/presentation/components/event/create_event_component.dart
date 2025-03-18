@@ -62,6 +62,9 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _upsalesController = TextEditingController();
+  final TextEditingController houseNumberController = TextEditingController();
+  final TextEditingController apartmentNumberController = TextEditingController();
+
   late final TextEditingController _bookingUrlController = TextEditingController();
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
@@ -99,6 +102,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
     _phoneController.text = widget.eventToEdit?.phone ?? '';
     _upsalesController.text = widget.eventToEdit?.upsalesItems?.join(', ') ?? '';
     _bookingUiModel = widget.eventToEdit?.bookingUiModel;
+    apartmentNumberController.text = widget.eventToEdit?.apartmentNumber ?? '';
+    houseNumberController.text = widget.eventToEdit?.houseNumber ?? '';
   }
 
   _handleLocaleChanged() {
@@ -177,10 +182,11 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       _titleController.text = widget.eventToEdit?.title ?? '';
       _descriptionController.text = widget.eventToEdit?.description ?? '';
       _eventToEdit = widget.eventToEdit ?? UiEventModel(id: -1);
-      _locationController.text = widget.eventToEdit?.location ?? '';
       _priceController.text = widget.eventToEdit?.price ?? '';
       _websiteController.text = widget.eventToEdit?.website ?? '';
       _phoneController.text = widget.eventToEdit?.phone ?? '';
+      apartmentNumberController.text = widget.eventToEdit?.apartmentNumber ?? '';
+      houseNumberController.text = widget.eventToEdit?.houseNumber ?? '';
       _photos.clear();
       _videos.clear();
       _photos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.image));
@@ -191,6 +197,10 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
       }
       _videos.addAll(_eventToEdit.media.where((element) => element.type == UiKitMediaType.video));
       _bookingUiModel = widget.eventToEdit?.bookingUiModel;
+    }
+    //handle location changes
+    if (_locationController.text.isEmpty && (widget.eventToEdit?.location ?? '').isNotEmpty) {
+      _locationController.text = widget.eventToEdit?.location ?? '';
     }
     _handleLocaleChanged();
 
@@ -211,6 +221,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
         bookingUrl: _bookingUrlController.text,
         bookingUiModel: _bookingUiModel,
         verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+        houseNumber: houseNumberController.text,
+        apartmentNumber: apartmentNumberController.text,
         upsalesItems: _upsalesSwitcher
             ? (_upsalesController.text.isNotEmpty
                 ? _upsalesController.text.split(',').map((e) => e.trim()).toList()
@@ -325,12 +337,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               Expanded(
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).BuildingNumber,
-                controller: _eventToEdit.houseNumberController,
+                controller: houseNumberController,
               ).paddingSymmetric(horizontal: horizontalPadding)),
               Expanded(
                   child: UiKitInputFieldNoFill(
                 label: S.of(context).OfficeAppartmentNumber,
-                controller: _eventToEdit.apartmentNumberController,
+                controller: apartmentNumberController,
               ).paddingSymmetric(horizontal: horizontalPadding)),
             ],
           ),
@@ -742,7 +754,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             ).paddingSymmetric(horizontal: horizontalPadding)
           ],
           SpacingFoundation.verticalSpace24,
-          if (_eventToEdit.bookingUiModel == null)
+          if (_eventToEdit.bookingUiModel == null || _eventToEdit.id <= 0)
             context
                 .button(
                   data: BaseUiKitButtonData(

@@ -62,6 +62,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   late final TextEditingController _descriptionController = TextEditingController();
   late final TextEditingController _priceController = TextEditingController();
   late final TextEditingController _bookingUrlController = TextEditingController();
+  late final TextEditingController houseNumberController = TextEditingController();
+  late final TextEditingController apartmentNumberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final GlobalKey<ReorderableListState> _reordablePhotokey = GlobalKey<ReorderableListState>();
   late final GlobalKey<ReorderableListState> _reordableVideokey = GlobalKey<ReorderableListState>();
@@ -98,6 +100,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
     _phoneController.text = widget.placeToEdit?.phone ?? '';
     _priceController.text = widget.placeToEdit?.price ?? '';
     _bookingUiModel = widget.placeToEdit?.bookingUiModel;
+    houseNumberController.text = widget.placeToEdit?.houseNumber ?? '';
+    apartmentNumberController.text = widget.placeToEdit?.apartmentNumber ?? '';
   }
 
   _onFocusChanged() {
@@ -113,6 +117,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
       bookingUrl: _bookingUrlController.text,
       bookingUiModel: _bookingUiModel,
       verticalPreview: _photos.firstWhereOrNull((e) => e.type == UiKitMediaType.image),
+      houseNumber: houseNumberController.text,
+      apartmentNumber: apartmentNumberController.text,
     ));
   }
 
@@ -305,12 +311,12 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 Expanded(
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).BuildingNumber,
-                  controller: _placeToEdit.houseNumberController,
+                  controller: houseNumberController,
                 ).paddingSymmetric(horizontal: horizontalPadding)),
                 Expanded(
                     child: UiKitInputFieldNoFill(
                   label: S.of(context).OfficeAppartmentNumber,
-                  controller: _placeToEdit.apartmentNumberController,
+                  controller: apartmentNumberController,
                 ).paddingSymmetric(horizontal: horizontalPadding)),
               ],
             ),
@@ -769,7 +775,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 SpacingFoundation.verticalSpace24
               ],
             ],
-            if (_placeToEdit.bookingUiModel == null)
+            if (_placeToEdit.bookingUiModel == null || _placeToEdit.id <= 0)
               context
                   .button(
                     data: BaseUiKitButtonData(
@@ -866,6 +872,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                     _placeToEdit.price = _priceController.text.replaceAll(' ', '');
                     _placeToEdit.media = [..._photos, ..._videos];
                     _placeToEdit.bookingUiModel = _bookingUiModel;
+                    _placeToEdit.houseNumber = houseNumberController.text;
+                    _placeToEdit.apartmentNumber = apartmentNumberController.text;
                     widget.onPlaceCreated.call(_placeToEdit);
                   },
                 ),

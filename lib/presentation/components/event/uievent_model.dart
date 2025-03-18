@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -31,8 +33,8 @@ class UiEventModel extends Advertisable {
   double? rating;
   bool archived;
   List<UiDescriptionItemModel>? descriptionItems;
-  TextEditingController houseNumberController;
-  TextEditingController apartmentNumberController;
+  String? houseNumber;
+  String? apartmentNumber;
   PlaceWeatherType? weatherType;
   List<FeedbackUiModel>? reviews;
   List<VideoReactionUiModel>? reactions;
@@ -82,8 +84,8 @@ class UiEventModel extends Advertisable {
     this.userPoints,
     this.ownerId,
     this.placeId,
-    String? houseNumber,
-    String? apartmentNumber,
+    this.houseNumber,
+    this.apartmentNumber,
   })  : descriptionItems = [
           if (scheduleString != null)
             UiDescriptionItemModel(title: S.current.DontMissIt, description: scheduleString, descriptionUrl: 'times'),
@@ -100,8 +102,6 @@ class UiEventModel extends Advertisable {
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
         ],
-        houseNumberController = TextEditingController(text:houseNumber),
-        apartmentNumberController = TextEditingController(text: apartmentNumber),
         super(isAdvertisement: isAdvertisement ?? false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
@@ -129,8 +129,9 @@ class UiEventModel extends Advertisable {
     this.isRecurrent = false,
     this.archived = false,
     this.descriptionItems = const [],
-  })  : houseNumberController = TextEditingController(),
-        apartmentNumberController = TextEditingController(),
+    this.houseNumber,
+    this.apartmentNumber,
+  }):
         super(isAdvertisement: true);
 
   String? validateCreation() {
@@ -192,8 +193,6 @@ class UiEventModel extends Advertisable {
         rating = null,
         archived = false,
         descriptionItems = const [],
-        houseNumberController = TextEditingController(),
-        apartmentNumberController = TextEditingController(),
         upsalesItems = const [],
         bookingUrl = null,
         bookingUiModel = null,
@@ -246,6 +245,8 @@ class UiEventModel extends Advertisable {
     int? userPoints,
     int? ownerId,
     int? placeId,
+    String? houseNumber,
+    String? apartmentNumber,
   }) =>
       UiEventModel(
         id: id,
@@ -283,6 +284,8 @@ class UiEventModel extends Advertisable {
         userPoints: userPoints ?? this.userPoints,
         ownerId: ownerId ?? this.ownerId,
         placeId: placeId ?? this.placeId,
+        houseNumber: houseNumber?? this.houseNumber,
+        apartmentNumber: apartmentNumber?? this.apartmentNumber,
       );
 
   bool selectableDayPredicate(DateTime day) {
@@ -322,8 +325,8 @@ class UiEventModel extends Advertisable {
     // 'descriptionItems': descriptionItems?.map((item) => item.toMap())?.toList(),
     'cityId': cityId,
     'city': city,
-    'houseNumber': houseNumberController.text,
-    'apartmentNumber': apartmentNumberController.text,
+    'houseNumber': houseNumber,
+    'apartmentNumber': apartmentNumber,
     // 'weatherType': weatherType?.toString(),
     'bookingUrl': bookingUrl,
     'bookingUiModel': bookingUiModel?.toMap(),
@@ -352,7 +355,9 @@ class UiEventModel extends Advertisable {
     // 'place': placeId!= null? PlaceModel.fromMap(PlaceModel.toMap(placeId)) : null,
   }..removeWhere((k, v) => v == null);
 
-  static UiEventModel fromMap(Map<String, dynamic> map) => UiEventModel(
+  static UiEventModel fromMap(Map<String, dynamic> map) {
+    print('constructing from Map with location ${map['locationModel']}');
+    return UiEventModel(
     id: map['id'] as int? ?? -1,
     title: map['title'] as String,
     description: map['description'] as String? ?? '',
@@ -396,5 +401,5 @@ class UiEventModel extends Advertisable {
     // booking: map['booking']!= null? BookingUiModel.fromMap(map['booking']) : null,
     // owner: map['owner']!= null? UserModel.fromMap(map['owner']) : null,
     // place: map['placeId']!= null? PlaceModel.fromMap(PlaceModel.toMap(map['placeId'])) : null,
-  );
+  );}
 }

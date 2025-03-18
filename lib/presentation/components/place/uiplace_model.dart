@@ -31,8 +31,8 @@ class UiPlaceModel {
   String? contentType;
   int? userPoints;
   String? currency;
-  TextEditingController houseNumberController;
-  TextEditingController apartmentNumberController;
+  String? houseNumber;
+  String? apartmentNumber;
   PlaceWeatherType? weatherType;
   String? bookingUrl;
   BookingUiModel? bookingUiModel;
@@ -77,8 +77,8 @@ class UiPlaceModel {
     this.archived = false,
     this.chainName,
     this.chainId,
-    String? houseNumber,
-    String? apartmentNumber,
+    this.houseNumber,
+    this.apartmentNumber,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
@@ -86,9 +86,7 @@ class UiPlaceModel {
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
           if (scheduleString != null)
             UiDescriptionItemModel(title: S.current.WorkHours, description: scheduleString, descriptionUrl: 'times'),
-        ],
-        houseNumberController = TextEditingController(text: houseNumber),
-        apartmentNumberController = TextEditingController(text: apartmentNumber) {
+        ] {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
     }
@@ -157,8 +155,8 @@ class UiPlaceModel {
     String? contentType,
     int? userPoints,
     String? currency,
-    TextEditingController? houseNumberController,
-    TextEditingController? apartmentNumberController,
+    String? houseNumber,
+    String? apartmentNumber,
     PlaceWeatherType? weatherType,
     String? bookingUrl,
     BookingUiModel? bookingUiModel,
@@ -201,6 +199,8 @@ class UiPlaceModel {
         moderationStatus: moderationStatus ?? this.moderationStatus,
         chainName: chainName ?? this.chainName,
         chainId: chainId ?? this.chainId,
+        houseNumber: houseNumber?? this.houseNumber,
+        apartmentNumber: apartmentNumber?? this.apartmentNumber,
       );
 
   UiPlaceModel.empty()
@@ -210,8 +210,6 @@ class UiPlaceModel {
         description = '',
         contentType = 'both',
         tags = const [],
-        houseNumberController = TextEditingController(),
-        apartmentNumberController = TextEditingController(),
         bookingUiModel = null,
         branches = null,
         archived = false,
@@ -251,8 +249,8 @@ class UiPlaceModel {
         // 'descriptionItems': descriptionItems?.map((item) => item.toMap())?.toList(),
         'cityId': cityId,
         'city': city,
-        'houseNumber': houseNumberController.text,
-        'apartmentNumber': apartmentNumberController.text,
+        'houseNumber': houseNumber,
+        'apartmentNumber': apartmentNumber,
         'weatherType': weatherType?.toString(),
         'bookingUrl': bookingUrl,
         'bookingUiModel': bookingUiModel?.toMap(),
