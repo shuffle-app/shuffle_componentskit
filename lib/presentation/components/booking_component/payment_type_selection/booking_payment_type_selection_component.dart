@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class BookingPaymentTypeSelectionComponent extends StatefulWidget {
   final StripeRegistrationStatus? stripeRegistrationStatus;
@@ -68,7 +69,13 @@ class _BookingPaymentTypeSelectionComponentState extends State<BookingPaymentTyp
 
     return Scaffold(
       body: BlurredAppBarPage(
-        title: S.current.Booking,
+        customTitle: Flexible(
+          child: AutoSizeText(
+            S.current.Booking,
+            style: boldTextTheme?.title1,
+            maxLines: 1,
+          ),
+        ),
         centerTitle: true,
         autoImplyLeading: true,
         childrenPadding: EdgeInsets.symmetric(
