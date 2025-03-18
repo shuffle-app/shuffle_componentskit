@@ -764,6 +764,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                         ? S.of(context).CreateBooking
                         : '${S.of(context).Edit} ${S.of(context).Booking}',
                     onPressed: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+
                       showUiKitGeneralFullScreenDialog(
                         context,
                         GeneralDialogData(
@@ -813,8 +815,8 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                                               setState(() {
                                                 _eventToEdit.bookingUrl = null;
                                               });
+                                              navigatorKey.currentContext?.pop();
                                             }
-                                            navigatorKey.currentContext?.pop();
                                           },
                                         ))),
                               );

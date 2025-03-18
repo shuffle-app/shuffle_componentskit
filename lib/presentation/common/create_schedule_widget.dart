@@ -339,7 +339,7 @@ abstract class UiScheduleModel {
 
   static UiScheduleModel? fromCachedString(String scheduleType, String cachedString) {
     if (scheduleType == 'UiScheduleTimeModel') {
-      return UiScheduleTimeModel(decodeSchedule( cachedString));
+      return UiScheduleTimeModel(decodeSchedule(cachedString));
     } else if (scheduleType == 'UiScheduleDatesModel') {
       return UiScheduleDatesModel(decodeSchedule(cachedString));
     } else if (scheduleType == 'UiScheduleDatesRangeModel') {
@@ -700,7 +700,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
-  static const String scheduleType = 'Date Range - Time';
+  static const String scheduleType = 'Date Range – Time';
   final List<MapEntry<String, List<TimeRange>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
   UiScheduleDatesRangeModel([List<MapEntry<String, List<TimeRange>>>? schedule]) {
