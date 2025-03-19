@@ -117,15 +117,16 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
           SpacingFoundation.verticalSpace24,
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 1.sw <= 380 ? 80.h : 65.h,
-        width: double.infinity,
+      bottomNavigationBar: SafeArea(
+        top: false,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (_validateText != null)
               Text(
                 _validateText!,
                 style: context.uiKitTheme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
+                textAlign: TextAlign.center,
               ),
             SpacingFoundation.verticalSpace10,
             Row(
@@ -152,6 +153,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
                       .paddingOnly(
                         left: EdgeInsetsFoundation.all16,
                         right: EdgeInsetsFoundation.all16,
+                        bottom: SpacingFoundation.verticalSpacing8,
                       ),
                 ),
               ],

@@ -785,6 +785,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                           ? S.of(context).CreateBooking
                           : '${S.of(context).Edit} ${S.of(context).Booking}',
                       onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+
                         showUiKitGeneralFullScreenDialog(
                           context,
                           GeneralDialogData(
@@ -834,8 +836,8 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                                 setState(() {
                                                   _placeToEdit.bookingUrl = null;
                                                 });
+                                                navigatorKey.currentContext?.pop();
                                               }
-                                              navigatorKey.currentContext?.pop();
                                             },
                                           )),
                                 );

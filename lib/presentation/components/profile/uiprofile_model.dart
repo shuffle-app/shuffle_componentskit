@@ -73,7 +73,7 @@ class UiProfileModel {
       achievements: achievements.where((element) => element.posterUrl != null || element.objectUrl != null).toList(),
       profileWidgets: [
         ProfileContentWidget(
-          title: S.current.Scheduler,
+          title: S.current.ToPlan,
           group: _statsConstGroup,
           onCalendarTap: onCalendarTap,
           showCalendar: true,

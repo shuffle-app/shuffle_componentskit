@@ -736,7 +736,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
 }
 
 class UiScheduleDatesRangeModel extends UiScheduleModel {
-  static const String scheduleType = 'Date Range - Time';
+  static const String scheduleType = 'Date Range – Time';
   final List<MapEntry<String, List<TimeRange>>> dailySchedule = List.empty(growable: true)..add(const MapEntry('', []));
 
   UiScheduleDatesRangeModel([List<MapEntry<String, List<TimeRange>>>? schedule]) {

@@ -64,7 +64,11 @@ class SearchResultComponent extends StatelessWidget {
               onFieldSubmitted: onFieldSubmitted,
             )
           : null,
-      children: searchResults,
+      children: [
+        SpacingFoundation.verticalSpace16,
+        ...searchResults,
+        kBottomNavigationBarHeight.heightBox
+      ],
     );
   }
 }
