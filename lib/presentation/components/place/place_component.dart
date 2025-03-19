@@ -823,6 +823,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
                       ? VoiceInContentCard(
                           voice: currentUiModel,
                           onViewAllTap: widget.onViewAllVoicesTap,
+                          onUserTap: (user) =>
+                              widget.onAvatarTap?.call(BaseUiKitUserTileData(id: user?.id, type: user?.userTileType)),
                         )
                       : SizedBox.shrink(),
                 );

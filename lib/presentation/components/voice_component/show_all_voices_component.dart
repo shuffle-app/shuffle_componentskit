@@ -5,10 +5,12 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ShowAllVoicesComponent extends StatefulWidget {
   final List<VoiceUiModel> voices;
+  final ValueChanged<BaseUiKitUserTileData?>? onUserTap;
 
   const ShowAllVoicesComponent({
     super.key,
     required this.voices,
+    this.onUserTap,
   });
 
   @override
@@ -50,45 +52,50 @@ class _ShowAllVoicesComponentState extends State<ShowAllVoicesComponent> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                BorderedUserCircleAvatar(
-                  imageUrl: user?.avatarUrl,
-                  name: user?.name,
-                  size: _avatarSize.w,
-                  border: GradientFoundation.gradientBorder,
-                ),
-                SpacingFoundation.horizontalSpace8,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          user?.name ?? '',
-                          style: textTheme?.caption4Regular,
-                        ),
-                        SpacingFoundation.horizontalSpace8,
-                        GradientableWidget(
-                          gradient: GradientFoundation.buttonGradient,
-                          child: ImageWidget(
-                            height: _starIconSize.w,
-                            width: _starIconSize.w,
-                            iconData: ShuffleUiKitIcons.star2,
-                            color: Colors.white,
+            GestureDetector(
+              onTap: () => widget.onUserTap?.call(
+                BaseUiKitUserTileData(id: user?.id, type: user?.userTileType),
+              ),
+              child: Row(
+                children: [
+                  BorderedUserCircleAvatar(
+                    imageUrl: user?.avatarUrl,
+                    name: user?.name,
+                    size: _avatarSize.w,
+                    border: GradientFoundation.gradientBorder,
+                  ),
+                  SpacingFoundation.horizontalSpace8,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            user?.name ?? '',
+                            style: textTheme?.caption4Regular,
                           ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      '@${user?.nickname}',
-                      style: textTheme?.caption4Regular.copyWith(
-                        color: ColorsFoundation.mutedText,
+                          SpacingFoundation.horizontalSpace8,
+                          GradientableWidget(
+                            gradient: GradientFoundation.buttonGradient,
+                            child: ImageWidget(
+                              height: _starIconSize.w,
+                              width: _starIconSize.w,
+                              iconData: ShuffleUiKitIcons.star2,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Text(
+                        '@${user?.nickname}',
+                        style: textTheme?.caption4Regular.copyWith(
+                          color: ColorsFoundation.mutedText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             SpacingFoundation.verticalSpace8,
             AudioPlayer(

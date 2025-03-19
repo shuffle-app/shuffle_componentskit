@@ -263,7 +263,7 @@ class _EventComponentState extends State<EventComponent> {
                       )
                     else
                       Positioned(
-                          right: -horizontalMargin -2,
+                          right: -horizontalMargin - 2,
                           child: UiKitPopUpMenuButton.optionWithIcon(options: [
                             UiKitPopUpMenuButtonOption(
                               title: S.of(context).Share,
@@ -733,6 +733,8 @@ class _EventComponentState extends State<EventComponent> {
                   duration: const Duration(milliseconds: 250),
                   child: currentUiModel != null
                       ? VoiceInContentCard(
+                          onUserTap: (user) =>
+                              widget.onAvatarTap?.call(BaseUiKitUserTileData(id: user?.id, type: user?.userTileType)),
                           voice: currentUiModel,
                           onViewAllTap: widget.onViewAllVoicesTap,
                         )
