@@ -183,6 +183,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
                       .paddingOnly(
                         left: EdgeInsetsFoundation.all16,
                         right: EdgeInsetsFoundation.all16,
+                        bottom: SpacingFoundation.verticalSpacing24,
                       ),
                 ),
               ],
