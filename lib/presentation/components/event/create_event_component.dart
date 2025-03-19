@@ -10,6 +10,7 @@ import 'package:shuffle_components_kit/presentation/components/add_link_componen
 import 'package:shuffle_components_kit/presentation/components/add_link_components/select_booking_link_component.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/payment_type_selection/booking_payment_type_selection_component.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:intl/src/intl/date_format.dart';
 
 import '../../../shuffle_components_kit.dart';
 import '../../common/photolist_editing_component.dart';
@@ -706,32 +707,99 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           : null,
                       availableTemplates: widget.availableTimeTemplates,
                       onTemplateCreated: widget.onTimeTemplateCreated,
-                      availableTypes: const [
-                        UiScheduleTimeModel.scheduleType,
-                        UiScheduleDatesModel.scheduleType,
-                        UiScheduleDatesRangeModel.scheduleType
+                      availableTypes: [
+                        S.of(context).TimeRange,
+                        S.of(context).DateTime,
+                        S.of(context).DateRangeTime,
                       ],
                       onScheduleCreated: (model) {
                         if (model is UiScheduleDatesModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join(',')}')
-                                .join('; ');
+
+                            final grouped = <DateTime, List<TimeOfDay>>{};
+
+                            for (final entry in model.dailySchedule) {
+                              final date = DateFormat('yy-MM-dd').parse(entry.key);
+                              grouped.putIfAbsent(date, () => []);
+                              grouped[date]!.addAll(entry.value);
+                            }
+
+                            final sortedEntries = grouped.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
+
+                            _eventToEdit.scheduleString = sortedEntries.map((e) {
+                              final times = e.value
+                                  .map((t) => t.normalizedString.replaceAll(' - ', ' – '))
+                                  .toSet()
+                                  .toList()
+                                ..sort((a, b) => timeComparator(a, b));
+
+                              final formattedDate = DateFormat('dd.MM.yy').format(e.key);
+
+                              return times.isNotEmpty ? '$formattedDate, ${times.join(', ')}' : formattedDate;
+                            }).join(' / ');
                           });
                         } else if (model is UiScheduleDatesRangeModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join('/')}')
-                                .join(', ');
+                            dev.log('model.dailySchedule ${model.dailySchedule}');
+
+                            _eventToEdit.scheduleString = model.dailySchedule.map((entry) {
+                              final dateParts = entry.key.split('/');
+                              final startDate = DateFormat('yy-MM-dd').parse(dateParts[0]);
+                              final endDate = DateFormat('yy-MM-dd').parse(dateParts[1]);
+
+                              final formattedStart = DateFormat('dd.MM.yy').format(startDate);
+                              final formattedEnd = DateFormat('dd.MM.yy').format(endDate);
+
+                              final timeRanges = entry.value
+                                  .map((tr) => tr.normalizedString
+                                      .replaceAll(' - ', ' – ')
+                                      .replaceAll('am', '')
+                                      .replaceAll('pm', '')
+                                      .trim())
+                                  .where((str) => str.isNotEmpty)
+                                  .toList()
+                                ..sort((a, b) {
+                                  final startTimeA = a.split(' – ')[0];
+                                  final startTimeB = b.split(' – ')[0];
+                                  return compareTimeStrings(startTimeA, startTimeB);
+                                });
+
+                              final dateRangeStr =
+                                  (startDate != endDate) ? '$formattedStart – $formattedEnd' : formattedStart;
+
+                              return timeRanges.isNotEmpty ? '$dateRangeStr, ${timeRanges.join(', ')}' : dateRangeStr;
+                            }).join(' / ');
                           });
                         } else if (model is UiScheduleTimeModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.weeklySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join('; ');
+                            dev.log('model.dailySchedule ${model.weeklySchedule}');
+
+                            final groupedEntries = <String, List<TimeOfDay>>{};
+
+                            for (final entry in model.weeklySchedule) {
+                              final normalizedKey = normalizeDayKey(entry.key);
+                              groupedEntries.putIfAbsent(normalizedKey, () => []);
+                              groupedEntries[normalizedKey]!.addAll(entry.value);
+                            }
+
+                            _eventToEdit.scheduleString = groupedEntries.entries.map((entry) {
+                              final days = entry.key.split(', ').map((d) => parseWeekdayKey(d)).toList();
+
+                              final formattedDays = compactDays(days.map((d) => d.toString().split('.').last).toList());
+
+                              final timesList = entry.value
+                                  .map((time) => normalizedTi(time, showDateName: false))
+                                  .toSet()
+                                  .toList()
+                                ..sort(timeComparator);
+
+                              final formattedTimes = timesList.join(' – ');
+
+                              return formattedTimes.isNotEmpty ? '$formattedDays, $formattedTimes' : formattedDays;
+                            }).join(' / ');
                           });
                         }
                       },
