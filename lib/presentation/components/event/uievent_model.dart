@@ -247,6 +247,7 @@ class UiEventModel extends Advertisable {
     int? placeId,
     String? houseNumber,
     String? apartmentNumber,
+    String? contentType,
   }) =>
       UiEventModel(
         id: id,
@@ -286,6 +287,7 @@ class UiEventModel extends Advertisable {
         placeId: placeId ?? this.placeId,
         houseNumber: houseNumber?? this.houseNumber,
         apartmentNumber: apartmentNumber?? this.apartmentNumber,
+        contentType: contentType?? this.contentType,
       );
 
   bool selectableDayPredicate(DateTime day) {
@@ -338,7 +340,7 @@ class UiEventModel extends Advertisable {
     'scheduleString': scheduleString,
     'scheduleType': schedule.runtimeType.toString(),
     'schedule': schedule?.encodeSchedule(),
-    'niche': niche?.id,
+    'niche': niche?.toMap(),
     'contentType': contentType,
     // 'branches': branches?.map((branch) => branch.toMap())?.toList(),
     'media': media.map((media) => media.toMap()).toList(),
@@ -356,7 +358,7 @@ class UiEventModel extends Advertisable {
   }..removeWhere((k, v) => v == null);
 
   static UiEventModel fromMap(Map<String, dynamic> map) {
-    print('constructing from Map with location ${map['locationModel']}');
+    print('constructing from Map with $map');
     return UiEventModel(
     id: map['id'] as int? ?? -1,
     title: map['title'] as String,
