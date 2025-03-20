@@ -215,6 +215,11 @@ class PlacePreview extends StatelessWidget {
             UiKitTagsWidget(
               baseTags: place.baseTags,
               uniqueTags: place.tags,
+              onTagTap: (value) {
+                if (place.schedule != null && value == ShuffleUiKitIcons.clock) {
+                  showTimeInfoDialog(context, place.schedule!.getReadableScheduleString());
+                }
+              },
             ).paddingSymmetric(horizontal: horizontalMargin)
           ]
         ],
