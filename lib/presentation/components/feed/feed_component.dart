@@ -557,6 +557,7 @@ class FeedComponent extends StatelessWidget {
                             media: item.media,
                             tags: item.tags,
                             baseTags: item.baseTags ?? [],
+                            schedule: item.schedule,
                           ),
                           model: feedLeisureModel,
                         );
