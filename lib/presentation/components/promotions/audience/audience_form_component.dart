@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/promotions/audience/audience_ui_model.dart';
+import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+
+import '../../../common/select_one_type_with_bottom.dart';
+import '../../../common/tags_selection_component.dart';
 
 class AudienceFormComponent extends StatefulWidget {
   final List<AudienceUiModel>? preSavedAudience;
@@ -10,14 +14,16 @@ class AudienceFormComponent extends StatefulWidget {
   final List<UiKitTag> allGenders;
   final List<UiKitTag> allCategories;
   final List<UiKitTag> allMindsets;
-  final List<UiKitTag> allDevices;
+  final List<String> allDevices;
 
   final List<String> allLanguages;
   final List<String> allBirthdayTypes;
+  final getPrefsForMindsetList;
 
   const AudienceFormComponent(
       {super.key,
       this.preSavedAudience,
+      this.getPrefsForMindsetList,
       this.onSaveTemplate,
       this.onAudienceDrafted,
       this.allGenders = const [],
@@ -33,14 +39,17 @@ class AudienceFormComponent extends StatefulWidget {
 
 class _AudienceFormComponentState extends State<AudienceFormComponent> {
   AudienceUiModel? selectedAudience;
+  bool wasSelectedTemplate = false;
 
   List<UiKitTag> selectedGenders = [];
   List<UiKitTag> selectedCategories = [];
   List<UiKitTag> selectedMindsets = [];
-  List<UiKitTag> selectedDevices = [];
+  List<String> selectedDevices = [];
   List<UiKitTag> selectedPrefs = [];
+  List<String> selectedLanguages = [];
+  List<String> selectedBirthdays = [];
 
-  final TextEditingController _languageController = TextEditingController();
+  // final TextEditingController _languageController = TextEditingController();
 
   int? selectedAgeFrom;
   int? selectedAgeTo;
@@ -58,18 +67,32 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
     selectedMindsets = audience.selectedMindsets ?? [];
     selectedDevices = audience.devices ?? [];
     selectedPrefs = audience.selectedPrefs ?? [];
-    _languageController.text = audience.languages?.join(', ') ?? '';
+    selectedLanguages = audience.languages ?? [];
     selectedAgeFrom = audience.fromAge;
     selectedAgeTo = audience.toAge;
+    selectedBirthdays = audience.birthdayOptions ?? [];
     setState(() {});
   }
 
   _sendDraftUpdatedAudience() {
     if (!mounted) return;
-    // if (widget.onAudienceDrafted!= null) {
-    //   widget.onAudienceDrafted!(selectedAudience!);
-    // }
+    if (widget.onAudienceDrafted != null) {
+      widget.onAudienceDrafted!((selectedAudience ?? AudienceUiModel()).copyWith(
+        genders: selectedGenders,
+        selectedCategories: selectedCategories,
+        selectedMindsets: selectedMindsets,
+        devices: selectedDevices,
+        selectedPrefs: selectedPrefs,
+        languages: selectedLanguages,
+        fromAge: selectedAgeFrom,
+        toAge: selectedAgeTo,
+        birthdayOptions: selectedBirthdays,
+      ));
+    }
   }
+
+  bool get canSaveTemplate =>
+      selectedGenders.isNotEmpty && selectedMindsets.isNotEmpty && selectedCategories.isNotEmpty;
 
   @override
   void dispose() {
@@ -80,12 +103,252 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final bodyBold = theme?.boldTextTheme.body;
+    final titleStyle = theme?.boldTextTheme.title2;
 
     return BlurredAppBarPage(
-      // title: S.current.Au,
+      title: S.current.Audience,
       centerTitle: true,
       autoImplyLeading: true,
-      children: [],
+      childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.verticalSpacing16),
+      children: [
+        SpacingFoundation.verticalSpace16,
+        Text(
+          S.current.CreateAudienceOrSelectOne,
+          style: bodyBold,
+        ),
+        SpacingFoundation.verticalSpace16,
+        SelectOneTypeWithBottom(
+            items: widget.preSavedAudience?.map((e) => e.title).nonNulls.toList() ?? [],
+            selectedItem: selectedAudience?.title,
+            onSelect: (title) {
+              final audience = widget.preSavedAudience!.firstWhere((e) => e.title == title);
+              onSelectSavedAudience(audience);
+
+              navigatorKey.currentContext?.pop();
+            }),
+        SpacingFoundation.verticalSpace24,
+        Text(
+          S.current.Gender,
+          style: titleStyle,
+        ),
+        SpacingFoundation.verticalSpace16,
+        Wrap(
+          runSpacing: SpacingFoundation.verticalSpacing4,
+          children: widget.allGenders
+              .map((gender) => SizedBox(
+                  width: 0.4.sw,
+                  child: UiKitCheckboxFilterItem(
+                    item: TitledFilterItem(
+                        mask: gender.title, value: gender.title, selected: selectedGenders.contains(gender.title)),
+                    onTap: (selected) {
+                      setState(() {
+                        if (!selectedGenders.remove(gender)) {
+                          selectedGenders.add(gender);
+                        }
+                      });
+                    },
+                    isSelected: selectedGenders.contains(gender),
+                  )))
+              .toList(),
+        ),
+        SpacingFoundation.verticalSpace24,
+        Text(
+          S.current.Age,
+          style: titleStyle,
+        ),
+        SpacingFoundation.verticalSpace16,
+        Row(children: [
+          Text(S.current.From, style: bodyBold),
+          SpacingFoundation.horizontalSpace4,
+          UiKitDropDownList<int>(
+            contentBorderRadius: BorderRadiusFoundation.all12,
+            maxHeight: .4.sh,
+            selectedItem: selectedAgeFrom,
+            items: List.generate(60, (i) => i + 18)
+                .map((age) => DropdownMenuItem(value: age, child: Text('$age')))
+                .toList(),
+            onChanged: (int? from) {
+              setState(() {
+                selectedAgeFrom = from;
+              });
+            },
+          ),
+          SpacingFoundation.horizontalSpace4,
+          Text(S.current.To.toLowerCase(), style: bodyBold),
+          SpacingFoundation.horizontalSpace4,
+          UiKitDropDownList<int>(
+            contentBorderRadius: BorderRadiusFoundation.all12,
+            maxHeight: .4.sh,
+            selectedItem: selectedAgeTo,
+            items: List.generate(60, (i) => i + (selectedAgeFrom ?? 18))
+                .map((age) => DropdownMenuItem(value: age, child: Text('$age')))
+                .toList(),
+            onChanged: (int? to) {
+              setState(() {
+                selectedAgeTo = to;
+              });
+            },
+          )
+        ]),
+        SpacingFoundation.verticalSpace24,
+        Text(
+          S.current.SelectLanguage,
+          style: titleStyle,
+        ),
+        SpacingFoundation.verticalSpace16,
+        Wrap(
+          runSpacing: SpacingFoundation.verticalSpacing4,
+          children: widget.allLanguages
+              .map((language) => SizedBox(
+                  width: 0.4.sw,
+                  child: UiKitCheckboxFilterItem(
+                    item: TitledFilterItem(
+                        mask: language, value: language, selected: selectedLanguages.contains(language)),
+                    onTap: (selected) {
+                      setState(() {
+                        if (!selectedLanguages.remove(language)) {
+                          selectedLanguages.add(language);
+                        }
+                      });
+                    },
+                    isSelected: selectedLanguages.contains(language),
+                  )))
+              .toList(),
+        ),
+        SpacingFoundation.verticalSpace24,
+        Text(
+          S.current.Birthday,
+          style: titleStyle,
+        ),
+        SpacingFoundation.verticalSpace16,
+        for (var i in widget.allBirthdayTypes)
+          UiKitCheckboxFilterItem(
+            onTap: (selected) {
+              setState(() {
+                if (selected) {
+                  selectedBirthdays.add(i);
+                } else {
+                  selectedBirthdays.remove(i);
+                }
+              });
+            },
+            item: TitledFilterItem(mask: i, value: i, selected: selectedBirthdays.contains(i)),
+            isSelected: selectedBirthdays.contains(i),
+          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing12),
+        SpacingFoundation.verticalSpace12,
+        Text(
+          S.current.Device,
+          style: titleStyle,
+        ),
+        SpacingFoundation.verticalSpace16,
+        Wrap(
+          children: widget.allDevices
+              .map((device) => SizedBox(
+                  width: 0.4.sw,
+                  child: UiKitCheckboxFilterItem(
+                    item: TitledFilterItem(mask: device, value: device, selected: selectedBirthdays.contains(device)),
+                    onTap: (selected) {
+                      setState(() {
+                        if (!selectedDevices.remove(device)) {
+                          selectedDevices.add(device);
+                        }
+                      });
+                    },
+                    isSelected: selectedDevices.contains(device),
+                  )))
+              .toList(),
+        ),
+        SpacingFoundation.verticalSpace24,
+        Text(
+          S.current.Information,
+          style: titleStyle,
+        ),
+        SpacingFoundation.verticalSpace16,
+        UiKitFieldWithTagList(
+            listUiKitTags: selectedCategories,
+            title: S.of(context).Categories,
+            onTap: () async {
+              final newTags = await context.push(TagsSelectionComponent(
+                selectedTags: selectedCategories,
+                title: S.of(context).Categories,
+                allTags: widget.allCategories,
+              ));
+              if (newTags != null) {
+                setState(() {
+                  selectedCategories.clear();
+                  selectedCategories.addAll(newTags.toSet());
+                });
+              }
+            }),
+        SpacingFoundation.verticalSpace16,
+        UiKitFieldWithTagList(
+            listUiKitTags: selectedMindsets,
+            title: S.of(context).ActivityTypes,
+            onTap: () async {
+              final newTags = await context.push(TagsSelectionComponent(
+                selectedTags: selectedMindsets,
+                title: S.of(context).ActivityTypes,
+                allTags: widget.allMindsets,
+              ));
+              if (newTags != null) {
+                setState(() {
+                  selectedMindsets.clear();
+                  selectedMindsets.addAll(newTags.toSet());
+                  selectedPrefs.clear();
+                });
+              }
+            }),
+        if (selectedMindsets.isNotEmpty) ...[
+          SpacingFoundation.verticalSpace16,
+          UiKitFieldWithTagList(
+              listUiKitTags: selectedPrefs,
+              title: S.of(context).Preferences,
+              onTap: () async {
+                final newTags = await context.push(TagsSelectionComponent(
+                  selectedTags: selectedPrefs,
+                  title: S.of(context).Preferences,
+                  allTags: widget.getPrefsForMindsetList(selectedMindsets),
+                ));
+                if (newTags != null) {
+                  setState(() {
+                    selectedPrefs.clear();
+                    selectedPrefs.addAll(newTags.toSet());
+                  });
+                }
+              }),
+        ],
+        SpacingFoundation.verticalSpace24,
+        if (widget.onSaveTemplate != null)
+          context.outlinedButton(
+              data: BaseUiKitButtonData(
+                  text: '${S.current.Save} ${S.current.Audience.toLowerCase()}',
+                  onPressed: canSaveTemplate
+                      ? () {
+                          final titleController = TextEditingController();
+                          enterNameUiKitDialog(context,
+                              controller: titleController,
+                              title: '${S.current.Save} ${S.current.Audience.toLowerCase()}', onConfirmTap: () {
+                            final audience = AudienceUiModel(
+                              title: titleController.text,
+                              genders: selectedGenders,
+                              fromAge: selectedAgeFrom,
+                              toAge: selectedAgeTo,
+                              languages: selectedLanguages,
+                              birthdayOptions: selectedBirthdays,
+                              devices: selectedDevices,
+                              selectedCategories: selectedCategories.toList(),
+                              selectedMindsets: selectedMindsets.toList(),
+                              selectedPrefs: selectedPrefs.toList(),
+                            );
+                            widget.onSaveTemplate?.call(audience);
+                            navigatorKey.currentContext?.pop();
+                          });
+                        }
+                      : null)),
+        kBottomNavigationBarHeight.heightBox,
+        SpacingFoundation.verticalSpace24,
+      ],
     );
   }
 }

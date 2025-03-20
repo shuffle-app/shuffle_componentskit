@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-class SelectScheduleType extends StatelessWidget {
-  final List<String> scheduleTypes;
-  final String? selectedScheduleName;
-  final ValueChanged<String?>? onSelectType;
-  final bool Function() showWarningDialog;
+class SelectOneTypeWithBottom extends StatelessWidget {
+  final List<String> items;
+  final String? selectedItem;
+  final ValueChanged<String?>? onSelect;
+  final bool Function()? showWarningDialog;
+  final String? warningDialogTitle;
+  final String? placeholderType;
 
-  const SelectScheduleType({
+  const SelectOneTypeWithBottom({
     super.key,
-    required this.scheduleTypes,
-    this.selectedScheduleName,
-    this.onSelectType,
-    required this.showWarningDialog,
+    required this.items,
+    this.selectedItem,
+    this.onSelect,
+     this.showWarningDialog,
+    this.warningDialogTitle,
+    this.placeholderType,
   });
 
   @override
@@ -21,14 +25,14 @@ class SelectScheduleType extends StatelessWidget {
 
     return GestureDetector(
       onTap: () async {
-        if (showWarningDialog()) {
+        if (showWarningDialog?.call() ?? false) {
           await showUiKitAlertDialog(
               context,
               AlertDialogData(
                   defaultButtonText: S.of(context).Ok,
                   insetPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
                   title: Text(
-                    S.of(context).ChangingScheduleTypeAlert,
+                    warningDialogTitle ?? S.of(context).ChangingScheduleTypeAlert,
                     textAlign: TextAlign.center,
                     style: theme?.boldTextTheme.title2.copyWith(color: UiKitColors.surface1),
                   )));
@@ -50,11 +54,11 @@ class SelectScheduleType extends StatelessWidget {
                   height: 2.h,
                   color: theme?.colorScheme.darkNeutral100.withOpacity(0.24),
                 ),
-                ...scheduleTypes.map(
+                ...items.map(
                   (e) {
                     return InkWell(
                       onTap: () {
-                        onSelectType?.call(e);
+                        onSelect?.call(e);
                       },
                       child: Column(
                         children: [
@@ -66,7 +70,7 @@ class SelectScheduleType extends StatelessWidget {
                               ),
                             ],
                           ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
-                          if (e != scheduleTypes.last)
+                          if (e != items.last)
                             Divider(
                               height: 2.h,
                               color: theme?.colorScheme.darkNeutral100.withOpacity(0.24),
@@ -88,7 +92,7 @@ class SelectScheduleType extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              selectedScheduleName ?? S.of(context).SelectOptionSchedule,
+              selectedItem ?? placeholderType ?? S.of(context).SelectOptionSchedule,
               style: theme?.boldTextTheme.caption1Medium,
             ),
             const Spacer(),

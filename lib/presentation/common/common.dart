@@ -13,5 +13,5 @@ export 'web_view_screen.dart';
 export '../components/auth/login_invitation_component.dart';
 export 'subs_in_content_card.dart';
 export 'sub_information_dialog.dart';
-export 'select_schedule_type.dart';
+export 'select_one_type_with_bottom.dart';
 export 'select_template_type.dart';

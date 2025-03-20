@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import 'select_schedule_type.dart';
+import 'select_one_type_with_bottom.dart';
 import 'select_template_type.dart';
 
 class CreateScheduleWidget extends StatefulWidget {
@@ -102,11 +102,11 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                     childrenBuilder: (context, index) {
                       if (index == 0) {
                         return Column(mainAxisSize: MainAxisSize.min, children: [
-                          SelectScheduleType(
-                            scheduleTypes: scheduleTypes,
-                            selectedScheduleName: selectedScheduleName,
+                          SelectOneTypeWithBottom(
+                            items: scheduleTypes,
+                            selectedItem: selectedScheduleName,
                             showWarningDialog: () => scheduleModel?.isNotEmpty ?? false,
-                            onSelectType: (type) {
+                            onSelect: (type) {
                               if (type != null) {
                                 if ((scheduleModel?.itemsCount ?? 0) > 1) {
                                   for (var i = 0; i < scheduleModel!.itemsCount - 1; i++) {
