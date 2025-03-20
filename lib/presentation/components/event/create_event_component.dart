@@ -208,7 +208,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   }
 
   _onFocusChanged() {
-    dev.log('focus changed', name: '_onFocusChanged');
+    dev.log('focus changed with ', name: '_onFocusChanged');
 
     widget.onDraftChanged?.call(_eventToEdit.copyWith(
         city: _cityController.text,
