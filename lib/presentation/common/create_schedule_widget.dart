@@ -85,7 +85,7 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     } else if (type == S.current.DateTime) {
       return 'Date – Time';
     } else if (type == S.current.DateRangeTime) {
-      return 'Date Range - Time';
+      return 'Date Range – Time';
     } else {
       return '';
     }
@@ -130,12 +130,12 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                 setState(() {
                                   selectedTemplateName = null;
                                   selectedScheduleName = type;
-                                  final cornetType = correctScheduleName(type);
-                                  if (cornetType == UiScheduleTimeModel.scheduleType) {
+                                  final correctType = correctScheduleName(type);
+                                  if (correctType == UiScheduleTimeModel.scheduleType) {
                                     scheduleModel = UiScheduleTimeModel();
-                                  } else if (cornetType == UiScheduleDatesModel.scheduleType) {
+                                  } else if (correctType == UiScheduleDatesModel.scheduleType) {
                                     scheduleModel = UiScheduleDatesModel();
-                                  } else if (cornetType == UiScheduleDatesRangeModel.scheduleType) {
+                                  } else if (correctType == UiScheduleDatesRangeModel.scheduleType) {
                                     scheduleModel = UiScheduleDatesRangeModel();
                                   }
                                 });
@@ -460,28 +460,19 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    final groupedEntries = <String, List<TimeOfDay>>{};
-
-    // Группируем записи по нормализованным ключам дней
-    for (final entry in weeklySchedule) {
+    return weeklySchedule.map((entry) {
       final normalizedKey = normalizeDayKey(entry.key);
-      groupedEntries.putIfAbsent(normalizedKey, () => []);
-      groupedEntries[normalizedKey]!.addAll(entry.value);
-    }
 
-    return groupedEntries.entries.map((entry) {
-      // Обрабатываем дни
-      final days = entry.key.split(', ').map((d) => parseWeekdayKey(d)).toList();
+      final days = normalizedKey.split(', ').map((d) => parseWeekdayKey(d)).toList();
 
       final formattedDays = compactDays(days.map((d) => d.toString().split('.').last).toList());
 
-      // Обрабатываем время
       final timesList = entry.value.map((time) => normalizedTi(time, showDateName: false)).toSet().toList()
         ..sort(timeComparator);
 
-      final formattedTimes = timesList.join(' – ');
+      final formattedTimes =
+          timesList.length == 2 && timesList[1] != timesList[0] ? timesList.join(' – ') : timesList.join(', ');
 
-      // Возвращаем в формате ["Дни", "Время"]
       return [formattedDays, formattedTimes];
     }).toList();
   }
@@ -690,12 +681,31 @@ class UiScheduleDatesModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return dailySchedule
-        .map((e) => [
-              '${dateFormatToString(e.key, locale: Localizations.localeOf(navigatorKey.currentContext!).languageCode)}:',
-              e.value.map((time) => time.normalizedString).join(', ')
-            ])
-        .toList();
+    final grouped = <DateTime, Set<String>>{};
+
+    for (final entry in dailySchedule) {
+      final date = DateFormat('yy-MM-dd').parse(entry.key);
+      final times = entry.value.map((time) => time.normalizedString.replaceAll(' - ', ' – ')).toSet();
+
+      grouped.update(
+        date,
+        (existing) => existing..addAll(times),
+        ifAbsent: () => times,
+      );
+    }
+
+    final sortedEntries = grouped.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
+
+    return sortedEntries.map((entry) {
+      final formattedDate = dateFormatterToString(
+        DateFormat('yy-MM-dd').format(entry.key),
+        locale: Localizations.localeOf(navigatorKey.currentContext!).languageCode,
+      );
+
+      final times = entry.value.toList()..sort((a, b) => timeComparator(a, b));
+
+      return [formattedDate, times.join(', ')];
+    }).toList();
   }
 
   @override
@@ -956,7 +966,31 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return dailySchedule.map((e) => ['${getDateRangeFromKey(e.key)!.toPrettyString()}:', e.value.join(', ')]).toList();
+    final groupedEntries = dailySchedule.fold<Map<String, Set<String>>>({}, (map, entry) {
+      final normalizedKey = normalizeDateKey(entry.key);
+
+      final times = entry.value
+          .map((tr) => tr.normalizedString.replaceAll(' - ', ' – ').replaceAll('am', '').replaceAll('pm', '').trim())
+          .where((str) => str.isNotEmpty)
+          .toSet();
+
+      map.update(
+        normalizedKey,
+        (existing) => existing..addAll(times),
+        ifAbsent: () => times,
+      );
+      return map;
+    });
+
+    return groupedEntries.entries.map((entry) {
+      final sortedTimes = entry.value.toList()
+        ..sort((a, b) => compareTimeStrings(
+              a.split(' – ')[0],
+              b.split(' – ')[0],
+            ));
+
+      return [entry.key, sortedTimes.join(', ')];
+    }).toList();
   }
 
   @override
@@ -1060,95 +1094,4 @@ bool asSameDayDateTime(String key) {
     int.parse(selectedDateList[2]),
   );
   return selectedDate.isAtSameDay;
-}
-
-enum WeekdayKey { Mon, Tue, Wed, Thu, Fri, Sat, Sun }
-
-WeekdayKey parseWeekdayKey(String input) {
-  const mapping = {
-    'Mon': WeekdayKey.Mon,
-    'Tue': WeekdayKey.Tue,
-    'Wed': WeekdayKey.Wed,
-    'Thu': WeekdayKey.Thu,
-    'Fri': WeekdayKey.Fri,
-    'Sat': WeekdayKey.Sat,
-    'Sun': WeekdayKey.Sun,
-    'Пн': WeekdayKey.Mon,
-    'Вт': WeekdayKey.Tue,
-    'Ср': WeekdayKey.Wed,
-    'Чт': WeekdayKey.Thu,
-    'Пт': WeekdayKey.Fri,
-    'Сб': WeekdayKey.Sat,
-    'Вс': WeekdayKey.Sun,
-  };
-
-  final key = mapping[input.trim()];
-  if (key == null) throw FormatException('Invalid weekday: $input');
-  return key;
-}
-
-String normalizeDayKey(String originalKey) {
-  final days = originalKey.split(', ').map((d) => parseWeekdayKey(d.trim())).toList()
-    ..sort((a, b) => a.index.compareTo(b.index));
-
-  return days.map((d) => d.toString().split('.').last).join(', ');
-}
-
-int timeComparator(String a, String b) {
-  return compareTimeStrings(a.split(' – ')[0], b.split(' – ')[0]);
-}
-
-int compareTimeStrings(String a, String b) {
-  final timeA = DateFormat('HH:mm').parse(a);
-  final timeB = DateFormat('HH:mm').parse(b);
-  return timeA.compareTo(timeB);
-}
-
-String formatRange(WeekdayKey start, WeekdayKey end) {
-  String localizedDay(WeekdayKey key) {
-    switch (key) {
-      case WeekdayKey.Mon:
-        return S.current.Mon;
-      case WeekdayKey.Tue:
-        return S.current.Tue;
-      case WeekdayKey.Wed:
-        return S.current.Wed;
-      case WeekdayKey.Thu:
-        return S.current.Thu;
-      case WeekdayKey.Fri:
-        return S.current.Fri;
-      case WeekdayKey.Sat:
-        return S.current.Sat;
-      case WeekdayKey.Sun:
-        return S.current.Sun;
-    }
-  }
-
-  final startStr = localizedDay(start);
-  final endStr = localizedDay(end);
-  return start == end ? startStr : '$startStr – $endStr';
-}
-
-String compactDays(List<String> dayStrings) {
-  if (dayStrings.isEmpty) return '';
-
-  final days = dayStrings.map(parseWeekdayKey).toList();
-  days.sort((a, b) => a.index.compareTo(b.index));
-
-  List<List<WeekdayKey>> ranges = [];
-  List<WeekdayKey> currentRange = [days.first];
-
-  for (int i = 1; i < days.length; i++) {
-    if (days[i].index == days[i - 1].index + 1) {
-      currentRange.add(days[i]);
-    } else {
-      ranges.add(currentRange);
-      currentRange = [days[i]];
-    }
-  }
-  ranges.add(currentRange);
-
-  return ranges.map((range) {
-    return formatRange(range.first, range.last);
-  }).join(', ');
 }
