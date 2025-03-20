@@ -361,6 +361,11 @@ class _EventComponentState extends State<EventComponent> {
           rating: widget.event.rating,
           baseTags: widget.event.baseTags,
           uniqueTags: widget.event.tags,
+          onTagTap: (value) {
+            if (widget.event.schedule != null && value == ShuffleUiKitIcons.clock) {
+              showTimeInfoDialog(context, widget.event.schedule!.getReadableScheduleString());
+            }
+          },
         ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace14,
         if (widget.event.description != null) ...[

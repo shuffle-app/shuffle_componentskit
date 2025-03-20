@@ -291,6 +291,11 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ],
         SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
+          onTagTap: (value) {
+            if (widget.place.schedule != null && value == ShuffleUiKitIcons.clock) {
+              showTimeInfoDialog(context, widget.place.schedule!.getReadableScheduleString());
+            }
+          },
           listViewController: listViewController,
           rating: widget.place.rating,
           media: widget.place.media,
