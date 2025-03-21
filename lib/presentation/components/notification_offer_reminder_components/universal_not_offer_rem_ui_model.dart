@@ -97,22 +97,22 @@ class UniversalNotOfferRemUiModel {
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        title.hashCode ^
-        pointPrice.hashCode ^
-        iconPath.hashCode ^
-        selectedDates.hashCode ^
-        notifyTheAudience.hashCode ^
-        isLaunched.hashCode ^
-        isLaunchedDate.hashCode ^
-        isOffer.hashCode ^
-        iconId.hashCode ^
-        imagePath.hashCode ^
+    return id.hashCode +
+        title.hashCode +
+        pointPrice.hashCode +
+        iconPath.hashCode +
+        selectedDates.hashCode +
+        notifyTheAudience.hashCode +
+        isLaunched.hashCode +
+        isLaunchedDate.hashCode +
+        isOffer.hashCode +
+        iconId.hashCode +
+        imagePath.hashCode +
         isPromo.hashCode;
   }
 
   @override
   String toString() {
-    return 'OfferUiModel(id: $id, title: $title, pointPrice: $pointPrice, iconId: $iconId, selectedDates: $selectedDates, notifyTheAudience: $notifyTheAudience, isLaunched: $isLaunched, isLaunchedDate: $isLaunchedDate, imagePath : $imagePath, isPromo: $isPromo)';
+    return 'OfferUiModel(id: $id, title: $title, pointPrice: $pointPrice, iconId: $iconId, selectedDates: $selectedDates, notifyTheAudience: $notifyTheAudience, isLaunched: $isLaunched, isLaunchedDate: $isLaunchedDate, imagePath : $imagePath, isPromo: $isPromo, status: $status)';
   }
 }

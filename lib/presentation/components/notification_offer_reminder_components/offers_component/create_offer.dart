@@ -251,7 +251,7 @@ class _CreateOfferState extends State<CreateOffer> {
                     setState(() {
                       _selectedDates.add(null);
                     });
-                  } else if (dates.start.isAtSameDayAs(dates.end) && (!dates.start.isBefore(now)) ||
+                  } else if (dates.start.isAtSameDayAs(dates.end) ||
                       (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
                     final dateEnd = dates.start.copyWith(day: dates.start.day + 1);
 
