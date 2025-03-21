@@ -45,11 +45,11 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
     scheduleModel = widget.scheduleToEdit;
     if (scheduleModel != null) {
       if (scheduleModel is UiScheduleTimeModel) {
-        selectedScheduleName = UiScheduleTimeModel.scheduleType;
+        selectedScheduleName = S.current.TimeRange;
       } else if (scheduleModel is UiScheduleDatesModel) {
-        selectedScheduleName = UiScheduleDatesModel.scheduleType;
+        selectedScheduleName = S.current.DateTime;
       } else if (scheduleModel is UiScheduleDatesRangeModel) {
-        selectedScheduleName = UiScheduleDatesRangeModel.scheduleType;
+        selectedScheduleName = S.current.DateRangeTime;
       }
       if ((scheduleModel?.itemsCount ?? 0) >= 1) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,6 +75,20 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
         (context, animation) {
       return ScaleTransition(scale: animation, child: const SizedBox());
     });
+  }
+
+  String correctScheduleName(String type) {
+    log('correctScheduleName ${type} abob ${S.current.DateRange}');
+
+    if (type == S.current.TimeRange) {
+      return 'Time Range';
+    } else if (type == S.current.DateTime) {
+      return 'Date – Time';
+    } else if (type == S.current.DateRangeTime) {
+      return 'Date Range – Time';
+    } else {
+      return '';
+    }
   }
 
   @override
@@ -116,11 +130,12 @@ class _CreateScheduleWidgetState extends State<CreateScheduleWidget> {
                                 setState(() {
                                   selectedTemplateName = null;
                                   selectedScheduleName = type;
-                                  if (type == UiScheduleTimeModel.scheduleType) {
+                                  final correctType = correctScheduleName(type);
+                                  if (correctType == UiScheduleTimeModel.scheduleType) {
                                     scheduleModel = UiScheduleTimeModel();
-                                  } else if (type == UiScheduleDatesModel.scheduleType) {
+                                  } else if (correctType == UiScheduleDatesModel.scheduleType) {
                                     scheduleModel = UiScheduleDatesModel();
-                                  } else if (type == UiScheduleDatesRangeModel.scheduleType) {
+                                  } else if (correctType == UiScheduleDatesRangeModel.scheduleType) {
                                     scheduleModel = UiScheduleDatesRangeModel();
                                   }
                                 });
@@ -445,9 +460,21 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return weeklySchedule
-        .map((e) => ['${e.key}:', (e.value.map((time) => time.normalizedString).join(' - '))])
-        .toList();
+    return weeklySchedule.map((entry) {
+      final normalizedKey = normalizeDayKey(entry.key);
+
+      final days = normalizedKey.split(', ').map((d) => parseWeekdayKey(d)).toList();
+
+      final formattedDays = compactDays(days.map((d) => d.toString().split('.').last).toList());
+
+      final timesList = entry.value.map((time) => normalizedTi(time, showDateName: false)).toSet().toList()
+        ..sort(timeComparator);
+
+      final formattedTimes =
+          timesList.length == 2 && timesList[1] != timesList[0] ? timesList.join(' – ') : timesList.join(', ');
+
+      return [formattedDays, formattedTimes];
+    }).toList();
   }
 
   @override
@@ -654,12 +681,31 @@ class UiScheduleDatesModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return dailySchedule
-        .map((e) => [
-              '${dateFormatToString(e.key, locale: Localizations.localeOf(navigatorKey.currentContext!).languageCode)}:',
-              e.value.map((time) => time.normalizedString).join(', ')
-            ])
-        .toList();
+    final grouped = <DateTime, Set<String>>{};
+
+    for (final entry in dailySchedule) {
+      final date = DateFormat('yy-MM-dd').parse(entry.key);
+      final times = entry.value.map((time) => time.normalizedString.replaceAll(' - ', ' – ')).toSet();
+
+      grouped.update(
+        date,
+        (existing) => existing..addAll(times),
+        ifAbsent: () => times,
+      );
+    }
+
+    final sortedEntries = grouped.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
+
+    return sortedEntries.map((entry) {
+      final formattedDate = dateFormatterToString(
+        DateFormat('yy-MM-dd').format(entry.key),
+        locale: Localizations.localeOf(navigatorKey.currentContext!).languageCode,
+      );
+
+      final times = entry.value.toList()..sort((a, b) => timeComparator(a, b));
+
+      return [formattedDate, times.join(', ')];
+    }).toList();
   }
 
   @override
@@ -920,12 +966,31 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
 
   @override
   List<List<String>> getReadableScheduleString() {
-    return dailySchedule
-        .map((e) => [
-              '${getDateRangeFromKey(e.key)!.toPrettyString()}:',
-              e.value.map((time) => time.normalizedString).join(', ')
-            ])
-        .toList();
+    final groupedEntries = dailySchedule.fold<Map<String, Set<String>>>({}, (map, entry) {
+      final normalizedKey = normalizeDateKey(entry.key);
+
+      final times = entry.value
+          .map((tr) => tr.normalizedString.replaceAll(' - ', ' – ').replaceAll('am', '').replaceAll('pm', '').trim())
+          .where((str) => str.isNotEmpty)
+          .toSet();
+
+      map.update(
+        normalizedKey,
+        (existing) => existing..addAll(times),
+        ifAbsent: () => times,
+      );
+      return map;
+    });
+
+    return groupedEntries.entries.map((entry) {
+      final sortedTimes = entry.value.toList()
+        ..sort((a, b) => compareTimeStrings(
+              a.split(' – ')[0],
+              b.split(' – ')[0],
+            ));
+
+      return [entry.key, sortedTimes.join(', ')];
+    }).toList();
   }
 
   @override

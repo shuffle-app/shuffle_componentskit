@@ -706,32 +706,34 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                           : null,
                       availableTemplates: widget.availableTimeTemplates,
                       onTemplateCreated: widget.onTimeTemplateCreated,
-                      availableTypes: const [
-                        UiScheduleTimeModel.scheduleType,
-                        UiScheduleDatesModel.scheduleType,
-                        UiScheduleDatesRangeModel.scheduleType
+                      availableTypes: [
+                        S.of(context).TimeRange,
+                        S.of(context).DateTime,
+                        S.of(context).DateRangeTime,
                       ],
                       onScheduleCreated: (model) {
                         if (model is UiScheduleDatesModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join(',')}')
-                                .join('; ');
+
+                            _eventToEdit.scheduleString =
+                                model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
                           });
                         } else if (model is UiScheduleDatesRangeModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.dailySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => e.normalizedString).join('/')}')
-                                .join(', ');
+                            dev.log('model.dailySchedule ${model.dailySchedule}');
+
+                            _eventToEdit.scheduleString =
+                                model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
                           });
                         } else if (model is UiScheduleTimeModel) {
                           setState(() {
                             _eventToEdit.schedule = model;
-                            _eventToEdit.scheduleString = model.weeklySchedule
-                                .map((e) => '${e.key}: ${e.value.map((e) => normalizedTi(e)).join('-')}')
-                                .join('; ');
+                            dev.log('model.dailySchedule ${model.weeklySchedule}');
+
+                            _eventToEdit.scheduleString =
+                                model.getReadableScheduleString().map((pair) => pair.join(': ')).join(' / ');
                           });
                         }
                       },

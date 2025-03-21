@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shuffle_components_kit/presentation/components/profile/uiprofile_model.dart';
 import 'package:shuffle_components_kit/presentation/components/voice_component/voice_ui_model.dart';
 
 import 'package:just_audio/just_audio.dart' as ap;
@@ -9,11 +10,13 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 class VoiceInContentCard extends StatefulWidget {
   final VoiceUiModel voice;
   final VoidCallback? onViewAllTap;
+  final ValueChanged<UiProfileModel?>? onUserTap;
 
   const VoiceInContentCard({
     super.key,
     required this.voice,
     this.onViewAllTap,
+    this.onUserTap,
   });
 
   @override
@@ -167,46 +170,49 @@ class _VoicesUiContentCardState extends State<VoiceInContentCard> with WidgetsBi
                     ),
                   ),
                   SpacingFoundation.verticalSpace2,
-                  Row(
-                    children: [
-                      BorderedUserCircleAvatar(
-                        imageUrl: widget.voice.user?.avatarUrl,
-                        name: widget.voice.user?.name,
-                        size: 24.w,
-                        border: GradientFoundation.gradientBorder,
-                      ),
-                      SpacingFoundation.horizontalSpace8,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                widget.voice.user?.name ?? '',
-                                style: regularTextTheme?.caption4Regular,
-                              ),
-                              SpacingFoundation.horizontalSpace8,
-                              GradientableWidget(
-                                gradient: GradientFoundation.buttonGradient,
-                                child: ImageWidget(
-                                  height: 10.w,
-                                  width: 10.w,
-                                  fit: BoxFit.contain,
-                                  iconData: ShuffleUiKitIcons.star2,
-                                  color: Colors.white,
+                  GestureDetector(
+                    onTap: () => widget.onUserTap?.call(widget.voice.user),
+                    child: Row(
+                      children: [
+                        BorderedUserCircleAvatar(
+                          imageUrl: widget.voice.user?.avatarUrl,
+                          name: widget.voice.user?.name,
+                          size: 24.w,
+                          border: GradientFoundation.gradientBorder,
+                        ),
+                        SpacingFoundation.horizontalSpace8,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  widget.voice.user?.name ?? '',
+                                  style: regularTextTheme?.caption4Regular,
                                 ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            '@${widget.voice.user?.nickname}',
-                            style: regularTextTheme?.caption4Regular.copyWith(
-                              color: ColorsFoundation.mutedText,
+                                SpacingFoundation.horizontalSpace8,
+                                GradientableWidget(
+                                  gradient: GradientFoundation.buttonGradient,
+                                  child: ImageWidget(
+                                    height: 10.w,
+                                    width: 10.w,
+                                    fit: BoxFit.contain,
+                                    iconData: ShuffleUiKitIcons.star2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
-                          )
-                        ],
-                      )
-                    ],
+                            Text(
+                              '@${widget.voice.user?.nickname}',
+                              style: regularTextTheme?.caption4Regular.copyWith(
+                                color: ColorsFoundation.mutedText,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ],
               )

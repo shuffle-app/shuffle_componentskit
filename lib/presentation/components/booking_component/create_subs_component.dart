@@ -153,7 +153,7 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
                       .paddingOnly(
                         left: EdgeInsetsFoundation.all16,
                         right: EdgeInsetsFoundation.all16,
-                        bottom: SpacingFoundation.verticalSpacing8,
+                        bottom: SpacingFoundation.verticalSpacing24,
                       ),
                 ),
               ],

@@ -40,7 +40,7 @@ class SelectOneTypeWithBottom extends StatelessWidget {
         showUiKitGeneralFullScreenDialog(
           context,
           GeneralDialogData(
-            topPadding: 0.5.sh,
+            topPadding: 1.sw <= 380 ? 0.5.sh : 0.6.sh,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -52,7 +52,7 @@ class SelectOneTypeWithBottom extends StatelessWidget {
                 SpacingFoundation.verticalSpace16,
                 Divider(
                   height: 2.h,
-                  color: theme?.colorScheme.darkNeutral100.withOpacity(0.24),
+                  color: theme?.colorScheme.darkNeutral100.withValues(alpha: 0.24),
                 ),
                 ...items.map(
                   (e) {

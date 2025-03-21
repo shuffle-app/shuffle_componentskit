@@ -263,7 +263,7 @@ class _EventComponentState extends State<EventComponent> {
                       )
                     else
                       Positioned(
-                          right: -horizontalMargin -2,
+                          right: -horizontalMargin - 2,
                           child: UiKitPopUpMenuButton.optionWithIcon(options: [
                             UiKitPopUpMenuButtonOption(
                               title: S.of(context).Share,
@@ -361,6 +361,11 @@ class _EventComponentState extends State<EventComponent> {
           rating: widget.event.rating,
           baseTags: widget.event.baseTags,
           uniqueTags: widget.event.tags,
+          onTagTap: (value) {
+            if (widget.event.schedule != null && value == ShuffleUiKitIcons.clock) {
+              showTimeInfoDialog(context, widget.event.schedule!.getReadableScheduleString());
+            }
+          },
         ).paddingSymmetric(horizontal: horizontalMargin),
         SpacingFoundation.verticalSpace14,
         if (widget.event.description != null) ...[
@@ -733,6 +738,8 @@ class _EventComponentState extends State<EventComponent> {
                   duration: const Duration(milliseconds: 250),
                   child: currentUiModel != null
                       ? VoiceInContentCard(
+                          onUserTap: (user) =>
+                              widget.onAvatarTap?.call(BaseUiKitUserTileData(id: user?.id, type: user?.userTileType)),
                           voice: currentUiModel,
                           onViewAllTap: widget.onViewAllVoicesTap,
                         )

@@ -19,20 +19,19 @@ class UiFeedModel {
 
   // final List<BusinessGlobalEventUiModel>? globalEvents;
 
-  const UiFeedModel({
-    this.filterChips,
-    // this.globalEvents,
-    this.activeFilterChips,
-    this.showHowItWorksBody = false,
-    this.shouldRecallOnMoodTap = false,
-    this.isHealthKitEnabled = true,
-    this.recommendedEvent,
-    this.showHowItWorksTitle = false,
-    // this.mixedItems
-    this.recommendedBusinessEvents,
-    this.niches,
-    this.loadingFilterChips
-  });
+  const UiFeedModel(
+      {this.filterChips,
+      // this.globalEvents,
+      this.activeFilterChips,
+      this.showHowItWorksBody = false,
+      this.shouldRecallOnMoodTap = false,
+      this.isHealthKitEnabled = true,
+      this.recommendedEvent,
+      this.showHowItWorksTitle = false,
+      // this.mixedItems
+      this.recommendedBusinessEvents,
+      this.niches,
+      this.loadingFilterChips});
 }
 
 class UiUniversalModel extends Advertisable {
@@ -58,6 +57,7 @@ class UiUniversalModel extends Advertisable {
   final String? placeName;
   final bool isArchieved;
   final bool hasNotificationSet;
+  final UiScheduleModel? schedule;
 
   UiUniversalModel({
     required this.id,
@@ -82,6 +82,7 @@ class UiUniversalModel extends Advertisable {
     this.placeName,
     this.isArchieved = false,
     this.hasNotificationSet = false,
+    this.schedule,
   }) : super(isAdvertisement: false);
 
   UiUniversalModel.advertisement({
@@ -107,6 +108,7 @@ class UiUniversalModel extends Advertisable {
     this.placeName,
     this.hasNotificationSet = false,
     this.isArchieved = false,
+    this.schedule,
   }) : super(isAdvertisement: true);
 
   UiUniversalModel.checkIn({
@@ -132,6 +134,7 @@ class UiUniversalModel extends Advertisable {
     this.placeName,
     this.isArchieved = false,
     this.hasNotificationSet = false,
+    this.schedule,
   }) : super(isAdvertisement: false);
 
   factory UiUniversalModel.fromPlaceUiModel(UiPlaceModel placeModel) => UiUniversalModel(
@@ -146,7 +149,8 @@ class UiUniversalModel extends Advertisable {
       baseTags: placeModel.baseTags,
       title: placeModel.title,
       isArchieved: placeModel.archived,
-      weatherType: placeModel.weatherType);
+      weatherType: placeModel.weatherType,
+      schedule: placeModel.schedule);
 
   factory UiUniversalModel.fromEventUiModel(UiEventModel eventModel) => UiUniversalModel(
       id: eventModel.id,
@@ -161,7 +165,8 @@ class UiUniversalModel extends Advertisable {
       isArchieved: eventModel.archived,
       baseTags: eventModel.baseTags,
       location: eventModel.location,
-      weatherType: eventModel.weatherType);
+      weatherType: eventModel.weatherType,
+      schedule: eventModel.schedule);
 
   factory UiUniversalModel.empty() => UiUniversalModel(
         id: -1,
@@ -213,28 +218,29 @@ class UiUniversalModel extends Advertisable {
     bool? hasNotificationSet,
     int? cityId,
     int? schedulerId,
-  }) => UiUniversalModel(
-    id: id?? this.id,
-    type: type?? this.type,
-    media: media?? this.media,
-    description: description?? this.description,
-    tags: tags?? this.tags,
-    baseTags: baseTags?? this.baseTags,
-    rating: rating?? this.rating,
-    website: website?? this.website,
-    weekdays: weekdays?? this.weekdays,
-    location: location?? this.location,
-    source: source?? this.source,
-    title: title?? this.title,
-    isFavorite: isFavorite?? this.isFavorite,
-    onFavoriteChanged: onFavoriteChanged?? this.onFavoriteChanged,
-    shouldVisitAt: shouldVisitAt?? this.shouldVisitAt,
-    weatherType: weatherType?? this.weatherType,
-    placeName: placeName?? this.placeName,
-    isArchieved: isArchieved?? this.isArchieved,
-    hasNotificationSet: hasNotificationSet?? this.hasNotificationSet,
-    cityId: cityId?? this.cityId,
-    schedulerId: schedulerId?? this.schedulerId,
-    remaindAt: remaindAt?? this.remaindAt,
-  );
+  }) =>
+      UiUniversalModel(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        media: media ?? this.media,
+        description: description ?? this.description,
+        tags: tags ?? this.tags,
+        baseTags: baseTags ?? this.baseTags,
+        rating: rating ?? this.rating,
+        website: website ?? this.website,
+        weekdays: weekdays ?? this.weekdays,
+        location: location ?? this.location,
+        source: source ?? this.source,
+        title: title ?? this.title,
+        isFavorite: isFavorite ?? this.isFavorite,
+        onFavoriteChanged: onFavoriteChanged ?? this.onFavoriteChanged,
+        shouldVisitAt: shouldVisitAt ?? this.shouldVisitAt,
+        weatherType: weatherType ?? this.weatherType,
+        placeName: placeName ?? this.placeName,
+        isArchieved: isArchieved ?? this.isArchieved,
+        hasNotificationSet: hasNotificationSet ?? this.hasNotificationSet,
+        cityId: cityId ?? this.cityId,
+        schedulerId: schedulerId ?? this.schedulerId,
+        remaindAt: remaindAt ?? this.remaindAt,
+      );
 }
