@@ -81,8 +81,8 @@ class _AddPromotionsComponentState extends State<AddPromotionsComponent> with Si
               UiKitCustomTabBar(
                 tabController: tabController,
                 tabs: [
-                  UiKitCustomTab(title: S.current.Place.toUpperCase(), height: 40.h),
-                  UiKitCustomTab(title: S.current.Events.toUpperCase(), height: 40.h),
+                  UiKitCustomTab(title: S.current.Place.toUpperCase(), height: 25.h),
+                  UiKitCustomTab(title: S.current.Events.toUpperCase(), height: 25.h),
                 ],
                 onTappedTab: (index) {},
               ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),

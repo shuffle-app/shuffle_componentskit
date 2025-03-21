@@ -559,6 +559,10 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 right: horizontalPadding,
                 bottom: SpacingFoundation.verticalSpacing24,
               ),
+            Text(S.current.PaymentMethod, style: theme?.boldTextTheme.title2).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
+            Text(widget.bookingUiModel.selectedPaymentTypes.map((e)=>e.name).join(', '), style: theme?.regularTextTheme.body,).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
             Text(
               '${S.of(context).Total}: ${formatDouble(_getTotalPrice)} ${widget.bookingUiModel.currency ?? 'AED'}',
               style: theme?.boldTextTheme.title2,
@@ -583,10 +587,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24),
-          Text(S.current.PaymentMethod, style: theme?.boldTextTheme.title2),
-          SpacingFoundation.verticalSpace16,
-          Text(widget.bookingUiModel.selectedPaymentTypes.map((e)=>e.name).join(', '), style: theme?.regularTextTheme.body,),
-          SpacingFoundation.verticalSpace16,
+
         ],
       ),
       bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _getTotalSubsTicketCount != 0
