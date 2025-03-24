@@ -130,7 +130,7 @@ class _PromotionScheduleComponentState extends State<PromotionScheduleComponent>
                     });
                   }
                 })
-          ]),
+          ]).paddingOnly(top: SpacingFoundation.verticalSpacing8),
         SelectOneTypeWithBottom(
           placeholderType: S.current.ShowSchedule,
           selectedItem: scheduleSetting.scheduleSettingDescription,
