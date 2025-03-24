@@ -16,7 +16,7 @@ class AudienceFormComponent extends StatefulWidget {
   final List<UiKitTag> allMindsets;
   final List<String> allDevices;
 
-  final List<String> allLanguages;
+  final List<LocaleModel> allLanguages;
   final List<String> allBirthdayTypes;
   final getPrefsForMindsetList;
 
@@ -41,12 +41,13 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
   AudienceUiModel? selectedAudience;
   bool wasSelectedTemplate = false;
 
-  List<UiKitTag> selectedGenders = [];
+  // List<UiKitTag> selectedGenders = [];
+  int? selectedGenderId;
   List<UiKitTag> selectedCategories = [];
   List<UiKitTag> selectedMindsets = [];
   List<String> selectedDevices = [];
   List<UiKitTag> selectedPrefs = [];
-  List<String> selectedLanguages = [];
+  List<LocaleModel> selectedLanguages = [];
   List<String> selectedBirthdays = [];
 
   // final TextEditingController _languageController = TextEditingController();
@@ -62,7 +63,8 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
 
   onSelectSavedAudience(AudienceUiModel audience) {
     selectedAudience = audience;
-    selectedGenders = audience.genders ?? [];
+    // selectedGenders = audience.genders ?? [];
+    selectedGenderId = audience.gender;
     selectedCategories = audience.selectedCategories ?? [];
     selectedMindsets = audience.selectedMindsets ?? [];
     selectedDevices = audience.devices ?? [];
@@ -78,7 +80,8 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
     if (!mounted) return;
     if (widget.onAudienceDrafted != null) {
       widget.onAudienceDrafted!((selectedAudience ?? AudienceUiModel()).copyWith(
-        genders: selectedGenders,
+        // genders: selectedGenders,
+        gender: selectedGenderId,
         selectedCategories: selectedCategories,
         selectedMindsets: selectedMindsets,
         devices: selectedDevices,
@@ -91,8 +94,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
     }
   }
 
-  bool get canSaveTemplate =>
-      selectedGenders.isNotEmpty && selectedMindsets.isNotEmpty && selectedCategories.isNotEmpty;
+  bool get canSaveTemplate => selectedGenderId != null && selectedMindsets.isNotEmpty;
 
   @override
   void dispose() {
@@ -138,20 +140,36 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
           children: widget.allGenders
               .map((gender) => SizedBox(
                   width: 0.4.sw,
-                  child: UiKitCheckboxFilterItem(
-                    item: TitledFilterItem(
-                        mask: gender.title, value: gender.title, selected: selectedGenders.contains(gender.title)),
-                    onTap: (selected) {
+                  child: UiKitRadioTile(
+                    title: gender.title,
+                    onTapped: () {
                       setState(() {
-                        if (!selectedGenders.remove(gender)) {
-                          selectedGenders.add(gender);
-                        }
+                        selectedGenderId = gender.id;
                       });
                     },
-                    isSelected: selectedGenders.contains(gender),
+                    selected: selectedGenderId == gender.id,
                   )))
               .toList(),
         ),
+        // Wrap(
+        //   runSpacing: SpacingFoundation.verticalSpacing4,
+        //   children: widget.allGenders
+        //       .map((gender) => SizedBox(
+        //           width: 0.4.sw,
+        //           child: UiKitCheckboxFilterItem(
+        //             item: TitledFilterItem(
+        //                 mask: gender.title, value: gender.title, selected: selectedGenders.contains(gender.title)),
+        //             onTap: (selected) {
+        //               setState(() {
+        //                 if (!selectedGenders.remove(gender)) {
+        //                   selectedGenders.add(gender);
+        //                 }
+        //               });
+        //             },
+        //             isSelected: selectedGenders.contains(gender),
+        //           )))
+        //       .toList(),
+        // ),
         SpacingFoundation.verticalSpace24,
         Text(
           S.current.Age,
@@ -204,7 +222,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
                   width: 0.4.sw,
                   child: UiKitCheckboxFilterItem(
                     item: TitledFilterItem(
-                        mask: language, value: language, selected: selectedLanguages.contains(language)),
+                        mask: language.name, value: language, selected: selectedLanguages.contains(language)),
                     onTap: (selected) {
                       setState(() {
                         if (!selectedLanguages.remove(language)) {
@@ -264,23 +282,23 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
           S.current.Information,
           style: titleStyle,
         ),
-        SpacingFoundation.verticalSpace16,
-        UiKitFieldWithTagList(
-            listUiKitTags: selectedCategories,
-            title: S.of(context).Categories,
-            onTap: () async {
-              final newTags = await context.push(TagsSelectionComponent(
-                selectedTags: selectedCategories,
-                title: S.of(context).Categories,
-                allTags: widget.allCategories,
-              ));
-              if (newTags != null) {
-                setState(() {
-                  selectedCategories.clear();
-                  selectedCategories.addAll(newTags.toSet());
-                });
-              }
-            }),
+        // SpacingFoundation.verticalSpace16,
+        // UiKitFieldWithTagList(
+        //     listUiKitTags: selectedCategories,
+        //     title: S.of(context).Categories,
+        //     onTap: () async {
+        //       final newTags = await context.push(TagsSelectionComponent(
+        //         selectedTags: selectedCategories,
+        //         title: S.of(context).Categories,
+        //         allTags: widget.allCategories,
+        //       ));
+        //       if (newTags != null) {
+        //         setState(() {
+        //           selectedCategories.clear();
+        //           selectedCategories.addAll(newTags.toSet());
+        //         });
+        //       }
+        //     }),
         SpacingFoundation.verticalSpace16,
         UiKitFieldWithTagList(
             listUiKitTags: selectedMindsets,
@@ -331,7 +349,8 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
                               title: '${S.current.Save} ${S.current.Audience.toLowerCase()}', onConfirmTap: () {
                             final audience = AudienceUiModel(
                               title: titleController.text,
-                              genders: selectedGenders,
+                              gender: selectedGenderId,
+                              // genders: selectedGenders,
                               fromAge: selectedAgeFrom,
                               toAge: selectedAgeTo,
                               languages: selectedLanguages,

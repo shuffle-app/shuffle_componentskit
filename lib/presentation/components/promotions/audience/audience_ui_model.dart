@@ -4,9 +4,10 @@ class AudienceUiModel {
   final int? id;
   final String? title;
   final List<UiKitTag>? genders;
+  final int? gender;
   final int? fromAge;
   final int? toAge;
-  final List<String>? languages;
+  final List<LocaleModel>? languages;
   final List<String>? devices;
   final List<String>? birthdayOptions;
   final List<UiKitTag>? selectedCategories;
@@ -17,6 +18,7 @@ class AudienceUiModel {
     this.id,
     this.title,
     this.genders,
+    this.gender,
     this.fromAge,
     this.toAge,
     this.languages,
@@ -31,9 +33,10 @@ class AudienceUiModel {
     int? id,
     String? title,
     List<UiKitTag>? genders,
+    int? gender,
     int? fromAge,
     int? toAge,
-    List<String>? languages,
+    List<LocaleModel>? languages,
     List<String>? devices,
     List<String>? birthdayOptions,
     List<UiKitTag>? selectedCategories,
@@ -44,6 +47,7 @@ class AudienceUiModel {
         id: id ?? this.id,
         title: title ?? this.title,
         genders: genders ?? this.genders,
+        gender: gender ?? this.gender,
         fromAge: fromAge ?? this.fromAge,
         toAge: toAge ?? this.toAge,
         languages: languages ?? this.languages,
@@ -60,10 +64,26 @@ class AudienceUiModel {
   @override
   int get hashCode => id?.hashCode ?? 0;
 
+  bool isIdentical(AudienceUiModel other) {
+    return id == other.id &&
+        title == other.title &&
+        genders == other.genders &&
+        gender == other.gender &&
+        fromAge == other.fromAge &&
+        toAge == other.toAge &&
+        languages == other.languages &&
+        devices == other.devices &&
+        birthdayOptions == other.birthdayOptions &&
+        selectedCategories == other.selectedCategories &&
+        selectedMindsets == other.selectedMindsets &&
+        selectedPrefs == other.selectedPrefs;
+  }
+
   Map<String, dynamic> toMap() => {
         'id': id,
         'title': title,
         'genders': genders?.map((tag) => tag.toMap()).toList(),
+        'gender': gender,
         'fromAge': fromAge,
         'toAge': toAge,
         'languages': languages,
@@ -78,6 +98,7 @@ class AudienceUiModel {
         id: map['id'],
         title: map['title'],
         genders: map['genders']?.map<UiKitTag>((item) => UiKitTag.fromMap(item)).toList(),
+        gender: map['gender'],
         fromAge: map['fromAge'],
         toAge: map['toAge'],
         languages: map['languages']?.map<String>((e) => e as String).toList(),

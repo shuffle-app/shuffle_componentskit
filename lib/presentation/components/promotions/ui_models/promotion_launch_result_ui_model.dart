@@ -4,7 +4,7 @@ class PromotionLaunchResultUiModel {
   final int toDayCount;
   final int yesterdayCount;
 
-  PromotionLaunchResultUiModel({
+  const PromotionLaunchResultUiModel({
     required this.title,
     this.popOverText,
     this.toDayCount = 0,

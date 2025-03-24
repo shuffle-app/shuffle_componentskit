@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
+import '../widgets/card_list_widget.dart';
 import 'select_one_type_with_bottom.dart';
 import 'select_template_type.dart';
 
@@ -381,7 +382,7 @@ class UiScheduleTimeModel extends UiScheduleModel {
     return StatefulBuilder(builder: (context, setState) {
       final MapEntry<String, List<TimeOfDay>> thisObject =
           weeklySchedule.isNotEmpty && weeklySchedule.length > index ? weeklySchedule[index] : const MapEntry('', []);
-      return _CardListWrapper(
+      return CardListWidget(
         children: [
           UiKitAddableFormField(
             title: S.current.TimeRange,
@@ -532,7 +533,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
     return StatefulBuilder(builder: (context, setState) {
       final MapEntry<String, List<TimeOfDay>> thisObject =
           dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
-      return _CardListWrapper(children: [
+      return CardListWidget(children: [
         UiKitAddableFormField(
             title: S.current.Date,
             onAdd: () {
@@ -765,7 +766,7 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
           dailySchedule.isNotEmpty && dailySchedule.length > index ? dailySchedule[index] : const MapEntry('', []);
       log('rebuild is here $thisObject', name: 'UiScheduleDatesRangeModel');
       final now = DateTime.now();
-      return _CardListWrapper(children: [
+      return CardListWidget(children: [
         UiKitAddableFormField(
             title: S.current.DateRange,
             onAdd: () {
@@ -1030,39 +1031,6 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
     final newSchedule = UiScheduleDatesRangeModel(dailySchedule.where((element) => element.key.isNotEmpty).toList());
     newSchedule.templateName = templateName;
     return newSchedule;
-  }
-}
-
-class _CardListWrapper extends StatelessWidget {
-  final List<Widget> children;
-
-  const _CardListWrapper({required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.uiKitTheme;
-
-    return UiKitCardWrapper(
-        padding: EdgeInsets.symmetric(
-            horizontal: SpacingFoundation.horizontalSpacing16, vertical: SpacingFoundation.verticalSpacing16),
-        borderRadius: BorderRadiusFoundation.all24,
-        color: theme?.colorScheme.surface1,
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: children.wrapChildrenSeparator(SpacingFoundation.verticalSpace8)));
-  }
-}
-
-extension WrapChildrenSeparator on List<Widget> {
-  List<Widget> wrapChildrenSeparator(Widget separator) {
-    final result = <Widget>[];
-    for (var i = 0; i < length; i++) {
-      result.add(this[i]);
-      if (i != length - 1) {
-        result.add(separator);
-      }
-    }
-    return result;
   }
 }
 
