@@ -857,7 +857,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 textAlign: TextAlign.center,
               )
             ],
-            if (_placeToEdit.bookingUiModel == null) SpacingFoundation.verticalSpace24,
+             SpacingFoundation.verticalSpace24,
             SafeArea(
               top: false,
               child: context.gradientButton(

@@ -838,7 +838,7 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
               textAlign: TextAlign.center,
             ),
           ],
-          if (_eventToEdit.bookingUiModel == null) SpacingFoundation.verticalSpace24,
+          SpacingFoundation.verticalSpace24,
           SafeArea(
             top: false,
             child: context.gradientButton(
