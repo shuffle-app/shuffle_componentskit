@@ -182,6 +182,8 @@ export 'promotions/add_promotions/add_promotions_component.dart';
 export 'promotions/promotions_component.dart';
 export 'promotions/audience/audience_ui_model.dart';
 export 'promotions/audience/audience_form_component.dart';
+export 'promotions/budget/budget_ui_model.dart';
+export 'promotions/budget/promo_budget_creation_component.dart';
 export 'promotions/info_promotion_component.dart';
 export 'promotions/schedule/promotion_schedule_component.dart';
 export 'promotions/schedule/promotion_schedule_ui_model.dart';

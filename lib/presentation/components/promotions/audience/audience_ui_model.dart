@@ -65,19 +65,21 @@ class AudienceUiModel {
   int get hashCode => id?.hashCode ?? 0;
 
   bool isIdentical(AudienceUiModel other) {
-    return id == other.id &&
-        title == other.title &&
-        genders == other.genders &&
+    return (genders ?? []).every((e) => (other.genders ?? []).contains(e)) &&
         gender == other.gender &&
         fromAge == other.fromAge &&
         toAge == other.toAge &&
-        languages == other.languages &&
-        devices == other.devices &&
-        birthdayOptions == other.birthdayOptions &&
-        selectedCategories == other.selectedCategories &&
-        selectedMindsets == other.selectedMindsets &&
-        selectedPrefs == other.selectedPrefs;
+        (languages ?? []).every((e) => (other.languages ?? []).contains(e)) &&
+        (devices ?? []).every((e) => (other.devices ?? []).contains(e)) &&
+        (birthdayOptions ?? []).every((e) => (other.birthdayOptions ?? []).contains(e)) &&
+        // selectedCategories == other.selectedCategories &&
+        (selectedMindsets ?? []).every((e) => (other.selectedMindsets ?? []).contains(e)) &&
+        (selectedPrefs ?? []).every((e) => (other.selectedPrefs ?? []).contains(e));
   }
+
+  @override
+  String toString() =>
+      'AudienceUiModel{id: $id, title: $title, genders: $genders, gender: $gender, fromAge: $fromAge, toAge: $toAge, languages: $languages, devices: $devices, birthdayOptions: $birthdayOptions, selectedCategories: $selectedCategories, selectedMindsets: $selectedMindsets, selectedPrefs: $selectedPrefs}';
 
   Map<String, dynamic> toMap() => {
         'id': id,
