@@ -47,7 +47,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
     super.initState();
     _universalNotOfferRemUiModel = widget.universalNotOfferRemUiModel ?? UniversalNotOfferRemUiModel(id: -1);
     _titleController.text = widget.universalNotOfferRemUiModel?.title ?? '';
-    _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? true;
+    _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? false;
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
     _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
     _iconsList = widget.iconsList?.values.toList() ?? [];
@@ -68,7 +68,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
   void didUpdateWidget(covariant CreateNotificationOrRemind oldWidget) {
     _universalNotOfferRemUiModel = widget.universalNotOfferRemUiModel ?? UniversalNotOfferRemUiModel(id: -1);
     _titleController.text = widget.universalNotOfferRemUiModel?.title ?? '';
-    _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? true;
+    _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? false;
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
     _selectedDates.clear();
     _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
@@ -132,7 +132,8 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
         autoImplyLeading: true,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
         children: [
-          if (widget.universalNotOfferRemUiModel != null)
+          if (widget.universalNotOfferRemUiModel != null &&
+              widget.universalNotOfferRemUiModel?.status == TicketIssueStatus.paid)
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
