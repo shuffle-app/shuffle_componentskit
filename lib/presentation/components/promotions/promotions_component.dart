@@ -11,10 +11,12 @@ class PromotionsComponent extends StatelessWidget {
   final VoidCallback? onCreatePromo;
   final ValueChanged<int>? onActivateTap;
   final GlobalKey<SliverAnimatedListState> listKey;
+  final ValueChanged<int>? onPayTap;
 
   /// Need for empty [listPromotion]
   final bool isPlace;
   final String? typeOfContent;
+
 
   const PromotionsComponent({
     super.key,
@@ -28,6 +30,7 @@ class PromotionsComponent extends StatelessWidget {
     this.onActivateTap,
     this.isPlace = false,
     this.typeOfContent,
+    this.onPayTap,
   });
 
   @override
@@ -46,6 +49,7 @@ class PromotionsComponent extends StatelessWidget {
         customWhatCreate: S.of(context).CreateAPromotionForYourXAndIncreaseAttendance(
               '${isPlace ? S.of(context).PlacePromo.toLowerCase() : S.of(context).EventPromo.toLowerCase()} ${typeOfContent?.toLowerCase()} ${placeOrEventName}',
             ),
+        onPayTap: onPayTap,
       ),
     );
   }
