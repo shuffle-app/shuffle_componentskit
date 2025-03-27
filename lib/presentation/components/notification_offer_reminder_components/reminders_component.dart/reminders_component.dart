@@ -8,8 +8,9 @@ class RemindersComponent extends StatefulWidget {
   final List<UniversalNotOfferRemUiModel> bookingReminders;
   final List<UniversalNotOfferRemUiModel> favoriteReminders;
   final ValueChanged<int?>? onEditReminder;
-  final Future Function(int?)? onRemoveReminder;
   final Future Function()? onCreateReminder;
+  final Future Function(int?)? onRemoveReminder;
+  final Future Function(int?)? onPayTap;
   final GlobalKey<SliverAnimatedListState> bookingListKey;
   final GlobalKey<SliverAnimatedListState> favoriteListKey;
   final ValueChanged<int>? onTabChange;
@@ -24,6 +25,7 @@ class RemindersComponent extends StatefulWidget {
     required this.favoriteReminders,
     this.onEditReminder,
     this.onRemoveReminder,
+    this.onPayTap,
     this.onCreateReminder,
     this.onTabChange,
     this.selectedTabIndex = 0,
@@ -158,6 +160,10 @@ class _RemindersComponentState extends State<RemindersComponent> with SingleTick
                     editingItemId: editingItemId,
                     placeOrEventName: widget.placeOrEventName,
                     onTapOutside: () => _onTapOutside(),
+                    onPayTap: (id) async {
+                      await widget.onPayTap?.call(id);
+                      setState(() {});
+                    },
                     onDismissed: (id) async {
                       await widget.onRemoveReminder?.call(id);
                       setState(() {});
@@ -178,6 +184,10 @@ class _RemindersComponentState extends State<RemindersComponent> with SingleTick
                     editingItemId: editingItemId,
                     placeOrEventName: widget.placeOrEventName,
                     onTapOutside: () => _onTapOutside(),
+                    onPayTap: (id) async {
+                      await widget.onPayTap?.call(id);
+                      setState(() {});
+                    },
                     onDismissed: (id) async {
                       await widget.onRemoveReminder?.call(id);
                       setState(() {});
@@ -190,79 +200,6 @@ class _RemindersComponentState extends State<RemindersComponent> with SingleTick
                       _onLongPress(id);
                     },
                   ),
-                  // CustomScrollView(
-                  //   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  //   slivers: [
-                  //     if (widget.favoriteReminders.isEmpty)
-                  //       UiKitCardWrapper(
-                  //         borderRadius: BorderRadiusFoundation.all24r,
-                  //         child: Row(
-                  //           children: [
-                  //             Flexible(
-                  //               flex: 3,
-                  //               child: Text(
-                  //                 S.of(context).CreateNewXForYourY(
-                  //                       S.of(context).Remainder,
-                  //                       widget.placeOrEventName ?? S.of(context).Place.toLowerCase(),
-                  //                     ),
-                  //                 style: theme?.boldTextTheme.body,
-                  //               ),
-                  //             ),
-                  //             Flexible(
-                  //               child: ImageWidget(
-                  //                 height: 60.h,
-                  //                 fit: BoxFit.fitHeight,
-                  //                 link: GraphicsFoundation.instance.png.indexFingerHands.path,
-                  //               ),
-                  //             )
-                  //           ],
-                  //         ).paddingAll(EdgeInsetsFoundation.all16),
-                  //       ).paddingOnly(top: SpacingFoundation.verticalSpacing16).wrapSliverBox
-                  //     else
-                  //       SliverAnimatedList(
-                  //         key: widget.favoriteListKey,
-                  //         initialItemCount: widget.favoriteReminders.length,
-                  //         itemBuilder: (context, index, animation) {
-                  //           final reminder = widget.favoriteReminders[index];
-                  //           final isItemEditing = editingItemId == reminder.id;
-
-                  //           return ScaleTransition(
-                  //             alignment: Alignment.topRight,
-                  //             scale: animation,
-                  //             child: GestureDetector(
-                  //               onTap: () {
-                  //                 _onTapOutside();
-                  //               },
-                  //               onLongPress: () {
-                  //                 _onLongPress(reminder.id);
-                  //               },
-                  //               child: TapRegion(
-                  //                 onTapOutside: (_) {
-                  //                   if (isItemEditing) {
-                  //                     _onTapOutside();
-                  //                   }
-                  //                 },
-                  //                 child: UniversalNotOfferRemItemWidget(
-                  //                   model: reminder,
-                  //                   onDismissed: () async {
-                  //                     await widget.onRemoveReminder?.call(reminder.id);
-                  //                     setState(() {});
-                  //                   },
-                  //                   onEdit: () {
-                  //                     widget.onEditReminder?.call(reminder.id);
-                  //                     editingItemId = null;
-                  //                   },
-                  //                   onLongPress: () => _onLongPress(reminder.id),
-                  //                   // onPayTap: () => widget.onPayTap?.call(offer.id),
-                  //                   isEditingMode: isItemEditing,
-                  //                 ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
-                  //               ),
-                  //             ),
-                  //           );
-                  //         },
-                  //       ),
-                  //   ],
-                  // ),
                 ],
               ),
             )
@@ -283,6 +220,7 @@ class ReminderAnimatedList extends StatelessWidget {
   final ValueChanged<int>? onDismissed;
   final ValueChanged<int>? onEditing;
   final ValueChanged<int>? onLongPress;
+  final ValueChanged<int>? onPayTap;
 
   const ReminderAnimatedList({
     super.key,
@@ -294,6 +232,7 @@ class ReminderAnimatedList extends StatelessWidget {
     this.onDismissed,
     this.onEditing,
     this.onLongPress,
+    this.onPayTap,
   });
 
   @override
@@ -353,7 +292,7 @@ class ReminderAnimatedList extends StatelessWidget {
                       onDismissed: () => onDismissed?.call(reminder.id),
                       onEdit: () => onEditing?.call(reminder.id),
                       onLongPress: () => onLongPress?.call(reminder.id),
-                      // onPayTap: () => widget.onPayTap?.call(offer.id),
+                      onPayTap: () => onPayTap?.call(reminder.id),
                       isEditingMode: isItemEditing,
                     ).paddingOnly(bottom: SpacingFoundation.verticalSpacing16),
                   ),

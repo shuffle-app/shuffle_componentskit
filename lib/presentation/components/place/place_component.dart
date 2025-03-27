@@ -353,28 +353,31 @@ class _PlaceComponentState extends State<PlaceComponent> {
           ],
         ),
         if (widget.showOfferButton)
-          Row(
-            children: [
-              Expanded(
-                child: UiKitPersonalToolInContentCard(
-                  text: S.of(context).CreateAUSP(widget.priceForOffer ?? 5),
-                  group: _personalToolInContentCardGroup,
-                  onTap: widget.onOfferButtonTap,
+          SizedBox(
+            height: 0.383.sw,
+            child: Row(
+              children: [
+                Expanded(
+                  child: UiKitPersonalToolInContentCard(
+                    text: S.of(context).CreateAUSP(widget.priceForOffer ?? 5),
+                    group: _personalToolInContentCardGroup,
+                    onTap: widget.onOfferButtonTap,
+                  ),
                 ),
-              ),
-              SpacingFoundation.horizontalSpace16,
-              Expanded(
-                child: UiKitPersonalToolInContentCard(
-                  group: _personalToolInContentCardGroup,
-                  text: S.of(context).SetUpARefresherForX(widget.priceForRefresher ?? 1),
-                  onTap: widget.onRefresherButtonTap,
+                SpacingFoundation.horizontalSpace16,
+                Expanded(
+                  child: UiKitPersonalToolInContentCard(
+                    group: _personalToolInContentCardGroup,
+                    text: S.of(context).SetUpARefresherForX(widget.priceForRefresher ?? 1),
+                    onTap: widget.onRefresherButtonTap,
+                  ),
                 ),
-              ),
-            ],
-          ).paddingOnly(
-            left: horizontalMargin,
-            right: horizontalMargin,
-            bottom: SpacingFoundation.verticalSpacing24,
+              ],
+            ).paddingOnly(
+              left: horizontalMargin,
+              right: horizontalMargin,
+              bottom: SpacingFoundation.verticalSpacing24,
+            ),
           ),
         if (widget.bookingNotifier != null)
           ListenableBuilder(
