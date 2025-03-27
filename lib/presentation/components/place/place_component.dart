@@ -254,31 +254,29 @@ class _PlaceComponentState extends State<PlaceComponent> {
         TitleWithAvatar(
           title: widget.place.title,
           avatarUrl: widget.place.logo,
-          horizontalMargin: horizontalMargin,
-          trailing: widget.isEligibleForEdit
-              ? IconButton(
-                  icon: ImageWidget(
-                    link: GraphicsFoundation.instance.svg.pencil.path,
-                    height: 20.h,
-                    color: theme?.colorScheme.inversePrimary,
-                    fit: BoxFit.fitHeight,
-                  ),
-                  onPressed: () => widget.onEditPressed?.call(),
-                )
-              : UiKitPopUpMenuButton.optionWithIcon(options: [
-                  UiKitPopUpMenuButtonOption(
-                    title: S.of(context).Share,
-                    icon: ShuffleUiKitIcons.share,
-                    value: 'share',
-                    onTap: widget.onSharePressed,
-                  ),
-                  UiKitPopUpMenuButtonOption(
-                    title: S.of(context).AddToScheduler,
-                    icon: ShuffleUiKitIcons.calendar,
-                    value: 'addToScheduler',
-                    onTap: widget.onAddToSchedulerPressed,
-                  ),
-                ]),
+          horizontalMargin: SpacingFoundation.horizontalSpacing8,
+          trailing: UiKitPopUpMenuButton.optionWithIcon(options: [
+            UiKitPopUpMenuButtonOption(
+              title: S.of(context).Share,
+              icon: ShuffleUiKitIcons.share,
+              value: 'share',
+              onTap: widget.onSharePressed,
+            ),
+            if (widget.isEligibleForEdit)
+              UiKitPopUpMenuButtonOption(
+                title: S.current.Edit,
+                icon: ShuffleUiKitIcons.pencil,
+                value: 'edit',
+                onTap: () => widget.onEditPressed?.call(),
+              )
+            else
+              UiKitPopUpMenuButtonOption(
+                title: S.of(context).AddToScheduler,
+                icon: ShuffleUiKitIcons.calendar,
+                value: 'addToScheduler',
+                onTap: widget.onAddToSchedulerPressed,
+              ),
+          ]),
         ),
         if (widget.place.archived) ...[
           SpacingFoundation.verticalSpace8,
