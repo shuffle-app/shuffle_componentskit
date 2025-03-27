@@ -51,6 +51,7 @@ class _AddPromotionsComponentState extends State<AddPromotionsComponent> with Si
         ),
       ),
       autoImplyLeading: true,
+      centerTitle: true,
       physics: NeverScrollableScrollPhysics(),
       children: widget.isPro
           ? widget.placesOrEvents.where((e) => !e.isPlace).isNotEmpty

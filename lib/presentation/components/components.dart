@@ -190,3 +190,5 @@ export 'promotions/schedule/promotion_schedule_ui_model.dart';
 export 'promotions/ui_models/promotion_launch_result_ui_model.dart';
 export 'promotions/widgets/custom_title_widget_promo.dart';
 export 'promotions/widgets/speedometer_painter.dart';
+export 'promotions/widgets/feeling_select_grid.dart';
+export 'promotions/widgets/city_multiple_choice_widget.dart';

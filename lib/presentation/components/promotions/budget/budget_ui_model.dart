@@ -18,4 +18,7 @@ class BudgetUiModel {
         averageCpc: averageCpc ?? this.averageCpc,
         generalBudget: generalBudget ?? this.generalBudget,
       );
+
+  @override
+  String toString() => 'BudgetUiModel{id: $id, dailyBudget: $dailyBudget, averageCpc: $averageCpc, generalBudget: $generalBudget}';
 }

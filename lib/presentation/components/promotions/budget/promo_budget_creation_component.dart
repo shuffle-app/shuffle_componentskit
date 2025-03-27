@@ -24,9 +24,16 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
 
   _updateBudget() {
     widget.onBudgetDrafted.call(BudgetUiModel(
-        dailyBudget: _dailyBudgetController.text.isEmpty ? null : int.tryParse(_dailyBudgetController.text),
-        averageCpc: _cpcBudgetController.text.isEmpty ? null : double.tryParse(_cpcBudgetController.text),
-        generalBudget: _totalBudgetController.text.isEmpty ? null : int.tryParse(_totalBudgetController.text)));
+        dailyBudget: _dailyBudgetController.text.isEmpty
+            ? null
+            : int.tryParse(_dailyBudgetController.text.replaceAll('\$', '').replaceAll(' ', '').trim()),
+        averageCpc: _cpcBudgetController.text.isEmpty
+            ? null
+            : double.tryParse(
+                _cpcBudgetController.text.replaceAll(',', '.').replaceAll('\$', '').replaceAll(' ', '').trim()),
+        generalBudget: _totalBudgetController.text.isEmpty
+            ? null
+            : int.tryParse(_totalBudgetController.text.replaceAll('\$', '').replaceAll(' ', '').trim())));
   }
 
   @override
@@ -44,7 +51,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
     return BlurredAppBarPage(
       autoImplyLeading: true,
       centerTitle: true,
-      title: 'Budget',
+      title: S.current.BudgetLabel,
       childrenPadding: EdgeInsets.symmetric(
           horizontal: SpacingFoundation.horizontalSpacing12, vertical: SpacingFoundation.verticalSpacing4),
       children: [
@@ -52,7 +59,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
         UiKitWrappedInputField.uiKitInputFieldNoIcon(
           enabled: true,
           label: Text(
-            'Daily budget',
+            S.current.DailyBudget,
             style: labelStyle,
           ),
           hintText: '50 \$',
@@ -61,6 +68,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
           // validator: widget.credentialsValidator,
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.next,
+          inputFormatters: [PriceWithSpacesFormatter(currency: '\$')],
         ),
         SpacingFoundation.verticalSpace2,
         UiKitWrappedInputField.uiKitInputFieldNoIcon(
@@ -69,7 +77,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Average\nCPC',
+                S.current.AverageCPC,
                 style: labelStyle,
               ),
               Builder(
@@ -92,7 +100,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
                 ),
               ),
               Text(
-                'Recommended\n0.20\$',
+                '${S.current.Recommended}\n0.20\$',
                 style: captionStyle,
                 textAlign: TextAlign.end,
               ),
@@ -101,6 +109,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
           hintText: '0.20 \$',
           controller: _cpcBudgetController,
           fillColor: colorScheme?.surface3,
+          inputFormatters: [PriceWithSpacesFormatter(currency: '\$')],
           // validator: widget.credentialsValidator,
           keyboardType: TextInputType.numberWithOptions(decimal: true),
           textInputAction: TextInputAction.next,
@@ -109,7 +118,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
         UiKitWrappedInputField.uiKitInputFieldNoIcon(
           enabled: true,
           label: Text(
-            'General budget constraint',
+            S.current.GeneralBudget,
             style: labelStyle,
           ),
           hintText: '1000 \$',
@@ -118,6 +127,7 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
           // validator: widget.credentialsValidator,
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.next,
+          inputFormatters: [PriceWithSpacesFormatter(currency: '\$')],
         ),
       ],
     );
