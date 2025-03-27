@@ -233,7 +233,7 @@ class _CreateOfferState extends State<CreateOffer> {
             UiKitSelectDateWidget(
               selectableDayPredicate: widget.selectableDayPredicate,
               selectedDates: _selectedDates,
-              dateToWord: true,
+              dateToWord: false,
               onCalenderTap: () async {
                 _selectedDates.clear();
                 final dates = await showDateRangePickerDialog(context);
