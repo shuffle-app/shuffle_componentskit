@@ -16,6 +16,7 @@ class UniversalNotOfferRemUiModel {
   final TicketIssueStatus? status;
   final String? imagePath;
   final bool isPromo;
+  final String? type;
 
   const UniversalNotOfferRemUiModel({
     required this.id,
@@ -32,6 +33,7 @@ class UniversalNotOfferRemUiModel {
     this.status,
     this.imagePath,
     this.isPromo = false,
+    this.type,
   });
 
   UniversalNotOfferRemUiModel copyWith({
@@ -49,6 +51,7 @@ class UniversalNotOfferRemUiModel {
     TicketIssueStatus? status,
     String? imagePath,
     bool? isPromo,
+    String? type,
   }) {
     return UniversalNotOfferRemUiModel(
       id: id ?? this.id,
@@ -65,6 +68,7 @@ class UniversalNotOfferRemUiModel {
       status: status ?? this.status,
       imagePath: imagePath ?? this.imagePath,
       isPromo: isPromo ?? this.isPromo,
+      type: type ?? this.type,
     );
   }
 
@@ -92,7 +96,8 @@ class UniversalNotOfferRemUiModel {
         other.isOffer == isOffer &&
         other.iconId == iconId &&
         other.imagePath == imagePath &&
-        other.isPromo == isPromo;
+        other.isPromo == isPromo &&
+        other.type == type;
   }
 
   @override
@@ -108,7 +113,8 @@ class UniversalNotOfferRemUiModel {
         isOffer.hashCode +
         iconId.hashCode +
         imagePath.hashCode +
-        isPromo.hashCode;
+        isPromo.hashCode +
+        type.hashCode;
   }
 
   @override

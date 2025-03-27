@@ -1,13 +1,18 @@
+// ignore_for_file: implementation_imports
+
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/src/iterable_extensions.dart';
 
 class CreateNotificationOrRemind extends StatefulWidget {
   final bool isNotification;
   final UniversalNotOfferRemUiModel? universalNotOfferRemUiModel;
   final ValueChanged<UniversalNotOfferRemUiModel>? onCreate;
   final bool Function(DateTime)? selectableDayPredicate;
+  final Map<int, String>? iconsList;
+  final bool isOneDate;
 
   const CreateNotificationOrRemind({
     super.key,
@@ -15,6 +20,8 @@ class CreateNotificationOrRemind extends StatefulWidget {
     this.universalNotOfferRemUiModel,
     this.onCreate,
     this.selectableDayPredicate,
+    this.iconsList,
+    this.isOneDate = false,
   });
 
   @override
@@ -32,8 +39,8 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
 
   late bool _isLaunched;
 
-  late int? _selectedIconIndex;
-  final List<String> _iconList = [];
+  int? _selectedIconIndex;
+  late List<String> _iconsList;
 
   @override
   void initState() {
@@ -43,11 +50,18 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
     _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? true;
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
     _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
-    for (var element in GraphicsFoundation.instance.png.reminder.values) {
-      _iconList.add(element.path);
-    }
-    _selectedIconIndex =
-        _iconList.indexWhere((element) => element == (widget.universalNotOfferRemUiModel?.iconPath ?? 0));
+    _iconsList = widget.iconsList?.values.toList() ?? [];
+    _iconsList.firstWhereIndexedOrNull(
+      (index, element) {
+        if (element == widget.universalNotOfferRemUiModel?.iconPath) {
+          _selectedIconIndex = index;
+          return true;
+        } else {
+          _selectedIconIndex = null;
+          return false;
+        }
+      },
+    );
   }
 
   @override
@@ -58,19 +72,40 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
     _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
     _selectedDates.clear();
     _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
-    for (var element in GraphicsFoundation.instance.png.reminder.values) {
-      _iconList.add(element.path);
-    }
-    _selectedIconIndex =
-        _iconList.indexWhere((element) => element == (widget.universalNotOfferRemUiModel?.iconPath ?? 0));
+    _iconsList = widget.iconsList?.values.toList() ?? [];
+    _iconsList.firstWhereIndexedOrNull(
+      (index, element) {
+        if (element == widget.universalNotOfferRemUiModel?.iconPath) {
+          _selectedIconIndex = index;
+          return true;
+        } else {
+          _selectedIconIndex = null;
+          return false;
+        }
+      },
+    );
     super.didUpdateWidget(oldWidget);
   }
 
   void _onSubmit() {
     if (_formKey.currentState != null && _formKey.currentState!.validate() && _selectedDates.first != null) {
+      late final String? iconPath;
+      late final int? iconId;
+
+      if (_selectedIconIndex != null) {
+        iconPath = _iconsList[_selectedIconIndex!];
+        iconId = widget.iconsList!.keys.firstWhereOrNull(
+          (k) => widget.iconsList?[k] == _iconsList[_selectedIconIndex!],
+        );
+      } else {
+        iconPath = null;
+        iconId = null;
+      }
+
       _universalNotOfferRemUiModel = _universalNotOfferRemUiModel.copyWith(
         title: _titleController.text.trim(),
-        iconPath: (_selectedIconIndex == -1 || _selectedIconIndex == null) ? null : _iconList[_selectedIconIndex!],
+        iconId: iconId,
+        iconPath: iconPath,
         isLaunched: _isLaunched,
         selectedDates: _selectedDates,
         isLaunchedDate: _isLaunchedDate ?? DateTime.now(),
@@ -159,38 +194,54 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
           UiKitSelectDateWidget(
             selectedDates: _selectedDates,
             selectableDayPredicate: widget.selectableDayPredicate,
-            dateToWord: true,
+            isOneDate: widget.isOneDate,
             onCalenderTap: () async {
               _selectedDates.clear();
-              final dates = await showDateRangePickerDialog(context);
+              if (widget.isOneDate) {
+                final today = DateTime.now();
 
-              if (dates != null) {
-                final DateTime now = DateTime.now();
-                final List<DateTime> generateDateList = generateDateRange([dates.start, dates.end]);
+                final DateTime? date = await showDatePicker(
+                  context: context,
+                  firstDate: today.add(const Duration(days: 1)),
+                  lastDate: today.add(const Duration(days: 60)),
+                  selectableDayPredicate: widget.selectableDayPredicate,
+                );
 
-                if (generateDateList.isEmpty) {
-                  setState(() {
-                    _selectedDates.add(null);
-                  });
-                } else if (widget.selectableDayPredicate != null &&
-                    !generateDateList.any((element) => widget.selectableDayPredicate!(element))) {
-                  setState(() {
-                    _selectedDates.add(null);
-                  });
-                } else if ((!dates.start.isBefore(now)) ||
-                    (((!dates.start.isBefore(now) || dates.start.isAtSameDay) && !dates.end.isBefore(now))) ||
-                    (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
-                  setState(() {
-                    _selectedDates.addAll([dates.start, dates.end]);
-                  });
-                } else if (dates.start.isAtSameDayAs(dates.end)) {
-                  setState(() {
-                    _selectedDates.addAll([dates.start]);
-                  });
-                } else {
-                  setState(() {
-                    _selectedDates.add(null);
-                  });
+                if (date != null) {
+                  _selectedDates.addAll([date]);
+                  setState(() {});
+                }
+              } else {
+                final dates = await showDateRangePickerDialog(context);
+
+                if (dates != null) {
+                  final DateTime now = DateTime.now();
+                  final List<DateTime> generateDateList = generateDateRange([dates.start, dates.end]);
+
+                  if (generateDateList.isEmpty) {
+                    setState(() {
+                      _selectedDates.add(null);
+                    });
+                  } else if (widget.selectableDayPredicate != null &&
+                      !generateDateList.any((element) => widget.selectableDayPredicate!(element))) {
+                    setState(() {
+                      _selectedDates.add(null);
+                    });
+                  } else if ((!dates.start.isBefore(now)) ||
+                      (((!dates.start.isBefore(now) || dates.start.isAtSameDay) && !dates.end.isBefore(now))) ||
+                      (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
+                    setState(() {
+                      _selectedDates.addAll([dates.start, dates.end]);
+                    });
+                  } else if (dates.start.isAtSameDayAs(dates.end)) {
+                    setState(() {
+                      _selectedDates.addAll([dates.start]);
+                    });
+                  } else {
+                    setState(() {
+                      _selectedDates.add(null);
+                    });
+                  }
                 }
               }
             },
@@ -203,7 +254,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
             ),
             SpacingFoundation.verticalSpace2,
             UiKitSelectedIconWidget(
-              iconList: _iconList,
+              iconList: _iconsList,
               onIconTap: (index) {
                 setState(() {
                   if (_selectedIconIndex != index) {
