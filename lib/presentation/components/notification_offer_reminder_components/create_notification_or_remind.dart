@@ -66,24 +66,26 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
 
   @override
   void didUpdateWidget(covariant CreateNotificationOrRemind oldWidget) {
-    _universalNotOfferRemUiModel = widget.universalNotOfferRemUiModel ?? UniversalNotOfferRemUiModel(id: -1);
-    _titleController.text = widget.universalNotOfferRemUiModel?.title ?? '';
-    _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? false;
-    _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
-    _selectedDates.clear();
-    _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
-    _iconsList = widget.iconsList?.values.toList() ?? [];
-    _iconsList.firstWhereIndexedOrNull(
-      (index, element) {
-        if (element == widget.universalNotOfferRemUiModel?.iconPath) {
-          _selectedIconIndex = index;
-          return true;
-        } else {
-          _selectedIconIndex = null;
-          return false;
-        }
-      },
-    );
+    if (oldWidget.universalNotOfferRemUiModel != widget.universalNotOfferRemUiModel) {
+      _universalNotOfferRemUiModel = widget.universalNotOfferRemUiModel ?? UniversalNotOfferRemUiModel(id: -1);
+      _titleController.text = widget.universalNotOfferRemUiModel?.title ?? '';
+      _isLaunched = widget.universalNotOfferRemUiModel?.isLaunched ?? false;
+      _isLaunchedDate = widget.universalNotOfferRemUiModel?.isLaunchedDate;
+      _selectedDates.clear();
+      _selectedDates.addAll(widget.universalNotOfferRemUiModel?.selectedDates?.toList() ?? [null]);
+      _iconsList = widget.iconsList?.values.toList() ?? [];
+      _iconsList.firstWhereIndexedOrNull(
+        (index, element) {
+          if (element == widget.universalNotOfferRemUiModel?.iconPath) {
+            _selectedIconIndex = index;
+            return true;
+          } else {
+            _selectedIconIndex = null;
+            return false;
+          }
+        },
+      );
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -253,7 +255,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
               S.of(context).PersonalizeYourReminder,
               style: theme?.regularTextTheme.labelSmall,
             ),
-            SpacingFoundation.verticalSpace2,
+            SpacingFoundation.verticalSpace8,
             UiKitSelectedIconWidget(
               iconList: _iconsList,
               onIconTap: (index) {
