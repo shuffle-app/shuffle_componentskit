@@ -144,7 +144,7 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                                 child: Text(
                                   model.isLaunched
                                       ? S.of(context).Launched
-                                      : DateTime.now().isBefore(model.isLaunchedDate!)
+                                      : DateTime.now().isBefore(model.isLaunchedDate ?? DateTime.now().toLocal())
                                           ? S.of(context).Pending
                                           : S.of(context).Expired,
                                   style: caption4Muted,
