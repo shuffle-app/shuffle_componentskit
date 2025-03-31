@@ -20,6 +20,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
   final Set<UiKitTag> _tags = {};
   final Set<UiKitTag> _allTags = {};
   final TextEditingController _controller = TextEditingController();
+  final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
 
   @override
   void initState() {
@@ -104,6 +105,7 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
                       (e) => UiKitCompactTextCard(
                         showRemoveButton: _tags.contains(e),
                         showCheckedBackground: _tags.contains(e),
+                        autoSizeGroup: autoSizeGroup,
                         text: e.title,
                         onTap: () {
                           setState(() {

@@ -239,6 +239,16 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
   @override
   void dispose() {
     FocusManager.instance.removeListener(_onFocusChanged);
+    apartmentNumberController.dispose();
+    houseNumberController.dispose();
+    _bookingUrlController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+    _cityController.dispose();
+    _phoneController.dispose();
+    _priceController.dispose();
+    _websiteController.dispose();
     super.dispose();
   }
 

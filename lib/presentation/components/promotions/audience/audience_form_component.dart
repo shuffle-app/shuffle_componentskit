@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/promotions/audience/audience_ui_model.dart';
 import 'package:shuffle_components_kit/services/navigation_service/navigation_key.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../common/select_one_type_with_bottom.dart';
 import '../../../common/tags_selection_component.dart';
 
@@ -38,6 +38,7 @@ class AudienceFormComponent extends StatefulWidget {
 }
 
 class _AudienceFormComponentState extends State<AudienceFormComponent> {
+  final autoSizeGroup = AutoSizeGroup();
   AudienceUiModel? selectedAudience;
   bool wasSelectedTemplate = false;
 
@@ -142,6 +143,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
                   width: 0.4.sw,
                   child: UiKitRadioTile(
                     title: gender.title,
+                    autoSizeGroup: autoSizeGroup,
                     onTapped: () {
                       setState(() {
                         selectedGenderId = gender.id;
@@ -362,7 +364,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
                             );
                             widget.onSaveTemplate?.call(audience);
                             navigatorKey.currentContext?.pop();
-                          });
+                          }).then((_) => titleController.dispose());
                         }
                       : null)),
         kBottomNavigationBarHeight.heightBox,

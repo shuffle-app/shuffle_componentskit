@@ -233,6 +233,18 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
   @override
   void dispose() {
     FocusManager.instance.removeListener(_onFocusChanged);
+    apartmentNumberController.dispose();
+    houseNumberController.dispose();
+    _bookingUrlController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+    _cityController.dispose();
+    _phoneController.dispose();
+    _priceController.dispose();
+    _websiteController.dispose();
+    _upsalesController.dispose();
+
     super.dispose();
   }
 

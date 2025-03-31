@@ -17,7 +17,7 @@ class ReactionViewComponent extends StatelessWidget {
   final bool Function()? onAuthorTapped;
   final VoidCallback? onVideoStarted;
 
-  ReactionViewComponent({
+  const ReactionViewComponent({
     super.key,
     required this.videoReactionModel,
     required this.content,
@@ -31,9 +31,10 @@ class ReactionViewComponent extends StatelessWidget {
     this.onVideoStarted,
     this.onVideoLiked,
     this.onVideoDisliked,
+    required this.videoProgressNotifier
   });
 
-  final videoProgressNotifier = ValueNotifier<double>(0);
+  final ValueNotifier<double> videoProgressNotifier;
 
   bool get swipeActionEnabled => onSwipeUp != null;
 
