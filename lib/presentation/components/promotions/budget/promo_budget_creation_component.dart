@@ -87,8 +87,13 @@ class _PromoBudgetCreationComponentState extends State<PromoBudgetCreationCompon
                     customMinHeight: 30.h,
                     showButton: false,
                     title: Text(
-                      S.of(context).SupportedFormatsVideo,
+                      S.of(context).CPCHintTitle,
                       style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                      textAlign: TextAlign.center,
+                    ),
+                    description: Text(
+                      S.of(context).CPCHintDescription,
+                      style: theme?.regularTextTheme.caption4.copyWith(color: Colors.black87),
                       textAlign: TextAlign.center,
                     ),
                   ),
