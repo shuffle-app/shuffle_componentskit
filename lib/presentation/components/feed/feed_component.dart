@@ -546,6 +546,7 @@ class FeedComponent extends StatelessWidget {
                         }
 
                         return PlacePreview(
+                          key: ValueKey(item.id),
                           // showFavoriteHint: index==0,
                           isFavorite: item.isFavorite,
                           onFavoriteChanged: item.onFavoriteChanged,

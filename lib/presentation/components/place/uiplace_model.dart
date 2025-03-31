@@ -3,11 +3,10 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import '../../../shuffle_components_kit.dart';
 
-class UiPlaceModel {
+class UiPlaceModel extends Advertisable {
   int id;
   List<BaseUiKitMedia> media;
   BaseUiKitMedia? verticalPreview;
-  List<String> weekdays;
   String description;
   List<UiKitTag> tags;
   List<UiKitTag> baseTags;
@@ -64,7 +63,6 @@ class UiPlaceModel {
     this.updatedAt,
     required this.tags,
     this.baseTags = const [],
-    this.weekdays = const [],
     this.schedule,
     this.niche,
     this.contentType = 'both',
@@ -79,6 +77,7 @@ class UiPlaceModel {
     this.chainId,
     this.houseNumber,
     this.apartmentNumber,
+    bool? isAdvertisement,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
             UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
@@ -86,7 +85,8 @@ class UiPlaceModel {
           UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
           if (scheduleString != null)
             UiDescriptionItemModel(title: S.current.WorkHours, description: scheduleString, descriptionUrl: 'times'),
-        ] {
+        ],
+        super(isAdvertisement: isAdvertisement ?? false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
     }
@@ -94,6 +94,25 @@ class UiPlaceModel {
       tags = List.empty(growable: true);
     }
   }
+
+  UiPlaceModel.advertisement({
+    this.id = -1,
+    this.title,
+    this.contentType,
+    this.description = '',
+    this.scheduleString,
+    this.media = const [],
+    this.location,
+    this.niche,
+    this.tags = const [],
+    this.baseTags = const [],
+    this.rating,
+    this.archived = false,
+    this.descriptionItems = const [],
+    this.houseNumber,
+    this.apartmentNumber,
+    this.branches,
+  }) : super(isAdvertisement: true);
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
@@ -169,7 +188,6 @@ class UiPlaceModel {
         id: id ?? this.id,
         media: media ?? this.media,
         verticalPreview: verticalPreview ?? this.verticalPreview,
-        weekdays: weekdays ?? this.weekdays,
         description: description ?? this.description,
         tags: tags ?? this.tags,
         baseTags: baseTags ?? this.baseTags,
@@ -199,27 +217,41 @@ class UiPlaceModel {
         moderationStatus: moderationStatus ?? this.moderationStatus,
         chainName: chainName ?? this.chainName,
         chainId: chainId ?? this.chainId,
-        houseNumber: houseNumber?? this.houseNumber,
-        apartmentNumber: apartmentNumber?? this.apartmentNumber,
+        houseNumber: houseNumber ?? this.houseNumber,
+        apartmentNumber: apartmentNumber ?? this.apartmentNumber,
       );
 
   UiPlaceModel.empty()
       : id = -1,
         media = const [],
-        weekdays = const [],
         description = '',
         contentType = 'both',
         tags = const [],
         bookingUiModel = null,
         branches = null,
         archived = false,
-        baseTags = const [] {
+        baseTags = const [],
+        super(isAdvertisement: false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
     }
     if (tags.isEmpty) {
       tags = List.empty(growable: true);
     }
+  }
+
+  UiKitSwiperCard uiKitCardSwiper([VoidCallback? onTap, ScrollController? scrollController]) {
+    return UiKitSwiperCard(
+      id: id,
+      tagsScrollController: scrollController,
+      title: title ?? '',
+      width: 1.sw - (SpacingFoundation.horizontalSpacing32 * 2),
+      onTap: onTap,
+      tags: baseTags.map((e) => e.widget).toList(),
+      subtitle: description,
+      imageLink: verticalPreview?.link ?? (media.isNotEmpty ? media.first.link : ''),
+      weatherType: weatherType,
+    );
   }
 
   bool selectableDayPredicate(DateTime day) {
@@ -245,7 +277,6 @@ class UiPlaceModel {
         'phone': phone,
         'price': price,
         'placeType': placeType?.toMap(),
-        'weekdays': weekdays,
         // 'descriptionItems': descriptionItems?.map((item) => item.toMap())?.toList(),
         'cityId': cityId,
         'city': city,
@@ -290,7 +321,7 @@ class UiPlaceModel {
         apartmentNumber: map['apartmentNumber'] as String?,
         // weatherType: map['weatherType'] as PlaceWeatherType?,
         bookingUrl: map['bookingUrl'] as String?,
-        bookingUiModel: map['bookingUiModel']!= null? BookingUiModel.fromMap(map['bookingUiModel']) : null,
+        bookingUiModel: map['bookingUiModel'] != null ? BookingUiModel.fromMap(map['bookingUiModel']) : null,
         // updatedAt: map['updatedAt']?.toDateTimeFromMillisecondsSinceEpoch(),
         moderationStatus: map['moderationStatus'] as String?,
         chainName: map['chainName'] as String?,

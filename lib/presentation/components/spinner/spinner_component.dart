@@ -32,14 +32,10 @@ class SpinnerComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spacing = SpacingFoundation.verticalSpace16;
-    final config =
-        GlobalComponent.of(context)?.globalConfiguration.appConfig.content ?? GlobalConfiguration().appConfig.content;
-    final model = ComponentSpinnerModel.fromJson(config['spinner']);
-    final ads = model.content.body?[ContentItemType.advertisement]?.properties;
 
     return Column(
       mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: model.positionModel?.titleAlignment?.crossAxisAlignment ?? CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(height: MediaQuery.of(context).viewPadding.top),
         spacing,
@@ -88,9 +84,7 @@ class SpinnerComponent extends StatelessWidget {
                       availableHeight: size.maxHeight,
                     ).paddingOnly(left: SpacingFoundation.horizontalSpacing16),
                     itemBuilder: (_, item, index) {
-                      if (item.isAdvertisement && (ads?.entries.isNotEmpty ?? false)) {
-                        final advertisement = ads?.entries.first;
-
+                      if (item.isAdvertisement) {
                         return Align(
                           alignment: Alignment.topCenter,
                           child: Column(
@@ -105,10 +99,9 @@ class SpinnerComponent extends StatelessWidget {
                                         availableWidth: 0.75.sw,
                                         customHeight: size.maxHeight * 0.76,
                                         imageLink: item.mediumBannerImage,
-                                        title: item.advertisementTitle ?? advertisement?.key ?? '',
+                                        title: item.advertisementTitle ?? '',
                                         onPressed: onAdvertisementTap,
-                                        size:
-                                            AdvertisementBannerSize.values.byName(advertisement?.value.type ?? 'small'),
+                                        size: AdvertisementBannerSize.medium,
                                       ),
                                     )
                                     .paddingOnly(
@@ -136,8 +129,6 @@ class SpinnerComponent extends StatelessWidget {
                         case UserTileType.influencer:
                           ownerTrailing = InfluencerAccountMark();
                           break;
-                        default:
-                          ownerTrailing = null;
                       }
 
                       return StreamBuilder(

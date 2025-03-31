@@ -45,7 +45,6 @@ class UiUniversalModel extends Advertisable {
   final String description;
   final List<UiKitTag> tags;
   final List<UiKitTag>? baseTags;
-  final List<String>? weekdays;
   final String? title;
   final String? website;
   final String? location;
@@ -69,7 +68,6 @@ class UiUniversalModel extends Advertisable {
     this.rating,
     this.cityId,
     this.website,
-    this.weekdays,
     this.remaindAt,
     this.location,
     this.source,
@@ -96,7 +94,6 @@ class UiUniversalModel extends Advertisable {
     this.cityId,
     this.schedulerId,
     this.website,
-    this.weekdays,
     this.location,
     this.remaindAt,
     this.source,
@@ -122,7 +119,6 @@ class UiUniversalModel extends Advertisable {
     this.cityId,
     this.schedulerId,
     this.rating,
-    this.weekdays,
     this.remaindAt,
     this.location,
     this.source,
@@ -228,7 +224,6 @@ class UiUniversalModel extends Advertisable {
         baseTags: baseTags ?? this.baseTags,
         rating: rating ?? this.rating,
         website: website ?? this.website,
-        weekdays: weekdays ?? this.weekdays,
         location: location ?? this.location,
         source: source ?? this.source,
         title: title ?? this.title,

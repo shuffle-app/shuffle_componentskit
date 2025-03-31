@@ -11,8 +11,8 @@ class ShuffleComponent extends StatelessWidget {
   final ComponentShuffleModel configModel;
   final VoidCallback? onLike;
   final VoidCallback? onDislike;
-  final Function? onFavorite;
-  final Function? onCardTap;
+  final ValueChanged<int>? onFavorite;
+  final ValueChanged<int>? onCardTap;
   final VoidCallback? onEnd;
   final VoidCallback? onHowItWorksPoped;
   final List<int> favoriteIds;
@@ -227,7 +227,7 @@ class ShuffleComponent extends StatelessWidget {
                                 intensities: [140, 150, 170, 200],
                                 pattern: [20, 15, 10, 5],
                               ));
-                              onFavorite?.call(shuffle.items[indexNotifier.value].title);
+                              onFavorite?.call(shuffle.items[indexNotifier.value].id);
                             },
                             iconWidget: ValueListenableBuilder(
                               valueListenable: indexNotifier,
