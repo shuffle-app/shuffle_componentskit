@@ -7,7 +7,7 @@ class SupportComponent extends StatelessWidget {
   final TextEditingController _nameController;
   final TextEditingController _emailController;
   final TextEditingController _textController;
-  final TextEditingController _daysCountController;
+  // final TextEditingController _daysCountController;
 
   final FocusNode daysFocusNode;
   final PositionModel? position;
@@ -30,11 +30,11 @@ class SupportComponent extends StatelessWidget {
     TextEditingController? emailController,
     TextEditingController? textController,
     TextEditingController? daysCountController,
-    this.onSupportRequestPressed
+    this.onSupportRequestPressed,
   })  : _nameController = nameController ?? TextEditingController(),
         _emailController = emailController ?? TextEditingController(),
-        _textController = textController ?? TextEditingController(),
-        _daysCountController = daysCountController ?? TextEditingController();
+        _textController = textController ?? TextEditingController();
+  // _daysCountController = daysCountController ?? TextEditingController()
 
   @override
   Widget build(BuildContext context) {
@@ -48,50 +48,55 @@ class SupportComponent extends StatelessWidget {
         centerTitle: true,
         autoImplyLeading: true,
         title: S.of(context).Support,
-        appBarTrailing: versionText!= null ?Text(versionText!,style: textTheme?.caption1Bold,) :null,
+        appBarTrailing: versionText != null
+            ? Text(
+                versionText!,
+                style: textTheme?.caption1Bold,
+              )
+            : null,
         childrenPadding: EdgeInsets.symmetric(
           horizontal: position?.horizontalMargin?.toDouble() ?? 0,
         ),
         children: [
           SpacingFoundation.verticalSpace16,
-          UiKitGradientSwitchTile(
-            title: S.of(context).EnableHintSystem,
-            onChanged: onSupportSubmitted,
-            switchedOn: isSupportActive,
-            subtitle: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  S.current.ForPeriod.toLowerCase(),
-                  style: textTheme?.labelLarge,
-                ),
-                SpacingFoundation.horizontalSpace16,
-                SizedBox(
-                  width: 0.2.sw,
-                  height: 0.625 * 0.2.sw,
-                  child: UiKitInputFieldNoIcon(
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    customPadding: EdgeInsets.symmetric(
-                      vertical: EdgeInsetsFoundation.vertical12,
-                      horizontal: EdgeInsetsFoundation.horizontal16,
-                    ),
-                    fillColor: surface3,
-                    hintText: '123',
-                    node: daysFocusNode,
-                    controller: _daysCountController,
-                  ),
-                ),
-                SpacingFoundation.horizontalSpace16,
-                Text(
-                  S.current.Days(int.tryParse(_daysCountController.text) ?? 0).toLowerCase(),
-                  style: textTheme?.labelLarge,
-                ),
-              ],
-            ),
-          ),
-          SpacingFoundation.verticalSpace24,
+          // UiKitGradientSwitchTile(
+          //   title: S.of(context).EnableHintSystem,
+          //   onChanged: onSupportSubmitted,
+          //   switchedOn: isSupportActive,
+          //   subtitle: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       Text(
+          //         S.current.ForPeriod.toLowerCase(),
+          //         style: textTheme?.labelLarge,
+          //       ),
+          //       SpacingFoundation.horizontalSpace16,
+          //       SizedBox(
+          //         width: 0.2.sw,
+          //         height: 0.625 * 0.2.sw,
+          //         child: UiKitInputFieldNoIcon(
+          //           textAlign: TextAlign.center,
+          //           keyboardType: TextInputType.number,
+          //           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          //           customPadding: EdgeInsets.symmetric(
+          //             vertical: EdgeInsetsFoundation.vertical12,
+          //             horizontal: EdgeInsetsFoundation.horizontal16,
+          //           ),
+          //           fillColor: surface3,
+          //           hintText: '123',
+          //           node: daysFocusNode,
+          //           controller: _daysCountController,
+          //         ),
+          //       ),
+          //       SpacingFoundation.horizontalSpace16,
+          //       Text(
+          //         S.current.Days(int.tryParse(_daysCountController.text) ?? 0).toLowerCase(),
+          //         style: textTheme?.labelLarge,
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // SpacingFoundation.verticalSpace24,
           UiKitCardWrapper(
             child: Theme(
               data: ThemeData(
@@ -186,10 +191,7 @@ class SupportComponent extends StatelessWidget {
       ),
       bottomNavigationBar: context
           .gradientButton(
-            data: BaseUiKitButtonData(
-              text: S.of(context).Send.toLowerCase(),
-              onPressed: onSupportRequestPressed
-            ),
+            data: BaseUiKitButtonData(text: S.of(context).Send.toLowerCase(), onPressed: onSupportRequestPressed),
           )
           .paddingOnly(
             left: EdgeInsetsFoundation.horizontal16,
