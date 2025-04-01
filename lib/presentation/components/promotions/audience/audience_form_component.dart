@@ -138,6 +138,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
         SpacingFoundation.verticalSpace16,
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing4,
+          spacing: SpacingFoundation.verticalSpacing4,
           children: widget.allGenders
               .map((gender) => SizedBox(
                   width: 0.4.sw,
@@ -191,6 +192,9 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
             onChanged: (int? from) {
               setState(() {
                 selectedAgeFrom = from;
+                if (selectedAgeTo != null && selectedAgeTo! < (from ?? 18)) {
+                  selectedAgeTo = null;
+                }
               });
             },
           ),
@@ -263,6 +267,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
         ),
         SpacingFoundation.verticalSpace16,
         Wrap(
+          runSpacing: SpacingFoundation.verticalSpacing4,
           children: widget.allDevices
               .map((device) => SizedBox(
                   width: 0.4.sw,
