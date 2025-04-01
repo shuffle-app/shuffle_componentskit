@@ -33,7 +33,7 @@ class AllChatsComponent extends StatelessWidget {
     return BlurredAppPageWithPagination<ChatItemUiModel>(
       title: S
           .of(context)
-          .Messages,
+          .Chats,
       centerTitle: true,
       autoImplyLeading: true,
       paginationController: controller,
