@@ -256,6 +256,7 @@ class _InviteComponentState extends State<InviteComponent> {
                       ),
                       const Spacer(),
                       context.gradientButton(
+                        padding: EdgeInsets.all(EdgeInsetsFoundation.all14 + 1.h),
                         data: BaseUiKitButtonData(
                           loading: loading,
                           onPressed: () {
