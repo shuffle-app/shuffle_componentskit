@@ -26,7 +26,7 @@ abstract class Advertisable {
   Advertisable({
     required this.isAdvertisement,
   }) {
-    final chance = Random().nextDouble();
+    final chance = _advertizableRandom.nextDouble();
     if (chance < 0.25) {
       bannerType = AdvertisementBannerType.text;
     } else {
@@ -42,7 +42,7 @@ abstract class Advertisable {
   }
 
   Widget spinnerTextBanner(double customHeight) {
-    final randomNumber = Random().nextInt(3) + 1;
+    final randomNumber = _advertizableRandom.nextInt(3) + 1;
     if (randomNumber == 1) return MediumTextAdBanner1(customHeight: customHeight);
     if (randomNumber == 2) return MediumTextAdBanner2(customHeight: customHeight);
     if (randomNumber == 3) return MediumTextAdBanner3(customHeight: customHeight);
@@ -51,7 +51,7 @@ abstract class Advertisable {
   }
 
   UiKitSwiperAdCard get _randomLargeTextBanner {
-    final randomNumber = Random().nextInt(3) + 1;
+    final randomNumber = _advertizableRandom.nextInt(3) + 1;
     if (randomNumber == 1) return LargeTextAdBanner1(customHeight: (1.sh / 1.6) * 0.91);
     if (randomNumber == 2) return LargeTextAdBanner2(customHeight: (1.sh / 1.6) * 0.91);
     if (randomNumber == 3) return LargeTextAdBanner3(customHeight: (1.sh / 1.6) * 0.91);
@@ -60,7 +60,7 @@ abstract class Advertisable {
   }
 
   Widget get _randomSmallTextAdBanner {
-    final randomNumber = Random().nextInt(4) + 1;
+    final randomNumber = _advertizableRandom.nextInt(4) + 1;
     if (randomNumber == 1) return const SmallTextAdBanner1();
     if (randomNumber == 2) return const SmallTextAdBanner2();
     if (randomNumber == 3) return const SmallTextAdBanner3();
@@ -70,22 +70,25 @@ abstract class Advertisable {
   }
 
   String get _randomSmallBannerPicture {
-    final randomIndex = _randomIndexForBanner ?? Random().nextInt(_customSmallBanners.length - 1);
+    final randomIndex = _randomIndexForBanner ?? _advertizableRandom.nextInt(_customSmallBanners.length - 1);
     _randomIndexForBanner = randomIndex;
     return _customSmallBanners.elementAt(randomIndex);
   }
 
   String get _randomMediumBannerPicture {
-    final randomIndex = _randomIndexForBanner ?? Random().nextInt(_customMediumBanners.length - 1);
+    final randomIndex = _randomIndexForBanner ?? _advertizableRandom.nextInt(_customMediumBanners.length - 1);
     _randomIndexForBanner = randomIndex;
     return _customMediumBanners.elementAt(randomIndex);
   }
 
   String get _randomLargeBannerPicture {
-    final randomIndex = _randomIndexForBanner ?? Random().nextInt(_customLargeBanners.length - 1);
+    final randomIndex = _randomIndexForBanner ?? _advertizableRandom.nextInt(_customLargeBanners.length - 1);
     _randomIndexForBanner = randomIndex;
     return _customLargeBanners.elementAt(randomIndex);
   }
 }
+
+final _advertizableRandom = Random();
+
 
 enum AdvertisementBannerType { picture, text }

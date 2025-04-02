@@ -5,10 +5,10 @@ class UiShuffleModel {
   final AnimationController dislikeController;
   final AnimationController likeController;
 
-  List<BaseUiKitSwiperCard> items;
-  bool showHowItWorks;
+  final List<BaseUiKitSwiperCard> items;
+  final bool showHowItWorks;
 
-  UiShuffleModel({
+  const UiShuffleModel({
     required this.items,
     this.showHowItWorks = false,
     required this.dislikeController,

@@ -384,7 +384,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitFieldWithTagList(
             listUiKitTags: [
               UiKitTag(
-                updateTitle: false,
                 title:
                     _priceController.text.isNotEmpty ? '${_eventToEdit.currency ?? ''} ${_priceController.text}' : '0',
                 icon: ShuffleUiKitIcons.label,
