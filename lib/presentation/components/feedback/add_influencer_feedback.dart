@@ -172,6 +172,7 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
         autoImplyLeading: true,
         centerTitle: true,
         title: S.current.AddFeedback,
+        expandTitle: false,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
