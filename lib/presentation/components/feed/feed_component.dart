@@ -570,8 +570,8 @@ class FeedComponent extends StatelessWidget {
                   ),
                   if (preserveScrollPosition)
                     SizedBox(
-                            height:
-                                ((controller.itemList?.length ?? 0) > 1 ? 0.2.sh : 0.8.sh) - kBottomNavigationBarHeight)
+                            height: ((controller.itemList?.length ?? 0) != 1 ? 0.2.sh : 0.8.sh) -
+                                kBottomNavigationBarHeight)
                         .wrapSliverBox,
                   kBottomNavigationBarHeight.heightBox.wrapSliverBox
                 ],
