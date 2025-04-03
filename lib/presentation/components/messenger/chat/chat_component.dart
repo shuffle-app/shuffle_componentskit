@@ -91,20 +91,25 @@ class ChatComponent extends StatelessWidget {
           onPressed: onLeaveChat,
         ),
       );
-    } else if (chatData.isGroupChat && !chatData.userIsOwner) {
+    } else if (chatData.isGroupChat) {
       trailingWidget = UiKitPopUpMenuButton.optionWithIcon(options: [
         UiKitPopUpMenuButtonOption(
-          title: S.of(context).Share,
+          title: S
+              .of(context)
+              .Share,
           icon: ShuffleUiKitIcons.share,
           value: 'share',
           onTap: onShareChat,
         ),
-        UiKitPopUpMenuButtonOption(
-          title: S.of(context).Edit,
-          icon: ShuffleUiKitIcons.logout,
-          value: 'leave',
-          onTap: onLeaveChat,
-        ),
+        if(!chatData.userIsOwner)
+          UiKitPopUpMenuButtonOption(
+            title: S
+                .of(context)
+                .Leave,
+            icon: ShuffleUiKitIcons.logout,
+            value: 'leave',
+            onTap: onLeaveChat,
+          ),
       ]);
     } else {
       trailingWidget = SizedBox.fromSize(
@@ -131,19 +136,19 @@ class ChatComponent extends StatelessWidget {
       keyboardPadding: isGuestView ? 0 : keyboardPadding,
       topFixedAddition: pinnedMessage != null
           ? GestureDetector(
-              onTap: onPinnedMessageTap,
-              child: UiKitInfoText(
-                chatName: pinnedMessage!.chatName,
-                text: pinnedMessage!.message!,
-                title: pinnedMessage!.infoMessageTitle,
-                centerText: !pinnedMessage!.messageId.isNegative,
-              ).paddingOnly(
-                top: EdgeInsetsFoundation.vertical16,
-                bottom: EdgeInsetsFoundation.zero,
-                left: EdgeInsetsFoundation.horizontal20,
-                right: EdgeInsetsFoundation.horizontal20,
-              ),
-            )
+        onTap: onPinnedMessageTap,
+        child: UiKitInfoText(
+          chatName: pinnedMessage!.chatName,
+          text: pinnedMessage!.message!,
+          title: pinnedMessage!.infoMessageTitle,
+          centerText: !pinnedMessage!.messageId.isNegative,
+        ).paddingOnly(
+          top: EdgeInsetsFoundation.vertical16,
+          bottom: EdgeInsetsFoundation.zero,
+          left: EdgeInsetsFoundation.horizontal20,
+          right: EdgeInsetsFoundation.horizontal20,
+        ),
+      )
           : null,
       scrollController: scrollController,
       appBarTrailing: trailingWidget,
@@ -220,24 +225,28 @@ class ChatComponent extends StatelessWidget {
       padding: EdgeInsets.only(top: EdgeInsetsFoundation.vertical24),
       builderDelegate: PagedChildBuilderDelegate<ChatMessageUiModel>(
         firstPageProgressIndicatorBuilder: (context) => const LoadingWidget(),
-        newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
-          gradient: GradientFoundation.greyGradient,
-          child: UiKitChatOutCard(
-            id: -1,
-            timeOfDay: DateTime.now(),
-            sentByMe: true,
-            text: ' ',
-          ),
-        ),
-        noItemsFoundIndicatorBuilder: (context) => isGuestView
-            ? Center(
-                child: HiddenChatMockedComponent(
-                  onJoinChatRequest: chatData.joinRequested == true ? null : () => onRequestToJoinChat?.call(),
-                ),
-              )
-            : UiKitEmptyListPlaceHolder(
-                message: S.of(context).NoMessagesYet,
+        newPageProgressIndicatorBuilder: (context) =>
+            UiKitShimmerProgressIndicator(
+              gradient: GradientFoundation.greyGradient,
+              child: UiKitChatOutCard(
+                id: -1,
+                timeOfDay: DateTime.now(),
+                sentByMe: true,
+                text: ' ',
               ),
+            ),
+        noItemsFoundIndicatorBuilder: (context) =>
+        isGuestView
+            ? Center(
+          child: HiddenChatMockedComponent(
+            onJoinChatRequest: chatData.joinRequested == true ? null : () => onRequestToJoinChat?.call(),
+          ),
+        )
+            : UiKitEmptyListPlaceHolder(
+          message: S
+              .of(context)
+              .NoMessagesYet,
+        ),
         itemBuilder: (context, item, index) {
           if (item.messageType == MessageType.info) {
             return VisibilityDetector(
@@ -282,7 +291,10 @@ class ChatComponent extends StatelessWidget {
                   context.createSmallOutlinedButton(
                     gradient: GradientFoundation.defaultLinearGradient,
                     data: BaseUiKitButtonData(
-                      text: S.of(context).Allow.toUpperCase(),
+                      text: S
+                          .of(context)
+                          .Allow
+                          .toUpperCase(),
                       onPressed: () => onRequestToJoinChat?.call(item.chatJoinRequestId),
                     ),
                   )
@@ -316,10 +328,11 @@ class ChatComponent extends StatelessWidget {
                         placeImagePath: item.invitationData!.contentImagePath,
                         invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
                         userType: item.invitationData!.senderUserType,
-                        onPlaceTap: () => onInvitationPlaceTap?.call(
-                          item.invitationData!.contentId,
-                          item.invitationData!.contentType,
-                        ),
+                        onPlaceTap: () =>
+                            onInvitationPlaceTap?.call(
+                              item.invitationData!.contentId,
+                              item.invitationData!.contentType,
+                            ),
                         canDenyInvitation: false,
                         canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                         onAcceptTap: () {
@@ -332,11 +345,11 @@ class ChatComponent extends StatelessWidget {
                         customMessageData: chatData.isGroupChat
                             ? null
                             : InviteCustomMessageData(
-                                senderUserName: item.invitationData!.senderUserName,
-                                receiverUserName: item.invitationData!.receiverUserName,
-                                senderUserType: item.invitationData!.senderUserType,
-                                receiverUserType: item.invitationData!.receiverUserType,
-                              ),
+                          senderUserName: item.invitationData!.senderUserName,
+                          receiverUserName: item.invitationData!.receiverUserName,
+                          senderUserType: item.invitationData!.senderUserType,
+                          receiverUserType: item.invitationData!.receiverUserType,
+                        ),
                       ),
                     ),
                   ],
@@ -355,29 +368,29 @@ class ChatComponent extends StatelessWidget {
                   if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                   item.replyMessageModel == null
                       ? UiKitChatOutCard(
-                          onReplyMessage: onReplyMessage,
-                          id: item.messageId,
-                          timeOfDay: item.timeSent,
-                          text: item.message,
-                          sentByMe: item.senderIsMe,
-                        )
+                    onReplyMessage: onReplyMessage,
+                    id: item.messageId,
+                    timeOfDay: item.timeSent,
+                    text: item.message,
+                    sentByMe: item.senderIsMe,
+                  )
                       : UiKitChatCardWithReplyOut(
-                          id: item.messageId,
-                          onReplyMessage: onReplyMessage,
-                          replyMessageId: item.replyMessageModel!.messageId,
-                          onReplyMassageTap: onReplyMessageTap,
-                          text: item.message,
-                          sentByMe: item.senderIsMe,
-                          replyText: item.replyMessageModel!.message!,
-                          timeOfDay: item.timeSent,
-                          replyUserAvatar: item.replyMessageModel!.senderAvatar!,
-                          replySenderName: item.replyMessageModel!.senderName!,
-                          replyUserType: item.replyMessageModel!.senderProfileType!,
-                        ),
+                    id: item.messageId,
+                    onReplyMessage: onReplyMessage,
+                    replyMessageId: item.replyMessageModel!.messageId,
+                    onReplyMassageTap: onReplyMessageTap,
+                    text: item.message,
+                    sentByMe: item.senderIsMe,
+                    replyText: item.replyMessageModel!.message!,
+                    timeOfDay: item.timeSent,
+                    replyUserAvatar: item.replyMessageModel!.senderAvatar!,
+                    replySenderName: item.replyMessageModel!.senderName!,
+                    replyUserType: item.replyMessageModel!.senderProfileType!,
+                  ),
                 ],
               ),
             );
-          } else  if (item.messageType == MessageType.joinRequest){
+          } else if (item.messageType == MessageType.joinRequest) {
             return VisibilityDetector(
               key: Key(item.messageId.toString()),
               onVisibilityChanged: (info) {
@@ -388,10 +401,11 @@ class ChatComponent extends StatelessWidget {
                 children: [
                   if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                   UiKitChatInCard(
-                    onUsernameTapped: () => onProfileTapped?.call(
-                      item.senderId,
-                      item.senderProfileType ?? UserTileType.ordinary,
-                    ),
+                    onUsernameTapped: () =>
+                        onProfileTapped?.call(
+                          item.senderId,
+                          item.senderProfileType ?? UserTileType.ordinary,
+                        ),
                     showAvatar: chatData.isGroupChat,
                     avatarUrl: item.senderAvatar,
                     senderName: item.senderName,
@@ -411,10 +425,11 @@ class ChatComponent extends StatelessWidget {
                       invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
                       userType: item.invitationData!.senderUserType,
                       onInvitePeopleTap: onAddMorePeople,
-                      onPlaceTap: () => onInvitationPlaceTap?.call(
-                        item.invitationData!.contentId,
-                        item.invitationData!.contentType,
-                      ),
+                      onPlaceTap: () =>
+                          onInvitationPlaceTap?.call(
+                            item.invitationData!.contentId,
+                            item.invitationData!.contentType,
+                          ),
                       canDenyInvitation: chatData.readOnlyChat
                           ? false
                           : chatData.isGroupChat
@@ -441,7 +456,7 @@ class ChatComponent extends StatelessWidget {
                 ],
               ),
             );
-          } else  {
+          } else {
             if (item.isInvitation && item.invitationData != null) {
               return VisibilityDetector(
                 key: Key(item.messageId.toString()),
@@ -453,10 +468,11 @@ class ChatComponent extends StatelessWidget {
                   children: [
                     if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                     UiKitChatInCard(
-                      onUsernameTapped: () => onProfileTapped?.call(
-                        item.senderId,
-                        item.senderProfileType ?? UserTileType.ordinary,
-                      ),
+                      onUsernameTapped: () =>
+                          onProfileTapped?.call(
+                            item.senderId,
+                            item.senderProfileType ?? UserTileType.ordinary,
+                          ),
                       showAvatar: chatData.isGroupChat,
                       avatarUrl: item.senderAvatar,
                       senderName: item.senderName,
@@ -476,15 +492,16 @@ class ChatComponent extends StatelessWidget {
                         invitedUsersData: item.invitationData!.invitedPeopleAvatarPaths,
                         userType: item.invitationData!.senderUserType,
                         onInvitePeopleTap: onAddMorePeople,
-                        onPlaceTap: () => onInvitationPlaceTap?.call(
-                          item.invitationData!.contentId,
-                          item.invitationData!.contentType,
-                        ),
+                        onPlaceTap: () =>
+                            onInvitationPlaceTap?.call(
+                              item.invitationData!.contentId,
+                              item.invitationData!.contentType,
+                            ),
                         canDenyInvitation: chatData.readOnlyChat
                             ? false
                             : chatData.isGroupChat
-                                ? !item.invitationData!.hasAcceptedInvite
-                                : !chatData.hasAcceptedInvite,
+                            ? !item.invitationData!.hasAcceptedInvite
+                            : !chatData.hasAcceptedInvite,
                         canAddMorePeople: chatData.readOnlyChat ? false : chatOwnerIsMe && isMultipleChat,
                         onAcceptTap: () {
                           onAcceptInvitationTap?.call(item.connectId ?? item.invitationData!.connectId);
@@ -496,11 +513,11 @@ class ChatComponent extends StatelessWidget {
                         customMessageData: chatData.isGroupChat
                             ? null
                             : InviteCustomMessageData(
-                                senderUserName: item.invitationData!.senderUserName,
-                                receiverUserName: item.invitationData!.receiverUserName,
-                                senderUserType: item.invitationData!.senderUserType,
-                                receiverUserType: item.invitationData!.receiverUserType,
-                              ),
+                          senderUserName: item.invitationData!.senderUserName,
+                          receiverUserName: item.invitationData!.receiverUserName,
+                          senderUserType: item.invitationData!.senderUserType,
+                          receiverUserType: item.invitationData!.receiverUserType,
+                        ),
                       ),
                     ),
                   ],
@@ -519,42 +536,44 @@ class ChatComponent extends StatelessWidget {
                   if (item.isLastMessageToDate) UiKitDateBadge(date: item.timeSent),
                   item.replyMessageModel == null
                       ? UiKitChatInCard(
-                          onUsernameTapped: () => onProfileTapped?.call(
-                            item.senderId,
-                            item.senderProfileType ?? UserTileType.ordinary,
-                          ),
-                          hasInvitation: false,
-                          showAvatar: chatData.isGroupChat,
-                          avatarUrl: item.senderAvatar,
-                          senderName: item.senderName,
-                          senderType: item.senderProfileType,
-                          onReplyMessage: onReplyMessage,
-                          id: item.messageId,
-                          timeOfDay: item.timeSent,
-                          text: item.message,
-                          senderNickname: item.senderNickname ?? '',
-                        )
-                      : UiKitChatCardWithReplyIn(
-                          onUsernameTapped: () => onProfileTapped?.call(
-                            item.senderId,
-                            item.senderProfileType ?? UserTileType.ordinary,
-                          ),
-                          showAvatar: chatData.isGroupChat,
-                          id: item.messageId,
-                          onReplyMessage: onReplyMessage,
-                          onReplyMassageTap: onReplyMessageTap,
-                          text: item.message,
-                          timeOfDay: item.timeSent,
-                          replyMessageId: item.replyMessageModel!.messageId,
-                          replyText: item.replyMessageModel!.message!,
-                          replyUserAvatar: item.replyMessageModel!.senderAvatar!,
-                          replyUserType: item.replyMessageModel!.senderProfileType!,
-                          replySenderName: item.replyMessageModel!.senderName!,
-                          senderNickname: item.senderNickname ?? '',
-                          senderName: item.senderName,
-                          senderType: item.senderProfileType,
-                          avatarUrl: item.senderAvatar,
+                    onUsernameTapped: () =>
+                        onProfileTapped?.call(
+                          item.senderId,
+                          item.senderProfileType ?? UserTileType.ordinary,
                         ),
+                    hasInvitation: false,
+                    showAvatar: chatData.isGroupChat,
+                    avatarUrl: item.senderAvatar,
+                    senderName: item.senderName,
+                    senderType: item.senderProfileType,
+                    onReplyMessage: onReplyMessage,
+                    id: item.messageId,
+                    timeOfDay: item.timeSent,
+                    text: item.message,
+                    senderNickname: item.senderNickname ?? '',
+                  )
+                      : UiKitChatCardWithReplyIn(
+                    onUsernameTapped: () =>
+                        onProfileTapped?.call(
+                          item.senderId,
+                          item.senderProfileType ?? UserTileType.ordinary,
+                        ),
+                    showAvatar: chatData.isGroupChat,
+                    id: item.messageId,
+                    onReplyMessage: onReplyMessage,
+                    onReplyMassageTap: onReplyMessageTap,
+                    text: item.message,
+                    timeOfDay: item.timeSent,
+                    replyMessageId: item.replyMessageModel!.messageId,
+                    replyText: item.replyMessageModel!.message!,
+                    replyUserAvatar: item.replyMessageModel!.senderAvatar!,
+                    replyUserType: item.replyMessageModel!.senderProfileType!,
+                    replySenderName: item.replyMessageModel!.senderName!,
+                    senderNickname: item.senderNickname ?? '',
+                    senderName: item.senderName,
+                    senderType: item.senderProfileType,
+                    avatarUrl: item.senderAvatar,
+                  ),
                 ],
               ),
             );
