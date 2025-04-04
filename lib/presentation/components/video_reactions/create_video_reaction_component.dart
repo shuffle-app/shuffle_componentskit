@@ -33,6 +33,7 @@ class CreateVideoReactionComponent extends StatelessWidget {
       autoImplyLeading: true,
       centerTitle: true,
       title: S.current.AddReactions,
+      expandTitle: false,
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,

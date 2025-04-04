@@ -16,6 +16,7 @@ class ReactionViewComponent extends StatelessWidget {
   final VoidCallback? onSeeMorePopOverCallback;
   final bool Function()? onAuthorTapped;
   final VoidCallback? onVideoStarted;
+  final bool hideReactionButtons;
 
   const ReactionViewComponent({
     super.key,
@@ -31,6 +32,7 @@ class ReactionViewComponent extends StatelessWidget {
     this.onVideoStarted,
     this.onVideoLiked,
     this.onVideoDisliked,
+    this.hideReactionButtons = false,
     required this.videoProgressNotifier
   });
 
@@ -156,7 +158,9 @@ class ReactionViewComponent extends StatelessWidget {
           bottom: SpacingFoundation.verticalSpacing24 + SpacingFoundation.verticalSpacing16,
           child: Row(
             mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if(!hideReactionButtons)
               context.bouncingButton(
                 blurred: true,
                 small: true,
@@ -203,6 +207,7 @@ class ReactionViewComponent extends StatelessWidget {
               ),
               if (videoReactionModel.eventDate?.isBefore(DateTime.now()) ?? false) const Expanded(child: Column()),
               SpacingFoundation.horizontalSpace20,
+              if(!hideReactionButtons)
               context.bouncingButton(
                 blurred: true,
                 small: true,

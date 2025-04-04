@@ -384,7 +384,6 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
           UiKitFieldWithTagList(
             listUiKitTags: [
               UiKitTag(
-                updateTitle: false,
                 title:
                     _priceController.text.isNotEmpty ? '${_eventToEdit.currency ?? ''} ${_priceController.text}' : '0',
                 icon: ShuffleUiKitIcons.label,
@@ -726,26 +725,28 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
                       onScheduleCreated: (model) {
                         if (model is UiScheduleDatesModel) {
                           setState(() {
-                            _eventToEdit.schedule = model;
-
                             _eventToEdit.scheduleString =
                                 model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
+
+                            _eventToEdit.schedule = model;
                           });
                         } else if (model is UiScheduleDatesRangeModel) {
                           setState(() {
-                            _eventToEdit.schedule = model;
                             dev.log('model.dailySchedule ${model.dailySchedule}');
 
                             _eventToEdit.scheduleString =
                                 model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
+
+                            _eventToEdit.schedule = model;
                           });
                         } else if (model is UiScheduleTimeModel) {
                           setState(() {
-                            _eventToEdit.schedule = model;
                             dev.log('model.dailySchedule ${model.weeklySchedule}');
 
                             _eventToEdit.scheduleString =
                                 model.getReadableScheduleString().map((pair) => pair.join(': ')).join(' / ');
+
+                            _eventToEdit.schedule = model;
                           });
                         }
                       },

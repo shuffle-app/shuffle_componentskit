@@ -8,7 +8,6 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class ShuffleComponent extends StatelessWidget {
   final UiShuffleModel shuffle;
-  final ComponentShuffleModel configModel;
   final VoidCallback? onLike;
   final VoidCallback? onDislike;
   final ValueChanged<int>? onFavorite;
@@ -19,13 +18,14 @@ class ShuffleComponent extends StatelessWidget {
   final ValueNotifier<int> indexNotifier;
   final ValueNotifier<String> backgroundImageNotifier;
   final bool allowedToSwipe;
+  final CardSwiperController controller;
 
   const ShuffleComponent({
     super.key,
     required this.shuffle,
-    required this.configModel,
     required this.indexNotifier,
     required this.backgroundImageNotifier,
+    required this.controller,
     this.allowedToSwipe = true,
     this.onLike,
     this.favoriteIds = const [],
@@ -43,7 +43,6 @@ class ShuffleComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
-    final bodyAlignment = configModel.positionModel?.bodyAlignment;
 
     return Stack(
       children: [
@@ -81,42 +80,39 @@ class ShuffleComponent extends StatelessWidget {
             height: 1.sh,
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: bodyAlignment.mainAxisAlignment,
-              crossAxisAlignment: bodyAlignment.crossAxisAlignment,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: MediaQuery.viewPaddingOf(context).top),
-                RepaintBoundary(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: TitleWithHowItWorks(
-                      title: S.of(context).TryYourself,
-                      textStyle: theme?.boldTextTheme.title1.copyWith(color: Colors.white),
-                      textAlign: TextAlign.center,
-                      shouldShow:
-                          shuffle.showHowItWorks && configModel.content.title?[ContentItemType.hintDialog] != null,
-                      howItWorksWidget: HowItWorksWidget(
-                        title: S.of(context).ShuffleHiwTitle,
-                        subtitle: S.of(context).ShuffleHiwSubtitle,
-                        hintTiles: [
-                          HintCardUiModel(
-                            title: S.of(context).ShuffleHiwHint(0),
-                            imageUrl: GraphicsFoundation.instance.png.shuffleAny.path,
-                          ),
-                          HintCardUiModel(
-                            title: S.of(context).ShuffleHiwHint(1),
-                            imageUrl: GraphicsFoundation.instance.png.swipeProperties.path,
-                          ),
-                          HintCardUiModel(
-                            title: S.of(context).ShuffleHiwHint(2),
-                            imageUrl: GraphicsFoundation.instance.png.likeDislike.path,
-                          ),
-                          HintCardUiModel(
-                            title: S.of(context).ShuffleHiwHint(3),
-                            imageUrl: GraphicsFoundation.instance.png.teach.path,
-                          ),
-                        ],
-                        onPop: onHowItWorksPoped,
-                      ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TitleWithHowItWorks(
+                    title: S.of(context).TryYourself,
+                    textStyle: theme?.boldTextTheme.title1.copyWith(color: Colors.white),
+                    textAlign: TextAlign.center,
+                    shouldShow: shuffle.showHowItWorks,
+                    howItWorksWidget: HowItWorksWidget(
+                      title: S.of(context).ShuffleHiwTitle,
+                      subtitle: S.of(context).ShuffleHiwSubtitle,
+                      hintTiles: [
+                        HintCardUiModel(
+                          title: S.of(context).ShuffleHiwHint(0),
+                          imageUrl: GraphicsFoundation.instance.png.shuffleAny.path,
+                        ),
+                        HintCardUiModel(
+                          title: S.of(context).ShuffleHiwHint(1),
+                          imageUrl: GraphicsFoundation.instance.png.swipeProperties.path,
+                        ),
+                        HintCardUiModel(
+                          title: S.of(context).ShuffleHiwHint(2),
+                          imageUrl: GraphicsFoundation.instance.png.likeDislike.path,
+                        ),
+                        HintCardUiModel(
+                          title: S.of(context).ShuffleHiwHint(3),
+                          imageUrl: GraphicsFoundation.instance.png.teach.path,
+                        ),
+                      ],
+                      onPop: onHowItWorksPoped,
                     ),
                   ),
                 ),
@@ -149,6 +145,7 @@ class ShuffleComponent extends StatelessWidget {
                       ),
                       if (shuffle.items.isNotEmpty)
                         UiKitCardSwiper(
+                          controller: controller,
                           size: Size(1.sw, 1.sh / 1.6),
                           likeController: shuffle.likeController,
                           dislikeController: shuffle.dislikeController,
@@ -195,74 +192,71 @@ class ShuffleComponent extends StatelessWidget {
                   ),
                 ),
                 SpacingFoundation.verticalSpace4,
-                RepaintBoundary(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      context.bouncingButton(
-                        blurred: true,
-                        small: true,
-                        data: BaseUiKitButtonData(
-                          onPressed: () {
-                            shuffle.dislikeController.forward(from: 0);
-                            FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
-                              intensities: [170, 200],
-                              pattern: [10, 5],
-                            ));
-                            onDislike?.call();
-                          },
-                          iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.heartbrokenfill,
-                            color: Colors.white,
-                          ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    context.bouncingButton(
+                      blurred: true,
+                      small: true,
+                      data: BaseUiKitButtonData(
+                        onPressed: () {
+                          shuffle.dislikeController.forward(from: 0);
+                          FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                            intensities: [170, 200],
+                            pattern: [10, 5],
+                          ));
+                          onDislike?.call();
+                        },
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.heartbrokenfill,
+                          color: Colors.white,
                         ),
                       ),
-                      SpacingFoundation.horizontalSpace24,
-                      if (configModel.showFavorite ?? true)
-                        context.bouncingButton(
-                          blurred: true,
-                          data: BaseUiKitButtonData(
-                            onPressed: () {
-                              FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
-                                intensities: [140, 150, 170, 200],
-                                pattern: [20, 15, 10, 5],
-                              ));
-                              onFavorite?.call(shuffle.items[indexNotifier.value].id);
-                            },
-                            iconWidget: ValueListenableBuilder(
-                              valueListenable: indexNotifier,
-                              builder: (_, value, __) {
-                                return ImageWidget(
-                                  iconData: shuffle.items.isNotEmpty &&
-                                          favoriteIds.contains(shuffle.items[value % shuffle.items.length].id)
-                                      ? ShuffleUiKitIcons.starfill
-                                      : ShuffleUiKitIcons.staroutline,
-                                  color: Colors.white,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      SpacingFoundation.horizontalSpace24,
-                      context.bouncingButton(
-                        blurred: true,
-                        small: true,
-                        data: BaseUiKitButtonData(
-                          onPressed: () {
-                            FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
-                              intensities: [170, 200],
-                              pattern: [10, 5],
-                            ));
-                            shuffle.likeController.forward(from: 0);
+                    ),
+                    SpacingFoundation.horizontalSpace24,
+                    context.bouncingButton(
+                      blurred: true,
+                      data: BaseUiKitButtonData(
+                        onPressed: () {
+                          FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                            intensities: [140, 150, 170, 200],
+                            pattern: [20, 15, 10, 5],
+                          ));
+                          onFavorite?.call(shuffle.items[indexNotifier.value].id);
+                        },
+                        iconWidget: ValueListenableBuilder(
+                          valueListenable: indexNotifier,
+                          builder: (_, value, __) {
+                            return ImageWidget(
+                              iconData: shuffle.items.isNotEmpty &&
+                                      favoriteIds.contains(shuffle.items[value % shuffle.items.length].id)
+                                  ? ShuffleUiKitIcons.starfill
+                                  : ShuffleUiKitIcons.staroutline,
+                              color: Colors.white,
+                            );
                           },
-                          iconInfo: BaseUiKitButtonIconData(
-                            iconData: ShuffleUiKitIcons.heartfill,
-                            color: Colors.white,
-                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SpacingFoundation.horizontalSpace24,
+                    context.bouncingButton(
+                      blurred: true,
+                      small: true,
+                      data: BaseUiKitButtonData(
+                        onPressed: () {
+                          FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(
+                            intensities: [170, 200],
+                            pattern: [10, 5],
+                          ));
+                          shuffle.likeController.forward(from: 0);
+                        },
+                        iconInfo: BaseUiKitButtonIconData(
+                          iconData: ShuffleUiKitIcons.heartfill,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SpacingFoundation.bottomNavigationBarSpacing,
               ],

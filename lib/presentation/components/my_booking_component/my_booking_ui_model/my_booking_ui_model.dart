@@ -27,7 +27,11 @@ class MyBookingUiModel {
 
   bool get isPast {
     if (visitDate != null) {
-      return DateTime.now().toLocal().isAfter(visitDate!);
+      final now = DateTime.now();
+      final todayJustDay = DateTime(now.year, now.month, now.day);
+      final visitDateJustDay = DateTime(visitDate!.year, visitDate!.month, visitDate!.day)
+        ..add(const Duration(days: 1));
+      return todayJustDay.isAfter(visitDateJustDay);
     } else {
       return false;
     }

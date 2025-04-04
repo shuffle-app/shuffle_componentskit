@@ -165,8 +165,7 @@ class _InviteComponentState extends State<InviteComponent> {
                 ),
         ),
         SpacingFoundation.verticalSpace16,
-        widget.selfInvitationModel != null && !isEditing
-            ? UiKitUserTileWithOption(
+        if (widget.selfInvitationModel != null && !isEditing) UiKitUserTileWithOption(
                 date: widget.selfInvitationModel!.date,
                 name: widget.selfInvitationModel!.name,
                 type: widget.selfInvitationModel!.userTileType,
@@ -198,8 +197,7 @@ class _InviteComponentState extends State<InviteComponent> {
                   ),
                 ],
                 avatarLink: widget.selfInvitationModel!.avatarLink,
-              )
-            : Column(
+              ) else Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -255,7 +253,9 @@ class _InviteComponentState extends State<InviteComponent> {
                         ),
                       ),
                       const Spacer(),
+
                       context.gradientButton(
+                        padding: EdgeInsets.all(SpacingFoundation.verticalSpacing12.h ),
                         data: BaseUiKitButtonData(
                           loading: loading,
                           onPressed: () {
@@ -269,6 +269,7 @@ class _InviteComponentState extends State<InviteComponent> {
                           },
                           iconInfo: BaseUiKitButtonIconData(
                             iconData: ShuffleUiKitIcons.plus,
+                            size: (theme?.boldTextTheme.caption1UpperCaseMedium.fontSize?.w ?? 16)+ 1.h
                           ),
                         ),
                       ),

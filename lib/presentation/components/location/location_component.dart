@@ -9,6 +9,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 import 'google_maps_api.dart';
 
+const String _huaweiMapApiKey = String.fromEnvironment('huaweiApiKey');
+
 class LocationComponent extends StatefulWidget {
   final VoidCallback onLocationConfirmed;
   final void Function(
@@ -55,10 +57,30 @@ class _LocationComponentState extends State<LocationComponent> {
   Timer? _debounceTimer;
   final LocationDetailsSheetController locationDetailsSheetController = LocationDetailsSheetController();
 
+  final ValueNotifier<bool> focusNotifier = ValueNotifier<bool>(false);
+  late final FocusNode _focusNode = FocusNode()
+    ..addListener(() {
+      if (!_focusNode.hasFocus) {
+        SystemChrome.setSystemUIOverlayStyle(
+          const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarIconBrightness: Brightness.dark,
+          ),
+        );
+      }
+      if (focusNotifier.value != _focusNode.hasFocus) focusNotifier.value = _focusNode.hasFocus;
+    });
+
   @override
   void initState() {
     if (widget.isHuawei) {
-      hms.HuaweiMapInitializer.initializeMap();
+      try {
+        hms.HuaweiMapInitializer.initializeMap();
+      } catch (e) {
+        log('Failed to initialize Huawei Map: $e', name: 'LocationComponent');
+        hms.HuaweiMapInitializer.setApiKey(apiKey: _huaweiMapApiKey);
+      }
     }
     super.initState();
     cameraPosition = CameraPosition(
@@ -334,6 +356,9 @@ class _LocationComponentState extends State<LocationComponent> {
   @override
   void dispose() {
     searchTextController.removeListener(_onSearchListener);
+    searchTextController.dispose();
+    _focusNode.dispose();
+    focusNotifier.dispose();
     super.dispose();
   }
 
@@ -342,6 +367,8 @@ class _LocationComponentState extends State<LocationComponent> {
     return Theme(
       data: UiKitThemeFoundation.defaultTheme,
       child: UiKitLocationPicker(
+        focusNode: _focusNode,
+        focusNotifier: focusNotifier,
         isHuawei: widget.isHuawei,
         onLocationChanged: widget.onLocationChanged,
         newPlace: _newPlaceTapped,

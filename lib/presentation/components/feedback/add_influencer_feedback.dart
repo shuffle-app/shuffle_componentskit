@@ -172,14 +172,8 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
         controller: _scrollController,
         autoImplyLeading: true,
         centerTitle: true,
-        customTitle: Flexible(
-          child: AutoSizeText(
-            S.current.AddFeedback,
-            maxLines: 1,
-            style: boldTextTheme?.title1,
-            textAlign: TextAlign.center,
-          ),
-        ),
+        title: S.current.AddFeedback,
+        expandTitle: false,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [

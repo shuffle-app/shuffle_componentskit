@@ -437,7 +437,6 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
             UiKitFieldWithTagList(
               listUiKitTags: [
                 UiKitTag(
-                  updateTitle: false,
                   title: _priceController.text.isNotEmpty
                       ? '${_placeToEdit.currency ?? ''} ${_priceController.text}'
                       : '0',
@@ -498,24 +497,21 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         onScheduleCreated: (model) {
                           if (model is UiScheduleDatesModel) {
                             setState(() {
-                              _placeToEdit.schedule = model;
-
                               _placeToEdit.scheduleString =
                                   model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
+                              _placeToEdit.schedule = model;
                             });
                           } else if (model is UiScheduleDatesRangeModel) {
                             setState(() {
-                              _placeToEdit.schedule = model;
-
                               _placeToEdit.scheduleString =
                                   model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
+                              _placeToEdit.schedule = model;
                             });
                           } else if (model is UiScheduleTimeModel) {
                             setState(() {
-                              _placeToEdit.schedule = model;
-
                               _placeToEdit.scheduleString =
                                   model.getReadableScheduleString().map((pair) => pair.join(': ')).join(' / ');
+                              _placeToEdit.schedule = model;
                             });
                           }
                         },
@@ -867,7 +863,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                 textAlign: TextAlign.center,
               )
             ],
-             SpacingFoundation.verticalSpace24,
+            SpacingFoundation.verticalSpace24,
             SafeArea(
               top: false,
               child: context.gradientButton(

@@ -51,7 +51,7 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
       autoImplyLeading: true,
       physics: NeverScrollableScrollPhysics(),
       centerTitle: true,
-      customToolbarBaseHeight: 80.w,
+      expandTitle: false,
       children: [
         UiKitCustomTabBar(
           tabController: tabController,
