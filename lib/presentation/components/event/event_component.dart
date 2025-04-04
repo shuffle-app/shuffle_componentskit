@@ -31,7 +31,6 @@ class EventComponent extends StatefulWidget {
   final VoidCallback? onRefresherButtonTap;
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
-  final ValueNotifier<String?>? translateDescription;
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
   final Set<int>? likedReviews;
@@ -41,6 +40,8 @@ class EventComponent extends StatefulWidget {
   final bool isInfluencer;
   final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
   final VoidCallback? onViewAllVoicesTap;
+  final Future<String?> Function()? onTranslateTap;
+  final ValueNotifier<bool>? isTranslateLoading;
 
   const EventComponent({
     super.key,
@@ -67,7 +68,6 @@ class EventComponent extends StatefulWidget {
     this.onRefresherButtonTap,
     this.bookingNotifier,
     this.onSpendPointTap,
-    this.translateDescription,
     this.showTranslateButton,
     this.currentUserId,
     this.likedReviews,
@@ -78,6 +78,8 @@ class EventComponent extends StatefulWidget {
     this.isInfluencer = false,
     this.voiceUiModels,
     this.onViewAllVoicesTap,
+    this.onTranslateTap,
+    this.isTranslateLoading,
   });
 
   @override
@@ -370,41 +372,46 @@ class _EventComponentState extends State<EventComponent> {
         SpacingFoundation.verticalSpace14,
         if (widget.event.description != null) ...[
           RepaintBoundary(
-              child: DescriptionWidget(
-            description: currentDescription,
-            showTranslateButton: widget.showTranslateButton,
-            onTranslateTap: () {
-              setState(() {
-                isTranslate = !isTranslate;
-                currentDescription = (isTranslate &&
-                        widget.translateDescription?.value != null &&
-                        widget.translateDescription!.value!.isNotEmpty)
-                    ? widget.translateDescription!.value!
-                    : widget.event.description ?? '';
-              });
-            },
-            isHide: isHide,
-            isTranslate: isTranslate,
-            onReadLess: () {
-              setState(() {
-                listViewController
-                    .animateTo(scrollPosition, duration: const Duration(milliseconds: 100), curve: Curves.easeIn)
-                    .then(
-                  (value) {
-                    setState(() {
-                      isHide = true;
-                    });
-                  },
-                );
-              });
-            },
-            onReadMore: () {
-              setState(() {
-                isHide = false;
-                scrollPosition = listViewController.position.pixels;
-              });
-            },
-          ).paddingSymmetric(horizontal: horizontalMargin)),
+            child: DescriptionWidget(
+              isTranslateLoading: widget.isTranslateLoading,
+              description: currentDescription,
+              showTranslateButton: widget.showTranslateButton,
+              onTranslateTap: () async {
+                if (isTranslate) {
+                  currentDescription = widget.event.description ?? '';
+                  isTranslate = !isTranslate;
+                } else {
+                  final translateDescription = await widget.onTranslateTap?.call();
+                  if (translateDescription != null && translateDescription.isNotEmpty) {
+                    currentDescription = translateDescription;
+                    isTranslate = !isTranslate;
+                  }
+                }
+                setState(() {});
+              },
+              isHide: isHide,
+              isTranslate: isTranslate,
+              onReadLess: () {
+                setState(() {
+                  listViewController
+                      .animateTo(scrollPosition, duration: const Duration(milliseconds: 100), curve: Curves.easeIn)
+                      .then(
+                    (value) {
+                      setState(() {
+                        isHide = true;
+                      });
+                    },
+                  );
+                });
+              },
+              onReadMore: () {
+                setState(() {
+                  isHide = false;
+                  scrollPosition = listViewController.position.pixels;
+                });
+              },
+            ).paddingSymmetric(horizontal: horizontalMargin),
+          ),
           SpacingFoundation.verticalSpace24,
         ],
         if (widget.showOfferButton)
