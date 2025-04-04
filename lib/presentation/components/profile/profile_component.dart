@@ -354,7 +354,7 @@ class ProfileComponent extends StatelessWidget {
                             width: 0.95.sw,
                             child: UiKitFeedbackCard(
                               showTranslateButton: feedback.showTranslateButton,
-                              translateText: feedback.translateText,
+                              onTranslateTap: feedback.onTranslateText,
                               title: feedback.feedbackAuthorName,
                               avatarUrl: feedback.feedbackAuthorPhoto,
                               datePosted: feedback.feedbackDateTime,

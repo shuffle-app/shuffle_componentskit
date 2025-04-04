@@ -143,7 +143,7 @@ class PublicProProfileComponent extends StatelessWidget {
                               ?.map(
                                 (feedback) => UiKitFeedbackCard(
                                   showTranslateButton: feedback.showTranslateButton,
-                                  translateText: feedback.translateText,
+                                  onTranslateTap: feedback.onTranslateText,
                                   title: feedback.feedbackAuthorName,
                                   avatarUrl: feedback.feedbackAuthorPhoto,
                                   userTileType: feedback.feedbackAuthorType,

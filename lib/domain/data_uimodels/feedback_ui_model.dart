@@ -19,8 +19,9 @@ class FeedbackUiModel {
   final VoidCallback? onEdit;
   final bool canEdit;
   final List<BaseUiKitMedia> media;
-  final ValueNotifier<bool>? showTranslateButton;
-  final ValueNotifier<String>? translateText;
+  final bool showTranslateButton;
+  final Future<String?> Function()? onTranslateText;
+  final ValueNotifier<bool>? isTranslateLoading;
 
   FeedbackUiModel({
     required this.feedbackAuthorName,
@@ -40,8 +41,9 @@ class FeedbackUiModel {
     this.onTap,
     this.onEdit,
     this.canEdit = false,
-    this.showTranslateButton,
-    this.translateText,
+    this.showTranslateButton = false,
+    this.onTranslateText,
+    this.isTranslateLoading,
   });
 
   factory FeedbackUiModel.empty() => FeedbackUiModel(
@@ -67,8 +69,9 @@ class FeedbackUiModel {
     VoidCallback? onTap,
     VoidCallback? onEdit,
     bool? canEdit,
-    ValueNotifier<bool>? showTranslateButton,
-    ValueNotifier<String>? translateText,
+    bool? showTranslateButton,
+    Future<String?> Function()? onTranslateText,
+    ValueNotifier<bool>? isTranslateLoading,
   }) {
     return FeedbackUiModel(
       feedbackAuthorName: feedbackAuthorName ?? this.feedbackAuthorName,
@@ -87,9 +90,10 @@ class FeedbackUiModel {
       eventId: eventId ?? this.eventId,
       onTap: onTap ?? this.onTap,
       showTranslateButton: showTranslateButton ?? this.showTranslateButton,
-      translateText: translateText ?? this.translateText,
+      onTranslateText: onTranslateText ?? this.onTranslateText,
       onEdit: onEdit ?? this.onEdit,
       canEdit: canEdit ?? this.canEdit,
+      isTranslateLoading: isTranslateLoading ?? this.isTranslateLoading,
     );
   }
 
