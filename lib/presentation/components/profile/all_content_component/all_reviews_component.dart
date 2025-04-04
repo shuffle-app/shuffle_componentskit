@@ -56,7 +56,7 @@ class AllReviewsComponent extends StatelessWidget {
                   width: feedbackCardWidth,
                   child: UiKitFeedbackCard(
                     showTranslateButton: feedback.showTranslateButton,
-                    translateText: feedback.translateText,
+                    onTranslateTap: feedback.onTranslateText,
                     userTileType: feedback.feedbackAuthorType,
                     title: feedback.feedbackAuthorName,
                     avatarUrl: feedback.feedbackAuthorPhoto,
