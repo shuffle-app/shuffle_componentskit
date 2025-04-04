@@ -5,7 +5,7 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'my_booking_ui_model/my_booking_ui_model.dart';
 
 class MyBookingComponent extends StatelessWidget {
-  final List<MyBookingUiModel>? myBookingUiModel;
+  final List<MyBookingUiModel> myBookingUiModel;
   final ValueChanged<int>? onAlertCircleTap;
   final ValueChanged<int>? onBarCodeTap;
   final ValueChanged<int>? onPayOrder;
@@ -17,7 +17,7 @@ class MyBookingComponent extends StatelessWidget {
 
   MyBookingComponent({
     super.key,
-    this.myBookingUiModel,
+    required this.myBookingUiModel,
     this.onPayOrder,
     this.onAlertCircleTap,
     this.onBarCodeTap,
@@ -25,8 +25,8 @@ class MyBookingComponent extends StatelessWidget {
     this.onFullRefundTap,
     this.onPartialRefundTap,
   }) {
-    myBookingUiModelUpcoming = myBookingUiModel?.where((element) => !element.isPast).toList();
-    myBookingUiModelPast = myBookingUiModel?.where((element) => element.isPast).toList();
+    myBookingUiModelUpcoming = myBookingUiModel.where((element) => !element.isPast).toList();
+    myBookingUiModelPast = myBookingUiModel.where((element) => element.isPast).toList();
   }
 
   @override
