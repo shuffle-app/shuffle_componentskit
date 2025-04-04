@@ -509,7 +509,7 @@ class UiScheduleTimeModel extends UiScheduleModel {
 
   @override
   UiScheduleModel getNonNullKeysSchedule() {
-    final newSchedule = UiScheduleTimeModel(weeklySchedule.where((element) => element.key.isNotEmpty).toList());
+    final newSchedule = UiScheduleTimeModel(weeklySchedule.where((element) => element.key.trim().isNotEmpty).toList());
     newSchedule.templateName = templateName;
     return newSchedule;
   }
@@ -740,7 +740,7 @@ class UiScheduleDatesModel extends UiScheduleModel {
 
   @override
   UiScheduleModel getNonNullKeysSchedule() {
-    final newSchedule = UiScheduleDatesModel(dailySchedule.where((element) => element.key.isNotEmpty).toList());
+    final newSchedule = UiScheduleDatesModel(dailySchedule.where((element) => element.key.trim().isNotEmpty).toList());
     newSchedule.templateName = templateName;
     return newSchedule;
   }
@@ -1028,7 +1028,8 @@ class UiScheduleDatesRangeModel extends UiScheduleModel {
 
   @override
   UiScheduleModel getNonNullKeysSchedule() {
-    final newSchedule = UiScheduleDatesRangeModel(dailySchedule.where((element) => element.key.isNotEmpty).toList());
+    final newSchedule =
+        UiScheduleDatesRangeModel(dailySchedule.where((element) => element.key.trim().isNotEmpty).toList());
     newSchedule.templateName = templateName;
     return newSchedule;
   }

@@ -497,24 +497,21 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                         onScheduleCreated: (model) {
                           if (model is UiScheduleDatesModel) {
                             setState(() {
-                              _placeToEdit.schedule = model;
-
                               _placeToEdit.scheduleString =
                                   model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
+                              _placeToEdit.schedule = model;
                             });
                           } else if (model is UiScheduleDatesRangeModel) {
                             setState(() {
-                              _placeToEdit.schedule = model;
-
                               _placeToEdit.scheduleString =
                                   model.getReadableScheduleString().map((pair) => pair.join(', ')).join(' / ');
+                              _placeToEdit.schedule = model;
                             });
                           } else if (model is UiScheduleTimeModel) {
                             setState(() {
-                              _placeToEdit.schedule = model;
-
                               _placeToEdit.scheduleString =
                                   model.getReadableScheduleString().map((pair) => pair.join(': ')).join(' / ');
+                              _placeToEdit.schedule = model;
                             });
                           }
                         },
