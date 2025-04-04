@@ -3,35 +3,54 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_uikit/ui_kit/atoms/cards/digest_content_card.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class DigestPageComponent extends StatelessWidget {
+class DigestPageComponent extends StatefulWidget {
   final String? title;
   final String? underTitleText;
   final List<DigestUiModel>? digestUiModels;
-
-  final ValueNotifier<bool>? showTranslateButton;
-  final ValueNotifier<String>? titleTranslateText;
-  final ValueNotifier<String>? underTitleTranslateText;
-
-  late final ValueNotifier<String> titleNotifier;
-  late final ValueNotifier<String> underTitleNotifier;
-  late final ValueNotifier<bool> isTranslate;
+  final Future<List<String>> Function()? onTranslateListTap;
+  final bool showTranslateButton;
 
   final Function(int placeOrEventId, bool isEvent)? onPlaceOrEventTap;
 
-  DigestPageComponent({
+  const DigestPageComponent({
     super.key,
     this.title,
     this.underTitleText,
     this.digestUiModels,
-    this.showTranslateButton,
-    this.titleTranslateText,
-    this.underTitleTranslateText,
+    this.showTranslateButton = false,
+    this.onTranslateListTap,
     this.onPlaceOrEventTap,
-  }) {
-    titleNotifier = ValueNotifier<String>(title ?? '');
-    underTitleNotifier = ValueNotifier<String>(underTitleText ?? '');
+  });
 
-    isTranslate = ValueNotifier<bool>(false);
+  @override
+  State<DigestPageComponent> createState() => _DigestPageComponentState();
+}
+
+class _DigestPageComponentState extends State<DigestPageComponent> {
+  final shufflePostVideoWidgetHeight = 0.16845.sw * 0.75;
+  final shufflePostVideoWidgetWidth = 0.16845.sw;
+  final playButtonSize = Size(32.w, 24.h);
+  late final xOffset = shufflePostVideoWidgetWidth / 2 - playButtonSize.width / 2;
+  late final yOffset = shufflePostVideoWidgetHeight / 2 - playButtonSize.height / 2;
+  final horizontalSpacing = SpacingFoundation.horizontalSpacing16;
+
+  bool isTranslate = false;
+  final List<String> translateListText = List.empty(growable: true);
+
+  Future<void> toggleTranslation() async {
+    if (isTranslate) {
+      isTranslate = !isTranslate;
+    } else {
+      if (translateListText.isEmpty) {
+        List<String>? translate = await widget.onTranslateListTap?.call();
+
+        if (translate != null && translate.isNotEmpty) translateListText.addAll(translate);
+      }
+
+      isTranslate = !isTranslate;
+    }
+
+    setState(() {});
   }
 
   @override
@@ -41,38 +60,7 @@ class DigestPageComponent extends StatelessWidget {
     final regularTextTheme = theme?.regularTextTheme;
     final colorScheme = theme?.colorScheme;
     final isLightTheme = theme?.themeMode == ThemeMode.light;
-
-    final shufflePostVideoWidgetHeight = 0.16845.sw * 0.75;
-    final shufflePostVideoWidgetWidth = 0.16845.sw;
-    final playButtonSize = Size(32.w, 24.h);
-    final xOffset = shufflePostVideoWidgetWidth / 2 - playButtonSize.width / 2;
-    final yOffset = shufflePostVideoWidgetHeight / 2 - playButtonSize.height / 2;
-
-    final horizontalSpacing = SpacingFoundation.horizontalSpacing16;
-
-    void toggleTranslation() {
-      isTranslate.value = !isTranslate.value;
-
-      ///Translate in publication
-      titleNotifier.value = isTranslate.value ? (titleTranslateText?.value ?? title ?? '') : title ?? '';
-      underTitleNotifier.value =
-          isTranslate.value ? (underTitleTranslateText?.value ?? underTitleText ?? '') : underTitleText ?? '';
-
-      ///Translate in content card
-      digestUiModels?.forEach(
-        (e) {
-          e.contentDescriptionNotifier?.value = isTranslate.value
-              ? (e.contentDescriptionTranslate?.value ?? e.contentDescription ?? '')
-              : e.contentDescription ?? '';
-
-          e.descriptionNotifier?.value =
-              isTranslate.value ? (e.descriptionTranslate?.value ?? e.description ?? '') : e.description ?? '';
-
-          e.subTitleNotifier?.value =
-              isTranslate.value ? (e.subTitleTranslate?.value ?? e.subTitle ?? '') : e.subTitle ?? '';
-        },
-      );
-    }
+    int digestTranslateIndex = -1;
 
     return BlurredAppBarPage(
       customTitle: Flexible(
@@ -88,34 +76,27 @@ class DigestPageComponent extends StatelessWidget {
       children: [
         Row(
           children: [
-            if (titleNotifier.value.isNotEmpty)
+            if (widget.title != null && widget.title!.isNotEmpty)
               Expanded(
-                child: ValueListenableBuilder<String>(
-                  valueListenable: titleNotifier,
-                  builder: (_, titleTranslate, __) => GradientableWidget(
-                    gradient: GradientFoundation.attentionCard,
-                    child: Text(
-                      titleTranslate,
-                      style: boldTextTheme?.title2,
-                    ),
+                child: GradientableWidget(
+                  gradient: GradientFoundation.attentionCard,
+                  child: Text(
+                    isTranslate && translateListText.isNotEmpty ? translateListText[0] : widget.title!,
+                    style: boldTextTheme?.title2,
                   ),
                 ),
               ),
-            if (showTranslateButton != null)
-              ValueListenableBuilder<bool>(
-                valueListenable: isTranslate,
-                builder: (_, isTranslating, __) => InkWell(
-                  onTap: toggleTranslation,
-                  child: showTranslateButton!.value
-                      ? Text(
-                          isTranslating ? S.of(context).Original : S.of(context).Translate,
-                          style: context.uiKitTheme?.regularTextTheme.caption4Regular.copyWith(
-                            color: isLightTheme ? ColorsFoundation.darkNeutral700 : ColorsFoundation.darkNeutral300,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ),
-              ).paddingOnly(left: SpacingFoundation.horizontalSpacing8),
+            InkWell(
+              onTap: toggleTranslation,
+              child: widget.showTranslateButton
+                  ? Text(
+                      isTranslate ? S.of(context).Original : S.of(context).Translate,
+                      style: context.uiKitTheme?.regularTextTheme.caption4Regular.copyWith(
+                        color: isLightTheme ? ColorsFoundation.darkNeutral700 : ColorsFoundation.darkNeutral300,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ).paddingOnly(left: SpacingFoundation.horizontalSpacing8),
           ],
         ).paddingOnly(
           bottom: SpacingFoundation.verticalSpacing24,
@@ -123,38 +104,35 @@ class DigestPageComponent extends StatelessWidget {
           left: horizontalSpacing,
           right: horizontalSpacing,
         ),
-        if (underTitleNotifier.value.isNotEmpty)
-          ValueListenableBuilder<String>(
-            valueListenable: underTitleNotifier,
-            builder: (_, underTitleTranslate, __) => Text(
-              underTitleTranslate,
-              style: regularTextTheme?.body,
-            ).paddingOnly(
-              bottom: SpacingFoundation.verticalSpacing24,
-              left: horizontalSpacing,
-              right: horizontalSpacing,
-            ),
+        if (widget.underTitleText != null && widget.underTitleText!.isNotEmpty)
+          Text(
+            isTranslate && translateListText.length >= 2 ? translateListText[1] : widget.underTitleText!,
+            style: regularTextTheme?.body,
+          ).paddingOnly(
+            bottom: SpacingFoundation.verticalSpacing24,
+            left: horizontalSpacing,
+            right: horizontalSpacing,
           ),
-        if (digestUiModels != null && digestUiModels!.isNotEmpty)
-          ...digestUiModels!.map(
+        if (widget.digestUiModels != null && widget.digestUiModels!.isNotEmpty)
+          ...widget.digestUiModels!.map(
             (e) {
+              digestTranslateIndex += 3;
               final id = e.placeId ?? e.eventId ?? -1;
               final isEvent = e.eventId != null;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (e.subTitleNotifier != null && e.subTitleNotifier!.value.isNotEmpty)
-                    ValueListenableBuilder<String>(
-                      valueListenable: e.subTitleNotifier!,
-                      builder: (_, subTitle, __) => Text(
-                        subTitle,
-                        style: theme?.boldTextTheme.subHeadline,
-                      ).paddingOnly(
-                        bottom: SpacingFoundation.verticalSpacing24,
-                        left: horizontalSpacing,
-                        right: horizontalSpacing,
-                      ),
+                  if (e.title != null && e.title!.isNotEmpty)
+                    Text(
+                      isTranslate && translateListText.length >= digestTranslateIndex
+                          ? translateListText[digestTranslateIndex]
+                          : e.title!,
+                      style: theme?.boldTextTheme.subHeadline,
+                    ).paddingOnly(
+                      bottom: SpacingFoundation.verticalSpacing24,
+                      left: horizontalSpacing,
+                      right: horizontalSpacing,
                     ),
                   if (e.placeId != null || e.eventId != null)
                     UiKitCardWrapper(
@@ -164,19 +142,18 @@ class DigestPageComponent extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
-                            onTap: () => onPlaceOrEventTap?.call(id, isEvent),
+                            onTap: () => widget.onPlaceOrEventTap?.call(id, isEvent),
                             child: DigestContentCard(digestUiModel: e),
                           ),
                           SpacingFoundation.verticalSpace8,
-                          if (e.contentDescriptionNotifier != null && e.contentDescriptionNotifier!.value.isNotEmpty)
-                            ValueListenableBuilder<String>(
-                              valueListenable: e.contentDescriptionNotifier!,
-                              builder: (_, contentDescriptionTranslate, __) => Text(
-                                contentDescriptionTranslate,
-                                style: regularTextTheme?.caption4Regular,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                          if (e.contentDescription != null && e.contentDescription!.isNotEmpty)
+                            Text(
+                              isTranslate && translateListText.length >= digestTranslateIndex + 1
+                                  ? translateListText[digestTranslateIndex + 1]
+                                  : e.contentDescription!,
+                              style: regularTextTheme?.caption4Regular,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                         ],
                       ),
@@ -219,13 +196,12 @@ class DigestPageComponent extends StatelessWidget {
                       left: horizontalSpacing,
                       right: horizontalSpacing,
                     ),
-                  if (e.descriptionNotifier != null && e.descriptionNotifier!.value.isNotEmpty)
-                    ValueListenableBuilder(
-                      valueListenable: e.descriptionNotifier!,
-                      builder: (_, descriptionTranslate, __) => Text(
-                        descriptionTranslate,
-                        style: regularTextTheme?.caption2,
-                      ),
+                  if (e.description != null && e.description!.isNotEmpty)
+                    Text(
+                      isTranslate && translateListText.length >= digestTranslateIndex + 2
+                          ? translateListText[digestTranslateIndex + 2]
+                          : e.description!,
+                      style: regularTextTheme?.caption2,
                     ).paddingOnly(
                       bottom: SpacingFoundation.verticalSpacing24,
                       left: horizontalSpacing,

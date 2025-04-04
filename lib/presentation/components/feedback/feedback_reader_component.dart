@@ -49,7 +49,8 @@ class FeedbackReaderComponent extends StatelessWidget {
                     customBackgroundColor: theme?.colorScheme.surface,
                     userTileType: e.feedbackAuthorType,
                     showTranslateButton: e.showTranslateButton,
-                    translateText: e.translateText,
+                    onTranslateTap: e.onTranslateText,
+                    isTranslateLoading: e.isTranslateLoading,
                     onEdit: e.onEdit,
                     canEdit: e.canEdit,
                     onAvatarTap: () => onAvatarTap?.call(BaseUiKitUserTileData(
@@ -71,7 +72,8 @@ class FeedbackReaderComponent extends StatelessWidget {
                   customBackgroundColor: theme?.colorScheme.surface,
                   userTileType: e.feedbackAuthorType,
                   showTranslateButton: e.showTranslateButton,
-                  translateText: e.translateText,
+                  onTranslateTap: e.onTranslateText,
+                  isTranslateLoading: e.isTranslateLoading,
                   onEdit: e.onEdit,
                   canEdit: e.canEdit,
                   onAvatarTap: () => onAvatarTap?.call(BaseUiKitUserTileData(

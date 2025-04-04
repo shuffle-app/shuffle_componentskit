@@ -8,6 +8,7 @@ import 'package:shuffle_components_kit/presentation/common/common.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class AddInfluencerFeedbackComponent extends StatefulWidget {
   final UiUniversalModel? uiUniversalModel;
@@ -171,7 +172,14 @@ class _AddInfluencerFeedbackComponentState extends State<AddInfluencerFeedbackCo
         controller: _scrollController,
         autoImplyLeading: true,
         centerTitle: true,
-        title: S.current.AddFeedback,
+        customTitle: Flexible(
+          child: AutoSizeText(
+            S.current.AddFeedback,
+            maxLines: 1,
+            style: boldTextTheme?.title1,
+            textAlign: TextAlign.center,
+          ),
+        ),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         children: [
