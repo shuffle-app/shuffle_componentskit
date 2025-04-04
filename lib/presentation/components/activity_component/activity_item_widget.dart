@@ -56,7 +56,7 @@ class ActivityItemWidget extends StatelessWidget {
                           textDirection: intl.Bidi.isRtlLanguage() ? TextDirection.rtl : TextDirection.ltr,
                         );
 
-                        textPainter.layout(maxWidth: maxWidth);
+                        textPainter.layout(maxWidth: maxWidth - SpacingFoundation.horizontalSpacing12);
 
                         final isTwoLines = textPainter.didExceedMaxLines;
 

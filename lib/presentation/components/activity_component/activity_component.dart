@@ -66,6 +66,7 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
           height: 0.75.sh,
           child: TabBarView(
             controller: tabController,
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               PagedListView.separated(
                 key: myActivityKey,

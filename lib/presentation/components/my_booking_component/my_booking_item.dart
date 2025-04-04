@@ -203,8 +203,7 @@ class MyBookingItem extends StatelessWidget {
         ),
         if (myBookingUiModel.isPast)
           context
-              .gradientButton(
-                padding: EdgeInsets.symmetric(vertical: SpacingFoundation.verticalSpacing6),
+              .smallGradientButton(
                 data: BaseUiKitButtonData(
                   text: S.of(context).LeaveFeedback,
                   onPressed: () => onLeaveFeedbackTap?.call(myBookingUiModel.id),
@@ -215,7 +214,6 @@ class MyBookingItem extends StatelessWidget {
         else if (myBookingUiModel.status == TicketIssueStatus.unpaid && myBookingUiModel.total != 0)
           context
               .smallGradientButton(
-                // padding: EdgeInsets.symmetric(vertical: SpacingFoundation.verticalSpacing6),
                 data: BaseUiKitButtonData(
                   text: S.of(context).Pay,
                   onPressed: () => onPayTap?.call(myBookingUiModel.id),
