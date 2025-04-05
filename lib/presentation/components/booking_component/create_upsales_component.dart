@@ -24,7 +24,6 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  late XFile? file;
   late UpsaleUiModel _upsaleUiModel;
 
   String? _validateText;
@@ -75,20 +74,24 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   }
 
   @override
+  void dispose() {
+    _descriptionController.dispose();
+    _limitController.dispose();
+    _priceController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
-        customTitle: Expanded(
-          child: AutoSizeText(
+        title:
             S.of(context).Upsales,
-            style: theme?.boldTextTheme.title1,
-            textAlign: TextAlign.center,
-            wrapWords: false,
-          ),
-        ),
-        customToolbarBaseHeight: 1.sw <= 380 ? 0.17.sh : 0.12.sh,
+
+        expandTitle: false,
         centerTitle: true,
         autoImplyLeading: true,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

@@ -22,9 +22,7 @@ class UpsaleUiModel {
   String? validateCreation({bool checkDate = false}) {
     if (photoPath == null || (photoPath?.isEmpty ?? true)) {
       return S.current.XIsRequired(S.current.Photo);
-    } else if (description == null) {
-      return S.current.XIsRequired(S.current.Description);
-    } else if (description != null && (description!.isEmpty || description!.trim().isEmpty)) {
+    } else if (description == null || (description?.isEmpty ?? true)) {
       return S.current.XIsRequired(S.current.Description);
     } else if (limit != null && limit!.isEmpty) {
       return S.current.XIsRequired(S.current.BookingLimit);

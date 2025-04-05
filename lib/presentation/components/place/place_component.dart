@@ -122,6 +122,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   // Set<int> likedReviews = {};
 
   final ScrollController listViewController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   bool get _noFeedbacks => feedbacksPagedController.itemList?.isEmpty ?? true;
 
@@ -216,6 +217,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
   void dispose() {
     reactionsPagingController.dispose();
     feedbacksPagedController.dispose();
+    listViewController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -289,6 +292,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ],
         SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
+          scrollController: scrollController,
           onTagTap: (value) {
             if (widget.place.schedule != null && value == ShuffleUiKitIcons.clock) {
               showTimeInfoDialog(context, widget.place.schedule!.getReadableScheduleString());
@@ -883,7 +887,7 @@ class EditReviewModel {
   final bool isEdited;
   final int? countToUpdate;
 
-  EditReviewModel({
+  const EditReviewModel({
     required this.isEdited,
     this.countToUpdate,
   });

@@ -328,7 +328,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                               onSave: (subsUiModel) {
                                 setState(() {
                                   _countSubsLimit();
-                                  _bookingUiModel.subsUiModel?[index - 1] = subsUiModel;
+                                  _subsUiModels[index - 1] = subsUiModel;
                                 });
                               },
                               subsUiModel: sabsItem,
@@ -433,7 +433,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                               currency: widget.currency,
                               onSave: (upsaleUiModel) {
                                 setState(() {
-                                  _bookingUiModel.upsaleUiModel?[index - 1] = upsaleUiModel;
+                                  _upsaleUiModels[index - 1] = upsaleUiModel;
                                 });
                               },
                               upsaleUiModel: upsaleItem,
