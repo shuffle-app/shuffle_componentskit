@@ -7,11 +7,9 @@ class SupportComponent extends StatelessWidget {
   final TextEditingController _nameController;
   final TextEditingController _emailController;
   final TextEditingController _textController;
-  // final TextEditingController _daysCountController;
+  final Map<String, String>? content;
 
   final FocusNode daysFocusNode;
-  final PositionModel? position;
-  final ContentBaseModel content;
   final ValueChanged<bool> onSupportSubmitted;
   final bool isSupportActive;
   final String? versionText;
@@ -20,12 +18,11 @@ class SupportComponent extends StatelessWidget {
 
   SupportComponent({
     super.key,
-    this.position,
     this.versionText,
+    this.content,
     this.isSupportActive = false,
     required this.onSupportSubmitted,
     required this.daysFocusNode,
-    required this.content,
     TextEditingController? nameController,
     TextEditingController? emailController,
     TextEditingController? textController,
@@ -34,6 +31,7 @@ class SupportComponent extends StatelessWidget {
   })  : _nameController = nameController ?? TextEditingController(),
         _emailController = emailController ?? TextEditingController(),
         _textController = textController ?? TextEditingController();
+
   // _daysCountController = daysCountController ?? TextEditingController()
 
   @override
@@ -55,7 +53,7 @@ class SupportComponent extends StatelessWidget {
               )
             : null,
         childrenPadding: EdgeInsets.symmetric(
-          horizontal: position?.horizontalMargin?.toDouble() ?? 0,
+          horizontal: SpacingFoundation.horizontalSpacing16,
         ),
         children: [
           SpacingFoundation.verticalSpace16,
@@ -111,14 +109,7 @@ class SupportComponent extends StatelessWidget {
                     data: BaseUiKitButtonData(
                       onPressed: () => context.push(
                         FAQComponent(
-                          positionModel: position,
-                          faqData: content.body?[ContentItemType.pageOpener]?.properties?.map(
-                                (key, value) => MapEntry(
-                                  key,
-                                  value.value!,
-                                ),
-                              ) ??
-                              Map<String, String>.identity(),
+                          faqData: content ?? Map<String, String>.identity(),
                         ),
                       ),
                       text: S.of(context).Faq.toUpperCase(),

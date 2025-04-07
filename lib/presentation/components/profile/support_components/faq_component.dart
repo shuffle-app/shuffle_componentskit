@@ -4,9 +4,8 @@ import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FAQComponent extends StatefulWidget {
   final Map<String, String> faqData;
-  final PositionModel? positionModel;
 
-  const FAQComponent({super.key, required this.faqData, this.positionModel});
+  const FAQComponent({super.key, required this.faqData,});
 
   @override
   State<FAQComponent> createState() => _FAQComponentState();
@@ -61,7 +60,7 @@ class _FAQComponentState extends State<FAQComponent> {
         customToolbarHeight: itemsToShow.isEmpty ? null : 170.0,
         centerTitle: true,
         childrenPadding: EdgeInsets.symmetric(
-          horizontal: widget.positionModel?.horizontalMargin?.toDouble() ?? 0,
+          horizontal: SpacingFoundation.horizontalSpacing16,
         ),
         childrenBuilder: (context, index) {
           if (itemsToShow.isEmpty) {
@@ -93,8 +92,8 @@ class _FAQComponentState extends State<FAQComponent> {
                       context,
                       GeneralDialogData(
                         child: WebContentComponent(url: widget.faqData[itemsToShow[index]]!).paddingSymmetric(
-                            vertical: widget.positionModel?.verticalMargin?.toDouble() ?? 0,
-                            horizontal: widget.positionModel?.horizontalMargin?.toDouble() ?? 0),
+                            vertical: SpacingFoundation.verticalSpacing16,
+                            horizontal: SpacingFoundation.horizontalSpacing16),
                       ),
                     ),
                     text: itemsToShow[index],

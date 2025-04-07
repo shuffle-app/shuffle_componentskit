@@ -27,8 +27,9 @@ class UpsaleUiModel {
     } else if (limit != null && limit!.isEmpty) {
       return S.current.XIsRequired(S.current.BookingLimit);
     } else if (limit != null && limit!.isNotEmpty) {
-      final newValue = int.parse(limit!.replaceAll(' ', ''));
-      if (newValue <= 0) {
+      final cleanedLimit = limit!.replaceAll(RegExp(r'[^\d]'), '').trim();
+      final newValue = int.tryParse(cleanedLimit.replaceAll(' ', '').trim());
+      if ((newValue ?? 0) <= 0) {
         return S.current.XIsRequired(S.current.BookingLimit);
       }
       return null;

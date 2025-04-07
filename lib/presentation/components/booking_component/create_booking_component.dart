@@ -265,7 +265,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                                 if (!widget.isViewMode) {
                                   context.push(
                                     CreateSubsComponent(
-                                      onSave: (subsUiModel) {
+                                      onSave: (SubsUiModel subsUiModel) {
                                         setState(() {
                                           _subsUiModels.add(subsUiModel);
                                           _countSubsLimit();
@@ -325,7 +325,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                         if (!widget.isViewMode) {
                           return context.push(
                             CreateSubsComponent(
-                              onSave: (subsUiModel) {
+                              onSave: (SubsUiModel subsUiModel) {
                                 setState(() {
                                   _countSubsLimit();
                                   _subsUiModels[index - 1] = subsUiModel;
@@ -372,7 +372,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                                   context.push(
                                     CreateUpsalesComponent(
                                       currency: widget.currency,
-                                      onSave: (upsaleUiModel) {
+                                      onSave: (UpsaleUiModel upsaleUiModel) {
                                         setState(() {
                                           _upsaleUiModels.add(upsaleUiModel);
                                         });
@@ -431,7 +431,7 @@ class _CreateBookingComponentState extends State<CreateBookingComponent> {
                           return context.push(
                             CreateUpsalesComponent(
                               currency: widget.currency,
-                              onSave: (upsaleUiModel) {
+                              onSave: (UpsaleUiModel upsaleUiModel) {
                                 setState(() {
                                   _upsaleUiModels[index - 1] = upsaleUiModel;
                                 });

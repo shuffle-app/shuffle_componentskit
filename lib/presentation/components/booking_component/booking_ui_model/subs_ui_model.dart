@@ -31,8 +31,9 @@ class SubsUiModel {
     } else if (bookingLimit != null && bookingLimit!.isEmpty) {
       return S.current.XIsRequired(S.current.BookingLimit);
     } else if (bookingLimit != null && bookingLimit!.isNotEmpty) {
-      final newValue = int.parse(bookingLimit!.replaceAll(' ', ''));
-      if (newValue <= 0) {
+      final cleanedLimit = bookingLimit!.replaceAll(RegExp(r'[^\d]'), '').trim();
+      final newValue = int.tryParse(cleanedLimit.replaceAll(' ', '').trim());
+      if ((newValue ?? 0) <= 0) {
         return S.current.XIsRequired(S.current.BookingLimit);
       }
       return null;

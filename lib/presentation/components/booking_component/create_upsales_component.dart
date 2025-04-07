@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 class CreateUpsalesComponent extends StatefulWidget {
   final UpsaleUiModel? upsaleUiModel;
-  final Function(UpsaleUiModel upsaleUiModel) onSave;
+  final ValueChanged<UpsaleUiModel> onSave;
   final String? currency;
 
   const CreateUpsalesComponent({
@@ -158,7 +158,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
             if (_validateText != null)
               Text(
                 _validateText!,
-                style: context.uiKitTheme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
+                style: theme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
                 textAlign: TextAlign.center,
               ),
             SpacingFoundation.verticalSpace10,
