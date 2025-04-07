@@ -37,6 +37,8 @@ class BookingUiModel {
     List<SubsUiModel>? subsUiModel,
     List<UpsaleUiModel>? upsaleUiModel,
     DateTime? selectedDateTime,
+    List<BookingPaymentType>? selectedPaymentTypes,
+    bool? showSubsInContentCard,
   }) {
     return BookingUiModel(
       id: id ?? this.id,
@@ -47,6 +49,8 @@ class BookingUiModel {
       subsUiModel: subsUiModel ?? this.subsUiModel,
       upsaleUiModel: upsaleUiModel ?? this.upsaleUiModel,
       selectedDateTime: selectedDateTime ?? this.selectedDateTime,
+      selectedPaymentTypes: selectedPaymentTypes ?? this.selectedPaymentTypes,
+      showSubsInContentCard: showSubsInContentCard ?? this.showSubsInContentCard,
     );
   }
 
