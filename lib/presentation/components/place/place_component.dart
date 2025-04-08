@@ -710,7 +710,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                             ),
                           )
                           .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
-                      : null,
+                      : const SizedBox.shrink(),
                 ),
                 content: _noFeedbacks
                     ? null
@@ -818,8 +818,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
+          ).paddingOnly(
+            bottom: SpacingFoundation.verticalSpacing24,
           ),
-        SpacingFoundation.verticalSpace24,
         if (widget.voiceUiModels != null)
           ListenableBuilder(
             listenable: widget.voiceUiModels!,
@@ -835,6 +836,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           onViewAllTap: widget.onViewAllVoicesTap,
                           onUserTap: (user) =>
                               widget.onAvatarTap?.call(BaseUiKitUserTileData(id: user?.id, type: user?.userTileType)),
+                        ).paddingOnly(
+                          bottom: SpacingFoundation.verticalSpacing24,
+                          left: horizontalMargin,
+                          right: horizontalMargin,
                         )
                       : SizedBox.shrink(),
                 );
@@ -842,10 +847,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 return SizedBox.shrink();
               }
             },
-          ).paddingOnly(
-            bottom: SpacingFoundation.verticalSpacing24,
-            left: horizontalMargin,
-            right: horizontalMargin,
           ),
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,

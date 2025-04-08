@@ -619,7 +619,7 @@ class _EventComponentState extends State<EventComponent> {
                             ),
                           )
                           .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
-                      : null,
+                      : const SizedBox.shrink(),
                 ),
                 content: _noFeedbacks
                     ? null
@@ -728,8 +728,9 @@ class _EventComponentState extends State<EventComponent> {
                 ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
+          ).paddingOnly(
+            bottom: SpacingFoundation.verticalSpacing24,
           ),
-        SpacingFoundation.verticalSpace24,
         if (widget.voiceUiModels != null)
           ListenableBuilder(
             listenable: widget.voiceUiModels!,
@@ -745,17 +746,17 @@ class _EventComponentState extends State<EventComponent> {
                               widget.onAvatarTap?.call(BaseUiKitUserTileData(id: user?.id, type: user?.userTileType)),
                           voice: currentUiModel,
                           onViewAllTap: widget.onViewAllVoicesTap,
-                        )
+                        ).paddingOnly(
+                    bottom: SpacingFoundation.verticalSpacing24,
+                    left: horizontalMargin,
+                    right: horizontalMargin,
+                  )
                       : SizedBox.shrink(),
                 );
               } else {
                 return SizedBox.shrink();
               }
             },
-          ).paddingOnly(
-            bottom: SpacingFoundation.verticalSpacing24,
-            left: horizontalMargin,
-            right: horizontalMargin,
           ),
         if (widget.event.descriptionItems != null)
           ...widget.event.descriptionItems!.map(
