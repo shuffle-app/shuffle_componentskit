@@ -50,7 +50,6 @@ class FeedbackReaderComponent extends StatelessWidget {
                     userTileType: e.feedbackAuthorType,
                     showTranslateButton: e.showTranslateButton,
                     onTranslateTap: e.onTranslateText,
-                    isTranslateLoading: e.isTranslateLoading,
                     onEdit: e.onEdit,
                     canEdit: e.canEdit,
                     onAvatarTap: () => onAvatarTap?.call(BaseUiKitUserTileData(
@@ -73,7 +72,6 @@ class FeedbackReaderComponent extends StatelessWidget {
                   userTileType: e.feedbackAuthorType,
                   showTranslateButton: e.showTranslateButton,
                   onTranslateTap: e.onTranslateText,
-                  isTranslateLoading: e.isTranslateLoading,
                   onEdit: e.onEdit,
                   canEdit: e.canEdit,
                   onAvatarTap: () => onAvatarTap?.call(BaseUiKitUserTileData(

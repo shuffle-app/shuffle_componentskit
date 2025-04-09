@@ -40,8 +40,7 @@ class EventComponent extends StatefulWidget {
   final bool isInfluencer;
   final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
   final VoidCallback? onViewAllVoicesTap;
-  final Future<String?> Function()? onTranslateTap;
-  final ValueNotifier<bool>? isTranslateLoading;
+  final AsyncValueGetter<String?>? onTranslateTap;
 
   const EventComponent({
     super.key,
@@ -79,7 +78,6 @@ class EventComponent extends StatefulWidget {
     this.voiceUiModels,
     this.onViewAllVoicesTap,
     this.onTranslateTap,
-    this.isTranslateLoading,
   });
 
   @override
@@ -106,6 +104,8 @@ class _EventComponentState extends State<EventComponent> {
 
   bool isHide = true;
   bool isTranslate = false;
+  bool isLoadingTranslate = false;
+  String? translateText;
 
   late double scrollPosition;
   final ScrollController listViewController = ScrollController();
@@ -373,20 +373,31 @@ class _EventComponentState extends State<EventComponent> {
         if (widget.event.description != null) ...[
           RepaintBoundary(
             child: DescriptionWidget(
-              isTranslateLoading: widget.isTranslateLoading,
+              isLoading: isLoadingTranslate,
               description: currentDescription,
               showTranslateButton: widget.showTranslateButton,
               onTranslateTap: () async {
+                isLoadingTranslate = true;
+                setState(() {});
+
                 if (isTranslate) {
                   currentDescription = widget.event.description ?? '';
                   isTranslate = !isTranslate;
                 } else {
-                  final translateDescription = await widget.onTranslateTap?.call();
-                  if (translateDescription != null && translateDescription.isNotEmpty) {
-                    currentDescription = translateDescription;
+                  if (translateText != null && translateText!.isNotEmpty) {
+                    currentDescription = translateText!;
                     isTranslate = !isTranslate;
+                  } else {
+                    final translateDescription = await widget.onTranslateTap?.call();
+                    if (translateDescription != null && translateDescription.isNotEmpty) {
+                      translateText = translateDescription;
+                      currentDescription = translateText!;
+                      isTranslate = !isTranslate;
+                    }
                   }
                 }
+
+                isLoadingTranslate = false;
                 setState(() {});
               },
               isHide: isHide,

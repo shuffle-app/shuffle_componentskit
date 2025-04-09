@@ -495,7 +495,6 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 viewShareDate: item.viewShareDate,
                 onLongPress: () => onLongPress?.call(item.id),
                 showTranslateButton: item.showTranslateButton,
-                translateText: item.translateText,
                 onTranslateTap: item.onTranslateTap,
                 children: _children(item, regularTextTheme),
               ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
@@ -521,7 +520,6 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 onLongPress: () => onLongPress?.call(item.id),
                 onProfilePress: item.userType == UserTileType.pro ? () => onProfilePress?.call(item.userId) : null,
                 showTranslateButton: item.showTranslateButton,
-                translateText: item.translateText,
                 // onTranslateTap: item.onTranslateTap,
               ).paddingOnly(bottom: bottomPadding);
             } else if (item is UpdatesFeedItem) {

@@ -56,7 +56,6 @@ class PlaceComponent extends StatefulWidget {
   final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
   final VoidCallback? onViewAllVoicesTap;
   final Future<String?> Function()? onTranslateTap;
-  final ValueNotifier<bool>? isTranslateLoading;
 
   const PlaceComponent({
     super.key,
@@ -105,7 +104,6 @@ class PlaceComponent extends StatefulWidget {
     this.voiceUiModels,
     this.onViewAllVoicesTap,
     this.onTranslateTap,
-    this.isTranslateLoading,
   });
 
   @override
@@ -300,7 +298,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
           rating: widget.place.rating,
           media: widget.place.media,
           description: widget.place.description,
-          isTranslateLoading: widget.isTranslateLoading,
           baseTags: widget.place.baseTags,
           showTranslateButton: widget.showTranslateButton,
           onTranslateTap: widget.onTranslateTap,
