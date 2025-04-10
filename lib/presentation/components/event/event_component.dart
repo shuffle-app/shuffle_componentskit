@@ -13,12 +13,12 @@ class EventComponent extends StatefulWidget {
   final VoidCallback? onSharePressed;
   final VoidCallback? onAddToSchedulerPressed;
   final VoidCallback? onArchivePressed;
-  final Future<bool> Function()? onAddReactionTapped;
+  final AsyncValueGetter<bool>? onAddReactionTapped;
   final PagedLoaderCallback<VideoReactionUiModel> reactionsLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> feedbackLoaderCallback;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
-  final Future<bool> Function()? onAddFeedbackTapped;
+  final AsyncValueGetter<bool>? onAddFeedbackTapped;
   final Future<bool> Function(int eventId) canLeaveFeedback;
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;

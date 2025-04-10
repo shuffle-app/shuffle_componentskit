@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:shuffle_uikit/ui_kit/atoms/cards/digest_content_card.dart';
@@ -7,7 +8,7 @@ class DigestPageComponent extends StatefulWidget {
   final String? title;
   final String? underTitleText;
   final List<DigestUiModel>? digestUiModels;
-  final Future<List<String>> Function()? onTranslateListTap;
+  final AsyncValueGetter<List<String>>? onTranslateListTap;
   final bool showTranslateButton;
 
   final Function(int placeOrEventId, bool isEvent)? onPlaceOrEventTap;

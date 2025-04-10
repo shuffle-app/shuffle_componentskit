@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
 class FeedbackUiModel {
@@ -20,7 +20,7 @@ class FeedbackUiModel {
   final bool canEdit;
   final List<BaseUiKitMedia> media;
   final bool showTranslateButton;
-  final Future<String?> Function()? onTranslateText;
+  final AsyncValueGetter<String?>? onTranslateText;
   final ValueNotifier<bool>? isTranslateLoading;
 
   FeedbackUiModel({

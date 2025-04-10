@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -15,7 +16,7 @@ abstract class InfluencerFeedItem {
   String? userReaction;
   final ViewShareDate? viewShareDate;
   final bool showTranslateButton;
-  final Future<String?> Function()? onTranslateTap;
+  final AsyncValueGetter<String?>? onTranslateTap;
   final ValueNotifier<String>? translateText;
 
   InfluencerFeedItem({
@@ -71,7 +72,7 @@ class DigestFeedItem extends InfluencerFeedItem {
   final int sunglassesReactionsCount;
   final int smileyReactionsCount;
   final VoidCallback? onReadTap;
-  final Future<List<String>> Function()? onTranslateListTap;
+  final AsyncValueGetter<List<String>>? onTranslateListTap;
 
   DigestFeedItem({
     required super.id,
@@ -110,7 +111,7 @@ class DigestFeedItem extends InfluencerFeedItem {
     VoidCallback? onReadTap,
     String? userReaction,
     ValueNotifier<String>? translateText,
-    Future<List<String>> Function()? onTranslateListTap,
+    AsyncValueGetter<List<String>>? onTranslateListTap,
   }) {
     return DigestFeedItem(
       key: super.key,

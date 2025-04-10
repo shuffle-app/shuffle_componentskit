@@ -16,7 +16,7 @@ class PlaceComponent extends StatefulWidget {
   final VoidCallback? onEventCreate;
   final VoidCallback? onEditPressed;
   final VoidCallback? onArchivePressed;
-  final Future<bool> Function()? onAddReactionTapped;
+  final AsyncValueGetter<bool>? onAddReactionTapped;
   final ValueNotifier<List<UiEventModel>?>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
@@ -28,7 +28,7 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final Future<EditReviewModel> Function(FeedbackUiModel)? onFeedbackTap;
-  final Future<bool> Function()? onAddFeedbackTapped;
+  final AsyncValueGetter<bool>? onAddFeedbackTapped;
   final Future<bool> Function(int placeId) canLeaveFeedbackCallback;
   final Future<bool> Function(int eventId) canLeaveFeedbackForEventCallback;
   final bool canLeaveVideoReaction;
@@ -45,7 +45,7 @@ class PlaceComponent extends StatefulWidget {
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
   final Set<int>? likedReviews;
-  final Future<String?> Function()? onCreateBranchesTap;
+  final AsyncValueGetter<String?>? onCreateBranchesTap;
   final Future<String?> Function(String?)? onRenameBranchesTap;
   final Future<String?> Function(int)? removeBranchItem;
   final bool showBranches;
@@ -55,7 +55,7 @@ class PlaceComponent extends StatefulWidget {
   final bool isInfluencer;
   final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
   final VoidCallback? onViewAllVoicesTap;
-  final Future<String?> Function()? onTranslateTap;
+  final AsyncValueGetter<String>? onTranslateTap;
 
   const PlaceComponent({
     super.key,
