@@ -55,7 +55,7 @@ class PlaceComponent extends StatefulWidget {
   final bool isInfluencer;
   final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
   final VoidCallback? onViewAllVoicesTap;
-  final AsyncValueGetter<String>? onTranslateTap;
+  final AsyncValueGetter<String?>? onTranslateTap;
 
   const PlaceComponent({
     super.key,
