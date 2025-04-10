@@ -13,12 +13,12 @@ class EventComponent extends StatefulWidget {
   final VoidCallback? onSharePressed;
   final VoidCallback? onAddToSchedulerPressed;
   final VoidCallback? onArchivePressed;
-  final Future<bool> Function()? onAddReactionTapped;
+  final AsyncValueGetter<bool>? onAddReactionTapped;
   final PagedLoaderCallback<VideoReactionUiModel> reactionsLoaderCallback;
   final PagedLoaderCallback<FeedbackUiModel> feedbackLoaderCallback;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
-  final Future<bool> Function()? onAddFeedbackTapped;
+  final AsyncValueGetter<bool>? onAddFeedbackTapped;
   final Future<bool> Function(int eventId) canLeaveFeedback;
   final bool canLeaveVideoReaction;
   final ValueChanged<int>? onLikedFeedback;
@@ -31,7 +31,6 @@ class EventComponent extends StatefulWidget {
   final VoidCallback? onRefresherButtonTap;
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
-  final ValueNotifier<String?>? translateDescription;
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
   final Set<int>? likedReviews;
@@ -41,6 +40,7 @@ class EventComponent extends StatefulWidget {
   final bool isInfluencer;
   final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
   final VoidCallback? onViewAllVoicesTap;
+  final AsyncValueGetter<String?>? onTranslateTap;
 
   const EventComponent({
     super.key,
@@ -67,7 +67,6 @@ class EventComponent extends StatefulWidget {
     this.onRefresherButtonTap,
     this.bookingNotifier,
     this.onSpendPointTap,
-    this.translateDescription,
     this.showTranslateButton,
     this.currentUserId,
     this.likedReviews,
@@ -78,6 +77,7 @@ class EventComponent extends StatefulWidget {
     this.isInfluencer = false,
     this.voiceUiModels,
     this.onViewAllVoicesTap,
+    this.onTranslateTap,
   });
 
   @override
@@ -104,6 +104,8 @@ class _EventComponentState extends State<EventComponent> {
 
   bool isHide = true;
   bool isTranslate = false;
+  bool isLoadingTranslate = false;
+  String? translateText;
 
   late double scrollPosition;
   final ScrollController listViewController = ScrollController();
@@ -370,41 +372,57 @@ class _EventComponentState extends State<EventComponent> {
         SpacingFoundation.verticalSpace14,
         if (widget.event.description != null) ...[
           RepaintBoundary(
-              child: DescriptionWidget(
-            description: currentDescription,
-            showTranslateButton: widget.showTranslateButton,
-            onTranslateTap: () {
-              setState(() {
-                isTranslate = !isTranslate;
-                currentDescription = (isTranslate &&
-                        widget.translateDescription?.value != null &&
-                        widget.translateDescription!.value!.isNotEmpty)
-                    ? widget.translateDescription!.value!
-                    : widget.event.description ?? '';
-              });
-            },
-            isHide: isHide,
-            isTranslate: isTranslate,
-            onReadLess: () {
-              setState(() {
-                listViewController
-                    .animateTo(scrollPosition, duration: const Duration(milliseconds: 100), curve: Curves.easeIn)
-                    .then(
-                  (value) {
-                    setState(() {
-                      isHide = true;
-                    });
-                  },
-                );
-              });
-            },
-            onReadMore: () {
-              setState(() {
-                isHide = false;
-                scrollPosition = listViewController.position.pixels;
-              });
-            },
-          ).paddingSymmetric(horizontal: horizontalMargin)),
+            child: DescriptionWidget(
+              isLoading: isLoadingTranslate,
+              description: currentDescription,
+              showTranslateButton: widget.showTranslateButton,
+              onTranslateTap: () async {
+                isLoadingTranslate = true;
+                setState(() {});
+
+                if (isTranslate) {
+                  currentDescription = widget.event.description ?? '';
+                  isTranslate = !isTranslate;
+                } else {
+                  if (translateText != null && translateText!.isNotEmpty) {
+                    currentDescription = translateText!;
+                    isTranslate = !isTranslate;
+                  } else {
+                    final translateDescription = await widget.onTranslateTap?.call();
+                    if (translateDescription != null && translateDescription.isNotEmpty) {
+                      translateText = translateDescription;
+                      currentDescription = translateText!;
+                      isTranslate = !isTranslate;
+                    }
+                  }
+                }
+
+                isLoadingTranslate = false;
+                setState(() {});
+              },
+              isHide: isHide,
+              isTranslate: isTranslate,
+              onReadLess: () {
+                setState(() {
+                  listViewController
+                      .animateTo(scrollPosition, duration: const Duration(milliseconds: 100), curve: Curves.easeIn)
+                      .then(
+                    (value) {
+                      setState(() {
+                        isHide = true;
+                      });
+                    },
+                  );
+                });
+              },
+              onReadMore: () {
+                setState(() {
+                  isHide = false;
+                  scrollPosition = listViewController.position.pixels;
+                });
+              },
+            ).paddingSymmetric(horizontal: horizontalMargin),
+          ),
           SpacingFoundation.verticalSpace24,
         ],
         if (widget.showOfferButton)

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
@@ -14,7 +15,9 @@ abstract class InfluencerFeedItem {
   final UserTileType userType;
   String? userReaction;
   final ViewShareDate? viewShareDate;
-  final ValueNotifier<bool>? showTranslateButton;
+  final bool showTranslateButton;
+  final AsyncValueGetter<String?>? onTranslateTap;
+  final ValueNotifier<String>? translateText;
 
   InfluencerFeedItem({
     required this.id,
@@ -27,7 +30,9 @@ abstract class InfluencerFeedItem {
     this.userReaction,
     this.userId,
     this.viewShareDate,
-    this.showTranslateButton,
+    this.showTranslateButton = false,
+    this.onTranslateTap,
+    this.translateText,
   });
 
   @override
@@ -40,7 +45,7 @@ abstract class InfluencerFeedItem {
         'avatarUrl: $avatarUrl, '
         'userType: $userType, '
         'userReaction: $userReaction,)'
-        'showTranslateButton: ${showTranslateButton?.value}';
+        'showTranslateButton: ${showTranslateButton}';
   }
 
   @override
@@ -67,8 +72,7 @@ class DigestFeedItem extends InfluencerFeedItem {
   final int sunglassesReactionsCount;
   final int smileyReactionsCount;
   final VoidCallback? onReadTap;
-  final ValueNotifier<String>? translateTitle;
-  final ValueNotifier<String>? translateUnderTitle;
+  final AsyncValueGetter<List<String>>? onTranslateListTap;
 
   DigestFeedItem({
     required super.id,
@@ -84,9 +88,9 @@ class DigestFeedItem extends InfluencerFeedItem {
     this.onReadTap,
     super.viewShareDate,
     super.userReaction,
-    this.translateTitle,
-    this.translateUnderTitle,
+    super.translateText,
     super.showTranslateButton,
+    this.onTranslateListTap,
   }) : super(
           speciality: '',
           name: 'Shuffle',
@@ -106,8 +110,8 @@ class DigestFeedItem extends InfluencerFeedItem {
     int? smileyReactionsCount,
     VoidCallback? onReadTap,
     String? userReaction,
-    ValueNotifier<String>? translateTitle,
-    ValueNotifier<String>? translateUnderTitle,
+    ValueNotifier<String>? translateText,
+    AsyncValueGetter<List<String>>? onTranslateListTap,
   }) {
     return DigestFeedItem(
       key: super.key,
@@ -123,9 +127,9 @@ class DigestFeedItem extends InfluencerFeedItem {
       smileyReactionsCount: smileyReactionsCount ?? this.smileyReactionsCount,
       onReadTap: onReadTap ?? this.onReadTap,
       userReaction: userReaction,
-      translateTitle: translateTitle ?? this.translateTitle,
-      translateUnderTitle: translateUnderTitle ?? this.translateUnderTitle,
+      translateText: translateText ?? super.translateText,
       showTranslateButton: super.showTranslateButton,
+      onTranslateListTap: onTranslateListTap ?? this.onTranslateListTap,
     );
   }
 }
@@ -167,6 +171,8 @@ class UpdatesFeedItem extends InfluencerFeedItem {
     this.commentsUpdate,
     this.newContent,
     super.showTranslateButton,
+    super.onTranslateTap,
+    super.translateText,
   });
 }
 
@@ -178,7 +184,6 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
   final int sunglassesReactionsCount;
   final int smileyReactionsCount;
   final List<UiKitMediaVideo>? videos;
-  final ValueNotifier<String>? translateText;
 
   ShufflePostFeedItem({
     required this.text,
@@ -204,8 +209,9 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
     super.newPersonalRespects,
     super.commentsUpdate,
     super.newContent,
-    this.translateText,
+    super.translateText,
     super.showTranslateButton,
+    super.onTranslateTap,
   }) : super(
           speciality: '',
           name: 'Shuffle',
@@ -249,8 +255,9 @@ class ShufflePostFeedItem extends UpdatesFeedItem {
       userReaction: userReaction,
       key: super.key,
       viewShareDate: viewShareDate,
-      translateText: translateText ?? this.translateText,
+      translateText: translateText ?? super.translateText,
       showTranslateButton: super.showTranslateButton,
+      onTranslateTap: super.onTranslateTap,
     );
   }
 }
@@ -263,7 +270,6 @@ class PostFeedItem extends InfluencerFeedItem {
   final int sunglassesReactionsCount;
   final int smileyReactionsCount;
   final bool newMark;
-  final ValueNotifier<String>? translateText;
   final DateTime? createAt;
 
   PostFeedItem({
@@ -284,8 +290,9 @@ class PostFeedItem extends InfluencerFeedItem {
     super.key,
     super.userReaction,
     this.newMark = false,
-    this.translateText,
+    super.translateText,
     super.showTranslateButton,
+    super.onTranslateTap,
     this.createAt,
   });
 
@@ -324,9 +331,10 @@ class PostFeedItem extends InfluencerFeedItem {
       userReaction: userReaction,
       key: key,
       viewShareDate: viewShareDate,
-      translateText: translateText ?? this.translateText,
+      translateText: translateText ?? super.translateText,
       showTranslateButton: super.showTranslateButton,
       createAt: this.createAt ?? createAt,
+      onTranslateTap: super.onTranslateTap,
     );
   }
 }

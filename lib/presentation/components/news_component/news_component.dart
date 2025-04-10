@@ -99,7 +99,6 @@ class NewsComponent extends StatelessWidget {
                 viewShareDate: item.viewShareDate,
                 hasNewMark: item.newMark,
                 showTranslateButton: item.showTranslateButton,
-                translateText: item.translateText,
                 createAt: item.createAt,
               ),
             ).paddingOnly(
