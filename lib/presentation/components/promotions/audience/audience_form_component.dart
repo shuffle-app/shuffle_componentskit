@@ -50,6 +50,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
   List<UiKitTag> selectedPrefs = [];
   List<LocaleModel> selectedLanguages = [];
   List<String> selectedBirthdays = [];
+  late final List<String> savedAudience;
 
   // final TextEditingController _languageController = TextEditingController();
 
@@ -59,6 +60,8 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
   @override
   void initState() {
     FocusManager.instance.addListener(_sendDraftUpdatedAudience);
+    savedAudience =
+        List.of(widget.preSavedAudience?.map((e) => e.title).nonNulls.where((e) => e.isNotEmpty).toList() ?? []);
     super.initState();
   }
 
@@ -116,28 +119,30 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
       childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.verticalSpacing16),
       children: [
         SpacingFoundation.verticalSpace16,
-        Text(
-          S.current.CreateAudienceOrSelectOne,
-          style: bodyBold,
-        ),
-        SpacingFoundation.verticalSpace16,
-        SelectOneTypeWithBottom(
-            items: widget.preSavedAudience?.map((e) => e.title).nonNulls.toList() ?? [],
+        if (savedAudience.isNotEmpty) ...[
+          Text(
+            S.current.CreateAudienceOrSelectOne,
+            style: bodyBold,
+          ),
+          SpacingFoundation.verticalSpace16,
+          SelectOneTypeWithBottom(
+            items: savedAudience,
             selectedItem: selectedAudience?.title,
             onSelect: (title) {
               final audience = widget.preSavedAudience!.firstWhere((e) => e.title == title);
               onSelectSavedAudience(audience);
 
               navigatorKey.currentContext?.pop();
-            }),
-        SpacingFoundation.verticalSpace24,
+            },
+          ),
+          SpacingFoundation.verticalSpace24,
+        ],
         Text(
           S.current.Gender,
           style: titleStyle,
         ),
         SpacingFoundation.verticalSpace16,
         Wrap(
-          runSpacing: SpacingFoundation.verticalSpacing4,
           spacing: SpacingFoundation.verticalSpacing4,
           children: widget.allGenders
               .map((gender) => SizedBox(
@@ -179,42 +184,42 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
           style: titleStyle,
         ),
         SpacingFoundation.verticalSpace16,
-        Row(children: [
-          Text(S.current.From, style: bodyBold),
-          SpacingFoundation.horizontalSpace4,
-          UiKitDropDownList<int>(
-            contentBorderRadius: BorderRadiusFoundation.all12,
-            maxHeight: .4.sh,
-            selectedItem: selectedAgeFrom,
-            items: List.generate(60, (i) => i + 18)
-                .map((age) => DropdownMenuItem(value: age, child: Text('$age')))
-                .toList(),
-            onChanged: (int? from) {
-              setState(() {
-                selectedAgeFrom = from;
-                if (selectedAgeTo != null && selectedAgeTo! < (from ?? 18)) {
-                  selectedAgeTo = null;
-                }
-              });
-            },
-          ),
-          SpacingFoundation.horizontalSpace4,
-          Text(S.current.To.toLowerCase(), style: bodyBold),
-          SpacingFoundation.horizontalSpace4,
-          UiKitDropDownList<int>(
-            contentBorderRadius: BorderRadiusFoundation.all12,
-            maxHeight: .4.sh,
-            selectedItem: selectedAgeTo,
-            items: List.generate(60, (i) => i + (selectedAgeFrom ?? 18))
-                .map((age) => DropdownMenuItem(value: age, child: Text('$age')))
-                .toList(),
-            onChanged: (int? to) {
-              setState(() {
-                selectedAgeTo = to;
-              });
-            },
-          )
-        ]),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(S.current.From, style: bodyBold),
+            UiKitDropDownList<int>(
+              contentBorderRadius: BorderRadiusFoundation.all12,
+              maxHeight: .4.sh,
+              selectedItem: selectedAgeFrom,
+              items: List.generate(60, (i) => i + 18)
+                  .map((age) => DropdownMenuItem(value: age, child: Text('$age')))
+                  .toList(),
+              onChanged: (int? from) {
+                setState(() {
+                  selectedAgeFrom = from;
+                  if (selectedAgeTo != null && selectedAgeTo! < (from ?? 18)) {
+                    selectedAgeTo = null;
+                  }
+                });
+              },
+            ),
+            Text(S.current.To.toLowerCase(), style: bodyBold),
+            UiKitDropDownList<int>(
+              contentBorderRadius: BorderRadiusFoundation.all12,
+              maxHeight: .4.sh,
+              selectedItem: selectedAgeTo,
+              items: List.generate(60, (i) => i + (selectedAgeFrom ?? 18))
+                  .map((age) => DropdownMenuItem(value: age, child: Text('$age')))
+                  .toList(),
+              onChanged: (int? to) {
+                setState(() {
+                  selectedAgeTo = to;
+                });
+              },
+            )
+          ],
+        ),
         SpacingFoundation.verticalSpace24,
         Text(
           S.current.SelectLanguage,
@@ -225,6 +230,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
           runSpacing: SpacingFoundation.verticalSpacing4,
           children: widget.allLanguages
               .map((language) => SizedBox(
+                  height: 28.w,
                   width: 0.4.sw,
                   child: UiKitCheckboxFilterItem(
                     item: TitledFilterItem(
@@ -267,7 +273,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
         ),
         SpacingFoundation.verticalSpace16,
         Wrap(
-          runSpacing: SpacingFoundation.verticalSpacing4,
+          runSpacing: SpacingFoundation.verticalSpacing8,
           children: widget.allDevices
               .map((device) => SizedBox(
                   width: 0.4.sw,
@@ -372,7 +378,6 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
                           }).then((_) => titleController.dispose());
                         }
                       : null)),
-        kBottomNavigationBarHeight.heightBox,
         SpacingFoundation.verticalSpace24,
       ],
     );

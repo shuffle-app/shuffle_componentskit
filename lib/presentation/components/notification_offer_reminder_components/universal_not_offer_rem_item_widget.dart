@@ -92,19 +92,24 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                         SpacingFoundation.verticalSpace2,
                         isTwoDate
                             ? AutoSizeText(
-                                '${formatDateWithCustomPattern('dd.MM.yy', (model.selectedDates!.first ?? DateTime.now()).toLocal())} - ${formatDateWithCustomPattern('dd.MM.yy', model.selectedDates!.last!.toLocal())}',
+                                '${formatDateWithCustomPattern('dd.MM.yy', model.selectedDates!.first!.toLocal())} - ${formatDateWithCustomPattern('dd.MM.yy', model.selectedDates!.last!.toLocal())}',
                                 maxLines: 1,
                                 minFontSize: 10,
                                 style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
-                              )
-                            : Text(
-                                formatDateWithCustomPattern(
-                                  'dd.MM.yyyy',
-                                  (model.selectedDates?.first ?? DateTime.now()).toLocal(),
-                                ),
-                                style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
-                              ),
-                        SpacingFoundation.verticalSpace2,
+                              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2)
+                            : model.selectedDates != null &&
+                                    model.selectedDates!.isNotEmpty &&
+                                    model.selectedDates!.first != null
+                                ? Text(
+                                    formatDateWithCustomPattern(
+                                      'dd.MM.yyyy',
+                                      model.selectedDates!.first!.toLocal(),
+                                    ),
+                                    style: theme?.boldTextTheme.caption3Medium.copyWith(
+                                      color: ColorsFoundation.mutedText,
+                                    ),
+                                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2)
+                                : 10.w.heightBox,
                         if (model.status == TicketIssueStatus.unpaid)
                           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             ImageWidget(
@@ -151,11 +156,14 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                                 ),
                               ),
                               SpacingFoundation.horizontalSpace2,
-                              Text(
-                                formatDateWithCustomPattern(
-                                    'dd.MM.yyyy', (model.isLaunchedDate ?? DateTime.now()).toLocal()),
-                                style: caption4Muted,
-                              ),
+                              if (model.isLaunchedDate != null || model.updateDate != null)
+                                Text(
+                                  formatDateWithCustomPattern(
+                                    'dd.MM.yyyy',
+                                    (model.isLaunchedDate ?? model.updateDate)!.toLocal(),
+                                  ),
+                                  style: caption4Muted,
+                                ),
                             ],
                           ),
                       ],

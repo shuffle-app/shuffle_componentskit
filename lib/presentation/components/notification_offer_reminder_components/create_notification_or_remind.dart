@@ -90,7 +90,9 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
   }
 
   void _onSubmit() {
-    if (_formKey.currentState != null && _formKey.currentState!.validate() && _selectedDates.first != null) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      if (widget.isNotification && _selectedDates.first == null) return;
+
       late final String? iconPath;
       late final int? iconId;
 
@@ -188,67 +190,69 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
               ),
             ),
           ),
-          SpacingFoundation.verticalSpace24,
-          Text(
-            widget.isNotification ? S.of(context).SelectPeriodOfValid : S.of(context).SelectDate,
-            style: theme?.regularTextTheme.labelSmall,
-          ),
-          SpacingFoundation.verticalSpace2,
-          UiKitSelectDateWidget(
-            selectedDates: _selectedDates,
-            selectableDayPredicate: widget.selectableDayPredicate,
-            isOneDate: widget.isOneDate,
-            onCalenderTap: () async {
-              _selectedDates.clear();
-              if (widget.isOneDate) {
-                final today = DateTime.now();
+          if (widget.isNotification) ...[
+            SpacingFoundation.verticalSpace24,
+            Text(
+              widget.isNotification ? S.of(context).SelectPeriodOfValid : S.of(context).SelectDate,
+              style: theme?.regularTextTheme.labelSmall,
+            ),
+            SpacingFoundation.verticalSpace2,
+            UiKitSelectDateWidget(
+              selectedDates: _selectedDates,
+              selectableDayPredicate: widget.selectableDayPredicate,
+              isOneDate: widget.isOneDate,
+              onCalenderTap: () async {
+                _selectedDates.clear();
+                if (widget.isOneDate) {
+                  final today = DateTime.now();
 
-                final DateTime? date = await showDatePicker(
-                  context: context,
-                  firstDate: today.add(const Duration(days: 1)),
-                  lastDate: today.add(const Duration(days: 60)),
-                  selectableDayPredicate: widget.selectableDayPredicate,
-                );
+                  final DateTime? date = await showDatePicker(
+                    context: context,
+                    firstDate: today.add(const Duration(days: 1)),
+                    lastDate: today.add(const Duration(days: 60)),
+                    selectableDayPredicate: widget.selectableDayPredicate,
+                  );
 
-                if (date != null) {
-                  _selectedDates.addAll([date]);
-                  setState(() {});
-                }
-              } else {
-                final dates = await showDateRangePickerDialog(context);
+                  if (date != null) {
+                    _selectedDates.addAll([date]);
+                    setState(() {});
+                  }
+                } else {
+                  final dates = await showDateRangePickerDialog(context);
 
-                if (dates != null) {
-                  final DateTime now = DateTime.now();
-                  final List<DateTime> generateDateList = generateDateRange([dates.start, dates.end]);
+                  if (dates != null) {
+                    final DateTime now = DateTime.now();
+                    final List<DateTime> generateDateList = generateDateRange([dates.start, dates.end]);
 
-                  if (generateDateList.isEmpty) {
-                    setState(() {
-                      _selectedDates.add(null);
-                    });
-                  } else if (widget.selectableDayPredicate != null &&
-                      !generateDateList.any((element) => widget.selectableDayPredicate!(element))) {
-                    setState(() {
-                      _selectedDates.add(null);
-                    });
-                  } else if ((!dates.start.isBefore(now)) ||
-                      (((!dates.start.isBefore(now) || dates.start.isAtSameDay) && !dates.end.isBefore(now))) ||
-                      (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
-                    setState(() {
-                      _selectedDates.addAll([dates.start, dates.end]);
-                    });
-                  } else if (dates.start.isAtSameDayAs(dates.end)) {
-                    setState(() {
-                      _selectedDates.addAll([dates.start]);
-                    });
-                  } else {
-                    setState(() {
-                      _selectedDates.add(null);
-                    });
+                    if (generateDateList.isEmpty) {
+                      setState(() {
+                        _selectedDates.add(null);
+                      });
+                    } else if (widget.selectableDayPredicate != null &&
+                        !generateDateList.any((element) => widget.selectableDayPredicate!(element))) {
+                      setState(() {
+                        _selectedDates.add(null);
+                      });
+                    } else if ((!dates.start.isBefore(now)) ||
+                        (((!dates.start.isBefore(now) || dates.start.isAtSameDay) && !dates.end.isBefore(now))) ||
+                        (dates.start.isAtSameDay && dates.end.isAtSameDay)) {
+                      setState(() {
+                        _selectedDates.addAll([dates.start, dates.end]);
+                      });
+                    } else if (dates.start.isAtSameDayAs(dates.end)) {
+                      setState(() {
+                        _selectedDates.addAll([dates.start]);
+                      });
+                    } else {
+                      setState(() {
+                        _selectedDates.add(null);
+                      });
+                    }
                   }
                 }
-              }
-            },
-          ),
+              },
+            ),
+          ],
           SpacingFoundation.verticalSpace24,
           if (!widget.isNotification) ...[
             Text(
