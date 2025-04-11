@@ -96,15 +96,17 @@ class UniversalNotOfferRemItemWidget extends StatelessWidget {
                                 maxLines: 1,
                                 minFontSize: 10,
                                 style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
-                              )
-                            : Text(
-                                formatDateWithCustomPattern(
-                                  'dd.MM.yyyy',
-                                  (model.selectedDates?.first ?? DateTime.now()).toLocal(),
-                                ),
-                                style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
-                              ),
-                        SpacingFoundation.verticalSpace2,
+                              ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2)
+                            : model.selectedDates != null && model.selectedDates!.isNotEmpty
+                                ? Text(
+                                    formatDateWithCustomPattern(
+                                      'dd.MM.yyyy',
+                                      (model.selectedDates?.first ?? DateTime.now()).toLocal(),
+                                    ),
+                                    style:
+                                        theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
+                                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2)
+                                : SizedBox.shrink(),
                         if (model.status == TicketIssueStatus.unpaid)
                           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             ImageWidget(
