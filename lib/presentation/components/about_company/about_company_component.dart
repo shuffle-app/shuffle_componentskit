@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class AboutCompanyComponent extends StatelessWidget {
   final VoidCallback? onFinished;
@@ -55,10 +56,11 @@ class AboutCompanyComponent extends StatelessWidget {
             SizedBox(
               height: MediaQuery.viewPaddingOf(context).top,
             ),
-            Text(
+            Flexible(
+                child: AutoSizeText(
               S.current.DescribeYourBusiness,
               style: boldTextTheme?.title1,
-            ),
+            )),
             SpacingFoundation.verticalSpace16,
             Stack(
               fit: StackFit.passthrough,

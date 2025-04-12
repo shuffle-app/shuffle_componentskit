@@ -171,7 +171,7 @@ class FeedComponent extends StatelessWidget {
                   ),
                 if (showBusinessContent) ...[
                   if (feed.recommendedBusinessEvents != null && feed.recommendedBusinessEvents!.isNotEmpty) ...[
-                    Text(
+                    AutoSizeText(
                       S.current.UpcomingGlobalEvents,
                       style: themeTitleStyle,
                     ).paddingSymmetric(horizontal: horizontalMargin).wrapSliverBox,

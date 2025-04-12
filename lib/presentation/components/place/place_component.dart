@@ -421,10 +421,11 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        Flexible(
+                            child: AutoSizeText(
                           S.of(context).UpcomingEvent,
                           style: boldTextTheme?.subHeadline,
-                        ),
+                        )),
                         SpacingFoundation.horizontalSpace16,
                         Builder(
                           builder: (context) => GestureDetector(

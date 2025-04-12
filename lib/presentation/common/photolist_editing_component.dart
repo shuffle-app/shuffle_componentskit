@@ -148,11 +148,12 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
                 borderRadius: BorderRadiusFoundation.all24,
               ),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Text(
+                Flexible(
+                    child: AutoSizeText(
                   S.current.SelectToSetPreview,
                   textAlign: TextAlign.center,
                   style: context.uiKitTheme?.boldTextTheme.title2.copyWith(color: primaryColor),
-                ),
+                )),
                 16.h.heightBox,
                 SizedBox(
                   height: 100.h,
@@ -193,8 +194,6 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
     return selected;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
@@ -210,10 +209,11 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
             fit: BoxFit.fitHeight,
           ),
           SpacingFoundation.verticalSpace16,
-          Text(
+          Flexible(
+              child: AutoSizeText(
             S.of(context).AddPhotoHere,
             style: theme?.boldTextTheme.body,
-          )
+          ))
         ],
       ),
     );
@@ -460,56 +460,56 @@ class _ImageViewFinderDialogState extends State<_ImageViewFinderDialog> {
       insetPadding: EdgeInsets.zero,
       backgroundColor: inversedColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadiusFoundation.all24),
-      child:  Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                    child: Text(
-                  widget.title,
-                  style: boldTextTheme?.title2.copyWith(color: primaryColor),
-                )),
-                SpacingFoundation.horizontalSpace16,
-                IconButton(
-                  icon: Icon(Icons.close, color: primaryColor),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-            SpacingFoundation.verticalSpace16,
-            if (originalImageBytes != null)
-              Center(
-                child: UiKitPictureViewFinder(
-                  key: ValueKey(originalImageBytes.hashCode),
-                  viewFinderOrientation: widget.viewFinderOrientation,
-                  imageBytes: originalImageBytes!,
-                  viewPortAvailableSize: availableSize,
-                  controller: controller,
-                  onCropCompleted: (bytes) {
-                    widget.onCropCompleted(CroppedImageData(
-                      originalFileBytes: originalImageBytes!,
-                      croppedFileBytes: bytes,
-                      mimeType: mimeType,
-                      filename: filename,
-                    ));
-                    Navigator.pop(context);
-                  },
-                ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                  child: Text(
+                widget.title,
+                style: boldTextTheme?.title2.copyWith(color: primaryColor),
+              )),
+              SpacingFoundation.horizontalSpace16,
+              IconButton(
+                icon: Icon(Icons.close, color: primaryColor),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-            SpacingFoundation.verticalSpace16,
-            context.gradientButton(
-              data: BaseUiKitButtonData(
-                text: S.of(context).Confirm.toUpperCase(),
-                fit: ButtonFit.fitWidth,
-                onPressed: () => controller.cropImage(),
-                loading: controller.state == UiKitViewFinderState.cropping,
+            ],
+          ),
+          SpacingFoundation.verticalSpace16,
+          if (originalImageBytes != null)
+            Center(
+              child: UiKitPictureViewFinder(
+                key: ValueKey(originalImageBytes.hashCode),
+                viewFinderOrientation: widget.viewFinderOrientation,
+                imageBytes: originalImageBytes!,
+                viewPortAvailableSize: availableSize,
+                controller: controller,
+                onCropCompleted: (bytes) {
+                  widget.onCropCompleted(CroppedImageData(
+                    originalFileBytes: originalImageBytes!,
+                    croppedFileBytes: bytes,
+                    mimeType: mimeType,
+                    filename: filename,
+                  ));
+                  Navigator.pop(context);
+                },
               ),
             ),
-          ],
-        ).paddingAll(EdgeInsetsFoundation.all24),
+          SpacingFoundation.verticalSpace16,
+          context.gradientButton(
+            data: BaseUiKitButtonData(
+              text: S.of(context).Confirm.toUpperCase(),
+              fit: ButtonFit.fitWidth,
+              onPressed: () => controller.cropImage(),
+              loading: controller.state == UiKitViewFinderState.cropping,
+            ),
+          ),
+        ],
+      ).paddingAll(EdgeInsetsFoundation.all24),
     );
   }
 }
