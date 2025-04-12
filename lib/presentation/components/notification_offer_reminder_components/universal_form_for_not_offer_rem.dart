@@ -67,6 +67,7 @@ class _UniversalFormForNotOfferRemState extends State<UniversalFormForNotOfferRe
       child: BlurredAppBarPage(
         animatedListKey: widget.animatedListKey,
         childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+        physics: AlwaysScrollableScrollPhysics(parent: const BouncingScrollPhysics()),
         customTitle: Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -102,26 +102,26 @@ class _RemindersComponentState extends State<RemindersComponent> with SingleTick
                     maxLines: 1,
                   ),
                 ),
-                SpacingFoundation.horizontalSpace8,
-                Builder(
-                  builder: (context) => GestureDetector(
-                    onTap: () => showUiKitPopover(
-                      context,
-                      customMinHeight: 30.h,
-                      showButton: false,
-                      title: Text(
-                        S.of(context).LongTapCardEdit,
-                        style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    child: ImageWidget(
-                      iconData: ShuffleUiKitIcons.info,
-                      width: 16.w,
-                      color: theme?.colorScheme.darkNeutral900,
-                    ),
-                  ),
-                ),
+                // SpacingFoundation.horizontalSpace8,
+                // Builder(
+                //   builder: (context) => GestureDetector(
+                //     onTap: () => showUiKitPopover(
+                //       context,
+                //       customMinHeight: 30.h,
+                //       showButton: false,
+                //       title: Text(
+                //         S.of(context).LongTapCardEdit,
+                //         style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                //         textAlign: TextAlign.center,
+                //       ),
+                //     ),
+                //     child: ImageWidget(
+                //       iconData: ShuffleUiKitIcons.info,
+                //       width: 16.w,
+                //       color: theme?.colorScheme.darkNeutral900,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -173,7 +173,7 @@ class _RemindersComponentState extends State<RemindersComponent> with SingleTick
                       editingItemId = null;
                     },
                     onLongPress: (id) {
-                      _onLongPress(id);
+                      // _onLongPress(id);
                     },
                   ),
 
@@ -197,7 +197,7 @@ class _RemindersComponentState extends State<RemindersComponent> with SingleTick
                       editingItemId = null;
                     },
                     onLongPress: (id) {
-                      _onLongPress(id);
+                      // _onLongPress(id);
                     },
                   ),
                 ],

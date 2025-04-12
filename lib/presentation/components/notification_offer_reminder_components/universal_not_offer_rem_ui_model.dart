@@ -17,6 +17,7 @@ class UniversalNotOfferRemUiModel {
   final String? imagePath;
   final bool isPromo;
   final String? type;
+  final DateTime? updateDate;
 
   const UniversalNotOfferRemUiModel({
     required this.id,
@@ -34,6 +35,7 @@ class UniversalNotOfferRemUiModel {
     this.imagePath,
     this.isPromo = false,
     this.type,
+    this.updateDate,
   });
 
   UniversalNotOfferRemUiModel copyWith({
@@ -52,6 +54,7 @@ class UniversalNotOfferRemUiModel {
     String? imagePath,
     bool? isPromo,
     String? type,
+    DateTime? updateDate,
   }) {
     return UniversalNotOfferRemUiModel(
       id: id ?? this.id,
@@ -69,6 +72,7 @@ class UniversalNotOfferRemUiModel {
       imagePath: imagePath ?? this.imagePath,
       isPromo: isPromo ?? this.isPromo,
       type: type ?? this.type,
+      updateDate: updateDate ?? this.updateDate,
     );
   }
 
@@ -97,7 +101,8 @@ class UniversalNotOfferRemUiModel {
         other.iconId == iconId &&
         other.imagePath == imagePath &&
         other.isPromo == isPromo &&
-        other.type == type;
+        other.type == type &&
+        other.updateDate == updateDate;
   }
 
   @override
@@ -114,7 +119,8 @@ class UniversalNotOfferRemUiModel {
         iconId.hashCode +
         imagePath.hashCode +
         isPromo.hashCode +
-        type.hashCode;
+        type.hashCode +
+        updateDate.hashCode;
   }
 
   @override
