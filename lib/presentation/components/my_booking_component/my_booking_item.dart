@@ -31,6 +31,35 @@ class MyBookingItem extends StatelessWidget {
       color: ColorsFoundation.mutedText,
     );
 
+    String? typeOfPaymentTitle;
+    String? typeOfPaymentText;
+
+    switch (myBookingUiModel.paymentType) {
+      case 1:
+        typeOfPaymentTitle = S.current.PaymentInCrypto;
+      case 2:
+        typeOfPaymentTitle = S.current.OnlinePayment;
+      case 3:
+        typeOfPaymentTitle = S.current.OnlyQRCodePayment;
+      case 4:
+        typeOfPaymentTitle = S.current.OnlyCashPayment;
+      default:
+        typeOfPaymentTitle = S.current.FreeTicket;
+    }
+
+    switch (myBookingUiModel.paymentType) {
+      case 1:
+        typeOfPaymentText = S.current.TheTicketCanOnlyBePaidInCrypto;
+      case 2:
+        typeOfPaymentText = S.current.TheTicketCanBePaidWithAnOnlineCard;
+      case 3:
+        typeOfPaymentText = S.current.TheTicketCanOnlyPaidForUsingTheQRCode;
+      case 4:
+        typeOfPaymentText = S.current.TicketsCanOnlyBePaidInCashAtTheEntrance;
+      default:
+        typeOfPaymentText = S.current.ShowBarcode;
+    }
+
     return Column(
       children: [
         Row(
@@ -78,59 +107,8 @@ class MyBookingItem extends StatelessWidget {
         SpacingFoundation.verticalSpace2,
         if (myBookingUiModel.visitDate != null)
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (myBookingUiModel.total == 0) ...[
-                Text(
-                  '${S.current.Free} ${S.current.Ticket.toLowerCase()}',
-                  style: captionStyle,
-                ),
-                SpacingFoundation.horizontalSpace4,
-                Builder(
-                    builder: (context) => GestureDetector(
-                          onTap: () => showUiKitPopover(
-                            context,
-                            customMinHeight: 30.h,
-                            showButton: false,
-                            title: Text(
-                              S.of(context).ShowBarcode,
-                              style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          child: ImageWidget(
-                            iconData: ShuffleUiKitIcons.info,
-                            width: 16.w,
-                            color: theme?.colorScheme.darkNeutral900,
-                          ),
-                        )),
-                const Spacer()
-              ] else if (myBookingUiModel.status == TicketIssueStatus.unpaid && !myBookingUiModel.isPast) ...[
-                Text(
-                  S.current.AwaitingPayment,
-                  style: captionStyle,
-                ),
-                SpacingFoundation.horizontalSpace4,
-                Builder(
-                    builder: (context) => GestureDetector(
-                          onTap: () => showUiKitPopover(
-                            context,
-                            customMinHeight: 30.h,
-                            showButton: false,
-                            title: Text(
-                              S.of(context).YouHaveTimeToPayTicket,
-                              style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          child: ImageWidget(
-                            iconData: ShuffleUiKitIcons.info,
-                            width: 16.w,
-                            color: theme?.colorScheme.darkNeutral900,
-                          ),
-                        )),
-                const Spacer()
-              ],
+              Spacer(),
               Text(
                 formatDateWithCustomPattern('dd.MM.yyyy', myBookingUiModel.visitDate!.toLocal()),
                 style: captionStyle,
@@ -141,7 +119,63 @@ class MyBookingItem extends StatelessWidget {
                 style: captionStyle,
               ),
             ],
-          ),
+          ).paddingOnly(bottom: SpacingFoundation.verticalSpacing2),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (myBookingUiModel.status == TicketIssueStatus.unpaid && !myBookingUiModel.isPast) ...[
+              Text(
+                S.current.AwaitingPayment,
+                style: captionStyle,
+              ),
+              SpacingFoundation.horizontalSpace4,
+              Builder(
+                  builder: (context) => GestureDetector(
+                        onTap: () => showUiKitPopover(
+                          context,
+                          customMinHeight: 30.h,
+                          showButton: false,
+                          title: Text(
+                            S.of(context).YouHaveTimeToPayTicket,
+                            style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        child: ImageWidget(
+                          iconData: ShuffleUiKitIcons.info,
+                          width: 16.w,
+                          color: theme?.colorScheme.darkNeutral900,
+                        ),
+                      )),
+              const Spacer()
+            ] else if (typeOfPaymentText.isNotEmpty && !myBookingUiModel.isPast) ...[
+              Text(
+                typeOfPaymentTitle,
+                style: captionStyle,
+              ),
+              SpacingFoundation.horizontalSpace4,
+              Builder(
+                  builder: (context) => GestureDetector(
+                        onTap: () => showUiKitPopover(
+                          context,
+                          customMinHeight: 30.h,
+                          showButton: false,
+                          title: Text(
+                            typeOfPaymentText!,
+                            style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        child: ImageWidget(
+                          iconData: ShuffleUiKitIcons.info,
+                          width: 16.w,
+                          color: theme?.colorScheme.darkNeutral900,
+                        ),
+                      )),
+              const Spacer()
+            ]
+          ],
+        ),
         SpacingFoundation.verticalSpace16,
         Row(
           children: [
