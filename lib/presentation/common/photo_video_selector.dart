@@ -51,7 +51,7 @@ class PhotoVideoSelector extends StatelessWidget {
       }
     });
 
-    final autoSizeGroup= AutoSizeGroup();
+    final autoSizeGroup = AutoSizeGroup();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -66,10 +66,11 @@ class PhotoVideoSelector extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
+                  Flexible(
+                      child: AutoSizeText(
                     S.of(context).Photo,
                     style: theme?.regularTextTheme.labelSmall,
-                  ).paddingSymmetric(horizontal: horizontalPadding),
+                  )).paddingSymmetric(horizontal: horizontalPadding),
                   Builder(
                     builder: (context) => GestureDetector(
                       onTap: () => showUiKitPopover(
@@ -166,17 +167,18 @@ class PhotoVideoSelector extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
+                  Flexible(
+                      child: AutoSizeText(
                     S.of(context).Video,
                     style: theme?.regularTextTheme.labelSmall,
-                  ).paddingSymmetric(horizontal: horizontalPadding),
+                  ).paddingSymmetric(horizontal: horizontalPadding)),
                   Builder(
                     builder: (context) => GestureDetector(
                       onTap: () => showUiKitPopover(
                         context,
                         customMinHeight: 30.h,
                         showButton: false,
-                        title: Text(
+                        title: AutoSizeText(
                           S.of(context).SupportedFormatsVideo,
                           style: theme?.regularTextTheme.body.copyWith(color: Colors.black87),
                           textAlign: TextAlign.center,

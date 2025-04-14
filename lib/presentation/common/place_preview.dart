@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class PlacePreview extends StatelessWidget {
   final ValueChanged<int>? onTap;
@@ -94,10 +95,10 @@ class PlacePreview extends StatelessWidget {
                   height: 14.w,
                 ),
                 SpacingFoundation.horizontalSpace12,
-                Text(
+                Flexible(child: AutoSizeText(
                   place.chainName!,
                   style: theme?.boldTextTheme.caption1Medium.copyWith(color: ColorsFoundation.mutedText),
-                ),
+                )),
               ],
             ).paddingOnly(
               bottom: SpacingFoundation.verticalSpacing4,

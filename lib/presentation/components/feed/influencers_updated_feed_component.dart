@@ -495,7 +495,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 viewShareDate: item.viewShareDate,
                 onLongPress: () => onLongPress?.call(item.id),
                 showTranslateButton: item.showTranslateButton,
-                translateText: item.translateText,
+                onTranslateTap: item.onTranslateTap,
                 children: _children(item, regularTextTheme),
               ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
             } else if (item is PostFeedItem) {
@@ -520,7 +520,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 onLongPress: () => onLongPress?.call(item.id),
                 onProfilePress: item.userType == UserTileType.pro ? () => onProfilePress?.call(item.userId) : null,
                 showTranslateButton: item.showTranslateButton,
-                translateText: item.translateText,
+                // onTranslateTap: item.onTranslateTap,
               ).paddingOnly(bottom: bottomPadding);
             } else if (item is UpdatesFeedItem) {
               child = UiKitContentUpdatesCard(
@@ -553,8 +553,7 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
                 viewShareDate: item.viewShareDate,
                 onReadTap: () => onReadTap?.call(item.id),
                 showTranslateButton: item.showTranslateButton,
-                titleTranslateText: item.translateTitle,
-                underTitleTranslateText: item.translateUnderTitle,
+                onTranslateTap: item.onTranslateListTap,
               ).paddingOnly(bottom: bottomPadding);
             } else {
               child = throw UnimplementedError('Unknown item type: ${item.runtimeType}');

@@ -16,7 +16,7 @@ class PlaceComponent extends StatefulWidget {
   final VoidCallback? onEventCreate;
   final VoidCallback? onEditPressed;
   final VoidCallback? onArchivePressed;
-  final Future<bool> Function()? onAddReactionTapped;
+  final AsyncValueGetter<bool>? onAddReactionTapped;
   final ValueNotifier<List<UiEventModel>?>? events;
   final ComplaintFormComponent? complaintFormComponent;
   final ValueChanged<UiEventModel>? onEventTap;
@@ -28,7 +28,7 @@ class PlaceComponent extends StatefulWidget {
   final PagedLoaderCallback<FeedbackUiModel> eventFeedbackLoaderCallback;
   final ValueChanged<VideoReactionUiModel>? onReactionTap;
   final Future<EditReviewModel> Function(FeedbackUiModel)? onFeedbackTap;
-  final Future<bool> Function()? onAddFeedbackTapped;
+  final AsyncValueGetter<bool>? onAddFeedbackTapped;
   final Future<bool> Function(int placeId) canLeaveFeedbackCallback;
   final Future<bool> Function(int eventId) canLeaveFeedbackForEventCallback;
   final bool canLeaveVideoReaction;
@@ -42,11 +42,10 @@ class PlaceComponent extends StatefulWidget {
   final VoidCallback? onRefresherButtonTap;
   final ValueNotifier<BookingUiModel?>? bookingNotifier;
   final VoidCallback? onSpendPointTap;
-  final ValueNotifier<String?>? translateDescription;
   final ValueNotifier<bool>? showTranslateButton;
   final int? currentUserId;
   final Set<int>? likedReviews;
-  final Future<String?> Function()? onCreateBranchesTap;
+  final AsyncValueGetter<String?>? onCreateBranchesTap;
   final Future<String?> Function(String?)? onRenameBranchesTap;
   final Future<String?> Function(int)? removeBranchItem;
   final bool showBranches;
@@ -56,6 +55,7 @@ class PlaceComponent extends StatefulWidget {
   final bool isInfluencer;
   final ValueNotifier<List<VoiceUiModel?>?>? voiceUiModels;
   final VoidCallback? onViewAllVoicesTap;
+  final AsyncValueGetter<String?>? onTranslateTap;
 
   const PlaceComponent({
     super.key,
@@ -90,7 +90,6 @@ class PlaceComponent extends StatefulWidget {
     this.bookingNotifier,
     this.onSpendPointTap,
     this.onArchivePressed,
-    this.translateDescription,
     this.showTranslateButton,
     this.currentUserId,
     this.likedReviews,
@@ -104,6 +103,7 @@ class PlaceComponent extends StatefulWidget {
     this.isInfluencer = false,
     this.voiceUiModels,
     this.onViewAllVoicesTap,
+    this.onTranslateTap,
   });
 
   @override
@@ -122,6 +122,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   // Set<int> likedReviews = {};
 
   final ScrollController listViewController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   bool get _noFeedbacks => feedbacksPagedController.itemList?.isEmpty ?? true;
 
@@ -216,6 +217,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
   void dispose() {
     reactionsPagingController.dispose();
     feedbacksPagedController.dispose();
+    listViewController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -289,6 +292,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
         ],
         SpacingFoundation.verticalSpace16,
         UiKitMediaSliderWithTags(
+          scrollController: scrollController,
           onTagTap: (value) {
             if (widget.place.schedule != null && value == ShuffleUiKitIcons.clock) {
               showTimeInfoDialog(context, widget.place.schedule!.getReadableScheduleString());
@@ -298,9 +302,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
           rating: widget.place.rating,
           media: widget.place.media,
           description: widget.place.description,
-          translateDescription: widget.translateDescription,
           baseTags: widget.place.baseTags,
           showTranslateButton: widget.showTranslateButton,
+          onTranslateTap: widget.onTranslateTap,
           uniqueTags: widget.place.tags,
           horizontalMargin: horizontalMargin,
           onCreateBranchesTap: widget.onCreateBranchesTap,
@@ -417,10 +421,11 @@ class _PlaceComponentState extends State<PlaceComponent> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        Flexible(
+                            child: AutoSizeText(
                           S.of(context).UpcomingEvent,
                           style: boldTextTheme?.subHeadline,
-                        ),
+                        )),
                         SpacingFoundation.horizontalSpace16,
                         Builder(
                           builder: (context) => GestureDetector(
@@ -706,7 +711,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                             ),
                           )
                           .paddingOnly(right: SpacingFoundation.horizontalSpacing16)
-                      : null,
+                      : const SizedBox.shrink(),
                 ),
                 content: _noFeedbacks
                     ? null
@@ -814,8 +819,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 ),
               ],
             ).paddingSymmetric(horizontal: horizontalMargin),
+          ).paddingOnly(
+            bottom: SpacingFoundation.verticalSpacing24,
           ),
-        SpacingFoundation.verticalSpace24,
         if (widget.voiceUiModels != null)
           ListenableBuilder(
             listenable: widget.voiceUiModels!,
@@ -831,6 +837,10 @@ class _PlaceComponentState extends State<PlaceComponent> {
                           onViewAllTap: widget.onViewAllVoicesTap,
                           onUserTap: (user) =>
                               widget.onAvatarTap?.call(BaseUiKitUserTileData(id: user?.id, type: user?.userTileType)),
+                        ).paddingOnly(
+                          bottom: SpacingFoundation.verticalSpacing24,
+                          left: horizontalMargin,
+                          right: horizontalMargin,
                         )
                       : SizedBox.shrink(),
                 );
@@ -838,10 +848,6 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 return SizedBox.shrink();
               }
             },
-          ).paddingOnly(
-            bottom: SpacingFoundation.verticalSpacing24,
-            left: horizontalMargin,
-            right: horizontalMargin,
           ),
         Wrap(
           runSpacing: SpacingFoundation.verticalSpacing8,
@@ -883,7 +889,7 @@ class EditReviewModel {
   final bool isEdited;
   final int? countToUpdate;
 
-  EditReviewModel({
+  const EditReviewModel({
     required this.isEdited,
     this.countToUpdate,
   });

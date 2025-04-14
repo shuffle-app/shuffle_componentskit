@@ -489,10 +489,10 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                             : null,
                         availableTemplates: widget.availableTimeTemplates,
                         onTemplateCreated: widget.onTimeTemplateCreated,
-                        availableTypes: const [
-                          UiScheduleTimeModel.scheduleType,
-                          UiScheduleDatesModel.scheduleType,
-                          UiScheduleDatesRangeModel.scheduleType
+                        availableTypes: [
+                          S.of(context).TimeRange,
+                          S.of(context).DateTime,
+                          S.of(context).DateRangeTime,
                         ],
                         onScheduleCreated: (model) {
                           if (model is UiScheduleDatesModel) {
@@ -578,15 +578,18 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
               listUiKitTags: _placeToEdit.placeType != null ? [_placeToEdit.placeType!] : null,
               onTap: () {
                 widget.onCategoryChanged?.call(_placeToEdit.contentType).then((value) {
-                  setState(() {
-                    _placeToEdit.placeType = value;
-                    _placeToEdit.baseTags.clear();
-                    _placeToEdit.tags.clear();
-                  });
+                  if (value != null) {
+                    setState(() {
+                      _placeToEdit.placeType = value;
+                      _placeToEdit.baseTags.clear();
+                      _placeToEdit.tags.clear();
+                    });
+                  }
                 });
               },
             ).paddingSymmetric(horizontal: horizontalPadding),
             if (_placeToEdit.contentType == 'business') ...[
+              SpacingFoundation.verticalSpace24,
               UiKitFieldWithTagList(
                 listUiKitTags: _placeToEdit.niche != null ? [_placeToEdit.niche!] : null,
                 title: S.of(context).PleaseSelectANiche,
@@ -832,7 +835,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                   BookingPaymentTypeSelectionComponent(
                                       stripeRegistrationStatus: widget.stripeStatus,
                                       selectedPaymentTypes: _bookingUiModel?.selectedPaymentTypes ?? [],
-                                      goNext: (types) => CreateBookingComponent(
+                                      goNext: (types) => navigatorKey.currentContext?.push(CreateBookingComponent(
                                             selectedTypes: types,
                                             bookingUiModel: _bookingUiModel,
                                             currency: _placeToEdit.currency,
@@ -845,7 +848,7 @@ class _CreatePlaceComponentState extends State<CreatePlaceComponent> {
                                                 navigatorKey.currentContext?.pop();
                                               }
                                             },
-                                          )),
+                                          ))),
                                 );
                               },
                             ),

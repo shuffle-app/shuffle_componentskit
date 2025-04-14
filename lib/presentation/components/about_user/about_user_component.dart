@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class AboutUserComponent extends StatelessWidget {
   final UiAboutUserModel aboutUserModel;
@@ -71,10 +72,11 @@ class AboutUserComponent extends StatelessWidget {
 
               return [
                 if (contentTypeList.first == ContentItemType.text)
-                  Text(
+                  Flexible(
+                      child: AutoSizeText(
                     S.of(context).NowLetsGetToKnowEachOther,
                     style: theme?.boldTextTheme.title1,
-                  ),
+                  )),
                 SpacingFoundation.verticalSpace16,
                 Stack(
                   children: [

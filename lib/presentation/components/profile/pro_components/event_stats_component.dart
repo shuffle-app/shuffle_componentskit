@@ -224,10 +224,11 @@ class ContentStatisticsComponent extends StatelessWidget {
                   thickness: 2,
                   height: SpacingFoundation.verticalSpacing32,
                 ),
-                Text(
+                Flexible(
+                    child: AutoSizeText(
                   S.current.ViewSources,
                   style: boldTextTheme?.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
-                ),
+                )),
                 SpacingFoundation.verticalSpace2,
                 SizedBox(
                   height: 0.275625.sw,

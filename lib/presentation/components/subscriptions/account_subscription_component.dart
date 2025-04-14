@@ -24,7 +24,6 @@ class AccountSubscriptionComponent extends StatelessWidget {
     this.onOfferSelected,
   });
 
-
   @override
   Widget build(BuildContext context) {
     final verticalMargin = (configModel.positionModel?.verticalMargin ?? 0).toDouble();
@@ -38,10 +37,11 @@ class AccountSubscriptionComponent extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          Flexible(
+              child: AutoSizeText(
             title,
             style: boldTextTheme?.title1,
-          ),
+          )),
           SpacingFoundation.verticalSpace16,
           context.userTile(
             data: BaseUiKitUserTileData(
@@ -192,10 +192,7 @@ class AccountSubscriptionComponent extends StatelessWidget {
                   .paddingOnly(bottom: bottimPaddign);
             },
           ),
-          if (uiModel.additionalInfo != null) ...[
-            SpacingFoundation.verticalSpace24,
-            uiModel.additionalInfo!
-          ],
+          if (uiModel.additionalInfo != null) ...[SpacingFoundation.verticalSpace24, uiModel.additionalInfo!],
         ],
       ).paddingSymmetric(
         vertical: verticalMargin,

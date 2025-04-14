@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 class CreateUpsalesComponent extends StatefulWidget {
   final UpsaleUiModel? upsaleUiModel;
-  final Function(UpsaleUiModel upsaleUiModel) onSave;
+  final ValueChanged<UpsaleUiModel> onSave;
   final String? currency;
 
   const CreateUpsalesComponent({
@@ -24,7 +24,6 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _limitController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  late XFile? file;
   late UpsaleUiModel _upsaleUiModel;
 
   String? _validateText;
@@ -75,20 +74,24 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
   }
 
   @override
+  void dispose() {
+    _descriptionController.dispose();
+    _limitController.dispose();
+    _priceController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
 
     return Scaffold(
       body: BlurredAppBarPage(
-        customTitle: Expanded(
-          child: AutoSizeText(
+        title:
             S.of(context).Upsales,
-            style: theme?.boldTextTheme.title1,
-            textAlign: TextAlign.center,
-            wrapWords: false,
-          ),
-        ),
-        customToolbarBaseHeight: 1.sw <= 380 ? 0.17.sh : 0.12.sh,
+
+        expandTitle: false,
         centerTitle: true,
         autoImplyLeading: true,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -155,7 +158,7 @@ class _CreateUpsalesComponentState extends State<CreateUpsalesComponent> {
             if (_validateText != null)
               Text(
                 _validateText!,
-                style: context.uiKitTheme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
+                style: theme?.boldTextTheme.body.copyWith(color: ColorsFoundation.error),
                 textAlign: TextAlign.center,
               ),
             SpacingFoundation.verticalSpace10,

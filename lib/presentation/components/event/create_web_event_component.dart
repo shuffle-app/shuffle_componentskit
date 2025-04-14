@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:shuffle_components_kit/presentation/utils/extentions/date_range_extension.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 
-import '../../../shuffle_components_kit.dart';
+import '../../../shuffle_components_kit.dart';import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart';
+
 
 //ignore_for_file: use_build_context_synchronously
 
@@ -148,8 +149,9 @@ class _CreateWebEventComponentState extends State<CreateWebEventComponent> {
   _onVideoAddRequested() async {
     final videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
     if (videoFile != null) {
+      final thumbnail = await FlutterVideoThumbnailPlus.thumbnailDataWeb(videoBytes:await videoFile.readAsBytes());
       setState(() {
-        _videos.add(UiKitMediaVideo(link: videoFile.path));
+        _videos.add(UiKitMediaVideo(link: videoFile.path,previewData: thumbnail));
       });
     }
   }

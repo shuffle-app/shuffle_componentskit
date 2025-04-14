@@ -158,10 +158,11 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
             child: UiKitMiniChart(data: widget.miniChartData!),
           ),
         SpacingFoundation.verticalSpace16,
-        Text(
+        Flexible(
+            child: AutoSizeText(
           S.current.UniqueStatistics,
           style: boldTextTheme?.title1,
-        ),
+        )),
         SpacingFoundation.verticalSpace16,
         if (widget.uniqueStatisticsModel != null)
           UiKitCardWrapper(
@@ -203,10 +204,11 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                   thickness: 2,
                   height: SpacingFoundation.verticalSpacing32,
                 ),
-                Text(
+                Flexible(
+                    child: AutoSizeText(
                   S.current.ViewSources,
                   style: boldTextTheme?.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
-                ),
+                )),
                 SpacingFoundation.verticalSpace2,
                 SizedBox(
                   height: 0.275625.sw,

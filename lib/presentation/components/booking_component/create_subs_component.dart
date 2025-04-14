@@ -6,7 +6,7 @@ import 'booking_ui_model/subs_ui_model.dart';
 
 class CreateSubsComponent extends StatefulWidget {
   final SubsUiModel? subsUiModel;
-  final Function(SubsUiModel subsUiModel) onSave;
+  final ValueChanged<SubsUiModel> onSave;
 
   const CreateSubsComponent({
     super.key,
@@ -70,6 +70,14 @@ class _CreateSubsComponentState extends State<CreateSubsComponent> {
     setState(() {
       _photoPath = '';
     });
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _limitController.dispose();
+    super.dispose();
   }
 
   @override

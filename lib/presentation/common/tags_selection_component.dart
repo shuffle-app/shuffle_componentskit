@@ -9,8 +9,13 @@ class TagsSelectionComponent extends StatefulWidget {
   final List<UiKitTag> allTags;
   final String title;
 
-  const TagsSelectionComponent(
-      {super.key, this.positionModel, required this.selectedTags, required this.title, required this.allTags});
+  const TagsSelectionComponent({
+    super.key,
+    this.positionModel,
+    required this.selectedTags,
+    required this.title,
+    required this.allTags,
+  });
 
   @override
   State<TagsSelectionComponent> createState() => _TagsSelectionComponentState();
@@ -50,12 +55,13 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final horizontalPadding = widget.positionModel?.horizontalMargin?.toDouble() ?? 0;
+    final horizontalPadding =
+        widget.positionModel?.horizontalMargin?.toDouble() ?? SpacingFoundation.horizontalSpacing16;
     final theme = context.uiKitTheme;
     TextStyle? textStyle = theme?.boldTextTheme.title1 ?? Theme.of(context).primaryTextTheme.titleMedium;
     textStyle = textStyle?.copyWith(color: theme?.colorScheme.inversePrimary);
     return Scaffold(
-        bottomNavigationBar: _tags.isNotEmpty
+        bottomNavigationBar: widget.selectedTags.isNotEmpty || _tags.isNotEmpty
             ? SafeArea(
                 child: context
                     .gradientButton(
@@ -76,9 +82,10 @@ class _TagsSelectionComponentState extends State<TagsSelectionComponent> {
               widget.title,
               maxLines: 2,
               style: textStyle,
+              wrapWords: false,
               textAlign: TextAlign.center,
             )),
-            childrenPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            childrenPadding: EdgeInsets.symmetric(horizontal: SpacingFoundation.horizontalSpacing16),
             children: [
               SpacingFoundation.verticalSpace16,
               UiKitInputFieldRightIcon(
