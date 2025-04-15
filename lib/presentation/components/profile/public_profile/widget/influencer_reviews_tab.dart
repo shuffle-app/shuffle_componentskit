@@ -40,48 +40,51 @@ class InfluencerReviewsTab extends StatelessWidget {
               child: SizedBox(
                 height: 0.285.sw * 1.7,
                 width: 1.sw,
-                child: PagedListView<int, VideoReactionUiModel>.separated(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  builderDelegate: PagedChildBuilderDelegate(
-                    firstPageProgressIndicatorBuilder: (c) => Align(
-                      alignment: Alignment.centerLeft,
-                      child: UiKitShimmerProgressIndicator(
-                        gradient: GradientFoundation.greyGradient,
-                        child: UiKitReactionPreview(
-                          customHeight: 0.285.sw * 1.7,
-                          customWidth: 0.285.sw,
-                          imagePath: GraphicsFoundation.instance.png.place.path,
-                        ).paddingOnly(left: horizontalMargin ?? SpacingFoundation.horizontalSpacing16),
-                      ),
-                    ),
-                    newPageProgressIndicatorBuilder: (c) => Align(
-                      alignment: Alignment.centerLeft,
-                      child: UiKitShimmerProgressIndicator(
-                        gradient: GradientFoundation.greyGradient,
-                        child: UiKitReactionPreview(
-                          customHeight: 0.285.sw * 1.7,
-                          customWidth: 0.285.sw,
-                          imagePath: GraphicsFoundation.instance.png.place.path,
-                        ),
-                      ),
-                    ),
-                    itemBuilder: (_, item, index) {
-                      double leftPadding = 0;
-                      if (index == 0) leftPadding = horizontalMargin ?? SpacingFoundation.horizontalSpacing16;
+                child: PagingListener(
+                    controller: storiesPagingController!,
+                    builder: (context, state, fetchNextPage) => PagedListView<int, VideoReactionUiModel>.separated(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          builderDelegate: PagedChildBuilderDelegate(
+                            firstPageProgressIndicatorBuilder: (c) => Align(
+                              alignment: Alignment.centerLeft,
+                              child: UiKitShimmerProgressIndicator(
+                                gradient: GradientFoundation.greyGradient,
+                                child: UiKitReactionPreview(
+                                  customHeight: 0.285.sw * 1.7,
+                                  customWidth: 0.285.sw,
+                                  imagePath: GraphicsFoundation.instance.png.place.path,
+                                ).paddingOnly(left: horizontalMargin ?? SpacingFoundation.horizontalSpacing16),
+                              ),
+                            ),
+                            newPageProgressIndicatorBuilder: (c) => Align(
+                              alignment: Alignment.centerLeft,
+                              child: UiKitShimmerProgressIndicator(
+                                gradient: GradientFoundation.greyGradient,
+                                child: UiKitReactionPreview(
+                                  customHeight: 0.285.sw * 1.7,
+                                  customWidth: 0.285.sw,
+                                  imagePath: GraphicsFoundation.instance.png.place.path,
+                                ),
+                              ),
+                            ),
+                            itemBuilder: (_, item, index) {
+                              double leftPadding = 0;
+                              if (index == 0) leftPadding = horizontalMargin ?? SpacingFoundation.horizontalSpacing16;
 
-                      return UiKitReactionPreview(
-                        customHeight: 0.285.sw * 1.7,
-                        customWidth: 0.285.sw,
-                        imagePath: item.previewImageUrl ?? '',
-                        viewed: item.isViewed,
-                        onTap: () => onReactionTapped?.call(item),
-                      ).paddingOnly(left: leftPadding);
-                    },
-                  ),
-                  separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
-                  pagingController: storiesPagingController!,
-                ),
+                              return UiKitReactionPreview(
+                                customHeight: 0.285.sw * 1.7,
+                                customWidth: 0.285.sw,
+                                imagePath: item.previewImageUrl ?? '',
+                                viewed: item.isViewed,
+                                onTap: () => onReactionTapped?.call(item),
+                              ).paddingOnly(left: leftPadding);
+                            },
+                          ),
+                          separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
+                          state: state,
+                          fetchNextPage: fetchNextPage,
+                        )),
               ),
             ).paddingSymmetric(vertical: SpacingFoundation.verticalSpacing16),
           ),

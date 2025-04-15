@@ -92,106 +92,112 @@ class StatisticsUsersBookingsComponent extends StatelessWidget {
           child: TabBarView(
             controller: tabController,
             children: [
-              PagedListView.separated(
-                padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-                pagingController: bookingUsersPaginationController,
-                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-                builderDelegate: PagedChildBuilderDelegate<BaseUiKitUserTileData>(
-                  itemBuilder: (context, item, index) => UiKitPopUpMenuTile(
-                    title: item.name ?? '',
-                    titleIcon: item.type == UserTileType.pro
-                        ? ProAccountMark()
-                        : item.type == UserTileType.influencer
-                            ? InfluencerAccountMark()
-                            : null,
-                    leading: context.userAvatar(
-                      size: UserAvatarSize.x40x40,
-                      type: item.type ?? UserTileType.ordinary,
-                      userName: item.username ?? '',
-                      imageUrl: item.avatarUrl,
-                    ),
-                    subtitle: item.username,
-                    noShows: item.noShows != null ? UiKitNoShowCard(noShows: item.noShows!) : null,
-                  ),
-                  firstPageProgressIndicatorBuilder: (context) => Column(
-                    children: List.generate(
-                      10,
-                      (index) => UiKitShimmerProgressIndicator(
-                        gradient: GradientFoundation.shunyGreyGradient,
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusFoundation.all24,
-                          child: Container(
-                            height: 0.1.sh,
-                            width: 1.sw,
-                            color: colorScheme?.inverseSurface,
+              PagingListener(
+                  controller: bookingUsersPaginationController,
+                  builder: (context, state, fetchNextPage) => PagedListView.separated(
+                        padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+                        state: state,
+                        fetchNextPage: fetchNextPage,
+                        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+                        builderDelegate: PagedChildBuilderDelegate<BaseUiKitUserTileData>(
+                          itemBuilder: (context, item, index) => UiKitPopUpMenuTile(
+                            title: item.name ?? '',
+                            titleIcon: item.type == UserTileType.pro
+                                ? ProAccountMark()
+                                : item.type == UserTileType.influencer
+                                    ? InfluencerAccountMark()
+                                    : null,
+                            leading: context.userAvatar(
+                              size: UserAvatarSize.x40x40,
+                              type: item.type ?? UserTileType.ordinary,
+                              userName: item.username ?? '',
+                              imageUrl: item.avatarUrl,
+                            ),
+                            subtitle: item.username,
+                            noShows: item.noShows != null ? UiKitNoShowCard(noShows: item.noShows!) : null,
+                          ),
+                          firstPageProgressIndicatorBuilder: (context) => Column(
+                            children: List.generate(
+                              10,
+                              (index) => UiKitShimmerProgressIndicator(
+                                gradient: GradientFoundation.shunyGreyGradient,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadiusFoundation.all24,
+                                  child: Container(
+                                    height: 0.1.sh,
+                                    width: 1.sw,
+                                    color: colorScheme?.inverseSurface,
+                                  ),
+                                ),
+                              ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16),
+                            ),
+                          ),
+                          newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
+                            gradient: GradientFoundation.shunyGreyGradient,
+                            child: ClipRRect(
+                              borderRadius: BorderRadiusFoundation.all24,
+                              child: Container(
+                                height: 0.1.sh,
+                                width: 1.sw,
+                                color: colorScheme?.inverseSurface,
+                              ),
+                            ),
                           ),
                         ),
-                      ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16),
-                    ),
-                  ),
-                  newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
-                    gradient: GradientFoundation.shunyGreyGradient,
-                    child: ClipRRect(
-                      borderRadius: BorderRadiusFoundation.all24,
-                      child: Container(
-                        height: 0.1.sh,
-                        width: 1.sw,
-                        color: colorScheme?.inverseSurface,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              PagedListView.separated(
-                padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
-                pagingController: favoritesUsersPaginationController,
-                builderDelegate: PagedChildBuilderDelegate<BaseUiKitUserTileData>(
-                  itemBuilder: (context, item, index) => UiKitPopUpMenuTile(
-                    title: item.name ?? '',
-                    titleIcon: item.type == UserTileType.pro
-                        ? ProAccountMark()
-                        : item.type == UserTileType.influencer
-                            ? InfluencerAccountMark()
-                            : null,
-                    leading: context.userAvatar(
-                      size: UserAvatarSize.x40x40,
-                      type: item.type ?? UserTileType.ordinary,
-                      userName: item.username ?? '',
-                      imageUrl: item.avatarUrl,
-                    ),
-                    subtitle: item.username,
-                    noShows: item.noShows != null ? UiKitNoShowCard(noShows: item.noShows!) : null,
-                  ),
-                  firstPageProgressIndicatorBuilder: (context) => Column(
-                    children: List.generate(
-                      10,
-                      (index) => UiKitShimmerProgressIndicator(
-                        gradient: GradientFoundation.shunyGreyGradient,
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusFoundation.all24,
-                          child: Container(
-                            height: 0.1.sh,
-                            width: 1.sw,
-                            color: colorScheme?.inverseSurface,
+                      )),
+              PagingListener(
+                  controller: favoritesUsersPaginationController,
+                  builder: (context, state, fetchNextPage) => PagedListView.separated(
+                        padding: EdgeInsets.all(EdgeInsetsFoundation.all16),
+                        state: state,
+                        fetchNextPage: fetchNextPage,
+                        builderDelegate: PagedChildBuilderDelegate<BaseUiKitUserTileData>(
+                          itemBuilder: (context, item, index) => UiKitPopUpMenuTile(
+                            title: item.name ?? '',
+                            titleIcon: item.type == UserTileType.pro
+                                ? ProAccountMark()
+                                : item.type == UserTileType.influencer
+                                    ? InfluencerAccountMark()
+                                    : null,
+                            leading: context.userAvatar(
+                              size: UserAvatarSize.x40x40,
+                              type: item.type ?? UserTileType.ordinary,
+                              userName: item.username ?? '',
+                              imageUrl: item.avatarUrl,
+                            ),
+                            subtitle: item.username,
+                            noShows: item.noShows != null ? UiKitNoShowCard(noShows: item.noShows!) : null,
+                          ),
+                          firstPageProgressIndicatorBuilder: (context) => Column(
+                            children: List.generate(
+                              10,
+                              (index) => UiKitShimmerProgressIndicator(
+                                gradient: GradientFoundation.shunyGreyGradient,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadiusFoundation.all24,
+                                  child: Container(
+                                    height: 0.1.sh,
+                                    width: 1.sw,
+                                    color: colorScheme?.inverseSurface,
+                                  ),
+                                ),
+                              ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16),
+                            ),
+                          ),
+                          newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
+                            gradient: GradientFoundation.shunyGreyGradient,
+                            child: ClipRRect(
+                              borderRadius: BorderRadiusFoundation.all24,
+                              child: Container(
+                                height: 0.1.sh,
+                                width: 1.sw,
+                                color: colorScheme?.inverseSurface,
+                              ),
+                            ),
                           ),
                         ),
-                      ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16),
-                    ),
-                  ),
-                  newPageProgressIndicatorBuilder: (context) => UiKitShimmerProgressIndicator(
-                    gradient: GradientFoundation.shunyGreyGradient,
-                    child: ClipRRect(
-                      borderRadius: BorderRadiusFoundation.all24,
-                      child: Container(
-                        height: 0.1.sh,
-                        width: 1.sw,
-                        color: colorScheme?.inverseSurface,
-                      ),
-                    ),
-                  ),
-                ),
-                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-              ),
+                        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+                      )),
             ],
           ),
         ),

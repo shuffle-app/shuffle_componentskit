@@ -72,55 +72,58 @@ class CreateVideoReactionComponent extends StatelessWidget {
         SizedBox(
           height: 1.sh - kToolbarHeight - 172,
           width: 1.sw,
-          child: PagedGridView(
-            pagingController: videosPagingController,
-            padding: EdgeInsets.zero,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: EdgeInsetsFoundation.vertical2,
-              mainAxisSpacing: EdgeInsetsFoundation.horizontal2,
-              childAspectRatio: 96 / 162,
-            ),
-            builderDelegate: PagedChildBuilderDelegate<VideoPreviewUiModel>(
-              itemBuilder: (context, item, index) {
-                return GestureDetector(
-                  onTap: () => onVideoSelectionChanged?.call(item),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      item.previewImage ?? const SizedBox.shrink(),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: 0.075.sh,
-                          decoration: const BoxDecoration(
-                            gradient: GradientFoundation.blackLinearGradient,
+          child: PagingListener(
+            controller: videosPagingController,
+            builder: (context, state, fetchNextPage) => PagedGridView(
+                state: state,
+                fetchNextPage: fetchNextPage,
+                padding: EdgeInsets.zero,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: EdgeInsetsFoundation.vertical2,
+                  mainAxisSpacing: EdgeInsetsFoundation.horizontal2,
+                  childAspectRatio: 96 / 162,
+                ),
+                builderDelegate: PagedChildBuilderDelegate<VideoPreviewUiModel>(
+                  itemBuilder: (context, item, index) {
+                    return GestureDetector(
+                      onTap: () => onVideoSelectionChanged?.call(item),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          item.previewImage ?? const SizedBox.shrink(),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              height: 0.075.sh,
+                              decoration: const BoxDecoration(
+                                gradient: GradientFoundation.blackLinearGradient,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: EdgeInsetsFoundation.vertical4,
-                        right: EdgeInsetsFoundation.horizontal4,
-                        child: Text(
-                          item.duration,
-                          style: textTheme?.caption2Medium.copyWith(color: Colors.white),
-                        ),
-                      ),
-                      if (multiSelectEnabled)
-                        Positioned(
-                          top: EdgeInsetsFoundation.vertical4,
-                          right: EdgeInsetsFoundation.horizontal4,
-                          child: UiKitCheckbox(
-                            key: ValueKey(item.id),
-                            onChanged: () => onVideoSelectionChanged?.call(item),
-                            isActive: selectedVideos.contains(item),
+                          Positioned(
+                            bottom: EdgeInsetsFoundation.vertical4,
+                            right: EdgeInsetsFoundation.horizontal4,
+                            child: Text(
+                              item.duration,
+                              style: textTheme?.caption2Medium.copyWith(color: Colors.white),
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                          if (multiSelectEnabled)
+                            Positioned(
+                              top: EdgeInsetsFoundation.vertical4,
+                              right: EdgeInsetsFoundation.horizontal4,
+                              child: UiKitCheckbox(
+                                key: ValueKey(item.id),
+                                onChanged: () => onVideoSelectionChanged?.call(item),
+                                isActive: selectedVideos.contains(item),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                )),
           ),
         ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       ],

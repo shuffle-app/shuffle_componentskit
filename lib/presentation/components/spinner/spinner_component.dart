@@ -71,7 +71,7 @@ class SpinnerComponent extends StatelessWidget {
         Expanded(
           child: LayoutBuilder(
             builder: (context, size) {
-              final itemsCount = itemsController.itemList?.length;
+              final itemsCount = itemsController.items?.length;
               final centerSingleItem = itemsCount == 1 && !kIsWeb;
 
               return SizedBox(
@@ -106,7 +106,7 @@ class SpinnerComponent extends StatelessWidget {
                                     )
                                     .paddingOnly(
                                       left: index == 0 ? SpacingFoundation.horizontalSpacing16 : 0,
-                                      right: itemsController.itemList?.length == index + 1
+                                      right: itemsController.items?.length == index + 1
                                           ? SpacingFoundation.horizontalSpacing16
                                           : 0,
                                     ),

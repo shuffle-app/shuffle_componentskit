@@ -108,42 +108,45 @@ class SpentPointsComponent extends StatelessWidget {
           SpacingFoundation.verticalSpace24,
           SizedBox(
             height: 0.75.sh,
-            child: PagedListView<int, UiModelDiscounts>(
-              padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
-              pagingController: pagingController,
-              builderDelegate: PagedChildBuilderDelegate(
-                noItemsFoundIndicatorBuilder: (_) => Center(
-                  child: Text(
-                    S.of(context).NothingFound,
-                    style: context.uiKitTheme?.boldTextTheme.body,
-                  ),
-                ),
-                itemBuilder: (context, item, index) {
-                  return UiKitCardWrapper(
-                    child: Column(
-                      children: [
-                        OfferContentCard(
-                          imageUrl: item.contentShortUiModel.imageUrl,
-                          title: item.contentShortUiModel.title,
-                          contentTitle: item.contentShortUiModel.contentTitle,
-                          periodFrom: item.contentShortUiModel.periodFrom,
-                          periodTo: item.contentShortUiModel.periodTo,
-                        ),
-                        SpacingFoundation.verticalSpace12,
-                        context.gradientButton(
-                          data: BaseUiKitButtonData(
-                            fit: ButtonFit.fitWidth,
-                            text: item.buttonTitle,
-                            onPressed: () async {
-                              onDiscountTap?.call(item);
-                            },
-                          ),
-                        )
-                      ],
-                    ).paddingAll(EdgeInsetsFoundation.all16),
-                  ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical8);
-                },
-              ),
+            child: PagingListener(
+              controller: pagingController,
+              builder: (context, state, fetchNextPage) => PagedListView<int, UiModelDiscounts>(
+                  padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
+                  state: state,
+                  fetchNextPage: fetchNextPage,
+                  builderDelegate: PagedChildBuilderDelegate(
+                    noItemsFoundIndicatorBuilder: (_) => Center(
+                      child: Text(
+                        S.of(context).NothingFound,
+                        style: context.uiKitTheme?.boldTextTheme.body,
+                      ),
+                    ),
+                    itemBuilder: (context, item, index) {
+                      return UiKitCardWrapper(
+                        child: Column(
+                          children: [
+                            OfferContentCard(
+                              imageUrl: item.contentShortUiModel.imageUrl,
+                              title: item.contentShortUiModel.title,
+                              contentTitle: item.contentShortUiModel.contentTitle,
+                              periodFrom: item.contentShortUiModel.periodFrom,
+                              periodTo: item.contentShortUiModel.periodTo,
+                            ),
+                            SpacingFoundation.verticalSpace12,
+                            context.gradientButton(
+                              data: BaseUiKitButtonData(
+                                fit: ButtonFit.fitWidth,
+                                text: item.buttonTitle,
+                                onPressed: () async {
+                                  onDiscountTap?.call(item);
+                                },
+                              ),
+                            )
+                          ],
+                        ).paddingAll(EdgeInsetsFoundation.all16),
+                      ).paddingSymmetric(vertical: EdgeInsetsFoundation.vertical8);
+                    },
+                  )),
             ),
           )
         ],

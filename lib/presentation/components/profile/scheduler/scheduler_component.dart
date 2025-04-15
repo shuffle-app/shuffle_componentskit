@@ -50,7 +50,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
 
   DateTime get firstDayToLoad {
     if (calendarFormat == CalendarFormat.week) {
-      final firstWeekDay = focusedDate.subtract(Duration(days: focusedDate.weekday));
+      final firstWeekDay = focusedDate.subtract(Duration(days: focusedDate.weekday-1));
       return firstWeekDay;
     } else {
       final firstMonthDay = DateTime(focusedDate.year, focusedDate.month, 1);
@@ -101,13 +101,13 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
     await Future.delayed(showingDuration);
     currentContent.addAll(await contentFuture);
     setState(() {
-      if (currentContent.isNotEmpty &&
-          !currentContent.any((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)) {
-        focusedDate = currentContent
-                .firstWhereOrNull((e) => e.shouldVisitAt != null && e.shouldVisitAt?.month == focusedDate.month)
-                ?.shouldVisitAt! ??
-            focusedDate;
-      }
+      // if (currentContent.isNotEmpty &&
+      //     !currentContent.any((e) => e.shouldVisitAt?.isAtSameDayAs(focusedDate) ?? false)) {
+      //   focusedDate = currentContent
+      //           .firstWhereOrNull((e) => e.shouldVisitAt != null && e.shouldVisitAt?.month == focusedDate.month)
+      //           ?.shouldVisitAt! ??
+      //       focusedDate;
+      // }
       showingOpacity = 1;
     });
   }
@@ -201,6 +201,7 @@ class _SchedulerComponentState extends State<SchedulerComponent> with SingleTick
           firstDay: firstDay,
           lastDay: lastDay,
           onPageChanged: (DateTime focusedDay) {
+            print('on page changed: $focusedDay',);
             if (focusedDay.month != focusedDate.month || calendarFormat == CalendarFormat.week) {
               FeedbackIsolate.instance.addEvent(FeedbackIsolateHaptics(intensities: [100]));
 

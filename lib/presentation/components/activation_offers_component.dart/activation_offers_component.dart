@@ -48,24 +48,27 @@ class ActivationOffersComponent extends StatelessWidget {
           ),
           SpacingFoundation.verticalSpace16,
           SizedBox(
-            height: 0.65.sh,
-            child: PagedListView<int, UsersOfOffer>(
-              pagingController: pagingController,
-              padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
-              builderDelegate: PagedChildBuilderDelegate(
-                noItemsFoundIndicatorBuilder: (context) => Text(
-                  S.of(context).ThereNoUsersWhoHaveBoughtOfferYet,
-                  style: boldTextTheme?.caption1Medium,
+              height: 0.65.sh,
+              child: PagingListener(
+                controller: pagingController,
+                builder: (context, state, fetchNextPage) => PagedListView<int, UsersOfOffer>(
+                  state: state,
+                  fetchNextPage: fetchNextPage,
+                  padding: EdgeInsets.all(EdgeInsetsFoundation.zero),
+                  builderDelegate: PagedChildBuilderDelegate(
+                    noItemsFoundIndicatorBuilder: (context) => Text(
+                      S.of(context).ThereNoUsersWhoHaveBoughtOfferYet,
+                      style: boldTextTheme?.caption1Medium,
+                    ),
+                    itemBuilder: (context, item, index) {
+                      return UserInOfferWidget(
+                        offerUser: item,
+                        onDetailsTap: onDetailsTap,
+                      ).paddingOnly(bottom: SpacingFoundation.verticalSpacing20);
+                    },
+                  ),
                 ),
-                itemBuilder: (context, item, index) {
-                  return UserInOfferWidget(
-                    offerUser: item,
-                    onDetailsTap: onDetailsTap,
-                  ).paddingOnly(bottom: SpacingFoundation.verticalSpacing20);
-                },
-              ),
-            ),
-          ),
+              )),
         ],
       ),
     );

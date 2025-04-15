@@ -306,47 +306,51 @@ class FeedComponent extends StatelessWidget {
                                 child: SizedBox(
                                   height: 0.285.sw * 1.7,
                                   width: 1.sw,
-                                  child: PagedListView<int, VideoReactionUiModel>.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    builderDelegate: PagedChildBuilderDelegate(
-                                      firstPageProgressIndicatorBuilder: (c) => Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: UiKitShimmerProgressIndicator(
-                                          gradient: GradientFoundation.greyGradient,
-                                          child: UiKitReactionPreview(
-                                            customHeight: 0.285.sw * 1.7,
-                                            customWidth: 0.285.sw,
-                                            imagePath: GraphicsFoundation.instance.png.place.path,
-                                          ).paddingOnly(left: horizontalMargin),
-                                        ),
-                                      ),
-                                      newPageProgressIndicatorBuilder: (c) => Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: UiKitShimmerProgressIndicator(
-                                          gradient: GradientFoundation.greyGradient,
-                                          child: UiKitReactionPreview(
-                                            customHeight: 0.285.sw * 1.7,
-                                            customWidth: 0.285.sw,
-                                            imagePath: GraphicsFoundation.instance.png.place.path,
-                                          ),
-                                        ),
-                                      ),
-                                      itemBuilder: (_, item, index) {
-                                        double leftPadding = 0;
-                                        if (index == 0) leftPadding = horizontalMargin;
+                                  child: PagingListener(
+                                      controller: storiesPagingController!,
+                                      builder: (context, state, fetchNextPage) =>
+                                          PagedListView<int, VideoReactionUiModel>.separated(
+                                            scrollDirection: Axis.horizontal,
+                                            builderDelegate: PagedChildBuilderDelegate(
+                                              firstPageProgressIndicatorBuilder: (c) => Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: UiKitShimmerProgressIndicator(
+                                                  gradient: GradientFoundation.greyGradient,
+                                                  child: UiKitReactionPreview(
+                                                    customHeight: 0.285.sw * 1.7,
+                                                    customWidth: 0.285.sw,
+                                                    imagePath: GraphicsFoundation.instance.png.place.path,
+                                                  ).paddingOnly(left: horizontalMargin),
+                                                ),
+                                              ),
+                                              newPageProgressIndicatorBuilder: (c) => Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: UiKitShimmerProgressIndicator(
+                                                  gradient: GradientFoundation.greyGradient,
+                                                  child: UiKitReactionPreview(
+                                                    customHeight: 0.285.sw * 1.7,
+                                                    customWidth: 0.285.sw,
+                                                    imagePath: GraphicsFoundation.instance.png.place.path,
+                                                  ),
+                                                ),
+                                              ),
+                                              itemBuilder: (_, item, index) {
+                                                double leftPadding = 0;
+                                                if (index == 0) leftPadding = horizontalMargin;
 
-                                        return UiKitReactionPreview(
-                                          customHeight: 0.285.sw * 1.7,
-                                          customWidth: 0.285.sw,
-                                          imagePath: item.previewImageUrl ?? '',
-                                          viewed: item.isViewed,
-                                          onTap: () => onReactionTapped?.call(item),
-                                        ).paddingOnly(left: leftPadding);
-                                      },
-                                    ),
-                                    separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
-                                    pagingController: storiesPagingController!,
-                                  ),
+                                                return UiKitReactionPreview(
+                                                  customHeight: 0.285.sw * 1.7,
+                                                  customWidth: 0.285.sw,
+                                                  imagePath: item.previewImageUrl ?? '',
+                                                  viewed: item.isViewed,
+                                                  onTap: () => onReactionTapped?.call(item),
+                                                ).paddingOnly(left: leftPadding);
+                                              },
+                                            ),
+                                            separatorBuilder: (_, i) => SpacingFoundation.horizontalSpace12,
+                                            state: state,
+                                            fetchNextPage: fetchNextPage,
+                                          )),
                                 ),
                               ),
                               SpacingFoundation.verticalSpace16,
@@ -517,61 +521,65 @@ class FeedComponent extends StatelessWidget {
                             })).wrapSliverBox,
                   ],
                   SpacingFoundation.verticalSpace24.wrapSliverBox,
-                  PagedSliverList.separated(
-                    shrinkWrapFirstPageIndicators: true,
-                    builderDelegate: PagedChildBuilderDelegate(
-                      animateTransitions: true,
-                      firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
-                      newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
-                      itemBuilder: (_, item, index) {
-                        item as UiUniversalModel;
-                        if (item.isAdvertisement && advertisement != null) {
-                          if (item.bannerType == AdvertisementBannerType.text) {
-                            return item.smallTextBanner.paddingSymmetric(horizontal: horizontalMargin);
-                          } else {
-                            return context
-                                .advertisementImageBanner(
-                                  data: BaseUiKitAdvertisementImageBannerData(
-                                    availableWidth: 1.sw - (horizontalMargin * 2),
-                                    onPressed: onAdvertisementPressed,
-                                    imageLink: item.smallBannerImage,
-                                    title: item.advertisementTitle ?? advertisement.key,
-                                    size: AdvertisementBannerSize.values.byName(
-                                      advertisement.value.type ?? S.of(context).Small.toLowerCase(),
+                  PagingListener(
+                    controller: controller,
+                    builder: (context, state, fetchNextPage) => PagedSliverList.separated(
+                      shrinkWrapFirstPageIndicators: true,
+                      builderDelegate: PagedChildBuilderDelegate(
+                        animateTransitions: true,
+                        firstPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+                        newPageProgressIndicatorBuilder: (c) => progressIndicator ?? const SizedBox.shrink(),
+                        itemBuilder: (_, item, index) {
+                          item as UiUniversalModel;
+                          if (item.isAdvertisement && advertisement != null) {
+                            if (item.bannerType == AdvertisementBannerType.text) {
+                              return item.smallTextBanner.paddingSymmetric(horizontal: horizontalMargin);
+                            } else {
+                              return context
+                                  .advertisementImageBanner(
+                                    data: BaseUiKitAdvertisementImageBannerData(
+                                      availableWidth: 1.sw - (horizontalMargin * 2),
+                                      onPressed: onAdvertisementPressed,
+                                      imageLink: item.smallBannerImage,
+                                      title: item.advertisementTitle ?? advertisement.key,
+                                      size: AdvertisementBannerSize.values.byName(
+                                        advertisement.value.type ?? S.of(context).Small.toLowerCase(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                                .paddingSymmetric(horizontal: horizontalMargin);
+                                  )
+                                  .paddingSymmetric(horizontal: horizontalMargin);
+                            }
                           }
-                        }
 
-                        return PlacePreview(
-                          key: ValueKey(item.id),
-                          // showFavoriteHint: index==0,
-                          isFavorite: item.isFavorite,
-                          onFavoriteChanged: item.onFavoriteChanged,
-                          onTap: (id) => onListItemPressed?.call(id, item.type),
-                          place: UiPlaceModel(
-                            id: item.id,
-                            title: item.title,
-                            description: item.description,
-                            media: item.media,
-                            tags: item.tags,
-                            baseTags: item.baseTags ?? [],
-                            schedule: item.schedule,
-                          ),
-                          model: feedLeisureModel,
-                        );
-                      },
+                          return PlacePreview(
+                            key: ValueKey(item.id),
+                            // showFavoriteHint: index==0,
+                            isFavorite: item.isFavorite,
+                            onFavoriteChanged: item.onFavoriteChanged,
+                            onTap: (id) => onListItemPressed?.call(id, item.type),
+                            place: UiPlaceModel(
+                              id: item.id,
+                              title: item.title,
+                              description: item.description,
+                              media: item.media,
+                              tags: item.tags,
+                              baseTags: item.baseTags ?? [],
+                              schedule: item.schedule,
+                            ),
+                            model: feedLeisureModel,
+                          );
+                        },
+                      ),
+                      itemExtent: 200.h,
+                      separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
+                      state: state,
+                      fetchNextPage: fetchNextPage,
                     ),
-                    itemExtent: 200.h,
-                    separatorBuilder: (_, i) => SpacingFoundation.verticalSpace24,
-                    pagingController: controller,
                   ),
                   if (preserveScrollPosition)
                     SizedBox(
-                            height: ((controller.itemList?.length ?? 0) != 1 ? 0.2.sh : 0.8.sh) -
-                                kBottomNavigationBarHeight)
+                            height:
+                                ((controller.items?.length ?? 0) != 1 ? 0.2.sh : 0.8.sh) - kBottomNavigationBarHeight)
                         .wrapSliverBox,
                   kBottomNavigationBarHeight.heightBox.wrapSliverBox
                 ],

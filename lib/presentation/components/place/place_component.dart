@@ -115,18 +115,24 @@ class _PlaceComponentState extends State<PlaceComponent> {
   final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
   final AutoSizeGroup _influencerGroup = AutoSizeGroup();
 
-  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
+  late final reactionsPagingController = PagingController<int, VideoReactionUiModel>(
+    fetchPage: _reactionsListener,
+    getNextPageKey: (PagingState<int, VideoReactionUiModel> state) => (state.keys?.last ?? 0) + 1,
+  );
 
-  final feedbacksPagedController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
+  late final feedbacksPagedController = PagingController<int, FeedbackUiModel>(
+    fetchPage: _feedbacksListener,
+    getNextPageKey: (PagingState<int, FeedbackUiModel> state) => (state.keys?.last ?? 0) + 1,
+  );
 
   // Set<int> likedReviews = {};
 
   final ScrollController listViewController = ScrollController();
   final ScrollController scrollController = ScrollController();
 
-  bool get _noFeedbacks => feedbacksPagedController.itemList?.isEmpty ?? true;
+  bool get _noFeedbacks => feedbacksPagedController.items?.isEmpty ?? true;
 
-  bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
+  bool get _noReactions => reactionsPagingController.items?.isEmpty ?? true;
 
   bool cannotLeaveLike(id) =>
       widget.currentUserId == id || widget.onLikedFeedback == null || widget.onDislikedFeedback == null;
@@ -138,42 +144,38 @@ class _PlaceComponentState extends State<PlaceComponent> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       canLeaveFeedback = await widget.canLeaveFeedbackCallback.call(widget.place.id);
-      reactionsPagingController.addPageRequestListener(_reactionsListener);
-      feedbacksPagedController.addPageRequestListener(_feedbacksListener);
-      reactionsPagingController.notifyPageRequestListeners(1);
-      feedbacksPagedController.notifyPageRequestListeners(1);
+      // reactionsPagingController.addPageRequestListener(_reactionsListener);
+      // feedbacksPagedController.addPageRequestListener(_feedbacksListener);
+      // reactionsPagingController.notifyPageRequestListeners(1);
+      // feedbacksPagedController.notifyPageRequestListeners(1);
       setState(() {});
     });
   }
 
-  void _reactionsListener(int page) async {
+  Future<List<VideoReactionUiModel>> _reactionsListener(int page) async {
     final data = await widget.placeReactionLoaderCallback(page, widget.place.id);
-    if (data.any((e) => reactionsPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
+    if (data.any((e) => reactionsPagingController.items?.any((el) => el.id == e.id) ?? false)) return [];
     if (data.isEmpty) {
-      reactionsPagingController.appendLastPage(data);
-      return;
+      return data;
     }
     if (data.last.empty) {
       data.removeLast();
-      reactionsPagingController.appendLastPage(data);
+      return data;
     } else {
       if (data.length < 10) {
-        reactionsPagingController.appendLastPage(data);
+        return data;
       } else {
-        reactionsPagingController.appendPage(data, page + 1);
+        return data;
       }
-    }
-    if (mounted) {
-      setState(() {});
     }
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
-    final updatedFeedbackIndex = feedbacksPagedController.itemList?.indexWhere((element) => element.id == feedbackId);
+    final updatedFeedbackIndex = feedbacksPagedController.items?.indexWhere((element) => element.id == feedbackId);
     if (updatedFeedbackIndex != null && updatedFeedbackIndex >= 0) {
-      final updatedFeedback = feedbacksPagedController.itemList?.removeAt(updatedFeedbackIndex);
+      final updatedFeedback = feedbacksPagedController.items?.removeAt(updatedFeedbackIndex);
       if (updatedFeedback != null) {
-        feedbacksPagedController.itemList?.insert(
+        feedbacksPagedController.items?.insert(
           updatedFeedbackIndex,
           updatedFeedback.copyWith(
               helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue, helpfulForUser: addValue > 0),
@@ -183,25 +185,23 @@ class _PlaceComponentState extends State<PlaceComponent> {
     setState(() {});
   }
 
-  void _feedbacksListener(int page) async {
+  Future<List<FeedbackUiModel>> _feedbacksListener(int page) async {
     final data = await widget.placeFeedbackLoaderCallback(page, widget.place.id);
-    if (data.any((e) => feedbacksPagedController.itemList?.any((el) => el.id == e.id) ?? false)) return;
+    if (data.any((e) => feedbacksPagedController.items?.any((el) => el.id == e.id) ?? false)) return [];
     widget.likedReviews?.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
-      feedbacksPagedController.appendLastPage(data);
-      return;
+      return data;
     }
     if (data.last.empty) {
       data.removeLast();
-      feedbacksPagedController.appendLastPage(data);
+      return data;
     } else {
       if (data.length < 10) {
-        feedbacksPagedController.appendLastPage(data);
+        return data;
       } else {
-        feedbacksPagedController.appendPage(data, page + 1);
+        return data;
       }
     }
-    setState(() {});
   }
 
   Future<void> _handleAddReactionTap() async {
@@ -703,7 +703,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                     setState(() {
                                       canLeaveFeedback = false;
                                       feedbacksPagedController.refresh();
-                                      feedbacksPagedController.notifyPageRequestListeners(1);
+                                      // feedbacksPagedController.notifyPageRequestListeners(1);
                                     });
                                   }
                                 });
@@ -751,7 +751,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                     (model) {
                                       if (model.isEdited) {
                                         feedbacksPagedController.refresh();
-                                        feedbacksPagedController.notifyPageRequestListeners(1);
+                                        // feedbacksPagedController.notifyPageRequestListeners(1);
                                       }
                                       final feedbackId = feedback.id;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/subs_ui_model.dart';
 import 'package:shuffle_components_kit/presentation/components/booking_component/booking_ui_model/upsale_ui_model.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class SubsInContentCard extends StatelessWidget {
   final Color? backgroundColor;
@@ -31,14 +32,15 @@ class SubsInContentCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (backgroundColor == null)
-            Text(
+            Flexible(
+                child: AutoSizeText(
               S.of(context).Subs,
               style: theme?.boldTextTheme.caption2Medium,
             ).paddingOnly(
               left: SpacingFoundation.horizontalSpacing16,
               bottom: SpacingFoundation.verticalSpacing4,
               top: SpacingFoundation.verticalSpacing12,
-            ),
+            )),
           SizedBox(
             height: 1.sw <= 380 ? 160.h : 125.h,
             child: ListView.separated(

@@ -5,7 +5,7 @@ class UiUpcomingEventsSpinnerModel {
   final ScrollController categoriesScrollController;
   final ScrollController? cardsScrollController;
 
-  UiUpcomingEventsSpinnerModel({
+  const UiUpcomingEventsSpinnerModel({
     required this.categoriesScrollController,
     this.onSpinChangedCategory,
     this.cardsScrollController,

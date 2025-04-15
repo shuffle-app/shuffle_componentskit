@@ -58,31 +58,34 @@ class _ViewHistoryPointComponentState extends State<ViewHistoryPointComponent> {
         ).paddingOnly(top: EdgeInsetsFoundation.vertical16),
         SizedBox(
           height: 0.75.sh,
-          child: PagedListView<int, PointHistoryUniversalModel>(
-            padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
-            pagingController: widget.pagingController,
-            builderDelegate: PagedChildBuilderDelegate(
-              noItemsFoundIndicatorBuilder: (_) => Center(
-                child: Text(
-                  S.of(context).NothingFound,
-                  style: context.uiKitTheme?.boldTextTheme.body,
-                ),
-              ),
-              itemBuilder: (context, item, index) {
-                return item.contentShortUiModel != null
-                    ? ViewHistoryActivationWidget(
-                        onTap: () => widget.onTapBarCode?.call(item),
-                        activationModel: item.contentShortUiModel,
-                      )
-                    : UiKitPointsHistoryTile(
-                        isLast: index == widget.pagingController.itemList!.length - 1,
-                        title: item.uiModelViewHistoryAccrual?.title ?? '',
-                        points: item.uiModelViewHistoryAccrual?.points ?? 0,
-                        dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),
-                      );
-              },
-            ),
-          ),
+          child: PagingListener(
+              controller: widget.pagingController,
+              builder: (context, state, fetchNextPage) => PagedListView<int, PointHistoryUniversalModel>(
+                    padding: EdgeInsets.symmetric(vertical: EdgeInsetsFoundation.vertical8),
+                    state: state,
+                    fetchNextPage: fetchNextPage,
+                    builderDelegate: PagedChildBuilderDelegate(
+                      noItemsFoundIndicatorBuilder: (_) => Center(
+                        child: Text(
+                          S.of(context).NothingFound,
+                          style: context.uiKitTheme?.boldTextTheme.body,
+                        ),
+                      ),
+                      itemBuilder: (context, item, index) {
+                        return item.contentShortUiModel != null
+                            ? ViewHistoryActivationWidget(
+                                onTap: () => widget.onTapBarCode?.call(item),
+                                activationModel: item.contentShortUiModel,
+                              )
+                            : UiKitPointsHistoryTile(
+                                isLast: index == widget.pagingController.items!.length - 1,
+                                title: item.uiModelViewHistoryAccrual?.title ?? '',
+                                points: item.uiModelViewHistoryAccrual?.points ?? 0,
+                                dateTime: item.uiModelViewHistoryAccrual?.date ?? DateTime.now(),
+                              );
+                      },
+                    ),
+                  )),
         )
       ],
     ));

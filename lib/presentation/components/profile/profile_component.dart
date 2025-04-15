@@ -92,7 +92,7 @@ class ProfileComponent extends StatelessWidget {
     this.onShowMoreTap,
   });
 
-  bool get _noFeedbacks => feedbackPagingController?.itemList?.isEmpty ?? true;
+  bool get _noFeedbacks => feedbackPagingController?.items?.isEmpty ?? true;
 
   String stringWithSpace(int text) {
     NumberFormat formatter = NumberFormat('#,###');
@@ -319,10 +319,9 @@ class ProfileComponent extends StatelessWidget {
         if (videoReactionsPagingController != null && profile.userTileType != UserTileType.influencer)
           SpacingFoundation.verticalSpace24,
         if (feedbackPagingController != null && profile.userTileType != UserTileType.influencer)
-          ValueListenableBuilder(
-            valueListenable: feedbackPagingController!,
-            builder: (context, value, child) {
-              return UiKitColoredAccentBlock(
+          AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: UiKitColoredAccentBlock(
                 title: Text(
                   S.current.MyFeedback,
                   style: textTheme?.title1,
@@ -341,37 +340,36 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     )
                     .paddingOnly(right: SpacingFoundation.horizontalSpacing16),
-                content: _noFeedbacks
-                    ? Text(
+                content: UiKitHorizontalScrollableList<FeedbackUiModel>(
+                  spacing: SpacingFoundation.horizontalSpacing8,
+                  shimmerLoadingChild: SizedBox(width: 0.95.sw, child: UiKitFeedbackCard()),
+                  noItemsFoundIndicator: SizedBox(
+                      width: 1.sw,
+                      child: Text(
                         S.current.NoFeedbacksYet,
                         style: textTheme?.subHeadline,
-                      ).paddingAll(EdgeInsetsFoundation.all16)
-                    : UiKitHorizontalScrollableList<FeedbackUiModel>(
-                        spacing: SpacingFoundation.horizontalSpacing8,
-                        shimmerLoadingChild: SizedBox(width: 0.95.sw, child: UiKitFeedbackCard()),
-                        itemBuilder: (context, feedback, index) {
-                          return SizedBox(
-                            width: 0.95.sw,
-                            child: UiKitFeedbackCard(
-                              showTranslateButton: feedback.showTranslateButton,
-                              onTranslateTap: feedback.onTranslateText,
-                              title: feedback.feedbackAuthorName,
-                              avatarUrl: feedback.feedbackAuthorPhoto,
-                              datePosted: feedback.feedbackDateTime,
-                              companyAnswered: false,
-                              text: feedback.feedbackText,
-                              media: feedback.media,
-                              isHelpful: feedback.helpfulForUser,
-                              helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                              onPressed: () => onFeedbackCardPressed?.call(feedback),
-                            ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
-                          );
-                        },
-                        pagingController: feedbackPagingController!,
-                      ),
-              );
-            },
-          ),
+                      ).paddingAll(EdgeInsetsFoundation.all16)),
+                  itemBuilder: (context, feedback, index) {
+                    return SizedBox(
+                      width: 0.95.sw,
+                      child: UiKitFeedbackCard(
+                        showTranslateButton: feedback.showTranslateButton,
+                        onTranslateTap: feedback.onTranslateText,
+                        title: feedback.feedbackAuthorName,
+                        avatarUrl: feedback.feedbackAuthorPhoto,
+                        datePosted: feedback.feedbackDateTime,
+                        companyAnswered: false,
+                        text: feedback.feedbackText,
+                        media: feedback.media,
+                        isHelpful: feedback.helpfulForUser,
+                        helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                        onPressed: () => onFeedbackCardPressed?.call(feedback),
+                      ).paddingOnly(left: index == 0 ? EdgeInsetsFoundation.all16 : 0),
+                    );
+                  },
+                  pagingController: feedbackPagingController!,
+                ),
+              )),
         if (feedbackPagingController != null) SpacingFoundation.verticalSpace24,
         if (profile.userTileType == UserTileType.pro) ...[
           MyEventsComponent(

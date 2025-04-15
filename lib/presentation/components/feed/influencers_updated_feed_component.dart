@@ -464,111 +464,114 @@ class _PagedInfluencerFeedItemListBody extends StatelessWidget {
         onCheckVisibleItems?.call(indexOfItem.value);
         return true;
       },
-      child: PagedListView.separated(
-        key: pageStorageKey,
-        scrollController: scrollController,
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        padding: EdgeInsets.only(
-          bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
-          top: MediaQuery.viewPaddingOf(context).top,
-        ),
-        pagingController: pagingController,
-        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,
-        builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
-          itemBuilder: (context, item, index) {
-            final isLast = index == pagingController.itemList!.length;
-            double bottomPadding = isLast ? 0 : SpacingFoundation.verticalSpacing8;
-            indexOfItem.value = index;
+      child: PagingListener(
+        controller: pagingController,
+        builder: (context, state, fetchNextPage) => PagedListView.separated(
+            key: pageStorageKey,
+            scrollController: scrollController,
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            padding: EdgeInsets.only(
+              bottom: kBottomNavigationBarHeight + EdgeInsetsFoundation.vertical32,
+              top: MediaQuery.viewPaddingOf(context).top,
+            ),
+            state: state,
+            fetchNextPage: fetchNextPage,
+            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace2,
+            builderDelegate: PagedChildBuilderDelegate<InfluencerFeedItem>(
+              itemBuilder: (context, item, index) {
+                final isLast = index == pagingController.items!.length;
+                double bottomPadding = isLast ? 0 : SpacingFoundation.verticalSpacing8;
+                indexOfItem.value = index;
 
-            late final Widget child;
-            if (item is ShufflePostFeedItem) {
-              child = UiKitContentUpdatesCard.fromShuffle(
-                key: item.key,
-                text: item.text,
-                onSharePress: () => onSharePress?.call(item.id),
-                heartEyesReactionsCount: item.heartEyesReactionsCount,
-                likeReactionsCount: item.likeReactionsCount,
-                fireReactionsCount: item.fireReactionsCount,
-                sunglassesReactionsCount: item.sunglassesReactionsCount,
-                smileyReactionsCount: item.smileyReactionsCount,
-                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-                viewShareDate: item.viewShareDate,
-                onLongPress: () => onLongPress?.call(item.id),
-                showTranslateButton: item.showTranslateButton,
-                onTranslateTap: item.onTranslateTap,
-                children: _children(item, regularTextTheme),
-              ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
-            } else if (item is PostFeedItem) {
-              child = UiKitPostCard(
-                key: item.key,
-                authorName: item.name,
-                authorUsername: item.username,
-                authorAvatarUrl: item.avatarUrl,
-                authorSpeciality: item.speciality,
-                authorUserType: item.userType,
-                //to allow this button only for admin
-                onSharePress: kIsWeb ? () => onSharePress?.call(item.id) : null,
-                heartEyesCount: item.heartEyesReactionsCount,
-                likesCount: item.likeReactionsCount,
-                sunglassesCount: item.sunglassesReactionsCount,
-                firesCount: item.fireReactionsCount,
-                smileyCount: item.smileyReactionsCount,
-                text: item.text,
-                viewShareDate: item.viewShareDate,
-                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-                hasNewMark: item.newMark,
-                onLongPress: () => onLongPress?.call(item.id),
-                onProfilePress: item.userType == UserTileType.pro ? () => onProfilePress?.call(item.userId) : null,
-                showTranslateButton: item.showTranslateButton,
-                // onTranslateTap: item.onTranslateTap,
-              ).paddingOnly(bottom: bottomPadding);
-            } else if (item is UpdatesFeedItem) {
-              child = UiKitContentUpdatesCard(
-                key: item.key,
-                viewShareDate: item.viewShareDate,
-                authorSpeciality: item.speciality,
-                authorName: item.name,
-                authorUsername: item.username,
-                //to allow this button only for admin
-                onSharePress: kIsWeb ? () => onSharePress?.call(item.id) : null,
-                authorAvatarUrl: item.avatarUrl,
-                authorUserType: item.userType,
-                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-                onLongPress: () => onLongPress?.call(item.id),
-                children: _children(item, regularTextTheme),
-              ).paddingOnly(bottom: bottomPadding);
-            } else if (item is DigestFeedItem) {
-              child = UiKitDigestCard(
-                onSharePress: () => onSharePress?.call(item.id),
-                key: item.key,
-                title: item.title,
-                digestUiModels: item.digestUiModels,
-                underTitleText: item.underTitleText,
-                onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
-                heartEyesReactionsCount: item.heartEyesReactionsCount,
-                likeReactionsCount: item.likeReactionsCount,
-                fireReactionsCount: item.fireReactionsCount,
-                sunglassesReactionsCount: item.sunglassesReactionsCount,
-                smileyReactionsCount: item.smileyReactionsCount,
-                viewShareDate: item.viewShareDate,
-                onReadTap: () => onReadTap?.call(item.id),
-                showTranslateButton: item.showTranslateButton,
-                onTranslateTap: item.onTranslateListTap,
-              ).paddingOnly(bottom: bottomPadding);
-            } else {
-              child = throw UnimplementedError('Unknown item type: ${item.runtimeType}');
-            }
+                late final Widget child;
+                if (item is ShufflePostFeedItem) {
+                  child = UiKitContentUpdatesCard.fromShuffle(
+                    key: item.key,
+                    text: item.text,
+                    onSharePress: () => onSharePress?.call(item.id),
+                    heartEyesReactionsCount: item.heartEyesReactionsCount,
+                    likeReactionsCount: item.likeReactionsCount,
+                    fireReactionsCount: item.fireReactionsCount,
+                    sunglassesReactionsCount: item.sunglassesReactionsCount,
+                    smileyReactionsCount: item.smileyReactionsCount,
+                    onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                    viewShareDate: item.viewShareDate,
+                    onLongPress: () => onLongPress?.call(item.id),
+                    showTranslateButton: item.showTranslateButton,
+                    onTranslateTap: item.onTranslateTap,
+                    children: _children(item, regularTextTheme),
+                  ).paddingOnly(bottom: EdgeInsetsFoundation.vertical16);
+                } else if (item is PostFeedItem) {
+                  child = UiKitPostCard(
+                    key: item.key,
+                    authorName: item.name,
+                    authorUsername: item.username,
+                    authorAvatarUrl: item.avatarUrl,
+                    authorSpeciality: item.speciality,
+                    authorUserType: item.userType,
+                    //to allow this button only for admin
+                    onSharePress: kIsWeb ? () => onSharePress?.call(item.id) : null,
+                    heartEyesCount: item.heartEyesReactionsCount,
+                    likesCount: item.likeReactionsCount,
+                    sunglassesCount: item.sunglassesReactionsCount,
+                    firesCount: item.fireReactionsCount,
+                    smileyCount: item.smileyReactionsCount,
+                    text: item.text,
+                    viewShareDate: item.viewShareDate,
+                    onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                    hasNewMark: item.newMark,
+                    onLongPress: () => onLongPress?.call(item.id),
+                    onProfilePress: item.userType == UserTileType.pro ? () => onProfilePress?.call(item.userId) : null,
+                    showTranslateButton: item.showTranslateButton,
+                    // onTranslateTap: item.onTranslateTap,
+                  ).paddingOnly(bottom: bottomPadding);
+                } else if (item is UpdatesFeedItem) {
+                  child = UiKitContentUpdatesCard(
+                    key: item.key,
+                    viewShareDate: item.viewShareDate,
+                    authorSpeciality: item.speciality,
+                    authorName: item.name,
+                    authorUsername: item.username,
+                    //to allow this button only for admin
+                    onSharePress: kIsWeb ? () => onSharePress?.call(item.id) : null,
+                    authorAvatarUrl: item.avatarUrl,
+                    authorUserType: item.userType,
+                    onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                    onLongPress: () => onLongPress?.call(item.id),
+                    children: _children(item, regularTextTheme),
+                  ).paddingOnly(bottom: bottomPadding);
+                } else if (item is DigestFeedItem) {
+                  child = UiKitDigestCard(
+                    onSharePress: () => onSharePress?.call(item.id),
+                    key: item.key,
+                    title: item.title,
+                    digestUiModels: item.digestUiModels,
+                    underTitleText: item.underTitleText,
+                    onReactionsTapped: (str) => onReactionsTapped?.call(item.id, str),
+                    heartEyesReactionsCount: item.heartEyesReactionsCount,
+                    likeReactionsCount: item.likeReactionsCount,
+                    fireReactionsCount: item.fireReactionsCount,
+                    sunglassesReactionsCount: item.sunglassesReactionsCount,
+                    smileyReactionsCount: item.smileyReactionsCount,
+                    viewShareDate: item.viewShareDate,
+                    onReadTap: () => onReadTap?.call(item.id),
+                    showTranslateButton: item.showTranslateButton,
+                    onTranslateTap: item.onTranslateListTap,
+                  ).paddingOnly(bottom: bottomPadding);
+                } else {
+                  child = throw UnimplementedError('Unknown item type: ${item.runtimeType}');
+                }
 
-            return AnchorItemWrapper(
-              index: index,
-              controller: scrollController,
-              child: index == 0
-                  ? AnimatedSize(
-                      duration: const Duration(milliseconds: 350), child: child.paddingOnly(top: topPadding ?? 0))
-                  : child,
-            );
-          },
-        ),
+                return AnchorItemWrapper(
+                  index: index,
+                  controller: scrollController,
+                  child: index == 0
+                      ? AnimatedSize(
+                          duration: const Duration(milliseconds: 350), child: child.paddingOnly(top: topPadding ?? 0))
+                      : child,
+                );
+              },
+            )),
       ),
     );
   }

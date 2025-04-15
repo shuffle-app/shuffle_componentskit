@@ -89,13 +89,17 @@ class _EventComponentState extends State<EventComponent> {
   final AutoSizeGroup _personalToolInContentCardGroup = AutoSizeGroup();
   final AutoSizeGroup _influencerGroup = AutoSizeGroup();
 
-  final reactionsPagingController = PagingController<int, VideoReactionUiModel>(firstPageKey: 1);
+  late final reactionsPagingController = PagingController<int, VideoReactionUiModel>(
+      getNextPageKey: (PagingState<int, VideoReactionUiModel> state) => (state.keys?.last ?? 0) + 1,
+      fetchPage: _onReactionsPageRequest);
 
-  final feedbackPagingController = PagingController<int, FeedbackUiModel>(firstPageKey: 1);
+  late final feedbackPagingController = PagingController<int, FeedbackUiModel>(
+      fetchPage: _onFeedbackPageRequest,
+      getNextPageKey: (PagingState<int, FeedbackUiModel> state) => (state.keys?.last ?? 0) + 1);
 
-  bool get _noFeedbacks => feedbackPagingController.itemList?.isEmpty ?? true;
+  bool get _noFeedbacks => feedbackPagingController.items?.isEmpty ?? true;
 
-  bool get _noReactions => reactionsPagingController.itemList?.isEmpty ?? true;
+  bool get _noReactions => reactionsPagingController.items?.isEmpty ?? true;
 
   bool cannotLeaveLike(id) =>
       widget.currentUserId == id || widget.onLikedFeedback == null || widget.onDislikedFeedback == null;
@@ -118,40 +122,34 @@ class _EventComponentState extends State<EventComponent> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       canLeaveFeedback = await widget.canLeaveFeedback(widget.event.id);
-      reactionsPagingController.addPageRequestListener(_onReactionsPageRequest);
-      reactionsPagingController.notifyPageRequestListeners(1);
-      feedbackPagingController.addPageRequestListener(_onFeedbackPageRequest);
-      feedbackPagingController.notifyPageRequestListeners(1);
       setState(() {});
     });
   }
 
-  void _onReactionsPageRequest(int page) async {
+  Future<List<VideoReactionUiModel>> _onReactionsPageRequest(int page) async {
     final data = await widget.reactionsLoaderCallback(page, widget.event.id);
-    if (data.any((e) => reactionsPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
+    if (data.any((e) => reactionsPagingController.items?.any((el) => el.id == e.id) ?? false)) return [];
     if (data.isEmpty) {
-      reactionsPagingController.appendLastPage(data);
-      return;
+      return data;
     }
     if (data.last.empty) {
       data.removeLast();
-      reactionsPagingController.appendLastPage(data);
+      return data;
     } else {
       if (data.length < 10) {
-        reactionsPagingController.appendLastPage(data);
+        return data;
       } else {
-        reactionsPagingController.appendPage(data, page + 1);
+        return data;
       }
     }
-    setState(() {});
   }
 
   void _updateFeedbackList(int feedbackId, int addValue) {
-    final updatedFeedbackIndex = feedbackPagingController.itemList?.indexWhere((element) => element.id == feedbackId);
+    final updatedFeedbackIndex = feedbackPagingController.items?.indexWhere((element) => element.id == feedbackId);
     if (updatedFeedbackIndex != null && updatedFeedbackIndex >= 0) {
-      final updatedFeedback = feedbackPagingController.itemList?.removeAt(updatedFeedbackIndex);
+      final updatedFeedback = feedbackPagingController.items?.removeAt(updatedFeedbackIndex);
       if (updatedFeedback != null) {
-        feedbackPagingController.itemList?.insert(
+        feedbackPagingController.items?.insert(
           updatedFeedbackIndex,
           updatedFeedback.copyWith(
               helpfulCount: (updatedFeedback.helpfulCount ?? 0) + addValue, helpfulForUser: addValue > 0),
@@ -161,26 +159,23 @@ class _EventComponentState extends State<EventComponent> {
     setState(() {});
   }
 
-  void _onFeedbackPageRequest(int page) async {
+  Future<List<FeedbackUiModel>> _onFeedbackPageRequest(int page) async {
     final data = await widget.feedbackLoaderCallback(page, widget.event.id);
-    if (data.any((e) => feedbackPagingController.itemList?.any((el) => el.id == e.id) ?? false)) return;
+    if (data.any((e) => feedbackPagingController.items?.any((el) => el.id == e.id) ?? false)) return [];
     widget.likedReviews?.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
-      feedbackPagingController.appendLastPage(data);
-      return;
+      return data;
     }
     if (data.last.empty) {
       data.removeLast();
-      feedbackPagingController.appendLastPage(data);
+      return data;
     } else {
       if (data.length < 10) {
-        feedbackPagingController.appendLastPage(data);
+        return data;
       } else {
-        feedbackPagingController.appendPage(data, page + 1);
+        return data;
       }
     }
-
-    setState(() {});
   }
 
   void _handleAddReactionTapped() async {
@@ -630,7 +625,7 @@ class _EventComponentState extends State<EventComponent> {
                                   setState(() {
                                     canLeaveFeedback = false;
                                     feedbackPagingController.refresh();
-                                    feedbackPagingController.notifyPageRequestListeners(1);
+                                    // feedbackPagingController.notifyPageRequestListeners(1);
                                   });
                                 }
                               }),
@@ -678,7 +673,7 @@ class _EventComponentState extends State<EventComponent> {
                                     (model) {
                                       if (model.isEdited) {
                                         feedbackPagingController.refresh();
-                                        feedbackPagingController.notifyPageRequestListeners(1);
+                                        // feedbackPagingController.notifyPageRequestListeners(1);
                                       }
                                       final feedbackId = feedback.id;
 
@@ -765,10 +760,10 @@ class _EventComponentState extends State<EventComponent> {
                           voice: currentUiModel,
                           onViewAllTap: widget.onViewAllVoicesTap,
                         ).paddingOnly(
-                    bottom: SpacingFoundation.verticalSpacing24,
-                    left: horizontalMargin,
-                    right: horizontalMargin,
-                  )
+                          bottom: SpacingFoundation.verticalSpacing24,
+                          left: horizontalMargin,
+                          right: horizontalMargin,
+                        )
                       : SizedBox.shrink(),
                 );
               } else {

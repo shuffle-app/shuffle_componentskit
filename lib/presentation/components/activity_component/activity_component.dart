@@ -68,40 +68,48 @@ class _ActivityComponentState extends State<ActivityComponent> with TickerProvid
             controller: tabController,
             physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
-              PagedListView.separated(
-                key: myActivityKey,
-                padding: EdgeInsets.only(
-                    bottom: SpacingFoundation.verticalSpacing24 + MediaQuery.viewInsetsOf(context).bottom),
-                pagingController: widget.myActivityPaginationController,
-                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-                builderDelegate: PagedChildBuilderDelegate<ActivityUiModel>(
-                  itemBuilder: (context, item, index) {
-                    return GestureDetector(
-                      onTap: () => widget.onItemTap?.call(item.eventId ?? item.placeId ?? -1, item.eventId != null),
-                      child: ActivityItemWidget(
-                        activityUiModel: item,
-                      ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-                    );
-                  },
-                ),
-              ),
-              PagedListView.separated(
-                key: commonActivityKey,
-                padding: EdgeInsets.only(
-                    bottom: SpacingFoundation.verticalSpacing24 + MediaQuery.viewInsetsOf(context).bottom),
-                pagingController: widget.commonActivityPaginationController,
-                separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-                builderDelegate: PagedChildBuilderDelegate<ActivityUiModel>(
-                  itemBuilder: (context, item, index) {
-                    return GestureDetector(
-                      onTap: () => widget.onItemTap?.call(item.eventId ?? item.placeId ?? -1, item.eventId != null),
-                      child: ActivityItemWidget(
-                        activityUiModel: item,
-                      ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
-                    );
-                  },
-                ),
-              ),
+              PagingListener(
+                  controller: widget.myActivityPaginationController,
+                  builder: (context, state, fetchNextPage) => PagedListView.separated(
+                        key: myActivityKey,
+                        padding: EdgeInsets.only(
+                            bottom: SpacingFoundation.verticalSpacing24 + MediaQuery.viewInsetsOf(context).bottom),
+                        state: state,
+                        fetchNextPage: fetchNextPage,
+                        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+                        builderDelegate: PagedChildBuilderDelegate<ActivityUiModel>(
+                          itemBuilder: (context, item, index) {
+                            return GestureDetector(
+                              onTap: () =>
+                                  widget.onItemTap?.call(item.eventId ?? item.placeId ?? -1, item.eventId != null),
+                              child: ActivityItemWidget(
+                                activityUiModel: item,
+                              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                            );
+                          },
+                        ),
+                      )),
+              PagingListener(
+                  controller: widget.commonActivityPaginationController,
+                  builder: (context, state, fetchNextPage) => PagedListView.separated(
+                        key: commonActivityKey,
+                        padding: EdgeInsets.only(
+                            bottom: SpacingFoundation.verticalSpacing24 + MediaQuery.viewInsetsOf(context).bottom),
+                        state: state,
+                        fetchNextPage: fetchNextPage,
+                        separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+                        builderDelegate: PagedChildBuilderDelegate<ActivityUiModel>(
+                          itemBuilder: (context, item, index) {
+                            return GestureDetector(
+                              onTap: () =>
+                                  widget.onItemTap?.call(item.eventId ?? item.placeId ?? -1, item.eventId != null),
+                              child: ActivityItemWidget(
+                                activityUiModel: item,
+                              ).paddingSymmetric(horizontal: SpacingFoundation.horizontalSpacing16),
+                            );
+                          },
+                        ),
+                      )),
             ],
           ),
         )

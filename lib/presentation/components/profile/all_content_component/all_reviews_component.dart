@@ -30,47 +30,50 @@ class AllReviewsComponent extends StatelessWidget {
         SpacingFoundation.verticalSpace16,
         SizedBox(
           height: 0.75.sh,
-          child: PagedListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
-            pagingController: feedbacksPagingController,
-            separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
-            builderDelegate: PagedChildBuilderDelegate<FeedbackUiModel>(
-              noItemsFoundIndicatorBuilder: (c) => Center(
-                child: Text(
-                  S.current.NoFeedbacksYet,
-                  style: boldTextTheme?.subHeadline,
-                ),
-              ),
-              newPageProgressIndicatorBuilder: (c) => UiKitShimmerProgressIndicator(
-                gradient: GradientFoundation.greyGradient,
-                child: SizedBox(
-                  width: feedbackCardWidth,
-                  child: UiKitFeedbackCard(),
-                ),
-              ),
-              firstPageProgressIndicatorBuilder: (c) => const Center(child: LoadingWidget()),
-              firstPageErrorIndicatorBuilder: (context) => const SizedBox(),
-              newPageErrorIndicatorBuilder: (context) => const SizedBox(),
-              itemBuilder: (context, feedback, index) {
-                return SizedBox(
-                  width: feedbackCardWidth,
-                  child: UiKitFeedbackCard(
-                    showTranslateButton: feedback.showTranslateButton,
-                    onTranslateTap: feedback.onTranslateText,
-                    userTileType: feedback.feedbackAuthorType,
-                    title: feedback.feedbackAuthorName,
-                    avatarUrl: feedback.feedbackAuthorPhoto,
-                    datePosted: feedback.feedbackDateTime,
-                    companyAnswered: false,
-                    text: feedback.feedbackText,
-                    media: feedback.media,
-                    helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
-                    onPressed: () => onFeedbackTapped.call(feedback),
-                  ),
-                );
-              },
-            ),
-          ),
+          child: PagingListener(
+              controller: feedbacksPagingController,
+              builder: (context, state, fetchNextPage) => PagedListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
+                    state: state,
+                    fetchNextPage: fetchNextPage,
+                    separatorBuilder: (context, index) => SpacingFoundation.verticalSpace16,
+                    builderDelegate: PagedChildBuilderDelegate<FeedbackUiModel>(
+                      noItemsFoundIndicatorBuilder: (c) => Center(
+                        child: Text(
+                          S.current.NoFeedbacksYet,
+                          style: boldTextTheme?.subHeadline,
+                        ),
+                      ),
+                      newPageProgressIndicatorBuilder: (c) => UiKitShimmerProgressIndicator(
+                        gradient: GradientFoundation.greyGradient,
+                        child: SizedBox(
+                          width: feedbackCardWidth,
+                          child: UiKitFeedbackCard(),
+                        ),
+                      ),
+                      firstPageProgressIndicatorBuilder: (c) => const Center(child: LoadingWidget()),
+                      firstPageErrorIndicatorBuilder: (context) => const SizedBox(),
+                      newPageErrorIndicatorBuilder: (context) => const SizedBox(),
+                      itemBuilder: (context, feedback, index) {
+                        return SizedBox(
+                          width: feedbackCardWidth,
+                          child: UiKitFeedbackCard(
+                            showTranslateButton: feedback.showTranslateButton,
+                            onTranslateTap: feedback.onTranslateText,
+                            userTileType: feedback.feedbackAuthorType,
+                            title: feedback.feedbackAuthorName,
+                            avatarUrl: feedback.feedbackAuthorPhoto,
+                            datePosted: feedback.feedbackDateTime,
+                            companyAnswered: false,
+                            text: feedback.feedbackText,
+                            media: feedback.media,
+                            helpfulCount: feedback.helpfulCount == 0 ? null : feedback.helpfulCount,
+                            onPressed: () => onFeedbackTapped.call(feedback),
+                          ),
+                        );
+                      },
+                    ),
+                  )),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shuffle_components_kit/shuffle_components_kit.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 subInformationDialog(
   BuildContext context,
@@ -52,10 +53,11 @@ subInformationDialog(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  Flexible(
+                      child: AutoSizeText(
                     sub.title ?? '',
                     style: theme?.boldTextTheme.title2,
-                  ),
+                  )),
                   1.sw <= 380 ? SpacingFoundation.verticalSpace12 : SpacingFoundation.verticalSpace16,
                   Center(
                     child: GradientableWidget(
