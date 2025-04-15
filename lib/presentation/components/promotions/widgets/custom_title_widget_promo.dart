@@ -32,26 +32,28 @@ class CustomTitleWidgetPromo extends StatelessWidget {
                 style: theme?.boldTextTheme.caption1Bold,
               ),
               SpacingFoundation.verticalSpace2,
-              model.selectedDates?.last != null
-                  ? AutoSizeText(
-                      '${formatDateWithCustomPattern('dd.MM', (model.selectedDates!.first ?? DateTime.now()).toLocal())} - ${formatDateWithCustomPattern('dd.MM.yyyy', model.selectedDates!.last!.toLocal())}',
-                      maxLines: 1,
-                      minFontSize: 10,
-                      style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
-                    )
-                  : Text(
-                      model.selectedDates?.first?.year == DateTime.now().year
-                          ? formatDateWithCustomPattern(
-                              'MMMM d',
-                              (model.selectedDates?.first ?? DateTime.now()).toLocal(),
-                            ).capitalize()
-                          : formatDateWithCustomPattern(
-                              'dd.MM.yyyy',
-                              (model.selectedDates?.first ?? DateTime.now()).toLocal(),
-                            ),
-                      style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
-                    ),
-              SpacingFoundation.verticalSpace2,
+              if (model.selectedDates != null && model.selectedDates!.isNotEmpty) ...[
+                model.selectedDates!.length > 1 && model.selectedDates?.last != null
+                    ? AutoSizeText(
+                        '${formatDateWithCustomPattern('dd.MM', (model.selectedDates!.first ?? DateTime.now()).toLocal())} - ${formatDateWithCustomPattern('dd.MM.yyyy', model.selectedDates!.last!.toLocal())}',
+                        maxLines: 1,
+                        minFontSize: 10,
+                        style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
+                      )
+                    : Text(
+                        model.selectedDates?.first?.year == DateTime.now().year
+                            ? formatDateWithCustomPattern(
+                                'MMMM d',
+                                (model.selectedDates?.first ?? DateTime.now()).toLocal(),
+                              ).capitalize()
+                            : formatDateWithCustomPattern(
+                                'dd.MM.yyyy',
+                                (model.selectedDates?.first ?? DateTime.now()).toLocal(),
+                              ),
+                        style: theme?.boldTextTheme.caption3Medium.copyWith(color: ColorsFoundation.mutedText),
+                      ),
+                SpacingFoundation.verticalSpace2,
+              ],
               Row(
                 children: [
                   ImageWidget(
