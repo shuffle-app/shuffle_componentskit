@@ -144,10 +144,13 @@ class _PlaceComponentState extends State<PlaceComponent> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       canLeaveFeedback = await widget.canLeaveFeedbackCallback.call(widget.place.id);
-      // reactionsPagingController.addPageRequestListener(_reactionsListener);
-      // feedbacksPagedController.addPageRequestListener(_feedbacksListener);
-      // reactionsPagingController.notifyPageRequestListeners(1);
-      // feedbacksPagedController.notifyPageRequestListeners(1);
+      if (!canLeaveFeedback!) {
+        feedbacksPagedController.fetchNextPage();
+      }
+      if (!widget.canLeaveVideoReaction) {
+        reactionsPagingController.fetchNextPage();
+      }
+      await Future.delayed(Duration(milliseconds: 500));
       setState(() {});
     });
   }
