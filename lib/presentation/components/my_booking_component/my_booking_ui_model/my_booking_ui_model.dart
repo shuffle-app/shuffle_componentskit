@@ -12,6 +12,7 @@ class MyBookingUiModel {
   final int? total;
   final String? categoryName;
   final TicketIssueStatus? status;
+  final int? paymentType;
 
   const MyBookingUiModel({
     required this.id,
@@ -23,6 +24,7 @@ class MyBookingUiModel {
     this.visitDate,
     this.categoryName,
     this.status,
+    this.paymentType,
   });
 
   bool get isPast {
@@ -78,6 +80,7 @@ class MyBookingUiModel {
     DateTime? visitDate,
     String? categoryName,
     TicketIssueStatus? status,
+    int? paymentType,
   }) =>
       MyBookingUiModel(
         id: id ?? this.id,
@@ -89,6 +92,7 @@ class MyBookingUiModel {
         visitDate: visitDate ?? this.visitDate,
         categoryName: categoryName ?? this.categoryName,
         status: status ?? this.status,
+        paymentType: paymentType ?? this.paymentType,
       );
 }
 
