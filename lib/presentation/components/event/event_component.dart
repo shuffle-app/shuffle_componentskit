@@ -130,13 +130,16 @@ class _EventComponentState extends State<EventComponent> {
     final data = await widget.reactionsLoaderCallback(page, widget.event.id);
     if (data.any((e) => reactionsPagingController.items?.any((el) => el.id == e.id) ?? false)) return [];
     if (data.isEmpty) {
+      reactionsPagingController.value = reactionsPagingController.value.copyWith(hasNextPage: false);
       return data;
     }
     if (data.last.empty) {
       data.removeLast();
+      reactionsPagingController.value = reactionsPagingController.value.copyWith(hasNextPage: false);
       return data;
     } else {
       if (data.length < 10) {
+        reactionsPagingController.value = reactionsPagingController.value.copyWith(hasNextPage: false);
         return data;
       } else {
         return data;
@@ -164,13 +167,16 @@ class _EventComponentState extends State<EventComponent> {
     if (data.any((e) => feedbackPagingController.items?.any((el) => el.id == e.id) ?? false)) return [];
     widget.likedReviews?.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
+      feedbackPagingController.value = feedbackPagingController.value.copyWith(hasNextPage: false);
       return data;
     }
     if (data.last.empty) {
       data.removeLast();
+      feedbackPagingController.value = feedbackPagingController.value.copyWith(hasNextPage: false);
       return data;
     } else {
       if (data.length < 10) {
+        feedbackPagingController.value = feedbackPagingController.value.copyWith(hasNextPage: false);
         return data;
       } else {
         return data;

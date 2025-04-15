@@ -71,9 +71,6 @@ class SpinnerComponent extends StatelessWidget {
         Expanded(
           child: LayoutBuilder(
             builder: (context, size) {
-              final itemsCount = itemsController.items?.length;
-              final centerSingleItem = itemsCount == 1 && !kIsWeb;
-
               return SizedBox(
                   width: 1.sw,
                   child: UiKitHorizontalScrollableList<UiEventModel>(
@@ -84,6 +81,8 @@ class SpinnerComponent extends StatelessWidget {
                       availableHeight: size.maxHeight,
                     ).paddingOnly(left: SpacingFoundation.horizontalSpacing16),
                     itemBuilder: (_, item, index) {
+                      final itemsCount = itemsController.items?.length ?? 0;
+                      final centerSingleItem = itemsCount <= 1 && !kIsWeb;
                       if (item.isAdvertisement) {
                         return Align(
                           alignment: Alignment.topCenter,

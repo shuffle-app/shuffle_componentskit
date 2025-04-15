@@ -156,13 +156,16 @@ class _PlaceComponentState extends State<PlaceComponent> {
     final data = await widget.placeReactionLoaderCallback(page, widget.place.id);
     if (data.any((e) => reactionsPagingController.items?.any((el) => el.id == e.id) ?? false)) return [];
     if (data.isEmpty) {
+      reactionsPagingController.value = reactionsPagingController.value.copyWith(hasNextPage: false);
       return data;
     }
     if (data.last.empty) {
       data.removeLast();
+      reactionsPagingController.value = reactionsPagingController.value.copyWith(hasNextPage: false);
       return data;
     } else {
       if (data.length < 10) {
+        reactionsPagingController.value = reactionsPagingController.value.copyWith(hasNextPage: false);
         return data;
       } else {
         return data;
@@ -190,13 +193,16 @@ class _PlaceComponentState extends State<PlaceComponent> {
     if (data.any((e) => feedbacksPagedController.items?.any((el) => el.id == e.id) ?? false)) return [];
     widget.likedReviews?.addAll(data.where((e) => e.helpfulForUser ?? false).map((e) => e.id));
     if (data.isEmpty) {
+      feedbacksPagedController.value = feedbacksPagedController.value.copyWith(hasNextPage: false);
       return data;
     }
     if (data.last.empty) {
       data.removeLast();
+      feedbacksPagedController.value = feedbacksPagedController.value.copyWith(hasNextPage: false);
       return data;
     } else {
       if (data.length < 10) {
+        feedbacksPagedController.value = feedbacksPagedController.value.copyWith(hasNextPage: false);
         return data;
       } else {
         return data;
