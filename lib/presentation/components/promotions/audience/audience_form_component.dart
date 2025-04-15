@@ -353,7 +353,7 @@ class _AudienceFormComponentState extends State<AudienceFormComponent> {
         if (widget.onSaveTemplate != null)
           context.outlinedButton(
               data: BaseUiKitButtonData(
-                  text: '${S.current.Save} ${S.current.Audience.toLowerCase()}',
+                  text: S.current.SaveAudience,
                   onPressed: canSaveTemplate
                       ? () {
                           final titleController = TextEditingController();
