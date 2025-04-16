@@ -422,10 +422,12 @@ class _CreateEventComponentState extends State<CreateEventComponent> {
             },
           ).paddingSymmetric(horizontal: horizontalPadding),
           SpacingFoundation.verticalSpace24,
-          Flexible(child: AutoSizeText(
+          AutoSizeText(
             S.of(context).TypeOfContent,
             style: theme?.regularTextTheme.labelSmall,
-          ).paddingSymmetric(horizontal: horizontalPadding)),
+          ).paddingSymmetric(
+            horizontal: horizontalPadding,
+          ),
           SpacingFoundation.verticalSpace4,
           UiKitCustomTabBar(
             key: _refreshKey,
