@@ -56,11 +56,10 @@ class AboutCompanyComponent extends StatelessWidget {
             SizedBox(
               height: MediaQuery.viewPaddingOf(context).top,
             ),
-            Flexible(
-                child: AutoSizeText(
+             AutoSizeText(
               S.current.DescribeYourBusiness,
               style: boldTextTheme?.title1,
-            )),
+            ),
             SpacingFoundation.verticalSpace16,
             Stack(
               fit: StackFit.passthrough,

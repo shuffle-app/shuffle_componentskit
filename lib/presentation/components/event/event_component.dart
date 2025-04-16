@@ -121,13 +121,9 @@ class _EventComponentState extends State<EventComponent> {
     currentDescription = widget.event.description ?? '';
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      feedbackPagingController.fetchNextPage();
+      reactionsPagingController.fetchNextPage();
       canLeaveFeedback = await widget.canLeaveFeedback(widget.event.id);
-      if(!canLeaveFeedback!){
-        feedbackPagingController.fetchNextPage();
-      }
-      if(!widget.canLeaveVideoReaction){
-        reactionsPagingController.fetchNextPage();
-      }
       await Future.delayed(Duration(milliseconds: 500));
       setState(() {});
     });

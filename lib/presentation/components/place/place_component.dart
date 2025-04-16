@@ -143,13 +143,9 @@ class _PlaceComponentState extends State<PlaceComponent> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      feedbacksPagedController.fetchNextPage();
+      reactionsPagingController.fetchNextPage();
       canLeaveFeedback = await widget.canLeaveFeedbackCallback.call(widget.place.id);
-      if (!canLeaveFeedback!) {
-        feedbacksPagedController.fetchNextPage();
-      }
-      if (!widget.canLeaveVideoReaction) {
-        reactionsPagingController.fetchNextPage();
-      }
       await Future.delayed(Duration(milliseconds: 500));
       setState(() {});
     });
