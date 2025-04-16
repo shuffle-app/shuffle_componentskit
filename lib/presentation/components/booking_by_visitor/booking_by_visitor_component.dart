@@ -426,7 +426,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
           if (errorSelectSubisActive) ...[
             Text(
               S.of(context).SelectSubs,
-              style: theme?.regularTextTheme.body.copyWith(color: UiKitColors.error),
+              style: theme?.regularTextTheme.caption2.copyWith(color: UiKitColors.error),
             ).paddingSymmetric(horizontal: horizontalPadding),
             SpacingFoundation.verticalSpace16,
           ],
@@ -503,7 +503,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
             if (errorSelectUpsaleisActive) ...[
               Text(
                 S.of(context).SelectYourFavoriteProduct,
-                style: theme?.regularTextTheme.body.copyWith(color: UiKitColors.error),
+                style: theme?.regularTextTheme.caption2.copyWith(color: UiKitColors.error),
               ).paddingSymmetric(horizontal: horizontalPadding),
               SpacingFoundation.verticalSpace16,
             ],
@@ -520,7 +520,7 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
               children: [
                 Text(
                   S.of(context).Schedule,
-                  style: theme?.regularTextTheme.labelSmall,
+                  style: theme?.regularTextTheme.labelLarge,
                 ),
                 const Spacer(),
                 context.outlinedButton(
@@ -559,14 +559,19 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 right: horizontalPadding,
                 bottom: SpacingFoundation.verticalSpacing24,
               ),
-            Text(S.current.PaymentMethod, style: theme?.boldTextTheme.title2).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace16,
-            Text(widget.bookingUiModel.selectedPaymentTypes.map((e)=>e.name).join(', '), style: theme?.regularTextTheme.body,).paddingSymmetric(horizontal: horizontalPadding),
-            SpacingFoundation.verticalSpace16,
             Text(
               '${S.of(context).Total}: ${formatDouble(_getTotalPrice)} ${widget.bookingUiModel.currency ?? 'AED'}',
               style: theme?.boldTextTheme.title2,
             ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace24,
+            Text(S.current.PaymentMethod, style: theme?.boldTextTheme.title2)
+                .paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
+            Text(
+              widget.bookingUiModel.selectedPaymentTypes.map((e) => e.name).join(', '),
+              style: theme?.regularTextTheme.body,
+            ).paddingSymmetric(horizontal: horizontalPadding),
+            SpacingFoundation.verticalSpace16,
           ],
           if ((_subs.isNotEmpty || _upsales.isNotEmpty) && _getTotalSubsTicketCount != 0)
             SafeArea(
@@ -587,7 +592,6 @@ class _BookingByVisitorComponentState extends State<BookingByVisitorComponent> {
                 ),
               ),
             ).paddingSymmetric(horizontal: horizontalPadding, vertical: SpacingFoundation.verticalSpacing24),
-
         ],
       ),
       bottomNavigationBar: (_subs.isEmpty && _upsales.isEmpty) && _getTotalSubsTicketCount != 0
