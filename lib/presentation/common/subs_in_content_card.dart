@@ -32,15 +32,14 @@ class SubsInContentCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (backgroundColor == null)
-            Flexible(
-                child: AutoSizeText(
+            AutoSizeText(
               S.of(context).Subs,
               style: theme?.boldTextTheme.caption2Medium,
             ).paddingOnly(
               left: SpacingFoundation.horizontalSpacing16,
               bottom: SpacingFoundation.verticalSpacing4,
               top: SpacingFoundation.verticalSpacing12,
-            )),
+            ),
           SizedBox(
             height: 1.sw <= 380 ? 160.h : 125.h,
             child: ListView.separated(
