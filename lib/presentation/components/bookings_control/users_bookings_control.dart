@@ -13,6 +13,7 @@ class UsersBookingsControl extends StatelessWidget {
   final VoidCallback? onRequestsRefund;
   final Function(String? value, int userId)? onPopupMenuSelected;
   final int? noShows;
+  final List<PopupMenuEntry<String>> Function(BuildContext)? popUpItemBuilder;
 
   const UsersBookingsControl({
     super.key,
@@ -24,6 +25,7 @@ class UsersBookingsControl extends StatelessWidget {
     this.onRequestsRefund,
     this.onPopupMenuSelected,
     this.noShows,
+    this.popUpItemBuilder,
   });
 
   @override
@@ -110,7 +112,7 @@ class UsersBookingsControl extends StatelessWidget {
                     ),
                     Flexible(
                       child: AutoSizeText(
-                        element.profile?.nickname ?? '',
+                        '@${element.profile?.nickname ?? ''}',
                         style: boldTextTheme?.caption1Bold.copyWith(color: ColorsFoundation.mutedText),
                         maxLines: 2,
                       ),
@@ -136,35 +138,45 @@ class UsersBookingsControl extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadiusFoundation.all16,
                       ),
-                      itemBuilder: (BuildContext context) => [
-                        PopupMenuItem(
-                          value: 'refund',
-                          child: Text(
-                            S.of(context).FullRefund,
-                            style: boldTextTheme?.caption2Medium.copyWith(
-                              color: theme?.colorScheme.inverseBodyTypography,
-                            ),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 'partialrefund',
-                          child: Text(
-                            S.of(context).PartialRefund,
-                            style: boldTextTheme?.caption2Medium.copyWith(
-                              color: theme?.colorScheme.inverseBodyTypography,
-                            ),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 'contact',
-                          child: Text(
-                            S.of(context).Contact,
-                            style: boldTextTheme?.caption2Medium.copyWith(
-                              color: theme?.colorScheme.inverseBodyTypography,
-                            ),
-                          ),
-                        ),
-                      ],
+                      itemBuilder: popUpItemBuilder ??
+                          (BuildContext context) => [
+                                PopupMenuItem(
+                                  value: 'details',
+                                  child: Text(
+                                    S.of(context).Details,
+                                    style: boldTextTheme?.caption2Medium.copyWith(
+                                      color: theme?.colorScheme.inverseBodyTypography,
+                                    ),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 'refund',
+                                  child: Text(
+                                    S.of(context).FullRefund,
+                                    style: boldTextTheme?.caption2Medium.copyWith(
+                                      color: theme?.colorScheme.inverseBodyTypography,
+                                    ),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 'partialrefund',
+                                  child: Text(
+                                    S.of(context).PartialRefund,
+                                    style: boldTextTheme?.caption2Medium.copyWith(
+                                      color: theme?.colorScheme.inverseBodyTypography,
+                                    ),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 'contact',
+                                  child: Text(
+                                    S.of(context).Contact,
+                                    style: boldTextTheme?.caption2Medium.copyWith(
+                                      color: theme?.colorScheme.inverseBodyTypography,
+                                    ),
+                                  ),
+                                ),
+                              ],
                       onSelected: (value) => onPopupMenuSelected?.call(value, element.ticketUiModel?.id ?? -1),
                     )
             ],

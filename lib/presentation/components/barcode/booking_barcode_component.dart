@@ -7,6 +7,7 @@ class BookingBarcodeComponent extends StatelessWidget {
   final String? title;
   final ValueChanged<String>? onShare;
   final String? imageUrl;
+  final int? paymentType;
 
   const BookingBarcodeComponent({
     super.key,
@@ -14,11 +15,13 @@ class BookingBarcodeComponent extends StatelessWidget {
     this.title,
     this.onShare,
     this.imageUrl,
+    this.paymentType,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.uiKitTheme;
+    final caption1Regular = theme?.regularTextTheme.caption1;
     final isNotEmptyTickets = tickets != null && tickets!.isNotEmpty;
 
     return Column(
@@ -78,7 +81,73 @@ class BookingBarcodeComponent extends StatelessWidget {
                   if (e.value)
                     Text(
                       S.of(context).BarcodeAlreadyBeenActivated,
-                      style: theme?.regularTextTheme.caption1,
+                      style: caption1Regular,
+                    ).paddingOnly(top: SpacingFoundation.verticalSpacing16)
+                  else if (paymentType == 3 || paymentType == 4)
+                    Stack(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              if (paymentType == 3) ...[
+                                TextSpan(
+                                  text: '${S.of(context).TheTicketCanOnlyBePaidForUsingThe} ',
+                                  style: caption1Regular,
+                                ),
+                                TextSpan(
+                                  text: S.of(context).ORCode,
+                                  style: caption1Regular?.copyWith(color: Colors.transparent),
+                                ),
+                                TextSpan(
+                                  text: ' ${S.of(context).AtTheEntrance}',
+                                  style: caption1Regular,
+                                ),
+                              ] else ...[
+                                TextSpan(
+                                  text: '${S.of(context).TheTicketCanOnlyBePaidAtTheEntrance} ',
+                                  style: caption1Regular,
+                                ),
+                                TextSpan(
+                                  text: S.of(context).InCash,
+                                  style: caption1Regular?.copyWith(color: Colors.transparent),
+                                ),
+                              ]
+                            ],
+                          ),
+                        ),
+                        GradientableWidget(
+                          gradient: GradientFoundation.defaultLinearGradient,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                if (paymentType == 3) ...[
+                                  TextSpan(
+                                    text: '${S.of(context).TheTicketCanOnlyBePaidForUsingThe} ',
+                                    style: caption1Regular?.copyWith(color: Colors.transparent),
+                                  ),
+                                  TextSpan(
+                                    text: S.of(context).ORCode,
+                                    style: caption1Regular?.copyWith(color: Colors.white),
+                                  ),
+                                  TextSpan(
+                                    text: ' ${S.of(context).AtTheEntrance}',
+                                    style: caption1Regular?.copyWith(color: Colors.transparent),
+                                  ),
+                                ] else ...[
+                                  TextSpan(
+                                    text: '${S.of(context).TheTicketCanOnlyBePaidAtTheEntrance} ',
+                                    style: caption1Regular?.copyWith(color: Colors.transparent),
+                                  ),
+                                  TextSpan(
+                                    text: S.of(context).InCash,
+                                    style: caption1Regular?.copyWith(color: Colors.white),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     ).paddingOnly(top: SpacingFoundation.verticalSpacing16),
                   SpacingFoundation.verticalSpace24,
                   Divider(

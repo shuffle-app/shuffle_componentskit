@@ -192,3 +192,4 @@ export 'promotions/widgets/custom_title_widget_promo.dart';
 export 'promotions/widgets/speedometer_painter.dart';
 export 'promotions/widgets/feeling_select_grid.dart';
 export 'promotions/widgets/city_multiple_choice_widget.dart';
+export 'ticket_info_component/ticket_info_component.dart';
