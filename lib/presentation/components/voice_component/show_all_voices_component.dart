@@ -40,7 +40,7 @@ class _ShowAllVoicesComponentState extends State<ShowAllVoicesComponent> {
 
     return BlurredAppBarPage(
       title: S.of(context).AllVoices,
-      customToolbarBaseHeight: 80.h,
+      expandTitle: false,
       centerTitle: true,
       autoImplyLeading: true,
       childrenPadding: EdgeInsets.all(EdgeInsetsFoundation.all16),
