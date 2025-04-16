@@ -7,10 +7,10 @@ class ProStatisticsSettingsComponent extends StatelessWidget {
   final FilterValueChanged<TitledFilterItem<String>>? onFilterValueChanged;
 
   const ProStatisticsSettingsComponent({
-    Key? key,
+    super.key,
     required this.filters,
     required this.onFilterValueChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

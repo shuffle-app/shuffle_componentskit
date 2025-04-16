@@ -209,11 +209,10 @@ class _PhotoListEditingComponentState extends State<PhotoListEditingComponent> {
             fit: BoxFit.fitHeight,
           ),
           SpacingFoundation.verticalSpace16,
-          Flexible(
-              child: AutoSizeText(
+          AutoSizeText(
             S.of(context).AddPhotoHere,
             style: theme?.boldTextTheme.body,
-          ))
+          )
         ],
       ),
     );

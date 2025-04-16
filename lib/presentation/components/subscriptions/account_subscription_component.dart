@@ -37,11 +37,10 @@ class AccountSubscriptionComponent extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(
-              child: AutoSizeText(
+          AutoSizeText(
             title,
             style: boldTextTheme?.title1,
-          )),
+          ),
           SpacingFoundation.verticalSpace16,
           context.userTile(
             data: BaseUiKitUserTileData(

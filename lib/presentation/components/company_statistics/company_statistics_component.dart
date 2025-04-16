@@ -73,15 +73,9 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
     textStyle = textStyle?.copyWith(color: colorScheme?.inversePrimary);
 
     return BlurredAppBarPage(
-      customTitle: Expanded(
-        child: AutoSizeText(
-          S.current.Statistics,
-          maxLines: 1,
-          style: textStyle,
-          textAlign: TextAlign.center,
-        ),
-      ),
-      expandTitle: true,
+      title: S.current.Statistics,
+      centerTitle: true,
+      expandTitle: false,
       childrenPadding: EdgeInsets.symmetric(horizontal: EdgeInsetsFoundation.horizontal16),
       children: [
         SpacingFoundation.verticalSpace16,
@@ -158,11 +152,10 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
             child: UiKitMiniChart(data: widget.miniChartData!),
           ),
         SpacingFoundation.verticalSpace16,
-        Flexible(
-            child: AutoSizeText(
+        AutoSizeText(
           S.current.UniqueStatistics,
           style: boldTextTheme?.title1,
-        )),
+        ),
         SpacingFoundation.verticalSpace16,
         if (widget.uniqueStatisticsModel != null)
           UiKitCardWrapper(
@@ -204,11 +197,10 @@ class _CompanyStatisticsComponentState extends State<CompanyStatisticsComponent>
                   thickness: 2,
                   height: SpacingFoundation.verticalSpacing32,
                 ),
-                Flexible(
-                    child: AutoSizeText(
+                AutoSizeText(
                   S.current.ViewSources,
                   style: boldTextTheme?.caption2Medium.copyWith(color: ColorsFoundation.mutedText),
-                )),
+                ),
                 SpacingFoundation.verticalSpace2,
                 SizedBox(
                   height: 0.275625.sw,

@@ -72,11 +72,10 @@ class AboutUserComponent extends StatelessWidget {
 
               return [
                 if (contentTypeList.first == ContentItemType.text)
-                  Flexible(
-                      child: AutoSizeText(
+                  AutoSizeText(
                     S.of(context).NowLetsGetToKnowEachOther,
                     style: theme?.boldTextTheme.title1,
-                  )),
+                  ),
                 SpacingFoundation.verticalSpace16,
                 Stack(
                   children: [
