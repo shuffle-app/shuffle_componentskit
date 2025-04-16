@@ -7,6 +7,8 @@ class UserBookingsControlUiModel {
   final TicketUiModel? refundUiModel;
   final int? noShows;
   bool isSelected;
+  final DateTime? visitDate;
+  final int? paymentType;
 
   UserBookingsControlUiModel({
     required this.id,
@@ -15,6 +17,8 @@ class UserBookingsControlUiModel {
     this.refundUiModel,
     this.noShows,
     this.isSelected = false,
+    this.visitDate,
+    this.paymentType,
   });
 
   UserBookingsControlUiModel copyWith({
@@ -24,6 +28,8 @@ class UserBookingsControlUiModel {
     TicketUiModel? refundUiModel,
     int? noShows,
     bool? isSelected,
+    DateTime? visitDate,
+    int? paymentType,
   }) {
     return UserBookingsControlUiModel(
       id: id ?? this.id,
@@ -32,6 +38,8 @@ class UserBookingsControlUiModel {
       refundUiModel: refundUiModel ?? this.refundUiModel,
       noShows: noShows ?? this.noShows,
       isSelected: isSelected ?? this.isSelected,
+      visitDate: visitDate ?? this.visitDate,
+      paymentType: paymentType ?? this.paymentType,
     );
   }
 }
