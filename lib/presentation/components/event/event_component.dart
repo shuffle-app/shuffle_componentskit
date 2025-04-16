@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -120,13 +122,21 @@ class _EventComponentState extends State<EventComponent> {
   void initState() {
     currentDescription = widget.event.description ?? '';
     super.initState();
+    reactionsPagingController.addListener(updateStateIfNotEmpty);
+    feedbackPagingController.addListener(updateStateIfNotEmpty);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       feedbackPagingController.fetchNextPage();
       reactionsPagingController.fetchNextPage();
       canLeaveFeedback = await widget.canLeaveFeedback(widget.event.id);
-      await Future.delayed(Duration(milliseconds: 500));
+      log('going to update reviews');
       setState(() {});
     });
+  }
+
+  updateStateIfNotEmpty(){
+    if(!_noFeedbacks || !_noReactions){
+      setState(() {});
+    }
   }
 
   Future<List<VideoReactionUiModel>> _onReactionsPageRequest(int page) async {
@@ -192,6 +202,7 @@ class _EventComponentState extends State<EventComponent> {
     if (addedReaction == true) {
       setState(() {
         reactionsPagingController.refresh();
+        reactionsPagingController.fetchNextPage();
       });
     }
   }
@@ -634,7 +645,7 @@ class _EventComponentState extends State<EventComponent> {
                                   setState(() {
                                     canLeaveFeedback = false;
                                     feedbackPagingController.refresh();
-                                    // feedbackPagingController.notifyPageRequestListeners(1);
+                                    feedbackPagingController.fetchNextPage();
                                   });
                                 }
                               }),

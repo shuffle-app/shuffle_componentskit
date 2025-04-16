@@ -70,7 +70,7 @@ class PhotoVideoSelector extends StatelessWidget {
                       child: AutoSizeText(
                     S.of(context).Photo,
                     style: theme?.regularTextTheme.labelSmall,
-                  )).paddingSymmetric(horizontal: horizontalPadding),
+                  ).paddingSymmetric(horizontal: horizontalPadding)),
                   Builder(
                     builder: (context) => GestureDetector(
                       onTap: () => showUiKitPopover(

@@ -142,13 +142,21 @@ class _PlaceComponentState extends State<PlaceComponent> {
   @override
   void initState() {
     super.initState();
+    feedbacksPagedController.addListener(updateStateIfNotEmpty);
+    reactionsPagingController.addListener(updateStateIfNotEmpty);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       feedbacksPagedController.fetchNextPage();
       reactionsPagingController.fetchNextPage();
       canLeaveFeedback = await widget.canLeaveFeedbackCallback.call(widget.place.id);
-      await Future.delayed(Duration(milliseconds: 500));
       setState(() {});
     });
+  }
+
+
+  updateStateIfNotEmpty(){
+    if(!_noFeedbacks || !_noReactions){
+      setState(() {});
+    }
   }
 
   Future<List<VideoReactionUiModel>> _reactionsListener(int page) async {
@@ -214,6 +222,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
     if (addedReaction == true) {
       setState(() {
         reactionsPagingController.refresh();
+        reactionsPagingController.fetchNextPage();
       });
     }
   }
@@ -708,7 +717,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                     setState(() {
                                       canLeaveFeedback = false;
                                       feedbacksPagedController.refresh();
-                                      // feedbacksPagedController.notifyPageRequestListeners(1);
+                                      feedbacksPagedController.fetchNextPage();
                                     });
                                   }
                                 });
