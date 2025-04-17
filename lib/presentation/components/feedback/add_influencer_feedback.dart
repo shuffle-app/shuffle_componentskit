@@ -8,7 +8,6 @@ import 'package:shuffle_components_kit/presentation/common/common.dart';
 import 'package:shuffle_components_kit/presentation/components/components.dart';
 import 'package:shuffle_uikit/shuffle_uikit.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class AddInfluencerFeedbackComponent extends StatefulWidget {
   final UiUniversalModel? uiUniversalModel;
