@@ -53,11 +53,10 @@ subInformationDialog(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(
-                      child: AutoSizeText(
+                 AutoSizeText(
                     sub.title ?? '',
                     style: theme?.boldTextTheme.title2,
-                  )),
+                  ),
                   1.sw <= 380 ? SpacingFoundation.verticalSpace12 : SpacingFoundation.verticalSpace16,
                   Center(
                     child: GradientableWidget(
