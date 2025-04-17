@@ -279,7 +279,7 @@ class _CreateNotificationOrRemindState extends State<CreateNotificationOrRemind>
             widget.isNotification
                 ? S.of(context).YourNotificationWillBeShown
                 : widget.universalNotOfferRemUiModel == null
-                    ? S.of(context).YourReminderIsShown1Time
+                    ? S.of(context).YourAudienceWillSeeTheReminderOnce
                     : S.of(context).YourReminderIsShown1TimeMax3,
             style: theme?.boldTextTheme.caption1Medium.copyWith(color: ColorsFoundation.mutedText),
           )
