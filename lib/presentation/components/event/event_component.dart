@@ -133,8 +133,8 @@ class _EventComponentState extends State<EventComponent> {
     });
   }
 
-  updateStateIfNotEmpty(){
-    if(!_noFeedbacks || !_noReactions){
+  updateStateIfNotEmpty() {
+    if (!_noFeedbacks || !_noReactions) {
       setState(() {});
     }
   }
@@ -335,7 +335,10 @@ class _EventComponentState extends State<EventComponent> {
 
                     context.push(
                         PhotoDialog(
-                          images: widget.event.media.map((e) => e.link).toList(),
+                          images: widget.event.media
+                              .where((e) => e.type == UiKitMediaType.image)
+                              .map((e) => e.link)
+                              .toList(),
                           initialIndex: index,
                           tag: heroTag,
                         ),
@@ -349,7 +352,7 @@ class _EventComponentState extends State<EventComponent> {
                     context.smallOutlinedButton(
                       blurred: true,
                       data: BaseUiKitButtonData(
-                        backgroundColor: Colors.white.withOpacity(0.01),
+                        backgroundColor: Colors.white.withValues(alpha: 0.01),
                         iconInfo: BaseUiKitButtonIconData(
                           iconData: ShuffleUiKitIcons.alertcircle,
                           color: context.uiKitTheme?.colorScheme.darkNeutral800,
