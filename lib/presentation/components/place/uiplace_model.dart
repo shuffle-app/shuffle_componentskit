@@ -80,11 +80,26 @@ class UiPlaceModel extends Advertisable {
     bool? isAdvertisement,
   })  : descriptionItems = [
           if (website != null && website.isNotEmpty)
-            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
-          if (phone != null && phone.isNotEmpty) UiDescriptionItemModel(title: S.current.Phone, description: phone),
-          UiDescriptionItemModel(title: S.current.Location, description: location ?? ''),
+            UiDescriptionItemModel(
+              title: S.current.Website,
+              description: title ?? '',
+              descriptionUrl: website,
+            ),
+          if (phone != null && phone.isNotEmpty)
+            UiDescriptionItemModel(
+              title: S.current.Phone,
+              description: '+${phone}',
+            ),
+          UiDescriptionItemModel(
+            title: S.current.Location,
+            description: location ?? '',
+          ),
           if (scheduleString != null)
-            UiDescriptionItemModel(title: S.current.WorkHours, description: scheduleString, descriptionUrl: 'times'),
+            UiDescriptionItemModel(
+              title: S.current.WorkHours,
+              description: scheduleString,
+              descriptionUrl: 'times',
+            ),
         ],
         super(isAdvertisement: isAdvertisement ?? false) {
     if (baseTags.isEmpty) {
@@ -265,6 +280,30 @@ class UiPlaceModel extends Advertisable {
 
   @override
   int get hashCode => id.hashCode;
+
+  bool get isEmpty {
+    return id == -1 &&
+        media.isEmpty &&
+        description.isEmpty &&
+        tags.isEmpty &&
+        baseTags.isEmpty &&
+        (title == null || title!.isEmpty) &&
+        (scheduleString == null || scheduleString!.isEmpty) &&
+        (website == null || website!.isEmpty) &&
+        (phone == null || phone!.isEmpty) &&
+        (price == null || price!.isEmpty) &&
+        placeType == null &&
+        (logo == null || logo!.isEmpty) &&
+        schedule == null &&
+        niche == null &&
+        (currency == null || currency!.isEmpty) &&
+        (houseNumber == null || houseNumber!.isEmpty) &&
+        (apartmentNumber == null || apartmentNumber!.isEmpty) &&
+        (bookingUrl == null || bookingUrl!.isEmpty) &&
+        bookingUiModel == null &&
+        (chainName == null || chainName!.isEmpty) &&
+        chainId == null;
+  }
 
   Map<String, dynamic> toMap() => {
         'title': title,

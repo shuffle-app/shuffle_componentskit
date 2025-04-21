@@ -83,23 +83,22 @@ class UiEventModel extends Advertisable {
     this.placeId,
     this.houseNumber,
     this.apartmentNumber,
-  })
-      : descriptionItems = [
-    if (scheduleString != null)
-      UiDescriptionItemModel(title: S.current.DontMissIt, description: scheduleString, descriptionUrl: 'times'),
-    if (location != null && location.isNotEmpty)
-      UiDescriptionItemModel(
-        title: S.current.Place,
-        description: location,
-      ),
-    if (phone != null && phone.isNotEmpty)
-      UiDescriptionItemModel(
-        title: S.current.Phone,
-        description: phone,
-      ),
-    if (website != null && website.isNotEmpty)
-      UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
-  ],
+  })  : descriptionItems = [
+          if (scheduleString != null)
+            UiDescriptionItemModel(title: S.current.DontMissIt, description: scheduleString, descriptionUrl: 'times'),
+          if (location != null && location.isNotEmpty)
+            UiDescriptionItemModel(
+              title: S.current.Place,
+              description: location,
+            ),
+          if (phone != null && phone.isNotEmpty)
+            UiDescriptionItemModel(
+              title: S.current.Phone,
+              description: '+${phone}',
+            ),
+          if (website != null && website.isNotEmpty)
+            UiDescriptionItemModel(title: S.current.Website, description: title ?? '', descriptionUrl: website),
+        ],
         super(isAdvertisement: isAdvertisement ?? false) {
     if (baseTags.isEmpty) {
       baseTags = List.empty(growable: true);
@@ -129,8 +128,7 @@ class UiEventModel extends Advertisable {
     this.descriptionItems = const [],
     this.houseNumber,
     this.apartmentNumber,
-  }) :
-        super(isAdvertisement: true);
+  }) : super(isAdvertisement: true);
 
   String? validateCreation() {
     if (title == null || title!.isEmpty) {
@@ -307,13 +305,40 @@ class UiEventModel extends Advertisable {
   @override
   int get hashCode => id.hashCode;
 
+  bool get isEmpty {
+    return id == -1 &&
+        (title == null || title!.isEmpty) &&
+        owner == null &&
+        media.isEmpty &&
+        verticalPreview == null &&
+        favorite == null &&
+        isRecurrent == false &&
+        (scheduleString == null || scheduleString!.isEmpty) &&
+        (contentType == null || contentType!.isEmpty) &&
+        (currency == null || currency!.isEmpty) &&
+        schedule == null &&
+        (description == null || description!.isEmpty) &&
+        eventType == null &&
+        (price == null || price!.isEmpty) &&
+        (website == null || website!.isEmpty) &&
+        (phone == null || phone!.isEmpty) &&
+        userPoints == null &&
+        niche == null &&
+        tags.isEmpty &&
+        baseTags.isEmpty &&
+        (descriptionItems == null || descriptionItems!.isEmpty) &&
+        (houseNumber == null || houseNumber!.isEmpty) &&
+        (apartmentNumber == null || apartmentNumber!.isEmpty) &&
+        (upsalesItems == null || upsalesItems!.isEmpty) &&
+        (bookingUrl == null || bookingUrl!.isEmpty) &&
+        bookingUiModel == null;
+  }
+
   @override
   String toString() =>
       'EventModel{id: $id, title: $title, owner: $owner, media: $media, favorite: $favorite, isRecurrent: $isRecurrent, scheduleString: $scheduleString, description: $description, location: $location, eventType: $eventType, price: $price, website: $website, phone: $phone, niche: $niche, tags: $tags, baseTags: $baseTags, rating: $rating, archived: $archived, currency: $currency, schedule: $schedule, reviewStatus: $reviewStatus, weatherType: $weatherType, reviews: $reviews, reactions: $reactions, upsalesItems: $upsalesItems, bookingUrl: $bookingUrl, bookingUiModel: $bookingUiModel, updatedAt: $updatedAt, moderationStatus: $moderationStatus, userPoints: $userPoints}';
 
-
-  Map<String, dynamic> toMap() =>
-      {
+  Map<String, dynamic> toMap() => {
         'title': title,
         'description': description,
         'tags': tags.map((tag) => tag.toMap()).toList(),
@@ -354,8 +379,7 @@ class UiEventModel extends Advertisable {
         // 'upsales': upsales,
         // 'owner': owner?.toMap(),
         // 'place': placeId!= null? PlaceModel.fromMap(PlaceModel.toMap(placeId)) : null,
-      }
-        ..removeWhere((k, v) => v == null);
+      }..removeWhere((k, v) => v == null);
 
   static UiEventModel fromMap(Map<String, dynamic> map) {
     print('constructing from Map with $map');
@@ -384,17 +408,18 @@ class UiEventModel extends Advertisable {
       currency: map['currency'] as String?,
       userPoints: map['userPoints'] as int?,
       scheduleString: map['scheduleString'] as String?,
-      schedule: map['schedule'] != null && map['scheduleType'] != null ? UiScheduleModel.fromCachedString(
-          map['scheduleType'], map['schedule']) : null,
+      schedule: map['schedule'] != null && map['scheduleType'] != null
+          ? UiScheduleModel.fromCachedString(map['scheduleType'], map['schedule'])
+          : null,
       niche: map['niche'] != null ? UiKitTag.fromMap(map['niche']) : null,
       contentType: map['contentType'] as String?,
       // branches: map['branches']!= null? List.from(map['branches'].map((item) => HorizontalCaptionedImageData.fromMap(item))) : null,
       media: map['media'] != null ? List.from(map['media'].map((item) => BaseUiKitMedia.fromMap(item))) : const [],
       // branches: map['branches']!= null? ValueNotifier<List<HorizontalCaptionedImageData>?>.value(List.from(map['branches'].map((item) => HorizontalCaptionedImageData.fromMap(item)))) : null,
 
-      upsalesItems: map['upsalesItems'] != null ? List.from((map['upsalesItems'] as List)
-          .map((item) => item as String?)
-          .nonNulls) : const [],
+      upsalesItems: map['upsalesItems'] != null
+          ? List.from((map['upsalesItems'] as List).map((item) => item as String?).nonNulls)
+          : const [],
       ownerId: map['ownerId'] as int?,
       placeId: map['placeId'] as int?,
       // isAdvertisement: map['isAdvertisement'] as bool? ?? false,
