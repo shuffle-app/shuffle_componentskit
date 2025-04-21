@@ -53,10 +53,8 @@ class AboutCompanyComponent extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: MediaQuery.viewPaddingOf(context).top,
-            ),
-             AutoSizeText(
+            SizedBox(height: MediaQuery.viewPaddingOf(context).top),
+            AutoSizeText(
               S.current.DescribeYourBusiness,
               style: boldTextTheme?.title1,
             ),
@@ -190,7 +188,11 @@ class AboutCompanyComponent extends StatelessWidget {
             context.button(
               data: BaseUiKitButtonData(
                 text: S.of(context).Confirm.toUpperCase(),
-                onPressed: onFinished,
+                onPressed: () {
+                  if (formKey.currentState?.validate() ?? true) {
+                    onFinished?.call();
+                  }
+                },
               ),
             ),
             SpacingFoundation.verticalSpace24,

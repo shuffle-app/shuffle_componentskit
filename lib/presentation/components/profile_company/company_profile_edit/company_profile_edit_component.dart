@@ -177,6 +177,7 @@ class CompanyProfileEditComponent extends StatelessWidget {
               controller: emailController,
               label: S.of(context).Email,
               validator: emailValidator,
+              readOnly: true,
               keyboardType: TextInputType.emailAddress,
             ),
             SpacingFoundation.verticalSpace16,

@@ -152,9 +152,8 @@ class _PlaceComponentState extends State<PlaceComponent> {
     });
   }
 
-
-  updateStateIfNotEmpty(){
-    if(!_noFeedbacks || !_noReactions){
+  updateStateIfNotEmpty() {
+    if (!_noFeedbacks || !_noReactions) {
       setState(() {});
     }
   }
@@ -337,7 +336,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
 
             context.push(
               PhotoDialog(
-                images: widget.place.media.map((e) => e.link).toList(),
+                images: widget.place.media.where((e) => e.type == UiKitMediaType.image).map((e) => e.link).toList(),
                 initialIndex: index,
                 tag: heroTag,
               ),
