@@ -6,12 +6,14 @@ import 'package:shuffle_uikit/ui_kit/molecules/tiles/user/ui_kit_chat_member_til
 class ChatMembersComponent extends StatelessWidget {
   final List<ChatMemberModel> members;
   final ValueChanged<ChatMemberModel>? onDelete;
+  final ValueChanged<ChatMemberModel>? onUserTap;
   final bool canDeleteUsers;
 
   const ChatMembersComponent({
     super.key,
     required this.members,
     required this.canDeleteUsers,
+    this.onUserTap,
     this.onDelete,
   });
 
@@ -56,15 +58,18 @@ class ChatMembersComponent extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final member = members.elementAt(index);
 
-                    return UiKitChatMemberUserTile(
-                      name: member.name,
-                      avatarPath: member.avatarUrl,
-                      invertThemeColors: true,
-                      nickname: member.username,
-                      userType: member.userType,
-                      acceptedInvite: member.inviteAccepted ?? false,
-                      canDelete: canDeleteUsers && member.canBeKicked,
-                      onDelete: () => onDelete?.call(member),
+                    return GestureDetector(
+                      onTap: () => onUserTap?.call(member),
+                      child: UiKitChatMemberUserTile(
+                        name: member.name,
+                        avatarPath: member.avatarUrl,
+                        invertThemeColors: true,
+                        nickname: member.username,
+                        userType: member.userType,
+                        acceptedInvite: member.inviteAccepted ?? false,
+                        canDelete: canDeleteUsers && member.canBeKicked,
+                        onDelete: () => onDelete?.call(member),
+                      ),
                     );
                   },
                   separatorBuilder: (context, index) => SpacingFoundation.verticalSpace8,

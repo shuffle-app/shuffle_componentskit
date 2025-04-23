@@ -20,9 +20,9 @@ class InviteComponent extends StatefulWidget {
     this.onChatTap,
     this.chatModels = const [],
   }) : assert(
-  selfInvitationModel != null ? onRemoveUserOptionTap != null : changeDate != null,
-  'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
-  );
+          selfInvitationModel != null ? onRemoveUserOptionTap != null : changeDate != null,
+          'Once an invited user is not null, onRemoveUserOptionTap must be provided.',
+        );
 
   final List<UiInvitePersonModel> persons;
   final List<int>? alreadyInvitedUserIds;
@@ -95,133 +95,117 @@ class _InviteComponentState extends State<InviteComponent> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(S
-                .of(context)
-                .InvitePeople, style: boldTextTheme?.subHeadline),
+            Text(S.of(context).InvitePeople, style: boldTextTheme?.subHeadline),
             context.smallGradientButton(
               data: BaseUiKitButtonData(
                 loading: loading,
-                text: S
-                    .of(context)
-                    .Invite,
-                onPressed: widget.persons
-                    .where((e) => e.isSelected)
-                    .isEmpty
+                text: S.of(context).Invite,
+                onPressed: widget.persons.where((e) => e.isSelected).isEmpty
                     ? null
                     : () {
-                  setState(() => loading = true);
-                  final invitedPersons = widget.persons.where((e) => e.isSelected);
-                  widget.onInviteTap
-                      ?.call(invitedPersons.toList())
-                      .whenComplete(() => setState(() => loading = false));
-                },
+                        setState(() => loading = true);
+                        final invitedPersons = widget.persons.where((e) => e.isSelected);
+                        widget.onInviteTap
+                            ?.call(invitedPersons.toList())
+                            .whenComplete(() => setState(() => loading = false));
+                      },
               ),
             ),
           ],
         ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
         SpacingFoundation.verticalSpace16,
         UiKitCardWrapper(
-          height: 0.5.sh - MediaQuery
-              .viewInsetsOf(context)
-              .bottom,
+          height: 0.5.sh - MediaQuery.viewInsetsOf(context).bottom,
           borderRadius: BorderRadius.zero,
           color: colorScheme?.surface1,
           child: widget.persons.isEmpty
               ? Center(
-              child: Text(
-                S
-                    .of(context)
-                    .NoPeopleAvailableToInvite,
-                style: theme?.boldTextTheme.subHeadline,
-                textAlign: TextAlign.center,
-              ).paddingAll(EdgeInsetsFoundation.all16))
+                  child: Text(
+                  S.of(context).NoPeopleAvailableToInvite,
+                  style: theme?.boldTextTheme.subHeadline,
+                  textAlign: TextAlign.center,
+                ).paddingAll(EdgeInsetsFoundation.all16))
               : ListView.separated(
-            controller: scrollController,
-            padding: EdgeInsets.symmetric(
-              horizontal: EdgeInsetsFoundation.horizontal16,
-              vertical: EdgeInsetsFoundation.vertical8,
-            ),
-            itemCount: widget.persons.length + widget.chatModels.length,
-            itemBuilder: (_, index) {
-              if (index < widget.chatModels.length) {
-                final chatModel = widget.chatModels[index];
-                return UiKitChatTile(
-                    chatTitle: chatModel.chatTitle,
-                    adminName: chatModel.adminName,
-                    date: chatModel.date,
-                    userTileType: chatModel.userTileType,
-                    avatarUrl: chatModel.avatarUrl,
-                    chatMembersCount: chatModel.chatMembersCount,
-                    onTap: () => widget.onChatTap?.call(chatModel.id),
-                    numberInList: index + 1);
-              }
+                  controller: scrollController,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: EdgeInsetsFoundation.horizontal16,
+                    vertical: EdgeInsetsFoundation.vertical8,
+                  ),
+                  itemCount: widget.persons.length + widget.chatModels.length,
+                  itemBuilder: (_, index) {
+                    if (index < widget.chatModels.length) {
+                      final chatModel = widget.chatModels[index];
+                      return UiKitChatTile(
+                          chatTitle: chatModel.chatTitle,
+                          adminName: chatModel.adminName,
+                          date: chatModel.date,
+                          userTileType: chatModel.userTileType,
+                          avatarUrl: chatModel.avatarUrl,
+                          chatMembersCount: chatModel.chatMembersCount,
+                          onTap: () => widget.onChatTap?.call(chatModel.id),
+                          numberInList: index + 1);
+                    }
 
-              final person = widget.persons[index - widget.chatModels.length];
+                    final person = widget.persons[index - widget.chatModels.length];
 
-              return UiKitUserTileWithCheckbox(
-                name: person.name,
-                disableSelection: widget.alreadyInvitedUserIds?.contains(person.id) ?? false,
-                subtitle: person.description,
-                isSelected: person.isSelected,
-                userTileType: person.userTileType,
-                date: person.date,
-                rating: person.rating ?? 0,
-                avatarLink: person.avatarLink,
-                handShake: person.handshake,
-                onDisabledTap: widget.onDisabledUserTileTap,
-                onTap: (isInvited) => setState(() => person.isSelected = isInvited),
-              );
-            },
-            separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
-          ),
+                    return UiKitUserTileWithCheckbox(
+                      name: person.name,
+                      disableSelection: widget.alreadyInvitedUserIds?.contains(person.id) ?? false,
+                      subtitle: person.description,
+                      isSelected: person.isSelected,
+                      userTileType: person.userTileType,
+                      date: person.date,
+                      rating: person.rating ?? 0,
+                      avatarLink: person.avatarLink,
+                      handShake: person.handshake,
+                      onDisabledTap: widget.onDisabledUserTileTap,
+                      onTap: (isInvited) => setState(() => person.isSelected = isInvited),
+                    );
+                  },
+                  separatorBuilder: (_, __) => SpacingFoundation.verticalSpace16,
+                ),
         ),
         SpacingFoundation.verticalSpace16,
-        if (widget.selfInvitationModel != null && !isEditing) UiKitUserTileWithOption(
-          date: widget.selfInvitationModel!.date,
-          name: widget.selfInvitationModel!.name,
-          type: widget.selfInvitationModel!.userTileType,
-          subtitle: widget.selfInvitationModel!.description,
-          onOptionTap: widget.onRemoveUserOptionTap!,
-          options: [
-            UiKitPopUpMenuButtonOption(
-              title: S
-                  .of(context)
-                  .Edit,
-              value: 'Edit',
-              textColor: colorScheme?.surface,
-              onTap: () {
-                setState(() {
-                  isEditing = true;
-                  _wishController.text = widget.selfInvitationModel!.description;
-                });
-              },
-            ),
-            UiKitPopUpMenuButtonOption(
-              title: S
-                  .of(context)
-                  .Share,
-              value: 'Share',
-              textColor: colorScheme?.surface,
-              onTap: widget.onShareOptionTap,
-            ),
-            UiKitPopUpMenuButtonOption(
-              title: S
-                  .of(context)
-                  .DeleteFromList,
-              value: 'Delete from list',
-              textColor: ColorsFoundation.error,
-              onTap: widget.onRemoveUserOptionTap,
-            ),
-          ],
-          avatarLink: widget.selfInvitationModel!.avatarLink,
-        ) else
+        if (widget.selfInvitationModel != null && !isEditing)
+          UiKitUserTileWithOption(
+            date: widget.selfInvitationModel!.date,
+            name: widget.selfInvitationModel!.name,
+            type: widget.selfInvitationModel!.userTileType,
+            subtitle: widget.selfInvitationModel!.description,
+            onOptionTap: widget.onRemoveUserOptionTap!,
+            options: [
+              UiKitPopUpMenuButtonOption(
+                title: S.of(context).Edit,
+                value: 'Edit',
+                textColor: colorScheme?.surface,
+                onTap: () {
+                  setState(() {
+                    isEditing = true;
+                    _wishController.text = widget.selfInvitationModel!.description;
+                  });
+                },
+              ),
+              UiKitPopUpMenuButtonOption(
+                title: S.of(context).Share,
+                value: 'Share',
+                textColor: colorScheme?.surface,
+                onTap: widget.onShareOptionTap,
+              ),
+              UiKitPopUpMenuButtonOption(
+                title: S.of(context).DeleteFromList,
+                value: 'Delete from list',
+                textColor: ColorsFoundation.error,
+                onTap: widget.onRemoveUserOptionTap,
+              ),
+            ],
+            avatarLink: widget.selfInvitationModel!.avatarLink,
+          )
+        else
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                S
-                    .of(context)
-                    .AddYourselfToList,
+                S.of(context).AddYourselfToList,
                 style: boldTextTheme?.subHeadline,
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               SpacingFoundation.verticalSpace4,
@@ -232,12 +216,11 @@ class _InviteComponentState extends State<InviteComponent> {
                     blurred: false,
                     data: BaseUiKitButtonData(
                       onPressed: widget.initialDate == null
-                          ? () =>
-                          widget.changeDate?.call().then((selectedDate) {
-                            if (selectedDate != null) {
-                              setState(() => _date = selectedDate);
-                            }
-                          })
+                          ? () => widget.changeDate?.call().then((selectedDate) {
+                                if (selectedDate != null) {
+                                  setState(() => _date = selectedDate);
+                                }
+                              })
                           : null,
                       iconInfo: BaseUiKitButtonIconData(
                         iconData: ShuffleUiKitIcons.calendar,
@@ -247,15 +230,13 @@ class _InviteComponentState extends State<InviteComponent> {
                   SpacingFoundation.horizontalSpace12,
                   _date != null
                       ? Text(
-                    DateFormat('MMMM dd').format(_date!),
-                    style: regularTextTheme?.body,
-                  )
+                          DateFormat('MMMM dd').format(_date!),
+                          style: regularTextTheme?.body,
+                        )
                       : Text(
-                    S
-                        .of(context)
-                        .NoDateSelected,
-                    style: regularTextTheme?.body,
-                  ),
+                          S.of(context).NoDateSelected,
+                          style: regularTextTheme?.body,
+                        ),
                 ],
               ).paddingSymmetric(horizontal: EdgeInsetsFoundation.horizontal16),
               SpacingFoundation.verticalSpace8,
@@ -264,22 +245,18 @@ class _InviteComponentState extends State<InviteComponent> {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: 0.15.sh,
+                      maxHeight: 66.w,
                       maxWidth: 0.75.sw,
                     ),
                     child: UiKitInputFieldNoIcon(
                       minLines: 1,
                       maxSymbols: 50,
                       controller: _wishController,
-                      hintText: S
-                          .of(context)
-                          .DescribeYourWishes
-                          .toUpperCase(),
+                      hintText: S.of(context).DescribeYourWishes.toUpperCase(),
                       fillColor: theme?.colorScheme.surface1,
                     ),
                   ),
                   const Spacer(),
-
                   context.gradientButton(
                     padding: EdgeInsets.all(SpacingFoundation.verticalSpacing12.h),
                     data: BaseUiKitButtonData(
@@ -291,11 +268,11 @@ class _InviteComponentState extends State<InviteComponent> {
                         });
                         widget.onAddWishTap?.call(_wishController.text, _date).whenComplete(
                               () => setState(() => loading = false),
-                        );
+                            );
                       },
                       iconInfo: BaseUiKitButtonIconData(
-                          iconData: ShuffleUiKitIcons.plus,
-                          size: (theme?.boldTextTheme.caption1UpperCaseMedium.fontSize?.w ?? 16) + 1.h
+                        iconData: ShuffleUiKitIcons.plus,
+                        size: 20.w,
                       ),
                     ),
                   ),
