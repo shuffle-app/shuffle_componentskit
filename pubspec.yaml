@@ -14,24 +14,24 @@ dependencies:
 
   #main ui kit
   shuffle_uikit:
-  #  path: ../shuffle_uikit
-    git:
-      url: https://github.com/shuffle-app/shuffle_ui_kit.git
-      ref: master
+    path: ../shuffle_uikit
+#    git:
+#      url: https://github.com/shuffle-app/shuffle_ui_kit.git
+#      ref: master
 
   #tools for config workers
   json_annotation: ^4.9.0
-  json_serializable: ^6.9.2
+  json_serializable: ^6.10.0
 
   #voice
-  record: ^5.2.1
-  file_picker: ^9.0.1
+  record: ^6.0.0
+  file_picker: ^10.2.0
 
   #for barcode generate
   barcode_widget: ^2.0.4
 
   #for scan barcode
-  mobile_scanner: ^6.0.2
+  mobile_scanner: ^7.0.1
 
   #scroll controller 
   anchor_scroll_controller: ^0.4.4
@@ -40,19 +40,19 @@ dependencies:
   flutter_dynamic_staggered_grid_view: ^1.0.0
 
   #configuration libs
-  http: ^1.2.1
+  http: ^1.4.0
   path_provider: ^2.1.5
 
   #ui_helpers
-  palette_generator: ^0.3.3+5
+#  palette_generator: ^0.3.3+5
   mask_text_input_formatter: ^2.9.0
 #  infinite_scroll_pagination: ^4.0.0-dev.1
   duration: ^4.0.3
   bubble_lens:
-#    path: ../bubble_lens
-    git:
-      url: https://github.com/shuffle-app/bubble_lens.git
-      ref: main
+    path: ../bubble_lens
+#    git:
+#      url: https://github.com/shuffle-app/bubble_lens.git
+#      ref: main
 
   flutter_mobx: ^2.3.0
   visibility_detector: ^0.4.0+2
@@ -65,7 +65,7 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 #  dart_code_metrics: ^5.7.3
   build_runner: ^2.4.14
 

@@ -44,7 +44,7 @@ class _CustomBarcodeScannerState extends State<CustomBarcodeScanner> {
           scanWindow: scanWindow(false),
           controller: controller,
           onDetect: widget.onDetect,
-          errorBuilder: (context, error, child) {
+          errorBuilder: (context, error) {
             return ScannerErrorWidget(error: error);
           },
         ),
