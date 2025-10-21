@@ -25,7 +25,7 @@ dependencies:
 
   #voice
   record: ^6.0.0
-  file_picker: ^10.2.0
+  file_picker: ^10.3.3
 
   #for barcode generate
   barcode_widget: ^2.0.4
